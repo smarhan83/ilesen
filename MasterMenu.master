@@ -11,7 +11,13 @@
     <meta name="description" content="Sistem iLESEN" />
     <meta name="author" content="" />
     <meta name="keyword" content="iLESEN" />
-    <title>PRO-LESEN MPK</title>
+        <title>
+        <%=
+            If(Request.Url.Host.ToLower() = "prolesen.mpkluang.gov.my",
+               "PRO-LESEN MPK",
+               "PRO-LESEN MPK (STAGING)")
+        %>
+    </title>
    
 
     <asp:ContentPlaceHolder ID="head" runat="server">
