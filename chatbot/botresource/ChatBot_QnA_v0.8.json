@@ -1,0 +1,5443 @@
+{
+  "GraphPan": {
+    "X": 2339.8990944826492,
+    "Y": 2493.3439644135269
+  },
+  "GraphZoom": 0.79999999999999982,
+  "GraphVersion": "1.6.0.0",
+  "UserNote": "",
+  "Nodes": [
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.DialogNode, Syn.Bot",
+      "DialogName": "dialog1",
+      "IntentAlias": null,
+      "Domain": null,
+      "Events": [],
+      "Actions": [],
+      "Id": "eddd807e-411e-444a-a687-038f648d4075",
+      "IsFolded": false,
+      "DisplayName": "Dialog (dialog1)",
+      "Position": {
+        "X": 6451.9999999999991,
+        "Y": 4063.4277777777775
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.IntentNode, Syn.Bot",
+      "IntentName": "intent1",
+      "IntentContexts": [],
+      "Prompts": [],
+      "AutoEntity": null,
+      "Fallback": null,
+      "Trait": null,
+      "Event": null,
+      "Action": null,
+      "Id": "0067bafc-ba6a-44eb-ad8d-4ef542ee0638",
+      "IsFolded": false,
+      "DisplayName": "Intent (intent1)",
+      "Position": {
+        "X": 5930.7777777777774,
+        "Y": 3188.3166666666671
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ExpressionNode, Syn.Bot",
+      "Value": "help",
+      "ExpressionName": null,
+      "Id": "5169b3e0-1684-417c-ba01-5df786f04eca",
+      "IsFolded": false,
+      "DisplayName": "Expression",
+      "Position": {
+        "X": 5735.9999999999991,
+        "Y": 3282.7611111111114
+      }
+    },
+    {
+      "$type": "Syn.Workspace.Nodes.InputOutput.InputNumberNode, Syn.Workspace",
+      "OutputValue": 1.0,
+      "Id": "69790d1a-e3a2-43a4-a16e-fa0694b583bd",
+      "IsFolded": false,
+      "DisplayName": "Input Number",
+      "Position": {
+        "X": 5737.4444444444434,
+        "Y": 3188.3166666666666
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ResponseNode, Syn.Bot",
+      "Priority": "Normal",
+      "Hint": "",
+      "Type": null,
+      "Format": null,
+      "Text": null,
+      "Children": [],
+      "Id": "964ae549-f1c7-4e13-b08c-0edfad8cdfc7",
+      "IsFolded": false,
+      "DisplayName": "Response",
+      "Position": {
+        "X": 5727.5555555555547,
+        "Y": 3444.8722222222223
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.OscovaBotNode, Syn.Bot",
+      "Entities": [],
+      "Traits": [],
+      "Scripts": [],
+      "Filters": [],
+      "BotSettings": null,
+      "UserSettings": null,
+      "SimlNodes": [],
+      "Id": "41305f32-cb7c-4484-81d7-7d3eaf756d21",
+      "IsFolded": false,
+      "DisplayName": "Oscova Bot",
+      "Position": {
+        "X": 6626.6666666666661,
+        "Y": 4064.65
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.IntentNode, Syn.Bot",
+      "IntentName": "intent2",
+      "IntentContexts": [],
+      "Prompts": [],
+      "AutoEntity": null,
+      "Fallback": null,
+      "Trait": null,
+      "Event": null,
+      "Action": null,
+      "Id": "1d61a8a7-6ea9-4c38-8a5f-a49417f09d86",
+      "IsFolded": false,
+      "DisplayName": "Intent (intent2)",
+      "Position": {
+        "X": 5920.0193582604352,
+        "Y": 3779.3384115619269
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ExpressionNode, Syn.Bot",
+      "Value": "Account sign in",
+      "ExpressionName": null,
+      "Id": "071b3134-5734-4c0a-8acb-24253c4efac5",
+      "IsFolded": false,
+      "DisplayName": "Expression",
+      "Position": {
+        "X": 5727.7753911429572,
+        "Y": 3882.290148501726
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ResponseNode, Syn.Bot",
+      "Priority": "Normal",
+      "Hint": null,
+      "Type": null,
+      "Format": null,
+      "Text": null,
+      "Children": [],
+      "Id": "1ec083d9-31fa-46f1-ac39-65a2c93e0583",
+      "IsFolded": false,
+      "DisplayName": "Response",
+      "Position": {
+        "X": 5714.7753911429572,
+        "Y": 4040.9568151683925
+      }
+    },
+    {
+      "$type": "Syn.Workspace.Nodes.InputOutput.InputNumberNode, Syn.Workspace",
+      "OutputValue": 0.8,
+      "Id": "a6a01b82-72bd-49f1-93ae-93fccc69816a",
+      "IsFolded": false,
+      "DisplayName": "Input Number",
+      "Position": {
+        "X": 5725.0652346857842,
+        "Y": 3783.9109387430376
+      }
+    },
+    {
+      "$type": "Syn.Workspace.Nodes.InputOutput.InputNumberNode, Syn.Workspace",
+      "OutputValue": 0.8,
+      "Id": "3a4a834f-4238-4bdd-b11b-0845361e7e84",
+      "IsFolded": false,
+      "DisplayName": "Input Number",
+      "Position": {
+        "X": 5723.97825510475,
+        "Y": 4387.8891938477873
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ExpressionNode, Syn.Bot",
+      "Value": "Software issue",
+      "ExpressionName": null,
+      "Id": "b3b41dd2-1a07-41e9-8224-bdd32017c029",
+      "IsFolded": false,
+      "DisplayName": "Expression",
+      "Position": {
+        "X": 5725.0893662158614,
+        "Y": 4481.9279103686022
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ResponseNode, Syn.Bot",
+      "Priority": "Normal",
+      "Hint": null,
+      "Type": null,
+      "Format": null,
+      "Text": null,
+      "Children": [],
+      "Id": "f0d45a8d-4b25-477d-943b-46fba3754843",
+      "IsFolded": false,
+      "DisplayName": "Response",
+      "Position": {
+        "X": 5705.8212675682835,
+        "Y": 4660.464107663749
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.IntentNode, Syn.Bot",
+      "IntentName": "intent3",
+      "IntentContexts": [],
+      "Prompts": [],
+      "AutoEntity": null,
+      "Fallback": null,
+      "Trait": null,
+      "Event": null,
+      "Action": null,
+      "Id": "cdc4a2f4-8f94-4668-aa8a-5f3fc64fb4e5",
+      "IsFolded": false,
+      "DisplayName": "Intent (intent3)",
+      "Position": {
+        "X": 5909.025761001546,
+        "Y": 4388.934498039037
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.IntentNode, Syn.Bot",
+      "IntentName": "intent4",
+      "IntentContexts": [],
+      "Prompts": [],
+      "AutoEntity": null,
+      "Fallback": null,
+      "Trait": null,
+      "Event": null,
+      "Action": null,
+      "Id": "6485a12b-535d-4f91-8c7f-5d2fcb8db9df",
+      "IsFolded": false,
+      "DisplayName": "Intent (intent4)",
+      "Position": {
+        "X": 5887.32528367458,
+        "Y": 5012.9321114041868
+      }
+    },
+    {
+      "$type": "Syn.Workspace.Nodes.InputOutput.InputNumberNode, Syn.Workspace",
+      "OutputValue": 0.8,
+      "Id": "b99ca9f4-0360-4f14-8264-36e1528e8730",
+      "IsFolded": false,
+      "DisplayName": "Input Number",
+      "Position": {
+        "X": 5706.525761001546,
+        "Y": 5006.9297247693412
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ExpressionNode, Syn.Bot",
+      "Value": "Hardware issue",
+      "ExpressionName": null,
+      "Id": "7c262781-586b-45fb-8e6b-0ea79b73ab48",
+      "IsFolded": false,
+      "DisplayName": "Expression",
+      "Position": {
+        "X": 5700.275761001546,
+        "Y": 5103.1797247693421
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ResponseNode, Syn.Bot",
+      "Priority": "Normal",
+      "Hint": null,
+      "Type": null,
+      "Format": null,
+      "ResponseMessages": [],
+      "Children": [],
+      "Id": "0514149a-7d15-483d-86e3-818580eabbc9",
+      "IsFolded": false,
+      "DisplayName": "Response",
+      "Position": {
+        "X": 5529.5776703094216,
+        "Y": 5008.7763834805546
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.QuickReplyMessageNode, Syn.Bot",
+      "QuickReplyTitle": "Good day! Thank you for reaching out to us via Digital Support Center.  How can I help you? Please select on the topics below:",
+      "QuickReplies": [
+        "1. Account sign in",
+        "2. Hardware issue",
+        "3. Software issue",
+        "4. Service",
+        "5. Others"
+      ],
+      "Id": "61e6b631-b3d5-40ae-8278-34f3c5f0664f",
+      "IsFolded": false,
+      "DisplayName": "Quick Replies Message",
+      "Position": {
+        "X": 4928.6666666666661,
+        "Y": 3453.15
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.QuickReplyMessageNode, Syn.Bot",
+      "QuickReplyTitle": "1. What seems to be the problem here?",
+      "QuickReplies": [
+        "1. How do I get started on the Digital Help Desk?",
+        "2. How can I get an account password to sign in to the Digital Support Center?"
+      ],
+      "Id": "293e2dc5-5123-47e0-b03b-37d4c87e8860",
+      "IsFolded": false,
+      "DisplayName": "Quick Replies Message",
+      "Position": {
+        "X": 5199.8695306284881,
+        "Y": 4270.6500000000033
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.IntentNode, Syn.Bot",
+      "IntentName": "intent5",
+      "IntentContexts": [],
+      "Prompts": [],
+      "AutoEntity": null,
+      "Fallback": null,
+      "Trait": null,
+      "Event": null,
+      "Action": null,
+      "Id": "25a5745f-7682-45bd-909a-257a676f15cb",
+      "IsFolded": false,
+      "DisplayName": "Intent (intent5)",
+      "Position": {
+        "X": 5198.4298594537559,
+        "Y": 3785.1718774860778
+      }
+    },
+    {
+      "$type": "Syn.Workspace.Nodes.InputOutput.InputNumberNode, Syn.Workspace",
+      "OutputValue": 0.8,
+      "Id": "fbaf31b4-5da6-437e-8df4-65c6963b0720",
+      "IsFolded": false,
+      "DisplayName": "Input Number",
+      "Position": {
+        "X": 4995.3187483426454,
+        "Y": 3779.8385441527448
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ExpressionNode, Syn.Bot",
+      "Value": "How can I get an account password to sign in to the Digital Support Center?",
+      "ExpressionName": null,
+      "Id": "38c62df0-5f63-4121-997d-2e463a75d9a5",
+      "IsFolded": false,
+      "DisplayName": "Expression",
+      "Position": {
+        "X": 4647.207637231535,
+        "Y": 3873.3940997083005
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ResponseNode, Syn.Bot",
+      "Priority": "Normal",
+      "Hint": null,
+      "Type": null,
+      "Format": null,
+      "ResponseMessages": [],
+      "Children": [],
+      "Id": "9c454e8e-9c78-45cd-a056-518a8a904152",
+      "IsFolded": false,
+      "DisplayName": "Response",
+      "Position": {
+        "X": 4996.2511270220411,
+        "Y": 4037.3095067621293
+      }
+    },
+    {
+      "$type": "Syn.Workspace.Nodes.InputOutput.InputTextNode, Syn.Workspace",
+      "OutputValue": "You may use your company-registered email address as username and password to access the System.\r\nFor example: USERNAME: hana@kulim.com.my PASSWORD: ******",
+      "Id": "ca67048c-b043-49aa-9fd6-57a6e3ba67c6",
+      "IsFolded": false,
+      "DisplayName": "Input Text",
+      "Position": {
+        "X": 4350.8066825775959,
+        "Y": 4037.5728321400125
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.IntentNode, Syn.Bot",
+      "IntentName": "intentnull",
+      "MinScore": 0.0,
+      "IntentContexts": [],
+      "Prompts": [],
+      "AutoEntity": null,
+      "Trait": null,
+      "Event": null,
+      "Action": null,
+      "Expressions": [],
+      "Id": "f5cd36f4-7c64-4b3d-9455-95068fd053e5",
+      "IsFolded": false,
+      "DisplayName": "Intent (intentnull)",
+      "Position": {
+        "X": 6438.2204077734586,
+        "Y": 4350.4765291505446
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ResponseNode, Syn.Bot",
+      "Priority": "Normal",
+      "Hint": null,
+      "Type": null,
+      "Format": null,
+      "ResponseMessages": [],
+      "Children": [],
+      "Id": "e5ac1745-dd0b-42e5-8a99-0cc724102d44",
+      "IsFolded": false,
+      "DisplayName": "Response",
+      "Position": {
+        "X": 6254.3278899870875,
+        "Y": 4462.4765291505446
+      }
+    },
+    {
+      "$type": "Syn.Workspace.Nodes.InputOutput.InputTextNode, Syn.Workspace",
+      "OutputValue": "Please type 'help' to start or contact \r\nICT Helpdesk for assistance.",
+      "Id": "009547f7-427a-4a9e-ac37-bfea5aa675d1",
+      "IsFolded": false,
+      "DisplayName": "Input Text",
+      "Position": {
+        "X": 5951.2026126051187,
+        "Y": 4698.2934281520966
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.FallbackNode, Syn.Bot",
+      "ContextName": "",
+      "Id": "0a911413-74ea-4d6f-af37-71b248860bd1",
+      "IsFolded": false,
+      "DisplayName": "Fallback",
+      "Position": {
+        "X": 6254.8599840891056,
+        "Y": 4355.43758949881
+      }
+    },
+    {
+      "$type": "Syn.Workspace.Nodes.InputOutput.InputTextNode, Syn.Workspace",
+      "OutputValue": "The hardware issue includes the physical parts of a \r\ncomputer, such as a case, central processing unit (CPU), \r\nrandom access memory (RAM), monitor, mouse, \r\nkeyboard, computer data storage, graphics card, sound \r\ncard, speakers, earphone, Tablet, Phone, note pad, \r\nphysical Server, Laptops router, modem, and motherboard.",
+      "Id": "359d80e1-b5c2-4f6f-87ab-71ab3a59078d",
+      "IsFolded": false,
+      "DisplayName": "Input Text",
+      "Position": {
+        "X": 5108.2885839300043,
+        "Y": 5105.1429726862916
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.IntentNode, Syn.Bot",
+      "IntentName": "intent7",
+      "IntentContexts": [],
+      "Prompts": [],
+      "AutoEntity": null,
+      "Fallback": null,
+      "Trait": null,
+      "Event": null,
+      "Action": null,
+      "Id": "d8959a4f-b3b3-4dfd-a2bf-db93df7456ab",
+      "IsFolded": false,
+      "DisplayName": "Intent (intent7)",
+      "Position": {
+        "X": 5862.7584195173758,
+        "Y": 5367.652651816491
+      }
+    },
+    {
+      "$type": "Syn.Workspace.Nodes.InputOutput.InputNumberNode, Syn.Workspace",
+      "OutputValue": 0.8,
+      "Id": "c4f9176d-6c48-4fa1-8dc0-546c0b015796",
+      "IsFolded": false,
+      "DisplayName": "Input Number",
+      "Position": {
+        "X": 5683.2733712853114,
+        "Y": 5374.5815452513471
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ExpressionNode, Syn.Bot",
+      "Value": "Service",
+      "ExpressionName": null,
+      "Id": "2fdc3650-ba83-4e75-8ed7-92afacab2e6e",
+      "IsFolded": false,
+      "DisplayName": "Expression",
+      "Position": {
+        "X": 5701.05114906309,
+        "Y": 5477.265183543579
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ResponseNode, Syn.Bot",
+      "Priority": "Normal",
+      "Hint": null,
+      "Type": null,
+      "Format": null,
+      "ResponseMessages": [],
+      "Children": [],
+      "Id": "1ac6fa32-17f0-4f5a-a9d0-e5a836a38b2f",
+      "IsFolded": false,
+      "DisplayName": "Response",
+      "Position": {
+        "X": 5514.3844823964228,
+        "Y": 5373.5791586164987
+      }
+    },
+    {
+      "$type": "Syn.Workspace.Nodes.InputOutput.InputTextNode, Syn.Workspace",
+      "OutputValue": "In a broad sense, services interact with users. This \r\nhappens through support channels like the Digital \r\nSupport Centre. Thus, they can resolve users’ issues \r\nquickly and effectively by the response according to \r\nindicated issues.",
+      "Id": "bc94d70c-60db-4b28-a4a2-a66d61474731",
+      "IsFolded": false,
+      "DisplayName": "Input Text",
+      "Position": {
+        "X": 5140.2178157297576,
+        "Y": 5452.6069363942761
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.IntentNode, Syn.Bot",
+      "IntentName": "intentother1",
+      "IntentContexts": [],
+      "Prompts": [],
+      "AutoEntity": null,
+      "Fallback": null,
+      "Trait": null,
+      "Event": null,
+      "Action": null,
+      "Id": "ca6a5dd3-bf71-412e-9999-ffc0839b81cf",
+      "IsFolded": false,
+      "DisplayName": "Intent (intentother1)",
+      "Position": {
+        "X": 6410.239693215829,
+        "Y": 4804.8785486987063
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ExpressionListNode, Syn.Bot",
+      "ExpressionList": [
+        "Hi",
+        "Hello",
+        "Hey"
+      ],
+      "Id": "7a9f9c27-7fd6-4697-a57f-81e4b13dff9e",
+      "IsFolded": false,
+      "DisplayName": "Expression List",
+      "Position": {
+        "X": 6214.9546229427024,
+        "Y": 4919.1612323369945
+      }
+    },
+    {
+      "$type": "Syn.Workspace.Nodes.InputOutput.InputNumberNode, Syn.Workspace",
+      "OutputValue": 0.5,
+      "Id": "8366d73b-922f-4c2c-a515-268c0eab72e5",
+      "IsFolded": false,
+      "DisplayName": "Input Number",
+      "Position": {
+        "X": 6231.6212896093684,
+        "Y": 4828.0501212258832
+      }
+    },
+    {
+      "$type": "Syn.Workspace.Nodes.InputOutput.InputTextNode, Syn.Workspace",
+      "OutputValue": "Hello. I hope you have a nice day. Please type 'help' to start.",
+      "Id": "f8468300-ff20-4814-851c-543c3491c6b3",
+      "IsFolded": false,
+      "DisplayName": "Input Text",
+      "Position": {
+        "X": 6068.2879562760336,
+        "Y": 5323.6056767814371
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ResponseNode, Syn.Bot",
+      "Priority": "Normal",
+      "Hint": null,
+      "Type": null,
+      "Format": null,
+      "ResponseMessages": [],
+      "Children": [],
+      "Id": "d49f7a87-8d24-4754-9026-2e9bebdb51e9",
+      "IsFolded": false,
+      "DisplayName": "Response",
+      "Position": {
+        "X": 6489.3990673871449,
+        "Y": 5111.3834545592163
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.IntentNode, Syn.Bot",
+      "IntentName": "intent8",
+      "IntentContexts": [],
+      "Prompts": [],
+      "AutoEntity": null,
+      "Fallback": null,
+      "Trait": null,
+      "Event": null,
+      "Action": null,
+      "Id": "9badbbdd-a9ff-41c1-97bf-33e4dd36e930",
+      "IsFolded": false,
+      "DisplayName": "Intent (intent8)",
+      "Position": {
+        "X": 5864.6931848316153,
+        "Y": 5693.1428003182282
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ExpressionNode, Syn.Bot",
+      "Value": "Others",
+      "ExpressionName": null,
+      "Id": "65aaa2c8-8491-498a-8ac4-182b0c3aab38",
+      "IsFolded": false,
+      "DisplayName": "Expression",
+      "Position": {
+        "X": 5702.0652346857769,
+        "Y": 5843.9834261469241
+      }
+    },
+    {
+      "$type": "Syn.Workspace.Nodes.InputOutput.InputNumberNode, Syn.Workspace",
+      "OutputValue": 0.8,
+      "Id": "c74bddec-9ed0-4e96-81fc-d4c1099587cd",
+      "IsFolded": false,
+      "DisplayName": "Input Number",
+      "Position": {
+        "X": 5699.8430124635552,
+        "Y": 5733.9834261469241
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ResponseNode, Syn.Bot",
+      "Priority": "Normal",
+      "Hint": null,
+      "Type": null,
+      "Format": null,
+      "ResponseMessages": [],
+      "Children": [],
+      "Id": "9b7fc12b-0f37-497d-a6cc-cc3d25434ee1",
+      "IsFolded": false,
+      "DisplayName": "Response",
+      "Position": {
+        "X": 5516.53619729517,
+        "Y": 5706.0969238928747
+      }
+    },
+    {
+      "$type": "Syn.Workspace.Nodes.InputOutput.InputTextNode, Syn.Workspace",
+      "OutputValue": "If you have problems accessing the Digital Support Centre\r\n kindly contact a response line for assistance.",
+      "Id": "d1722838-aab4-41fd-8382-34fdb6c589ba",
+      "IsFolded": false,
+      "DisplayName": "Input Text",
+      "Position": {
+        "X": 5107.6473084062809,
+        "Y": 5908.3191461150991
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.IntentNode, Syn.Bot",
+      "IntentName": "intentother2",
+      "IntentContexts": [],
+      "Prompts": [],
+      "AutoEntity": null,
+      "Fallback": null,
+      "Trait": null,
+      "Event": null,
+      "Action": null,
+      "Id": "39848f8e-0d57-438f-8f8a-952b78dfef15",
+      "IsFolded": false,
+      "DisplayName": "Intent (intentother2)",
+      "Position": {
+        "X": 6995.7247414479125,
+        "Y": 4360.268231238405
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ExpressionNode, Syn.Bot",
+      "Value": "Do you know Anis Adzizee?",
+      "ExpressionName": null,
+      "Id": "34445a0e-de84-43b8-ae4c-b114b5cf2611",
+      "IsFolded": false,
+      "DisplayName": "Expression",
+      "Position": {
+        "X": 6689.0580747812437,
+        "Y": 4455.8237867939624
+      }
+    },
+    {
+      "$type": "Syn.Workspace.Nodes.InputOutput.InputNumberNode, Syn.Workspace",
+      "OutputValue": 0.8,
+      "Id": "ffde402b-7c5a-4d78-8c83-6e01d1bfe1a9",
+      "IsFolded": false,
+      "DisplayName": "Input Number",
+      "Position": {
+        "X": 6787.9469636701342,
+        "Y": 4362.4904534606276
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ResponseNode, Syn.Bot",
+      "Priority": "Normal",
+      "Hint": null,
+      "Type": null,
+      "Format": null,
+      "ResponseMessages": [],
+      "Children": [],
+      "Id": "45780ee2-70cd-40ed-840b-3b0a9514c53d",
+      "IsFolded": false,
+      "DisplayName": "Response",
+      "Position": {
+        "X": 6813.502519225688,
+        "Y": 4621.3793423495163
+      }
+    },
+    {
+      "$type": "Syn.Workspace.Nodes.InputOutput.InputTextNode, Syn.Workspace",
+      "OutputValue": "Of course I know him. \r\nHe is my master.",
+      "Id": "cb810329-ad26-4166-b16e-daffb6bcd28d",
+      "IsFolded": false,
+      "DisplayName": "Input Text",
+      "Position": {
+        "X": 6595.7247414479116,
+        "Y": 4820.2682312384059
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.IntentNode, Syn.Bot",
+      "IntentName": "intent9",
+      "IntentContexts": [],
+      "Prompts": [],
+      "AutoEntity": null,
+      "Fallback": null,
+      "Trait": null,
+      "Event": null,
+      "Action": null,
+      "Id": "9119e179-3102-4145-9eaa-0d10c43ce379",
+      "IsFolded": false,
+      "DisplayName": "Intent (intent9)",
+      "Position": {
+        "X": 4943.5555555555484,
+        "Y": 4375.1184036064651
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ExpressionNode, Syn.Bot",
+      "Value": "How do I get started on the Digital Help Desk?",
+      "ExpressionName": "",
+      "Id": "a62fa38f-9643-49a8-bed6-04dd86e533ae",
+      "IsFolded": false,
+      "DisplayName": "Expression",
+      "Position": {
+        "X": 4583.91564432162,
+        "Y": 4481.3473809822817
+      }
+    },
+    {
+      "$type": "Syn.Workspace.Nodes.InputOutput.InputNumberNode, Syn.Workspace",
+      "OutputValue": 0.8,
+      "Id": "784784f1-4f81-44aa-be98-6dc823f96dc5",
+      "IsFolded": false,
+      "DisplayName": "Input Number",
+      "Position": {
+        "X": 4759.6484528744259,
+        "Y": 4381.2039037530149
+      }
+    },
+    {
+      "$type": "Syn.Workspace.Nodes.InputOutput.InputTextNode, Syn.Workspace",
+      "OutputValue": "We are glad to inform you that you are able to access the Digital Support Centre (DSC) \r\nby URL Link http://dsc.kulim.com.my/Default.aspx at any internet web browser.",
+      "Id": "2b4af6bc-2734-4c30-afcc-b4a445e08aa0",
+      "IsFolded": false,
+      "DisplayName": "Input Text",
+      "Position": {
+        "X": 3842.8063476112693,
+        "Y": 4560.1512721740673
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ResponseNode, Syn.Bot",
+      "Priority": "Normal",
+      "Hint": null,
+      "Type": null,
+      "Format": null,
+      "ResponseMessages": [],
+      "Children": [],
+      "Id": "792dd9d8-615c-4e9c-ae7c-643e829895f2",
+      "IsFolded": false,
+      "DisplayName": "Response",
+      "Position": {
+        "X": 4416.4905581375833,
+        "Y": 4351.700072576029
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.QuickReplyMessageNode, Syn.Bot",
+      "QuickReplyTitle": "Select one of the related software:",
+      "QuickReplies": [
+        "KPLANT",
+        "JDE",
+        "TM1",
+        "OMP 10.2",
+        "KFOR",
+        "KULIM Breeding Information System (KULIM BIS)",
+        "E-Fertilizer Recommendation System (E-FRS)"
+      ],
+      "Id": "5c851a1a-e53a-4c5c-9287-783788d9bbd6",
+      "IsFolded": false,
+      "DisplayName": "Quick Replies Message",
+      "Position": {
+        "X": 5284.8730236138181,
+        "Y": 4571.4477415636529
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.IntentNode, Syn.Bot",
+      "IntentName": "intent_kplant",
+      "IntentContexts": [],
+      "Prompts": [],
+      "AutoEntity": null,
+      "Fallback": null,
+      "Trait": null,
+      "Event": null,
+      "Action": null,
+      "Id": "5c63f56f-85a9-4088-9556-909e4503336a",
+      "IsFolded": false,
+      "DisplayName": "Intent (intent_kplant)",
+      "Position": {
+        "X": 4933.1083177314649,
+        "Y": 4739.6830356812989
+      }
+    },
+    {
+      "$type": "Syn.Workspace.Nodes.InputOutput.InputNumberNode, Syn.Workspace",
+      "OutputValue": 1.0,
+      "Id": "b7880a93-bc25-4743-92c9-01fe30e207d9",
+      "IsFolded": false,
+      "DisplayName": "Input Number",
+      "Position": {
+        "X": 4740.1671412608766,
+        "Y": 4716.1536239165944
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ExpressionNode, Syn.Bot",
+      "Value": "KPLANT",
+      "ExpressionName": null,
+      "Id": "94dd5dd7-05c7-4357-b6ab-8e66cc382a6a",
+      "IsFolded": false,
+      "DisplayName": "Expression",
+      "Position": {
+        "X": 4744.8730236138181,
+        "Y": 4810.2712709754169
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ResponseNode, Syn.Bot",
+      "Priority": "Normal",
+      "Hint": null,
+      "Type": null,
+      "Format": null,
+      "Text": null,
+      "Children": [],
+      "Id": "7af4ff4a-287e-43d7-89fd-9fbaff08aa59",
+      "IsFolded": false,
+      "DisplayName": "Response",
+      "Position": {
+        "X": 4730.7553765549937,
+        "Y": 4969.0948003871808
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.QuickReplyMessageNode, Syn.Bot",
+      "QuickReplyTitle": "Select one of the following questions:",
+      "QuickReplies": [
+        "What is the purpose of KPLANT system?",
+        "How to access the KPLANT System?",
+        "How do I request for user account?",
+        "What are the modules in KPLANT?",
+        "How to get QR code for workers in KPLANT?",
+        "How to get QR code for scanner user?",
+        "How to setup gang for contractor?",
+        "How to add or setup new field and block?",
+        "Is it possible to repair the defective device?",
+        "Can a user create a new codes for deductions and allowances in their checkroll?"
+      ],
+      "Id": "a67d1696-1673-4ddb-a488-ca3fe6f95b6b",
+      "IsFolded": false,
+      "DisplayName": "Quick Replies Message",
+      "Position": {
+        "X": 4189.5789059667586,
+        "Y": 4727.9183297989466
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.IntentNode, Syn.Bot",
+      "IntentName": "intent_kplant1",
+      "IntentContexts": [],
+      "Prompts": [],
+      "AutoEntity": null,
+      "Fallback": null,
+      "Trait": null,
+      "Event": null,
+      "Action": null,
+      "Id": "c308c5fe-fb98-4d9e-ab93-fe6a35fba798",
+      "IsFolded": false,
+      "DisplayName": "Intent (intent_kplant1)",
+      "Position": {
+        "X": 3666.6176919736631,
+        "Y": 4061.9668027355228
+      }
+    },
+    {
+      "$type": "Syn.Workspace.Nodes.InputOutput.InputNumberNode, Syn.Workspace",
+      "OutputValue": 0.9,
+      "Id": "b493db1b-5d5f-41b6-b9cc-07344c1a3be8",
+      "IsFolded": false,
+      "DisplayName": "Input Number",
+      "Position": {
+        "X": 3491.8583336848933,
+        "Y": 4067.1004925750976
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ExpressionNode, Syn.Bot",
+      "Value": "What is the purpose of KPLANT system?",
+      "ExpressionName": null,
+      "Id": "177ada8b-9c3f-49bb-9009-e1a6ca456cc1",
+      "IsFolded": false,
+      "DisplayName": "Expression",
+      "Position": {
+        "X": 3343.1751786046793,
+        "Y": 4166.0510273344562
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ResponseNode, Syn.Bot",
+      "Priority": "Normal",
+      "Hint": null,
+      "Type": null,
+      "Format": null,
+      "ResponseMessages": [],
+      "Children": [],
+      "Id": "ac26b959-f5ed-48fe-9b08-fd75f3cb1d41",
+      "IsFolded": false,
+      "DisplayName": "Response",
+      "Position": {
+        "X": 3180.9291892998658,
+        "Y": 4057.0871235911409
+      }
+    },
+    {
+      "$type": "Syn.Workspace.Nodes.InputOutput.InputTextNode, Syn.Workspace",
+      "OutputValue": "This system is a Plantation software serves \r\nmultiple purposes in the management of \r\nplantations such as plantation data management, \r\ncrop planning and monitoring, Yield Performance \r\nAnalysis and wages calculation for workers.",
+      "Id": "48dcd175-a7cb-462c-bf04-1ddcd5133e8d",
+      "IsFolded": false,
+      "DisplayName": "Input Text",
+      "Position": {
+        "X": 2810.2854213031574,
+        "Y": 4115.7168027355256
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.IntentNode, Syn.Bot",
+      "IntentName": "intent_kplant2",
+      "IntentContexts": [],
+      "Prompts": [],
+      "AutoEntity": null,
+      "Fallback": null,
+      "Trait": null,
+      "Event": null,
+      "Action": null,
+      "Id": "44debf86-59b2-4100-bd21-1bf34fee9023",
+      "IsFolded": false,
+      "DisplayName": "Intent (intent_kplant2)",
+      "Position": {
+        "X": 2639.0542086719074,
+        "Y": 4040.0917976222449
+      }
+    },
+    {
+      "$type": "Syn.Workspace.Nodes.InputOutput.InputNumberNode, Syn.Workspace",
+      "OutputValue": 0.9,
+      "Id": "7993b979-4d70-48ef-bfc9-2f0d93b622c9",
+      "IsFolded": false,
+      "DisplayName": "Input Number",
+      "Position": {
+        "X": 2476.0786841963823,
+        "Y": 4061.1844549649022
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ExpressionNode, Syn.Bot",
+      "Value": "How to access the KPLANT System?",
+      "ExpressionName": null,
+      "Id": "b2ec061f-6045-4a6d-8809-2ec50dac63d4",
+      "IsFolded": false,
+      "DisplayName": "Expression",
+      "Position": {
+        "X": 2347.5874254551236,
+        "Y": 4165.5987906292385
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ResponseNode, Syn.Bot",
+      "Priority": "Normal",
+      "Hint": null,
+      "Type": null,
+      "Format": null,
+      "ResponseMessages": [],
+      "Children": [],
+      "Id": "99e9beaf-d252-4a59-ba6d-349678b9506c",
+      "IsFolded": false,
+      "DisplayName": "Response",
+      "Position": {
+        "X": 2182.5903503345221,
+        "Y": 4037.5235824245578
+      }
+    },
+    {
+      "$type": "Syn.Workspace.Nodes.InputOutput.InputTextNode, Syn.Workspace",
+      "OutputValue": "To access the system, go to url \r\nhttp://kplant.kulim.com.my.",
+      "Id": "8c530582-67c9-4187-abbc-2a6488d936c6",
+      "IsFolded": false,
+      "DisplayName": "Input Text",
+      "Position": {
+        "X": 1923.325287831394,
+        "Y": 4067.5608339558421
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.IntentNode, Syn.Bot",
+      "IntentName": "intent_kplant3",
+      "IntentContexts": [],
+      "Prompts": [],
+      "AutoEntity": null,
+      "Fallback": null,
+      "Trait": null,
+      "Event": null,
+      "Action": null,
+      "Id": "d19db43c-aeb5-469f-ad2e-0058b8483e90",
+      "IsFolded": false,
+      "DisplayName": "Intent (intent_kplant3)",
+      "Position": {
+        "X": 1741.4507867183004,
+        "Y": 4028.6365025195714
+      }
+    },
+    {
+      "$type": "Syn.Workspace.Nodes.InputOutput.InputNumberNode, Syn.Workspace",
+      "OutputValue": 0.9,
+      "Id": "682cfb22-7a90-4488-9515-12b8d386da74",
+      "IsFolded": false,
+      "DisplayName": "Input Number",
+      "Position": {
+        "X": 1577.7582292757427,
+        "Y": 4041.3155734486418
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ExpressionNode, Syn.Bot",
+      "Value": "How do I request for user account?",
+      "ExpressionName": null,
+      "Id": "fc84ecd0-0254-43f1-84a3-d724d0b71131",
+      "IsFolded": false,
+      "DisplayName": "Expression",
+      "Position": {
+        "X": 1456.9505369680503,
+        "Y": 4140.0405151735822
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ResponseNode, Syn.Bot",
+      "Priority": "Normal",
+      "Hint": null,
+      "Type": null,
+      "Format": null,
+      "ResponseMessages": [],
+      "Children": [],
+      "Id": "719aeb82-72ab-4d68-a8a3-a7c129f60247",
+      "IsFolded": false,
+      "DisplayName": "Response",
+      "Position": {
+        "X": 1297.2821109231361,
+        "Y": 4016.2608393998717
+      }
+    },
+    {
+      "$type": "Syn.Workspace.Nodes.InputOutput.InputTextNode, Syn.Workspace",
+      "OutputValue": "To request for user account please submit new \r\nDSC ticket from Digital Support Centre.",
+      "Id": "38dd652a-23f6-436d-b072-ddcbef472cf6",
+      "IsFolded": false,
+      "DisplayName": "Input Text",
+      "Position": {
+        "X": 953.14166803269427,
+        "Y": 4075.6757578147885
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.IntentNode, Syn.Bot",
+      "IntentName": "intent_kplant4",
+      "IntentContexts": [],
+      "Prompts": [],
+      "AutoEntity": null,
+      "Fallback": null,
+      "Trait": null,
+      "Event": null,
+      "Action": null,
+      "Id": "9a738b3d-160b-4d04-a507-3d4957111d53",
+      "IsFolded": false,
+      "DisplayName": "Intent (intent_kplant4)",
+      "Position": {
+        "X": 3663.6162648360323,
+        "Y": 4380.3978970518483
+      }
+    },
+    {
+      "$type": "Syn.Workspace.Nodes.InputOutput.InputNumberNode, Syn.Workspace",
+      "OutputValue": 0.9,
+      "Id": "0405ec3b-875e-4453-8f3b-eef8a04c2709",
+      "IsFolded": false,
+      "DisplayName": "Input Number",
+      "Position": {
+        "X": 3492.1314163511847,
+        "Y": 4385.504124158072
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ExpressionNode, Syn.Bot",
+      "Value": "What are the modules in KPLANT?",
+      "ExpressionName": null,
+      "Id": "a5a09565-e669-4e14-9a35-fe21d6d7d629",
+      "IsFolded": false,
+      "DisplayName": "Expression",
+      "Position": {
+        "X": 3370.2293184490877,
+        "Y": 4482.4341940881432
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ResponseNode, Syn.Bot",
+      "Priority": "Normal",
+      "Hint": null,
+      "Type": null,
+      "Format": null,
+      "ResponseMessages": [],
+      "Children": [],
+      "Id": "89c2b8c8-06cf-4788-bd75-ca8d11a67996",
+      "IsFolded": false,
+      "DisplayName": "Response",
+      "Position": {
+        "X": 3203.0756058132752,
+        "Y": 4392.1008162487942
+      }
+    },
+    {
+      "$type": "Syn.Workspace.Nodes.InputOutput.StringCollectionInputNode, Syn.Workspace",
+      "StringList": [
+        "Here are the modules in KPLANT:",
+        "- Harvesting",
+        "- Checkroll",
+        "- Sundry",
+        "- Nursery",
+        "- Rainfall",
+        "- Incident",
+        "- Task Force",
+        "- Mill Operation Data",
+        "- Agro Farm"
+      ],
+      "Id": "df8dadb7-7a32-4756-a403-70ba367bd2a8",
+      "IsFolded": false,
+      "DisplayName": "Input Text List",
+      "Position": {
+        "X": 2925.7539274915976,
+        "Y": 4384.065851213828
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.IntentNode, Syn.Bot",
+      "IntentName": "intent_kplant5",
+      "IntentContexts": [],
+      "Prompts": [],
+      "AutoEntity": null,
+      "Fallback": null,
+      "Trait": null,
+      "Event": null,
+      "Action": null,
+      "Id": "8c47a069-af95-49c5-851d-1d792d7815ca",
+      "IsFolded": false,
+      "DisplayName": "Intent (intent_kplant5)",
+      "Position": {
+        "X": 2732.549898028617,
+        "Y": 4371.3560610040468
+      }
+    },
+    {
+      "$type": "Syn.Workspace.Nodes.InputOutput.InputNumberNode, Syn.Workspace",
+      "OutputValue": 0.9,
+      "Id": "b345fc97-76d0-4468-b299-b67950e11945",
+      "IsFolded": false,
+      "DisplayName": "Input Number",
+      "Position": {
+        "X": 2563.0650495437685,
+        "Y": 4390.5984852464717
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ExpressionNode, Syn.Bot",
+      "Value": "How to get QR code for workers in KPLANT?",
+      "ExpressionName": null,
+      "Id": "e337dedb-de32-4a2f-b385-7dfb947c7d0b",
+      "IsFolded": false,
+      "DisplayName": "Expression",
+      "Position": {
+        "X": 2388.7014131801311,
+        "Y": 4486.7803034282888
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ResponseNode, Syn.Bot",
+      "Priority": "Normal",
+      "Hint": null,
+      "Type": null,
+      "Format": null,
+      "ResponseMessages": [],
+      "Children": [],
+      "Id": "2e2a8247-e22a-47ff-9340-cb1c6c0633ce",
+      "IsFolded": false,
+      "DisplayName": "Response",
+      "Position": {
+        "X": 2224.6152773589147,
+        "Y": 4383.0685057631554
+      }
+    },
+    {
+      "$type": "Syn.Workspace.Nodes.InputOutput.InputTextNode, Syn.Workspace",
+      "OutputValue": "To get QR code for workers, register the \r\nworkers in KPLANT Checkroll> Master \r\nSetup> Employee master. Setup gang for \r\nthe workers. Go to Kplant Harvesting >\r\nTemplate Generation> Employee ID badge.",
+      "Id": "6587673b-7e83-431c-8c90-bb40945f6c67",
+      "IsFolded": false,
+      "DisplayName": "Input Text",
+      "Position": {
+        "X": 1892.5849743286115,
+        "Y": 4411.6745663692172
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.IntentNode, Syn.Bot",
+      "IntentName": "intent_kplant6",
+      "IntentContexts": [],
+      "Prompts": [],
+      "AutoEntity": null,
+      "Fallback": null,
+      "Trait": null,
+      "Event": null,
+      "Action": null,
+      "Id": "3020c19b-0246-4cfe-897d-9f9a1a4e7f94",
+      "IsFolded": false,
+      "DisplayName": "Intent (intent_kplant6)",
+      "Position": {
+        "X": 1714.2327815730771,
+        "Y": 4377.8300889161465
+      }
+    },
+    {
+      "$type": "Syn.Workspace.Nodes.InputOutput.InputNumberNode, Syn.Workspace",
+      "OutputValue": 0.9,
+      "Id": "842371b8-8893-42f4-8e3a-f89035e5e3bc",
+      "IsFolded": false,
+      "DisplayName": "Input Number",
+      "Position": {
+        "X": 1552.85904419934,
+        "Y": 4384.3755434616005
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ExpressionNode, Syn.Bot",
+      "Value": "How to get QR code for scanner user?",
+      "ExpressionName": null,
+      "Id": "94532cce-b512-469e-9a03-fb951baa06c6",
+      "IsFolded": false,
+      "DisplayName": "Expression",
+      "Position": {
+        "X": 1405.8186401589353,
+        "Y": 4478.2846343706915
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ResponseNode, Syn.Bot",
+      "Priority": "Normal",
+      "Hint": null,
+      "Type": null,
+      "Format": null,
+      "ResponseMessages": [],
+      "Children": [],
+      "Id": "725960dd-5fae-45dc-a5c3-9655cd0b4b10",
+      "IsFolded": false,
+      "DisplayName": "Response",
+      "Position": {
+        "X": 1247.4145997548956,
+        "Y": 4363.2038262898841
+      }
+    },
+    {
+      "$type": "Syn.Workspace.Nodes.InputOutput.InputTextNode, Syn.Workspace",
+      "OutputValue": "To get QR code for scanner user, ensure the has \r\nbeen registered in KPLANT Harvesting> Employee \r\ninformation. Go to KPLANT Harvesting>Master setup> \r\nScanner user and enter the information.",
+      "Id": "3becb07e-9e6c-421e-acb3-55d3c6d0c20c",
+      "IsFolded": false,
+      "DisplayName": "Input Text",
+      "Position": {
+        "X": 854.6469229872182,
+        "Y": 4409.6583717444319
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.IntentNode, Syn.Bot",
+      "IntentName": "intent_kplant7",
+      "IntentContexts": [],
+      "Prompts": [],
+      "AutoEntity": null,
+      "Fallback": null,
+      "Trait": null,
+      "Event": null,
+      "Action": null,
+      "Id": "ed54abe4-aa77-4666-9db3-547672443dfa",
+      "IsFolded": false,
+      "DisplayName": "Intent (intent_kplant7)",
+      "Position": {
+        "X": 3671.5190834441082,
+        "Y": 4751.4503686629214
+      }
+    },
+    {
+      "$type": "Syn.Workspace.Nodes.InputOutput.InputNumberNode, Syn.Workspace",
+      "OutputValue": 0.9,
+      "Id": "ab6d7500-7191-44c3-95ce-434c95fa5bbd",
+      "IsFolded": false,
+      "DisplayName": "Input Number",
+      "Position": {
+        "X": 3510.629828130257,
+        "Y": 4762.5730723252191
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ExpressionNode, Syn.Bot",
+      "Value": "How to setup gang for contractor?",
+      "ExpressionName": null,
+      "Id": "54daf821-2d2d-456b-af22-7593c43a0367",
+      "IsFolded": false,
+      "DisplayName": "Expression",
+      "Position": {
+        "X": 3381.9908063333437,
+        "Y": 4865.8152103041994
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ResponseNode, Syn.Bot",
+      "Priority": "Normal",
+      "Hint": null,
+      "Type": null,
+      "Format": null,
+      "ResponseMessages": [],
+      "Children": [],
+      "Id": "8b92aea9-d6b6-44f3-9e43-32b936e6f1d0",
+      "IsFolded": false,
+      "DisplayName": "Response",
+      "Position": {
+        "X": 3217.1889415314777,
+        "Y": 4761.8525063414954
+      }
+    },
+    {
+      "$type": "Syn.Workspace.Nodes.InputOutput.InputTextNode, Syn.Workspace",
+      "OutputValue": "To setup gang contractor in KPLANT, \r\nplease submit new DSC ticket from Digital \r\nSupport Centre.",
+      "Id": "75895fb2-a0cc-4e13-a3cb-7cdc19eb56dd",
+      "IsFolded": false,
+      "DisplayName": "Input Text",
+      "Position": {
+        "X": 2895.6271699697058,
+        "Y": 4798.9076733966631
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.IntentNode, Syn.Bot",
+      "IntentName": "intent_kplant8",
+      "IntentContexts": [],
+      "Prompts": [],
+      "AutoEntity": null,
+      "Fallback": null,
+      "Trait": null,
+      "Event": null,
+      "Action": null,
+      "Id": "b9d7f7ce-0a67-41a8-8d59-986578303b21",
+      "IsFolded": false,
+      "DisplayName": "Intent (intent_kplant8)",
+      "Position": {
+        "X": 2710.4256436387218,
+        "Y": 4755.2218814638563
+      }
+    },
+    {
+      "$type": "Syn.Workspace.Nodes.InputOutput.InputNumberNode, Syn.Workspace",
+      "OutputValue": 0.9,
+      "Id": "4125a8d7-c6c9-46c7-aa18-57573b0276dc",
+      "IsFolded": false,
+      "DisplayName": "Input Number",
+      "Position": {
+        "X": 2546.9191501322284,
+        "Y": 4777.7218814638563
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ExpressionNode, Syn.Bot",
+      "Value": "How to add or setup new field and block?",
+      "ExpressionName": null,
+      "Id": "e09754b9-58aa-4e67-9f35-f5ada2776f19",
+      "IsFolded": false,
+      "DisplayName": "Expression",
+      "Position": {
+        "X": 2383.1366825997607,
+        "Y": 4863.6309723729473
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ResponseNode, Syn.Bot",
+      "Priority": "Normal",
+      "Hint": null,
+      "Type": null,
+      "Format": null,
+      "ResponseMessages": [],
+      "Children": [],
+      "Id": "0dfec49e-fc97-486c-a2e2-0ccff295a010",
+      "IsFolded": false,
+      "DisplayName": "Response",
+      "Position": {
+        "X": 2219.700535413614,
+        "Y": 4743.6959074378829
+      }
+    },
+    {
+      "$type": "Syn.Workspace.Nodes.InputOutput.InputTextNode, Syn.Workspace",
+      "OutputValue": "To add new field , go to KPLANT Checkroll> Master setup> \r\nField master> Enter field information.  To add new block, \r\nKPLANT Checkroll> Master setup> Block master> Select \r\nfield and enter block master information. The new field \r\nand block created will be reflect into KPLANT Harvesting, \r\nfield profile screen.",
+      "Id": "6869207b-00d8-415f-80ef-3a411b17a4df",
+      "IsFolded": false,
+      "DisplayName": "Input Text",
+      "Position": {
+        "X": 1804.2324037044325,
+        "Y": 4792.7179295685055
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.IntentNode, Syn.Bot",
+      "IntentName": "intent_kplant9",
+      "IntentContexts": [],
+      "Prompts": [],
+      "AutoEntity": null,
+      "Fallback": null,
+      "Trait": null,
+      "Event": null,
+      "Action": null,
+      "Id": "c5fdef95-c997-4b05-9743-366cae518d20",
+      "IsFolded": false,
+      "DisplayName": "Intent (intent_kplant9)",
+      "Position": {
+        "X": 1619.9853005689095,
+        "Y": 4726.1822045536528
+      }
+    },
+    {
+      "$type": "Syn.Workspace.Nodes.InputOutput.InputNumberNode, Syn.Workspace",
+      "OutputValue": 0.9,
+      "Id": "dada6154-8080-4db7-a8fe-0c0409b55a5b",
+      "IsFolded": false,
+      "DisplayName": "Input Number",
+      "Position": {
+        "X": 1460.5524001360116,
+        "Y": 4741.3575292289779
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ResponseNode, Syn.Bot",
+      "Priority": "Normal",
+      "Hint": null,
+      "Type": null,
+      "Format": null,
+      "ResponseMessages": [],
+      "Children": [],
+      "Id": "802c7daf-c7f5-4a13-9128-c38a3fa1f62d",
+      "IsFolded": false,
+      "DisplayName": "Response",
+      "Position": {
+        "X": 1121.3458990347738,
+        "Y": 4717.7925941640424
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ExpressionNode, Syn.Bot",
+      "Value": "Is it possible to repair the defective device?",
+      "ExpressionName": null,
+      "Id": "b83aee71-6eac-461d-97e2-2bfad326fcf7",
+      "IsFolded": false,
+      "DisplayName": "Expression",
+      "Position": {
+        "X": 1284.5731717620454,
+        "Y": 4829.8077456791943
+      }
+    },
+    {
+      "$type": "Syn.Workspace.Nodes.InputOutput.InputTextNode, Syn.Workspace",
+      "OutputValue": "Yes, it is often possible to fix a defective device \r\ndepending on the nature of the problem. Please \r\nsubmit new DSC ticket from Digital Support Centre. \r\nWe may provide you with additional troubleshooting \r\nsteps or guidance specific to your device. We will \r\nalso determine of the issue can be fixed remotely or \r\nmay require send the device to our HQ office.",
+      "Id": "42b57fd5-19f4-4c0c-8e6e-0bc4805f7e73",
+      "IsFolded": false,
+      "DisplayName": "Input Text",
+      "Position": {
+        "X": 741.98226267113728,
+        "Y": 4756.5198668913154
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.IntentNode, Syn.Bot",
+      "IntentName": "intent_kplant10",
+      "IntentContexts": [],
+      "Prompts": [],
+      "AutoEntity": null,
+      "Fallback": null,
+      "Trait": null,
+      "Event": null,
+      "Action": null,
+      "Id": "e7a78062-85f1-4359-8df0-38a6452a8622",
+      "IsFolded": false,
+      "DisplayName": "Intent (intent_kplant10)",
+      "Position": {
+        "X": 3657.1446531064385,
+        "Y": 3735.10964506049
+      }
+    },
+    {
+      "$type": "Syn.Workspace.Nodes.InputOutput.InputNumberNode, Syn.Workspace",
+      "OutputValue": 0.9,
+      "Id": "bd63c42f-b1da-4343-82bd-af22cd47f900",
+      "IsFolded": false,
+      "DisplayName": "Input Number",
+      "Position": {
+        "X": 3484.9981884599729,
+        "Y": 3727.3823723332157
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ExpressionNode, Syn.Bot",
+      "Value": "Can a user create a new codes for deductions and allowances in their checkroll?",
+      "ExpressionName": null,
+      "Id": "fd18a528-e691-41cc-a52c-c714e4a01199",
+      "IsFolded": false,
+      "DisplayName": "Expression",
+      "Position": {
+        "X": 3125.2002086619927,
+        "Y": 3831.4985339493783
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ResponseNode, Syn.Bot",
+      "Priority": "Normal",
+      "Hint": null,
+      "Type": null,
+      "Format": null,
+      "ResponseMessages": [],
+      "Children": [],
+      "Id": "1582d042-49e8-4c33-b1a5-e13cd18842c4",
+      "IsFolded": false,
+      "DisplayName": "Response",
+      "Position": {
+        "X": 2965.17495613674,
+        "Y": 3690.1854026362466
+      }
+    },
+    {
+      "$type": "Syn.Workspace.Nodes.InputOutput.InputTextNode, Syn.Workspace",
+      "OutputValue": "No, user are not allow to create any allowances and \r\ndeductions code. Please submit a DSC ticket through \r\nthe Digital Support Centre, and an Administrator will \r\nassist you in creating the approved allowance and \r\ndeductions code.",
+      "Id": "574a8a45-6cb8-40bc-95a5-9b9702714534",
+      "IsFolded": false,
+      "DisplayName": "Input Text",
+      "Position": {
+        "X": 2571.0082894700736,
+        "Y": 3711.3975238483672
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.IntentNode, Syn.Bot",
+      "IntentName": "intent_jde",
+      "IntentContexts": [],
+      "Prompts": [],
+      "AutoEntity": null,
+      "Fallback": null,
+      "Trait": null,
+      "Event": null,
+      "Action": null,
+      "Id": "f033a187-0c42-484a-a5e5-55eb0b436e8f",
+      "IsFolded": false,
+      "DisplayName": "Intent (intent_jde)",
+      "Position": {
+        "X": 4933.8399697624127,
+        "Y": 5305.2387936896157
+      }
+    },
+    {
+      "$type": "Syn.Workspace.Nodes.InputOutput.InputNumberNode, Syn.Workspace",
+      "OutputValue": 1.0,
+      "Id": "041f3f68-756d-4ed4-a24b-a998f7617551",
+      "IsFolded": false,
+      "DisplayName": "Input Number",
+      "Position": {
+        "X": 4768.8399697624127,
+        "Y": 5318.9887936896157
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ExpressionNode, Syn.Bot",
+      "Value": "JDE",
+      "ExpressionName": null,
+      "Id": "6c4a5a0e-fd05-4c8f-a5b1-2f2c1497097c",
+      "IsFolded": false,
+      "DisplayName": "Expression",
+      "Position": {
+        "X": 4773.8399697624127,
+        "Y": 5413.9887936896166
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ResponseNode, Syn.Bot",
+      "Priority": "Normal",
+      "Hint": null,
+      "Type": null,
+      "Format": null,
+      "Text": null,
+      "Children": [],
+      "Id": "5caea72e-6126-4f24-828b-e0973cd799fe",
+      "IsFolded": false,
+      "DisplayName": "Response",
+      "Position": {
+        "X": 4762.5899697624127,
+        "Y": 5583.9887936896157
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.QuickReplyMessageNode, Syn.Bot",
+      "QuickReplyTitle": "Select one of the following questions:",
+      "QuickReplies": [
+        "What is the purpose of JDE system?",
+        "How to access the JD Edwards system?",
+        "How do I request for user account?",
+        "What are JDE frequently asked questions?"
+      ],
+      "Id": "f92a5700-431b-407a-b262-2c4ed713a4ed",
+      "IsFolded": false,
+      "DisplayName": "Quick Replies Message",
+      "Position": {
+        "X": 4420.2873381834643,
+        "Y": 5336.4230042159325
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.IntentNode, Syn.Bot",
+      "IntentName": "intent_jde1",
+      "IntentContexts": [],
+      "Prompts": [],
+      "AutoEntity": null,
+      "Fallback": null,
+      "Trait": null,
+      "Event": null,
+      "Action": null,
+      "Id": "9210e008-aba8-419a-8918-08b3c6eaa6a6",
+      "IsFolded": false,
+      "DisplayName": "Intent (intent_jde1)",
+      "Position": {
+        "X": 3675.5480980240636,
+        "Y": 5098.0029222253215
+      }
+    },
+    {
+      "$type": "Syn.Workspace.Nodes.InputOutput.InputNumberNode, Syn.Workspace",
+      "OutputValue": 0.9,
+      "Id": "d59f6222-c323-4c64-8756-c7a84845bf75",
+      "IsFolded": false,
+      "DisplayName": "Input Number",
+      "Position": {
+        "X": 3487.862448665262,
+        "Y": 5108.8163193545106
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ExpressionNode, Syn.Bot",
+      "Value": "What is the purpose of JDE system?",
+      "ExpressionName": null,
+      "Id": "c6a21115-5e03-48a2-86e2-c118dbd3fe32",
+      "IsFolded": false,
+      "DisplayName": "Expression",
+      "Position": {
+        "X": 3373.8911567992322,
+        "Y": 5212.8354581104913
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ResponseNode, Syn.Bot",
+      "Priority": "Normal",
+      "Hint": null,
+      "Type": null,
+      "Format": null,
+      "ResponseMessages": [],
+      "Children": [],
+      "Id": "e0388daf-6eb7-43d3-afe2-ca87754f9bdc",
+      "IsFolded": false,
+      "DisplayName": "Response",
+      "Position": {
+        "X": 3208.5323051245914,
+        "Y": 5109.294788254032
+      }
+    },
+    {
+      "$type": "Syn.Workspace.Nodes.InputOutput.InputTextNode, Syn.Workspace",
+      "OutputValue": "This ERP JD Edwards 9.2 & 8,2 system \r\nis a financial management system for \r\nMill and Estate",
+      "Id": "d4019485-97f9-44ff-a2dd-bcedbe372a88",
+      "IsFolded": false,
+      "DisplayName": "Input Text",
+      "Position": {
+        "X": 2909.6806304834431,
+        "Y": 5145.46703705786
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.IntentNode, Syn.Bot",
+      "IntentName": "intent_jde2",
+      "IntentContexts": [],
+      "Prompts": [],
+      "AutoEntity": null,
+      "Fallback": null,
+      "Trait": null,
+      "Event": null,
+      "Action": null,
+      "Id": "923babaf-24fd-4956-9229-01846301624f",
+      "IsFolded": false,
+      "DisplayName": "Intent (intent_jde2)",
+      "Position": {
+        "X": 2750.8557772528284,
+        "Y": 5104.4093675172271
+      }
+    },
+    {
+      "$type": "Syn.Workspace.Nodes.InputOutput.InputNumberNode, Syn.Workspace",
+      "OutputValue": 0.9,
+      "Id": "068ed597-73ad-426b-8c22-7be86a1592b2",
+      "IsFolded": false,
+      "DisplayName": "Input Number",
+      "Position": {
+        "X": 2584.415746695151,
+        "Y": 5112.1175416959895
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ExpressionNode, Syn.Bot",
+      "Value": "How to access the JD Edwards System?",
+      "ExpressionName": null,
+      "Id": "8f0f21f1-d7ad-46f9-8c70-e981608d3b6d",
+      "IsFolded": false,
+      "DisplayName": "Expression",
+      "Position": {
+        "X": 2434.8817512788037,
+        "Y": 5208.962461482085
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ResponseNode, Syn.Bot",
+      "Priority": "Normal",
+      "Hint": null,
+      "Type": null,
+      "Format": null,
+      "ResponseMessages": [],
+      "Children": [],
+      "Id": "108626a4-9aed-4930-a761-8f184031f041",
+      "IsFolded": false,
+      "DisplayName": "Response",
+      "Position": {
+        "X": 2276.6617359999645,
+        "Y": 5098.1450436058431
+      }
+    },
+    {
+      "$type": "Syn.Workspace.Nodes.InputOutput.InputTextNode, Syn.Workspace",
+      "OutputValue": "To access the system, go to the Microsoft Edge \r\ninternet browser and use the URL as follow:\r\nhttp://kulimjde02:100/jde/E1Menu.maf?jdeLoginAction=LOGOUT&RENDER_MAFLET=E1Menu",
+      "Id": "469e7bb4-32e5-4512-857a-a71551d9584e",
+      "IsFolded": false,
+      "DisplayName": "Input Text",
+      "Position": {
+        "X": 1682.5135312635236,
+        "Y": 5137.1748373415185
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.IntentNode, Syn.Bot",
+      "IntentName": "intent_jde3",
+      "IntentContexts": [],
+      "Prompts": [],
+      "AutoEntity": null,
+      "Fallback": null,
+      "Trait": null,
+      "Event": null,
+      "Action": null,
+      "Id": "7887d0f6-b6d2-472e-a0c9-a2a6b181914f",
+      "IsFolded": false,
+      "DisplayName": "Intent (intent_jde3)",
+      "Position": {
+        "X": 3677.15329106229,
+        "Y": 5423.3903793688642
+      }
+    },
+    {
+      "$type": "Syn.Workspace.Nodes.InputOutput.InputNumberNode, Syn.Workspace",
+      "OutputValue": 0.9,
+      "Id": "b8a22234-e276-4e0b-8aed-fe9a7b113d1c",
+      "IsFolded": false,
+      "DisplayName": "Input Number",
+      "Position": {
+        "X": 3409.8358944066586,
+        "Y": 5436.26129440154
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ExpressionNode, Syn.Bot",
+      "Value": "What are JDE frequently asked questions?",
+      "ExpressionName": null,
+      "Id": "d2b97e42-610f-4e11-b1d8-9ffacffa4efd",
+      "IsFolded": false,
+      "DisplayName": "Expression",
+      "Position": {
+        "X": 3351.8308439016091,
+        "Y": 5542.8522034924481
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ResponseNode, Syn.Bot",
+      "Priority": "Normal",
+      "Hint": null,
+      "Type": null,
+      "Format": null,
+      "Text": null,
+      "Children": [],
+      "Id": "5015f332-a088-4a8f-9361-1f6287905086",
+      "IsFolded": false,
+      "DisplayName": "Response",
+      "Position": {
+        "X": 3181.6047346978103,
+        "Y": 5440.401046927178
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.QuickReplyMessageNode, Syn.Bot",
+      "QuickReplyTitle": "Select one of the following JDE issues:",
+      "QuickReplies": [
+        "Unable to sign in Enterprise one JD Edwards. Sign-in failure with error message: Please contact the system administrator.",
+        "Unable to proceed with the transaction. The transaction loading is too long/nonstop progress or message like R09801 your report has NOT been submitted successfully?",
+        "The report In the JDE system is unable to open or queue for too long or cannot be generated.",
+        "All JDE transactions cannot post to GL.",
+        "How to backup while the backup appears not running / Auto daily backup inactive.",
+        "Request the password due to a new PC / Formatted PC and forgetting the password.",
+        "How about if the JDE system cannot perform a backup either before closing, after closing or daily backup?"
+      ],
+      "Id": "68d98183-a9aa-42ae-b853-75ed9e88c692",
+      "IsFolded": false,
+      "DisplayName": "Quick Replies Message",
+      "Position": {
+        "X": 2184.1552397483151,
+        "Y": 5421.6889257150542
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.IntentNode, Syn.Bot",
+      "IntentName": "intent_jde31",
+      "IntentContexts": [],
+      "Prompts": [],
+      "AutoEntity": null,
+      "Fallback": null,
+      "Trait": null,
+      "Event": null,
+      "Action": null,
+      "Id": "4cd0581e-60f0-4aad-91e9-9d9e958e0239",
+      "IsFolded": false,
+      "DisplayName": "Intent (intent_jde31)",
+      "Position": {
+        "X": 2009.6757792724331,
+        "Y": 5429.0669861987144
+      }
+    },
+    {
+      "$type": "Syn.Workspace.Nodes.InputOutput.InputNumberNode, Syn.Workspace",
+      "OutputValue": 0.9,
+      "Id": "a8464398-8c55-4317-859a-879b2c140e3d",
+      "IsFolded": false,
+      "DisplayName": "Input Number",
+      "Position": {
+        "X": 1837.6303247269782,
+        "Y": 5435.3169861987162
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ExpressionNode, Syn.Bot",
+      "Value": "Unable to sign in Enterprise one JD Edwards. Sign-in failure with error message: Please contact the system administrator.",
+      "ExpressionName": null,
+      "Id": "e50c8f23-0743-42dc-bfff-7baad7e020a8",
+      "IsFolded": false,
+      "DisplayName": "Expression",
+      "Position": {
+        "X": 1259.3348701815232,
+        "Y": 5525.4306225623523
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ResponseNode, Syn.Bot",
+      "Priority": "Normal",
+      "Hint": null,
+      "Type": null,
+      "Format": null,
+      "ResponseMessages": [],
+      "Children": [],
+      "Id": "07e8c414-f0b0-4a59-8cbb-b97fcc4a17d7",
+      "IsFolded": false,
+      "DisplayName": "Response",
+      "Position": {
+        "X": 1098.7100057857735,
+        "Y": 5430.8851680168973
+      }
+    },
+    {
+      "$type": "Syn.Workspace.Nodes.InputOutput.InputTextNode, Syn.Workspace",
+      "OutputValue": "To request a user account, please submit a new \r\nDSC ticket from Digital Support Centre. First-level \r\ntechnical support will check the due to sign-in \r\nfailure.",
+      "Id": "1384adde-c814-4563-97fd-859fe8cf180d",
+      "IsFolded": false,
+      "DisplayName": "Input Text",
+      "Position": {
+        "X": 727.23273305850034,
+        "Y": 5472.02153165326
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.IntentNode, Syn.Bot",
+      "IntentName": "intent_jde32",
+      "IntentContexts": [],
+      "Prompts": [],
+      "AutoEntity": null,
+      "Fallback": null,
+      "Trait": null,
+      "Event": null,
+      "Action": null,
+      "Id": "ec5c6e11-2440-4da5-af7e-397de5e431a9",
+      "IsFolded": false,
+      "DisplayName": "Intent (intent_jde32)",
+      "Position": {
+        "X": 3674.9403582363057,
+        "Y": 5800.5486325688134
+      }
+    },
+    {
+      "$type": "Syn.Workspace.Nodes.InputOutput.InputNumberNode, Syn.Workspace",
+      "OutputValue": 0.9,
+      "Id": "44e6931c-b506-43fe-8324-e3abff752eab",
+      "IsFolded": false,
+      "DisplayName": "Input Number",
+      "Position": {
+        "X": 3504.256597552544,
+        "Y": 5802.0327040528846
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ExpressionNode, Syn.Bot",
+      "Value": "Unable to proceed with the transaction. The transaction loading is too long/nonstop progress or message like R09801 your report has NOT been submitted successfully?",
+      "ExpressionName": null,
+      "Id": "d37622d1-4b0b-478e-94e2-286cec6e4c66",
+      "IsFolded": false,
+      "DisplayName": "Expression",
+      "Position": {
+        "X": 2672.7414460373939,
+        "Y": 5902.38623940642
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ResponseNode, Syn.Bot",
+      "Priority": "Normal",
+      "Hint": null,
+      "Type": null,
+      "Format": null,
+      "ResponseMessages": [],
+      "Children": [],
+      "Id": "b2c59c24-7a1e-4737-9fa0-9b2283854f1b",
+      "IsFolded": false,
+      "DisplayName": "Response",
+      "Position": {
+        "X": 2500.7212440171897,
+        "Y": 5825.1640171841973
+      }
+    },
+    {
+      "$type": "Syn.Workspace.Nodes.InputOutput.InputTextNode, Syn.Workspace",
+      "OutputValue": "Please indicate the error first and write it before \r\nsubmitting a new DSC ticket from Digital Support \r\nCentre and the system administrator will give \r\nassistance.",
+      "Id": "a9e6431e-5675-423e-bda9-5db5044621cd",
+      "IsFolded": false,
+      "DisplayName": "Input Text",
+      "Position": {
+        "X": 2130.7717490676964,
+        "Y": 5849.8609868811673
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.IntentNode, Syn.Bot",
+      "IntentName": "intent_jde33",
+      "IntentContexts": [],
+      "Prompts": [],
+      "AutoEntity": null,
+      "Fallback": null,
+      "Trait": null,
+      "Event": null,
+      "Action": null,
+      "Id": "4274d5e4-23e2-40ef-87c8-76b7056e2263",
+      "IsFolded": false,
+      "DisplayName": "Intent (intent_jde33)",
+      "Position": {
+        "X": 1960.0289808308628,
+        "Y": 5807.17049929927
+      }
+    },
+    {
+      "$type": "Syn.Workspace.Nodes.InputOutput.InputNumberNode, Syn.Workspace",
+      "OutputValue": 0.9,
+      "Id": "c56e2b39-ec82-47f9-9880-625367ddacb7",
+      "IsFolded": false,
+      "DisplayName": "Input Number",
+      "Position": {
+        "X": 1792.795880597763,
+        "Y": 5812.1565132852857
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ExpressionNode, Syn.Bot",
+      "Value": "The report In the JDE system is unable to open or queue for too long or cannot be generated.",
+      "ExpressionName": null,
+      "Id": "24f86e2c-9324-42e3-916d-d7827212b105",
+      "IsFolded": false,
+      "DisplayName": "Expression",
+      "Position": {
+        "X": 1354.9776987795829,
+        "Y": 5907.0236461524173
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ResponseNode, Syn.Bot",
+      "Priority": "Normal",
+      "Hint": null,
+      "Type": null,
+      "Format": null,
+      "ResponseMessages": [],
+      "Children": [],
+      "Id": "7f9ad6ec-6050-4fb7-9dda-6efb00c54029",
+      "IsFolded": false,
+      "DisplayName": "Response",
+      "Position": {
+        "X": 1192.2203052184839,
+        "Y": 5783.6233966405871
+      }
+    },
+    {
+      "$type": "Syn.Workspace.Nodes.InputOutput.InputTextNode, Syn.Workspace",
+      "OutputValue": "For these issues, might require a DBA to \r\ncheck the system, especially in the database. \r\nTo request support, please submit a new \r\nDSC ticket from Digital Support Centre.",
+      "Id": "ec285411-0a3e-46d1-b9ae-f06dd18307cf",
+      "IsFolded": false,
+      "DisplayName": "Input Text",
+      "Position": {
+        "X": 842.6010355992139,
+        "Y": 5849.7554867726776
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.IntentNode, Syn.Bot",
+      "IntentName": "intent_jde34",
+      "IntentContexts": [],
+      "Prompts": [],
+      "AutoEntity": null,
+      "Fallback": null,
+      "Trait": null,
+      "Event": null,
+      "Action": null,
+      "Id": "ab800f9f-5754-45e6-9aa3-62f354acbbba",
+      "IsFolded": false,
+      "DisplayName": "Intent (intent_jde34)",
+      "Position": {
+        "X": 3676.1506750342705,
+        "Y": 6133.5447200798208
+      }
+    },
+    {
+      "$type": "Syn.Workspace.Nodes.InputOutput.InputNumberNode, Syn.Workspace",
+      "OutputValue": 0.9,
+      "Id": "ef28f3e3-d970-425e-98fb-99870b10e1b1",
+      "IsFolded": false,
+      "DisplayName": "Input Number",
+      "Position": {
+        "X": 3510.9558698394667,
+        "Y": 6140.2113867464877
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ResponseNode, Syn.Bot",
+      "Priority": "Normal",
+      "Hint": null,
+      "Type": null,
+      "Format": null,
+      "ResponseMessages": [],
+      "Children": [],
+      "Id": "3ad10cd2-1198-432b-8499-7c827c32e896",
+      "IsFolded": false,
+      "DisplayName": "Response",
+      "Position": {
+        "X": 3199.6138784974746,
+        "Y": 6118.7395252746273
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ExpressionNode, Syn.Bot",
+      "Value": "All JDE transactions cannot post to GL.",
+      "ExpressionName": null,
+      "Id": "653deab3-a749-4130-b725-e1eb7932c0e0",
+      "IsFolded": false,
+      "DisplayName": "Expression",
+      "Position": {
+        "X": 3363.6831425667383,
+        "Y": 6235.5360620711635
+      }
+    },
+    {
+      "$type": "Syn.Workspace.Nodes.InputOutput.InputTextNode, Syn.Workspace",
+      "OutputValue": "For this issue, might require a DBA \r\nto check the system first, especially in \r\nthe database area. To request support, \r\nplease submit a new DSC ticket from \r\nDigital Support Centre.",
+      "Id": "958c433f-d068-43a4-964d-f3ef90812f2a",
+      "IsFolded": false,
+      "DisplayName": "Input Text",
+      "Position": {
+        "X": 2895.8489878590731,
+        "Y": 6171.97821975438
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.IntentNode, Syn.Bot",
+      "IntentName": "intent_jde35",
+      "IntentContexts": [],
+      "Prompts": [],
+      "AutoEntity": null,
+      "Fallback": null,
+      "Trait": null,
+      "Event": null,
+      "Action": null,
+      "Id": "18a883c5-d934-4fa0-a7e6-ab02d72b0bcd",
+      "IsFolded": false,
+      "DisplayName": "Intent (intent_jde35)",
+      "Position": {
+        "X": 2730.700513484147,
+        "Y": 6138.8984002804855
+      }
+    },
+    {
+      "$type": "Syn.Workspace.Nodes.InputOutput.InputNumberNode, Syn.Workspace",
+      "OutputValue": 0.9,
+      "Id": "eb3f9261-ce5a-4b7d-a8bf-b75d5fe7c619",
+      "IsFolded": false,
+      "DisplayName": "Input Number",
+      "Position": {
+        "X": 2561.975023288071,
+        "Y": 6158.2002422293863
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ExpressionNode, Syn.Bot",
+      "Value": "How to backup while the backup appears not running / Auto daily backup inactive.",
+      "ExpressionName": null,
+      "Id": "73643d6c-e0e7-4683-a2df-735838ff0b67",
+      "IsFolded": false,
+      "DisplayName": "Expression",
+      "Position": {
+        "X": 2180.7005134841493,
+        "Y": 6251.8232368817935
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ResponseNode, Syn.Bot",
+      "Priority": "Normal",
+      "Hint": null,
+      "Type": null,
+      "Format": null,
+      "ResponseMessages": [],
+      "Children": [],
+      "Id": "755bcf17-1c46-441f-bddf-9c1679701daa",
+      "IsFolded": false,
+      "DisplayName": "Response",
+      "Position": {
+        "X": 2016.5249341615101,
+        "Y": 6154.5653640356859
+      }
+    },
+    {
+      "$type": "Syn.Workspace.Nodes.InputOutput.InputTextNode, Syn.Workspace",
+      "OutputValue": "Please check the physical drive free space. \r\nIf the drive were full it will turn to red colour \r\nif not you may further the new DSC ticket \r\nfrom Digital Support Centre and the system \r\nadministrator will support you remotely.",
+      "Id": "41360681-85f6-4a4b-9128-56ebcbb2b03f",
+      "IsFolded": false,
+      "DisplayName": "Input Text",
+      "Position": {
+        "X": 1678.3847083742255,
+        "Y": 6194.2890717005694
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.IntentNode, Syn.Bot",
+      "IntentName": "intent_jde36",
+      "IntentContexts": [],
+      "Prompts": [],
+      "AutoEntity": null,
+      "Fallback": null,
+      "Trait": null,
+      "Event": null,
+      "Action": null,
+      "Id": "d38294ba-637a-441d-81e6-0668c69f014d",
+      "IsFolded": false,
+      "DisplayName": "Intent (intent_jde36)",
+      "Position": {
+        "X": 1518.5286034570051,
+        "Y": 6150.3078660661959
+      }
+    },
+    {
+      "$type": "Syn.Workspace.Nodes.InputOutput.InputNumberNode, Syn.Workspace",
+      "OutputValue": 0.9,
+      "Id": "d4e766af-7b42-4485-8f6b-910716fafdeb",
+      "IsFolded": false,
+      "DisplayName": "Input Number",
+      "Position": {
+        "X": 1353.6801186085206,
+        "Y": 6185.8381690965
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ExpressionNode, Syn.Bot",
+      "Value": "Request the password due to a new PC / Formatted PC and forgetting the password.",
+      "ExpressionName": null,
+      "Id": "6d379652-be16-45c7-b6d3-baaaef671a8a",
+      "IsFolded": false,
+      "DisplayName": "Expression",
+      "Position": {
+        "X": 971.13466406306338,
+        "Y": 6271.1411993995307
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ResponseNode, Syn.Bot",
+      "Priority": "Normal",
+      "Hint": null,
+      "Type": null,
+      "Format": null,
+      "ResponseMessages": [],
+      "Children": [],
+      "Id": "e3995461-6f49-411a-8d8f-ae1a72e5c6f0",
+      "IsFolded": false,
+      "DisplayName": "Response",
+      "Position": {
+        "X": 814.89223982063891,
+        "Y": 6154.7169569752868
+      }
+    },
+    {
+      "$type": "Syn.Workspace.Nodes.InputOutput.InputTextNode, Syn.Workspace",
+      "OutputValue": "Users has to check the record of the password on \r\nthe slip of username and password that is \r\nprovided to the Chief Clerk if still cannot, please \r\nsubmit a new DSC ticket from Digital Support \r\nCentre.",
+      "Id": "4cc479eb-88e6-401f-8ddf-758c3ad9ae07",
+      "IsFolded": false,
+      "DisplayName": "Input Text",
+      "Position": {
+        "X": 454.31648224488197,
+        "Y": 6215.14119939953
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.IntentNode, Syn.Bot",
+      "IntentName": "intent_jde37",
+      "IntentContexts": [],
+      "Prompts": [],
+      "AutoEntity": null,
+      "Fallback": null,
+      "Trait": null,
+      "Event": null,
+      "Action": null,
+      "Id": "36137d1b-3731-4c8f-9109-eed21f4d1246",
+      "IsFolded": false,
+      "DisplayName": "Intent (intent_jde37)",
+      "Position": {
+        "X": 3682.8753887321968,
+        "Y": 6451.8442053411381
+      }
+    },
+    {
+      "$type": "Syn.Workspace.Nodes.InputOutput.InputNumberNode, Syn.Workspace",
+      "OutputValue": 0.9,
+      "Id": "a8ae3fc9-2359-404d-8a61-a4cb1cf33ee9",
+      "IsFolded": false,
+      "DisplayName": "Input Number",
+      "Position": {
+        "X": 3507.7390250958333,
+        "Y": 6466.2078417047742
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ExpressionNode, Syn.Bot",
+      "Value": "How about if the JDE system cannot perform a backup either before closing, after closing or daily backup?",
+      "ExpressionName": null,
+      "Id": "d5a85a41-4880-4fe4-8564-cc39bd88d0fd",
+      "IsFolded": false,
+      "DisplayName": "Expression",
+      "Position": {
+        "X": 3008.0572069140162,
+        "Y": 6560.3442053411372
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ResponseNode, Syn.Bot",
+      "Priority": "Normal",
+      "Hint": null,
+      "Type": null,
+      "Format": null,
+      "ResponseMessages": [],
+      "Children": [],
+      "Id": "200337f6-4e53-45b9-bb8c-98c8d23eb427",
+      "IsFolded": false,
+      "DisplayName": "Response",
+      "Position": {
+        "X": 2845.5572069140144,
+        "Y": 6465.9805689775012
+      }
+    },
+    {
+      "$type": "Syn.Workspace.Nodes.InputOutput.InputTextNode, Syn.Workspace",
+      "OutputValue": "Please indicate the error first and write \r\nit before submitting a new DSC ticket \r\nfrom Digital Support Centre.",
+      "Id": "e3c6c8bf-5389-402c-ba04-72d19860a830",
+      "IsFolded": false,
+      "DisplayName": "Input Text",
+      "Position": {
+        "X": 2535.5572069140153,
+        "Y": 6492.9351144320472
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.IntentNode, Syn.Bot",
+      "IntentName": "intent_tm1",
+      "IntentContexts": [],
+      "Prompts": [],
+      "AutoEntity": null,
+      "Fallback": null,
+      "Trait": null,
+      "Event": null,
+      "Action": null,
+      "Id": "7e7808b9-3b12-46e4-9024-a7085c52baf6",
+      "IsFolded": false,
+      "DisplayName": "Intent (intent_tm1)",
+      "Position": {
+        "X": 4903.9241066146078,
+        "Y": 5917.3711801454965
+      }
+    },
+    {
+      "$type": "Syn.Workspace.Nodes.InputOutput.InputNumberNode, Syn.Workspace",
+      "OutputValue": 1.0,
+      "Id": "825730eb-8820-4d5e-a940-098e448648e9",
+      "IsFolded": false,
+      "DisplayName": "Input Number",
+      "Position": {
+        "X": 4738.7997261748878,
+        "Y": 5927.1506100840261
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ExpressionNode, Syn.Bot",
+      "Value": "TM1",
+      "ExpressionName": null,
+      "Id": "f2ee39a0-0ef5-4612-99eb-e0cf9e91e511",
+      "IsFolded": false,
+      "DisplayName": "Expression",
+      "Position": {
+        "X": 4745.4663928415548,
+        "Y": 6012.4839434173591
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ResponseNode, Syn.Bot",
+      "Priority": "Normal",
+      "Hint": null,
+      "Type": null,
+      "Format": null,
+      "Text": null,
+      "Children": [],
+      "Id": "3fa108bd-c703-4298-a446-220c5732e6d8",
+      "IsFolded": false,
+      "DisplayName": "Response",
+      "Position": {
+        "X": 4730.7997261748887,
+        "Y": 6172.78908593273
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.QuickReplyMessageNode, Syn.Bot",
+      "QuickReplyTitle": "Select one of the following questions:",
+      "QuickReplies": [
+        "How to access the IBM Cognos TM1?",
+        "How to connect to IBM Cognos TM1 Perspective?",
+        "Forgot the username & password to log in the TM1 perspective?",
+        "What are the input template for Budget Estate?",
+        "What are the input template for Budget Mill?",
+        "How to Populate GC Apportionment in TM1 Budget system?",
+        "How to update the new Mill Equipment master list in TM1 Budget system?"
+      ],
+      "Id": "c3a62ac2-2768-4f41-9b84-653dabc44fdd",
+      "IsFolded": false,
+      "DisplayName": "Quick Replies Message",
+      "Position": {
+        "X": 4238.7997261748878,
+        "Y": 5944.78908593273
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.IntentNode, Syn.Bot",
+      "IntentName": "intent_tm11",
+      "IntentContexts": [],
+      "Prompts": [],
+      "AutoEntity": null,
+      "Fallback": null,
+      "Trait": null,
+      "Event": null,
+      "Action": null,
+      "Id": "ad59d933-43e6-4b5a-8936-192093097908",
+      "IsFolded": false,
+      "DisplayName": "Intent (intent_tm11)",
+      "Position": {
+        "X": 2364.7577639965225,
+        "Y": 6460.3962446251662
+      }
+    },
+    {
+      "$type": "Syn.Workspace.Nodes.InputOutput.InputNumberNode, Syn.Workspace",
+      "OutputValue": 0.9,
+      "Id": "2f8348f1-35e5-4dc0-9ccc-c6fddc58c826",
+      "IsFolded": false,
+      "DisplayName": "Input Number",
+      "Position": {
+        "X": 2188.772915511674,
+        "Y": 6492.92654765547
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ExpressionNode, Syn.Bot",
+      "Value": "How to access the IBM Cognos TM1?",
+      "ExpressionName": null,
+      "Id": "597bd37e-68a7-4e63-811f-a92a05094be4",
+      "IsFolded": false,
+      "DisplayName": "Expression",
+      "Position": {
+        "X": 2053.7426124813696,
+        "Y": 6604.5629112918341
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ResponseNode, Syn.Bot",
+      "Priority": "Normal",
+      "Hint": null,
+      "Type": null,
+      "Format": null,
+      "ResponseMessages": [],
+      "Children": [],
+      "Id": "a7aaf405-03f5-430f-9c7f-53ad0757ee9c",
+      "IsFolded": false,
+      "DisplayName": "Response",
+      "Position": {
+        "X": 1881.5001882389463,
+        "Y": 6488.4416991706212
+      }
+    },
+    {
+      "$type": "Syn.Workspace.Nodes.InputOutput.InputTextNode, Syn.Workspace",
+      "OutputValue": "To access the IBM Cognos TM1, user need to \r\nconnect with the global protect> remote the \r\nDesktop connection ( 172.19.80.191) > and \r\nclick the perspective",
+      "Id": "92bca3df-e883-4eb8-a889-91c546f7e420",
+      "IsFolded": false,
+      "DisplayName": "Input Text",
+      "Position": {
+        "X": 1534.2274609662197,
+        "Y": 6522.623517352441
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.IntentNode, Syn.Bot",
+      "IntentName": "intent_tm12",
+      "IntentContexts": [],
+      "Prompts": [],
+      "AutoEntity": null,
+      "Fallback": null,
+      "Trait": null,
+      "Event": null,
+      "Action": null,
+      "Id": "5e22e7db-c35a-43be-b01d-577dc22fdbab",
+      "IsFolded": false,
+      "DisplayName": "Intent (intent_tm12)",
+      "Position": {
+        "X": 3685.8594722005009,
+        "Y": 6775.2573494951876
+      }
+    },
+    {
+      "$type": "Syn.Workspace.Nodes.InputOutput.InputNumberNode, Syn.Workspace",
+      "OutputValue": 0.9,
+      "Id": "cc9a4b36-0d6d-49d8-9d44-976c1dfd0390",
+      "IsFolded": false,
+      "DisplayName": "Input Number",
+      "Position": {
+        "X": 3521.9663653073931,
+        "Y": 6777.6834234212611
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ExpressionNode, Syn.Bot",
+      "Value": "How to connect to IBM Cognos TM1 Perspective?",
+      "ExpressionName": null,
+      "Id": "81a2d8f0-dff6-42d0-9080-500d4d0f5aaa",
+      "IsFolded": false,
+      "DisplayName": "Expression",
+      "Position": {
+        "X": 3320.7845471255755,
+        "Y": 6867.5016052394431
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ResponseNode, Syn.Bot",
+      "Priority": "Normal",
+      "Hint": null,
+      "Type": null,
+      "Format": null,
+      "ResponseMessages": [],
+      "Children": [],
+      "Id": "38e5d748-98dc-4882-a123-c8e19294f197",
+      "IsFolded": false,
+      "DisplayName": "Response",
+      "Position": {
+        "X": 3155.7389357106404,
+        "Y": 6805.7830951004753
+      }
+    },
+    {
+      "$type": "Syn.Workspace.Nodes.InputOutput.InputTextNode, Syn.Workspace",
+      "OutputValue": "Double click the perspective> explorer> \r\nTM1 > Kulim > and insert the username \r\nand password > click OK",
+      "Id": "55213d65-79ec-48e2-a516-3ef8645193a8",
+      "IsFolded": false,
+      "DisplayName": "Input Text",
+      "Position": {
+        "X": 2839.34932532103,
+        "Y": 6825.4843938017739
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.IntentNode, Syn.Bot",
+      "IntentName": "intent_tm13",
+      "IntentContexts": [],
+      "Prompts": [],
+      "AutoEntity": null,
+      "Fallback": null,
+      "Trait": null,
+      "Event": null,
+      "Action": null,
+      "Id": "ee5b56db-d5b4-4605-a7b5-d94b03ede3c4",
+      "IsFolded": false,
+      "DisplayName": "Intent (intent_tm13)",
+      "Position": {
+        "X": 2669.7433234791097,
+        "Y": 6787.9080581549906
+      }
+    },
+    {
+      "$type": "Syn.Workspace.Nodes.InputOutput.InputNumberNode, Syn.Workspace",
+      "OutputValue": 0.9,
+      "Id": "6c1c1626-f04d-4ab8-81a2-c0d38dfc8d8b",
+      "IsFolded": false,
+      "DisplayName": "Input Number",
+      "Position": {
+        "X": 2503.9013321371176,
+        "Y": 6797.2911750381072
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ExpressionNode, Syn.Bot",
+      "Value": "Forgot the username & password to log in the TM1 perspective?",
+      "ExpressionName": null,
+      "Id": "f5a5bcbc-afd3-4eb9-ac62-9e3c616da314",
+      "IsFolded": false,
+      "DisplayName": "Expression",
+      "Position": {
+        "X": 2224.3558775916636,
+        "Y": 6889.4022861492194
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ResponseNode, Syn.Bot",
+      "Priority": "Normal",
+      "Hint": null,
+      "Type": null,
+      "Format": null,
+      "ResponseMessages": [],
+      "Children": [],
+      "Id": "0f05408f-5b8a-4afa-9b26-f2423e4cd38b",
+      "IsFolded": false,
+      "DisplayName": "Response",
+      "Position": {
+        "X": 2050.8104230462086,
+        "Y": 6817.8568316037645
+      }
+    },
+    {
+      "$type": "Syn.Workspace.Nodes.InputOutput.InputTextNode, Syn.Workspace",
+      "OutputValue": "Please contact the administrator.",
+      "Id": "24bae184-2500-4f5b-9114-774f7d148d9a",
+      "IsFolded": false,
+      "DisplayName": "Input Text",
+      "Position": {
+        "X": 1771.0877192982459,
+        "Y": 6845.42660831828
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.IntentNode, Syn.Bot",
+      "IntentName": "intent_tm14",
+      "IntentContexts": [],
+      "Prompts": [],
+      "AutoEntity": null,
+      "Fallback": null,
+      "Trait": null,
+      "Event": null,
+      "Action": null,
+      "Id": "5b04c7b8-bbef-47b8-9786-7c1b8ebfbeec",
+      "IsFolded": false,
+      "DisplayName": "Intent (intent_tm14)",
+      "Position": {
+        "X": 1597.5544262930728,
+        "Y": 6813.7907451945093
+      }
+    },
+    {
+      "$type": "Syn.Workspace.Nodes.InputOutput.InputNumberNode, Syn.Workspace",
+      "OutputValue": 0.9,
+      "Id": "a372dd4d-157d-4cfb-9a1a-e4d54d61c2e2",
+      "IsFolded": false,
+      "DisplayName": "Input Number",
+      "Position": {
+        "X": 1434.9509858738436,
+        "Y": 6823.462545014916
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ExpressionNode, Syn.Bot",
+      "Value": "What are the input template for Budget Estate?",
+      "ExpressionName": null,
+      "Id": "467660d8-1297-4109-859e-2fc28edb9c3f",
+      "IsFolded": false,
+      "DisplayName": "Expression",
+      "Position": {
+        "X": 1240.1476539644989,
+        "Y": 6924.1622301368534
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ResponseNode, Syn.Bot",
+      "Priority": "Normal",
+      "Hint": null,
+      "Type": null,
+      "Format": null,
+      "ResponseMessages": [],
+      "Children": [],
+      "Id": "d66226b5-5449-44e0-abbd-330605425899",
+      "IsFolded": false,
+      "DisplayName": "Response",
+      "Position": {
+        "X": 1078.8079410458388,
+        "Y": 6808.08567511293
+      }
+    },
+    {
+      "$type": "Syn.Workspace.Nodes.InputOutput.StringCollectionInputNode, Syn.Workspace",
+      "StringList": [
+        "There are 9 input template for budget Estate which are:",
+        "- Field Master Actual Input Template",
+        "- Field Master Input Template",
+        "- Field Crop Input Template",
+        "- Running Account Input Template",
+        "- Capex Input Template",
+        "- Sales and Distribution Input Template",
+        "- General Charges Input Template",
+        "- Field Expenditure Input Template",
+        "- Manufacturing Input Template",
+        "- Nursery Input Template"
+      ],
+      "Id": "17029383-d29e-4eac-a930-7e5212f4bd92",
+      "IsFolded": false,
+      "DisplayName": "Input Text List",
+      "Position": {
+        "X": 686.65845221002178,
+        "Y": 6760.3668941833157
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.IntentNode, Syn.Bot",
+      "IntentName": "intent_tm15",
+      "IntentContexts": [],
+      "Prompts": [],
+      "AutoEntity": null,
+      "Fallback": null,
+      "Trait": null,
+      "Event": null,
+      "Action": null,
+      "Id": "670e62f3-abb3-42f9-8906-c82892692f49",
+      "IsFolded": false,
+      "DisplayName": "Intent (intent_tm15)",
+      "Position": {
+        "X": 3681.3271377257033,
+        "Y": 7135.7790404040388
+      }
+    },
+    {
+      "$type": "Syn.Workspace.Nodes.InputOutput.InputNumberNode, Syn.Workspace",
+      "OutputValue": 0.9,
+      "Id": "c3fdf213-7e03-4bf0-8ffb-bb98f3a2f11c",
+      "IsFolded": false,
+      "DisplayName": "Input Number",
+      "Position": {
+        "X": 3511.1706546044034,
+        "Y": 7147.3067592280649
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ExpressionNode, Syn.Bot",
+      "Value": "What are the input template for Budget Mill?",
+      "ExpressionName": null,
+      "Id": "4a27ac65-159b-40e3-91c3-a2b5bea26941",
+      "IsFolded": false,
+      "DisplayName": "Expression",
+      "Position": {
+        "X": 3332.1933818771304,
+        "Y": 7251.2840319553379
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ResponseNode, Syn.Bot",
+      "Priority": "Normal",
+      "Hint": null,
+      "Type": null,
+      "Format": null,
+      "ResponseMessages": [],
+      "Children": [],
+      "Id": "3dd22564-3487-4a0d-976b-fa115809a829",
+      "IsFolded": false,
+      "DisplayName": "Response",
+      "Position": {
+        "X": 3169.5797455134943,
+        "Y": 7151.3976683189749
+      }
+    },
+    {
+      "$type": "Syn.Workspace.Nodes.InputOutput.StringCollectionInputNode, Syn.Workspace",
+      "StringList": [
+        "There are 8 input template for Budget Mill which are:",
+        "- Mill Equipment Master",
+        "- Mill Revenue Input Template",
+        "- Mill Running Hours",
+        "- Mill Running Account Input Template",
+        "- Capex Input Template",
+        "- Mill General Charges Input Template",
+        "- Mill Sales and Distribution Input Template",
+        "- Mill Production Cost Input Template",
+        "- Mill Maintenance Cost Input Template"
+      ],
+      "Id": "08470c75-cd25-4ef4-84b2-cd3640fb914a",
+      "IsFolded": false,
+      "DisplayName": "Input Text List",
+      "Position": {
+        "X": 2774.5117051843422,
+        "Y": 7135.1020722844978
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.IntentNode, Syn.Bot",
+      "IntentName": "intent_tm16",
+      "IntentContexts": [],
+      "Prompts": [],
+      "AutoEntity": null,
+      "Fallback": null,
+      "Trait": null,
+      "Event": null,
+      "Action": null,
+      "Response": null,
+      "Id": "7e548913-6cce-489c-8032-83b052eab281",
+      "IsFolded": false,
+      "DisplayName": "Intent (intent_tm16)",
+      "Position": {
+        "X": 2597.9621347458797,
+        "Y": 7155.1751376703523
+      }
+    },
+    {
+      "$type": "Syn.Workspace.Nodes.InputOutput.InputNumberNode, Syn.Workspace",
+      "OutputValue": 0.9,
+      "Id": "56934f6e-f819-4e10-bf75-52c884fb7dbe",
+      "IsFolded": false,
+      "DisplayName": "Input Number",
+      "Position": {
+        "X": 2411.27347781218,
+        "Y": 7155.6436845804083
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ExpressionNode, Syn.Bot",
+      "Value": "How to Populate GC Apportionment in TM1 Budget system?",
+      "ExpressionName": null,
+      "Id": "3e678cf2-ee56-4291-8f47-2bdf278f18b5",
+      "IsFolded": false,
+      "DisplayName": "Expression",
+      "Position": {
+        "X": 2155.4840041279685,
+        "Y": 7238.80157931725
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ResponseNode, Syn.Bot",
+      "Priority": "Normal",
+      "Hint": null,
+      "Type": null,
+      "Format": null,
+      "ResponseMessages": [],
+      "Children": [],
+      "Id": "92792816-2cf1-4f51-a07a-8313b834844a",
+      "IsFolded": false,
+      "DisplayName": "Response",
+      "Position": {
+        "X": 2000.7471620227054,
+        "Y": 7159.8542108961965
+      }
+    },
+    {
+      "$type": "Syn.Workspace.Nodes.InputOutput.InputTextNode, Syn.Workspace",
+      "OutputValue": "Go to TM1 > Kulim > Estate  > 11 \r\nInput Template > Data Populate \r\nGC Apportionment Launcher",
+      "Id": "5fae628a-1d97-4227-8acf-6f83f3fe328d",
+      "IsFolded": false,
+      "DisplayName": "Input Text",
+      "Position": {
+        "X": 1724.7930228245493,
+        "Y": 7184.8789107232878
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.IntentNode, Syn.Bot",
+      "IntentName": "intent_tm17",
+      "IntentContexts": [],
+      "Prompts": [],
+      "AutoEntity": null,
+      "Fallback": null,
+      "Trait": null,
+      "Event": null,
+      "Action": null,
+      "Id": "09708cc5-c5d5-4be6-a773-7ab87c55443a",
+      "IsFolded": false,
+      "DisplayName": "Intent (intent_tm17)",
+      "Position": {
+        "X": 1561.8521870286584,
+        "Y": 7145.4671863625881
+      }
+    },
+    {
+      "$type": "Syn.Workspace.Nodes.InputOutput.InputNumberNode, Syn.Workspace",
+      "OutputValue": 0.9,
+      "Id": "fdb03028-b48a-402a-9bbf-0ab0d5f1d3f0",
+      "IsFolded": false,
+      "DisplayName": "Input Number",
+      "Position": {
+        "X": 1401.1282051282058,
+        "Y": 7164.1436569508251
+      }
+    },
+    {
+      "$type": "Syn.Workspace.Nodes.InputOutput.InputTextNode, Syn.Workspace",
+      "OutputValue": "To update or add the new Mill equipment, \r\nplease submit new DSC Ticket from Digital \r\nSupport Centre with the list of equipment.",
+      "Id": "8fd18577-e0e8-466a-a4b4-36d522e2df90",
+      "IsFolded": false,
+      "DisplayName": "Input Text",
+      "Position": {
+        "X": 574.06938159879371,
+        "Y": 7204.143656950826
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ExpressionNode, Syn.Bot",
+      "Value": "How to update the new Mill Equipment master list in TM1 Budget system?",
+      "ExpressionName": null,
+      "Id": "8e10f834-893d-414b-9e6d-85c434e08f1d",
+      "IsFolded": false,
+      "DisplayName": "Expression",
+      "Position": {
+        "X": 1065.834087481147,
+        "Y": 7251.2024804802377
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ResponseNode, Syn.Bot",
+      "Priority": "Normal",
+      "Hint": null,
+      "Type": null,
+      "Format": null,
+      "ResponseMessages": [],
+      "Children": [],
+      "Id": "5d427c83-05ee-4e8a-8d82-0b3278f17229",
+      "IsFolded": false,
+      "DisplayName": "Response",
+      "Position": {
+        "X": 904.65761689291139,
+        "Y": 7175.9083628331791
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.IntentNode, Syn.Bot",
+      "IntentName": "intent_omp",
+      "IntentContexts": [],
+      "Prompts": [],
+      "AutoEntity": null,
+      "Fallback": null,
+      "Trait": null,
+      "Event": null,
+      "Action": null,
+      "Id": "b49c2580-43dd-47af-a687-4fc0e07a4aba",
+      "IsFolded": false,
+      "DisplayName": "Intent (intent_omp)",
+      "Position": {
+        "X": 4922.2173684291029,
+        "Y": 6526.2692074357219
+      }
+    },
+    {
+      "$type": "Syn.Workspace.Nodes.InputOutput.InputNumberNode, Syn.Workspace",
+      "OutputValue": 1.0,
+      "Id": "39808587-4cc6-410e-ac51-8beb29d10b4a",
+      "IsFolded": false,
+      "DisplayName": "Input Number",
+      "Position": {
+        "X": 4763.9054026171343,
+        "Y": 6516.4508313673459
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ExpressionListNode, Syn.Bot",
+      "ExpressionList": [
+        "OMP",
+        "OMP 10.2"
+      ],
+      "Id": "f29f046a-2495-4f35-adba-7f9b6d9008d4",
+      "IsFolded": false,
+      "DisplayName": "Expression List",
+      "Position": {
+        "X": 4742.7942915060221,
+        "Y": 6598.6730535895686
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ResponseNode, Syn.Bot",
+      "Priority": "Normal",
+      "Hint": null,
+      "Type": null,
+      "Format": null,
+      "Text": null,
+      "Children": [],
+      "Id": "1c9c5ec7-e739-4ece-8d12-d9caa453d157",
+      "IsFolded": false,
+      "DisplayName": "Response",
+      "Position": {
+        "X": 4745.0165137282465,
+        "Y": 6759.784164700678
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.QuickReplyMessageNode, Syn.Bot",
+      "QuickReplyTitle": "Select one of the following questions/Issues:",
+      "QuickReplies": [
+        "How to install the OMP 10.2 system on a laptop or PC?",
+        "Cannot open OMP application.",
+        "Error message: We are unable to import the harvesting round-length column with float number.",
+        "Error ODBC",
+        "Cannot open the report in Excel / PDF OMP system unable to export Excel form."
+      ],
+      "Id": "0788aa85-08fb-48bb-b43d-761be25c8a7f",
+      "IsFolded": false,
+      "DisplayName": "Quick Replies Message",
+      "Position": {
+        "X": 4123.6595578760607,
+        "Y": 6529.512773530244
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.IntentNode, Syn.Bot",
+      "IntentName": "intent_omp1",
+      "IntentContexts": [],
+      "Prompts": [],
+      "AutoEntity": null,
+      "Fallback": null,
+      "Trait": null,
+      "Event": null,
+      "Action": null,
+      "Id": "e9689852-0b81-461e-b0bd-004cd60987d4",
+      "IsFolded": false,
+      "DisplayName": "Intent (intent_omp1)",
+      "Position": {
+        "X": 3671.8747786151889,
+        "Y": 3358.551787333362
+      }
+    },
+    {
+      "$type": "Syn.Workspace.Nodes.InputOutput.InputNumberNode, Syn.Workspace",
+      "OutputValue": 0.9,
+      "Id": "4db06b7b-dd9c-4446-b61c-3aa5271a5d1d",
+      "IsFolded": false,
+      "DisplayName": "Input Number",
+      "Position": {
+        "X": 3442.4303341707446,
+        "Y": 3362.4406762222493
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ExpressionNode, Syn.Bot",
+      "Value": "How to install the OMP 10.2 system on a laptop or PC?",
+      "ExpressionName": null,
+      "Id": "4a474d74-0518-4843-a30a-83bb77a16158",
+      "IsFolded": false,
+      "DisplayName": "Expression",
+      "Position": {
+        "X": 3282.430334170745,
+        "Y": 3461.8851206666955
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ResponseNode, Syn.Bot",
+      "Priority": "Normal",
+      "Hint": null,
+      "Type": null,
+      "Format": null,
+      "ResponseMessages": [],
+      "Children": [],
+      "Id": "2eada084-e17e-40ea-94c1-9d28ce2bb239",
+      "IsFolded": false,
+      "DisplayName": "Response",
+      "Position": {
+        "X": 3121.3192230596337,
+        "Y": 3342.44067622225
+      }
+    },
+    {
+      "$type": "Syn.Workspace.Nodes.InputOutput.InputTextNode, Syn.Workspace",
+      "OutputValue": "To request this installation please \r\nsubmit a new DSC ticket from \r\nDigital Support Centre.",
+      "Id": "fe5d44cf-6758-44a9-8071-8b70a2af8c7c",
+      "IsFolded": false,
+      "DisplayName": "Input Text",
+      "Position": {
+        "X": 2849.0970008374115,
+        "Y": 3347.9962317778068
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.IntentNode, Syn.Bot",
+      "IntentName": "intent_omp2",
+      "IntentContexts": [],
+      "Prompts": [],
+      "AutoEntity": null,
+      "Fallback": null,
+      "Trait": null,
+      "Event": null,
+      "Action": null,
+      "Id": "4d3d1456-e569-4458-aeec-9939aea14b11",
+      "IsFolded": false,
+      "DisplayName": "Intent (intent_omp2)",
+      "Position": {
+        "X": 2675.5652548056787,
+        "Y": 3321.3231785037815
+      }
+    },
+    {
+      "$type": "Syn.Workspace.Nodes.InputOutput.InputNumberNode, Syn.Workspace",
+      "OutputValue": 0.9,
+      "Id": "c317d868-9b84-4e50-a78c-04ad9acc4d61",
+      "IsFolded": false,
+      "DisplayName": "Input Number",
+      "Position": {
+        "X": 2510.5469397873635,
+        "Y": 3322.5136546942572
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ExpressionNode, Syn.Bot",
+      "Value": "Cannot open the OMP application.",
+      "ExpressionName": null,
+      "Id": "b51861b0-f3e3-4081-b95d-95832cc23bb6",
+      "IsFolded": false,
+      "DisplayName": "Expression",
+      "Position": {
+        "X": 2390.5469397873649,
+        "Y": 3413.9422261228292
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ResponseNode, Syn.Bot",
+      "Priority": "Normal",
+      "Hint": null,
+      "Type": null,
+      "Format": null,
+      "ResponseMessages": [],
+      "Children": [],
+      "Id": "3cbc2f7e-adef-4632-8c33-228cfb17267e",
+      "IsFolded": false,
+      "DisplayName": "Response",
+      "Position": {
+        "X": 2231.3511841205791,
+        "Y": 3307.8183417970245
+      }
+    },
+    {
+      "$type": "Syn.Workspace.Nodes.InputOutput.InputTextNode, Syn.Workspace",
+      "OutputValue": "Please check and ensure the VPN is \r\nenabled first, this issue is only if the \r\nuser tries to access from outside the \r\noffice network area like at home etc.\r\nAlso, check the network connection.",
+      "Id": "94ac60df-1131-4033-b5c8-023bcbea434a",
+      "IsFolded": false,
+      "DisplayName": "Input Text",
+      "Position": {
+        "X": 1937.0654698348646,
+        "Y": 3344.0088179874997
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.IntentNode, Syn.Bot",
+      "IntentName": "intent_omp3",
+      "IntentContexts": [],
+      "Prompts": [],
+      "AutoEntity": null,
+      "Fallback": null,
+      "Trait": null,
+      "Event": null,
+      "Action": null,
+      "Id": "c8a13c8e-9a46-4813-aa83-c446165d91c0",
+      "IsFolded": false,
+      "DisplayName": "Intent (intent_omp3)",
+      "Position": {
+        "X": 1768.8354978354989,
+        "Y": 3296.58567134809
+      }
+    },
+    {
+      "$type": "Syn.Workspace.Nodes.InputOutput.InputNumberNode, Syn.Workspace",
+      "OutputValue": 0.9,
+      "Id": "b00f11c3-a8ef-4bc4-9ae3-6ad9423dbfc6",
+      "IsFolded": false,
+      "DisplayName": "Input Number",
+      "Position": {
+        "X": 1539.1926406926416,
+        "Y": 3323.2285284909472
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ExpressionListNode, Syn.Bot",
+      "ExpressionList": [
+        "Error message: We are unable to import the harvesting round-length column with float number.",
+        "Error ODBC"
+      ],
+      "Id": "d9d1d94c-5256-4cbc-8fae-bd7e5a474835",
+      "IsFolded": false,
+      "DisplayName": "Expression List",
+      "Position": {
+        "X": 1119.1926406926416,
+        "Y": 3414.371385633804
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ResponseNode, Syn.Bot",
+      "Priority": "Normal",
+      "Hint": null,
+      "Type": null,
+      "Format": null,
+      "ResponseMessages": [],
+      "Children": [],
+      "Id": "d0b33518-b90c-4ead-bd51-8c0bdd1b27f8",
+      "IsFolded": false,
+      "DisplayName": "Response",
+      "Position": {
+        "X": 948.00000000000023,
+        "Y": 3303.6574739294592
+      }
+    },
+    {
+      "$type": "Syn.Workspace.Nodes.InputOutput.StringCollectionInputNode, Syn.Workspace",
+      "StringList": [
+        "Please indicate the error first and write it before submitting a new DSC ticket from Digital Support Centre.",
+        "The OMP system should close properly and please don’t leave it without closing properly when accessing the remote to the OMP system."
+      ],
+      "Id": "158c115e-f6d6-4000-928a-6a4c0f7e7696",
+      "IsFolded": false,
+      "DisplayName": "Input Text List",
+      "Position": {
+        "X": 115.60784313725503,
+        "Y": 3374.8731602039688
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.IntentNode, Syn.Bot",
+      "IntentName": "intent_omp4",
+      "IntentContexts": [],
+      "Prompts": [],
+      "AutoEntity": null,
+      "Fallback": null,
+      "Trait": null,
+      "Event": null,
+      "Action": null,
+      "Id": "a474ecd9-a3ea-4b7f-a822-a2312956a6bf",
+      "IsFolded": false,
+      "DisplayName": "Intent (intent_omp4)",
+      "Position": {
+        "X": 2379.394538355089,
+        "Y": 3657.1666118990279
+      }
+    },
+    {
+      "$type": "Syn.Workspace.Nodes.InputOutput.InputNumberNode, Syn.Workspace",
+      "OutputValue": 0.9,
+      "Id": "d61ddbbe-a538-46a4-85ab-59a7d574c6b6",
+      "IsFolded": false,
+      "DisplayName": "Input Number",
+      "Position": {
+        "X": 2211.1592442374422,
+        "Y": 3664.22543542844
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ExpressionNode, Syn.Bot",
+      "Value": "Cannot open the report in Excel / PDF OMP system unable to export Excel form.",
+      "ExpressionName": null,
+      "Id": "bf2c550a-94b1-4e93-80da-f013f2d07d73",
+      "IsFolded": false,
+      "DisplayName": "Expression",
+      "Position": {
+        "X": 1849.9827736492061,
+        "Y": 3751.2842589578518
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ResponseNode, Syn.Bot",
+      "Priority": "Normal",
+      "Hint": null,
+      "Type": null,
+      "Format": null,
+      "ResponseMessages": [],
+      "Children": [],
+      "Id": "7ba948d9-a95f-40e2-bef6-135a7b64ad72",
+      "IsFolded": false,
+      "DisplayName": "Response",
+      "Position": {
+        "X": 1692.3357148256773,
+        "Y": 3638.343082487263
+      }
+    },
+    {
+      "$type": "Syn.Workspace.Nodes.InputOutput.InputTextNode, Syn.Workspace",
+      "OutputValue": "Please try to close the system currently being open \r\nand open it again. If the report still exists with an \r\nerror please indicate the error first and write it \r\nbefore submitting a new DSC ticket from Digital \r\nSupport Centre",
+      "Id": "628366aa-3fe4-4942-af41-bbb01ad93e4f",
+      "IsFolded": false,
+      "DisplayName": "Input Text",
+      "Position": {
+        "X": 1318.2180677668539,
+        "Y": 3645.4019060166752
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.IntentNode, Syn.Bot",
+      "IntentName": "intent_kfor",
+      "IntentContexts": [],
+      "Prompts": [],
+      "AutoEntity": null,
+      "Fallback": null,
+      "Trait": null,
+      "Event": null,
+      "Action": null,
+      "Id": "718069a5-6355-4f49-9620-6ac50721d2d0",
+      "IsFolded": false,
+      "DisplayName": "Intent (intent_kfor)",
+      "Position": {
+        "X": 5857.2364604369614,
+        "Y": 6060.897372399646
+      }
+    },
+    {
+      "$type": "Syn.Workspace.Nodes.InputOutput.InputNumberNode, Syn.Workspace",
+      "OutputValue": 1.0,
+      "Id": "6a6dca64-8a10-484c-a991-8d25dca81fd1",
+      "IsFolded": false,
+      "DisplayName": "Input Number",
+      "Position": {
+        "X": 5682.3133835138842,
+        "Y": 6055.8204493227249
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ExpressionNode, Syn.Bot",
+      "Value": "KFOR",
+      "ExpressionName": null,
+      "Id": "97f1f286-821b-4be2-af35-eb1494ca8bd3",
+      "IsFolded": false,
+      "DisplayName": "Expression",
+      "Position": {
+        "X": 5687.3133835138842,
+        "Y": 6145.8204493227249
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ResponseNode, Syn.Bot",
+      "Priority": "Normal",
+      "Hint": null,
+      "Type": null,
+      "Format": null,
+      "Text": null,
+      "Children": [],
+      "Id": "1fad03cb-2fb8-46ab-aed7-cd108a418427",
+      "IsFolded": false,
+      "DisplayName": "Response",
+      "Position": {
+        "X": 5521.3133835138842,
+        "Y": 6051.8204493227249
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.QuickReplyMessageNode, Syn.Bot",
+      "QuickReplyTitle": "Select one of the following questions:",
+      "QuickReplies": [
+        "How to access the KFOR System?",
+        "How do I request for user account?",
+        "How to update the profile for existing user?"
+      ],
+      "Id": "0823032e-4bf2-4ee9-9601-62f3c6900c7e",
+      "IsFolded": false,
+      "DisplayName": "Quick Replies Message",
+      "Position": {
+        "X": 5183.3133835138842,
+        "Y": 6058.8204493227249
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.IntentNode, Syn.Bot",
+      "IntentName": "intent_bis",
+      "IntentContexts": [],
+      "Prompts": [],
+      "AutoEntity": null,
+      "Fallback": null,
+      "Trait": null,
+      "Event": null,
+      "Action": null,
+      "Id": "a0800ac8-85e0-4699-ae47-a42b8ec44eff",
+      "IsFolded": false,
+      "DisplayName": "Intent (intent_bis)",
+      "Position": {
+        "X": 5923.1952756869159,
+        "Y": 6398.5174134961626
+      }
+    },
+    {
+      "$type": "Syn.Workspace.Nodes.InputOutput.InputNumberNode, Syn.Workspace",
+      "OutputValue": 0.8,
+      "Id": "bc8bab6e-1ea4-4124-a1ab-41af3fbe4633",
+      "IsFolded": false,
+      "DisplayName": "Input Number",
+      "Position": {
+        "X": 5760.1952756869159,
+        "Y": 6401.0174134961626
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ExpressionNode, Syn.Bot",
+      "Value": "KULIM Breeding Information System (KULIM BIS)",
+      "ExpressionName": null,
+      "Id": "41c8db8a-f660-4e21-b7a8-eda3a547eb4f",
+      "IsFolded": false,
+      "DisplayName": "Expression",
+      "Position": {
+        "X": 5560.4452756869159,
+        "Y": 6484.7674134961626
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ResponseNode, Syn.Bot",
+      "Priority": "Normal",
+      "Hint": null,
+      "Type": null,
+      "Format": null,
+      "Text": null,
+      "Children": [],
+      "Id": "2c356222-066e-4647-abe7-51fc3f2595ef",
+      "IsFolded": false,
+      "DisplayName": "Response",
+      "Position": {
+        "X": 5395.6952756869159,
+        "Y": 6384.2674134961626
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.QuickReplyMessageNode, Syn.Bot",
+      "QuickReplyTitle": "Select one of the following questions:",
+      "QuickReplies": [
+        "How to access the Kulim BIS system?",
+        "What is the purpose of BIS system?",
+        "How do I request for user account?"
+      ],
+      "Id": "52343f8d-4db8-4aef-95b6-9fe5daab1849",
+      "IsFolded": false,
+      "DisplayName": "Quick Replies Message",
+      "Position": {
+        "X": 5099.4452756869159,
+        "Y": 6383.0174134961626
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.IntentNode, Syn.Bot",
+      "IntentName": "intent_efrs",
+      "IntentContexts": [],
+      "Prompts": [],
+      "AutoEntity": null,
+      "Fallback": null,
+      "Trait": null,
+      "Event": null,
+      "Action": null,
+      "Id": "d6a26049-84f5-4b6d-b478-57ccff8f7386",
+      "IsFolded": false,
+      "DisplayName": "Intent (intent_efrs)",
+      "Position": {
+        "X": 5957.5268496419967,
+        "Y": 6720.6309523809523
+      }
+    },
+    {
+      "$type": "Syn.Workspace.Nodes.InputOutput.InputNumberNode, Syn.Workspace",
+      "OutputValue": 0.8,
+      "Id": "6754a409-ff82-4c7f-bee8-a3ccc71a4fc2",
+      "IsFolded": false,
+      "DisplayName": "Input Number",
+      "Position": {
+        "X": 5787.8576767096629,
+        "Y": 6717.0444862155373
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ExpressionNode, Syn.Bot",
+      "Value": "E-Fertilizer Recommendation System (E-FRS)",
+      "ExpressionName": null,
+      "Id": "2405e353-462e-4620-9e21-1df5fa45bad2",
+      "IsFolded": false,
+      "DisplayName": "Expression",
+      "Position": {
+        "X": 5614.20105903182,
+        "Y": 6810.4176805378611
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ResponseNode, Syn.Bot",
+      "Priority": "Normal",
+      "Hint": null,
+      "Type": null,
+      "Format": null,
+      "Text": null,
+      "Children": [],
+      "Id": "5f2f6128-4b9a-4f13-8465-98140770eb3d",
+      "IsFolded": false,
+      "DisplayName": "Response",
+      "Position": {
+        "X": 5457.4015363587923,
+        "Y": 6713.0167258839119
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.QuickReplyMessageNode, Syn.Bot",
+      "QuickReplyTitle": "Select one of the following questions:",
+      "QuickReplies": [
+        "How to access the EFRS system?",
+        "How do I request for user account?",
+        "What are the type of data in E-FRS?"
+      ],
+      "Id": "cccb0e16-2ef7-4721-a265-d59f3ec1b86a",
+      "IsFolded": false,
+      "DisplayName": "Quick Replies Message",
+      "Position": {
+        "X": 5141.4015363587923,
+        "Y": 6711.0167258839119
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.IntentNode, Syn.Bot",
+      "IntentName": "intent_kfor1",
+      "IntentContexts": [],
+      "Prompts": [],
+      "AutoEntity": null,
+      "Fallback": null,
+      "Trait": null,
+      "Event": null,
+      "Action": null,
+      "Id": "33c5b1cf-3c1f-484f-aa75-8576a430607a",
+      "IsFolded": false,
+      "DisplayName": "Intent (intent_kfor1)",
+      "Position": {
+        "X": 3693.5344792147707,
+        "Y": 3036.4258438458937
+      }
+    },
+    {
+      "$type": "Syn.Workspace.Nodes.InputOutput.InputNumberNode, Syn.Workspace",
+      "OutputValue": 0.9,
+      "Id": "33819d45-06e6-4686-9063-2b05e9f70391",
+      "IsFolded": false,
+      "DisplayName": "Input Number",
+      "Position": {
+        "X": 3524.4868601671515,
+        "Y": 3040.235367655418
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ExpressionNode, Syn.Bot",
+      "Value": "How to access the KFOR system?",
+      "ExpressionName": null,
+      "Id": "3c43d271-030f-4afe-b0cd-940d7eb80844",
+      "IsFolded": false,
+      "DisplayName": "Expression",
+      "Position": {
+        "X": 3416.9868601671519,
+        "Y": 3131.4853676554176
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ResponseNode, Syn.Bot",
+      "Priority": "Normal",
+      "Hint": null,
+      "Type": null,
+      "Format": null,
+      "ResponseMessages": [],
+      "Children": [],
+      "Id": "3b013be5-b591-4bc4-a34b-21c8a434d785",
+      "IsFolded": false,
+      "DisplayName": "Response",
+      "Position": {
+        "X": 3256.148568019099,
+        "Y": 3008.8514405595338
+      }
+    },
+    {
+      "$type": "Syn.Workspace.Nodes.InputOutput.InputTextNode, Syn.Workspace",
+      "OutputValue": "To access the system, go to url \r\nhttp://kfws.kulim.com.my/login",
+      "Id": "1d0c57ea-26c3-4f45-ae6c-a0fbff330367",
+      "IsFolded": false,
+      "DisplayName": "Input Text",
+      "Position": {
+        "X": 2999.8985680190985,
+        "Y": 3066.3514405595338
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.IntentNode, Syn.Bot",
+      "IntentName": "intent_kfor2",
+      "IntentContexts": [],
+      "Prompts": [],
+      "AutoEntity": null,
+      "Fallback": null,
+      "Trait": null,
+      "Event": null,
+      "Action": null,
+      "Id": "b3c94728-5222-4172-b887-dc15fb41347c",
+      "IsFolded": false,
+      "DisplayName": "Intent (intent_kfor2)",
+      "Position": {
+        "X": 2843.1643413990373,
+        "Y": 2991.6115108548756
+      }
+    },
+    {
+      "$type": "Syn.Workspace.Nodes.InputOutput.InputNumberNode, Syn.Workspace",
+      "OutputValue": 0.9,
+      "Id": "9c939e0e-d603-4a04-8e1e-bff71c24a193",
+      "IsFolded": false,
+      "DisplayName": "Input Number",
+      "Position": {
+        "X": 2680.9421191768151,
+        "Y": 3006.0559552993218
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ExpressionNode, Syn.Bot",
+      "Value": "How to update the profile for existing user?",
+      "ExpressionName": null,
+      "Id": "f55109a6-ce20-45da-9246-33d5ed64d028",
+      "IsFolded": false,
+      "DisplayName": "Expression",
+      "Position": {
+        "X": 2516.4976747323708,
+        "Y": 3092.7226219659879
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ResponseNode, Syn.Bot",
+      "Priority": "Normal",
+      "Hint": null,
+      "Type": null,
+      "Format": null,
+      "ResponseMessages": [],
+      "Children": [],
+      "Id": "520e532a-bd3b-4bdf-90f0-32cce4e2abfb",
+      "IsFolded": false,
+      "DisplayName": "Response",
+      "Position": {
+        "X": 2362.0532302879265,
+        "Y": 2976.0559552993204
+      }
+    },
+    {
+      "$type": "Syn.Workspace.Nodes.InputOutput.InputTextNode, Syn.Workspace",
+      "OutputValue": "To update the profile for existing user, \r\nplease submit new DSC Ticket from \r\nDigital Centre.",
+      "Id": "7f08e477-e7ae-4f88-bafc-d932508732f0",
+      "IsFolded": false,
+      "DisplayName": "Input Text",
+      "Position": {
+        "X": 2055.38656362126,
+        "Y": 3009.3892886326535
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.IntentNode, Syn.Bot",
+      "IntentName": "intent_bis1",
+      "IntentContexts": [],
+      "Prompts": [],
+      "AutoEntity": null,
+      "Fallback": null,
+      "Trait": null,
+      "Event": null,
+      "Action": null,
+      "Id": "0e3c75b5-3334-4bfa-828e-28959dd464ad",
+      "IsFolded": false,
+      "DisplayName": "Intent (intent_bis1)",
+      "Position": {
+        "X": 1893.9465760969422,
+        "Y": 2975.6054776723722
+      }
+    },
+    {
+      "$type": "Syn.Workspace.Nodes.InputOutput.InputNumberNode, Syn.Workspace",
+      "OutputValue": 0.9,
+      "Id": "cafa4ef1-065a-4374-9539-bcbfeee5a452",
+      "IsFolded": false,
+      "DisplayName": "Input Number",
+      "Position": {
+        "X": 1726.0234991738653,
+        "Y": 2989.6054776723718
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ExpressionNode, Syn.Bot",
+      "Value": "How to access the Kulim BIS system?",
+      "ExpressionName": null,
+      "Id": "34b71e90-9800-48ca-b76b-b2c42e041da7",
+      "IsFolded": false,
+      "DisplayName": "Expression",
+      "Position": {
+        "X": 1596.4081145584805,
+        "Y": 3077.6054776723722
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ResponseNode, Syn.Bot",
+      "Priority": "Normal",
+      "Hint": null,
+      "Type": null,
+      "Format": null,
+      "ResponseMessages": [],
+      "Children": [],
+      "Id": "7104983c-885c-4f17-9668-5822fd491e59",
+      "IsFolded": false,
+      "DisplayName": "Response",
+      "Position": {
+        "X": 1433.4081145584732,
+        "Y": 2980.6054776723722
+      }
+    },
+    {
+      "$type": "Syn.Workspace.Nodes.InputOutput.InputTextNode, Syn.Workspace",
+      "OutputValue": "To access the system, go to url \r\nhttp://bis.kulim.com.my/",
+      "Id": "4ffe8646-9855-4aaf-900a-03ed1d1d3d1b",
+      "IsFolded": false,
+      "DisplayName": "Input Text",
+      "Position": {
+        "X": 1176.4081145584732,
+        "Y": 3008.6054776723722
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.IntentNode, Syn.Bot",
+      "IntentName": "intent_bis2",
+      "IntentContexts": [],
+      "Prompts": [],
+      "AutoEntity": null,
+      "Fallback": null,
+      "Trait": null,
+      "Event": null,
+      "Action": null,
+      "Id": "e53082d0-49c4-47ad-a5b6-86d20d40eec1",
+      "IsFolded": false,
+      "DisplayName": "Intent (intent_bis2)",
+      "Position": {
+        "X": 1022.2835497835504,
+        "Y": 2980.3130106415092
+      }
+    },
+    {
+      "$type": "Syn.Workspace.Nodes.InputOutput.InputNumberNode, Syn.Workspace",
+      "OutputValue": 0.9,
+      "Id": "2c051275-a6df-476f-9481-c31f5f1c6294",
+      "IsFolded": false,
+      "DisplayName": "Input Number",
+      "Position": {
+        "X": 853.13131313131362,
+        "Y": 2964.7690370712185
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ExpressionNode, Syn.Bot",
+      "Value": "What is the purpose of KULIM BIS system?",
+      "ExpressionName": null,
+      "Id": "0d2100da-4185-45de-af7e-55a47030328d",
+      "IsFolded": false,
+      "DisplayName": "Expression",
+      "Position": {
+        "X": 684.84848484848544,
+        "Y": 3054.8700471722291
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ResponseNode, Syn.Bot",
+      "Priority": "Normal",
+      "Hint": null,
+      "Type": null,
+      "Format": null,
+      "ResponseMessages": [],
+      "Children": [],
+      "Id": "06f828d0-5bd8-4b27-b64e-d60f075da435",
+      "IsFolded": false,
+      "DisplayName": "Response",
+      "Position": {
+        "X": 527.77777777777794,
+        "Y": 2944.7348045310196
+      }
+    },
+    {
+      "$type": "Syn.Workspace.Nodes.InputOutput.InputTextNode, Syn.Workspace",
+      "OutputValue": "The KULIM Breeding Information System (KULIM BIS) was \r\ndesigned to manage oil palm breeding data efficiently, \r\nallowing for more systematic integration and sharing of \r\ndata from different sites.",
+      "Id": "3c9d4c1b-064f-4058-a34e-3b895f18a880",
+      "IsFolded": false,
+      "DisplayName": "Input Text",
+      "Position": {
+        "X": 120.00000000000011,
+        "Y": 2965.8459156421309
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.IntentNode, Syn.Bot",
+      "IntentName": "intent_efrs1",
+      "IntentContexts": [],
+      "Prompts": [],
+      "AutoEntity": null,
+      "Fallback": null,
+      "Trait": null,
+      "Event": null,
+      "Action": null,
+      "Id": "b8ffa70e-5cf3-485f-a4c5-03529897f93c",
+      "IsFolded": false,
+      "DisplayName": "Intent (intent_efrs1)",
+      "Position": {
+        "X": 3702.9425803734389,
+        "Y": 2693.0042199238428
+      }
+    },
+    {
+      "$type": "Syn.Workspace.Nodes.InputOutput.InputNumberNode, Syn.Workspace",
+      "OutputValue": 0.9,
+      "Id": "019f9057-dc77-4f49-a01a-24dfa2b61372",
+      "IsFolded": false,
+      "DisplayName": "Input Number",
+      "Position": {
+        "X": 3525.29552154991,
+        "Y": 2705.9453963944311
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ExpressionNode, Syn.Bot",
+      "Value": "How to access the EFRS system?",
+      "ExpressionName": null,
+      "Id": "a6922113-f9f4-4b1f-b9bd-ce9206bfd052",
+      "IsFolded": false,
+      "DisplayName": "Expression",
+      "Position": {
+        "X": 3420.5896391969682,
+        "Y": 2794.1806905120779
+      }
+    },
+    {
+      "$type": "Syn.Bot.Oscova.WorkspaceNodes.ResponseNode, Syn.Bot",
+      "Priority": "Normal",
+      "Hint": null,
+      "Type": null,
+      "Format": null,
+      "ResponseMessages": [],
+      "Children": [],
+      "Id": "5c09cf70-82c4-44b6-9060-979244f5e813",
+      "IsFolded": false,
+      "DisplayName": "Response",
+      "Position": {
+        "X": 3259.413168608733,
+        "Y": 2678.8865728650194
+      }
+    },
+    {
+      "$type": "Syn.Workspace.Nodes.InputOutput.InputTextNode, Syn.Workspace",
+      "OutputValue": "To access the system, go to url \r\nhttp://121.120.88.52/efrs/login.aspx",
+      "Id": "194aa6e2-07ee-472e-ab0b-c7eb1b5d3022",
+      "IsFolded": false,
+      "DisplayName": "Input Text",
+      "Position": {
+        "X": 2971.1778744910857,
+        "Y": 2724.6953963944316
+      }
+    }
+  ],
+  "Connections": [
+    {
+      "FromNodeId": "0067bafc-ba6a-44eb-ad8d-4ef542ee0638",
+      "FromPortName": "Output",
+      "ToNodeId": "eddd807e-411e-444a-a687-038f648d4075",
+      "ToPortName": "Intents"
+    },
+    {
+      "FromNodeId": "1d61a8a7-6ea9-4c38-8a5f-a49417f09d86",
+      "FromPortName": "Output",
+      "ToNodeId": "eddd807e-411e-444a-a687-038f648d4075",
+      "ToPortName": "Intents"
+    },
+    {
+      "FromNodeId": "cdc4a2f4-8f94-4668-aa8a-5f3fc64fb4e5",
+      "FromPortName": "Output",
+      "ToNodeId": "eddd807e-411e-444a-a687-038f648d4075",
+      "ToPortName": "Intents"
+    },
+    {
+      "FromNodeId": "6485a12b-535d-4f91-8c7f-5d2fcb8db9df",
+      "FromPortName": "Output",
+      "ToNodeId": "eddd807e-411e-444a-a687-038f648d4075",
+      "ToPortName": "Intents"
+    },
+    {
+      "FromNodeId": "25a5745f-7682-45bd-909a-257a676f15cb",
+      "FromPortName": "Output",
+      "ToNodeId": "eddd807e-411e-444a-a687-038f648d4075",
+      "ToPortName": "Intents"
+    },
+    {
+      "FromNodeId": "f5cd36f4-7c64-4b3d-9455-95068fd053e5",
+      "FromPortName": "Output",
+      "ToNodeId": "eddd807e-411e-444a-a687-038f648d4075",
+      "ToPortName": "Intents"
+    },
+    {
+      "FromNodeId": "ca6a5dd3-bf71-412e-9999-ffc0839b81cf",
+      "FromPortName": "Output",
+      "ToNodeId": "eddd807e-411e-444a-a687-038f648d4075",
+      "ToPortName": "Intents"
+    },
+    {
+      "FromNodeId": "d8959a4f-b3b3-4dfd-a2bf-db93df7456ab",
+      "FromPortName": "Output",
+      "ToNodeId": "eddd807e-411e-444a-a687-038f648d4075",
+      "ToPortName": "Intents"
+    },
+    {
+      "FromNodeId": "39848f8e-0d57-438f-8f8a-952b78dfef15",
+      "FromPortName": "Output",
+      "ToNodeId": "eddd807e-411e-444a-a687-038f648d4075",
+      "ToPortName": "Intents"
+    },
+    {
+      "FromNodeId": "9badbbdd-a9ff-41c1-97bf-33e4dd36e930",
+      "FromPortName": "Output",
+      "ToNodeId": "eddd807e-411e-444a-a687-038f648d4075",
+      "ToPortName": "Intents"
+    },
+    {
+      "FromNodeId": "9119e179-3102-4145-9eaa-0d10c43ce379",
+      "FromPortName": "Output",
+      "ToNodeId": "eddd807e-411e-444a-a687-038f648d4075",
+      "ToPortName": "Intents"
+    },
+    {
+      "FromNodeId": "5c63f56f-85a9-4088-9556-909e4503336a",
+      "FromPortName": "Output",
+      "ToNodeId": "eddd807e-411e-444a-a687-038f648d4075",
+      "ToPortName": "Intents"
+    },
+    {
+      "FromNodeId": "c308c5fe-fb98-4d9e-ab93-fe6a35fba798",
+      "FromPortName": "Output",
+      "ToNodeId": "eddd807e-411e-444a-a687-038f648d4075",
+      "ToPortName": "Intents"
+    },
+    {
+      "FromNodeId": "44debf86-59b2-4100-bd21-1bf34fee9023",
+      "FromPortName": "Output",
+      "ToNodeId": "eddd807e-411e-444a-a687-038f648d4075",
+      "ToPortName": "Intents"
+    },
+    {
+      "FromNodeId": "d19db43c-aeb5-469f-ad2e-0058b8483e90",
+      "FromPortName": "Output",
+      "ToNodeId": "eddd807e-411e-444a-a687-038f648d4075",
+      "ToPortName": "Intents"
+    },
+    {
+      "FromNodeId": "9a738b3d-160b-4d04-a507-3d4957111d53",
+      "FromPortName": "Output",
+      "ToNodeId": "eddd807e-411e-444a-a687-038f648d4075",
+      "ToPortName": "Intents"
+    },
+    {
+      "FromNodeId": "8c47a069-af95-49c5-851d-1d792d7815ca",
+      "FromPortName": "Output",
+      "ToNodeId": "eddd807e-411e-444a-a687-038f648d4075",
+      "ToPortName": "Intents"
+    },
+    {
+      "FromNodeId": "3020c19b-0246-4cfe-897d-9f9a1a4e7f94",
+      "FromPortName": "Output",
+      "ToNodeId": "eddd807e-411e-444a-a687-038f648d4075",
+      "ToPortName": "Intents"
+    },
+    {
+      "FromNodeId": "ed54abe4-aa77-4666-9db3-547672443dfa",
+      "FromPortName": "Output",
+      "ToNodeId": "eddd807e-411e-444a-a687-038f648d4075",
+      "ToPortName": "Intents"
+    },
+    {
+      "FromNodeId": "b9d7f7ce-0a67-41a8-8d59-986578303b21",
+      "FromPortName": "Output",
+      "ToNodeId": "eddd807e-411e-444a-a687-038f648d4075",
+      "ToPortName": "Intents"
+    },
+    {
+      "FromNodeId": "c5fdef95-c997-4b05-9743-366cae518d20",
+      "FromPortName": "Output",
+      "ToNodeId": "eddd807e-411e-444a-a687-038f648d4075",
+      "ToPortName": "Intents"
+    },
+    {
+      "FromNodeId": "e7a78062-85f1-4359-8df0-38a6452a8622",
+      "FromPortName": "Output",
+      "ToNodeId": "eddd807e-411e-444a-a687-038f648d4075",
+      "ToPortName": "Intents"
+    },
+    {
+      "FromNodeId": "f033a187-0c42-484a-a5e5-55eb0b436e8f",
+      "FromPortName": "Output",
+      "ToNodeId": "eddd807e-411e-444a-a687-038f648d4075",
+      "ToPortName": "Intents"
+    },
+    {
+      "FromNodeId": "9210e008-aba8-419a-8918-08b3c6eaa6a6",
+      "FromPortName": "Output",
+      "ToNodeId": "eddd807e-411e-444a-a687-038f648d4075",
+      "ToPortName": "Intents"
+    },
+    {
+      "FromNodeId": "923babaf-24fd-4956-9229-01846301624f",
+      "FromPortName": "Output",
+      "ToNodeId": "eddd807e-411e-444a-a687-038f648d4075",
+      "ToPortName": "Intents"
+    },
+    {
+      "FromNodeId": "7887d0f6-b6d2-472e-a0c9-a2a6b181914f",
+      "FromPortName": "Output",
+      "ToNodeId": "eddd807e-411e-444a-a687-038f648d4075",
+      "ToPortName": "Intents"
+    },
+    {
+      "FromNodeId": "4cd0581e-60f0-4aad-91e9-9d9e958e0239",
+      "FromPortName": "Output",
+      "ToNodeId": "eddd807e-411e-444a-a687-038f648d4075",
+      "ToPortName": "Intents"
+    },
+    {
+      "FromNodeId": "ec5c6e11-2440-4da5-af7e-397de5e431a9",
+      "FromPortName": "Output",
+      "ToNodeId": "eddd807e-411e-444a-a687-038f648d4075",
+      "ToPortName": "Intents"
+    },
+    {
+      "FromNodeId": "4274d5e4-23e2-40ef-87c8-76b7056e2263",
+      "FromPortName": "Output",
+      "ToNodeId": "eddd807e-411e-444a-a687-038f648d4075",
+      "ToPortName": "Intents"
+    },
+    {
+      "FromNodeId": "ab800f9f-5754-45e6-9aa3-62f354acbbba",
+      "FromPortName": "Output",
+      "ToNodeId": "eddd807e-411e-444a-a687-038f648d4075",
+      "ToPortName": "Intents"
+    },
+    {
+      "FromNodeId": "18a883c5-d934-4fa0-a7e6-ab02d72b0bcd",
+      "FromPortName": "Output",
+      "ToNodeId": "eddd807e-411e-444a-a687-038f648d4075",
+      "ToPortName": "Intents"
+    },
+    {
+      "FromNodeId": "d38294ba-637a-441d-81e6-0668c69f014d",
+      "FromPortName": "Output",
+      "ToNodeId": "eddd807e-411e-444a-a687-038f648d4075",
+      "ToPortName": "Intents"
+    },
+    {
+      "FromNodeId": "36137d1b-3731-4c8f-9109-eed21f4d1246",
+      "FromPortName": "Output",
+      "ToNodeId": "eddd807e-411e-444a-a687-038f648d4075",
+      "ToPortName": "Intents"
+    },
+    {
+      "FromNodeId": "ad59d933-43e6-4b5a-8936-192093097908",
+      "FromPortName": "Output",
+      "ToNodeId": "eddd807e-411e-444a-a687-038f648d4075",
+      "ToPortName": "Intents"
+    },
+    {
+      "FromNodeId": "5e22e7db-c35a-43be-b01d-577dc22fdbab",
+      "FromPortName": "Output",
+      "ToNodeId": "eddd807e-411e-444a-a687-038f648d4075",
+      "ToPortName": "Intents"
+    },
+    {
+      "FromNodeId": "ee5b56db-d5b4-4605-a7b5-d94b03ede3c4",
+      "FromPortName": "Output",
+      "ToNodeId": "eddd807e-411e-444a-a687-038f648d4075",
+      "ToPortName": "Intents"
+    },
+    {
+      "FromNodeId": "5b04c7b8-bbef-47b8-9786-7c1b8ebfbeec",
+      "FromPortName": "Output",
+      "ToNodeId": "eddd807e-411e-444a-a687-038f648d4075",
+      "ToPortName": "Intents"
+    },
+    {
+      "FromNodeId": "670e62f3-abb3-42f9-8906-c82892692f49",
+      "FromPortName": "Output",
+      "ToNodeId": "eddd807e-411e-444a-a687-038f648d4075",
+      "ToPortName": "Intents"
+    },
+    {
+      "FromNodeId": "7e548913-6cce-489c-8032-83b052eab281",
+      "FromPortName": "Output",
+      "ToNodeId": "eddd807e-411e-444a-a687-038f648d4075",
+      "ToPortName": "Intents"
+    },
+    {
+      "FromNodeId": "09708cc5-c5d5-4be6-a773-7ab87c55443a",
+      "FromPortName": "Output",
+      "ToNodeId": "eddd807e-411e-444a-a687-038f648d4075",
+      "ToPortName": "Intents"
+    },
+    {
+      "FromNodeId": "e9689852-0b81-461e-b0bd-004cd60987d4",
+      "FromPortName": "Output",
+      "ToNodeId": "eddd807e-411e-444a-a687-038f648d4075",
+      "ToPortName": "Intents"
+    },
+    {
+      "FromNodeId": "4d3d1456-e569-4458-aeec-9939aea14b11",
+      "FromPortName": "Output",
+      "ToNodeId": "eddd807e-411e-444a-a687-038f648d4075",
+      "ToPortName": "Intents"
+    },
+    {
+      "FromNodeId": "c8a13c8e-9a46-4813-aa83-c446165d91c0",
+      "FromPortName": "Output",
+      "ToNodeId": "eddd807e-411e-444a-a687-038f648d4075",
+      "ToPortName": "Intents"
+    },
+    {
+      "FromNodeId": "a474ecd9-a3ea-4b7f-a822-a2312956a6bf",
+      "FromPortName": "Output",
+      "ToNodeId": "eddd807e-411e-444a-a687-038f648d4075",
+      "ToPortName": "Intents"
+    },
+    {
+      "FromNodeId": "718069a5-6355-4f49-9620-6ac50721d2d0",
+      "FromPortName": "Output",
+      "ToNodeId": "eddd807e-411e-444a-a687-038f648d4075",
+      "ToPortName": "Intents"
+    },
+    {
+      "FromNodeId": "a0800ac8-85e0-4699-ae47-a42b8ec44eff",
+      "FromPortName": "Output",
+      "ToNodeId": "eddd807e-411e-444a-a687-038f648d4075",
+      "ToPortName": "Intents"
+    },
+    {
+      "FromNodeId": "d6a26049-84f5-4b6d-b478-57ccff8f7386",
+      "FromPortName": "Output",
+      "ToNodeId": "eddd807e-411e-444a-a687-038f648d4075",
+      "ToPortName": "Intents"
+    },
+    {
+      "FromNodeId": "b49c2580-43dd-47af-a687-4fc0e07a4aba",
+      "FromPortName": "Output",
+      "ToNodeId": "eddd807e-411e-444a-a687-038f648d4075",
+      "ToPortName": "Intents"
+    },
+    {
+      "FromNodeId": "33c5b1cf-3c1f-484f-aa75-8576a430607a",
+      "FromPortName": "Output",
+      "ToNodeId": "eddd807e-411e-444a-a687-038f648d4075",
+      "ToPortName": "Intents"
+    },
+    {
+      "FromNodeId": "7e7808b9-3b12-46e4-9024-a7085c52baf6",
+      "FromPortName": "Output",
+      "ToNodeId": "eddd807e-411e-444a-a687-038f648d4075",
+      "ToPortName": "Intents"
+    },
+    {
+      "FromNodeId": "b3c94728-5222-4172-b887-dc15fb41347c",
+      "FromPortName": "Output",
+      "ToNodeId": "eddd807e-411e-444a-a687-038f648d4075",
+      "ToPortName": "Intents"
+    },
+    {
+      "FromNodeId": "0e3c75b5-3334-4bfa-828e-28959dd464ad",
+      "FromPortName": "Output",
+      "ToNodeId": "eddd807e-411e-444a-a687-038f648d4075",
+      "ToPortName": "Intents"
+    },
+    {
+      "FromNodeId": "e53082d0-49c4-47ad-a5b6-86d20d40eec1",
+      "FromPortName": "Output",
+      "ToNodeId": "eddd807e-411e-444a-a687-038f648d4075",
+      "ToPortName": "Intents"
+    },
+    {
+      "FromNodeId": "b8ffa70e-5cf3-485f-a4c5-03529897f93c",
+      "FromPortName": "Output",
+      "ToNodeId": "eddd807e-411e-444a-a687-038f648d4075",
+      "ToPortName": "Intents"
+    },
+    {
+      "FromNodeId": "69790d1a-e3a2-43a4-a16e-fa0694b583bd",
+      "FromPortName": "OutputValue",
+      "ToNodeId": "0067bafc-ba6a-44eb-ad8d-4ef542ee0638",
+      "ToPortName": "MinScore"
+    },
+    {
+      "FromNodeId": "5169b3e0-1684-417c-ba01-5df786f04eca",
+      "FromPortName": "Output",
+      "ToNodeId": "0067bafc-ba6a-44eb-ad8d-4ef542ee0638",
+      "ToPortName": "Expressions"
+    },
+    {
+      "FromNodeId": "964ae549-f1c7-4e13-b08c-0edfad8cdfc7",
+      "FromPortName": "Output",
+      "ToNodeId": "0067bafc-ba6a-44eb-ad8d-4ef542ee0638",
+      "ToPortName": "Response"
+    },
+    {
+      "FromNodeId": "61e6b631-b3d5-40ae-8278-34f3c5f0664f",
+      "FromPortName": "Output",
+      "ToNodeId": "964ae549-f1c7-4e13-b08c-0edfad8cdfc7",
+      "ToPortName": "ResponseMessages"
+    },
+    {
+      "FromNodeId": "eddd807e-411e-444a-a687-038f648d4075",
+      "FromPortName": "Output",
+      "ToNodeId": "41305f32-cb7c-4484-81d7-7d3eaf756d21",
+      "ToPortName": "Dialogs"
+    },
+    {
+      "FromNodeId": "a6a01b82-72bd-49f1-93ae-93fccc69816a",
+      "FromPortName": "OutputValue",
+      "ToNodeId": "1d61a8a7-6ea9-4c38-8a5f-a49417f09d86",
+      "ToPortName": "MinScore"
+    },
+    {
+      "FromNodeId": "071b3134-5734-4c0a-8acb-24253c4efac5",
+      "FromPortName": "Output",
+      "ToNodeId": "1d61a8a7-6ea9-4c38-8a5f-a49417f09d86",
+      "ToPortName": "Expressions"
+    },
+    {
+      "FromNodeId": "1ec083d9-31fa-46f1-ac39-65a2c93e0583",
+      "FromPortName": "Output",
+      "ToNodeId": "1d61a8a7-6ea9-4c38-8a5f-a49417f09d86",
+      "ToPortName": "Response"
+    },
+    {
+      "FromNodeId": "293e2dc5-5123-47e0-b03b-37d4c87e8860",
+      "FromPortName": "Output",
+      "ToNodeId": "1ec083d9-31fa-46f1-ac39-65a2c93e0583",
+      "ToPortName": "ResponseMessages"
+    },
+    {
+      "FromNodeId": "5c851a1a-e53a-4c5c-9287-783788d9bbd6",
+      "FromPortName": "Output",
+      "ToNodeId": "f0d45a8d-4b25-477d-943b-46fba3754843",
+      "ToPortName": "ResponseMessages"
+    },
+    {
+      "FromNodeId": "3a4a834f-4238-4bdd-b11b-0845361e7e84",
+      "FromPortName": "OutputValue",
+      "ToNodeId": "cdc4a2f4-8f94-4668-aa8a-5f3fc64fb4e5",
+      "ToPortName": "MinScore"
+    },
+    {
+      "FromNodeId": "b3b41dd2-1a07-41e9-8224-bdd32017c029",
+      "FromPortName": "Output",
+      "ToNodeId": "cdc4a2f4-8f94-4668-aa8a-5f3fc64fb4e5",
+      "ToPortName": "Expressions"
+    },
+    {
+      "FromNodeId": "f0d45a8d-4b25-477d-943b-46fba3754843",
+      "FromPortName": "Output",
+      "ToNodeId": "cdc4a2f4-8f94-4668-aa8a-5f3fc64fb4e5",
+      "ToPortName": "Response"
+    },
+    {
+      "FromNodeId": "b99ca9f4-0360-4f14-8264-36e1528e8730",
+      "FromPortName": "OutputValue",
+      "ToNodeId": "6485a12b-535d-4f91-8c7f-5d2fcb8db9df",
+      "ToPortName": "MinScore"
+    },
+    {
+      "FromNodeId": "7c262781-586b-45fb-8e6b-0ea79b73ab48",
+      "FromPortName": "Output",
+      "ToNodeId": "6485a12b-535d-4f91-8c7f-5d2fcb8db9df",
+      "ToPortName": "Expressions"
+    },
+    {
+      "FromNodeId": "0514149a-7d15-483d-86e3-818580eabbc9",
+      "FromPortName": "Output",
+      "ToNodeId": "6485a12b-535d-4f91-8c7f-5d2fcb8db9df",
+      "ToPortName": "Response"
+    },
+    {
+      "FromNodeId": "359d80e1-b5c2-4f6f-87ab-71ab3a59078d",
+      "FromPortName": "OutputValue",
+      "ToNodeId": "0514149a-7d15-483d-86e3-818580eabbc9",
+      "ToPortName": "Text"
+    },
+    {
+      "FromNodeId": "fbaf31b4-5da6-437e-8df4-65c6963b0720",
+      "FromPortName": "OutputValue",
+      "ToNodeId": "25a5745f-7682-45bd-909a-257a676f15cb",
+      "ToPortName": "MinScore"
+    },
+    {
+      "FromNodeId": "38c62df0-5f63-4121-997d-2e463a75d9a5",
+      "FromPortName": "Output",
+      "ToNodeId": "25a5745f-7682-45bd-909a-257a676f15cb",
+      "ToPortName": "Expressions"
+    },
+    {
+      "FromNodeId": "9c454e8e-9c78-45cd-a056-518a8a904152",
+      "FromPortName": "Output",
+      "ToNodeId": "25a5745f-7682-45bd-909a-257a676f15cb",
+      "ToPortName": "Response"
+    },
+    {
+      "FromNodeId": "ca67048c-b043-49aa-9fd6-57a6e3ba67c6",
+      "FromPortName": "OutputValue",
+      "ToNodeId": "9c454e8e-9c78-45cd-a056-518a8a904152",
+      "ToPortName": "Text"
+    },
+    {
+      "FromNodeId": "0a911413-74ea-4d6f-af37-71b248860bd1",
+      "FromPortName": "Output",
+      "ToNodeId": "f5cd36f4-7c64-4b3d-9455-95068fd053e5",
+      "ToPortName": "Fallback"
+    },
+    {
+      "FromNodeId": "e5ac1745-dd0b-42e5-8a99-0cc724102d44",
+      "FromPortName": "Output",
+      "ToNodeId": "f5cd36f4-7c64-4b3d-9455-95068fd053e5",
+      "ToPortName": "Response"
+    },
+    {
+      "FromNodeId": "009547f7-427a-4a9e-ac37-bfea5aa675d1",
+      "FromPortName": "OutputValue",
+      "ToNodeId": "e5ac1745-dd0b-42e5-8a99-0cc724102d44",
+      "ToPortName": "Text"
+    },
+    {
+      "FromNodeId": "c4f9176d-6c48-4fa1-8dc0-546c0b015796",
+      "FromPortName": "OutputValue",
+      "ToNodeId": "d8959a4f-b3b3-4dfd-a2bf-db93df7456ab",
+      "ToPortName": "MinScore"
+    },
+    {
+      "FromNodeId": "2fdc3650-ba83-4e75-8ed7-92afacab2e6e",
+      "FromPortName": "Output",
+      "ToNodeId": "d8959a4f-b3b3-4dfd-a2bf-db93df7456ab",
+      "ToPortName": "Expressions"
+    },
+    {
+      "FromNodeId": "1ac6fa32-17f0-4f5a-a9d0-e5a836a38b2f",
+      "FromPortName": "Output",
+      "ToNodeId": "d8959a4f-b3b3-4dfd-a2bf-db93df7456ab",
+      "ToPortName": "Response"
+    },
+    {
+      "FromNodeId": "bc94d70c-60db-4b28-a4a2-a66d61474731",
+      "FromPortName": "OutputValue",
+      "ToNodeId": "1ac6fa32-17f0-4f5a-a9d0-e5a836a38b2f",
+      "ToPortName": "Text"
+    },
+    {
+      "FromNodeId": "8366d73b-922f-4c2c-a515-268c0eab72e5",
+      "FromPortName": "OutputValue",
+      "ToNodeId": "ca6a5dd3-bf71-412e-9999-ffc0839b81cf",
+      "ToPortName": "MinScore"
+    },
+    {
+      "FromNodeId": "7a9f9c27-7fd6-4697-a57f-81e4b13dff9e",
+      "FromPortName": "Expressions",
+      "ToNodeId": "ca6a5dd3-bf71-412e-9999-ffc0839b81cf",
+      "ToPortName": "Expressions"
+    },
+    {
+      "FromNodeId": "d49f7a87-8d24-4754-9026-2e9bebdb51e9",
+      "FromPortName": "Output",
+      "ToNodeId": "ca6a5dd3-bf71-412e-9999-ffc0839b81cf",
+      "ToPortName": "Response"
+    },
+    {
+      "FromNodeId": "f8468300-ff20-4814-851c-543c3491c6b3",
+      "FromPortName": "OutputValue",
+      "ToNodeId": "d49f7a87-8d24-4754-9026-2e9bebdb51e9",
+      "ToPortName": "Text"
+    },
+    {
+      "FromNodeId": "c74bddec-9ed0-4e96-81fc-d4c1099587cd",
+      "FromPortName": "OutputValue",
+      "ToNodeId": "9badbbdd-a9ff-41c1-97bf-33e4dd36e930",
+      "ToPortName": "MinScore"
+    },
+    {
+      "FromNodeId": "65aaa2c8-8491-498a-8ac4-182b0c3aab38",
+      "FromPortName": "Output",
+      "ToNodeId": "9badbbdd-a9ff-41c1-97bf-33e4dd36e930",
+      "ToPortName": "Expressions"
+    },
+    {
+      "FromNodeId": "9b7fc12b-0f37-497d-a6cc-cc3d25434ee1",
+      "FromPortName": "Output",
+      "ToNodeId": "9badbbdd-a9ff-41c1-97bf-33e4dd36e930",
+      "ToPortName": "Response"
+    },
+    {
+      "FromNodeId": "d1722838-aab4-41fd-8382-34fdb6c589ba",
+      "FromPortName": "OutputValue",
+      "ToNodeId": "9b7fc12b-0f37-497d-a6cc-cc3d25434ee1",
+      "ToPortName": "Text"
+    },
+    {
+      "FromNodeId": "ffde402b-7c5a-4d78-8c83-6e01d1bfe1a9",
+      "FromPortName": "OutputValue",
+      "ToNodeId": "39848f8e-0d57-438f-8f8a-952b78dfef15",
+      "ToPortName": "MinScore"
+    },
+    {
+      "FromNodeId": "34445a0e-de84-43b8-ae4c-b114b5cf2611",
+      "FromPortName": "Output",
+      "ToNodeId": "39848f8e-0d57-438f-8f8a-952b78dfef15",
+      "ToPortName": "Expressions"
+    },
+    {
+      "FromNodeId": "45780ee2-70cd-40ed-840b-3b0a9514c53d",
+      "FromPortName": "Output",
+      "ToNodeId": "39848f8e-0d57-438f-8f8a-952b78dfef15",
+      "ToPortName": "Response"
+    },
+    {
+      "FromNodeId": "cb810329-ad26-4166-b16e-daffb6bcd28d",
+      "FromPortName": "OutputValue",
+      "ToNodeId": "45780ee2-70cd-40ed-840b-3b0a9514c53d",
+      "ToPortName": "Text"
+    },
+    {
+      "FromNodeId": "784784f1-4f81-44aa-be98-6dc823f96dc5",
+      "FromPortName": "OutputValue",
+      "ToNodeId": "9119e179-3102-4145-9eaa-0d10c43ce379",
+      "ToPortName": "MinScore"
+    },
+    {
+      "FromNodeId": "a62fa38f-9643-49a8-bed6-04dd86e533ae",
+      "FromPortName": "Output",
+      "ToNodeId": "9119e179-3102-4145-9eaa-0d10c43ce379",
+      "ToPortName": "Expressions"
+    },
+    {
+      "FromNodeId": "792dd9d8-615c-4e9c-ae7c-643e829895f2",
+      "FromPortName": "Output",
+      "ToNodeId": "9119e179-3102-4145-9eaa-0d10c43ce379",
+      "ToPortName": "Response"
+    },
+    {
+      "FromNodeId": "2b4af6bc-2734-4c30-afcc-b4a445e08aa0",
+      "FromPortName": "OutputValue",
+      "ToNodeId": "792dd9d8-615c-4e9c-ae7c-643e829895f2",
+      "ToPortName": "Text"
+    },
+    {
+      "FromNodeId": "b7880a93-bc25-4743-92c9-01fe30e207d9",
+      "FromPortName": "OutputValue",
+      "ToNodeId": "5c63f56f-85a9-4088-9556-909e4503336a",
+      "ToPortName": "MinScore"
+    },
+    {
+      "FromNodeId": "94dd5dd7-05c7-4357-b6ab-8e66cc382a6a",
+      "FromPortName": "Output",
+      "ToNodeId": "5c63f56f-85a9-4088-9556-909e4503336a",
+      "ToPortName": "Expressions"
+    },
+    {
+      "FromNodeId": "7af4ff4a-287e-43d7-89fd-9fbaff08aa59",
+      "FromPortName": "Output",
+      "ToNodeId": "5c63f56f-85a9-4088-9556-909e4503336a",
+      "ToPortName": "Response"
+    },
+    {
+      "FromNodeId": "a67d1696-1673-4ddb-a488-ca3fe6f95b6b",
+      "FromPortName": "Output",
+      "ToNodeId": "7af4ff4a-287e-43d7-89fd-9fbaff08aa59",
+      "ToPortName": "ResponseMessages"
+    },
+    {
+      "FromNodeId": "b493db1b-5d5f-41b6-b9cc-07344c1a3be8",
+      "FromPortName": "OutputValue",
+      "ToNodeId": "c308c5fe-fb98-4d9e-ab93-fe6a35fba798",
+      "ToPortName": "MinScore"
+    },
+    {
+      "FromNodeId": "177ada8b-9c3f-49bb-9009-e1a6ca456cc1",
+      "FromPortName": "Output",
+      "ToNodeId": "c308c5fe-fb98-4d9e-ab93-fe6a35fba798",
+      "ToPortName": "Expressions"
+    },
+    {
+      "FromNodeId": "ac26b959-f5ed-48fe-9b08-fd75f3cb1d41",
+      "FromPortName": "Output",
+      "ToNodeId": "c308c5fe-fb98-4d9e-ab93-fe6a35fba798",
+      "ToPortName": "Response"
+    },
+    {
+      "FromNodeId": "48dcd175-a7cb-462c-bf04-1ddcd5133e8d",
+      "FromPortName": "OutputValue",
+      "ToNodeId": "ac26b959-f5ed-48fe-9b08-fd75f3cb1d41",
+      "ToPortName": "Text"
+    },
+    {
+      "FromNodeId": "7993b979-4d70-48ef-bfc9-2f0d93b622c9",
+      "FromPortName": "OutputValue",
+      "ToNodeId": "44debf86-59b2-4100-bd21-1bf34fee9023",
+      "ToPortName": "MinScore"
+    },
+    {
+      "FromNodeId": "b2ec061f-6045-4a6d-8809-2ec50dac63d4",
+      "FromPortName": "Output",
+      "ToNodeId": "44debf86-59b2-4100-bd21-1bf34fee9023",
+      "ToPortName": "Expressions"
+    },
+    {
+      "FromNodeId": "99e9beaf-d252-4a59-ba6d-349678b9506c",
+      "FromPortName": "Output",
+      "ToNodeId": "44debf86-59b2-4100-bd21-1bf34fee9023",
+      "ToPortName": "Response"
+    },
+    {
+      "FromNodeId": "8c530582-67c9-4187-abbc-2a6488d936c6",
+      "FromPortName": "OutputValue",
+      "ToNodeId": "99e9beaf-d252-4a59-ba6d-349678b9506c",
+      "ToPortName": "Text"
+    },
+    {
+      "FromNodeId": "682cfb22-7a90-4488-9515-12b8d386da74",
+      "FromPortName": "OutputValue",
+      "ToNodeId": "d19db43c-aeb5-469f-ad2e-0058b8483e90",
+      "ToPortName": "MinScore"
+    },
+    {
+      "FromNodeId": "fc84ecd0-0254-43f1-84a3-d724d0b71131",
+      "FromPortName": "Output",
+      "ToNodeId": "d19db43c-aeb5-469f-ad2e-0058b8483e90",
+      "ToPortName": "Expressions"
+    },
+    {
+      "FromNodeId": "719aeb82-72ab-4d68-a8a3-a7c129f60247",
+      "FromPortName": "Output",
+      "ToNodeId": "d19db43c-aeb5-469f-ad2e-0058b8483e90",
+      "ToPortName": "Response"
+    },
+    {
+      "FromNodeId": "38dd652a-23f6-436d-b072-ddcbef472cf6",
+      "FromPortName": "OutputValue",
+      "ToNodeId": "719aeb82-72ab-4d68-a8a3-a7c129f60247",
+      "ToPortName": "Text"
+    },
+    {
+      "FromNodeId": "0405ec3b-875e-4453-8f3b-eef8a04c2709",
+      "FromPortName": "OutputValue",
+      "ToNodeId": "9a738b3d-160b-4d04-a507-3d4957111d53",
+      "ToPortName": "MinScore"
+    },
+    {
+      "FromNodeId": "a5a09565-e669-4e14-9a35-fe21d6d7d629",
+      "FromPortName": "Output",
+      "ToNodeId": "9a738b3d-160b-4d04-a507-3d4957111d53",
+      "ToPortName": "Expressions"
+    },
+    {
+      "FromNodeId": "89c2b8c8-06cf-4788-bd75-ca8d11a67996",
+      "FromPortName": "Output",
+      "ToNodeId": "9a738b3d-160b-4d04-a507-3d4957111d53",
+      "ToPortName": "Response"
+    },
+    {
+      "FromNodeId": "df8dadb7-7a32-4756-a403-70ba367bd2a8",
+      "FromPortName": "StringList",
+      "ToNodeId": "89c2b8c8-06cf-4788-bd75-ca8d11a67996",
+      "ToPortName": "Text"
+    },
+    {
+      "FromNodeId": "b345fc97-76d0-4468-b299-b67950e11945",
+      "FromPortName": "OutputValue",
+      "ToNodeId": "8c47a069-af95-49c5-851d-1d792d7815ca",
+      "ToPortName": "MinScore"
+    },
+    {
+      "FromNodeId": "e337dedb-de32-4a2f-b385-7dfb947c7d0b",
+      "FromPortName": "Output",
+      "ToNodeId": "8c47a069-af95-49c5-851d-1d792d7815ca",
+      "ToPortName": "Expressions"
+    },
+    {
+      "FromNodeId": "2e2a8247-e22a-47ff-9340-cb1c6c0633ce",
+      "FromPortName": "Output",
+      "ToNodeId": "8c47a069-af95-49c5-851d-1d792d7815ca",
+      "ToPortName": "Response"
+    },
+    {
+      "FromNodeId": "6587673b-7e83-431c-8c90-bb40945f6c67",
+      "FromPortName": "OutputValue",
+      "ToNodeId": "2e2a8247-e22a-47ff-9340-cb1c6c0633ce",
+      "ToPortName": "Text"
+    },
+    {
+      "FromNodeId": "842371b8-8893-42f4-8e3a-f89035e5e3bc",
+      "FromPortName": "OutputValue",
+      "ToNodeId": "3020c19b-0246-4cfe-897d-9f9a1a4e7f94",
+      "ToPortName": "MinScore"
+    },
+    {
+      "FromNodeId": "94532cce-b512-469e-9a03-fb951baa06c6",
+      "FromPortName": "Output",
+      "ToNodeId": "3020c19b-0246-4cfe-897d-9f9a1a4e7f94",
+      "ToPortName": "Expressions"
+    },
+    {
+      "FromNodeId": "725960dd-5fae-45dc-a5c3-9655cd0b4b10",
+      "FromPortName": "Output",
+      "ToNodeId": "3020c19b-0246-4cfe-897d-9f9a1a4e7f94",
+      "ToPortName": "Response"
+    },
+    {
+      "FromNodeId": "3becb07e-9e6c-421e-acb3-55d3c6d0c20c",
+      "FromPortName": "OutputValue",
+      "ToNodeId": "725960dd-5fae-45dc-a5c3-9655cd0b4b10",
+      "ToPortName": "Text"
+    },
+    {
+      "FromNodeId": "ab6d7500-7191-44c3-95ce-434c95fa5bbd",
+      "FromPortName": "OutputValue",
+      "ToNodeId": "ed54abe4-aa77-4666-9db3-547672443dfa",
+      "ToPortName": "MinScore"
+    },
+    {
+      "FromNodeId": "54daf821-2d2d-456b-af22-7593c43a0367",
+      "FromPortName": "Output",
+      "ToNodeId": "ed54abe4-aa77-4666-9db3-547672443dfa",
+      "ToPortName": "Expressions"
+    },
+    {
+      "FromNodeId": "8b92aea9-d6b6-44f3-9e43-32b936e6f1d0",
+      "FromPortName": "Output",
+      "ToNodeId": "ed54abe4-aa77-4666-9db3-547672443dfa",
+      "ToPortName": "Response"
+    },
+    {
+      "FromNodeId": "75895fb2-a0cc-4e13-a3cb-7cdc19eb56dd",
+      "FromPortName": "OutputValue",
+      "ToNodeId": "8b92aea9-d6b6-44f3-9e43-32b936e6f1d0",
+      "ToPortName": "Text"
+    },
+    {
+      "FromNodeId": "4125a8d7-c6c9-46c7-aa18-57573b0276dc",
+      "FromPortName": "OutputValue",
+      "ToNodeId": "b9d7f7ce-0a67-41a8-8d59-986578303b21",
+      "ToPortName": "MinScore"
+    },
+    {
+      "FromNodeId": "e09754b9-58aa-4e67-9f35-f5ada2776f19",
+      "FromPortName": "Output",
+      "ToNodeId": "b9d7f7ce-0a67-41a8-8d59-986578303b21",
+      "ToPortName": "Expressions"
+    },
+    {
+      "FromNodeId": "0dfec49e-fc97-486c-a2e2-0ccff295a010",
+      "FromPortName": "Output",
+      "ToNodeId": "b9d7f7ce-0a67-41a8-8d59-986578303b21",
+      "ToPortName": "Response"
+    },
+    {
+      "FromNodeId": "6869207b-00d8-415f-80ef-3a411b17a4df",
+      "FromPortName": "OutputValue",
+      "ToNodeId": "0dfec49e-fc97-486c-a2e2-0ccff295a010",
+      "ToPortName": "Text"
+    },
+    {
+      "FromNodeId": "dada6154-8080-4db7-a8fe-0c0409b55a5b",
+      "FromPortName": "OutputValue",
+      "ToNodeId": "c5fdef95-c997-4b05-9743-366cae518d20",
+      "ToPortName": "MinScore"
+    },
+    {
+      "FromNodeId": "b83aee71-6eac-461d-97e2-2bfad326fcf7",
+      "FromPortName": "Output",
+      "ToNodeId": "c5fdef95-c997-4b05-9743-366cae518d20",
+      "ToPortName": "Expressions"
+    },
+    {
+      "FromNodeId": "802c7daf-c7f5-4a13-9128-c38a3fa1f62d",
+      "FromPortName": "Output",
+      "ToNodeId": "c5fdef95-c997-4b05-9743-366cae518d20",
+      "ToPortName": "Response"
+    },
+    {
+      "FromNodeId": "42b57fd5-19f4-4c0c-8e6e-0bc4805f7e73",
+      "FromPortName": "OutputValue",
+      "ToNodeId": "802c7daf-c7f5-4a13-9128-c38a3fa1f62d",
+      "ToPortName": "Text"
+    },
+    {
+      "FromNodeId": "bd63c42f-b1da-4343-82bd-af22cd47f900",
+      "FromPortName": "OutputValue",
+      "ToNodeId": "e7a78062-85f1-4359-8df0-38a6452a8622",
+      "ToPortName": "MinScore"
+    },
+    {
+      "FromNodeId": "fd18a528-e691-41cc-a52c-c714e4a01199",
+      "FromPortName": "Output",
+      "ToNodeId": "e7a78062-85f1-4359-8df0-38a6452a8622",
+      "ToPortName": "Expressions"
+    },
+    {
+      "FromNodeId": "1582d042-49e8-4c33-b1a5-e13cd18842c4",
+      "FromPortName": "Output",
+      "ToNodeId": "e7a78062-85f1-4359-8df0-38a6452a8622",
+      "ToPortName": "Response"
+    },
+    {
+      "FromNodeId": "574a8a45-6cb8-40bc-95a5-9b9702714534",
+      "FromPortName": "OutputValue",
+      "ToNodeId": "1582d042-49e8-4c33-b1a5-e13cd18842c4",
+      "ToPortName": "Text"
+    },
+    {
+      "FromNodeId": "041f3f68-756d-4ed4-a24b-a998f7617551",
+      "FromPortName": "OutputValue",
+      "ToNodeId": "f033a187-0c42-484a-a5e5-55eb0b436e8f",
+      "ToPortName": "MinScore"
+    },
+    {
+      "FromNodeId": "6c4a5a0e-fd05-4c8f-a5b1-2f2c1497097c",
+      "FromPortName": "Output",
+      "ToNodeId": "f033a187-0c42-484a-a5e5-55eb0b436e8f",
+      "ToPortName": "Expressions"
+    },
+    {
+      "FromNodeId": "5caea72e-6126-4f24-828b-e0973cd799fe",
+      "FromPortName": "Output",
+      "ToNodeId": "f033a187-0c42-484a-a5e5-55eb0b436e8f",
+      "ToPortName": "Response"
+    },
+    {
+      "FromNodeId": "f92a5700-431b-407a-b262-2c4ed713a4ed",
+      "FromPortName": "Output",
+      "ToNodeId": "5caea72e-6126-4f24-828b-e0973cd799fe",
+      "ToPortName": "ResponseMessages"
+    },
+    {
+      "FromNodeId": "d59f6222-c323-4c64-8756-c7a84845bf75",
+      "FromPortName": "OutputValue",
+      "ToNodeId": "9210e008-aba8-419a-8918-08b3c6eaa6a6",
+      "ToPortName": "MinScore"
+    },
+    {
+      "FromNodeId": "c6a21115-5e03-48a2-86e2-c118dbd3fe32",
+      "FromPortName": "Output",
+      "ToNodeId": "9210e008-aba8-419a-8918-08b3c6eaa6a6",
+      "ToPortName": "Expressions"
+    },
+    {
+      "FromNodeId": "e0388daf-6eb7-43d3-afe2-ca87754f9bdc",
+      "FromPortName": "Output",
+      "ToNodeId": "9210e008-aba8-419a-8918-08b3c6eaa6a6",
+      "ToPortName": "Response"
+    },
+    {
+      "FromNodeId": "d4019485-97f9-44ff-a2dd-bcedbe372a88",
+      "FromPortName": "OutputValue",
+      "ToNodeId": "e0388daf-6eb7-43d3-afe2-ca87754f9bdc",
+      "ToPortName": "Text"
+    },
+    {
+      "FromNodeId": "068ed597-73ad-426b-8c22-7be86a1592b2",
+      "FromPortName": "OutputValue",
+      "ToNodeId": "923babaf-24fd-4956-9229-01846301624f",
+      "ToPortName": "MinScore"
+    },
+    {
+      "FromNodeId": "8f0f21f1-d7ad-46f9-8c70-e981608d3b6d",
+      "FromPortName": "Output",
+      "ToNodeId": "923babaf-24fd-4956-9229-01846301624f",
+      "ToPortName": "Expressions"
+    },
+    {
+      "FromNodeId": "108626a4-9aed-4930-a761-8f184031f041",
+      "FromPortName": "Output",
+      "ToNodeId": "923babaf-24fd-4956-9229-01846301624f",
+      "ToPortName": "Response"
+    },
+    {
+      "FromNodeId": "469e7bb4-32e5-4512-857a-a71551d9584e",
+      "FromPortName": "OutputValue",
+      "ToNodeId": "108626a4-9aed-4930-a761-8f184031f041",
+      "ToPortName": "Text"
+    },
+    {
+      "FromNodeId": "b8a22234-e276-4e0b-8aed-fe9a7b113d1c",
+      "FromPortName": "OutputValue",
+      "ToNodeId": "7887d0f6-b6d2-472e-a0c9-a2a6b181914f",
+      "ToPortName": "MinScore"
+    },
+    {
+      "FromNodeId": "d2b97e42-610f-4e11-b1d8-9ffacffa4efd",
+      "FromPortName": "Output",
+      "ToNodeId": "7887d0f6-b6d2-472e-a0c9-a2a6b181914f",
+      "ToPortName": "Expressions"
+    },
+    {
+      "FromNodeId": "5015f332-a088-4a8f-9361-1f6287905086",
+      "FromPortName": "Output",
+      "ToNodeId": "7887d0f6-b6d2-472e-a0c9-a2a6b181914f",
+      "ToPortName": "Response"
+    },
+    {
+      "FromNodeId": "68d98183-a9aa-42ae-b853-75ed9e88c692",
+      "FromPortName": "Output",
+      "ToNodeId": "5015f332-a088-4a8f-9361-1f6287905086",
+      "ToPortName": "ResponseMessages"
+    },
+    {
+      "FromNodeId": "a8464398-8c55-4317-859a-879b2c140e3d",
+      "FromPortName": "OutputValue",
+      "ToNodeId": "4cd0581e-60f0-4aad-91e9-9d9e958e0239",
+      "ToPortName": "MinScore"
+    },
+    {
+      "FromNodeId": "e50c8f23-0743-42dc-bfff-7baad7e020a8",
+      "FromPortName": "Output",
+      "ToNodeId": "4cd0581e-60f0-4aad-91e9-9d9e958e0239",
+      "ToPortName": "Expressions"
+    },
+    {
+      "FromNodeId": "07e8c414-f0b0-4a59-8cbb-b97fcc4a17d7",
+      "FromPortName": "Output",
+      "ToNodeId": "4cd0581e-60f0-4aad-91e9-9d9e958e0239",
+      "ToPortName": "Response"
+    },
+    {
+      "FromNodeId": "1384adde-c814-4563-97fd-859fe8cf180d",
+      "FromPortName": "OutputValue",
+      "ToNodeId": "07e8c414-f0b0-4a59-8cbb-b97fcc4a17d7",
+      "ToPortName": "Text"
+    },
+    {
+      "FromNodeId": "44e6931c-b506-43fe-8324-e3abff752eab",
+      "FromPortName": "OutputValue",
+      "ToNodeId": "ec5c6e11-2440-4da5-af7e-397de5e431a9",
+      "ToPortName": "MinScore"
+    },
+    {
+      "FromNodeId": "d37622d1-4b0b-478e-94e2-286cec6e4c66",
+      "FromPortName": "Output",
+      "ToNodeId": "ec5c6e11-2440-4da5-af7e-397de5e431a9",
+      "ToPortName": "Expressions"
+    },
+    {
+      "FromNodeId": "b2c59c24-7a1e-4737-9fa0-9b2283854f1b",
+      "FromPortName": "Output",
+      "ToNodeId": "ec5c6e11-2440-4da5-af7e-397de5e431a9",
+      "ToPortName": "Response"
+    },
+    {
+      "FromNodeId": "a9e6431e-5675-423e-bda9-5db5044621cd",
+      "FromPortName": "OutputValue",
+      "ToNodeId": "b2c59c24-7a1e-4737-9fa0-9b2283854f1b",
+      "ToPortName": "Text"
+    },
+    {
+      "FromNodeId": "c56e2b39-ec82-47f9-9880-625367ddacb7",
+      "FromPortName": "OutputValue",
+      "ToNodeId": "4274d5e4-23e2-40ef-87c8-76b7056e2263",
+      "ToPortName": "MinScore"
+    },
+    {
+      "FromNodeId": "24f86e2c-9324-42e3-916d-d7827212b105",
+      "FromPortName": "Output",
+      "ToNodeId": "4274d5e4-23e2-40ef-87c8-76b7056e2263",
+      "ToPortName": "Expressions"
+    },
+    {
+      "FromNodeId": "7f9ad6ec-6050-4fb7-9dda-6efb00c54029",
+      "FromPortName": "Output",
+      "ToNodeId": "4274d5e4-23e2-40ef-87c8-76b7056e2263",
+      "ToPortName": "Response"
+    },
+    {
+      "FromNodeId": "ec285411-0a3e-46d1-b9ae-f06dd18307cf",
+      "FromPortName": "OutputValue",
+      "ToNodeId": "7f9ad6ec-6050-4fb7-9dda-6efb00c54029",
+      "ToPortName": "Text"
+    },
+    {
+      "FromNodeId": "ef28f3e3-d970-425e-98fb-99870b10e1b1",
+      "FromPortName": "OutputValue",
+      "ToNodeId": "ab800f9f-5754-45e6-9aa3-62f354acbbba",
+      "ToPortName": "MinScore"
+    },
+    {
+      "FromNodeId": "653deab3-a749-4130-b725-e1eb7932c0e0",
+      "FromPortName": "Output",
+      "ToNodeId": "ab800f9f-5754-45e6-9aa3-62f354acbbba",
+      "ToPortName": "Expressions"
+    },
+    {
+      "FromNodeId": "3ad10cd2-1198-432b-8499-7c827c32e896",
+      "FromPortName": "Output",
+      "ToNodeId": "ab800f9f-5754-45e6-9aa3-62f354acbbba",
+      "ToPortName": "Response"
+    },
+    {
+      "FromNodeId": "958c433f-d068-43a4-964d-f3ef90812f2a",
+      "FromPortName": "OutputValue",
+      "ToNodeId": "3ad10cd2-1198-432b-8499-7c827c32e896",
+      "ToPortName": "Text"
+    },
+    {
+      "FromNodeId": "eb3f9261-ce5a-4b7d-a8bf-b75d5fe7c619",
+      "FromPortName": "OutputValue",
+      "ToNodeId": "18a883c5-d934-4fa0-a7e6-ab02d72b0bcd",
+      "ToPortName": "MinScore"
+    },
+    {
+      "FromNodeId": "73643d6c-e0e7-4683-a2df-735838ff0b67",
+      "FromPortName": "Output",
+      "ToNodeId": "18a883c5-d934-4fa0-a7e6-ab02d72b0bcd",
+      "ToPortName": "Expressions"
+    },
+    {
+      "FromNodeId": "755bcf17-1c46-441f-bddf-9c1679701daa",
+      "FromPortName": "Output",
+      "ToNodeId": "18a883c5-d934-4fa0-a7e6-ab02d72b0bcd",
+      "ToPortName": "Response"
+    },
+    {
+      "FromNodeId": "41360681-85f6-4a4b-9128-56ebcbb2b03f",
+      "FromPortName": "OutputValue",
+      "ToNodeId": "755bcf17-1c46-441f-bddf-9c1679701daa",
+      "ToPortName": "Text"
+    },
+    {
+      "FromNodeId": "d4e766af-7b42-4485-8f6b-910716fafdeb",
+      "FromPortName": "OutputValue",
+      "ToNodeId": "d38294ba-637a-441d-81e6-0668c69f014d",
+      "ToPortName": "MinScore"
+    },
+    {
+      "FromNodeId": "6d379652-be16-45c7-b6d3-baaaef671a8a",
+      "FromPortName": "Output",
+      "ToNodeId": "d38294ba-637a-441d-81e6-0668c69f014d",
+      "ToPortName": "Expressions"
+    },
+    {
+      "FromNodeId": "e3995461-6f49-411a-8d8f-ae1a72e5c6f0",
+      "FromPortName": "Output",
+      "ToNodeId": "d38294ba-637a-441d-81e6-0668c69f014d",
+      "ToPortName": "Response"
+    },
+    {
+      "FromNodeId": "4cc479eb-88e6-401f-8ddf-758c3ad9ae07",
+      "FromPortName": "OutputValue",
+      "ToNodeId": "e3995461-6f49-411a-8d8f-ae1a72e5c6f0",
+      "ToPortName": "Text"
+    },
+    {
+      "FromNodeId": "a8ae3fc9-2359-404d-8a61-a4cb1cf33ee9",
+      "FromPortName": "OutputValue",
+      "ToNodeId": "36137d1b-3731-4c8f-9109-eed21f4d1246",
+      "ToPortName": "MinScore"
+    },
+    {
+      "FromNodeId": "d5a85a41-4880-4fe4-8564-cc39bd88d0fd",
+      "FromPortName": "Output",
+      "ToNodeId": "36137d1b-3731-4c8f-9109-eed21f4d1246",
+      "ToPortName": "Expressions"
+    },
+    {
+      "FromNodeId": "200337f6-4e53-45b9-bb8c-98c8d23eb427",
+      "FromPortName": "Output",
+      "ToNodeId": "36137d1b-3731-4c8f-9109-eed21f4d1246",
+      "ToPortName": "Response"
+    },
+    {
+      "FromNodeId": "e3c6c8bf-5389-402c-ba04-72d19860a830",
+      "FromPortName": "OutputValue",
+      "ToNodeId": "200337f6-4e53-45b9-bb8c-98c8d23eb427",
+      "ToPortName": "Text"
+    },
+    {
+      "FromNodeId": "825730eb-8820-4d5e-a940-098e448648e9",
+      "FromPortName": "OutputValue",
+      "ToNodeId": "7e7808b9-3b12-46e4-9024-a7085c52baf6",
+      "ToPortName": "MinScore"
+    },
+    {
+      "FromNodeId": "f2ee39a0-0ef5-4612-99eb-e0cf9e91e511",
+      "FromPortName": "Output",
+      "ToNodeId": "7e7808b9-3b12-46e4-9024-a7085c52baf6",
+      "ToPortName": "Expressions"
+    },
+    {
+      "FromNodeId": "3fa108bd-c703-4298-a446-220c5732e6d8",
+      "FromPortName": "Output",
+      "ToNodeId": "7e7808b9-3b12-46e4-9024-a7085c52baf6",
+      "ToPortName": "Response"
+    },
+    {
+      "FromNodeId": "c3a62ac2-2768-4f41-9b84-653dabc44fdd",
+      "FromPortName": "Output",
+      "ToNodeId": "3fa108bd-c703-4298-a446-220c5732e6d8",
+      "ToPortName": "ResponseMessages"
+    },
+    {
+      "FromNodeId": "2f8348f1-35e5-4dc0-9ccc-c6fddc58c826",
+      "FromPortName": "OutputValue",
+      "ToNodeId": "ad59d933-43e6-4b5a-8936-192093097908",
+      "ToPortName": "MinScore"
+    },
+    {
+      "FromNodeId": "597bd37e-68a7-4e63-811f-a92a05094be4",
+      "FromPortName": "Output",
+      "ToNodeId": "ad59d933-43e6-4b5a-8936-192093097908",
+      "ToPortName": "Expressions"
+    },
+    {
+      "FromNodeId": "a7aaf405-03f5-430f-9c7f-53ad0757ee9c",
+      "FromPortName": "Output",
+      "ToNodeId": "ad59d933-43e6-4b5a-8936-192093097908",
+      "ToPortName": "Response"
+    },
+    {
+      "FromNodeId": "92bca3df-e883-4eb8-a889-91c546f7e420",
+      "FromPortName": "OutputValue",
+      "ToNodeId": "a7aaf405-03f5-430f-9c7f-53ad0757ee9c",
+      "ToPortName": "Text"
+    },
+    {
+      "FromNodeId": "cc9a4b36-0d6d-49d8-9d44-976c1dfd0390",
+      "FromPortName": "OutputValue",
+      "ToNodeId": "5e22e7db-c35a-43be-b01d-577dc22fdbab",
+      "ToPortName": "MinScore"
+    },
+    {
+      "FromNodeId": "81a2d8f0-dff6-42d0-9080-500d4d0f5aaa",
+      "FromPortName": "Output",
+      "ToNodeId": "5e22e7db-c35a-43be-b01d-577dc22fdbab",
+      "ToPortName": "Expressions"
+    },
+    {
+      "FromNodeId": "38e5d748-98dc-4882-a123-c8e19294f197",
+      "FromPortName": "Output",
+      "ToNodeId": "5e22e7db-c35a-43be-b01d-577dc22fdbab",
+      "ToPortName": "Response"
+    },
+    {
+      "FromNodeId": "55213d65-79ec-48e2-a516-3ef8645193a8",
+      "FromPortName": "OutputValue",
+      "ToNodeId": "38e5d748-98dc-4882-a123-c8e19294f197",
+      "ToPortName": "Text"
+    },
+    {
+      "FromNodeId": "6c1c1626-f04d-4ab8-81a2-c0d38dfc8d8b",
+      "FromPortName": "OutputValue",
+      "ToNodeId": "ee5b56db-d5b4-4605-a7b5-d94b03ede3c4",
+      "ToPortName": "MinScore"
+    },
+    {
+      "FromNodeId": "f5a5bcbc-afd3-4eb9-ac62-9e3c616da314",
+      "FromPortName": "Output",
+      "ToNodeId": "ee5b56db-d5b4-4605-a7b5-d94b03ede3c4",
+      "ToPortName": "Expressions"
+    },
+    {
+      "FromNodeId": "0f05408f-5b8a-4afa-9b26-f2423e4cd38b",
+      "FromPortName": "Output",
+      "ToNodeId": "ee5b56db-d5b4-4605-a7b5-d94b03ede3c4",
+      "ToPortName": "Response"
+    },
+    {
+      "FromNodeId": "24bae184-2500-4f5b-9114-774f7d148d9a",
+      "FromPortName": "OutputValue",
+      "ToNodeId": "0f05408f-5b8a-4afa-9b26-f2423e4cd38b",
+      "ToPortName": "Text"
+    },
+    {
+      "FromNodeId": "a372dd4d-157d-4cfb-9a1a-e4d54d61c2e2",
+      "FromPortName": "OutputValue",
+      "ToNodeId": "5b04c7b8-bbef-47b8-9786-7c1b8ebfbeec",
+      "ToPortName": "MinScore"
+    },
+    {
+      "FromNodeId": "467660d8-1297-4109-859e-2fc28edb9c3f",
+      "FromPortName": "Output",
+      "ToNodeId": "5b04c7b8-bbef-47b8-9786-7c1b8ebfbeec",
+      "ToPortName": "Expressions"
+    },
+    {
+      "FromNodeId": "d66226b5-5449-44e0-abbd-330605425899",
+      "FromPortName": "Output",
+      "ToNodeId": "5b04c7b8-bbef-47b8-9786-7c1b8ebfbeec",
+      "ToPortName": "Response"
+    },
+    {
+      "FromNodeId": "17029383-d29e-4eac-a930-7e5212f4bd92",
+      "FromPortName": "StringList",
+      "ToNodeId": "d66226b5-5449-44e0-abbd-330605425899",
+      "ToPortName": "Text"
+    },
+    {
+      "FromNodeId": "c3fdf213-7e03-4bf0-8ffb-bb98f3a2f11c",
+      "FromPortName": "OutputValue",
+      "ToNodeId": "670e62f3-abb3-42f9-8906-c82892692f49",
+      "ToPortName": "MinScore"
+    },
+    {
+      "FromNodeId": "4a27ac65-159b-40e3-91c3-a2b5bea26941",
+      "FromPortName": "Output",
+      "ToNodeId": "670e62f3-abb3-42f9-8906-c82892692f49",
+      "ToPortName": "Expressions"
+    },
+    {
+      "FromNodeId": "3dd22564-3487-4a0d-976b-fa115809a829",
+      "FromPortName": "Output",
+      "ToNodeId": "670e62f3-abb3-42f9-8906-c82892692f49",
+      "ToPortName": "Response"
+    },
+    {
+      "FromNodeId": "08470c75-cd25-4ef4-84b2-cd3640fb914a",
+      "FromPortName": "StringList",
+      "ToNodeId": "3dd22564-3487-4a0d-976b-fa115809a829",
+      "ToPortName": "Text"
+    },
+    {
+      "FromNodeId": "56934f6e-f819-4e10-bf75-52c884fb7dbe",
+      "FromPortName": "OutputValue",
+      "ToNodeId": "7e548913-6cce-489c-8032-83b052eab281",
+      "ToPortName": "MinScore"
+    },
+    {
+      "FromNodeId": "3e678cf2-ee56-4291-8f47-2bdf278f18b5",
+      "FromPortName": "Output",
+      "ToNodeId": "7e548913-6cce-489c-8032-83b052eab281",
+      "ToPortName": "Expressions"
+    },
+    {
+      "FromNodeId": "5fae628a-1d97-4227-8acf-6f83f3fe328d",
+      "FromPortName": "OutputValue",
+      "ToNodeId": "92792816-2cf1-4f51-a07a-8313b834844a",
+      "ToPortName": "Text"
+    },
+    {
+      "FromNodeId": "fdb03028-b48a-402a-9bbf-0ab0d5f1d3f0",
+      "FromPortName": "OutputValue",
+      "ToNodeId": "09708cc5-c5d5-4be6-a773-7ab87c55443a",
+      "ToPortName": "MinScore"
+    },
+    {
+      "FromNodeId": "8e10f834-893d-414b-9e6d-85c434e08f1d",
+      "FromPortName": "Output",
+      "ToNodeId": "09708cc5-c5d5-4be6-a773-7ab87c55443a",
+      "ToPortName": "Expressions"
+    },
+    {
+      "FromNodeId": "5d427c83-05ee-4e8a-8d82-0b3278f17229",
+      "FromPortName": "Output",
+      "ToNodeId": "09708cc5-c5d5-4be6-a773-7ab87c55443a",
+      "ToPortName": "Response"
+    },
+    {
+      "FromNodeId": "8fd18577-e0e8-466a-a4b4-36d522e2df90",
+      "FromPortName": "OutputValue",
+      "ToNodeId": "5d427c83-05ee-4e8a-8d82-0b3278f17229",
+      "ToPortName": "Text"
+    },
+    {
+      "FromNodeId": "39808587-4cc6-410e-ac51-8beb29d10b4a",
+      "FromPortName": "OutputValue",
+      "ToNodeId": "b49c2580-43dd-47af-a687-4fc0e07a4aba",
+      "ToPortName": "MinScore"
+    },
+    {
+      "FromNodeId": "f29f046a-2495-4f35-adba-7f9b6d9008d4",
+      "FromPortName": "Expressions",
+      "ToNodeId": "b49c2580-43dd-47af-a687-4fc0e07a4aba",
+      "ToPortName": "Expressions"
+    },
+    {
+      "FromNodeId": "1c9c5ec7-e739-4ece-8d12-d9caa453d157",
+      "FromPortName": "Output",
+      "ToNodeId": "b49c2580-43dd-47af-a687-4fc0e07a4aba",
+      "ToPortName": "Response"
+    },
+    {
+      "FromNodeId": "0788aa85-08fb-48bb-b43d-761be25c8a7f",
+      "FromPortName": "Output",
+      "ToNodeId": "1c9c5ec7-e739-4ece-8d12-d9caa453d157",
+      "ToPortName": "ResponseMessages"
+    },
+    {
+      "FromNodeId": "4db06b7b-dd9c-4446-b61c-3aa5271a5d1d",
+      "FromPortName": "OutputValue",
+      "ToNodeId": "e9689852-0b81-461e-b0bd-004cd60987d4",
+      "ToPortName": "MinScore"
+    },
+    {
+      "FromNodeId": "4a474d74-0518-4843-a30a-83bb77a16158",
+      "FromPortName": "Output",
+      "ToNodeId": "e9689852-0b81-461e-b0bd-004cd60987d4",
+      "ToPortName": "Expressions"
+    },
+    {
+      "FromNodeId": "2eada084-e17e-40ea-94c1-9d28ce2bb239",
+      "FromPortName": "Output",
+      "ToNodeId": "e9689852-0b81-461e-b0bd-004cd60987d4",
+      "ToPortName": "Response"
+    },
+    {
+      "FromNodeId": "fe5d44cf-6758-44a9-8071-8b70a2af8c7c",
+      "FromPortName": "OutputValue",
+      "ToNodeId": "2eada084-e17e-40ea-94c1-9d28ce2bb239",
+      "ToPortName": "Text"
+    },
+    {
+      "FromNodeId": "c317d868-9b84-4e50-a78c-04ad9acc4d61",
+      "FromPortName": "OutputValue",
+      "ToNodeId": "4d3d1456-e569-4458-aeec-9939aea14b11",
+      "ToPortName": "MinScore"
+    },
+    {
+      "FromNodeId": "b51861b0-f3e3-4081-b95d-95832cc23bb6",
+      "FromPortName": "Output",
+      "ToNodeId": "4d3d1456-e569-4458-aeec-9939aea14b11",
+      "ToPortName": "Expressions"
+    },
+    {
+      "FromNodeId": "3cbc2f7e-adef-4632-8c33-228cfb17267e",
+      "FromPortName": "Output",
+      "ToNodeId": "4d3d1456-e569-4458-aeec-9939aea14b11",
+      "ToPortName": "Response"
+    },
+    {
+      "FromNodeId": "94ac60df-1131-4033-b5c8-023bcbea434a",
+      "FromPortName": "OutputValue",
+      "ToNodeId": "3cbc2f7e-adef-4632-8c33-228cfb17267e",
+      "ToPortName": "Text"
+    },
+    {
+      "FromNodeId": "b00f11c3-a8ef-4bc4-9ae3-6ad9423dbfc6",
+      "FromPortName": "OutputValue",
+      "ToNodeId": "c8a13c8e-9a46-4813-aa83-c446165d91c0",
+      "ToPortName": "MinScore"
+    },
+    {
+      "FromNodeId": "d9d1d94c-5256-4cbc-8fae-bd7e5a474835",
+      "FromPortName": "Expressions",
+      "ToNodeId": "c8a13c8e-9a46-4813-aa83-c446165d91c0",
+      "ToPortName": "Expressions"
+    },
+    {
+      "FromNodeId": "d0b33518-b90c-4ead-bd51-8c0bdd1b27f8",
+      "FromPortName": "Output",
+      "ToNodeId": "c8a13c8e-9a46-4813-aa83-c446165d91c0",
+      "ToPortName": "Response"
+    },
+    {
+      "FromNodeId": "158c115e-f6d6-4000-928a-6a4c0f7e7696",
+      "FromPortName": "StringList",
+      "ToNodeId": "d0b33518-b90c-4ead-bd51-8c0bdd1b27f8",
+      "ToPortName": "Text"
+    },
+    {
+      "FromNodeId": "d61ddbbe-a538-46a4-85ab-59a7d574c6b6",
+      "FromPortName": "OutputValue",
+      "ToNodeId": "a474ecd9-a3ea-4b7f-a822-a2312956a6bf",
+      "ToPortName": "MinScore"
+    },
+    {
+      "FromNodeId": "bf2c550a-94b1-4e93-80da-f013f2d07d73",
+      "FromPortName": "Output",
+      "ToNodeId": "a474ecd9-a3ea-4b7f-a822-a2312956a6bf",
+      "ToPortName": "Expressions"
+    },
+    {
+      "FromNodeId": "7ba948d9-a95f-40e2-bef6-135a7b64ad72",
+      "FromPortName": "Output",
+      "ToNodeId": "a474ecd9-a3ea-4b7f-a822-a2312956a6bf",
+      "ToPortName": "Response"
+    },
+    {
+      "FromNodeId": "628366aa-3fe4-4942-af41-bbb01ad93e4f",
+      "FromPortName": "OutputValue",
+      "ToNodeId": "7ba948d9-a95f-40e2-bef6-135a7b64ad72",
+      "ToPortName": "Text"
+    },
+    {
+      "FromNodeId": "6a6dca64-8a10-484c-a991-8d25dca81fd1",
+      "FromPortName": "OutputValue",
+      "ToNodeId": "718069a5-6355-4f49-9620-6ac50721d2d0",
+      "ToPortName": "MinScore"
+    },
+    {
+      "FromNodeId": "97f1f286-821b-4be2-af35-eb1494ca8bd3",
+      "FromPortName": "Output",
+      "ToNodeId": "718069a5-6355-4f49-9620-6ac50721d2d0",
+      "ToPortName": "Expressions"
+    },
+    {
+      "FromNodeId": "1fad03cb-2fb8-46ab-aed7-cd108a418427",
+      "FromPortName": "Output",
+      "ToNodeId": "718069a5-6355-4f49-9620-6ac50721d2d0",
+      "ToPortName": "Response"
+    },
+    {
+      "FromNodeId": "0823032e-4bf2-4ee9-9601-62f3c6900c7e",
+      "FromPortName": "Output",
+      "ToNodeId": "1fad03cb-2fb8-46ab-aed7-cd108a418427",
+      "ToPortName": "ResponseMessages"
+    },
+    {
+      "FromNodeId": "bc8bab6e-1ea4-4124-a1ab-41af3fbe4633",
+      "FromPortName": "OutputValue",
+      "ToNodeId": "a0800ac8-85e0-4699-ae47-a42b8ec44eff",
+      "ToPortName": "MinScore"
+    },
+    {
+      "FromNodeId": "41c8db8a-f660-4e21-b7a8-eda3a547eb4f",
+      "FromPortName": "Output",
+      "ToNodeId": "a0800ac8-85e0-4699-ae47-a42b8ec44eff",
+      "ToPortName": "Expressions"
+    },
+    {
+      "FromNodeId": "2c356222-066e-4647-abe7-51fc3f2595ef",
+      "FromPortName": "Output",
+      "ToNodeId": "a0800ac8-85e0-4699-ae47-a42b8ec44eff",
+      "ToPortName": "Response"
+    },
+    {
+      "FromNodeId": "52343f8d-4db8-4aef-95b6-9fe5daab1849",
+      "FromPortName": "Output",
+      "ToNodeId": "2c356222-066e-4647-abe7-51fc3f2595ef",
+      "ToPortName": "ResponseMessages"
+    },
+    {
+      "FromNodeId": "6754a409-ff82-4c7f-bee8-a3ccc71a4fc2",
+      "FromPortName": "OutputValue",
+      "ToNodeId": "d6a26049-84f5-4b6d-b478-57ccff8f7386",
+      "ToPortName": "MinScore"
+    },
+    {
+      "FromNodeId": "2405e353-462e-4620-9e21-1df5fa45bad2",
+      "FromPortName": "Output",
+      "ToNodeId": "d6a26049-84f5-4b6d-b478-57ccff8f7386",
+      "ToPortName": "Expressions"
+    },
+    {
+      "FromNodeId": "5f2f6128-4b9a-4f13-8465-98140770eb3d",
+      "FromPortName": "Output",
+      "ToNodeId": "d6a26049-84f5-4b6d-b478-57ccff8f7386",
+      "ToPortName": "Response"
+    },
+    {
+      "FromNodeId": "cccb0e16-2ef7-4721-a265-d59f3ec1b86a",
+      "FromPortName": "Output",
+      "ToNodeId": "5f2f6128-4b9a-4f13-8465-98140770eb3d",
+      "ToPortName": "ResponseMessages"
+    },
+    {
+      "FromNodeId": "33819d45-06e6-4686-9063-2b05e9f70391",
+      "FromPortName": "OutputValue",
+      "ToNodeId": "33c5b1cf-3c1f-484f-aa75-8576a430607a",
+      "ToPortName": "MinScore"
+    },
+    {
+      "FromNodeId": "3c43d271-030f-4afe-b0cd-940d7eb80844",
+      "FromPortName": "Output",
+      "ToNodeId": "33c5b1cf-3c1f-484f-aa75-8576a430607a",
+      "ToPortName": "Expressions"
+    },
+    {
+      "FromNodeId": "3b013be5-b591-4bc4-a34b-21c8a434d785",
+      "FromPortName": "Output",
+      "ToNodeId": "33c5b1cf-3c1f-484f-aa75-8576a430607a",
+      "ToPortName": "Response"
+    },
+    {
+      "FromNodeId": "1d0c57ea-26c3-4f45-ae6c-a0fbff330367",
+      "FromPortName": "OutputValue",
+      "ToNodeId": "3b013be5-b591-4bc4-a34b-21c8a434d785",
+      "ToPortName": "Text"
+    },
+    {
+      "FromNodeId": "9c939e0e-d603-4a04-8e1e-bff71c24a193",
+      "FromPortName": "OutputValue",
+      "ToNodeId": "b3c94728-5222-4172-b887-dc15fb41347c",
+      "ToPortName": "MinScore"
+    },
+    {
+      "FromNodeId": "f55109a6-ce20-45da-9246-33d5ed64d028",
+      "FromPortName": "Output",
+      "ToNodeId": "b3c94728-5222-4172-b887-dc15fb41347c",
+      "ToPortName": "Expressions"
+    },
+    {
+      "FromNodeId": "520e532a-bd3b-4bdf-90f0-32cce4e2abfb",
+      "FromPortName": "Output",
+      "ToNodeId": "b3c94728-5222-4172-b887-dc15fb41347c",
+      "ToPortName": "Response"
+    },
+    {
+      "FromNodeId": "7f08e477-e7ae-4f88-bafc-d932508732f0",
+      "FromPortName": "OutputValue",
+      "ToNodeId": "520e532a-bd3b-4bdf-90f0-32cce4e2abfb",
+      "ToPortName": "Text"
+    },
+    {
+      "FromNodeId": "cafa4ef1-065a-4374-9539-bcbfeee5a452",
+      "FromPortName": "OutputValue",
+      "ToNodeId": "0e3c75b5-3334-4bfa-828e-28959dd464ad",
+      "ToPortName": "MinScore"
+    },
+    {
+      "FromNodeId": "34b71e90-9800-48ca-b76b-b2c42e041da7",
+      "FromPortName": "Output",
+      "ToNodeId": "0e3c75b5-3334-4bfa-828e-28959dd464ad",
+      "ToPortName": "Expressions"
+    },
+    {
+      "FromNodeId": "7104983c-885c-4f17-9668-5822fd491e59",
+      "FromPortName": "Output",
+      "ToNodeId": "0e3c75b5-3334-4bfa-828e-28959dd464ad",
+      "ToPortName": "Response"
+    },
+    {
+      "FromNodeId": "4ffe8646-9855-4aaf-900a-03ed1d1d3d1b",
+      "FromPortName": "OutputValue",
+      "ToNodeId": "7104983c-885c-4f17-9668-5822fd491e59",
+      "ToPortName": "Text"
+    },
+    {
+      "FromNodeId": "2c051275-a6df-476f-9481-c31f5f1c6294",
+      "FromPortName": "OutputValue",
+      "ToNodeId": "e53082d0-49c4-47ad-a5b6-86d20d40eec1",
+      "ToPortName": "MinScore"
+    },
+    {
+      "FromNodeId": "0d2100da-4185-45de-af7e-55a47030328d",
+      "FromPortName": "Output",
+      "ToNodeId": "e53082d0-49c4-47ad-a5b6-86d20d40eec1",
+      "ToPortName": "Expressions"
+    },
+    {
+      "FromNodeId": "06f828d0-5bd8-4b27-b64e-d60f075da435",
+      "FromPortName": "Output",
+      "ToNodeId": "e53082d0-49c4-47ad-a5b6-86d20d40eec1",
+      "ToPortName": "Response"
+    },
+    {
+      "FromNodeId": "3c9d4c1b-064f-4058-a34e-3b895f18a880",
+      "FromPortName": "OutputValue",
+      "ToNodeId": "06f828d0-5bd8-4b27-b64e-d60f075da435",
+      "ToPortName": "Text"
+    },
+    {
+      "FromNodeId": "019f9057-dc77-4f49-a01a-24dfa2b61372",
+      "FromPortName": "OutputValue",
+      "ToNodeId": "b8ffa70e-5cf3-485f-a4c5-03529897f93c",
+      "ToPortName": "MinScore"
+    },
+    {
+      "FromNodeId": "a6922113-f9f4-4b1f-b9bd-ce9206bfd052",
+      "FromPortName": "Output",
+      "ToNodeId": "b8ffa70e-5cf3-485f-a4c5-03529897f93c",
+      "ToPortName": "Expressions"
+    },
+    {
+      "FromNodeId": "5c09cf70-82c4-44b6-9060-979244f5e813",
+      "FromPortName": "Output",
+      "ToNodeId": "b8ffa70e-5cf3-485f-a4c5-03529897f93c",
+      "ToPortName": "Response"
+    },
+    {
+      "FromNodeId": "194aa6e2-07ee-472e-ab0b-c7eb1b5d3022",
+      "FromPortName": "OutputValue",
+      "ToNodeId": "5c09cf70-82c4-44b6-9060-979244f5e813",
+      "ToPortName": "Text"
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+Exception Message           : The specified string is not in the form required for a subject.
+Details                     : System.ArgumentException: The specified string is not in the form required for a subject.
+   at System.Net.Mail.Message.set_Subject(String value)
+   at EmailManager.SendMailNoAttach(String[] mailTo, String subject, String Msgbody, String[] cc) in D:\inetpub\helpDeskKulim\App_Code\EmailManager.vb:line 55
+Exception Source            : System
+Time of Occurence           : 5/28/2023 8:18:03 AM
+Page                        : EmailManager.cs
+Method                      : SendMailNoAttach
+-------------------------------------------------------------------------------

@@ -1,0 +1,1283 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ProLesen - MPK Kluang</title>
+
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+
+  <style>
+    :root{
+      --pastel-1:#EAF6FF; /* light blue */
+      --pastel-2:#FFF1F5; /* light pink */
+      --pastel-3:#F2FFF4; /* light green */
+      --pastel-4:#FFF9E6; /* light yellow */
+      --primary:#2D6CDF;
+      --text:#1f2937;
+      --muted:#6b7280;
+      --card:#ffffff;
+      --shadow: 0 10px 30px rgba(16, 24, 40, 0.08);
+      --radius: 22px;
+    }
+
+    body{
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color: var(--text);
+      background: linear-gradient(135deg, var(--pastel-1), var(--pastel-2));
+      min-height: 100vh;
+    }
+
+    /* ====== Common ====== */
+    .soft-card{
+      background: rgba(255,255,255,0.92);
+      border: 1px solid rgba(17,24,39,0.06);
+      box-shadow: var(--shadow);
+      border-radius: var(--radius);
+    }
+
+    .btn-soft{
+      border-radius: 999px;
+      padding: 10px 16px;
+      border: 1px solid rgba(45,108,223,0.15);
+      background: rgba(45,108,223,0.08);
+      color: var(--primary);
+      font-weight: 600;
+    }
+    .btn-soft:hover{
+      background: rgba(45,108,223,0.14);
+      color: var(--primary);
+    }
+
+    .badge-soft{
+      background: rgba(45,108,223,0.10);
+      color: var(--primary);
+      border: 1px solid rgba(45,108,223,0.12);
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-weight: 600;
+      font-size: 12px;
+    }
+
+    /* ====== Navbar ====== */
+    .navbar{
+      background: rgba(255,255,255,0.75) !important;
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(17,24,39,0.06);
+    }
+
+    .brand-wrap{
+      display:flex;
+      align-items:center;
+      gap:20px;
+    }
+    .brand-logo{
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, rgba(45,108,223,0.18), rgba(34,197,94,0.12));
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      box-shadow: 0 10px 20px rgba(45,108,223,0.15);
+      border: 1px solid rgba(45,108,223,0.10);
+    }
+	.brand-logo img{
+	  height: 65px;
+	  width: auto;
+	  object-fit: contain;
+	}
+
+    .brand-logo i{
+      color: var(--primary);
+      font-size: 18px;
+    }
+    .brand-title{
+      line-height: 1.1;
+    }
+    .brand-title strong{
+      font-size: 16px;
+      display:block;
+    }
+    .brand-title small{
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .nav-link{
+      font-weight: 600;
+      color: rgba(31,41,55,0.85) !important;
+    }
+    .nav-link:hover{
+      color: var(--primary) !important;
+    }
+
+    /* ====== Hero Slider ====== */
+    .hero{
+      padding: 28px 0 10px 0;
+    }
+
+    .hero-slider{
+      position: relative;
+      overflow: hidden;
+      border-radius: 30px;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(17,24,39,0.06);
+      background: #fff;
+    }
+
+    .hero-slide{
+      display:none;
+      position: relative;
+      height: 440px;
+      background-size: cover;
+      background-position: center;
+    }
+    .hero-slide.active{
+      display:block;
+      animation: fadeIn 600ms ease;
+    }
+
+    @keyframes fadeIn{
+      from {opacity: 0.35; transform: scale(1.01);}
+      to {opacity: 1; transform: scale(1);}
+    }
+
+    /* overlay gradient */
+    .hero-slide::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background: linear-gradient(90deg, rgba(17,24,39,0.65), rgba(17,24,39,0.10));
+    }
+
+    /* curved info panel (NOT a box) */
+    .hero-info{
+      position:absolute;
+      left: 26px;
+      bottom: 26px;
+      max-width: 520px;
+      color: #fff;
+      padding: 18px 20px;
+      border-radius: 26px 26px 26px 8px;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.18);
+      backdrop-filter: blur(10px);
+    }
+    .hero-info h1{
+      font-size: 28px;
+      margin: 0 0 6px 0;
+      font-weight: 800;
+      letter-spacing: 0.2px;
+    }
+    .hero-info p{
+      margin: 0;
+      color: rgba(255,255,255,0.90);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .hero-actions{
+      margin-top: 12px;
+      display:flex;
+      gap:10px;
+      flex-wrap: wrap;
+    }
+    .btn-hero{
+      border-radius: 999px;
+      padding: 10px 16px;
+      font-weight: 700;
+      border: 1px solid rgba(255,255,255,0.25);
+      background: rgba(255,255,255,0.12);
+      color: #fff;
+    }
+    .btn-hero:hover{
+      background: rgba(255,255,255,0.20);
+      color:#fff;
+    }
+
+    .slider-dots{
+      position:absolute;
+      right: 18px;
+      bottom: 18px;
+      display:flex;
+      gap:8px;
+      z-index: 3;
+    }
+    .dot{
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.45);
+      border: 1px solid rgba(255,255,255,0.30);
+      cursor:pointer;
+    }
+    .dot.active{
+      background: rgba(255,255,255,0.95);
+    }
+
+    /* ====== Sections ====== */
+    .section-title{
+      font-size: 18px;
+      font-weight: 800;
+      margin: 0 0 6px 0;
+    }
+    .section-subtitle{
+      color: var(--muted);
+      margin: 0;
+      font-size: 13px;
+    }
+
+    .feature-icon{
+      width: 44px;
+      height: 44px;
+      border-radius: 16px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background: linear-gradient(135deg, rgba(45,108,223,0.14), rgba(34,197,94,0.10));
+      border: 1px solid rgba(45,108,223,0.12);
+    }
+    .feature-icon i{
+      color: var(--primary);
+      font-size: 18px;
+    }
+
+    /* ====== Footer ====== */
+    footer{
+      color: rgba(31,41,55,0.75);
+    }
+
+    /* ====== Admin Layout ====== */
+    #adminPage{
+      display:none;
+    }
+
+    .admin-shell{
+      display:flex;
+      gap: 18px;
+      padding: 18px 0;
+    }
+
+    .sidebar{
+      width: 280px;
+      padding: 16px;
+      border-radius: var(--radius);
+      background: rgba(255,255,255,0.86);
+      border: 1px solid rgba(17,24,39,0.06);
+      box-shadow: var(--shadow);
+      height: calc(100vh - 120px);
+      position: sticky;
+      top: 90px;
+      overflow:auto;
+    }
+
+    .sidebar .menu-title{
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 800;
+      letter-spacing: 0.4px;
+      text-transform: uppercase;
+      margin: 14px 0 8px 0;
+    }
+
+    .sidebar a{
+      text-decoration:none;
+    }
+
+    .side-item{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      color: rgba(31,41,55,0.85);
+      font-weight: 650;
+      transition: 0.2s ease;
+    }
+    .side-item:hover{
+      background: rgba(45,108,223,0.08);
+      color: var(--primary);
+    }
+    .side-item i{
+      font-size: 16px;
+      color: rgba(45,108,223,0.85);
+    }
+
+    .admin-main{
+      flex: 1;
+      min-width: 0;
+    }
+
+    .topbar{
+      background: rgba(255,255,255,0.75);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(17,24,39,0.06);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 12px 14px;
+      display:flex;
+      align-items:center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .search-wrap{
+      flex:1;
+      max-width: 520px;
+    }
+    .search-wrap .form-control{
+      border-radius: 999px;
+      border: 1px solid rgba(17,24,39,0.08);
+      background: rgba(255,255,255,0.9);
+      padding-left: 42px;
+    }
+    .search-wrap{
+      position:relative;
+    }
+    .search-wrap i{
+      position:absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: rgba(31,41,55,0.45);
+    }
+
+    .profile-btn{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      border-radius: 999px;
+      padding: 6px 10px;
+      border: 1px solid rgba(17,24,39,0.08);
+      background: rgba(255,255,255,0.9);
+      cursor:pointer;
+    }
+    .profile-btn img{
+      width: 34px;
+      height: 34px;
+      border-radius: 999px;
+      object-fit: cover;
+      border: 2px solid rgba(45,108,223,0.18);
+    }
+    .profile-name{
+      font-weight: 800;
+      font-size: 13px;
+      line-height: 1.1;
+    }
+    .profile-role{
+      font-size: 11px;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .stat-card{
+      padding: 16px;
+      border-radius: var(--radius);
+      background: rgba(255,255,255,0.92);
+      border: 1px solid rgba(17,24,39,0.06);
+      box-shadow: var(--shadow);
+      height: 100%;
+    }
+    .stat-card .stat-top{
+      display:flex;
+      align-items:center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    .stat-card h3{
+      font-size: 22px;
+      font-weight: 900;
+      margin: 0;
+    }
+    .stat-card p{
+      margin: 0;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .mini-table td, .mini-table th{
+      padding: 12px 12px !important;
+      vertical-align: middle;
+    }
+
+    /* Mobile adjustments */
+    @media (max-width: 992px){
+      .hero-slide{ height: 380px; }
+      .sidebar{ display:none; }
+      .admin-shell{ flex-direction: column; }
+      .topbar{ flex-wrap: wrap; }
+      .search-wrap{ max-width: 100%; }
+    }
+	
+/* ====== HERO Curve Style ====== */
+.hero-curve{
+  border-top-left-radius: 0 !important;
+  border-top-right-radius: 0 !important;
+}
+
+/* Potong bentuk gambar jadi curve (bukan petak) */
+.hero-clip{
+  /*border-radius: 34px;*/
+  clip-path: polygon(
+    0% 0%,
+    100% 0%,
+    100% 82%,
+    75% 92%,
+    55% 84%,
+    30% 95%,
+    0% 88%
+  );
+}
+
+/* Tambah ruang bawah sebab wave overlay */
+.hero-slide{
+  height: 470px;
+}
+
+/* Info panel jadi lebih organic (curve) */
+.hero-info-curve{
+  border-radius: 28px 28px 28px 10px;
+  background: rgba(17,24,39,0.35);
+  border: 1px solid rgba(255,255,255,0.18);
+  backdrop-filter: blur(12px);
+}
+
+/* Wave bawah untuk nampak premium */
+.hero-wave{
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:-1px;
+  height: 120px;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.hero-wave svg{
+  width: 100%;
+  height: 100%;
+  display:block;
+}
+
+/* Pastikan dots atas wave */
+.slider-dots{
+  z-index: 5;
+}
+
+/* Mobile tweak */
+@media (max-width: 992px){
+  .hero-slide{
+    height: 400px;
+  }
+  .hero-clip{
+    clip-path: polygon(
+      0% 0%,
+      100% 0%,
+      100% 85%,
+      70% 92%,
+      45% 86%,
+      20% 95%,
+      0% 90%
+    );
+  }
+}
+	
+  </style>
+</head>
+
+<body>
+
+  <!-- =======================
+       NAVBAR (Shared)
+  ======================== -->
+  <nav class="navbar navbar-expand-lg sticky-top">
+    <div class="container">
+		<a class="navbar-brand text-decoration-none" href="#" id="navHome">
+		  <div class="brand-wrap">
+			<div class="brand-logo">
+			  <img src="images/logo.png" alt="Logo">
+			</div>
+
+			<div class="brand-title">
+			  <strong>ProLesen</strong>
+			  <small>MPK Kluang</small>
+			</div>
+		  </div>
+		</a>
+
+
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navMenu">
+        <ul class="navbar-nav ms-auto gap-lg-2 mt-3 mt-lg-0">
+          <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-journal-text me-1"></i>Manual Pengguna</a></li>
+          <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-journal-check me-1"></i>Manual Pengguna Agensi & Jabatan</a></li>
+          <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-lightning-charge me-1"></i>Pautan Pantas Pengguna</a></li>
+          <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-telephone me-1"></i>Hubungi Kami</a></li>
+          <li class="nav-item">
+            <a class="nav-link" href="#" id="btnLogin">
+              <i class="bi bi-box-arrow-in-right me-1"></i>Log Masuk
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+
+  <!-- =======================
+       HOMEPAGE (Public)
+  ======================== -->
+  <main id="homePage">
+    <section class="hero">
+      <div class="container">
+        <section class="hero">
+		  <div class="container">
+			<div class="hero-slider hero-curve" id="heroSlider">
+
+			  <!-- Slide 1 -->
+			  <div class="hero-slide active hero-clip"
+				   style="background-image:url('https://images.unsplash.com/photo-1521791055366-0d553872125f?auto=format&fit=crop&w=1800&q=80');">
+				<div class="hero-info hero-info-curve">
+				  <span class="badge-soft"><i class="bi bi-shield-check me-1"></i>Selamat & Terurus</span>
+				  <h1>Permohonan Lesen Lebih Pantas</h1>
+				  <p>
+					ProLesen membantu pengguna memohon, menyemak status dan mengurus lesen
+					dengan lebih mudah secara digital – mesra pengguna & responsif.
+				  </p>
+				  <div class="hero-actions">
+					<button class="btn btn-hero" id="btnQuickLogin1"><i class="bi bi-person-lock me-1"></i>Log Masuk</button>
+					<button class="btn btn-hero"><i class="bi bi-info-circle me-1"></i>Ketahui Lebih Lanjut</button>
+				  </div>
+				</div>
+			  </div>
+
+			  <!-- Slide 2 -->
+			  <div class="hero-slide hero-clip"
+				   style="background-image:url('https://images.unsplash.com/photo-1556761175-4b46a572b786?auto=format&fit=crop&w=1800&q=80');">
+				<div class="hero-info hero-info-curve">
+				  <span class="badge-soft"><i class="bi bi-people me-1"></i>Mesra Agensi</span>
+				  <h1>Urus Kelulusan & Semakan</h1>
+				  <p>
+					Modul agensi & jabatan memudahkan semakan, kelulusan dan pemantauan
+					permohonan lesen dengan rekod yang teratur.
+				  </p>
+				  <div class="hero-actions">
+					<button class="btn btn-hero"><i class="bi bi-journal-text me-1"></i>Manual Agensi</button>
+					<button class="btn btn-hero"><i class="bi bi-lightning-charge me-1"></i>Pautan Pantas</button>
+				  </div>
+				</div>
+			  </div>
+
+			  <!-- Slide 3 -->
+			  <div class="hero-slide hero-clip"
+				   style="background-image:url('https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?auto=format&fit=crop&w=1800&q=80');">
+				<div class="hero-info hero-info-curve">
+				  <span class="badge-soft"><i class="bi bi-graph-up-arrow me-1"></i>Dashboard & Laporan</span>
+				  <h1>Analitik & Laporan Korporat</h1>
+				  <p>
+					Dapatkan ringkasan permohonan, prestasi proses dan laporan untuk
+					pengurusan dengan paparan moden dan kemas.
+				  </p>
+				  <div class="hero-actions">
+					<button class="btn btn-hero"><i class="bi bi-bar-chart me-1"></i>Lihat Contoh</button>
+					<button class="btn btn-hero"><i class="bi bi-telephone me-1"></i>Hubungi Kami</button>
+				  </div>
+				</div>
+			  </div>
+
+			  <!-- Curve overlay bawah (wave) -->
+			  <div class="hero-wave">
+				<svg viewBox="0 0 1440 140" preserveAspectRatio="none">
+					<path
+					  d="M0,64 C240,140 420,10 720,70 C980,130 1120,40 1440,95 L1440,140 L0,140 Z"
+					  fill="rgba(17,24,39,0.22)">
+					</path>
+
+				</svg>
+			  </div>
+
+			  <div class="slider-dots" id="sliderDots"></div>
+			</div>
+		  </div>
+		</section>
+
+
+        </div>
+      </div>
+    </section>
+
+    <section class="py-4">
+      <div class="container">
+        <div class="row g-4">
+
+          <div class="col-lg-4">
+            <div class="soft-card p-4 h-100">
+              <div class="d-flex align-items-start gap-3">
+                <div class="feature-icon">
+                  <i class="bi bi-file-earmark-text"></i>
+                </div>
+                <div>
+                  <div class="section-title">Permohonan Berstruktur</div>
+                  <p class="section-subtitle">
+                    Borang permohonan direka kemas & mudah diisi untuk pengguna awam.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-4">
+            <div class="soft-card p-4 h-100">
+              <div class="d-flex align-items-start gap-3">
+                <div class="feature-icon">
+                  <i class="bi bi-clock-history"></i>
+                </div>
+                <div>
+                  <div class="section-title">Jejak Status Permohonan</div>
+                  <p class="section-subtitle">
+                    Semak status secara real-time untuk kelulusan, semakan & tindakan.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-4">
+            <div class="soft-card p-4 h-100">
+              <div class="d-flex align-items-start gap-3">
+                <div class="feature-icon">
+                  <i class="bi bi-shield-lock"></i>
+                </div>
+                <div>
+                  <div class="section-title">Keselamatan & Akses</div>
+                  <p class="section-subtitle">
+                    Kawalan akses pengguna mengikut peranan (role) untuk admin & agensi.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="row g-4 mt-1">
+          <div class="col-lg-8">
+            <div class="soft-card p-4">
+              <div class="d-flex justify-content-between align-items-start flex-wrap gap-3">
+                <div>
+                  <div class="section-title">Pengumuman & Makluman</div>
+                  <p class="section-subtitle">
+                    Makluman penting berkaitan proses permohonan lesen dan kemaskini sistem.
+                  </p>
+                </div>
+                <span class="badge-soft"><i class="bi bi-megaphone me-1"></i>Info</span>
+              </div>
+
+              <div class="mt-3">
+                <div class="d-flex align-items-center gap-3 py-2">
+                  <i class="bi bi-dot text-primary"></i>
+                  <div>
+                    <strong>Waktu Operasi Kaunter</strong>
+                    <div class="text-muted small">Isnin–Jumaat • 8.00 pagi – 5.00 petang</div>
+                  </div>
+                </div>
+                <div class="d-flex align-items-center gap-3 py-2">
+                  <i class="bi bi-dot text-primary"></i>
+                  <div>
+                    <strong>Dokumen Sokongan</strong>
+                    <div class="text-muted small">Sila pastikan dokumen lengkap sebelum hantar permohonan</div>
+                  </div>
+                </div>
+                <div class="d-flex align-items-center gap-3 py-2">
+                  <i class="bi bi-dot text-primary"></i>
+                  <div>
+                    <strong>Sokongan Pengguna</strong>
+                    <div class="text-muted small">Gunakan menu “Hubungi Kami” untuk bantuan teknikal</div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <div class="col-lg-4">
+            <div class="soft-card p-4">
+              <div class="section-title">Akses Pantas</div>
+              <p class="section-subtitle mb-3">Pautan yang kerap digunakan</p>
+
+              <div class="d-grid gap-2">
+                <button class="btn btn-soft"><i class="bi bi-journal-text me-1"></i>Manual Pengguna</button>
+                <button class="btn btn-soft"><i class="bi bi-journal-check me-1"></i>Manual Agensi & Jabatan</button>
+                <button class="btn btn-soft"><i class="bi bi-lightning-charge me-1"></i>Pautan Pantas</button>
+                <button class="btn btn-soft"><i class="bi bi-telephone me-1"></i>Hubungi Kami</button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <footer class="py-4">
+      <div class="container">
+        <div class="soft-card p-4">
+          <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
+            <div>
+              <strong>ProLesen</strong> • Majlis Perbandaran Kluang
+              <div class="small text-muted">Sistem Permohonan & Pengurusan Lesen</div>
+            </div>
+            <div class="small text-muted">
+              © <span id="yearNow"></span> MPK Kluang • All rights reserved
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </main>
+
+
+  <!-- =======================
+       ADMIN PAGE (After Login)
+  ======================== -->
+  <main id="adminPage">
+    <div class="container">
+      <div class="admin-shell">
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+          <div class="d-flex align-items-center gap-2 mb-2">
+            <div class="brand-logo" style="width:38px;height:38px;border-radius:14px;">
+              <i class="bi bi-building"></i>
+            </div>
+            <div>
+              <!-- <div style="font-weight:900;">ProLesen</div> -->
+              <div class="small text-muted">Admin Panel</div>
+            </div>
+          </div>
+
+          <div class="menu-title">Admin</div>
+          <a href="#" class="side-item"><i class="bi bi-gear"></i> Tetapan Sistem</a>
+          <a href="#" class="side-item"><i class="bi bi-sliders"></i> Pilihan Sistem</a>
+          <a href="#" class="side-item"><i class="bi bi-wrench-adjustable-circle"></i> System Setup</a>
+
+          <div class="menu-title">Lesen</div>
+          <a href="#" class="side-item"><i class="bi bi-tools"></i> Tetapan</a>
+          <a href="#" class="side-item"><i class="bi bi-file-earmark-plus"></i> Permohonan</a>
+          <a href="#" class="side-item"><i class="bi bi-patch-check"></i> Kelulusan</a>
+          <a href="#" class="side-item"><i class="bi bi-file-earmark-bar-graph"></i> Laporan</a>
+
+          <div class="menu-title">Lain-Lain</div>
+          <a href="#" class="side-item" id="btnLogoutSide"><i class="bi bi-box-arrow-right"></i> Log Keluar</a>
+          <a href="#" class="side-item"><i class="bi bi-journal-text"></i> Manual Pengguna</a>
+          <a href="#" class="side-item"><i class="bi bi-journal-check"></i> Manual Pengguna Agensi & Jabatan</a>
+          <a href="#" class="side-item"><i class="bi bi-lightning-charge"></i> Pautan Pantas Pengguna</a>
+          <a href="#" class="side-item"><i class="bi bi-telephone"></i> Hubungi Kami</a>
+        </aside>
+
+        <!-- Main -->
+        <section class="admin-main">
+
+          <!-- Topbar -->
+          <div class="topbar mb-4">
+            <div class="d-flex align-items-center gap-2">
+              <span class="badge-soft"><i class="bi bi-speedometer2 me-1"></i>Dashboard</span>
+              <span class="small text-muted d-none d-md-inline">Ringkasan sistem ProLesen</span>
+            </div>
+
+            <div class="search-wrap">
+              <i class="bi bi-search"></i>
+              <input type="text" class="form-control" placeholder="Cari permohonan / lesen / pengguna...">
+            </div>
+
+            <!-- Profile Dropdown -->
+            <div class="dropdown">
+              <div class="profile-btn" data-bs-toggle="dropdown" aria-expanded="false">
+                <img src="https://i.pravatar.cc/100?img=12" alt="Profile">
+                <div class="d-none d-md-block">
+                  <div class="profile-name">Admin ProLesen</div>
+                  <div class="profile-role">MPK Kluang</div>
+                </div>
+                <i class="bi bi-chevron-down ms-1 text-muted"></i>
+              </div>
+
+              <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0" style="border-radius:18px;">
+                <li>
+                  <a class="dropdown-item py-2" href="#">
+                    <i class="bi bi-person-circle me-2"></i>Lihat Profil Pengguna
+                  </a>
+                </li>
+                <li>
+                  <a class="dropdown-item py-2" href="#">
+                    <i class="bi bi-bell me-2"></i>Notifikasi
+                    <span class="badge text-bg-primary ms-2">3</span>
+                  </a>
+                </li>
+                <li><hr class="dropdown-divider"></li>
+                <li>
+                  <a class="dropdown-item py-2 text-danger" href="#" id="btnLogoutTop">
+                    <i class="bi bi-box-arrow-right me-2"></i>Log Keluar
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Dashboard Cards -->
+          <div class="row g-4 mb-4">
+            <div class="col-md-6 col-xl-3">
+              <div class="stat-card">
+                <div class="stat-top">
+                  <span class="badge-soft"><i class="bi bi-file-earmark-text me-1"></i>Permohonan</span>
+                  <i class="bi bi-three-dots text-muted"></i>
+                </div>
+                <h3>128</h3>
+                <p>Jumlah permohonan bulan ini</p>
+              </div>
+            </div>
+
+            <div class="col-md-6 col-xl-3">
+              <div class="stat-card">
+                <div class="stat-top">
+                  <span class="badge-soft"><i class="bi bi-hourglass-split me-1"></i>Dalam Proses</span>
+                  <i class="bi bi-three-dots text-muted"></i>
+                </div>
+                <h3>34</h3>
+                <p>Menunggu semakan / tindakan</p>
+              </div>
+            </div>
+
+            <div class="col-md-6 col-xl-3">
+              <div class="stat-card">
+                <div class="stat-top">
+                  <span class="badge-soft"><i class="bi bi-patch-check me-1"></i>Diluluskan</span>
+                  <i class="bi bi-three-dots text-muted"></i>
+                </div>
+                <h3>76</h3>
+                <p>Permohonan berjaya diluluskan</p>
+              </div>
+            </div>
+
+            <div class="col-md-6 col-xl-3">
+              <div class="stat-card">
+                <div class="stat-top">
+                  <span class="badge-soft"><i class="bi bi-x-circle me-1"></i>Ditolak</span>
+                  <i class="bi bi-three-dots text-muted"></i>
+                </div>
+                <h3>18</h3>
+                <p>Perlu pembetulan / semakan</p>
+              </div>
+            </div>
+          </div>
+		  
+		  <!-- =======================
+			Charts Section
+			======================= -->
+			<div class="row g-4 mt-4">
+
+			  <!-- Bar Chart -->
+			  <div class="col-xl-6">
+				<div class="soft-card p-4">
+				  <div class="section-title">Bar Chart - Permohonan Bulanan</div>
+				  <div style="position: relative; height: 300px;">
+					<canvas id="barMonthly"></canvas>
+				  </div>
+				</div>
+			  </div>
+
+			  <!-- Pie Chart -->
+			  <div class="col-xl-6">
+				<div class="soft-card p-4">
+				  <div class="section-title">Pie Chart - Status Permohonan</div>
+				  <div style="position: relative; height: 300px;">
+					<canvas id="pieStatus"></canvas>
+				  </div>
+				</div>
+			  </div>
+
+			  <!-- Line Chart -->
+			  <div class="col-xl-6">
+				<div class="soft-card p-4">
+				  <div class="section-title">Line Chart - Kelulusan Harian</div>
+				  <div style="position: relative; height: 300px;">
+					<canvas id="lineDaily"></canvas>
+				  </div>
+				</div>
+			  </div>
+
+			  <!-- Scatter Chart -->
+			  <div class="col-xl-6">
+				<div class="soft-card p-4">
+				  <div class="section-title">Scatter Chart - Proses vs Masa</div>
+				  <div style="position: relative; height: 300px;">
+					<canvas id="scatterProcess"></canvas>
+				  </div>
+				</div>
+			  </div>
+
+			  <!-- Radar Chart -->
+			  <div class="col-xl-6">
+				<div class="soft-card p-4">
+				  <div class="section-title">Radar Chart - Skor Jabatan</div>
+				  <div style="position: relative; height: 300px;">
+					<canvas id="radarDept"></canvas>
+				  </div>
+				</div>
+			  </div>
+			  
+			<div class="col-xl-6">
+			  <div class="soft-card p-4">
+				<div class="section-title">Doughnut Chart - Kategori</div>
+				<div style="position: relative; height: 300px;">
+				  <canvas id="doughnutCategory"></canvas>
+				</div>
+			  </div>
+			</div>
+			  
+
+			</div>
+
+			<br/>
+          <!-- Activity + Table -->
+          <div class="row g-4">
+            <div class="col-xl-7">
+              <div class="soft-card p-4">
+                <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
+                  <div>
+                    <div class="section-title">Aktiviti Terkini</div>
+                    <p class="section-subtitle">Log ringkas untuk pemantauan</p>
+                  </div>
+                  <button class="btn btn-soft btn-sm"><i class="bi bi-arrow-repeat me-1"></i>Refresh</button>
+                </div>
+
+                <div class="mt-3">
+                  <div class="d-flex align-items-start gap-3 py-2">
+                    <div class="feature-icon" style="width:38px;height:38px;border-radius:14px;">
+                      <i class="bi bi-file-earmark-plus"></i>
+                    </div>
+                    <div>
+                      <div style="font-weight:800;">Permohonan baru diterima</div>
+                      <div class="small text-muted">No. Rujukan: PL-2026-00081 • 5 minit lepas</div>
+                    </div>
+                  </div>
+
+                  <div class="d-flex align-items-start gap-3 py-2">
+                    <div class="feature-icon" style="width:38px;height:38px;border-radius:14px;">
+                      <i class="bi bi-patch-check"></i>
+                    </div>
+                    <div>
+                      <div style="font-weight:800;">Kelulusan telah direkodkan</div>
+                      <div class="small text-muted">No. Rujukan: PL-2026-00067 • 1 jam lepas</div>
+                    </div>
+                  </div>
+
+                  <div class="d-flex align-items-start gap-3 py-2">
+                    <div class="feature-icon" style="width:38px;height:38px;border-radius:14px;">
+                      <i class="bi bi-bell"></i>
+                    </div>
+                    <div>
+                      <div style="font-weight:800;">Notifikasi dihantar kepada pemohon</div>
+                      <div class="small text-muted">3 notifikasi dihantar • Hari ini</div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+            <div class="col-xl-5">
+              <div class="soft-card p-4">
+                <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
+                  <div>
+                    <div class="section-title">Permohonan Perlu Tindakan</div>
+                    <p class="section-subtitle">Senarai ringkas untuk semakan</p>
+                  </div>
+                  <span class="badge-soft"><i class="bi bi-exclamation-triangle me-1"></i>Action</span>
+                </div>
+
+                <div class="table-responsive mt-3">
+                  <table class="table mini-table align-middle">
+                    <thead>
+                      <tr class="text-muted small">
+                        <th>Rujukan</th>
+                        <th>Status</th>
+                        <th class="text-end">Tindakan</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>
+                          <div style="font-weight:800;">PL-2026-00081</div>
+                          <div class="small text-muted">Premis Makanan</div>
+                        </td>
+                        <td><span class="badge text-bg-warning">Semak</span></td>
+                        <td class="text-end">
+                          <button class="btn btn-soft btn-sm"><i class="bi bi-eye me-1"></i>Lihat</button>
+                        </td>
+                      </tr>
+
+                      <tr>
+                        <td>
+                          <div style="font-weight:800;">PL-2026-00079</div>
+                          <div class="small text-muted">Perniagaan Runcit</div>
+                        </td>
+                        <td><span class="badge text-bg-info">Proses</span></td>
+                        <td class="text-end">
+                          <button class="btn btn-soft btn-sm"><i class="bi bi-eye me-1"></i>Lihat</button>
+                        </td>
+                      </tr>
+
+                      <tr>
+                        <td>
+                          <div style="font-weight:800;">PL-2026-00073</div>
+                          <div class="small text-muted">Lesen Iklan</div>
+                        </td>
+                        <td><span class="badge text-bg-danger">Pembetulan</span></td>
+                        <td class="text-end">
+                          <button class="btn btn-soft btn-sm"><i class="bi bi-eye me-1"></i>Lihat</button>
+                        </td>
+                      </tr>
+
+                    </tbody>
+                  </table>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-4">
+            <div class="soft-card p-4">
+              <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                <div>
+                  <div style="font-weight:900;">ProLesen • Admin Panel</div>
+                  <div class="small text-muted">Sistem Permohonan & Pengurusan Lesen</div>
+                </div>
+                <button class="btn btn-soft" id="btnBackHome">
+                  <i class="bi bi-house me-1"></i>Kembali Homepage
+                </button>
+              </div>
+            </div>
+          </div>
+
+        </section>
+      </div>
+    </div>
+  </main>
+
+
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    // Year footer
+    document.getElementById("yearNow").innerText = new Date().getFullYear();
+
+    // ====== Slider Logic (jQuery) ======
+    const $slides = $("#heroSlider .hero-slide");
+    const $dotsContainer = $("#sliderDots");
+    let currentIndex = 0;
+    let timer = null;
+
+    function renderDots(){
+      $dotsContainer.html("");
+      $slides.each(function(i){
+        const dot = $('<div class="dot"></div>');
+        if(i === currentIndex) dot.addClass("active");
+        dot.on("click", function(){
+          goToSlide(i);
+          restartTimer();
+        });
+        $dotsContainer.append(dot);
+      });
+    }
+
+    function goToSlide(index){
+      $slides.removeClass("active");
+      $slides.eq(index).addClass("active");
+      currentIndex = index;
+      renderDots();
+    }
+
+    function nextSlide(){
+      const next = (currentIndex + 1) % $slides.length;
+      goToSlide(next);
+    }
+
+    function startTimer(){
+      timer = setInterval(nextSlide, 4500);
+    }
+
+    function restartTimer(){
+      clearInterval(timer);
+      startTimer();
+    }
+
+    renderDots();
+    startTimer();
+
+    // ====== Fake Login / Logout Navigation ======
+    function showAdmin(){
+      $("#homePage").hide();
+      $("#adminPage").show();
+      window.scrollTo(0,0);
+    }
+
+    function showHome(){
+      $("#adminPage").hide();
+      $("#homePage").show();
+      window.scrollTo(0,0);
+    }
+
+    $("#btnLogin, #btnQuickLogin1").on("click", function(e){
+      e.preventDefault();
+      showAdmin();
+    });
+
+    $("#btnLogoutTop, #btnLogoutSide").on("click", function(e){
+      e.preventDefault();
+      showHome();
+    });
+
+    $("#btnBackHome, #navHome").on("click", function(e){
+      e.preventDefault();
+      showHome();
+    });
+  </script>
+  
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+$(document).ready(function(){
+// Bar Chart - Permohonan Bulanan
+new Chart(document.getElementById("barMonthly"), {
+  type: "bar",
+  data: {
+    labels: ["Jan","Feb","Mar","Apr","Mei","Jun","Jul","Ogos","Sep","Okt","Nov","Dis"],
+    datasets: [{
+      label: "Jumlah Permohonan",
+      data: [12,19,15,25,18,22,20,30,28,24,16,10],
+      backgroundColor: "#0ea5e9"
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: { y: { beginAtZero: true } }
+  }
+});
+
+// Pie Chart - Status Permohonan
+new Chart(document.getElementById("pieStatus"), {
+  type: "pie",
+  data: {
+    labels: ["Baru","Proses","Diluluskan","Ditolak"],
+    datasets: [{
+      data: [50,30,70,20],
+      backgroundColor: ["#0ea5e9","#0b3b7a","#34d399","#f87171"]
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: { legend: { position: 'bottom' } }
+  }
+});
+
+// Line Chart - Kelulusan Harian
+new Chart(document.getElementById("lineDaily"), {
+  type: "line",
+  data: {
+    labels: ["1","2","3","4","5","6","7"],
+    datasets: [{
+      label: "Kelulusan",
+      data: [5,7,4,8,6,9,10],
+      borderColor: "#34d399",
+      backgroundColor: "rgba(52,211,153,0.2)",
+      tension: 0.4,
+      fill: true
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: { legend: { position: 'top' } },
+    scales: { y: { beginAtZero: true } }
+  }
+});
+
+// Scatter Chart - Proses vs Masa
+new Chart(document.getElementById("scatterProcess"), {
+  type: "scatter",
+  data: {
+    datasets: [{
+      label: "Proses vs Masa",
+      data: [
+        {x:1, y:2}, {x:2, y:3}, {x:3, y:1}, {x:4, y:4}, {x:5, y:2}
+      ],
+      backgroundColor: "#facc15"
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: { legend: { position: 'top' } },
+    scales: { x: { title: { display:true, text:"Masa (hari)" } }, y: { title: { display:true, text:"Proses" } } }
+  }
+});
+
+// Radar Chart - Skor Jabatan
+new Chart(document.getElementById("radarDept"), {
+  type: "radar",
+  data: {
+    labels: ["Jabatan A","Jabatan B","Jabatan C","Jabatan D","Jabatan E"],
+    datasets: [{
+      label: "Skor",
+      data: [65,59,90,81,56],
+      fill: true,
+      backgroundColor: "rgba(59,130,246,0.2)",
+      borderColor: "#3b82f6",
+      pointBackgroundColor: "#3b82f6"
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: { legend: { position: 'top' } },
+    scales: { r: { beginAtZero: true } }
+  }
+});
+
+new Chart(document.getElementById("doughnutCategory"), {
+  type: "doughnut",
+  data: {
+    labels: ["Kategori A", "Kategori B", "Kategori C", "Kategori D"],
+    datasets: [{
+      data: [25, 40, 20, 15],
+      backgroundColor: ["#f59e0b", "#10b981", "#3b82f6", "#ef4444"]
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: { legend: { position: 'bottom' } }
+  }
+});
+
+
+
+});
+</script>
+  
+</body>
+</html>

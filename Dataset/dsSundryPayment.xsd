@@ -1,0 +1,141 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="dsSundryPayment" targetNamespace="http://tempuri.org/dsSundryPayment.xsd" xmlns:mstns="http://tempuri.org/dsSundryPayment.xsd" xmlns="http://tempuri.org/dsSundryPayment.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections>
+          <Connection AppSettingsObjectName="Web.config" AppSettingsPropertyName="ConnectionString" ConnectionStringObject="" IsAppSettingsProperty="true" Modifier="Assembly" Name="ConnectionString (Web.config)" ParameterPrefix="@" PropertyReference="AppConfig.System.Configuration.ConfigurationManager.0.ConnectionStrings.ConnectionString.ConnectionString" Provider="System.Data.SqlClient" />
+        </Connections>
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="dsSundryPayment" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="dsSundryPayment" msprop:Generator_UserDSName="dsSundryPayment">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="SundryPayment" msprop:Generator_TableClassName="SundryPaymentDataTable" msprop:Generator_TableVarName="tableSundryPayment" msprop:Generator_TablePropName="SundryPayment" msprop:Generator_RowDeletingName="SundryPaymentRowDeleting" msprop:Generator_UserTableName="SundryPayment" msprop:Generator_RowChangingName="SundryPaymentRowChanging" msprop:Generator_RowEvHandlerName="SundryPaymentRowChangeEventHandler" msprop:Generator_RowDeletedName="SundryPaymentRowDeleted" msprop:Generator_RowEvArgName="SundryPaymentRowChangeEvent" msprop:Generator_RowChangedName="SundryPaymentRowChanged" msprop:Generator_RowClassName="SundryPaymentRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="SundryClaimID" msdata:ReadOnly="true" msdata:AutoIncrement="true" msprop:Generator_ColumnVarNameInTable="columnSundryWorkDoneID" msprop:Generator_ColumnPropNameInRow="SundryClaimID" msprop:Generator_ColumnPropNameInTable="SundryWorkDoneIDColumn" msprop:Generator_UserColumnName="SundryClaimID" type="xs:int" />
+              <xs:element name="EstateID" msprop:Generator_ColumnVarNameInTable="columnEstateID" msprop:Generator_ColumnPropNameInRow="EstateID" msprop:Generator_ColumnPropNameInTable="EstateIDColumn" msprop:Generator_UserColumnName="EstateID" type="xs:int" />
+              <xs:element name="EstateDesc" msprop:Generator_ColumnVarNameInTable="columnEstateDesc" msprop:Generator_ColumnPropNameInRow="EstateDesc" msprop:Generator_ColumnPropNameInTable="EstateDescColumn" msprop:Generator_UserColumnName="EstateDesc" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="100" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="ActMthYearID" msprop:Generator_ColumnVarNameInTable="columnActMthYearID" msprop:Generator_ColumnPropNameInRow="ActMthYearID" msprop:Generator_ColumnPropNameInTable="ActMthYearIDColumn" msprop:Generator_UserColumnName="ActMthYearID">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="50" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="Yr" msdata:ReadOnly="true" msprop:Generator_ColumnVarNameInTable="columnYr" msprop:Generator_ColumnPropNameInRow="Yr" msprop:Generator_ColumnPropNameInTable="YrColumn" msprop:Generator_UserColumnName="Yr" type="xs:int" minOccurs="0" />
+              <xs:element name="Mth" msdata:ReadOnly="true" msprop:Generator_ColumnVarNameInTable="columnMth" msprop:Generator_ColumnPropNameInRow="Mth" msprop:Generator_ColumnPropNameInTable="MthColumn" msprop:Generator_UserColumnName="Mth" type="xs:int" minOccurs="0" />
+              <xs:element name="EmpID" msprop:Generator_ColumnVarNameInTable="columnEmpID" msprop:Generator_ColumnPropNameInRow="EmpID" msprop:Generator_ColumnPropNameInTable="EmpIDColumn" msprop:Generator_UserColumnName="EmpID">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="50" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="EmpCode" msprop:Generator_ColumnVarNameInTable="columnEmpCode" msprop:Generator_ColumnPropNameInRow="EmpCode" msprop:Generator_ColumnPropNameInTable="EmpCodeColumn" msprop:Generator_UserColumnName="EmpCode" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="20" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="FirstName" msprop:Generator_ColumnVarNameInTable="columnFirstName" msprop:Generator_ColumnPropNameInRow="FirstName" msprop:Generator_ColumnPropNameInTable="FirstNameColumn" msprop:Generator_UserColumnName="FirstName" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="100" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="GangNo" msdata:ReadOnly="true" msprop:Generator_ColumnVarNameInTable="columnGangNo" msprop:Generator_ColumnPropNameInRow="GangNo" msprop:Generator_ColumnPropNameInTable="GangNoColumn" msprop:Generator_UserColumnName="GangNo" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="50" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="SundryCategoryID" msprop:Generator_ColumnVarNameInTable="columnSundryCategoryID" msprop:Generator_ColumnPropNameInRow="SundryCategoryID" msprop:Generator_ColumnPropNameInTable="SundryCategoryIDColumn" msprop:Generator_UserColumnName="SundryCategoryID" type="xs:int" minOccurs="0" />
+              <xs:element name="SundryCategory" msprop:Generator_ColumnVarNameInTable="columnSundryWork" msprop:Generator_ColumnPropNameInRow="SundryCategory" msprop:Generator_ColumnPropNameInTable="SundryWorkColumn" msprop:Generator_UserColumnName="SundryCategory" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="250" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="Taxable" msprop:Generator_ColumnVarNameInTable="columnTaxable" msprop:Generator_ColumnPropNameInRow="Taxable" msprop:Generator_ColumnPropNameInTable="TaxableColumn" msprop:Generator_UserColumnName="Taxable" type="xs:boolean" minOccurs="0" />
+              <xs:element name="JobCode" msprop:Generator_ColumnVarNameInTable="columnJobCode" msprop:Generator_ColumnPropNameInRow="JobCode" msprop:Generator_ColumnPropNameInTable="JobCodeColumn" msprop:Generator_UserColumnName="JobCode" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="12" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="JobDesc" msprop:Generator_ColumnVarNameInTable="columnJobDesc" msprop:Generator_ColumnPropNameInRow="JobDesc" msprop:Generator_ColumnPropNameInTable="JobDescColumn" msprop:Generator_UserColumnName="JobDesc" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="100" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="FieldCode" msprop:Generator_ColumnVarNameInTable="columnFieldCode" msprop:Generator_ColumnPropNameInRow="FieldCode" msprop:Generator_ColumnPropNameInTable="FieldCodeColumn" msprop:Generator_UserColumnName="FieldCode" type="xs:string" minOccurs="0" />
+              <xs:element name="VehicleCode" msprop:Generator_ColumnVarNameInTable="columnVehicleCode" msprop:Generator_ColumnPropNameInRow="VehicleCode" msprop:Generator_ColumnPropNameInTable="VehicleCodeColumn" msprop:Generator_UserColumnName="VehicleCode" type="xs:string" minOccurs="0" />
+              <xs:element name="Amount" msprop:Generator_ColumnVarNameInTable="columnAmount" msprop:Generator_ColumnPropNameInRow="Amount" msprop:Generator_ColumnPropNameInTable="AmountColumn" msprop:Generator_UserColumnName="Amount" type="xs:decimal" />
+              <xs:element name="Remark" msdata:ReadOnly="true" msprop:Generator_ColumnVarNameInTable="columnRemark" msprop:Generator_ColumnPropNameInRow="Remark" msprop:Generator_ColumnPropNameInTable="RemarkColumn" msprop:Generator_UserColumnName="Remark" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="250" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="SundryCategory" msprop:Generator_TableClassName="SundryWorkDataTable" msprop:Generator_TableVarName="tableSundryWork" msprop:Generator_TablePropName="SundryCategory" msprop:Generator_RowDeletingName="SundryWorkRowDeleting" msprop:Generator_UserTableName="SundryCategory" msprop:Generator_RowChangingName="SundryWorkRowChanging" msprop:Generator_RowEvHandlerName="SundryWorkRowChangeEventHandler" msprop:Generator_RowDeletedName="SundryWorkRowDeleted" msprop:Generator_RowEvArgName="SundryWorkRowChangeEvent" msprop:Generator_RowChangedName="SundryWorkRowChanged" msprop:Generator_RowClassName="SundryWorkRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="SundryCategoryID" msdata:ReadOnly="true" msdata:AutoIncrement="true" msprop:Generator_ColumnVarNameInTable="columnSundryCategoryID" msprop:Generator_ColumnPropNameInRow="SundryCategoryID" msprop:Generator_ColumnPropNameInTable="SundryCategoryIDColumn" msprop:Generator_UserColumnName="SundryCategoryID" type="xs:int" />
+              <xs:element name="SundryCategory" msprop:Generator_ColumnVarNameInTable="columnSundryWork" msprop:Generator_ColumnPropNameInRow="SundryCategory" msprop:Generator_ColumnPropNameInTable="SundryWorkColumn" msprop:Generator_UserColumnName="SundryCategory">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="250" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="MonthList" msprop:Generator_TableClassName="MonthListDataTable" msprop:Generator_TableVarName="tableMonthList" msprop:Generator_TablePropName="MonthList" msprop:Generator_RowDeletingName="MonthListRowDeleting" msprop:Generator_UserTableName="MonthList" msprop:Generator_RowChangingName="MonthListRowChanging" msprop:Generator_RowEvHandlerName="MonthListRowChangeEventHandler" msprop:Generator_RowDeletedName="MonthListRowDeleted" msprop:Generator_RowEvArgName="MonthListRowChangeEvent" msprop:Generator_RowChangedName="MonthListRowChanged" msprop:Generator_RowClassName="MonthListRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="iMth" msdata:ReadOnly="true" msdata:AutoIncrement="true" msdata:Caption="SundryCategoryID" msprop:Generator_ColumnVarNameInTable="columniMth" msprop:Generator_ColumnPropNameInRow="iMth" msprop:Generator_ColumnPropNameInTable="iMthColumn" msprop:Generator_UserColumnName="iMth" type="xs:int" />
+              <xs:element name="Mth" msdata:Caption="SundryCategory" msprop:Generator_ColumnVarNameInTable="columnMth" msprop:Generator_ColumnPropNameInRow="Mth" msprop:Generator_ColumnPropNameInTable="MthColumn" msprop:Generator_UserColumnName="Mth">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="250" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+    <xs:unique name="Constraint1" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//mstns:SundryPayment" />
+      <xs:field xpath="mstns:SundryClaimID" />
+    </xs:unique>
+    <xs:unique name="SundryWork_Constraint1" msdata:ConstraintName="Constraint1" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//mstns:SundryCategory" />
+      <xs:field xpath="mstns:SundryCategoryID" />
+    </xs:unique>
+  </xs:element>
+</xs:schema>

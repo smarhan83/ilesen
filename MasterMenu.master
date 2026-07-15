@@ -1,0 +1,608 @@
+﻿<%@ Master Language="VB" CodeFile="MasterMenu.master.vb" Inherits="MasterMenu" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <!-- Removed by WebCopy --><!--<base href="./">--><!-- Removed by WebCopy -->
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
+    <meta name="description" content="Sistem iLESEN" />
+    <meta name="author" content="" />
+    <meta name="keyword" content="iLESEN" />
+    <title>PRO-LESEN MPK</title>
+   
+
+    <asp:ContentPlaceHolder ID="head" runat="server">
+         <%--<link rel="apple-touch-icon" sizes="57x57" href="<%= ResolveUrl("~/assets/favicon/apple-icon-57x57.png") %>" />
+    <link rel="apple-touch-icon" sizes="60x60" href="<%= ResolveUrl("~/assets/favicon/apple-icon-60x60.png") %>" />
+    <link rel="apple-touch-icon" sizes="72x72" href="<%= ResolveUrl("~/assets/favicon/apple-icon-72x72.png") %>" />
+    <link rel="apple-touch-icon" sizes="76x76" href="<%= ResolveUrl("~/assets/favicon/apple-icon-76x76.png") %>" />
+    <link rel="apple-touch-icon" sizes="114x114" href="<%= ResolveUrl("~/assets/favicon/apple-icon-114x114.png") %>" />
+    <link rel="apple-touch-icon" sizes="120x120" href="<%= ResolveUrl("~/assets/favicon/apple-icon-120x120.png") %>" />
+    <link rel="apple-touch-icon" sizes="144x144" href="<%= ResolveUrl("~/assets/favicon/apple-icon-144x144.png") %>" />
+    <link rel="apple-touch-icon" sizes="152x152" href="<%= ResolveUrl("~/assets/favicon/apple-icon-152x152.png") %>" />
+    <link rel="apple-touch-icon" sizes="180x180" href="<%= ResolveUrl("~/assets/favicon/apple-icon-180x180.png") %>" />
+    <link rel="icon" type="image/png" sizes="192x192" href="<%= ResolveUrl("~/assets/favicon/android-icon-192x192.png") %>" />
+    <link rel="icon" type="image/png" sizes="32x32" href="<%= ResolveUrl("~/assets/favicon/favicon-32x32.png") %>" />
+    <link rel="icon" type="image/png" sizes="96x96" href="<%= ResolveUrl("~/assets/favicon/favicon-96x96.png") %>" />
+    <link rel="icon" type="image/png" sizes="16x16" href="<%= ResolveUrl("~/assets/favicon/favicon-16x16.png") %>" />--%>
+	<link href="<%= ResolveUrl("~/favicon.ico") %>" rel="shortcut icon" type="image/x-icon" />
+
+    <script type="text/javascript" src="<%= ResolveUrl("~/Scripts/jquery-3.6.0.min.js") %>"></script>
+
+    <%--<link rel="manifest" href="~/assets/favicon/manifest.json" />--%>
+    <meta name="msapplication-TileColor" content="#ffffff" />
+    <meta name="msapplication-TileImage" content="<%= ResolveUrl("~/assets/favicon/ms-icon-144x144.png") %>" />
+    <meta name="theme-color" content="#ffffff" />
+    <!-- Vendors styles-->
+    <link rel="stylesheet" href="<%= ResolveUrl("~/vendors/simplebar/css/simplebar.css") %>" />
+    <link rel="stylesheet" href="<%= ResolveUrl("~/css/vendors/simplebar.css") %>" />
+    <!-- Main styles for this application-->
+    <link href="<%= ResolveUrl("~/css/style.css") %>" rel="stylesheet" />
+    <!-- We use those styles to show code examples, you should remove them in your application.-->
+    <link href="<%= ResolveUrl("~/css/examples.css") %>" rel="stylesheet" />
+
+
+        <!-- SweetAlert2 -->
+    <link rel="stylesheet" href="<%= ResolveUrl("~/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css") %>">
+    <!-- Toastr -->
+    <link rel="stylesheet" href="<%= ResolveUrl("~/plugins/toastr/toastr.min.css") %>">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="<%= ResolveUrl("~/dist/css/adminlte.min.css") %>">
+    <link rel="stylesheet" href="<%= ResolveUrl("~/plugins/select2/css/select2.min.css") %>">
+    <link rel="stylesheet" href="<%= ResolveUrl("~/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css") %>">
+    <link rel="stylesheet" href="<%= ResolveUrl("~/plugins/jquery-ui/jquery-ui.css") %>">
+    <link href="<%= ResolveUrl("~/vendors/%40coreui/chartjs/css/coreui-chartjs.css") %>" rel="stylesheet" />
+    <link rel="stylesheet" href="<%= ResolveUrl("~/assets/dist/css/adminlte.css") %>" />
+
+<%--            <!-- jQuery -->
+    <script src="<%= ResolveUrl("~/plugins/jquery/jquery.min.js") %>"></script>
+    <!-- jQuery UI 1.11.4 -->
+    <script src="<%= ResolveUrl("~/plugins/jquery-ui/jquery-ui.min.js") %>"></script>
+    <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+
+    <script src="<%= ResolveUrl("~/dist/js/adminlte.min.js") %>"></script>
+    <script src="<%= ResolveUrl("~/plugins/select2/js/select2.full.min.js") %>"></script>--%>
+    </asp:ContentPlaceHolder>
+    <asp:ContentPlaceHolder ID="HeadContent" runat="server">
+    </asp:ContentPlaceHolder>
+
+    <style>
+        .nav-group-toggle{
+            font-weight : bold !important;
+        }
+
+        .sidebar {
+            background-color : #EDECFC !important;
+            height : 100vh !important;			
+        }
+
+        body {
+
+            font-family : 'Trebuchet MS' !important;
+            font-size : 12pt !important;
+        }
+
+        .nav-group-toggle{
+            color : #000 !important;
+        }
+
+        .nav-group-toggle:hover {
+            color : #fff !important;
+        }
+
+        .nav-item{
+            color : #5046e5 !important;
+            font-size : 11.5pt !important;
+        }
+
+        .nav-dark{
+            color : #000 !important;
+        }
+
+        .nav-dark:hover {
+            color : #fff !important;
+        }
+
+ #overlay {
+            position: fixed;
+            z-index: 99;
+            top: 0px;
+            left: 0px;
+            background-color: #f8f8f8;
+            width: 100%;
+            height: 100%;
+            filter: Alpha(Opacity=90);
+            opacity: 0.95;
+        }
+
+        #theprogress {
+            /*background-color: #fff;
+            border:1px solid #ccc;*/
+            padding: 10px;
+            width: 300px;
+            height: 30px;
+            line-height: 30px;
+            text-align: center;
+            filter: Alpha(Opacity=100);
+            opacity: 1;
+        }
+
+        #modalprogress {
+            position: absolute;
+            top: 20%;
+            left: 55%;
+            margin: -11px 0 0 -150px;
+            color: #990000;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .avatar-img{
+            height : 2.5rem !important;
+            width : 2.5rem !important;
+        }
+        #upMain {
+                min-height: calc(100vh - 138px)!important;
+        }
+        .footer {
+            color : #fff;
+        }		
+
+        .blink {
+          animation: blink 1s steps(1, end) infinite;
+        }
+
+        @keyframes blink {
+          0% {
+            opacity: 1;
+          }
+          50% {
+            opacity: 0;
+          }
+          100% {
+            opacity: 1;
+          }
+        }		
+    </style>
+
+</head>
+<body class="hold-transition sidebar-mini layout-fixed">
+    <form id="form1" runat="server">
+
+    <asp:ScriptManager ID="ScriptManager1" runat="server">
+    </asp:ScriptManager>
+
+   
+    <asp:Label ID="labelsession" runat="server" Text='<%#Session.Item("sessionSystemId") %>'></asp:Label>
+        
+
+    <div class="sidebar sidebar-light sidebar-fixed" id="sidebar">
+      <div class="sidebar-brand d-none d-md-flex">
+      <%--  <svg class="sidebar-brand-full" width="118" height="46" alt="CoreUI Logo">
+          <use xlink:href="~/assets/brand/coreui.svg#full"></use>
+        </svg>
+        <svg class="sidebar-brand-narrow" width="46" height="46" alt="CoreUI Logo">
+          <use xlink:href="~/assets/brand/coreui.svg#signet"></use>
+        </svg>--%>
+         <%--<asp:Image ID="Image1" runat="server" ImageUrl="~/images/logo.png" Width="75" />--%>
+          <asp:HyperLink ID="hlHome" runat="server" ImageUrl="~/images/logo.png" NavigateUrl="~/Default.aspx" ImageWidth="68%"></asp:HyperLink>
+        <button class="sidebar-toggler" type="button" data-coreui-toggle="unfoldable"></button>
+      </div>
+      <ul class="sidebar-nav" data-coreui="navigation" data-simplebar="">
+
+        <li class="nav-item"><a class="nav-link nav-dark" href="<%= ResolveUrl("~/default.aspx") %>">
+        <svg class="nav-icon">
+        <use xlink:href="<%= ResolveUrl("~/vendors/@coreui/icons/svg/free.svg#cil-home") %>"></use>
+        </svg> Dashboard<span class="badge bg-primary-gradient ms-auto">BARU</span></a></li>
+
+        <!-- start dynamic left menu -->
+          
+          <div runat="server" id="menuBar1"></div>
+           
+       <!-- end dynamic left menu -->
+
+        <li class="nav-divider"></li>
+
+        
+        <li class="nav-title">Lain-lain</li>
+       <li class="nav-item"><a class="nav-link nav-dark" href="logout" runat="server" id="liLogout" visible="false">
+                <svg class="nav-icon">
+                  <use xlink:href="<%= ResolveUrl("~/vendors/@coreui/icons/svg/free.svg#cil-account-logout") %>"></use>
+                </svg> Log Keluar</a>
+       </li>
+       <%--<li class="nav-item"><a class="nav-link nav-dark" href="<%= ResolveUrl("~/lesen/semakkelulusan.aspx?p_Id=3351&m_Id=3353") %>">
+                <svg class="nav-icon">
+                  <use xlink:href="<%= ResolveUrl("~/vendors/@coreui/icons/svg/free.svg#cil-check-circle") %>"></use>
+                </svg> Semak Kelulusan</a>
+       </li>--%>
+       <li class="nav-item"><a class="nav-link nav-dark" href="<%= ResolveUrl("~/Pro-Lesen Manual Pengguna Sistem V1.0.pdf") %>" target="_blank">
+                <svg class="nav-icon">
+                  <use xlink:href="<%= ResolveUrl("~/vendors/@coreui/icons/svg/free.svg#cil-description") %>"></use>
+                </svg> Manual Pengguna</a>
+       </li>
+
+       <li class="nav-item"><a class="nav-link nav-dark" href="<%= ResolveUrl("~/Manual Pengguna Prolesen_Rev 1.0_13012025.pdf") %>" target="_blank">
+                <svg class="nav-icon">
+                  <use xlink:href="<%= ResolveUrl("~/vendors/@coreui/icons/svg/free.svg#cil-description") %>"></use>
+                </svg> Manual Pengguna Agensi <br/>& Jabatan</a>
+       </li>
+	   
+       <li class="nav-item"><a class="nav-link nav-dark" href="<%= ResolveUrl("~/PautanPantasPengguna.pdf") %>" target="_blank">
+                <svg class="nav-icon">
+                  <use xlink:href="<%= ResolveUrl("~/vendors/@coreui/icons/svg/free.svg#cil-description") %>"></use>
+                </svg> Pautan Pantas Pengguna</a>
+       </li>	   
+	   
+       <%--<li class="nav-item"><a class="nav-link nav-dark" href="<%= ResolveUrl("~/pages.aspx?Content_Name=infosistem") %>" >
+                <svg class="nav-icon">
+                  <use xlink:href="<%= ResolveUrl("~/vendors/@coreui/icons/svg/free.svg#cil-description") %>"></use>
+                </svg> Tentang Sistem</a>
+       </li>--%>	   
+
+       <li class="nav-item"><a class="nav-link nav-dark" href="<%= ResolveUrl("~/pages.aspx?Content_Name=kami") %>" >
+                <svg class="nav-icon">
+                  <use xlink:href="<%= ResolveUrl("~/vendors/@coreui/icons/svg/free.svg#cil-description") %>"></use>
+                </svg> Hubungi Kami</a>
+       </li>
+
+       <%-- <li class="nav-group"><a class="nav-link nav-group-toggle" href="#">
+            <svg class="nav-icon">
+              <use xlink:href="<%= ResolveUrl("~/vendors/@coreui/icons/svg/free.svg#cil-star") %>"></use>
+            </svg> Pautan Luar</a>
+          <ul class="nav-group-items">
+            <li class="nav-item"><a class="nav-link" href="https://mail.mpkluang.gov.my:2096/" target="_top">
+                 Webmail Staf</a></li>
+            <li class="nav-item"><a class="nav-link" href="http://egaji.mpkluang.gov.my/eProPayrollMPKluang/faces/Login/login.xhtml" target="_top">
+                 e-PRO Penggajian</a></li>
+            <li class="nav-item"><a class="nav-link" href="http://epbt.mpkluang.gov.my/" target="_top">
+                 ePBT</a></li>
+            <li class="nav-item"><a class="nav-link" href="http://www.eghrmis.gov.my/" target="_top">
+                HRMIS</a></li>
+            <li class="nav-item"><a class="nav-link" href="http://www.kwsp.gov.my/portal/ms/web/kwsp/home" target="_top">
+                KWSP</a></li>
+          </ul>
+        </li>--%>
+     
+    
+
+
+      </ul>
+
+
+
+    </div>
+  
+    <div class="wrapper d-flex flex-column min-vh-100 bg-light bg-opacity-50 dark:bg-transparent">
+      <header class="header header-light bg-primary header-sticky mb-4">
+        <div class="container-fluid">
+          <button class="header-toggler px-md-0 me-md-3 d-md-none" type="button" onclick="coreui.Sidebar.getInstance(document.querySelector('#sidebar')).toggle()">
+            <svg class="icon icon-lg">
+              <use xlink:href="<%= ResolveUrl("~/vendors/@coreui/icons/svg/free.svg#cil-menu") %>"></use>
+            </svg>
+          </button><a class="header-brand d-md-none text-white" href="<%= ResolveUrl("~/default.aspx") %>">
+            <%--<svg width="118" height="46" alt="CoreUI Logo">
+              <use xlink:href="~/assets/brand/coreui.svg#full"></use>
+            </svg>--%>
+              <asp:Image ID="Image2" runat="server" Width="100" ImageUrl="~/images/logo.png" />
+           </a>
+         <%-- <form class="d-none d-md-flex" role="search">
+            <div class="input-group"><span class="input-group-text bg-light border-0 px-1" id="search-addon">
+                <svg class="icon icon-lg my-1 mx-2 text-disabled">
+                  <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-search"></use>
+                </svg></span>
+              <input class="form-control bg-light border-0" type="text" placeholder="Search..." aria-label="Search" aria-describedby="search-addon">
+            </div>
+          </form>--%>
+            <div class="input-group title-header" style="width:50%;font-size:18pt;font-family:Calibri;" runat="server" id="idTitleHeader">
+                <asp:Label ID="lblTitlePage" runat="server" Text="PRO-LESEN MPK"></asp:Label>
+            </div>	  
+          <ul class="header-nav d-none d-sm-flex ms-auto me-3">
+            <li class="nav-item dropdown d-md-down-none" runat="server" visible="false" id="liNotification"><a class="nav-link" data-coreui-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><span class="d-inline-block my-1 mx-2 position-relative">
+                  <svg class="icon icon-lg">
+                    <use xlink:href="<%= ResolveUrl("~/vendors/@coreui/icons/svg/free.svg#cil-bell") %>"></use>
+                  </svg><span class="position-absolute top-0 start-100 translate-middle p-1 bg-danger rounded-circle blink" visible="false" runat="server" id="idSpanNoti"><span class="visually-hidden">-</span></span></span></a>
+              <div class="dropdown-menu dropdown-menu-end dropdown-menu-lg pt-0">
+                <div class="dropdown-header bg-light dark:bg-white dark:bg-opacity-10"><strong>Notifikasi</strong></div>
+
+                  <a class="dropdown-item" href="<%= ResolveUrl("~/lesen/kelulusan.aspx?p_Id=3351&m_Id=3352") %>">
+                  <svg class="icon me-2">
+                    <use xlink:href="<%= ResolveUrl("~/vendors/@coreui/icons/svg/free.svg#cil-task") %>"></use>
+                  </svg> Kelulusan - Pendaftaran<span class="badge badge-sm bg-danger-gradient ms-2"><asp:Label ID="lblNotiApproval" runat="server"></asp:Label></span></a>
+                  
+                <a class="dropdown-item" href="<%= ResolveUrl("~/lesen/pembatalan.aspx?p_Id=3351&m_Id=4351") %>">
+                <svg class="icon me-2">
+                    <use xlink:href="<%= ResolveUrl("~/vendors/@coreui/icons/svg/free.svg#cil-task") %>"></use>
+                </svg> Kelulusan - Pembatalan<span class="badge badge-sm bg-danger-gradient ms-2"><asp:Label ID="lblNotiApproval2" runat="server"></asp:Label></span></a>
+
+                  <div id="divNotiSuratMohonUlasan" runat="server" visible="false">
+                      <a class="dropdown-item" href="<%= ResolveUrl("~/lesen/semakansurat.aspx?p_Id=3351&m_Id=4353") %>">
+                          <svg class="icon me-2">
+                              <use xlink:href="<%= ResolveUrl("~/vendors/@coreui/icons/svg/free.svg#cil-task") %>"></use>
+                          </svg>
+                          Kelulusan - Surat Mohon Ulasan<span class="badge badge-sm bg-danger-gradient ms-2"><asp:Label ID="lblNotiApproval3" runat="server"></asp:Label></span></a>
+                  </div>
+              </div>
+            </li>
+  
+
+          </ul>
+          <asp:Label ID="lblFullname1" runat="server" Text="Label" Style="font-weight: 700 bold; color : #fff;"></asp:Label>
+          <ul class="header-nav ms-auto ms-sm-0 me-sm-4" runat="server" id="profileInfo">
+            <li class="nav-item dropdown d-flex align-items-center"><a class="nav-link py-0" data-coreui-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                <div class="avatar avatar-md">
+                    
+                    
+                    <asp:Image ID="imgProfile" CssClass="avatar-img" runat="server" />
+                    <span class="avatar-status bg-success"></span></div>
+              </a>
+                
+              <div class="dropdown-menu dropdown-menu-end pt-0">
+                
+                <div class="dropdown-header bg-light py-2 dark:bg-white dark:bg-opacity-10">
+                  <div class="fw-semibold">Tetapan</div>
+                </div><a class="dropdown-item" href="<%= ResolveUrl("~/administration/userprofile.aspx?p_Id=30&m_Id=36") %>">
+                  <svg class="icon me-2">
+                    <use xlink:href="<%= ResolveUrl("~/vendors/@coreui/icons/svg/free.svg#cil-user") %>"></use>
+                  </svg> Info Pengguna</a>
+                  <%--<a class="dropdown-item" href="<%= ResolveUrl("~/administration/userprofile.aspx?p_Id=30&m_Id=36") %>">
+                  <svg class="icon me-2">
+                    <use xlink:href="<%= ResolveUrl("~/vendors/@coreui/icons/svg/free.svg#cil-settings") %>"></use>
+                  </svg> Tukar Kata Laluan</a>--%>
+                
+                <div class="dropdown-divider"></div>
+            <%--       <a class="dropdown-item" href="#">
+                 <svg class="icon me-2">
+                    <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-lock-locked"></use>
+                  </svg> Lock Account</a>--%>
+                 <a class="dropdown-item" href="<%= ResolveUrl("~/Logout") %>">
+                  <svg class="icon me-2">
+                    <use xlink:href="<%= ResolveUrl("~/vendors/@coreui/icons/svg/free.svg#cil-account-logout") %>"></use>
+                  </svg> Log Keluar</a>
+              </div>
+            </li>
+          </ul>
+       <%--   <button class="header-toggler px-md-0 me-md-3" type="button" onclick="coreui.Sidebar.getInstance(document.querySelector('#aside')).show()">
+            <svg class="icon icon-lg">
+              <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-applications-settings"></use>
+            </svg>
+          </button>--%>
+        </div>
+      </header>
+
+        <!-- Start Dashboard -->
+
+        <%  If Session.Item("sessionUsersId") > 0 Then %>
+
+
+
+        <%  End If %>
+
+        <!-- End Dashboard -->
+        <asp:UpdatePanel runat="server" >
+            
+        <ContentTemplate>
+        <div runat="server" id="upMain">
+
+        <asp:ContentPlaceHolder ID="MainContent" runat="server">
+            
+        </asp:ContentPlaceHolder>
+        </div>
+        </ContentTemplate>
+                
+        </asp:UpdatePanel>
+
+        <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+        </asp:ContentPlaceHolder>
+
+        <asp:UpdateProgress runat="server" ID="PageUpdateProgress" DynamicLayout="true">
+            <ProgressTemplate>
+                <div id="overlay">
+                    <div id="modalprogress">
+                        <div id="theprogress">
+                            <%--<asp:Image ID="imgOHDC" runat="server" ImageAlign="AbsMiddle" Width="60%" ImageUrl="~/assets/dist/img/system_logo.png" /><br />--%>
+                            <asp:Image ID="imgWaitIcon" runat="server" ImageAlign="AbsMiddle" ImageUrl="~/assets/dist/img/spinnergreen.gif" /><br />
+                                        
+                        </div>
+                    </div>
+                </div>
+            </ProgressTemplate>
+        </asp:UpdateProgress>
+
+
+      <footer class="footer" >
+        <div runat="server" id="idFooter1" style="text-align:center !important;width:100% !important;font-size : 10pt;"><%--<a href="http://ilesen.integrasys.my/"></a> --%>
+            
+            <%--<span id="copyright">
+                <script>document.getElementById('copyright').appendChild(document.createTextNode(new Date().getFullYear()))</script>
+            </span>--%>
+            Pro-Lesen MPK &copy; Hakcipta Terpelihara 2024 <br />
+            
+        </div>
+        <%--<div runat="server" id="idFooter2" class="ms-auto">Dibangunkan oleh&nbsp;<a href="https://integrasys.my/" target="_blank">Integrasys Solution Sdn Bhd</a></div>--%>
+      </footer>
+    </div>
+    <!-- CoreUI and necessary plugins-->
+    <script src="<%= ResolveUrl("~/vendors/%40coreui/coreui-pro/js/coreui.bundle.min.js") %>"></script>
+    <script src="<%= ResolveUrl("~/vendors/simplebar/js/simplebar.min.js") %>"></script>
+    <script>
+        if (document.body.classList.contains('dark-theme')) {
+            var element = document.getElementById('btn-dark-theme');
+            if (typeof (element) != 'undefined' && element != null) {
+                document.getElementById('btn-dark-theme').checked = true;
+            }
+        } else {
+            var element = document.getElementById('btn-light-theme');
+            if (typeof (element) != 'undefined' && element != null) {
+                document.getElementById('btn-light-theme').checked = true;
+            }
+        }
+
+        function handleThemeChange(src) {
+            var event = document.createEvent('Event');
+            event.initEvent('themeChange', true, true);
+
+            if (src.value === 'light') {
+                document.body.classList.remove('dark-theme');
+            }
+            if (src.value === 'dark') {
+                document.body.classList.add('dark-theme');
+            }
+            document.body.dispatchEvent(event);
+        }
+    </script>
+    <!-- Plugins and scripts required by this view-->
+    <script src="<%= ResolveUrl("~/vendors/chart.js/js/chart.min.js") %>"></script>
+    <script src="<%= ResolveUrl("~/vendors/%40coreui/chartjs/js/coreui-chartjs.js") %>"></script>
+    <script src="<%= ResolveUrl("~/vendors/%40coreui/utils/js/coreui-utils.js") %>"></script>
+    <script src="<%= ResolveUrl("~/js/main.js") %>"></script>
+
+        <script src="<%= ResolveUrl("~/plugins/bootstrap/js/bootstrap.bundle.min.js") %>"></script>
+
+
+      
+
+
+        <!-- jQuery -->
+        <script src="<%= ResolveUrl("~/plugins/jquery/jquery.min.js") %>"></script>
+        <!-- jQuery UI 1.11.4 -->
+        <script src="<%= ResolveUrl("~/plugins/jquery-ui/jquery-ui.min.js") %>"></script>
+        <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+
+
+
+
+        <!-- Select2 -->
+        <script src="<%= ResolveUrl("~/plugins/select2/js/select2.full.min.js") %>"></script>
+        <!-- Bootstrap4 Duallistbox -->
+        <script src="<%= ResolveUrl("~/plugins/bootstrap4-duallistbox/jquery.bootstrap-duallistbox.min.js") %>"></script>
+        <!-- InputMask -->
+        <script src="<%= ResolveUrl("~/plugins/moment/moment.min.js") %>"></script>
+        <script src="<%= ResolveUrl("~/plugins/inputmask/jquery.inputmask.bundle.js") %>"></script>
+        <!-- date-range-picker -->
+        <script src="<%= ResolveUrl("~/plugins/daterangepicker/daterangepicker.js") %>"></script>
+        <!-- bootstrap color picker -->
+        <script src="<%= ResolveUrl("~/plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.min.js") %>"></script>
+        <!-- Bootstrap Switch -->
+  <%--      <script src="/plugins/bootstrap-switch/js/bootstrap-switch.min.js"></script>--%>
+
+        <!-- DataTables -->
+        <script src="<%= ResolveUrl("~/plugins/datatables/jquery.dataTables.min.js") %>"></script>
+        <script src="<%= ResolveUrl("~/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js") %>"></script>
+        <script src="<%= ResolveUrl("~/plugins/datatables-responsive/js/dataTables.responsive.min.js") %>"></script>
+        <script src="<%= ResolveUrl("~/plugins/datatables-responsive/js/responsive.bootstrap4.min.js") %>"></script>
+
+        <!-- Toastr -->
+        <script src="<%= ResolveUrl("~/plugins/toastr/toastr.min.js") %>"></script>
+
+        <!-- jQuery -->
+        <%--<script src="/plugins/jquery/jquery.min.js"></script>--%>
+
+        <!-- SweetAlert2 -->
+        <script src="<%= ResolveUrl("~/plugins/sweetalert2/sweetalert2.min.js") %>"></script>
+        <!-- Toastr -->
+        <script src="<%= ResolveUrl("~/plugins/toastr/toastr.min.js") %>"></script>
+        <!-- AdminLTE App -->
+        <script src="<%= ResolveUrl("~/dist/js/adminlte.min.j") %>s"></script>
+        <!-- Select2 -->
+        <script src="<%= ResolveUrl("~/plugins/select2/js/select2.full.min.js") %>"></script>
+
+        <!--EXISTING -->
+
+        <!-- daterangepicker -->
+        <script src="<%= ResolveUrl("~/plugins/moment/moment.min.js") %>"></script>
+        <script src="<%= ResolveUrl("~/plugins/daterangepicker/daterangepicker.js") %>"></script>
+        <!-- Tempusdominus Bootstrap 4 -->
+        <script src="<%= ResolveUrl("~/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js") %>"></script>
+        <!-- Summernote -->
+        <script src="<%= ResolveUrl("~/plugins/summernote/summernote-bs4.min.js") %>"></script>
+        <!-- overlayScrollbars -->
+        <script src="<%= ResolveUrl("~/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js") %>"></script>
+        <!-- AdminLTE App -->
+        <script src="<%= ResolveUrl("~/assets/dist/js/adminlte.js") %>"></script>
+
+
+
+        <script>
+            $(function () {
+                //Initialize Select2 Elements
+                $('.select2').select2()
+
+                //Initialize Select2 Elements
+                $('.select2bs4').select2({
+                    theme: 'bootstrap4'
+                })
+
+                //Datemask dd/mm/yyyy
+                $('#datemask').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' })
+                //Datemask2 mm/dd/yyyy
+                $('#datemask2').inputmask('mm/dd/yyyy', { 'placeholder': 'mm/dd/yyyy' })
+                //Money Euro
+                $('[data-mask]').inputmask()
+
+                //Date picker
+                $('#reservationdate').datetimepicker({
+                    format: 'L'
+                });
+
+                //Date and time picker
+                $('#reservationdatetime').datetimepicker({ icons: { time: 'far fa-clock' } });
+
+                //Date range picker
+                $('#reservation').daterangepicker()
+                //Date range picker with time picker
+                $('#reservationtime').daterangepicker({
+                    timePicker: true,
+                    timePickerIncrement: 30,
+                    locale: {
+                        format: 'MM/DD/YYYY hh:mm A'
+                    }
+                })
+                //Date range as a button
+                $('#daterange-btn').daterangepicker(
+                    {
+                        ranges: {
+                            'Today': [moment(), moment()],
+                            'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                            'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                            'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                            'This Month': [moment().startOf('month'), moment().endOf('month')],
+                            'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                        },
+                        startDate: moment().subtract(29, 'days'),
+                        endDate: moment()
+                    },
+                    function (start, end) {
+                        $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'))
+                    }
+                )
+
+                //Timepicker - 
+                $('#timepicker').datetimepicker({
+                    format: 'LT'
+                })
+
+                //Bootstrap Duallistbox
+                $('.duallistbox').bootstrapDualListbox()
+
+                //Colorpicker
+                $('.my-colorpicker1').colorpicker()
+                //color picker with addon
+                $('.my-colorpicker2').colorpicker()
+
+                $('.my-colorpicker2').on('colorpickerChange', function (event) {
+                    $('.my-colorpicker2 .fa-square').css('color', event.color.toString());
+                })
+            })
+     
+
+            
+        </script>
+
+
+    </form>
+</body>
+</html>
+
