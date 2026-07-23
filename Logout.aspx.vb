@@ -8,6 +8,6 @@ Partial Class Logout
         If Not Session("sessionUsersId") Is Nothing Then
             GlobalClass.auditTrail("Logout Button", "Logout", "Logout")
         End If
-        Response.Redirect("~/Default.aspx")
+        Response.Redirect("~/")
     End Sub
 End Class

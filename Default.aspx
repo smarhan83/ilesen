@@ -39,7 +39,7 @@
 
             <%  If Session.Item("sessionUsersId") > 0 Then %>
 
-            <div class="body flex-grow-1 px-3">
+            <div class="body flex-grow-1 px-3" runat="server" visible="false">
             <div class="container-lg">
                 <div class="fs-2 fw-semibold">Dashboard</div>
                 <nav aria-label="breadcrumb">
@@ -953,194 +953,329 @@
             </div>
             </div>        
 
-            <% Else %>
-
-          
-			<div class="bg-light d-flex flex-row align-items-center dark:bg-transparent" runat="server" visible="false">
-				<div class="container">
-				<div class="row justify-content-center">
-					  <div class="col-lg-12 text-center">
-						  <asp:Image ID="Image2" runat="server" Width="15%" ImageUrl="~/images/logo_mpk_new.png" />
-					  </div>
-				</div>
-				</div>
-			</div> 
-           
-            <div class="bg-light  d-flex flex-row align-items-center dark:bg-transparent">
-                  <div class="container">
-                    <div class="row justify-content-center">
-                      <div class="col-lg-8">
-                        <div class="card-group d-block d-md-flex row">
-
-                          <div class="card col-md-5 text-white bg-primary-login py-5">
-                            <div class="card-body text-center" runat="server" id="divLogoBig" >
-                              <div>
-                                <h2>&nbsp;</h2>
-                                  <asp:Image ID="Image1" runat="server" ImageUrl="~/images/logo_mpk_new.png" Width="50%"/>
-                                <p></p>
-                                
-                              </div>
-                            </div>
-
-                                      <br />
-                        <div align="center">
-                            <asp:Label ID="txtError" runat="server"
-                                Style="font-weight: 700; color: #5046E5"></asp:Label>
-               
-                        </div>
-
-                          </div>
-
-                          <div class="card col-md-7 p-4 mb-0" runat="server" id="myForm">
-                            <div class="card-body">
-                              <h1>Log Masuk</h1>
-                              <p class="text-medium-emphasis">Sila Masukkan Maklumat Anda</p>
-                              <div class="input-group mb-3"><span class="input-group-text">
-                                <svg class="icon">
-                                <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-user"></use>
-                                </svg></span>
-                                <asp:TextBox ID="txtUsername" runat="server" CssClass="form-control" placeholder="ID Pengguna (cth : 910101014321 tanpa '-')"></asp:TextBox>
-                                        
-                                <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server"
-                                ControlToValidate="txtUsername" ErrorMessage="Sila Masukkan ID Pengguna" Display="none"></asp:RequiredFieldValidator>
-                                <asp:ValidatorCalloutExtender ID="ce1" runat="server" TargetControlID="RequiredFieldValidator3">
-                                </asp:ValidatorCalloutExtender>
-                              </div>
-                              <div class="input-group mb-4"><span class="input-group-text">
-
-                                <svg class="icon">
-                                <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-lock-locked"></use>
-                                </svg></span>
-                                <asp:TextBox ID="txtPassword" runat="server" TextMode="Password" CssClass="form-control" placeholder="Katalaluan"></asp:TextBox>
-
-                                <div class="input-group-append">  
-                                <button id="show_password" class="btn btn-primary" type="button" onclick="myshowp()">  
-                                <%--<span class="fa fa-eye-slash icon"></span>  --%>
-                                <svg class="icon">
-                                <use xlink:href="<%= ResolveUrl("~/vendors/@coreui/icons/svg/free.svg#cil-lock-unlocked") %>"></use>
-                                </svg>
-                                </button>  
-                                </div>
-                                
-
-                               <script>
-                                    function myshowp() {
-
-                                        
-                                        if (document.getElementById('<%= txtPassword.ClientID %>').type == "password") {
-                                            document.getElementById('<%= txtPassword.ClientID %>').type = 'Text';
-                                        }
-                                        else {
-
-                                            document.getElementById('<%= txtPassword.ClientID %>').type = 'password';
-                                        }
-                                        
-
-                                    }
-
-                               </script>
-							   
-                                <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server"
-                                ControlToValidate="txtPassword" ErrorMessage="Sila Masukkan Katalaluan" Display="none"></asp:RequiredFieldValidator>
-                                <asp:ValidatorCalloutExtender ID="ce2" runat="server" TargetControlID="RequiredFieldValidator2">
-                                </asp:ValidatorCalloutExtender>
-                              </div>
-                              <div class="row">
-                                <div class="col-6">
-                      
-                                    <asp:Button ID="btnLogin" runat="server" Text="Log Masuk" CssClass="btn btn-primary px-4" />
-                                </div>
-                                <div class="col-6 text-end">
-                                  <%--<button class="btn btn-link px-0" type="button">Forgot password?</button>--%>
-									<asp:LinkButton ID="lbFP" runat="server" CssClass="btn btn-link px-0 " ValidationGroup="frmFP">Lupa Katalaluan?</asp:LinkButton>								  
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-						  
-                            <!-- forgot password -->
-                            <div class="card col-md-7 p-4 mb-0" runat="server" id="myCheckAcc" visible="false">
-                                <div class="card-body p-0">
-                                    <!-- Nested Row within Card Body -->
-                                    <div class="row">
-                                
-                                        <div class="col-lg-12" >
-                                            <div class="p-5" style="/*background-image: linear-gradient(rgba(255,255,255,0.8), rgba(255,255,255,0.8)),url('../shop/img/1mrff logo.png');*/ background-repeat : no-repeat;background-position : center; ">
-
-                                                <asp:FormView ID="fvFP" DefaultMode="Insert" Width="100%" runat="server" DataKeyNames="farmerID" DataSourceID="SqlDataSourceForm">
-                                    
-                                                    <InsertItemTemplate>
-           
-                                                        <div class="text-center">
-                                                            <h2 class="h3 text-gray-900 mb-4">Pengesahan Akaun</h2>
-                                                        </div>
-                                                                                           
-
-
-                                                        <div class="form-group row">
-                                                            <div class="col-sm-12 mb-3 mb-sm-0">
-                                                                <asp:TextBox AutoCompleteType="Disabled" Text='' class="form-control form-control-user" placeholder="Alamat Email *" runat="server" ID="Users_Email" />
-                                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator5" ControlToValidate="Users_Email" CssClass="text-danger" runat="server" ErrorMessage="Sila masukkan alamat email!" ValidationGroup="insertForm" Display="Dynamic"></asp:RequiredFieldValidator>
-                                                                <asp:RegularExpressionValidator ID="RegularExpressionValidator1" runat="server" CssClass="text-danger"
-                                                                ControlToValidate="Users_Email" ErrorMessage="Alamat Email Tidak Sah"
-                                                                ValidationExpression="\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*"
-                                                                ValidationGroup="insertForm" Display="Dynamic"></asp:RegularExpressionValidator>
-                                                                <%--<asp:CustomValidator runat="server" OnServerValidate="EmailValidate" Display="Dynamic" ControlToValidate="Users_Email2" ID="vldEmail"></asp:CustomValidator>--%>
-
-                                                            </div>
-                                
-                                                        </div>                                                 
-
-                                        
-                                                        <asp:LinkButton ID="btnCheckAcc" runat="server" Text="Semak" class="btn btn-success btn-lg btn-block" style="background-color:#0a9c18" ValidationGroup="insertForm" CausesValidation="True" OnClick="btnCheckAcc_Click"  />
-
-                                                        <div class="center" style="text-align:center"><asp:Label ID="lblCheckAcc" runat="server" Text="" ></asp:Label></div>     
-                                                        <asp:HiddenField ID="hfRegID" runat="server" />
-                                                
-                                                        <asp:LinkButton ID="btnEmailVerify" Visible="false" runat="server" Text="Resend Verification Link" class="btn btn-success btn-lg btn-block" style="background-color:#0a9c18" ValidationGroup="insertForm" CausesValidation="True" OnClick="btnEmailVerify_Click"  />
-
-                                                        <asp:LinkButton ID="btnEmailReset" Visible="false" runat="server" Text="Reset Katalaluan" class="btn btn-success btn-lg btn-block" style="background-color:#0a9c18" ValidationGroup="insertForm" CausesValidation="True" OnClick="btnEmailReset_Click"  />
-                                                
-                                                    </InsertItemTemplate>
-                                    
-                                                </asp:FormView>
-
-                                        <asp:SqlDataSource runat="server" ID="SqlDataSourceForm" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
-                                    
-                                            InsertCommand="INSERT INTO TBL_USERS (Users_Name, Users_Fullname, Users_Password, Users_Email, Users_Enabled, Users_Register,Users_TelNo,Users_RegID,createdDate,estate_id,Users_Address) 
-                                            VALUES (@Users_Email, @Users_Fullname, @Users_Password, @Users_Email, 0, 0,@Users_TelNo,@Users_RegID,getdate(),0,@Users_Address);
-                                            SELECT @latestID = @@IDENTITY;
-                                            INSERT INTO ECM_Buyers (Username,FullName,Email,Active,CreatorID,CreatedDt,LastModID,LastModDt,PhoneNo,UsersID)
-                                            VALUES (@Users_Email,@Users_Fullname,@Users_Email,0,'regform',getdate(),'regform',getdate(),@Users_TelNo,@latestID);
-                                            INSERT INTO TBL_USER_GROUPLIST (UGL_UGN_Id,UGL_Users_Id) VALUES (8,@latestID);
-                                            ">
-                                            <InsertParameters>
-                                                <asp:Parameter Name="latestID" Type="Int32" Direction="Output" />  
-                                                <asp:Parameter Name="Users_Name" />
-                                                <asp:Parameter Name="Users_Fullname" />
-                                                <asp:Parameter Name="Users_Password" />
-                                                <asp:Parameter Name="Users_Email" />
-                                                <asp:Parameter Name="Users_TelNo" />
-                                                <asp:Parameter Name="Users_RegID" />
-                                                <asp:Parameter Name="Users_Address" />
-                                            </InsertParameters>
-                                    
-                                        </asp:SqlDataSource>                                        
-                                
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>                            
-
-                            <!-- end forgot password  -->						  
-
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+            <section class="admin-main">
+                <!-- Topbar -->
+                <div class="topbar mb-4">
+                <div class="d-flex align-items-center gap-2">
+                    <span class="badge-soft"><i class="bi bi-speedometer2 me-1"></i>Dashboard</span>
+                    <span class="small text-muted d-none d-md-inline">Ringkasan sistem ProLesen</span>
                 </div>
-    
+
+                <div class="search-wrap">
+                    <i class="bi bi-search"></i>
+                    <input type="text" class="form-control searchInput" placeholder="Cari permohonan / lesen / pengguna...">
+                </div>
+
+                <%--<!-- Profile Dropdown -->
+                <div class="dropdown">
+                    <div class="profile-btn" data-bs-toggle="dropdown" aria-expanded="false">
+                    <img src="https://i.pravatar.cc/100?img=12" alt="Profile">
+                    <div class="d-none d-md-block">
+                        <div class="profile-name">Admin ProLesen</div>
+                        <div class="profile-role">MPK Kluang</div>
+                    </div>
+                    <i class="bi bi-chevron-down ms-1 text-muted"></i>
+                    </div>
+
+                    <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0" style="border-radius:18px;">
+                    <li>
+                        <a class="dropdown-item py-2" href="#">
+                        <i class="bi bi-person-circle me-2"></i>Lihat Profil Pengguna
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item py-2" href="#">
+                        <i class="bi bi-bell me-2"></i>Notifikasi
+                        <span class="badge text-bg-primary ms-2">3</span>
+                        </a>
+                    </li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li>
+                        <a class="dropdown-item py-2 text-danger" href="#" id="btnLogoutTop">
+                        <i class="bi bi-box-arrow-right me-2"></i>Log Keluar
+                        </a>
+                    </li>
+                    </ul>
+                </div>--%>
+
+                </div>
+
+
+            </section>
+
+            <!-- Dashboard Cards -->
+            <asp:SqlDataSource ID="sdsCountStatus" runat="server" ConnectionString="<%$ ConnectionStrings:webcon_ConnectionStr %>"
+            SelectCommand="
+            SELECT
+                COUNT(DISTINCT a.Permohonan_ID) AS TotalPermohonan,
+                SUM(CASE WHEN a.ApprStatusID IN (1,2,3,4,5,7,8) THEN 1 ELSE 0 END) AS TotalDalamProses,
+                SUM(CASE WHEN a.ApprStatusID = 10 THEN 1 ELSE 0 END) AS Diluluskan,
+                SUM(CASE WHEN a.ApprStatusID IN (6,9) THEN 1 ELSE 0 END) AS Ditolak
+            FROM
+            (
+                SELECT Permohonan_ID, ApprStatusID, AgensiID
+                FROM v_LESEN_ApprovalList_Curr
+
+                UNION ALL
+
+                SELECT Permohonan_ID, ApprStatusID, AgensiID
+                FROM v_LESEN_ApprovalListBatal_Curr
+            ) a
+            WHERE IIF(@AgensiID = 0 OR @AgensiID = 1,0,@AgensiID) =
+                    IIF(@AgensiID = 0 OR @AgensiID = 1,0,a.AgensiID)
+            AND a.ApprStatusID &lt;&gt; 0
+            ">
+            <SelectParameters>
+            <asp:SessionParameter SessionField="sessionEstateID" Name="AgensiID"></asp:SessionParameter>
+            </SelectParameters>
+            </asp:SqlDataSource>
+
+            <div class="row g-4 mb-4">
+            <div class="col-md-6 col-xl-3">
+                <div class="stat-card">
+                <div class="stat-top">
+                    <span class="badge-soft"><i class="bi bi-file-earmark-text me-1"></i>Permohonan</span>
+                    <i class="bi bi-three-dots text-muted"></i>
+                </div>
+                
+                <h3>
+                    <asp:FormView ID="FormView5" runat="server" DataSourceID="sdsCountStatus">
+                        <ItemTemplate>
+                            <%# Eval("TotalPermohonan") %>
+                        </ItemTemplate>
+                    </asp:FormView>
+                </h3>
+                <p>Jumlah permohonan / pembatalan</p>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-xl-3">
+                <div class="stat-card">
+                <div class="stat-top">
+                    <span class="badge-soft"><i class="bi bi-hourglass-split me-1"></i>Dalam Proses</span>
+                    <i class="bi bi-three-dots text-muted"></i>
+                </div>
+                <h3>
+                    <asp:FormView ID="FormView6" runat="server" DataSourceID="sdsCountStatus">
+                        <ItemTemplate>
+                            <%# Eval("TotalDalamProses") %>
+                        </ItemTemplate>
+                    </asp:FormView>
+                </h3>
+                <p>Menunggu semakan / tindakan</p>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-xl-3">
+                <div class="stat-card">
+                <div class="stat-top">
+                    <span class="badge-soft"><i class="bi bi-patch-check me-1"></i>Diluluskan</span>
+                    <i class="bi bi-three-dots text-muted"></i>
+                </div>
+                <h3>
+                    <asp:FormView ID="FormView7" runat="server" DataSourceID="sdsCountStatus">
+                        <ItemTemplate>
+                            <%# Eval("Diluluskan") %>
+                        </ItemTemplate>
+                    </asp:FormView>
+                </h3>
+                <p>Permohonan/pembatalan diluluskan</p>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-xl-3">
+                <div class="stat-card">
+                <div class="stat-top">
+                    <span class="badge-soft"><i class="bi bi-x-circle me-1"></i>Ditolak</span>
+                    <i class="bi bi-three-dots text-muted"></i>
+                </div>
+                <h3>
+                    <asp:FormView ID="FormView8" runat="server" DataSourceID="sdsCountStatus">
+                        <ItemTemplate>
+                            <%# Eval("Ditolak") %>
+                        </ItemTemplate>
+                    </asp:FormView>
+                </h3>
+                <p>Perlu pembetulan / semakan</p>
+                </div>
+            </div>
+            </div>
+
+            <!-- =======================
+            Charts Section
+            ======================= -->
+            <div class="row g-4 mt-4">
+
+                <!-- Bar Chart -->
+                <div class="col-xl-6">
+                <div class="soft-card p-4">
+                    <div class="section-title">Bar Chart - Permohonan Bulanan (Tahun Semasa)</div>
+                    <div style="position: relative; height: 300px;">
+				                <canvas id="barMonthly"></canvas>
+                    </div>
+                </div>
+                </div>
+
+                <!-- Pie Chart -->
+                <div class="col-xl-6">
+                <div class="soft-card p-4">
+                    <div class="section-title">Pie Chart - Status Permohonan (Tahun Semasa)</div>
+                    <div style="position: relative; height: 300px;">
+				                <canvas id="pieStatus"></canvas>
+                    </div>
+                </div>
+                </div>
+
+                <!-- Line Chart -->
+                <div class="col-xl-12">
+                <div class="soft-card p-4">
+                    <div class="section-title">Line Chart - Kelulusan Harian (Bulan Semasa)</div>
+                    <div style="position: relative; height: 300px;">
+				                <canvas id="lineDaily"></canvas>
+                    </div>
+                </div>
+                </div>
+
+<%--                <!-- Scatter Chart -->
+                <div class="col-xl-6">
+                <div class="soft-card p-4">
+                    <div class="section-title">Scatter Chart - Proses vs Masa</div>
+                    <div style="position: relative; height: 300px;">
+				                <canvas id="scatterProcess"></canvas>
+                    </div>
+                </div>
+                </div>--%>
+
+   <%--             <!-- Radar Chart -->
+                <div class="col-xl-6">
+                <div class="soft-card p-4">
+                    <div class="section-title">Radar Chart - Skor Jabatan</div>
+                    <div style="position: relative; height: 300px;">
+				                <canvas id="radarDept"></canvas>
+                    </div>
+                </div>
+                </div>
+			  
+            <div class="col-xl-6">
+                <div class="soft-card p-4">
+                <div class="section-title">Doughnut Chart - Kategori</div>
+                <div style="position: relative; height: 300px;">
+                    <canvas id="doughnutCategory"></canvas>
+                </div>
+                </div>
+            </div>--%>
+			  
+
+            </div>
+
+            <!-- Activity + Table -->
+            <div class="row g-4 mt-4">
+            <div class="col-xl-7">
+                <div class="soft-card p-4">
+                <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
+                    <div>
+                    <div class="section-title">Aktiviti Terkini</div>
+                    <p class="section-subtitle">Log ringkas untuk pemantauan</p>
+                    </div>
+                    <button class="btn btn-soft btn-sm"><i class="bi bi-arrow-repeat me-1"></i>Refresh</button>
+                </div>
+
+                <div class="mt-3">
+                    <div class="d-flex align-items-start gap-3 py-2">
+                    <div class="feature-icon" style="width:38px;height:38px;border-radius:14px;">
+                        <i class="bi bi-file-earmark-plus"></i>
+                    </div>
+                    <div>
+                        <div style="font-weight:800;">Permohonan baru diterima</div>
+                        <div class="small text-muted">No. Rujukan: PL-2026-00081 • 5 minit lepas</div>
+                    </div>
+                    </div>
+
+                    <div class="d-flex align-items-start gap-3 py-2">
+                    <div class="feature-icon" style="width:38px;height:38px;border-radius:14px;">
+                        <i class="bi bi-patch-check"></i>
+                    </div>
+                    <div>
+                        <div style="font-weight:800;">Kelulusan telah direkodkan</div>
+                        <div class="small text-muted">No. Rujukan: PL-2026-00067 • 1 jam lepas</div>
+                    </div>
+                    </div>
+
+                    <div class="d-flex align-items-start gap-3 py-2">
+                    <div class="feature-icon" style="width:38px;height:38px;border-radius:14px;">
+                        <i class="bi bi-bell"></i>
+                    </div>
+                    <div>
+                        <div style="font-weight:800;">Notifikasi dihantar kepada pemohon</div>
+                        <div class="small text-muted">3 notifikasi dihantar • Hari ini</div>
+                    </div>
+                    </div>
+
+                </div>
+                </div>
+            </div>
+
+            <div class="col-xl-5">
+                <div class="soft-card p-4">
+                <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
+                    <div>
+                    <div class="section-title">Permohonan Perlu Tindakan</div>
+                    <p class="section-subtitle">Senarai ringkas untuk semakan</p>
+                    </div>
+                    <span class="badge-soft"><i class="bi bi-exclamation-triangle me-1"></i>Action</span>
+                </div>
+
+                <div class="table-responsive mt-3">
+                    <table class="table mini-table align-middle">
+                    <thead>
+                        <tr class="text-muted small">
+                        <th>Rujukan</th>
+                        <th>Status</th>
+                        <th class="text-end">Tindakan</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                        <td>
+                            <div style="font-weight:800;">PL-2026-00081</div>
+                            <div class="small text-muted">Premis Makanan</div>
+                        </td>
+                        <td><span class="badge text-bg-warning">Semak</span></td>
+                        <td class="text-end">
+                            <button class="btn btn-soft btn-sm"><i class="bi bi-eye me-1"></i>Lihat</button>
+                        </td>
+                        </tr>
+
+                        <tr>
+                        <td>
+                            <div style="font-weight:800;">PL-2026-00079</div>
+                            <div class="small text-muted">Perniagaan Runcit</div>
+                        </td>
+                        <td><span class="badge text-bg-info">Proses</span></td>
+                        <td class="text-end">
+                            <button class="btn btn-soft btn-sm"><i class="bi bi-eye me-1"></i>Lihat</button>
+                        </td>
+                        </tr>
+
+                        <tr>
+                        <td>
+                            <div style="font-weight:800;">PL-2026-00073</div>
+                            <div class="small text-muted">Lesen Iklan</div>
+                        </td>
+                        <td><span class="badge text-bg-danger">Pembetulan</span></td>
+                        <td class="text-end">
+                            <button class="btn btn-soft btn-sm"><i class="bi bi-eye me-1"></i>Lihat</button>
+                        </td>
+                        </tr>
+
+                    </tbody>
+                    </table>
+                </div>
+
+                </div>
+            </div>
+            </div>
+            <% Else %>
 
 				<br />
 
@@ -1169,8 +1304,154 @@
             });
             */
 
+
         }
     </script>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    $(document).ready(function () {
+        // Bar Chart - Permohonan Bulanan
+        new Chart(document.getElementById("barMonthly"), {
+            type: "bar",
+            data: {
+                labels: ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Ogos", "Sep", "Okt", "Nov", "Dis"],
+                datasets: [{
+                    label: "Jumlah Permohonan",
+                    //data: [12, 19, 15, 25, 18, 22, 20, 30, 28, 24, 16, 10],
+                    data: <%= MonthlyData %>,
+                    backgroundColor: "#0ea5e9"
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: { y: { beginAtZero: true } }
+            }
+        });
+
+        // Pie Chart - Status Permohonan
+        new Chart(document.getElementById("pieStatus"), {
+            type: "pie",
+            data: {
+                labels: ["Baru", "Proses", "Diluluskan", "Ditolak"],
+                datasets: [{
+                    //data: [50, 30, 70, 20],
+                    data: <%= StatusData %>,
+                    backgroundColor: ["#0ea5e9", "#0b3b7a", "#34d399", "#fb7185"]
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { position: 'bottom' } }
+            }
+        });
+
+        // Line Chart - Kelulusan Harian
+        new Chart(document.getElementById("lineDaily"), {
+            type: "line",
+            data: {
+                labels: [
+                    "1", "2", "3", "4", "5", "6", "7", "8", "9", "10",
+                    "11", "12", "13", "14", "15", "16", "17", "18", "19", "20",
+                    "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"
+                ],
+                datasets: [{
+                    label: "Kelulusan",
+                    data: <%= DailyData %>,
+                    borderColor: "#34d399",
+                    backgroundColor: "rgba(52,211,153,0.2)",
+                    tension: 0.4,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { position: 'top' } },
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: "HARI"
+                        }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: "JUMLAH KELULUSAN"
+                        }
+                    }
+                }
+            }
+        });
+
+        // Scatter Chart - Proses vs Masa
+        new Chart(document.getElementById("scatterProcess"), {
+            type: "scatter",
+            data: {
+                datasets: [{
+                    label: "Proses vs Masa",
+                    data: [
+                        { x: 1, y: 2 }, { x: 2, y: 3 }, { x: 3, y: 1 }, { x: 4, y: 4 }, { x: 5, y: 2 }
+                    ],
+                    backgroundColor: "#facc15"
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { position: 'top' } },
+                scales: { x: { title: { display: true, text: "Masa (hari)" } }, y: { title: { display: true, text: "Proses" } } }
+            }
+        });
+
+        // Radar Chart - Skor Jabatan
+        new Chart(document.getElementById("radarDept"), {
+            type: "radar",
+            data: {
+                labels: ["Jabatan A", "Jabatan B", "Jabatan C", "Jabatan D", "Jabatan E"],
+                datasets: [{
+                    label: "Skor",
+                    data: [65, 59, 90, 81, 56],
+                    fill: true,
+                    backgroundColor: "rgba(59,130,246,0.2)",
+                    borderColor: "#3b82f6",
+                    pointBackgroundColor: "#3b82f6"
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { position: 'top' } },
+                scales: { r: { beginAtZero: true } }
+            }
+        });
+
+        new Chart(document.getElementById("doughnutCategory"), {
+            type: "doughnut",
+            data: {
+                labels: ["Kategori A", "Kategori B", "Kategori C", "Kategori D"],
+                datasets: [{
+                    data: [25, 40, 20, 15],
+                    backgroundColor: ["#f59e0b", "#10b981", "#3b82f6", "#ef4444"]
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { position: 'bottom' } }
+            }
+        });
+
+
+
+    });
+</script>
 
 </asp:Content>
 
