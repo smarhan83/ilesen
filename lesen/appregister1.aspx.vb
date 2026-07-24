@@ -2002,8 +2002,11 @@ Partial Class appregister1
     End Sub
 
     Protected Sub BackButton_Click(sender As Object, e As EventArgs)
-        Response.Redirect(Request.Url.AbsoluteUri)
+        'Response.Redirect(Request.Url.AbsoluteUri)
+        backToList()
     End Sub
+
+
 
     Protected Sub DDL_JenisLesen_SelectedIndexChanged(sender As Object, e As EventArgs)
         Dim ddl As DropDownList = DirectCast(FormView1.FindControl("DDL_JenisLesen"), DropDownList)
@@ -2516,7 +2519,7 @@ Partial Class appregister1
                     ShowAlert("error", "", "Gagal hantar")
                 Else
                     ShowAlert("success", "", "Berjaya hantar")
-                    GridView1.DataBind()
+                    'GridView1.DataBind()
                     backToList()
                 End If
 
@@ -2571,6 +2574,7 @@ Partial Class appregister1
         whiteCard.Visible = True
         TabContainer1.Visible = False
         GridView1.SelectedIndex = -1
+        GridView1.DataBind()
     End Sub
 
     Private Sub FormViewMaintenanceTemplate_ItemInserting(sender As Object, e As FormViewInsertEventArgs) Handles FormViewMaintenanceTemplate.ItemInserting

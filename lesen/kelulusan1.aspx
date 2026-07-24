@@ -2720,7 +2720,7 @@
 
     <asp:SqlDataSource ID="SqlDataSourceGrid" runat="server"
         ConnectionString="<%$ ConnectionStrings:webcon_ConnectionStr %>"
-        SelectCommand="SELECT a.*,e.*,f.*, g.Rujukan,g.IsSuratPemeriksaanFail,ISNULL(g.AlamatPremis,ISNULL(g.AlamatPenjajaan,ISNULL(g.AnjingAlamat,isnull(g.LokasiPasar1,ISNULL(g.LokasiPasar2,ISNULL(g.LokasiPasar3,'')))))) as AlamatPremis, isnull(h.IsPenilaian,0) as IsPenilaianStatus,   
+        SelectCommand="SELECT a.*,e.*,f.*, g.Rujukan,g.IsSuratPemeriksaanFail,ISNULL(g.AlamatBaru,ISNULL(g.AlamatPremis,ISNULL(g.AlamatPenjajaan,ISNULL(g.AnjingAlamat,isnull(g.LokasiPasar1,ISNULL(g.LokasiPasar2,ISNULL(g.LokasiPasar3,'')))))) as AlamatPremis, isnull(h.IsPenilaian,0) as IsPenilaianStatus,   
             g.JenisLesenDescList, g.JenisLesenIdList FROM 
             v_LESEN_ApprovalList_Curr a 
             left join LESEN_JabatanAgensi e on e.JabatanAgensi_ID = a.AgensiID

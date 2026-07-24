@@ -2711,9 +2711,9 @@
                                     <asp:TemplateField ShowHeader="True" HeaderText="Surat Balasan" SortExpression="Surat">
                                         <ItemTemplate>
                                             <span runat="server" class="badge badge-secondary" visible='<%# If(Eval("Surat") = 0 And Eval("SuratBNM") = 0 And
-                                                                     Eval("SuratBombaJohor") = 0 And Eval("SuratBombaPenggaram") = 0 And Eval("SuratFarmasi") = 0 And Eval("SuratJurutera") = 0 And
-                                                                     Eval("SuratBangunan") = 0 And Eval("SuratPerancang") = 0 And Eval("SuratPenguatkuasa") = 0 And Eval("SuratHarta") = 0 And
-                                                                     Eval("SuratKluang") = 0 And Eval("SuratKesihatan") = 0 And Eval("SuratSWCorp") = 0 And Eval("SuratKebajikan") = 0, True, False) %>'>Tiada</span>
+                                                            Eval("SuratBombaJohor") = 0 And Eval("SuratBombaPenggaram") = 0 And Eval("SuratFarmasi") = 0 And Eval("SuratJurutera") = 0 And
+                                                            Eval("SuratBangunan") = 0 And Eval("SuratPerancang") = 0 And Eval("SuratPenguatkuasa") = 0 And Eval("SuratHarta") = 0 And
+                                                            Eval("SuratKluang") = 0 And Eval("SuratKesihatan") = 0 And Eval("SuratSWCorp") = 0 And Eval("SuratKebajikan") = 0, True, False) %>'>Tiada</span>
                                             <span runat="server" class="badge badge-info" visible='<%# If(Eval("Surat") > 0, True, False) %>'>Inspektorat</span>
                                             <span runat="server" class="badge badge-info" visible='<%# If(Eval("SuratBNM") > 0, True, False) %>'>Bank Negara</span>
                                             <span runat="server" class="badge badge-info" visible='<%# If(Eval("SuratBombaJohor") > 0 Or Eval("SuratBombaPenggaram") > 0, True, False) %>'>Bomba</span>
