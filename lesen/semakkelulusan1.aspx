@@ -308,7 +308,7 @@
                                     <div class="form-group">
                                         <label>&nbsp; </label>
                                         <asp:HyperLink ID="HyperLink1" runat="server"
-                                            CssClass="btn btn-primary form-control" NavigateUrl='<%# "~/lesen/appregister.aspx?p_Id=3348&m_Id=3349&pid=" + Eval("Permohonan_ID").ToString() %>' Target="_blank">Lihat Maklumat Permohonan</asp:HyperLink>
+                                            CssClass="btn btn-primary form-control" NavigateUrl='<%# "~/lesen/appregister1.aspx?p_Id=3348&m_Id=3349&pid=" + Eval("Permohonan_ID").ToString() %>' Target="_blank">Lihat Maklumat Permohonan</asp:HyperLink>
                                     </div>
                                 </div>
 
