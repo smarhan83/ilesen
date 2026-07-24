@@ -99,7 +99,7 @@ Partial Class MasterMenu
         End If
 
         If GlobalClass.CheckPagePermission("Read", "semakansurat.aspx") Then
-            'divNotiSuratMohonUlasan.Visible = True
+            divNotiSuratMohonUlasan.Visible = True
         End If
 
 
@@ -885,14 +885,14 @@ Partial Class MasterMenu
 
             If myReader.Read Then
                 Try
-                    'lblNotiApproval.Text = myReader.Item("cnt")
+                    lblNotiApproval.Text = myReader.Item("cnt")
 
                     If CInt(myReader.Item("cnt")) > 0 Then
-                        'idSpanNoti.Visible = True
+                        idSpanNoti.Visible = True
                     End If				
 					
                 Catch ex As Exception
-                    'lblNotiApproval.Text = ""
+                    lblNotiApproval.Text = ""
                 End Try
 
             End If
@@ -950,14 +950,14 @@ Partial Class MasterMenu
 
             If myReader.Read Then
                 Try
-                    'lblNotiApproval2.Text = myReader.Item("cnt")
+                    lblNotiApproval2.Text = myReader.Item("cnt")
 
                     If CInt(myReader.Item("cnt")) > 0 Then
-                        'idSpanNoti.Visible = True
+                        idSpanNoti.Visible = True
                     End If				
 					
                 Catch ex As Exception
-                    'lblNotiApproval2.Text = ""
+                    lblNotiApproval2.Text = ""
                 End Try
 
             End If
@@ -1021,13 +1021,13 @@ Partial Class MasterMenu
 		If myReader.Read Then
 
 			Try
-                    'lblNotiApproval3.Text = myReader.Item("cnt")
+                    lblNotiApproval3.Text = myReader.Item("cnt")
 
                     If CInt(myReader.Item("cnt")) > 0 Then
-                        'idSpanNoti.Visible = True
+                        idSpanNoti.Visible = True
                     End If				
 			Catch ex As Exception
-                    'lblNotiApproval3.Text = "0"
+                    lblNotiApproval3.Text = "0"
                 End Try
 
 		Else

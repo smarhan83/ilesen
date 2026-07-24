@@ -1185,3 +1185,22 @@ a.badge-dark:focus, a.badge-dark.focus {
         transform: rotate(360deg);
     }
 }
+
+/*notification*/
+.blink {
+    animation: blink-animation 1.2s infinite;
+}
+
+@keyframes blink-animation {
+    0% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.2;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
