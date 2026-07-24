@@ -1079,3 +1079,43 @@ a.badge-dark:focus, a.badge-dark.focus {
 .styleDisplayNone{
     display : none !important;
 }
+
+/*DASHBOARD*/
+.soft-card {
+    background: rgba(255,255,255,.9);
+    border-radius: 24px;
+    border: 1px solid rgba(0,0,0,.06);
+    box-shadow: 0 10px 30px rgba(0,0,0,.05);
+}
+
+.section-title {
+    font-size: 1.1rem;
+    font-weight: 800;
+}
+
+.section-subtitle {
+    font-size: .85rem;
+    color: #6b7280;
+}
+
+.btn-soft {
+    background: #f1f5f9;
+    border-radius: 12px;
+}
+
+.soft-card a:hover .bg-light {
+    transform: translateY(-2px);
+    transition: .2s;
+}
+
+.dashboard-progress {
+    height: 22px;
+    border-radius: 14px;
+    background: #f1f5f9;
+    overflow: hidden;
+}
+
+    .dashboard-progress .progress-bar {
+        font-size: .75rem;
+        font-weight: 700;
+    }
