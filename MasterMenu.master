@@ -25,6 +25,8 @@
     <link rel="stylesheet" href="<%= ResolveUrl("~/assets/dist/css/adminlte.css") %>" />--%>
 
     </asp:ContentPlaceHolder>
+
+
     
 <%--    <link rel="stylesheet" href="~/dist/css/adminlte.min.css">
     <link rel="stylesheet" href="~/plugins/fontawesome-free/css/all.min.css">
@@ -756,7 +758,33 @@ h1{
     <asp:ScriptManager ID="ScriptManager1" runat="server">
     </asp:ScriptManager>
 
-    
+    <!--AJAX POSTBACK LOADING-->
+<asp:UpdateProgress runat="server" ID="PageUpdateProgress" DynamicLayout="true">
+    <ProgressTemplate>
+
+        <div class="loading-overlay">
+            <div class="loading-box">
+
+                <div class="loader-spinner"></div>
+
+                <div class="loading-text">
+                    Sila tunggu...
+                </div>
+
+            </div>
+        </div>
+
+    </ProgressTemplate>
+</asp:UpdateProgress>
+
+    <!--LOADING PAGE-->
+    <div id="pageLoader" class="loading-overlay" style="display:none;">
+        <div class="loading-box">
+            <div class="loader-spinner"></div>
+            <div class="loading-text">Sila tunggu...</div>
+        </div>
+    </div>
+
 
     <asp:Label ID="labelsession" runat="server" Text='<%#Session.Item("sessionSystemId") %>'></asp:Label>
         
@@ -1416,8 +1444,7 @@ h1{
                    
 
                 </aside>
-
-                
+               
 
                 <!-- Main -->
                 
@@ -1600,6 +1627,12 @@ h1{
 
 
 
+        </script>
+
+        <script>
+            window.addEventListener("beforeunload", function () {
+                document.getElementById("pageLoader").style.display = "flex";
+            });
         </script>
 
     </form>
