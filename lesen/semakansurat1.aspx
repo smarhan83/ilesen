@@ -347,7 +347,7 @@
 
                                     <div class="form-group">
                                         <label>Jenis Lesen</label>
-                                        <asp:Label ID="Label3" runat="server" Text='<%# Bind("JenisLesen_Description") %>' CssClass="form-control"></asp:Label>
+                                        <asp:Label ID="Label3" runat="server" Text='<%# Bind("JenisLesenDescList") %>' CssClass="form-control"></asp:Label>
                                         
                                     </div>
                                 </div>
@@ -450,23 +450,23 @@
                 InsertCommand=""
                 SelectCommand="select * from (
                 select
-                'Permohonan Baru' as jenisPermohonan,PermohonanAgensi_ID,b.JenisLesen_ID,TarikhMohon,JenisLesen_Description,
+                'Permohonan Baru' as jenisPermohonan,PermohonanAgensi_ID,b.JenisLesen_ID,TarikhMohon,b.JenisLesenDescList,
                 Pemohon_Name,JabatanAgensi_Description,JabatanAgensi_IsLesen,a.Permohonan_ID,b.Rujukan,b.NamaSyarikat
                 from LESEN_PermohonanAgensi a
                 inner join LESEN_Permohonan b on b.Permohonan_ID = a.Permohonan_ID
                 inner join LESEN_JabatanAgensi c on c.JabatanAgensi_ID = a.JabatanAgensi_ID
-                inner join LESEN_JenisLesen d on d.JenisLesen_ID = b.JenisLesen_ID
+                left join LESEN_JenisLesen d on d.JenisLesen_ID = b.JenisLesen_ID
                 inner join LESEN_Pemohon e on e.Pemohon_ID = b.Permohonan_PemohonID
 
                 union all
 
                 select 
-                'Pembatalan' as jenisPermohonan,PermohonanAgensi_ID,b.JenisLesen_ID,TarikhMohon,JenisLesen_Description,
+                'Pembatalan' as jenisPermohonan,PermohonanAgensi_ID,b.JenisLesen_ID,TarikhMohon,b.JenisLesenDescList,
                 Pemohon_Name,JabatanAgensi_Description,JabatanAgensi_IsLesen,a.Permohonan_ID,b.Rujukan,b.NamaSyarikat
                 from LESEN_PermohonanAgensiBatal a
                 inner join LESEN_Permohonan b on b.Permohonan_ID = a.Permohonan_ID
                 inner join LESEN_JabatanAgensi c on c.JabatanAgensi_ID = a.JabatanAgensi_ID
-                inner join LESEN_JenisLesen d on d.JenisLesen_ID = b.JenisLesen_ID
+                left join LESEN_JenisLesen d on d.JenisLesen_ID = b.JenisLesen_ID
                 inner join LESEN_Pemohon e on e.Pemohon_ID = b.Permohonan_PemohonID
                 ) as tbl1
 
@@ -685,7 +685,7 @@
         from LESEN_PermohonanAgensi a
         inner join LESEN_Permohonan b on b.Permohonan_ID = a.Permohonan_ID
         inner join LESEN_JabatanAgensi c on c.JabatanAgensi_ID = a.JabatanAgensi_ID
-        inner join LESEN_JenisLesen d on d.JenisLesen_ID = b.JenisLesen_ID
+        left join LESEN_JenisLesen d on d.JenisLesen_ID = b.JenisLesen_ID
         inner join LESEN_Pemohon e on e.Pemohon_ID = b.Permohonan_PemohonID
 
         union all
@@ -696,7 +696,7 @@
         from LESEN_PermohonanAgensiBatal a
         inner join LESEN_Permohonan b on b.Permohonan_ID = a.Permohonan_ID
         inner join LESEN_JabatanAgensi c on c.JabatanAgensi_ID = a.JabatanAgensi_ID
-        inner join LESEN_JenisLesen d on d.JenisLesen_ID = b.JenisLesen_ID
+        left join LESEN_JenisLesen d on d.JenisLesen_ID = b.JenisLesen_ID
         inner join LESEN_Pemohon e on e.Pemohon_ID = b.Permohonan_PemohonID
 
         ) as tbl1
@@ -752,7 +752,7 @@
                                             SelectCommand="select * from 
                                         (select '0' as JenisLesen_ID, '-- Lesen --' as JenisLesen_Description
                                         union all
-                                        select JenisLesen_Description AS JenisLesen_ID, JenisLesen_Description from LESEN_JenisLesen where JenisLesen_IsActive=1
+                                        select JenisLesen_Remarks AS JenisLesen_ID, JenisLesen_Description from LESEN_JenisLesen where JenisLesen_IsActive=1
                                         ) as tbl1 order by JenisLesen_Description "></asp:SqlDataSource>
                                     </div>
 
@@ -835,7 +835,7 @@
                              <asp:TemplateField HeaderText="Jenis Lesen">
                                  <ItemTemplate>
                                     
-                                    <asp:Label ID="lblJenisLesen" runat="server" Text='<%# Eval("JenisLesen_Description") %>' ></asp:Label>
+                                    <asp:Label ID="lblJenisLesen" runat="server" Text='<%# Eval("JenisLesenDescList") %>' ></asp:Label>
                                     <%--<asp:Label ID="lblA" runat="server" Text=" / " Font-Bold="True" ></asp:Label>--%><br />
                                     <asp:Label ID="lblJenisPermohonan" runat="server" Text='<%# "<< " + Eval("jenisPermohonan") + " >>" %>' ForeColor="Blue" ></asp:Label>
                                  </ItemTemplate>

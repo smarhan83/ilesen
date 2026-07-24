@@ -302,7 +302,7 @@
     <section class="content">
         <div class="container-fluid">
 
-            <asp:FormView ID="FormView1" runat="server" DataKeyNames="JenisLesenIdList"
+            <asp:FormView ID="FormView1" runat="server" DataKeyNames="JenisLesen_ID"
                 DataSourceID="SqlDataSourceForm" DefaultMode="Edit" Width="100%" CssClass="CustomTab">
                 <EditItemTemplate>
 
@@ -462,7 +462,7 @@
             <asp:SqlDataSource ID="SqlDataSourceForm" runat="server"
                 ConnectionString="<%$ ConnectionStrings:webcon_ConnectionStr %>"
                 InsertCommand=""
-                SelectCommand="SELECT a.*,e.*,f.*,g.JenisPerniagaan,g.Rujukan,
+                SelectCommand="SELECT a.*,e.*,f.*,g.JenisLesenIdList,g.JenisLesenDescList,g.JenisPerniagaan,g.Rujukan,
                 ISNULL(g.AlamatPremis,ISNULL(g.AlamatPenjajaan,ISNULL(g.AnjingAlamat,isnull(g.LokasiPasar1,ISNULL(g.LokasiPasar2,ISNULL(g.LokasiPasar3,'')))))) as AlamatPremis 
 				FROM 
                 v_LESEN_ApprovalList_Curr a 
@@ -1647,7 +1647,7 @@
 
                             </div>
 
-                            <div class="row">
+                            <div class="row" hidden="hidden">
 
                                 <div class="col-md-10">
 
@@ -1674,7 +1674,7 @@
                                 </div>
 
                             </div>
-                            <div class="row">
+                            <div class="row" hidden="hidden">
 
                                 <div class="col-md-10">
 
@@ -1891,7 +1891,7 @@
                                                 SelectCommand="SELECT * FROM LESEN_PermohonanSurat WHERE PSID=@PSID">
                                                 <InsertParameters>
                                                     <asp:ControlParameter ControlID="GridView1" PropertyName="SelectedDataKey.Values[0]" Name="Permohonan_ID"></asp:ControlParameter>
-                                                    <asp:ControlParameter ControlID="GridView1" PropertyName="SelectedDataKey.Values[1]" Name="StatusID"></asp:ControlParameter>
+                                                    <asp:ControlParameter ControlID="GridView1" PropertyName="SelectedDataKey.Values[2]" Name="StatusID"></asp:ControlParameter>
                                                     <asp:Parameter Name="P1"></asp:Parameter>
                                                     <asp:Parameter Name="P2"></asp:Parameter>
                                                     <asp:Parameter Name="P3"></asp:Parameter>
@@ -1930,14 +1930,14 @@
                                             </asp:GridView>
                                             <asp:SqlDataSource runat="server" ID="SqlDataSourceGridReport" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
                                                 DeleteCommand="DELETE FROM LESEN_PermohonanSurat WHERE PSID=@PSID"
-                                                SelectCommand="SELECT * FROM LESEN_PermohonanSurat WHERE Permohonan_ID=@Permohonan_ID AND JenisReport=IIF(@StatusID=9, 'SKB', 'SKL') 
+                                                SelectCommand="SELECT * FROM LESEN_PermohonanSurat WHERE Permohonan_ID=@Permohonan_ID AND JenisReport=IIF(@StatusID=9, 'LIB', 'LIL') 
                                                 ORDER BY P1, P2, P3">
                                                 <DeleteParameters>
                                                     <asp:Parameter Name="PSID"></asp:Parameter>
                                                 </DeleteParameters>
                                                 <SelectParameters>
                                                     <asp:ControlParameter ControlID="GridView1" PropertyName="SelectedDataKey.Values[0]" Name="Permohonan_ID"></asp:ControlParameter>
-                                                    <asp:ControlParameter ControlID="GridView1" PropertyName="SelectedDataKey.Values[1]" Name="StatusID"></asp:ControlParameter>
+                                                    <asp:ControlParameter ControlID="GridView1" PropertyName="SelectedDataKey.Values[2]" Name="StatusID"></asp:ControlParameter>
                                                 </SelectParameters>
                                             </asp:SqlDataSource>
                                         </div>
@@ -2638,8 +2638,8 @@
                                 </ItemTemplate>
                             </asp:TemplateField>
 
-                            <asp:BoundField DataField="JenisLesen_Description" HeaderText="Jenis Lesen"
-                                SortExpression="JenisLesen_Description" />
+                            <asp:BoundField DataField="JenisLesenDescList" HeaderText="Jenis Lesen"
+                                SortExpression="JenisLesenDescList" />
                            <%-- <asp:BoundField DataField="Pemohon_Name" HeaderText="Nama Pemohon"
                                 SortExpression="Pemohon_Name" />--%>
 

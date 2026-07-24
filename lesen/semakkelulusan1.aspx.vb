@@ -1576,7 +1576,6 @@ Partial Class semakkelulusan1
 
     End Sub
 
-
     Protected Sub BT_SuratMohonUlasan_Command(sender As Object, e As CommandEventArgs)
 
         Dim jenisLesenIdList As Integer = CStr(Me.FormView1.DataKey("JenislesenIdList"))

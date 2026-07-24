@@ -617,6 +617,7 @@ Partial Class appregister1
             BindRepeater()
             updateJenisLesenList(newItem.ItemValue, newItem.ItemText)
             PanelAccess(ddlItems.SelectedValue, False)
+            'LoadPrevRekodPermohonan()
         End If
 
         ' Reset dropdown to the first item
@@ -659,6 +660,99 @@ Partial Class appregister1
 
         rptSelectedItems.DataSource = DirectCast(ViewState("SelectedList"), List(Of SelectedItem))
         rptSelectedItems.DataBind()
+    End Sub
+
+    Private Sub LoadPrevRekodPermohonan()
+
+        Dim tbid As TextBox = DirectCast(FormView1.FindControl("TB_PemohonID"), TextBox)
+        Dim TB_NamaSyarikat As TextBox = DirectCast(FormView1.FindControl("TB_NamaSyarikat"), TextBox)
+        Dim TB_NoPendaftaran As TextBox = DirectCast(FormView1.FindControl("TB_NoPendaftaran"), TextBox)
+        Dim TB_NoAkaun As TextBox = DirectCast(FormView1.FindControl("TB_NoAkaun"), TextBox)
+        Dim TB_AlamatPremis As TextBox = DirectCast(FormView1.FindControl("TB_AlamatPremis"), TextBox)
+        Dim TB_JenisPerniagaan As TextBox = DirectCast(FormView1.FindControl("TB_JenisPerniagaan"), TextBox)
+        Dim TB_PemilikBaru As TextBox = DirectCast(FormView1.FindControl("TB_PemilikBaru"), TextBox)
+        Dim TB_AlamatBaru As TextBox = DirectCast(FormView1.FindControl("TB_AlamatBaru"), TextBox)
+        Dim TB_JenisPerniagaanBaru As TextBox = DirectCast(FormView1.FindControl("TB_JenisPerniagaanBaru"), TextBox)
+        Dim TB_NamaBaruSyarikat As TextBox = DirectCast(FormView1.FindControl("TB_NamaBaruSyarikat"), TextBox)
+        Dim TB_BillboardLokasi As TextBox = DirectCast(FormView1.FindControl("TB_BillboardLokasi"), TextBox)
+        Dim TB_AlamatPenjajaan As TextBox = DirectCast(FormView1.FindControl("TB_AlamatPenjajaan"), TextBox)
+        Dim TB_JenisPerniagaanPenjaja As TextBox = DirectCast(FormView1.FindControl("TB_JenisPerniagaanPenjaja"), TextBox)
+
+        Dim pnla As Panel = DirectCast(FormView1.FindControl("pnlesen1"), Panel)
+        Dim pnld As Panel = DirectCast(FormView1.FindControl("pnlesen4"), Panel)
+
+        Using myConnection As New SqlConnection(ConfigurationManager.ConnectionStrings("webcon_ConnectionStr").ConnectionString)
+
+            myConnection.Open()
+
+            Dim SQL As String = "WITH RankedData AS (
+                SELECT 
+                    Pemohon_ID,
+                    NamaSyarikat, NoPendaftaran, NoAkaun, AlamatPremis, JenisPerniagaan, 
+                    PemilikBaru, AlamatBaru, JenisPerniagaanBaru, NamaBaruSyarikat, 
+                    BillboardLokasi, AlamatPenjajaan, JenisPerniagaanPenjaja,
+                    -- This ranks rows for each column individually, putting the latest non-null value at rank 1
+                    ROW_NUMBER() OVER (PARTITION BY Pemohon_ID ORDER BY CASE WHEN NamaSyarikat IS NOT NULL THEN Permohonan_ID END DESC) as rn1,
+                    ROW_NUMBER() OVER (PARTITION BY Pemohon_ID ORDER BY CASE WHEN NoPendaftaran IS NOT NULL THEN Permohonan_ID END DESC) as rn2,
+                    ROW_NUMBER() OVER (PARTITION BY Pemohon_ID ORDER BY CASE WHEN NoAkaun IS NOT NULL THEN Permohonan_ID END DESC) as rn3,
+                    ROW_NUMBER() OVER (PARTITION BY Pemohon_ID ORDER BY CASE WHEN AlamatPremis IS NOT NULL THEN Permohonan_ID END DESC) as rn4,
+                    ROW_NUMBER() OVER (PARTITION BY Pemohon_ID ORDER BY CASE WHEN JenisPerniagaan IS NOT NULL THEN Permohonan_ID END DESC) as rn5,
+                    ROW_NUMBER() OVER (PARTITION BY Pemohon_ID ORDER BY CASE WHEN AlamatBaru IS NOT NULL THEN Permohonan_ID END DESC) as rn6,
+                    ROW_NUMBER() OVER (PARTITION BY Pemohon_ID ORDER BY CASE WHEN JenisPerniagaanBaru IS NOT NULL THEN Permohonan_ID END DESC) as rn7,
+                    ROW_NUMBER() OVER (PARTITION BY Pemohon_ID ORDER BY CASE WHEN NamaBaruSyarikat IS NOT NULL THEN Permohonan_ID END DESC) as rn8,
+                    ROW_NUMBER() OVER (PARTITION BY Pemohon_ID ORDER BY CASE WHEN AlamatPenjajaan IS NOT NULL THEN Permohonan_ID END DESC) as rn9,
+                    ROW_NUMBER() OVER (PARTITION BY Pemohon_ID ORDER BY CASE WHEN JenisPerniagaanPenjaja IS NOT NULL THEN Permohonan_ID END DESC) as rn10
+                FROM Lesen_Permohonan
+                WHERE Pemohon_ID = @Pemohon_ID AND YEAR(TarikhMohon) > YEAR(GETDATE())-5 
+            )
+            SELECT 
+                Pemohon_ID,
+                MAX(CASE WHEN rn1 = 1 THEN NamaSyarikat END) AS NamaSyarikat,
+                MAX(CASE WHEN rn2 = 1 THEN NoPendaftaran END) AS NoPendaftaran,
+                MAX(CASE WHEN rn3 = 1 THEN NoAkaun END) AS NoAkaun,
+                MAX(CASE WHEN rn4 = 1 THEN AlamatPremis END) AS AlamatPremis,
+                MAX(CASE WHEN rn5 = 1 THEN JenisPerniagaan END) AS JenisPerniagaan,
+                MAX(CASE WHEN rn6 = 1 THEN AlamatBaru END) AS AlamatBaru,
+                MAX(CASE WHEN rn7 = 1 THEN JenisPerniagaanBaru END) AS JenisPerniagaanBaru,
+                MAX(CASE WHEN rn8 = 1 THEN NamaBaruSyarikat END) AS NamaBaruSyarikat,
+                MAX(CASE WHEN rn9 = 1 THEN AlamatPenjajaan END) AS AlamatPenjajaan,
+                MAX(CASE WHEN rn10 = 1 THEN JenisPerniagaanPenjaja END) AS JenisPerniagaanPenjaja
+            FROM RankedData
+            GROUP BY Pemohon_ID;"
+
+            Dim myCommandSelect As New SqlCommand(SQL, myConnection)
+            myCommandSelect.Parameters.AddWithValue("@Pemohon_ID", tbid.Text)
+
+            Dim myReader As SqlDataReader = myCommandSelect.ExecuteReader
+
+            Try
+                If myReader.Read Then
+
+                    If pnla.Visible = True Then
+                        TB_NamaSyarikat.Text = If(myReader.Item("NamaBaruSyarikat").ToString().Length > 0, myReader.Item("NamaBaruSyarikat").ToString(), myReader.Item("NamaSyarikat").ToString())
+                        TB_NoPendaftaran.Text = myReader.Item("NoPendaftaran").ToString()
+                        TB_NoAkaun.Text = myReader.Item("NoAkaun").ToString()
+                        TB_AlamatPremis.Text = If(myReader.Item("AlamatBaru").ToString().Length > 0, myReader.Item("AlamatBaru").ToString(), myReader.Item("AlamatPremis").ToString())
+                        TB_JenisPerniagaan.Text = If(myReader.Item("JenisPerniagaanBaru").ToString().Length > 0, myReader.Item("JenisPerniagaanBaru").ToString(), myReader.Item("JenisPerniagaan").ToString())
+                    End If
+
+                    If pnld.Visible = True Then
+                        TB_AlamatPenjajaan.Text = myReader.Item("AlamatPenjajaan").ToString()
+                        TB_JenisPerniagaanPenjaja.Text = myReader.Item("JenisPerniagaanPenjaja").ToString()
+                    End If
+
+                Else
+                    'ShowAlert("error", "", "Rekod pemohon tiada di dalam sistem")
+                End If
+
+            Catch ex As Exception
+
+                ShowAlert("error", "", ex.Message)
+
+            End Try
+
+        End Using
+
     End Sub
 
     Protected Sub btnAddIklan_Click(sender As Object, e As EventArgs)
@@ -2366,8 +2460,9 @@ Partial Class appregister1
         Dim counter1 As Integer = 0
         Dim extstr As String = ""
         Dim hfid As HiddenField = DirectCast(FormView1.FindControl("HF_PermohonanID"), HiddenField)
+        Dim ddl As HiddenField = DirectCast(FormView1.FindControl("HF_JenisLesenIdList"), HiddenField)
         Dim cb As CheckBox = DirectCast(FormView1.FindControl("CB_IsBatal"), CheckBox)
-        Dim ddl As DropDownList = DirectCast(FormView1.FindControl("DDL_JenisLesen"), DropDownList)
+        'Dim ddl As DropDownList = DirectCast(FormView1.FindControl("DDL_JenisLesen"), DropDownList)
 
         If reviewSurat(cb.Checked) Then
 
@@ -2392,7 +2487,7 @@ Partial Class appregister1
                 myCommand1.Dispose()
                 myConnection.Close()
 
-                If counter < 1 And cb.Checked = False And ddl.SelectedValue <> 9 Then
+                If counter < 1 And cb.Checked = False And ddl.Value <> "9" Then
                     ShowAlert("error", "", "Gagal hantar. Sila tambah jabatan agensi")
                     Return
                 End If

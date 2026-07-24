@@ -4333,8 +4333,7 @@ FROM v_LESEN_ApprovalListBatal_Curr a
             })
 
         }
-        
+
     </script>
 
 </asp:Content>
-
