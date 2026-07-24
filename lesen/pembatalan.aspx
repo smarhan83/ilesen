@@ -474,7 +474,7 @@
                 ConnectionString="<%$ ConnectionStrings:webcon_ConnectionStr %>"
                 InsertCommand=""
                 SelectCommand="SELECT g.NamaSyarikat,a.*,d.*,e.*,f.*,g.JenisPerniagaan,g.Rujukan,
-                ISNULL(g.AlamatPremis,ISNULL(g.AlamatPenjajaan,ISNULL(g.AnjingAlamat,isnull(g.LokasiPasar1,ISNULL(g.LokasiPasar2,ISNULL(g.LokasiPasar3,'')))))) as AlamatPremis 
+                ISNULL(g.AlamatBaru,ISNULL(g.AlamatPremis,ISNULL(g.AlamatPenjajaan,ISNULL(g.AnjingAlamat,isnull(g.LokasiPasar1,ISNULL(g.LokasiPasar2,ISNULL(g.LokasiPasar3,''))))))) as AlamatPremis 
 				FROM 
                 v_LESEN_ApprovalListBatal_Curr a
                 inner join LESEN_JenisLesen d on d.JenisLesen_ID = a.JenisLesen_ID
@@ -1677,7 +1677,7 @@
 
     <asp:SqlDataSource ID="SqlDataSourceGrid" runat="server"
         ConnectionString="<%$ ConnectionStrings:webcon_ConnectionStr %>"
-        SelectCommand="SELECT g.NamaSyarikat,a.*,d.*,e.*,f.*, g.IsSuratPemeriksaanFail,g.IsSuratPemeriksaanFail,ISNULL(g.AlamatBaru,ISNULL(g.AlamatPremis,ISNULL(g.AlamatPenjajaan,ISNULL(g.AnjingAlamat,isnull(g.LokasiPasar1,ISNULL(g.LokasiPasar2,ISNULL(g.LokasiPasar3,'')))))) as AlamatPremis, isnull(h.IsPenilaian,0) as IsPenilaianStatus FROM 
+        SelectCommand="SELECT g.NamaSyarikat,a.*,d.*,e.*,f.*, g.IsSuratPemeriksaanFail,g.IsSuratPemeriksaanFail,ISNULL(g.AlamatBaru,ISNULL(g.AlamatPremis,ISNULL(g.AlamatPenjajaan,ISNULL(g.AnjingAlamat,isnull(g.LokasiPasar1,ISNULL(g.LokasiPasar2,ISNULL(g.LokasiPasar3,''))))))) as AlamatPremis, isnull(h.IsPenilaian,0) as IsPenilaianStatus FROM 
             v_LESEN_ApprovalListBatal_Curr a
             inner join LESEN_JenisLesen d on d.JenisLesen_ID = a.JenisLesen_ID
             left join LESEN_JabatanAgensi e on e.JabatanAgensi_ID = a.AgensiID
