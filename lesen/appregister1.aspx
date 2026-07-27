@@ -2711,22 +2711,41 @@
                                     <asp:TemplateField ShowHeader="True" HeaderText="Surat Balasan" SortExpression="Surat">
                                         <ItemTemplate>
                                             <span runat="server" class="badge badge-secondary" visible='<%# If(Eval("Surat") = 0 And Eval("SuratBNM") = 0 And
-                                                            Eval("SuratBombaJohor") = 0 And Eval("SuratBombaPenggaram") = 0 And Eval("SuratFarmasi") = 0 And Eval("SuratJurutera") = 0 And
-                                                            Eval("SuratBangunan") = 0 And Eval("SuratPerancang") = 0 And Eval("SuratPenguatkuasa") = 0 And Eval("SuratHarta") = 0 And
-                                                            Eval("SuratKluang") = 0 And Eval("SuratKesihatan") = 0 And Eval("SuratSWCorp") = 0 And Eval("SuratKebajikan") = 0, True, False) %>'>Tiada</span>
-                                            <span runat="server" class="badge badge-info" visible='<%# If(Eval("Surat") > 0, True, False) %>'>Inspektorat</span>
+                                                Eval("SuratBombaJohor") = 0 And Eval("SuratBombaPenggaram") = 0 And Eval("SuratFarmasi") = 0 And Eval("SuratJurutera") = 0 And
+                                                Eval("SuratBangunan") = 0 And Eval("SuratPerancang") = 0 And Eval("SuratPenguatkuasa") = 0 And Eval("SuratHarta") = 0 And
+                                                Eval("SuratKluang") = 0 And Eval("SuratKesihatan") = 0 And Eval("SuratSWCorp") = 0 And Eval("SuratKebajikan") = 0, True, False) %>'>Tiada</span>
+
+                                            <asp:LinkButton runat="server" CssClass="badge badge-info" Visible='<%# If(Eval("Surat") > 0, True, False) %>' CommandName="SuratAgensi" CommandArgument='<%# Container.DataItemIndex %>,3'>Inspektorat</asp:LinkButton>
+                                            <%--<asp:LinkButton runat="server" CssClass="badge badge-info" Visible='<%# If(Eval("SuratBNM") > 0, True, False) %>' CommandName="SuratAgensi" CommandArgument='<%# Container.DataItemIndex %>,2'>Bank Negara</asp:LinkButton>
+                                            <asp:LinkButton runat="server" CssClass="badge badge-info" Visible='<%# If(Eval("SuratBombaJohor") > 0, True, False) %>' CommandName="SuratAgensi" CommandArgument='<%# Container.DataItemIndex %>,5'>Bomba</asp:LinkButton>
+                                            <asp:LinkButton runat="server" CssClass="badge badge-info" Visible='<%# If(Eval("SuratFarmasi") > 0, True, False) %>' CommandName="SuratAgensi" CommandArgument='<%# Container.DataItemIndex %>,6'>Farmasi</asp:LinkButton>
+                                            <asp:LinkButton runat="server" CssClass="badge badge-info" Visible='<%# If(Eval("SuratJurutera") > 0, True, False) %>' CommandName="SuratAgensi" CommandArgument='<%# Container.DataItemIndex %>,8'>Kejuruteraan</asp:LinkButton>
+                                            <asp:LinkButton runat="server" CssClass="badge badge-info" Visible='<%# If(Eval("SuratBangunan") > 0, True, False) %>' CommandName="SuratAgensi" CommandArgument='<%# Container.DataItemIndex %>,9'>Kawalan Bangunan</asp:LinkButton>
+                                            <asp:LinkButton runat="server" CssClass="badge badge-info" Visible='<%# If(Eval("SuratPerancang") > 0, True, False) %>' CommandName="SuratAgensi" CommandArgument='<%# Container.DataItemIndex %>,10'>Perancang Bandar & Landskap</asp:LinkButton>
+                                            <asp:LinkButton runat="server" CssClass="badge badge-info" Visible='<%# If(Eval("SuratPenguatkuasa") > 0, True, False) %>' CommandName="SuratAgensi" CommandArgument='<%# Container.DataItemIndex %>,11'>Penguatkuasaan</asp:LinkButton>
+                                            <asp:LinkButton runat="server" CssClass="badge badge-info" Visible='<%# If(Eval("SuratHarta") > 0, True, False) %>' CommandName="SuratAgensi" CommandArgument='<%# Container.DataItemIndex %>,11'>Pengurusan Harta</asp:LinkButton>
+                                            <asp:LinkButton runat="server" CssClass="badge badge-info" Visible='<%# If(Eval("SuratKluang") > 0, True, False) %>' CommandName="SuratAgensi" CommandArgument='<%# Container.DataItemIndex %>,13'>PD Kluang</asp:LinkButton>
+                                            <asp:LinkButton runat="server" CssClass="badge badge-info" Visible='<%# If(Eval("SuratPolis") > 0, True, False) %>' CommandName="SuratAgensi" CommandArgument='<%# Container.DataItemIndex %>,14'>Polis</asp:LinkButton>
+                                            <asp:LinkButton runat="server" CssClass="badge badge-info" Visible='<%# If(Eval("SuratKesihatan") > 0, True, False) %>' CommandName="SuratAgensi" CommandArgument='<%# Container.DataItemIndex %>,15'>Kesihatan</asp:LinkButton>
+                                            <asp:LinkButton runat="server" CssClass="badge badge-info" Visible='<%# If(Eval("SuratSWCorp") > 0, True, False) %>' CommandName="SuratAgensi" CommandArgument='<%# Container.DataItemIndex %>,17'>SWCorp</asp:LinkButton>
+                                            <asp:LinkButton runat="server" CssClass="badge badge-info" Visible='<%# If(Eval("SuratKebajikan") > 0, True, False) %>' CommandName="SuratAgensi" CommandArgument='<%# Container.DataItemIndex %>,18'>Kebajikan Masyarakat</asp:LinkButton>
+                                            <asp:LinkButton runat="server" CssClass="badge badge-info" Visible='<%# If(Eval("SuratPendidikan") > 0, True, False) %>' CommandName="SuratAgensi" CommandArgument='<%# Container.DataItemIndex %>,19'>Pendidikan</asp:LinkButton>--%>
+
+                                            <%--<span runat="server" class="badge badge-info" visible='<%# If(Eval("Surat") > 0, True, False) %>'>Inspektorat</span>--%>
                                             <span runat="server" class="badge badge-info" visible='<%# If(Eval("SuratBNM") > 0, True, False) %>'>Bank Negara</span>
                                             <span runat="server" class="badge badge-info" visible='<%# If(Eval("SuratBombaJohor") > 0 Or Eval("SuratBombaPenggaram") > 0, True, False) %>'>Bomba</span>
                                             <span runat="server" class="badge badge-info" visible='<%# If(Eval("SuratFarmasi") > 0, True, False) %>'>Farmasi</span>
                                             <span runat="server" class="badge badge-info" visible='<%# If(Eval("SuratJurutera") > 0, True, False) %>'>Kejuruteraan</span>
                                             <span runat="server" class="badge badge-info" visible='<%# If(Eval("SuratBangunan") > 0, True, False) %>'>Kawalan Bangunan</span>
-                                            <span runat="server" class="badge badge-info" visible='<%# If(Eval("SuratPerancang") > 0, True, False) %>'>Perjancang Bandar & Landskap</span>
+                                            <span runat="server" class="badge badge-info" visible='<%# If(Eval("SuratPerancang") > 0, True, False) %>'>Perancang Bandar & Landskap</span>
                                             <span runat="server" class="badge badge-info" visible='<%# If(Eval("SuratPenguatkuasa") > 0, True, False) %>'>Penguatkuasaan</span>
                                             <span runat="server" class="badge badge-info" visible='<%# If(Eval("SuratHarta") > 0, True, False) %>'>Pengurusan Harta</span>
                                             <span runat="server" class="badge badge-info" visible='<%# If(Eval("SuratKluang") > 0, True, False) %>'>PD Kluang</span>
+                                            <span runat="server" class="badge badge-info" visible='<%# If(Eval("SuratPolis") > 0, True, False) %>'>Polis</span>
                                             <span runat="server" class="badge badge-info" visible='<%# If(Eval("SuratKesihatan") > 0, True, False) %>'>Kesihatan</span>
                                             <span runat="server" class="badge badge-info" visible='<%# If(Eval("SuratSWCorp") > 0, True, False) %>'>SWCorp</span>
                                             <span runat="server" class="badge badge-info" visible='<%# If(Eval("SuratKebajikan") > 0, True, False) %>'>Kebajikan Masyarakat</span>
+                                            <span runat="server" class="badge badge-info" visible='<%# If(Eval("SuratPenidikan") > 0, True, False) %>'>Pendidikan</span>
                                         </ItemTemplate>
                                     </asp:TemplateField>
                                     <asp:BoundField DataField="Description" HeaderText="Status" SortExpression="Description"></asp:BoundField>
@@ -2813,7 +2832,10 @@
                                         END AS SuratSWCorp,
                                         CASE WHEN a.IsBatal = 0 THEN (SELECT COUNT(Permohonan_ID) AS totalSah FROM LESEN_PermohonanAgensi WHERE JabatanAgensi_ID = 18 AND PengesahID IS NOT NULL AND Permohonan_ID = a.Permohonan_ID) 
                                         ELSE (SELECT COUNT(Permohonan_ID) AS totalSah FROM LESEN_PermohonanAgensiBatal WHERE JabatanAgensi_ID = 18 AND PengesahID IS NOT NULL AND Permohonan_ID = a.Permohonan_ID) 
-                                        END AS SuratKebajikan 
+                                        END AS SuratKebajikan, 
+                                        CASE WHEN a.IsBatal = 0 THEN (SELECT COUNT(Permohonan_ID) AS totalSah FROM LESEN_PermohonanAgensi WHERE JabatanAgensi_ID = 19 AND PengesahID IS NOT NULL AND Permohonan_ID = a.Permohonan_ID) 
+                                        ELSE (SELECT COUNT(Permohonan_ID) AS totalSah FROM LESEN_PermohonanAgensiBatal WHERE JabatanAgensi_ID = 19 AND PengesahID IS NOT NULL AND Permohonan_ID = a.Permohonan_ID) 
+                                        END AS SuratPendidikan 
                                         FROM LESEN_Permohonan a 
                                         INNER JOIN LESEN_Pemohon c ON a.Permohonan_PemohonID = c.Pemohon_ID 
                                         INNER JOIN ApprovalStatus d ON a.StatusID = d.ApprStatusID 

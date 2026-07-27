@@ -5,7 +5,9 @@ Imports System.Drawing
 Imports System.Drawing.Imaging
 Imports System.Security.Cryptography
 Imports System.Security.Policy
+Imports System.Web.UI.WebControls
 Imports DocumentFormat.OpenXml.Bibliography
+Imports DocumentFormat.OpenXml.Office2010.Excel
 Imports Microsoft.SqlServer.Management.Smo
 
 <Serializable()>
@@ -236,6 +238,37 @@ Partial Class appregister1
             End Using
 
             GridView1.DataBind()
+
+        ElseIf e.CommandName = "SuratAgensi" Then
+
+            Dim rawArgument As String = e.CommandArgument.ToString()
+            Dim args As String() = rawArgument.Split(","c)
+
+            If args.Length >= 2 Then
+                Dim intRow As Integer = CInt(args(0))
+                Dim agensiId As Integer = CInt(args(1))
+
+                If intRow > 9 Then
+                    intRow -= GridView1.PageIndex * 10
+                End If
+
+                Dim pid As String = CStr(Me.GridView1.DataKeys(intRow)("Permohonan_ID"))
+
+                If agensiId = 3 Then
+
+                    If GetIsSuratFail(pid) Then
+                        ViewSuratPemeriksaanFail(pid)
+                    Else
+                        ViewSuratPemeriksaanAuto(pid, agensiId, True)
+                    End If
+
+                Else
+
+                    'Response.Redirect("")
+
+                End If
+
+            End If
 
         End If
 
