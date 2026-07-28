@@ -747,7 +747,7 @@ Partial Class semakkelulusan1
                 FROM LESEN_Permohonan a 
                 INNER JOIN LESEN_Pemohon b ON b.Pemohon_ID=a.Permohonan_PemohonID 
                 LEFT JOIN TBL_USERS c ON a.TandatanganKelulusanId=c.Users_Id 
-                LEFT JOIN LESEN_PermohonanSurat d ON d.Permohonan_ID=a.Permohonan_ID 
+                LEFT JOIN LESEN_PermohonanSurat d ON d.Permohonan_ID=a.Permohonan_ID AND d.JenisReport LIKE 'SK%' 
                 WHERE a.Permohonan_ID=@permohonanID ORDER BY d.P1, d.P2, d.P3"
 
             sql = sql.Replace("@permohonanID", permohonanID)

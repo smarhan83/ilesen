@@ -1066,7 +1066,7 @@
 
                     <asp:GridView ID="GridView1" runat="server" Visible="true" AllowPaging="true"
                         AllowSorting="True" AutoGenerateColumns="False" 
-                        DataKeyNames="Permohonan_ID,StatusID,JenisLesenIdList,IsSuratKelulusanFail,IsPublish"
+                        DataKeyNames="Permohonan_ID,ApprStatusID,JenisLesenIdList,IsSuratKelulusanFail,IsPublish"
                         DataSourceID="SqlDataSourceGrid"
                         CssClass="table table-bordered" PagerStyle-CssClass="pgr"
                         AlternatingRowStyle-CssClass="alt">
