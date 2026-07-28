@@ -2713,7 +2713,8 @@
                                             <span runat="server" class="badge badge-secondary" visible='<%# If(Eval("Surat") = 0 And Eval("SuratBNM") = 0 And
                                                 Eval("SuratBombaJohor") = 0 And Eval("SuratBombaPenggaram") = 0 And Eval("SuratFarmasi") = 0 And Eval("SuratJurutera") = 0 And
                                                 Eval("SuratBangunan") = 0 And Eval("SuratPerancang") = 0 And Eval("SuratPenguatkuasa") = 0 And Eval("SuratHarta") = 0 And
-                                                Eval("SuratKluang") = 0 And Eval("SuratKesihatan") = 0 And Eval("SuratSWCorp") = 0 And Eval("SuratKebajikan") = 0, True, False) %>'>Tiada</span>
+                                                Eval("SuratKluang") = 0 And Eval("SuratPolis") = 0 And And Eval("SuratKesihatan") = 0 And Eval("SuratSWCorp") = 0 And 
+                                                Eval("SuratKebajikan") = 0 And Eval("SuratPendidikan") = 0, True, False) %>'>Tiada</span>
 
                                             <asp:LinkButton runat="server" CssClass="badge badge-info" Visible='<%# If(Eval("Surat") > 0, True, False) %>' CommandName="SuratAgensi" CommandArgument='<%# Container.DataItemIndex %>,3'>Inspektorat</asp:LinkButton>
                                             <%--<asp:LinkButton runat="server" CssClass="badge badge-info" Visible='<%# If(Eval("SuratBNM") > 0, True, False) %>' CommandName="SuratAgensi" CommandArgument='<%# Container.DataItemIndex %>,2'>Bank Negara</asp:LinkButton>

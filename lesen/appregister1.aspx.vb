@@ -1,4 +1,6 @@
 ﻿
+Imports System
+Imports System.Configuration
 Imports System.Data
 Imports System.Data.SqlClient
 Imports System.Drawing
@@ -263,8 +265,36 @@ Partial Class appregister1
                     End If
 
                 Else
+                    Dim filepath As String = ""
 
-                    'Response.Redirect("")
+                    Using myConnection As New SqlConnection(ConfigurationManager.ConnectionStrings("webcon_ConnectionStr").ConnectionString)
+
+                        myConnection.Open()
+
+                        Dim SQL As String = "SELECT TOP(1) UlasanFail_FilePath FROM LESEN_UlasanFail WHERE UlasanFail_ContentType='application/pdf' AND UlsanFail_PermohonanID = @Permohonan_ID AND UlasanFail_PermohonanAgensiID = @Agensi_ID"
+
+                        Dim myCommandSelect As New SqlCommand(SQL, myConnection)
+                        myCommandSelect.Parameters.AddWithValue("@Permohonan_ID", pid)
+                        myCommandSelect.Parameters.AddWithValue("@Agensi_ID", agensiId)
+
+                        Dim myReader As SqlDataReader = myCommandSelect.ExecuteReader
+
+                        Try
+
+                            If myReader.Read Then
+                                filepath = myReader.Item(0).ToString
+                            End If
+
+                        Catch ex As Exception
+                            MessageBox("ERROR", Me)
+                        End Try
+
+                        myReader.Close()
+                        myConnection.Close()
+
+                    End Using
+
+                    Response.Redirect(filepath)
 
                 End If
 
