@@ -2746,7 +2746,7 @@
                                             <span runat="server" class="badge badge-info" visible='<%# If(Eval("SuratKesihatan") > 0, True, False) %>'>Kesihatan</span>
                                             <span runat="server" class="badge badge-info" visible='<%# If(Eval("SuratSWCorp") > 0, True, False) %>'>SWCorp</span>
                                             <span runat="server" class="badge badge-info" visible='<%# If(Eval("SuratKebajikan") > 0, True, False) %>'>Kebajikan Masyarakat</span>
-                                            <span runat="server" class="badge badge-info" visible='<%# If(Eval("SuratPenidikan") > 0, True, False) %>'>Pendidikan</span>
+                                            <span runat="server" class="badge badge-info" visible='<%# If(Eval("SuratPendidikan") > 0, True, False) %>'>Pendidikan</span>
                                         </ItemTemplate>
                                     </asp:TemplateField>
                                     <asp:BoundField DataField="Description" HeaderText="Status" SortExpression="Description"></asp:BoundField>
