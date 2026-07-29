@@ -163,11 +163,11 @@ Partial Class kelulusan1
                         Session.Item("isDisablePrintSession") = "Y"
                     End If
 
-                    If Session.Item("sessionIsPenilai") = "True" Then
-                        divTarikhSurat.Visible = True
-                    Else
-                        divTarikhSurat.Visible = False
-                    End If
+                    'If Session.Item("sessionIsPenilai") = "True" Then
+                    'divTarikhSurat.Visible = True
+                    'Else
+                    'divTarikhSurat.Visible = False
+                    'End If
 
                     GetSuratContent(PermohonanID)
 
@@ -2373,7 +2373,7 @@ Partial Class kelulusan1
 
         Try
 
-            sql = "SELECT a.Permohonan_ID, a.TarikhPemeriksaan, CAST(a.TarikhSuratPemeriksaan AS datetime) AS TarikhSuratPemeriksaan, 
+            sql = "SELECT a.Permohonan_ID, a.TarikhPemeriksaan, 'True' AS IsDigitalSign, CAST(a.TarikhSuratPemeriksaan AS datetime) AS TarikhSuratPemeriksaan, 
                 CAST(a.NamaSyarikat AS varchar(200)) AS NamaSyarikat, 
                 f.NoPendaftaran, f.NoAkaun, f.AlamatPremis, f.JenisPerniagaan, f.PemilikBaru, f.AlamatBaru, 
                 f.JenisPerniagaanBaru, f.NamaBaruSyarikat, f.BillboardLokasi, f.LokasiPasar1, f.LokasiPasar2, 

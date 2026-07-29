@@ -49,6 +49,12 @@ Partial Class MasterMenu
 
             End Try
 
+            If Request.Url.Host.ToLower() = "prolesen.mpkluang.gov.my" Then
+                lblTitlePage.Text = "PRO-LESEN MPK"
+            Else
+                lblTitlePage.Text = "PRO-LESEN MPK (STAGING)"
+            End If
+
         Else
 
             liLogout.Visible = False

@@ -308,7 +308,7 @@
                                     <div class="form-group">
                                         <label>&nbsp; </label>
                                         <asp:HyperLink ID="HyperLink1" runat="server"
-                                            CssClass="btn btn-primary form-control" NavigateUrl='<%# "~/lesen/appregister.aspx?p_Id=3348&m_Id=3349&pid=" + Eval("Permohonan_ID").ToString() %>' Target="_blank">Lihat Maklumat Permohonan</asp:HyperLink>
+                                            CssClass="btn btn-primary form-control" NavigateUrl='<%# "~/lesen/appregister1.aspx?p_Id=3348&m_Id=3349&pid=" + Eval("Permohonan_ID").ToString() %>' Target="_blank">Lihat Maklumat Permohonan</asp:HyperLink>
                                     </div>
                                 </div>
 
@@ -340,13 +340,13 @@
                         <div class="card-footer">
                             <asp:LinkButton ID="btnBack" runat="server" CausesValidation="False" Text="Kembali ke senarai" CssClass="btn btn-default" OnClick="btnBack_Click" />
                             <asp:LinkButton runat="server" CssClass="btn btn-warning" CausesValidation="False" Text="Lihat Surat Mohon Ulasan" ID="BT_SuratMohonUlasan" Visible='<%# If(CInt(Session.Item("sessionEstateId")) = 1, False, True) %>' OnCommand="BT_SuratMohonUlasan_Command" />
-                            <asp:LinkButton runat="server" CssClass="btn btn-warning" ValidationGroup="updateForm" Text="Jana Surat" ID="BT_Generate" Visible='<%# If(Eval("IsPublish") = True Or Eval("StatusID") < 9, False, True) %>' OnCommand="BT_Generate_Command" CausesValidation="True" OnClientClick="return confirm('Jana surat sekarang?');"/>
-                            <asp:LinkButton runat="server" CssClass="btn btn-warning" ValidationGroup="updateForm" Text="Lihat Surat" ID="BT_ViewMail" Visible='<%# If(Eval("StatusID") < 9, False, True) %>' OnCommand="BT_ViewMail_Command" CausesValidation="False" />
+                            <asp:LinkButton runat="server" CssClass="btn btn-warning" ValidationGroup="updateForm" Text="Jana Surat" ID="BT_Generate" Visible='<%# If(Eval("IsPublish") = True Or Eval("ApprStatusID") < 9, False, True) %>' OnCommand="BT_Generate_Command" CausesValidation="True" OnClientClick="return confirm('Jana surat sekarang?');"/>
+                            <asp:LinkButton runat="server" CssClass="btn btn-warning" ValidationGroup="updateForm" Text="Lihat Surat" ID="BT_ViewMail" Visible='<%# If(Eval("ApprStatusID") < 9, False, True) %>' OnCommand="BT_ViewMail_Command" CausesValidation="False" />
                             <label style="margin-left: 50px;">Janaan Komputer?</label>
-                            <asp:CheckBox ID="CB_IsDigitalSign" runat="server" Checked="true" AutoPostBack="true" Enabled='<%# If(Eval("StatusID") < 9, False, True) %>'/>
+                            <asp:CheckBox ID="CB_IsDigitalSign" runat="server" Checked="true" AutoPostBack="true" Enabled='<%# If(Eval("ApprStatusID") < 9, False, True) %>'/>
 
                             <label style="margin-left: 50px;">Terbit Kelulusan?</label>
-                            <asp:CheckBox ID="CB_IsPublish" runat="server" Checked='<%# Eval("IsPublish") %>' OnCheckedChanged="CB_IsPublish_CheckedChanged" AutoPostBack="true" Enabled='<%# If(Eval("StatusID") < 9, False, True) %>'/>
+                            <asp:CheckBox ID="CB_IsPublish" runat="server" Checked='<%# Eval("IsPublish") %>' OnCheckedChanged="CB_IsPublish_CheckedChanged" AutoPostBack="true" Enabled='<%# If(Eval("ApprStatusID") < 9, False, True) %>'/>
 
                         </div>
 
@@ -1066,7 +1066,7 @@
 
                     <asp:GridView ID="GridView1" runat="server" Visible="true" AllowPaging="true"
                         AllowSorting="True" AutoGenerateColumns="False" 
-                        DataKeyNames="Permohonan_ID,StatusID,JenisLesenIdList,IsSuratKelulusanFail,IsPublish"
+                        DataKeyNames="Permohonan_ID,ApprStatusID,JenisLesenIdList,IsSuratKelulusanFail,IsPublish"
                         DataSourceID="SqlDataSourceGrid"
                         CssClass="table table-bordered" PagerStyle-CssClass="pgr"
                         AlternatingRowStyle-CssClass="alt">
