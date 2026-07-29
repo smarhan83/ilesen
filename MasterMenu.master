@@ -813,7 +813,15 @@ h1{
 
             <div class="collapse navbar-collapse" id="navMenu">
             <ul class="navbar-nav ms-auto gap-lg-2 mt-3 mt-lg-0">
-                <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-journal-text me-1"></i>Manual Pengguna</a></li>
+                <li class="nav-item">
+                    <asp:LinkButton ID="lnkSemak" 
+                        runat="server" 
+                        CssClass="nav-link"
+                        OnClick="lnkSemak_Click">
+                        <i class="bi bi-journal-text me-1"></i>
+                        Semak Permohonan
+                    </asp:LinkButton>
+                </li>
                 <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-journal-check me-1"></i>Manual Pengguna Agensi & Jabatan</a></li>
                 <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-lightning-charge me-1"></i>Pautan Pantas Pengguna</a></li>
                 <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-telephone me-1"></i>Hubungi Kami</a></li>
@@ -1005,6 +1013,193 @@ h1{
         </div>
         </nav>
 
+        <%--POPUP SEMAKAN--%>
+        <div class="modal fade" id="modalSemak" tabindex="-1">
+
+            <div class="modal-dialog modal-xl modal-dialog-centered">
+
+                <div class="modal-content">
+
+
+                    <div class="modal-header bg-primary text-white">
+
+                        <h5 class="modal-title">
+                            <i class="bi bi-file-earmark-text me-2"></i>
+                            Semakan Status Permohonan Lesen
+                        </h5>
+
+
+                        <button type="button" 
+                                class="btn-close btn-close-white"
+                                data-bs-dismiss="modal">
+                        </button>
+
+                    </div>
+
+
+                    <div class="modal-body">
+
+                        <div class="search-card">
+
+                            <h4 class="search-title">
+                                <i class="bi bi-search"></i>
+                                CARI PERMOHONAN LESEN
+                            </h4>
+
+                            <p class="search-desc">
+                                Masukkan No. Kad Pengenalan atau No. Passport
+                                untuk menyemak status permohonan lesen.
+                            </p>
+
+                            <label class="fw-bold mb-2">
+                                No. Kad Pengenalan / No. Passport
+                                <span class="text-danger">*</span>
+                            </label>
+
+                            <div class="input-group">
+
+                                <asp:TextBox ID="txtNoPengenalan"
+                                    runat="server"
+                                    CssClass="form-control"
+                                    placeholder="Contoh: 900101011234 / 202501123456">
+                                </asp:TextBox>
+
+
+                                <asp:LinkButton ID="btnSemak"
+                                    runat="server"
+                                    CssClass="btn btn-primary">
+
+                                    <i class="bi bi-search"></i>
+                                    Semak
+
+                                </asp:LinkButton>
+
+                            </div>
+
+                            <small class="text-muted d-block mt-3 hint-text">
+                                <i class="bi bi-info-circle-fill hint-icon"></i>
+                                <asp:Label runat="server" id="lblMessage">Sila masukkan No. Kad Pengenalan (tanpa -) atau No. Passport (tanpa simbol).</asp:Label>
+                            </small>                         
+
+                            <%--STATUS--%>
+                            <br />
+                            <h4 class="search-title">
+                                <i class="bi bi-list-ul"></i>
+                                SENARAI PERMOHONAN
+                            </h4>
+                         
+
+                            <asp:GridView ID="GridViewReport" 
+                                HeaderStyle-ForeColor="Black" 
+                                CssClass="table-status-cek table table-bordered" 
+                                AllowPaging="True" 
+                                ShowHeaderWhenEmpty="True" 
+                                EmptyDataText="No records Found" 
+                                AllowSorting="True" 
+                                runat="server" 
+                                AutoGenerateColumns="False" 
+                                DataKeyNames="Permohonan_ID" 
+                                DataSourceID="SqlDataSourceGrid">
+                                <Columns>
+                                    <asp:BoundField HeaderText="Bil" DataField="RowNo" />
+                                    <asp:TemplateField HeaderText="No. Permohonan">
+                                        <ItemTemplate>
+                                            <a class="link-rujukan">
+                                                <%# Eval("Rujukan") %>
+                                            </a>
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
+                                    <asp:BoundField HeaderText="Jenis Lesen" DataField="JenisLesen_Description" />
+                                    <asp:BoundField HeaderText="Tarikh Mohon"
+                                        DataField="TarikhMohon"
+                                        DataFormatString="{0:dd/MM/yyyy}"
+                                        HtmlEncode="false" />
+                                    <asp:TemplateField HeaderText="Status">
+                                        <ItemTemplate>
+                                            <span class='<%# GetStatusClass(Eval("StatusDesc").ToString()) %>'>
+                                                <%# Eval("StatusDesc") %>
+                                            </span>
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
+                                    <asp:TemplateField HeaderText="Tindakan">
+                                        <ItemTemplate>
+                                            <asp:LinkButton ID="lnkCetak"
+                                                runat="server"
+                                                CssClass='<%# GetButtonClass(Eval("StatusDesc")) %>'
+                                                Text="🖨 Cetak Surat"
+                                                CommandArgument='<%# Eval("Permohonan_ID") %>'
+                                                Visible='<%# Eval("StatusDesc").ToString() = "Diluluskan" Or Eval("StatusDesc").ToString() = "Ditolak" %>'
+                                                OnClick="lnkCetak_Click" />
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
+<%--                                    <asp:TemplateField HeaderText="Tindakan">
+                                        <ItemTemplate>
+                                            <%# GetActionButton(Eval("StatusDesc"), Eval("Permohonan_ID")) %>
+                                        </ItemTemplate>
+                                    </asp:TemplateField>--%>
+                                </Columns>
+                            </asp:GridView>                        
+
+                            <asp:SqlDataSource ID="SqlDataSourceGrid" runat="server"
+                                ConnectionString="<%$ ConnectionStrings:webcon_ConnectionStr %>"
+                                SelectCommand="SELECT 
+
+                                ROW_NUMBER() OVER(ORDER BY TarikhMohon desc, Permohonan_ID desc) as RowNo, * 
+                                FROM (
+
+                                    SELECT ROW_NUMBER() OVER (PARTITION BY a.Permohonan_ID ORDER BY a.ApprovalID DESC) AS RepNo,
+                                        CASE
+                                            WHEN g.StatusID = 10 THEN 'Diluluskan'
+                                            WHEN g.StatusID IN (6,9) THEN 'Ditolak'
+                                            ELSE 'Dalam Semakan'
+                                        END AS StatusDesc,
+                                    '' AS UserType, a.*, d.JenisLesen_Description, g.Rujukan, g.IsSuratKelulusanFail, g.StatusID, g.IsPublish, g.Is24jam, f.Pemohon_Name, h.CreatedDt FROM 
+                                    v_LESEN_ApprovalList_Curr a
+                                    inner join LESEN_JenisLesen d on d.JenisLesen_ID = a.JenisLesen_ID
+                                    left join LESEN_JabatanAgensi e on e.JabatanAgensi_ID = a.AgensiID
+                                    inner join LESEN_Pemohon f on f.Pemohon_ID = a.Permohonan_PemohonID
+                                    inner join LESEN_Permohonan g on g.Permohonan_ID = a.Permohonan_ID 
+                                    inner join LESEN_ApprovalList h on h.Permohonan_ID = a.Permohonan_ID and h.ApprStatusID = a.ApprStatusID 
+                                    WHERE g.StatusID &gt; 0  
+                                    and g.IsBatal = 0 
+                                    and (
+                                        REPLACE(REPLACE(REPLACE(f.Pemohon_ICNo, '-', ''), ' ', ''), CHAR(9), '') =
+                                        REPLACE(REPLACE(REPLACE(@Pemohon_ICNo, '-', ''), ' ', ''), CHAR(9), '')
+                                        or
+                                        REPLACE(REPLACE(REPLACE(f.Pemohon_PassportNo, '-', ''), ' ', ''), CHAR(9), '') =
+                                        REPLACE(REPLACE(REPLACE(@Pemohon_ICNo, '-', ''), ' ', ''), CHAR(9), '')
+                                    )
+
+                                ) AS tbl WHERE RepNo = 1 order by TarikhMohon desc, Permohonan_ID desc"
+                                >
+
+                                <SelectParameters>                                  
+
+                                    <asp:ControlParameter ControlID="txtNoPengenalan" PropertyName="Text" DefaultValue="" Name="Pemohon_ICNo"></asp:ControlParameter>                                                                        
+
+                                </SelectParameters>
+                            </asp:SqlDataSource>
+
+                            <div class="alert alert-info-custom mt-3">
+                                <i class="bi bi-info-circle-fill info-icon"></i>
+                                <div class="info-content">
+                                    <strong>Maklumat</strong>
+                                    <p>Bagi permohonan yang telah diluluskan atau ditolak, klik butang <b>Cetak Surat</b> untuk memuat turun surat rasmi.</p>
+                                </div>
+                            </div>
+
+                            </div>
+
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </div>
+
 
       <!-- =======================
            HOMEPAGE (Public)
@@ -1190,7 +1385,7 @@ h1{
               <p class="section-subtitle mb-3">Pautan yang kerap digunakan</p>
 
               <div class="d-grid gap-2">
-                <button class="btn btn-soft"><i class="bi bi-journal-text me-1"></i>Manual Pengguna</button>
+                <button class="btn btn-soft"><i class="bi bi-journal-text me-1"></i>Semak Permohonan</button>
                 <button class="btn btn-soft"><i class="bi bi-journal-check me-1"></i>Manual Agensi & Jabatan</button>
                 <button class="btn btn-soft"><i class="bi bi-lightning-charge me-1"></i>Pautan Pantas</button>
                 <button class="btn btn-soft"><i class="bi bi-telephone me-1"></i>Hubungi Kami</button>

@@ -1172,5 +1172,137 @@ Partial Class MasterMenu
 
     'End Sub
 
+    Protected Sub lnkSemak_Click(sender As Object, e As EventArgs)
+
+        ScriptManager.RegisterStartupScript(
+            Me,
+            Me.GetType(),
+            "showModal",
+            "var myModal=new bootstrap.Modal(document.getElementById('modalSemak')); myModal.show();",
+            True)
+
+    End Sub
+
+
+    Private Sub btnSemak_Click(sender As Object, e As EventArgs) Handles btnSemak.Click
+
+        If String.IsNullOrWhiteSpace(txtNoPengenalan.Text) Then
+
+            lblMessage.Text = "Sila masukkan No Kad Pengenalan atau No SSM"
+            lblMessage.Visible = True
+
+        Else
+
+            GridViewReport.DataBind()
+        End If
+
+        Dim noIC As String = txtNoPengenalan.Text.Trim()
+
+        ScriptManager.RegisterStartupScript(
+        Me,
+        Me.GetType(),
+        "showModal",
+        "var myModal=new bootstrap.Modal(document.getElementById('modalSemak'));myModal.show();",
+        True)
+
+        Return
+
+        ' Dummy display
+        'lblNoIC.Text = noIC
+
+        'modalStatusPermohonan.Visible = True
+
+        'ScriptManager.RegisterStartupScript(
+        'Me,
+        'Me.GetType(),
+        '"showModal",
+        '"var myModal=new bootstrap.Modal(document.getElementById('modalSemak'));myModal.hide();",
+        'True)
+
+        ' Tutup modal semak & buka modal result
+        'ScriptManager.RegisterStartupScript(
+        'Me,
+        'Me.GetType(),
+        '"showResult",
+        '"
+        'bootstrap.Modal.getInstance(document.getElementById('modalSemak')).hide();
+
+        'setTimeout(function(){
+
+        '    var resultModal = new bootstrap.Modal(
+        '        document.getElementById('modalStatusPermohonan')
+        '    );
+
+        '    resultModal.show();
+
+        '},300);
+        '",
+        'True)
+
+    End Sub
+
+
+    Protected Function GetStatusClass(ByVal status As String) As String
+        Select Case status.Trim()
+            Case "Dalam Semakan"
+                Return "status-badge status-pending"
+            Case "Diluluskan"
+                Return "status-badge status-approved"
+            Case "Ditolak"
+                Return "status-badge status-rejected"
+            Case Else
+                Return "status-badge"
+        End Select
+    End Function
+
+    Protected Function GetActionClass(ByVal status As String) As String
+        Select Case status.Trim()
+            Case "Diluluskan"
+                Return "btn-print btn-print-approved"
+            Case "Ditolak"
+                Return "btn-print btn-print-rejected"
+            Case Else
+                Return ""
+        End Select
+    End Function
+
+    Protected Sub lnkCetak_Click(sender As Object, e As EventArgs)
+
+        Dim btn As LinkButton = CType(sender, LinkButton)
+        Dim id As String = btn.CommandArgument
+
+        Response.Redirect("CetakSurat.aspx?id=" & id)
+
+    End Sub
+
+    Protected Function GetButtonClass(ByVal status As Object) As String
+
+        Select Case status.ToString().Trim()
+
+            Case "Diluluskan"
+                Return "btn-print btn-print-approved"
+
+            Case "Ditolak"
+                Return "btn-print btn-print-rejected"
+
+            Case Else
+                Return "btn-print"
+
+        End Select
+
+    End Function
+    'Protected Function GetActionButton(ByVal statusObj As Object, ByVal idObj As Object) As String
+    '    Dim status As String = statusObj.ToString().Trim()
+    '    Dim id As String = idObj.ToString()
+
+    '    If status = "Diluluskan" Then
+    '        Return "<a href='CetakSurat.aspx?id=" & id & "' class='btn-print btn-print-approved'>🖨 Cetak Surat</a>"
+    '    ElseIf status = "Ditolak" Then
+    '        Return "<a href='CetakSurat.aspx?id=" & id & "' class='btn-print btn-print-rejected'>🖨 Cetak Surat</a>"
+    '    Else
+    '        Return "<span class='no-action'>-</span>"
+    '    End If
+    'End Function
+
 End Class
 
