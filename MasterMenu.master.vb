@@ -1267,12 +1267,24 @@ Partial Class MasterMenu
     End Function
 
     Protected Sub lnkCetak_Click(sender As Object, e As EventArgs)
+        ScriptManager.RegisterStartupScript(
+        Me,
+        Me.GetType(),
+        "showModal",
+        "var myModal=new bootstrap.Modal(document.getElementById('modalSemak'));myModal.show();",
+        True)
 
         Dim btn As LinkButton = CType(sender, LinkButton)
-        Dim id As String = btn.CommandArgument
+        Dim rowIndex As Integer = CInt(btn.CommandArgument)
 
-        Response.Redirect("CetakSurat.aspx?id=" & id)
+        Dim Permohonan_ID As String = GridViewReport.DataKeys(rowIndex)("Permohonan_ID").ToString()
+        Dim JenisLesenID As Integer = CInt(GridViewReport.DataKeys(rowIndex)("JenisLesen_ID"))
 
+        If GetIsSuratFail(Permohonan_ID) Then
+            ViewSuratKelulusanFail(Permohonan_ID)
+        Else
+            ViewSuratKelulusanAuto(Permohonan_ID, JenisLesenID, True)
+        End If
     End Sub
 
     Protected Function GetButtonClass(ByVal status As Object) As String
@@ -1291,18 +1303,142 @@ Partial Class MasterMenu
         End Select
 
     End Function
-    'Protected Function GetActionButton(ByVal statusObj As Object, ByVal idObj As Object) As String
-    '    Dim status As String = statusObj.ToString().Trim()
-    '    Dim id As String = idObj.ToString()
 
-    '    If status = "Diluluskan" Then
-    '        Return "<a href='CetakSurat.aspx?id=" & id & "' class='btn-print btn-print-approved'>🖨 Cetak Surat</a>"
-    '    ElseIf status = "Ditolak" Then
-    '        Return "<a href='CetakSurat.aspx?id=" & id & "' class='btn-print btn-print-rejected'>🖨 Cetak Surat</a>"
-    '    Else
-    '        Return "<span class='no-action'>-</span>"
-    '    End If
-    'End Function
+    Private Function GetIsSuratFail(pid As Integer) As Boolean
+
+        Dim isFail As Boolean
+
+        Using myConnection As New SqlConnection(ConfigurationManager.ConnectionStrings("webcon_ConnectionStr").ConnectionString)
+
+            myConnection.Open()
+
+            Dim SQL As String = "SELECT IsSuratKelulusanFail FROM LESEN_Permohonan WHERE Permohonan_ID = @Permohonan_ID"
+
+            Dim myCommandSelect As New SqlCommand(SQL, myConnection)
+            myCommandSelect.Parameters.AddWithValue("@Permohonan_ID", pid)
+
+            Dim myReader As SqlDataReader = myCommandSelect.ExecuteReader
+
+            Try
+                If myReader.Read Then
+
+                    isFail = CBool(myReader.Item("IsSuratKelulusanFail"))
+
+                End If
+
+            Catch ex As Exception
+                'MessageBox(ex.Message, Me)
+            End Try
+
+            myReader.Close()
+            myConnection.Close()
+
+        End Using
+
+        Return isFail
+
+    End Function
+
+    Private Sub ViewSuratKelulusanFail(permohonanID As String)
+
+        Dim filepath As String = ""
+
+        Using myConnection As New SqlConnection(ConfigurationManager.ConnectionStrings("webcon_ConnectionStr").ConnectionString)
+
+            myConnection.Open()
+
+            Dim SQL As String = "SELECT PermohonanFail_FilePath FROM LESEN_PermohonanFail WHERE PermohonanFail_PermohonanID = @permohonanID AND PermohonanFail_JenisLampiran = 'SK'"
+
+            Dim myCommandSelect As New SqlCommand(SQL, myConnection)
+            myCommandSelect.Parameters.AddWithValue("@permohonanID", permohonanID)
+
+            Dim myReader As SqlDataReader = myCommandSelect.ExecuteReader
+
+            Try
+                If myReader.Read Then
+
+                    filepath = myReader.Item("PermohonanFail_FilePath")
+                    filepath = filepath.Remove(0, 1)
+                    ScriptManager.RegisterClientScriptBlock(Me.Page, Me.[GetType](), "", "window.open('.." + filepath + "', '_blank', '');", True)
+                End If
+
+            Catch ex As Exception
+                MessageBox(ex.Message, Me.Page)
+            End Try
+
+            myReader.Close()
+            myConnection.Close()
+
+        End Using
+
+    End Sub
+
+    Private Sub ViewSuratKelulusanAuto(permohonanID As String, jenislesenID As Integer, isPDF As Boolean)
+        'Dim cb As CheckBox = DirectCast(FormView1.FindControl("CB_IsDigitalSign"), CheckBox)
+
+        Dim sql As String = ""
+        Dim jenisLesenDesc = {"", "suratkelulusan", "sk_pasar", "sk_anjing", "sk_penjaja", "sk_billboard", "sk_tukaralamat", "sk_tambahpremis", "sk_tambahjenis",
+            "sk_tukarpemilik", "sk_tukariklan", "sk_tukarnama", "sk_kurangiklan", "sk_kakilima", "sk_batal", "sk_ekspo", "sk_tambahiklan", "sk_tepikedai", "sk_lebuhawam",
+            "sk_tukaralamatnamaiklan", "sk_tukarpemilikalamatiklan", "", "", "sk_tukarnamaiklan", "sk_tukarpemilikiklan", "sk_pasartambahpetak", "sk_tukarnamatambahpremis"}
+
+        Try
+
+            sql = "SELECT a.KadarBayaran_Desc, a.KadarBayaran_Amount, b.*, c.Pemohon_Name, c.Pemohon_Address, c.Pemohon_ICNo, c.Pemohon_MobileNo, c.Pemohon_TelNo, d.Users_Fullname, d.Users_Signature, e.name AS AnjingJenisPremisDesc " &
+                "FROM LESEN_Permohonan b " &
+                "LEFT JOIN LESEN_KadarBayaran a ON a.KadarBayaran_PermohonanID = b.Permohonan_ID " &
+                "INNER JOIN LESEN_Pemohon c ON b.Permohonan_PemohonID = c.Pemohon_ID " &
+                "INNER JOIN TBL_USERS d ON b.TandatanganKelulusanId = d.Users_Id " &
+                "LEFT JOIN TBL_LOOKUPS e ON e.id = b.AnjingJenisPremis " &
+                "WHERE a.IsSelect=1 AND b.Permohonan_ID=" & permohonanID & " ORDER BY a.SeqNo ASC"
+
+            Dim ReportVar As String
+
+            ReportVar = jenisLesenDesc(jenislesenID)
+
+            If jenislesenID < 19 Or jenislesenID = 25 Then
+                sql = "SELECT f.JenisLesen_Description, a.*, b.Pemohon_Name, b.Pemohon_Address, b.Pemohon_ICNo, b.Pemohon_MobileNo, b.Pemohon_TelNo," &
+                "c.Users_Fullname, c.Users_Signature, d.name AS AnjingJenisPremisDesc, e.P1, e.P2, e.P3, e.IsiKandungan " &
+                "FROM LESEN_Permohonan a " &
+                "INNER JOIN LESEN_Pemohon b ON b.Pemohon_ID=a.Permohonan_PemohonID " &
+                "LEFT JOIN TBL_USERS c ON a.TandatanganKelulusanId=c.Users_Id " &
+                "LEFT JOIN TBL_LOOKUPS d ON d.id=a.AnjingJenisPremis " &
+                "LEFT JOIN LESEN_PermohonanSurat e ON e.Permohonan_ID=a.Permohonan_ID " &
+                "INNER JOIN LESEN_JenisLesen f ON f.JenisLesen_ID=a.JenisLesen_ID WHERE a.Permohonan_ID=" & permohonanID & " ORDER BY P1, P2, P3"
+
+                ReportVar = jenisLesenDesc(1)
+
+            End If
+
+
+
+            Dim pobjData(1, 1)
+            Dim lStrReportName = ReportVar + ".rpt"
+
+            'Dim sessionActiveMonthYearID As String = GlobalClass.getIDActiveMonthByEstateID(Session.Item("sessionEstateCode"), DirectCast(FormView1.FindControl("cmbYear"), DropDownList).SelectedValue, DirectCast(FormView1.FindControl("cmbMonth"), DropDownList).SelectedValue)
+
+            pobjData(0, 0) = "paraSQL" : pobjData(0, 1) = sql
+            pobjData(1, 0) = "isDigitalSign" : pobjData(1, 1) = isPDF
+
+            Session.Item("ReportName" + ReportVar) = lStrReportName
+            Session.Item("pobjData" + ReportVar) = pobjData
+            Session.Item("pathUrl" + ReportVar) = "~/lesen/report/kelulusan"
+            'MessageBox(Session.Item("pathUrl" + ReportVar), Me)
+
+            If isPDF Then
+                Session.Item("reportPrintType") = "pdf"
+            End If
+
+            ScriptManager.RegisterClientScriptBlock(Me.Page, Me.[GetType](), ReportVar, "window.open('../ReportViewer.aspx?name=" + ReportVar + "', '_blank', '');", True)
+        Catch ex As Exception
+            MessageBox(ex.Message, Me.Page)
+        End Try
+    End Sub
+
+    Public Sub MessageBox(ByVal Msg As String, ByVal obj As System.Web.UI.Page)
+        Dim jscript As String
+        Dim x = "OURServices"
+        ScriptManager.RegisterClientScriptBlock(Me.Page, Me.[GetType](), "Alert", "alert('" & Msg & "');", True)
+    End Sub
 
 End Class
 

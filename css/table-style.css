@@ -1,0 +1,291 @@
+/* ===========================================
+   Override Bootstrap Table untuk GridView
+   Style: Pro-Lesen MPK
+   =========================================== */
+
+.table-wrapper {
+    background: #ffffff;
+    border-radius: 12px;
+    border: 1px solid #e5e7eb;
+    overflow: hidden;
+}
+
+.table {
+    font-size: .85rem;
+    color: #1e293b;
+    margin-bottom: 0;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+    /* ===== Header ===== */
+    .table thead th,
+    .table th {
+        background: #f8fafc !important;
+        color: #64748b !important;
+        font-size: .78rem;
+        font-weight: 600;
+        letter-spacing: .02em;
+        text-transform: none;
+        padding: 14px 16px !important;
+        border-bottom: 1px solid #e2e8f0 !important;
+        border-top: none !important;
+        vertical-align: middle;
+        white-space: nowrap;
+    }
+
+    /* ===== Isi table ===== */
+    .table td {
+        padding: 16px !important;
+        vertical-align: middle;
+        border-color: #f1f5f9 !important;
+        border-top: 1px solid #f1f5f9;
+    }
+
+    .table tbody tr:first-child td {
+        border-top: none;
+    }
+
+    /* Nama item (baris utama, bold) */
+    .table td .item-title {
+        font-weight: 700;
+        color: #0f172a;
+        display: block;
+        margin-bottom: 2px;
+    }
+
+    /* Sub-text (Jabatan/Agensi dsb) */
+    .table td .item-subtitle {
+        font-size: .78rem;
+        color: #94a3b8;
+        display: block;
+    }
+
+    /* ===== Hover row ===== */
+    .table tbody tr {
+        transition: background-color .15s ease;
+    }
+
+        .table tbody tr:hover {
+            background-color: #f8fafc;
+        }
+
+    /* ===== Header link sorting GridView ===== */
+    .table th a {
+        color: #475569 !important;
+        text-decoration: none;
+    }
+
+        .table th a:hover {
+            color: #2563eb !important;
+            text-decoration: none;
+        }
+
+    /* ===== Checkbox custom (kolum "Pilih?") ===== */
+    .table input[type="checkbox"] {
+        width: 18px;
+        height: 18px;
+        border: 1.5px solid #cbd5e1;
+        border-radius: 4px;
+        accent-color: #4338ca;
+        cursor: pointer;
+    }
+
+    /* ===== Kolum angka (Jumlah RM) rata kanan ===== */
+    .table td.text-end,
+    .table th.text-end {
+        text-align: right;
+    }
+
+    .table td.text-center,
+    .table th.text-center {
+        text-align: center;
+    }
+
+/* ===========================================
+   Butang Tindakan (3-dot) + Dropdown
+   =========================================== */
+.btn-action-dots {
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    background: #ffffff;
+    color: #64748b;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all .15s ease;
+}
+
+    .btn-action-dots:hover,
+    .btn-action-dots:focus {
+        background: #f8fafc;
+        border-color: #cbd5e1;
+        color: #334155;
+    }
+
+.action-dropdown-menu {
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    box-shadow: 0 10px 25px -5px rgba(0,0,0,.1), 0 8px 10px -6px rgba(0,0,0,.05);
+    padding: 6px;
+    min-width: 160px;
+}
+
+    .action-dropdown-menu .dropdown-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 8px 10px;
+        border-radius: 6px;
+        font-size: .85rem;
+        font-weight: 500;
+        color: #334155;
+    }
+
+        .action-dropdown-menu .dropdown-item:hover {
+            background-color: #f1f5f9;
+        }
+
+        .action-dropdown-menu .dropdown-item i {
+            font-size: 1rem;
+            width: 18px;
+            text-align: center;
+        }
+
+        .action-dropdown-menu .dropdown-item.text-primary {
+            color: #2563eb;
+        }
+
+            .action-dropdown-menu .dropdown-item.text-primary i {
+                color: #2563eb;
+            }
+
+        .action-dropdown-menu .dropdown-item.text-danger {
+            color: #dc2626;
+        }
+
+            .action-dropdown-menu .dropdown-item.text-danger i {
+                color: #dc2626;
+            }
+
+/* ===========================================
+   Search box + Tapis button (atas table)
+   =========================================== */
+.table-search-box {
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    padding: 9px 14px;
+    font-size: .85rem;
+    background: #ffffff;
+}
+
+    .table-search-box:focus {
+        border-color: #6366f1;
+        box-shadow: 0 0 0 3px rgba(99,102,241,.1);
+        outline: none;
+    }
+
+.btn-tapis {
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    background: #ffffff;
+    color: #334155;
+    font-weight: 500;
+    font-size: .85rem;
+    padding: 9px 16px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+    .btn-tapis:hover {
+        background: #f8fafc;
+    }
+
+/* ===========================================
+   Pagination gaya bulat/rounded
+   =========================================== */
+.pagination-modern {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+    .pagination-modern .page-btn {
+        min-width: 36px;
+        height: 36px;
+        border-radius: 8px;
+        border: 1px solid #e2e8f0;
+        background: #ffffff;
+        color: #475569;
+        font-size: .85rem;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0 10px;
+        transition: all .15s ease;
+    }
+
+        .pagination-modern .page-btn:hover {
+            background: #f8fafc;
+            border-color: #cbd5e1;
+        }
+
+        .pagination-modern .page-btn.active {
+            background: #3730a3;
+            border-color: #3730a3;
+            color: #ffffff;
+        }
+
+        .pagination-modern .page-btn:disabled,
+        .pagination-modern .page-btn.disabled {
+            opacity: .4;
+            cursor: not-allowed;
+        }
+
+/* ===========================================
+   "X rekod per halaman" dropdown
+   =========================================== */
+.rekod-per-halaman select {
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    padding: 7px 10px;
+    font-size: .85rem;
+    color: #334155;
+    background: #ffffff;
+}
+
+/* ===========================================
+   Tab navigation (Lampiran, Inspektorat, dsb)
+   =========================================== */
+.tab-modern {
+    border-bottom: 1px solid #e2e8f0;
+    display: flex;
+    gap: 8px;
+}
+
+    .tab-modern .tab-link {
+        padding: 12px 4px;
+        margin-right: 24px;
+        font-size: .9rem;
+        font-weight: 500;
+        color: #64748b;
+        border-bottom: 2px solid transparent;
+        text-decoration: none;
+    }
+
+        .tab-modern .tab-link:hover {
+            color: #334155;
+        }
+
+        .tab-modern .tab-link.active {
+            color: #3730a3;
+            font-weight: 700;
+            border-bottom-color: #3730a3;
+        }

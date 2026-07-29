@@ -749,6 +749,11 @@ h1{
 
     <!-- CUSTOM CSS WAJIB PALING BAWAH -->
     <link rel="stylesheet" href="~/css/custom-admin.css">
+    <link rel="stylesheet" href="~/css/custom-admin-tab.css">
+    <%--<link rel="stylesheet" href="~/css/table-style.css">--%>
+
+    <link rel="stylesheet" href="~/css/auto-icon-button.css" />
+    
 
 </head>
 
@@ -1046,10 +1051,10 @@ h1{
                                 CARI PERMOHONAN LESEN
                             </h4>
 
-                            <p class="search-desc">
+                            <%--<p class="search-desc">
                                 Masukkan No. Kad Pengenalan atau No. Passport
                                 untuk menyemak status permohonan lesen.
-                            </p>
+                            </p>--%>
 
                             <label class="fw-bold mb-2">
                                 No. Kad Pengenalan / No. Passport
@@ -1093,13 +1098,54 @@ h1{
                                 HeaderStyle-ForeColor="Black" 
                                 CssClass="table-status-cek table table-bordered" 
                                 AllowPaging="True" 
-                                ShowHeaderWhenEmpty="True" 
-                                EmptyDataText="No records Found" 
+                                ShowHeaderWhenEmpty="False" 
                                 AllowSorting="True" 
                                 runat="server" 
                                 AutoGenerateColumns="False" 
-                                DataKeyNames="Permohonan_ID" 
+                                DataKeyNames="Permohonan_ID,JenisLesen_ID" 
                                 DataSourceID="SqlDataSourceGrid">
+                                <EmptyDataTemplate>
+                                    <div class="empty-state">
+                                        <div class="empty-state-icon-svg">
+                                            <svg viewBox="0 0 240 220" xmlns="http://www.w3.org/2000/svg">
+                                              <!-- decorative plus / dot marks -->
+                                              <g stroke="#c7d5e8" stroke-width="3" stroke-linecap="round">
+                                                <path d="M35 60 h14 M42 53 v14" />
+                                                <path d="M205 55 h14 M212 48 v14" />
+                                                <path d="M215 120 h12 M221 114 v12" />
+                                              </g>
+                                              <circle cx="30" cy="115" r="4" fill="none" stroke="#c7d5e8" stroke-width="3"/>
+                                              <circle cx="185" cy="80" r="2.5" fill="#c7d5e8"/>
+                                              <circle cx="198" cy="145" r="2.5" fill="#c7d5e8"/>
+
+                                              <!-- clipboard shadow -->
+                                              <rect x="58" y="42" width="110" height="140" rx="12" fill="#e8edf5"/>
+
+                                              <!-- clipboard body -->
+                                              <rect x="52" y="36" width="110" height="140" rx="12" fill="#ffffff" stroke="#c7d5e8" stroke-width="3"/>
+
+                                              <!-- clip at top -->
+                                              <rect x="87" y="26" width="40" height="20" rx="6" fill="#3d5a80" stroke="#3d5a80" stroke-width="2"/>
+                                              <circle cx="107" cy="36" r="5" fill="#ffffff"/>
+
+                                              <!-- text lines -->
+                                              <g stroke="#c7d5e8" stroke-width="6" stroke-linecap="round">
+                                                <line x1="72" y1="70" x2="132" y2="70"/>
+                                                <line x1="72" y1="86" x2="140" y2="86"/>
+                                                <line x1="72" y1="102" x2="120" y2="102"/>
+                                                <line x1="72" y1="118" x2="140" y2="118"/>
+                                                <line x1="72" y1="134" x2="110" y2="134"/>
+                                              </g>
+
+                                              <!-- magnifying glass -->
+                                              <circle cx="150" cy="130" r="32" fill="#eaf1fb" stroke="#3d5a80" stroke-width="6"/>
+                                              <line x1="173" y1="153" x2="196" y2="176" stroke="#3d5a80" stroke-width="8" stroke-linecap="round"/>
+                                            </svg>
+                                        </div>
+                                        <h5>Sila masukkan No. Kad Pengenalan atau No. Passport</h5>
+                                        <p>Masukkan maklumat di atas dan klik butang 'Semak' untuk melihat senarai permohonan lesen anda.</p>
+                                    </div>
+                                </EmptyDataTemplate>
                                 <Columns>
                                     <asp:BoundField HeaderText="Bil" DataField="RowNo" />
                                     <asp:TemplateField HeaderText="No. Permohonan">
@@ -1127,7 +1173,7 @@ h1{
                                                 runat="server"
                                                 CssClass='<%# GetButtonClass(Eval("StatusDesc")) %>'
                                                 Text="🖨 Cetak Surat"
-                                                CommandArgument='<%# Eval("Permohonan_ID") %>'
+                                                CommandArgument='<%# CType(Container, GridViewRow).RowIndex %>'
                                                 Visible='<%# Eval("StatusDesc").ToString() = "Diluluskan" Or Eval("StatusDesc").ToString() = "Ditolak" %>'
                                                 OnClick="lnkCetak_Click" />
                                         </ItemTemplate>
@@ -1385,7 +1431,13 @@ h1{
               <p class="section-subtitle mb-3">Pautan yang kerap digunakan</p>
 
               <div class="d-grid gap-2">
-                <button class="btn btn-soft"><i class="bi bi-journal-text me-1"></i>Semak Permohonan</button>
+                <asp:LinkButton ID="LinkButton1" 
+                    runat="server" 
+                    CssClass="btn btn-soft"
+                    OnClick="lnkSemak_Click">
+                    <i class="bi bi-journal-text me-1"></i>
+                    Semak Permohonan
+                </asp:LinkButton>
                 <button class="btn btn-soft"><i class="bi bi-journal-check me-1"></i>Manual Agensi & Jabatan</button>
                 <button class="btn btn-soft"><i class="bi bi-lightning-charge me-1"></i>Pautan Pantas</button>
                 <button class="btn btn-soft"><i class="bi bi-telephone me-1"></i>Hubungi Kami</button>
@@ -1741,7 +1793,7 @@ h1{
           ======================== -->
           <main id="adminPage">
             <div class="container">
-              <div class="admin-shell">
+              <div class="admin-shell admin-layout">
 
                 <button type="button" id="btnMenu" class="btn btn-light d-lg-none">
                     <i class="bi bi-list"></i>
@@ -1769,7 +1821,7 @@ h1{
 
                 <!-- Main -->
                 
-                <asp:UpdatePanel runat="server" >            
+                <asp:UpdatePanel runat="server"  RenderMode="Block" Class="myUpdatePanel">            
                 <ContentTemplate>
 
                 <div runat="server" id="upMain">
@@ -2021,6 +2073,7 @@ h1{
 
     </script>
 
+    <script src="/js/auto-icon-button.js"></script>
     <script>
 
         function applyGridButtonIcon() {
@@ -2047,6 +2100,82 @@ h1{
                 });
         }
 
+    </script>
+
+    <script>
+        function convertActionButtonsToDropdown() {
+
+            return;
+            if (window.innerWidth <= 768) return;
+
+            document.querySelectorAll('td').forEach(function (td) {
+                if (td.dataset.dropdownConverted === "1") return;
+
+                // ambil SEMUA link/button action dalam cell ni, tak kira dia dalam nested div ke tidak
+                var actionButtons = td.querySelectorAll(
+                    'a.btn-warning.btn-sm, a.btn-primary.btn-sm, a.btn-danger.btn-sm, a.btn-info.btn-sm, a.btn-success.btn-sm'
+                );
+
+                if (actionButtons.length === 0) return;
+
+                var wrapper = document.createElement('div');
+                wrapper.className = 'dropdown';
+
+                var toggleBtn = document.createElement('button');
+                toggleBtn.type = 'button';
+                toggleBtn.className = 'btn btn-action-dots';
+                toggleBtn.setAttribute('data-bs-toggle', 'dropdown');
+                toggleBtn.setAttribute('aria-expanded', 'false');
+                toggleBtn.innerHTML = '<i class="bi bi-three-dots-vertical"></i>';
+
+                var menu = document.createElement('ul');
+                menu.className = 'dropdown-menu action-dropdown-menu dropdown-menu-end';
+
+                actionButtons.forEach(function (btn) {
+                    var li = document.createElement('li');
+
+                    var isDanger = btn.classList.contains('btn-danger');
+                    var label = btn.textContent.trim().toLowerCase();
+
+                    // buang class button lama, tukar ke dropdown-item
+                    btn.classList.remove('btn', 'btn-warning', 'btn-primary', 'btn-danger', 'btn-info', 'btn-success', 'btn-sm');
+                    btn.classList.add('dropdown-item');
+                    btn.classList.add(isDanger ? 'text-danger' : 'text-primary');
+
+                    // pilih icon ikut keyword dalam text button
+                    var iconClass = 'bi bi-chevron-right me-2';
+                    if (label.includes('nyah') || label.includes('padam') || label.includes('delete')) {
+                        iconClass = 'bi bi-slash-circle me-2';
+                    } else if (label.includes('lihat')) {
+                        iconClass = 'bi bi-eye me-2';
+                    } else if (label.includes('surat')) {
+                        iconClass = 'bi bi-envelope me-2';
+                    } else if (label.includes('kemaskini') || label.includes('kemas kini')) {
+                        iconClass = 'bi bi-pencil me-2';
+                    }
+
+                    var icon = document.createElement('i');
+                    icon.className = iconClass;
+                    btn.prepend(icon);
+
+                    li.appendChild(btn);
+                    menu.appendChild(li);
+                });
+
+                wrapper.appendChild(toggleBtn);
+                wrapper.appendChild(menu);
+
+                td.innerHTML = '';
+                td.appendChild(wrapper);
+                td.dataset.dropdownConverted = "1";
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', convertActionButtonsToDropdown);
+
+        if (typeof Sys !== 'undefined' && Sys.WebForms && Sys.WebForms.PageRequestManager) {
+            Sys.WebForms.PageRequestManager.getInstance().add_endRequest(convertActionButtonsToDropdown);
+        }
     </script>
 
   <script>
