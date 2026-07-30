@@ -1428,7 +1428,13 @@ Partial Class MasterMenu
                 Session.Item("reportPrintType") = "pdf"
             End If
 
-            ScriptManager.RegisterClientScriptBlock(Me.Page, Me.[GetType](), ReportVar, "window.open('../ReportViewer.aspx?name=" + ReportVar + "', '_blank', '');", True)
+
+            Dim reportUrl As String = ResolveUrl("~/ReportViewer.aspx?name=" & ReportVar)
+
+            ScriptManager.RegisterClientScriptBlock(Me.Page, Me.[GetType](), ReportVar,
+                "window.open('" & reportUrl & "', '_blank', '');", True)
+
+            'ScriptManager.RegisterClientScriptBlock(Me.Page, Me.[GetType](), ReportVar, "window.open('~/ReportViewer.aspx?name=" + ReportVar + "', '_blank', '');", True)
         Catch ex As Exception
             MessageBox(ex.Message, Me.Page)
         End Try
