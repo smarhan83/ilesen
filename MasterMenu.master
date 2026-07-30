@@ -2011,81 +2011,31 @@ h1{
     </form>
 
     <script>
-        function applyMobileLabels() {
-
-            $('.table-bordered').each(function () {
-
-                var headers = [];
-
-                $(this).find('th').each(function () {
-
-                    // Auto add keep-header jika ada control
-                    if ($(this).find('.btn').length > 0) {
-                        $(this).addClass('keep-header');
-                    }
-
-                    headers.push($(this).text().trim());
-                });
-
-                $(this).find('tbody tr').each(function () {
-
-                    $(this).find('td').each(function (i) {
-
-                        $(this).attr('data-label', headers[i]);
-
-                        // Skip jika ada button/link/input
-                        if ($(this).find('.btn').length > 0) {
-                            return;
-                        }
-
-                        var value = $(this)
-                            .text()
-                            .replace(/\u00A0/g, '')
-                            .trim();
-
-                        //if (value === '') {
-                        //    $(this).hide();
-                        //} else {
-                        //    $(this).show();
-                        //}
-
-                    });
-
-                });
-
-            });
-
-        }
-
-        $(document).ready(function () {
-            applyMobileLabels();
-        });
-
-        if (typeof (Sys) !== "undefined") {
-
-            Sys.WebForms.PageRequestManager
-                .getInstance()
-                .add_endRequest(function () {
-                    applyMobileLabels();
-                });
-
-        }
-
-    </script>
-
-    <script src="/js/auto-icon-button.js"></script>
-    <script>
-
         function applyGridButtonIcon() {
 
-            $('#MainContent_GridView1 .btn').each(function () {
+            var iconMap = {
+                "Kemaskini": "bi bi-pencil",
+                "Nyah Aktif": "bi bi-slash-circle",
+                "Padam": "bi bi-trash",
+                "Lihat": "bi bi-eye"
+            };
 
-                var text = $(this).text().trim();
+            $('.table-bordered .btn').each(function () {
+                var $btn = $(this);
 
-                if (text === "Kemaskini" || text === "Nyah Aktif") {
-                    $(this).addClass('btn-action-icon');
+                // dah pernah diproses - skip terus, elak duplicate
+                if ($btn.data('icon-applied')) {
+                    return;
                 }
 
+                var text = $btn.text().trim();
+
+                if (iconMap.hasOwnProperty(text)) {
+                    $btn.attr('title', text);
+                    $btn.addClass('btn-action-icon');
+                    $btn.html('<i class="' + iconMap[text] + '"></i>');
+                    $btn.data('icon-applied', true);
+                }
             });
         }
 
@@ -2102,21 +2052,30 @@ h1{
 
     </script>
 
+    <script src="/js/auto-icon-button.js"></script>
+    <script>
+
+        function applyGridButtonIcon() {
+
+
+ID t
+
+    </script>
+
     <script>
         function convertActionButtonsToDropdown() {
 
-            return;
             if (window.innerWidth <= 768) return;
 
-            document.querySelectorAll('td').forEach(function (td) {
+            document.querySelectorAll('.table-bordered td').forEach(function (td) {
                 if (td.dataset.dropdownConverted === "1") return;
 
-                // ambil SEMUA link/button action dalam cell ni, tak kira dia dalam nested div ke tidak
                 var actionButtons = td.querySelectorAll(
                     'a.btn-warning.btn-sm, a.btn-primary.btn-sm, a.btn-danger.btn-sm, a.btn-info.btn-sm, a.btn-success.btn-sm'
                 );
 
-                if (actionButtons.length === 0) return;
+                // kalau takde button, atau cuma 1 button je - skip, tak payah convert
+                if (actionButtons.length <= 1) return;
 
                 var wrapper = document.createElement('div');
                 wrapper.className = 'dropdown';
@@ -2133,16 +2092,18 @@ h1{
 
                 actionButtons.forEach(function (btn) {
                     var li = document.createElement('li');
-
                     var isDanger = btn.classList.contains('btn-danger');
                     var label = btn.textContent.trim().toLowerCase();
 
-                    // buang class button lama, tukar ke dropdown-item
-                    btn.classList.remove('btn', 'btn-warning', 'btn-primary', 'btn-danger', 'btn-info', 'btn-success', 'btn-sm');
+                    btn.classList.remove('btn', 'btn-warning', 'btn-primary', 'btn-danger', 'btn-info', 'btn-success', 'btn-sm', 'btn-action-icon');
                     btn.classList.add('dropdown-item');
                     btn.classList.add(isDanger ? 'text-danger' : 'text-primary');
 
-                    // pilih icon ikut keyword dalam text button
+                    // guna title attribute sebagai fallback label kalau text dah kosong (icon-only button)
+                    if (!label && btn.title) {
+                        label = btn.title.trim().toLowerCase();
+                    }
+
                     var iconClass = 'bi bi-chevron-right me-2';
                     if (label.includes('nyah') || label.includes('padam') || label.includes('delete')) {
                         iconClass = 'bi bi-slash-circle me-2';
@@ -2152,6 +2113,18 @@ h1{
                         iconClass = 'bi bi-envelope me-2';
                     } else if (label.includes('kemaskini') || label.includes('kemas kini')) {
                         iconClass = 'bi bi-pencil me-2';
+                    }
+
+                    // KUNCI FIX: kalau dah ada icon sedia ada, buang dulu sebelum insert baru
+                    // (elak double icon bila applyGridButtonIcon dah insert icon awal)
+                    var existingIcon = btn.querySelector('i');
+                    if (existingIcon) {
+                        existingIcon.remove();
+                    }
+
+                    // pulihkan text label balik (sebab applyGridButtonIcon dah kosongkan text tadi)
+                    if (btn.textContent.trim() === '' && btn.title) {
+                        btn.textContent = btn.title;
                     }
 
                     var icon = document.createElement('i');
@@ -2164,7 +2137,6 @@ h1{
 
                 wrapper.appendChild(toggleBtn);
                 wrapper.appendChild(menu);
-
                 td.innerHTML = '';
                 td.appendChild(wrapper);
                 td.dataset.dropdownConverted = "1";
@@ -2172,7 +2144,6 @@ h1{
         }
 
         document.addEventListener('DOMContentLoaded', convertActionButtonsToDropdown);
-
         if (typeof Sys !== 'undefined' && Sys.WebForms && Sys.WebForms.PageRequestManager) {
             Sys.WebForms.PageRequestManager.getInstance().add_endRequest(convertActionButtonsToDropdown);
         }

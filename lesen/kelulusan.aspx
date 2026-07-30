@@ -16,248 +16,809 @@
             /*background-color : #ffffff !important;*/
             font-weight: normal !important;
         }
-        /*.MyTabStyle .ajax__tab_header
-        {
-            font-family: "Helvetica Neue" , Arial, Sans-Serif;
-            font-size: 14px;
-            font-weight:bold;
-            display: block;
+        
+        /*NEW LAYOUT*/
+.page-layout {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 20px;
+    align-items: start;
+}
 
+@media (max-width: 992px) {
+    .page-layout {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ===== Info Card (Maklumat Permohonan + Alamat) ===== */
+.info-card {
+    background: #fff;
+    border: 1px solid #e9ecef;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.info-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 15px;
+    padding-bottom: 18px;
+    margin-bottom: 18px;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.info-card-header-left {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.info-avatar {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: #E4DFFB;
+    color: #6C5CE7;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    flex-shrink: 0;
+}
+
+.info-card-header-left h4 {
+    margin: 0 0 4px 0;
+    font-weight: 700;
+    font-size: 16pt;
+    color: #212529;
+}
+
+.info-card-header-left .sub-text {
+    color: #6c757d;
+    font-size: 9.5pt;
+    margin-bottom: 2px;
+}
+
+.info-card-header-right {
+    text-align: right;
+}
+
+.info-card-header-right .label {
+    color: #6c757d;
+    font-size: 8.5pt;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    justify-content: flex-end;
+    margin-bottom: 2px;
+}
+
+.info-card-header-right .value {
+    font-weight: 600;
+    font-size: 10pt;
+    color: #212529;
+}
+
+.badge-status-pill {
+    display: inline-block;
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: 8.5pt;
+    font-weight: 700;
+    background: #FFF3CD;
+    color: #B8860B;
+}
+
+.section-title {
+    font-size: 9pt;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: #2E3192;
+    text-transform: uppercase;
+    margin-bottom: 15px;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px 30px;
+}
+
+.info-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.info-item i {
+    color: #adb5bd;
+    font-size: 15pt;
+    margin-top: 2px;
+}
+
+.info-item .info-label {
+    color: #6c757d;
+    font-size: 8.5pt;
+    margin-bottom: 2px;
+}
+
+.info-item .info-value {
+    font-weight: 600;
+    color: #212529;
+    font-size: 10pt;
+}
+
+.address-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.address-card {
+    border: 1px solid #e9ecef;
+    border-radius: 10px;
+    padding: 15px 18px;
+    display: flex;
+    gap: 12px;
+}
+
+.address-card i {
+    color: #adb5bd;
+    font-size: 15pt;
+    margin-top: 2px;
+}
+
+.address-card .addr-label {
+    color: #6c757d;
+    font-size: 8.5pt;
+    margin-bottom: 4px;
+}
+
+.address-card .addr-value {
+    font-weight: 600;
+    font-size: 9.5pt;
+    color: #212529;
+    line-height: 1.5;
+}
+
+/* ===== Sejarah Ulasan (timeline horizontal list) ===== */
+.sejarah-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.sejarah-item {
+    display: flex;
+    gap: 15px;
+    padding-bottom: 18px;
+}
+
+.sejarah-icon {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: #E4DFFB;
+    color: #6C5CE7;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+}
+
+.sejarah-icon.success {
+    background: #D4EDDA;
+    color: #28a745;
+}
+
+.sejarah-date {
+    font-size: 8pt;
+    color: #6c757d;
+    white-space: nowrap;
+    min-width: 90px;
+}
+
+.sejarah-body {
+    flex: 1;
+}
+
+.sejarah-body .row-top {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 3px;
+}
+
+.sejarah-body .actor {
+    font-weight: 700;
+    font-size: 9.5pt;
+    color: #212529;
+}
+
+.badge-mini {
+    font-size: 7.5pt;
+    font-weight: 700;
+    padding: 2px 10px;
+    border-radius: 20px;
+    background: #D4EDDA;
+    color: #28a745;
+}
+
+.badge-mini.blue {
+    background: #DCE7FB;
+    color: #2E6FD9;
+}
+
+.sejarah-body .desc {
+    font-size: 8.5pt;
+    color: #6c757d;
+}
+
+/* ===== Sidebar: Status Proses ===== */
+.status-proses-card {
+    background: #fff;
+    border: 1px solid #e9ecef;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.status-proses-title {
+    font-size: 9pt;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: #2E3192;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+}
+
+.status-timeline {
+    position: relative;
+    padding-left: 8px;
+}
+
+.status-step {
+    position: relative;
+    padding-left: 34px;
+    padding-bottom: 24px;
+}
+
+.status-step:last-child {
+    padding-bottom: 0;
+}
+
+.status-step::before {
+    content: '';
+    position: absolute;
+    left: 11px;
+    top: 26px;
+    bottom: -2px;
+    width: 2px;
+    background: #e9ecef;
+}
+
+.status-step:last-child::before {
+    display: none;
+}
+
+.status-step.done::before {
+    background: #28a745;
+}
+
+.status-step-icon {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    color: #fff;
+    background: #dee2e6;
+    z-index: 1;
+}
+
+.status-step.done .status-step-icon {
+    background: #28a745;
+}
+
+.status-step.current .status-step-icon {
+    background: #2E3192;
+    box-shadow: 0 0 0 4px rgba(46, 49, 146, 0.15);
+}
+
+.status-step.pending .status-step-icon {
+    background: #fff;
+    border: 2px solid #dee2e6;
+}
+
+.status-step-title {
+    font-weight: 700;
+    font-size: 9.5pt;
+    color: #212529;
+    margin-bottom: 3px;
+}
+
+.status-step.pending .status-step-title {
+    color: #adb5bd;
+    font-weight: 600;
+}
+
+.status-step-date {
+    font-size: 8pt;
+    color: #6c757d;
+}
+
+.status-step.current .status-step-date {
+    color: #2E3192;
+    font-weight: 600;
+}
+
+.status-step.pending .status-step-date {
+    color: #adb5bd;
+}
+
+/* ===== Sidebar: Lampiran Permohonan ===== */
+.lampiran-card {
+    background: #fff;
+    border: 1px solid #e9ecef;
+    border-radius: 10px;
+    padding: 20px;
+}
+
+.lampiran-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid #f1f3f5;
+}
+
+.lampiran-item:last-of-type {
+    border-bottom: none;
+}
+
+.lampiran-icon {
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    background: #FDEBEC;
+    color: #E74C3C;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    flex-shrink: 0;
+}
+
+.lampiran-name {
+    flex: 1;
+    font-size: 9pt;
+    font-weight: 500;
+    color: #212529;
+}
+
+.lampiran-download {
+    color: #6c757d;
+    font-size: 14px;
+    text-decoration: none;
+}
+
+.lampiran-download:hover {
+    color: #2E3192;
+}
+
+.btn-lihat-semua {
+    width: 100%;
+    margin-top: 12px;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #2E3192;
+    background: #fff;
+    color: #2E3192;
+    font-weight: 600;
+    font-size: 9pt;
+    text-align: center;
+    display: block;
+    text-decoration: none;
+}
+
+.btn-lihat-semua:hover {
+    background: #2E3192;
+    color: #fff;
+}
+
+/* ===== Ulasan / Catatan + action buttons bawah ===== */
+.ulasan-footer-card {
+    background: #fff;
+    border: 1px solid #e9ecef;
+    border-radius: 10px;
+    padding: 20px;
+    margin-top: 20px;
+    width : 100%;
+}
+
+.ulasan-footer-card textarea {
+    width: 100%;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 9.5pt;
+    min-height: 90px;
+    resize: vertical;
+}
+
+.ulasan-footer-card,
+.ulasan-footer-card textarea,
+.ulasan-footer-card * {
+    box-sizing: border-box;
+}
+
+.ulasan-char-count {
+    font-size: 8pt;
+    color: #adb5bd;
+    margin-top: 5px;
+}
+
+.ulasan-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 18px;
+    flex-wrap: wrap;
+}
+
+.ulasan-actions .btn-action {
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 9pt;
+    border: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    min-width: 140px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.ulasan-actions .btn-action small {
+    font-weight: 400;
+    font-size: 7.5pt;
+    opacity: 0.85;
+}
+
+.btn-kembalikan {
+    background: #fff;
+    color: #E74C3C;
+    border: 1px solid #F5C6CB !important;
+}
+
+.btn-simpan {
+    background: #fff;
+    color: #212529;
+    border: 1px solid #dee2e6 !important;
+}
+
+.btn-luluskan {
+    background: #2E3192;
+    color: #fff;
+}
+
+.address-card .form-control-plain {
+    border: none !important;
+    background: transparent !important;
+    padding: 0 !important;
+    font-weight: 600;
+    font-size: 9.5pt;
+    color: #212529;
+    resize: none;
+    box-shadow: none !important;
+    width: 100%;
+}
+
+.address-card .form-control-plain:focus {
+    outline: none;
+    box-shadow: none !important;
+}
+        /*END NEW LAYOUT*/
+
+        /*LAMPIRAN*/
+
+.lampiran-card {
+    background: #fff;
+    border: 1px solid #e9ecef;
+    border-radius: 10px;
+    padding: 20px;
+}
+
+.lampiran-card .lampiran-gridview {
+    width: 100%;
+    border-collapse: collapse;
+    border: none !important;
+}
+
+.lampiran-card .lampiran-gridview tr {
+    border: none !important;
+}
+
+.lampiran-card .lampiran-gridview td {
+    border: none !important;
+    padding: 0 !important;
+}
+
+.lampiran-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid #f1f3f5;
+}
+
+.lampiran-card .lampiran-gridview tr:last-child .lampiran-item {
+    border-bottom: none;
+}
+
+.lampiran-icon {
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    background: #FDEBEC;
+    color: #E74C3C;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    flex-shrink: 0;
+}
+
+.lampiran-name {
+    flex: 1;
+    font-size: 9pt;
+    font-weight: 500;
+    color: #212529;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.lampiran-download {
+    color: #6c757d;
+    font-size: 14px;
+    text-decoration: none;
+    flex-shrink: 0;
+}
+
+.lampiran-download:hover {
+    color: #2E3192;
+}
+
+.lampiran-empty {
+    text-align: center;
+    color: #adb5bd;
+    font-size: 9pt;
+    padding: 20px 0;
+}
+        /*END OF LAMPIRAN*/
+
+        /*ULASAN*/
+
+.nota-card {
+    background: #fff;
+    border: 1px solid #e9ecef;
+    border-radius: 10px;
+    padding: 20px;
+    margin-top: 20px;
+}
+
+.nota-block {
+    margin-bottom: 20px;
+}
+
+.nota-block:last-child {
+    margin-bottom: 0;
+}
+
+.nota-label-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.nota-label {
+    font-size: 9pt;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    color: #2E3192;
+    text-transform: uppercase;
+    margin: 0;
+}
+
+.nota-signoff {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 9pt;
+}
+
+.nota-signoff .actor-name {
+    font-weight: 600;
+    color: #212529;
+}
+
+.nota-signoff .status-pill {
+    font-size: 8pt;
+    font-weight: 700;
+    padding: 3px 12px;
+    border-radius: 20px;
+}
+
+.nota-signoff .status-pill.support {
+    background: #D4EDDA;
+    color: #28a745;
+}
+
+.nota-signoff .status-pill.reject {
+    background: #FDEBEC;
+    color: #E74C3C;
+}
+
+.nota-card textarea.form-control {
+    width: 100%;
+    box-sizing: border-box;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 9.5pt;
+    resize: vertical;
+}
+
+.nota-kelulusan-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.nota-kelulusan-options table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.nota-kelulusan-options td {
+    padding: 0 !important;
+}
+
+.nota-kelulusan-options input[type="radio"] {
+    display: none;
+}
+
+.nota-kelulusan-options label {
+    display: inline-block;
+    padding: 8px 16px;
+    border: 1px solid #dee2e6;
+    border-radius: 20px;
+    font-size: 8.5pt;
+    font-weight: 600;
+    color: #495057;
+    cursor: pointer;
+    margin: 4px 6px 4px 0;
+    transition: all 0.15s ease-in-out;
+}
+
+        .nota-kelulusan-options input[type="radio"]:checked + label {
+            background: #2E3192;
+            color : #ffffff;
         }
-        .MyTabStyle .ajax__tab_header .ajax__tab_outer
-        {
-            border-color: #222;
-            color: #222;
-            padding-left: 10px;
-            margin-right: 3px;
-            border:solid 1px #d7d7d7;
-        }
-        .MyTabStyle .ajax__tab_header .ajax__tab_inner
-        {
-            border-color: #666;
-            color: #666;
-            padding: 3px 10px 2px 0px;
-        }
-        .MyTabStyle .ajax__tab_hover .ajax__tab_outer
-        {
-            background-color:#9c3;
-        }
-        .MyTabStyle .ajax__tab_hover .ajax__tab_inner
-        {
-            color: #fff;
-        }
-        .MyTabStyle .ajax__tab_active .ajax__tab_outer
-        {
-            border-bottom-color: #ffffff;
-            background-color: #d7d7d7;
-        }
-        .MyTabStyle .ajax__tab_active .ajax__tab_inner
-        {
-            color: #000;
-            border-color: #333;
-        }
-        .MyTabStyle .ajax__tab_body
-        {
-            font-family: verdana,tahoma,helvetica;
-            font-size: 10pt;
-            background-color: #fff;
-            border-top-width: 0;
-            border: solid 1px #d7d7d7;
-            border-top-color: #ffffff;
-        }
-*/
 
 
-        .ajax__tab_xp .ajax__tab_header {
-            background-image: url('') !important;
-            font-size: 11pt !important;
-            height: 40px !important;
-            color: #000 !important;
-        }
+.agensi-ulasan-card {
+    background: #F7F6FE;
+    border: 1px solid #E9ECEF;
+    border-radius: 10px;
+    padding: 18px;
+}
 
-            .ajax__tab_xp .ajax__tab_header .ajax__tab_outer {
-                background-image: url('') !important;
-            }
+.agensi-ulasan-item {
+    padding-bottom: 16px;
+    margin-bottom: 16px;
+    border-bottom: 1px solid #E0DCF5;
+}
 
-            .ajax__tab_xp .ajax__tab_header .ajax__tab_inner {
-                /* background-image: url('WebResource.axd?d=zNSHuGr6hc7c16bSY9eWXPrNBVsZSwehGbscYki57kRbdTai8trIfAuzMrttb3pm0uA8ApvgRAgRqJhPO3fCauUTiyK3qOK21RmA7QURs6o63zcRczK2Ul9bZbli-JHArtBLoeaLoTT7L8haCKoAtg2&t=636970230480000000'); */
-            }
+.agensi-ulasan-item:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
 
-            .ajax__tab_xp .ajax__tab_header .ajax__tab_tab {
-                background-image: url('') !important;
-            }
+.agensi-ulasan-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 8px;
+}
 
-            .ajax__tab_xp .ajax__tab_header .ajax__tab_hover .ajax__tab_outer {
-                background-image: url('') !important;
-            }
+.agensi-ulasan-name {
+    font-weight: 700;
+    font-size: 9.5pt;
+    color: #212529;
+}
 
-            .ajax__tab_xp .ajax__tab_header .ajax__tab_hover .ajax__tab_inner {
-                background-image: url('') !important;
-            }
+.agensi-ulasan-header .btn-lihat-surat {
+    padding: 4px 12px;
+    font-size: 8pt;
+    border-radius: 20px;
+    background: #fff;
+    border: 1px solid #dee2e6;
+    color: #495057;
+    font-weight: 600;
+    text-decoration: none;
+}
 
-            .ajax__tab_xp .ajax__tab_header .ajax__tab_hover .ajax__tab_tab {
-                background-image: url('') !important;
-            }
+.agensi-ulasan-header .btn-lihat-surat:hover {
+    border-color: #2E3192;
+    color: #2E3192;
+}
 
-            .ajax__tab_xp .ajax__tab_header .ajax__tab_active .ajax__tab_outer {
-                background-image: url('') !important;
-            }
+.agensi-pengesah-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    font-size: 8.5pt;
+    color: #495057;
+    margin-bottom: 6px;
+}
 
-            .ajax__tab_xp .ajax__tab_header .ajax__tab_active .ajax__tab_inner {
-                /* background-image: url('WebResource.axd?d=7d55T9B4j42nYTnSODbo405bsr8zp3hoGjir6Z58ZoKPdLgwtf6qu3MXJibmbhhdha0NpvsKmg-yAHSNyDR0n5oskACF5v0vuvb-ErTRvIZqPQgNHZyi6J2H6QcoTzSVIy4XafuCbAtMT3T8iHBky3A6CmqrVChVQYLFcawUCe01&t=636970230480000000'); */
-            }
+.agensi-pengesah-row b {
+    color: #212529;
+}
 
-            .ajax__tab_xp .ajax__tab_header .ajax__tab_active .ajax__tab_tab {
-                background-image: url('') !important;
-            }
+.status-pill-sm {
+    font-size: 7.5pt;
+    font-weight: 700;
+    padding: 2px 10px;
+    border-radius: 20px;
+    display: inline-block;
+}
 
-        .ajax__tab_xp .ajax__tab_header_verticalleft {
-            background-image: url('') !important;
-        }
+.status-pill-sm.pending {
+    background: #FFF3CD;
+    color: #B8860B;
+}
 
-            .ajax__tab_xp .ajax__tab_header_verticalleft .ajax__tab_outer {
-                background-image: url('') !important;
-            }
+.status-pill-sm.support {
+    background: #D4EDDA;
+    color: #28a745;
+}
 
-            .ajax__tab_xp .ajax__tab_header_verticalleft .ajax__tab_inner {
-                background-image: url('') !important;
-            }
+.status-pill-sm.reject {
+    background: #FDEBEC;
+    color: #E74C3C;
+}
 
-            .ajax__tab_xp .ajax__tab_header_verticalleft .ajax__tab_tab {
-                background-image: url('') !important;
-            }
+.agensi-nota-text {
+    font-size: 8.5pt;
+    color: #6c757d;
+    line-height: 1.5;
+}
+        /*END ULASAN*/
 
-            .ajax__tab_xp .ajax__tab_header_verticalleft .ajax__tab_hover .ajax__tab_outer {
-                background-image: url('') !important;
-            }
 
-            .ajax__tab_xp .ajax__tab_header_verticalleft .ajax__tab_hover .ajax__tab_inner {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header_verticalleft .ajax__tab_hover .ajax__tab_tab {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header_verticalleft .ajax__tab_active .ajax__tab_outer {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header_verticalleft .ajax__tab_active .ajax__tab_inner {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header_verticalleft .ajax__tab_active .ajax__tab_tab {
-                background-image: url('') !important;
-            }
-
-        .ajax__tab_xp .ajax__tab_header_verticalright {
-            background-image: url('') !important;
-        }
-
-            .ajax__tab_xp .ajax__tab_header_verticalright .ajax__tab_outer {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header_verticalright .ajax__tab_inner {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header_verticalright .ajax__tab_tab {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header_verticalright .ajax__tab_hover .ajax__tab_outer {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header_verticalright .ajax__tab_hover .ajax__tab_inner {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header_verticalright .ajax__tab_hover .ajax__tab_tab {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header_verticalright .ajax__tab_active .ajax__tab_outer {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header_verticalright .ajax__tab_active .ajax__tab_inner {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header_verticalright .ajax__tab_active .ajax__tab_tab {
-                background-image: url('') !important;
-            }
-
-        .ajax__tab_xp .ajax__tab_header_bottom {
-            background-image: url('') !important;
-        }
-
-            .ajax__tab_xp .ajax__tab_header_bottom .ajax__tab_outer {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header_bottom .ajax__tab_inner {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header_bottom .ajax__tab_tab {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header_bottom .ajax__tab_hover .ajax__tab_outer {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header_bottom .ajax__tab_hover .ajax__tab_inner {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header_bottom .ajax__tab_hover .ajax__tab_tab {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header_bottom .ajax__tab_active .ajax__tab_outer {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header_bottom .ajax__tab_active .ajax__tab_inner {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header_bottom .ajax__tab_active .ajax__tab_tab {
-                background-image: url('') !important;
-            }
-
-        .ajax__tab_xp .ajax__tab_header .ajax__tab_active .ajax__tab_inner {
-            background-image: url('') !important;            
-            width: 120px !important;
-            text-align: center !important;
-            vertical-align: middle !important;
-            border-top-right-radius: 10px 10px !important;
-            border-top-left-radius: 10px 10px !important;
-        }
-
-            .ajax__tab_xp .ajax__tab_header .ajax__tab_active .ajax__tab_inner a {
-                color: #fff !important;
-                /*font-weight : bold !important;*/
-            }
-
-        .ajax__tab_xp .ajax__tab_header .ajax__tab_inner {
-            background-image: url('') !important;
-            background-color: #E9ECEF !important;
-            width: 120px !important;
-            text-align: center !important;
-            vertical-align: middle !important;
-            border-top-right-radius: 10px 10px !important;
-            border-top-left-radius: 10px 10px !important;
-        }
-
-            .ajax__tab_xp .ajax__tab_header .ajax__tab_inner a {
-                color: #413a3a !important;
-            }
 
 
         .styleDisplayNone {
@@ -302,150 +863,303 @@
     <section class="content">
         <div class="container-fluid">
 
+           
+
             <asp:FormView ID="FormView1" runat="server" DataKeyNames="JenisLesen_ID"
                 DataSourceID="SqlDataSourceForm" DefaultMode="Edit" Width="100%" CssClass="CustomTab">
                 <EditItemTemplate>
 
-                    <div class="card card-warning">
-                        <div class="card-header">
-                            <h3 class="card-title">
-                                <div runat="server" id="idWindowTitle2">Maklumat</div>
-                                <h3></h3>
-                                <div class="card-tools">
-                                    <button class="btn btn-tool" data-card-widget="collapse" type="button">
-                                        <i class="fas fa-minus"></i>
-                                    </button>
-                                </div>
-                            </h3>
+                <div class="page-layout">
 
+                <!-- ===== KIRI: content utama ===== -->
+                <div>
+
+                <!-- Maklumat Permohonan + Alamat -->
+                <div class="info-card">
+
+                    <div class="info-card-header">
+                        <div class="info-card-header-left">
+                            <div class="info-avatar"><i class="bi bi-person-fill"></i></div>
+                            <div>
+                                <h4><asp:Label ID="Label1" runat="server" Text='<%# Eval("Pemohon_Name") %>'></asp:Label></h4>
+                                <div class="sub-text"><asp:Label ID="Label3" runat="server" Text='<%# Bind("JenisLesen_Description") %>'></asp:Label></div>
+                                <div class="sub-text">No. Fail : <asp:Label ID="Label26" runat="server" Text='<%# Eval("Rujukan") %>'></asp:Label></div>
+                            </div>
                         </div>
-                        <!-- /.card-header -->
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label>Nama Pemohon</label>
-                                        <asp:Label ID="Label1" runat="server" Text='<%# Eval("Pemohon_Name") %>' CssClass="form-control"></asp:Label>
-                                    </div>
-                                </div>
-								
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label>Nama Syarikat</label>
-                                        <asp:Label ID="Label145" runat="server" Text='<%# Eval("NamaSyarikat") %>' CssClass="form-control"></asp:Label>
-                                    </div>
-                                </div>								
-
-                                <div class="col-md-4">
-
-                                    <div class="form-group">
-                                        <label>Tarikh mohon</label>
-                                        <asp:Label ID="Label2" runat="server" Text='<%# Eval("TarikhMohon", "{0:yyyy-MM-dd}") %>' CssClass="form-control"></asp:Label>
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-
-                            <div class="row">
-
-                                <div class="col-md-4">
-
-                                    <div class="form-group">
-                                        <label>Jenis Lesen</label>
-                                        <asp:Label ID="Label3" runat="server" Text='<%# Bind("JenisLesen_Description") %>' CssClass="form-control"></asp:Label>
-                                    </div>
-                                </div>
-								
-                                <div class="col-md-4">
-
-                                    <div class="form-group">
-                                        <label>Jenis Perniagaan</label>
-                                        <asp:Label ID="Label22" runat="server" Text='<%# Bind("JenisPerniagaan") %>' CssClass="form-control"></asp:Label>
-                                    </div>
-                                </div>								
-
-                                <div class="col-md-4" runat="server" visible='<%# If(IsDBNull(Eval("JabatanAgensi_IsLesen")), "true", If(Eval("JabatanAgensi_IsLesen") = "1", "true", "false")) %>'>
-
-                                    <div class="form-group">
-                                        <label>&nbsp; </label>
-                                        <%-- <asp:LinkButton ID="btnViewDetail" runat="server" CausesValidation="False"  Text="Lihat Maklumat Permohonan" 
-                                            Visible='<%# If(IsDBNull(Eval("JabatanAgensi_IsLesen")), "true", If(Eval("JabatanAgensi_IsLesen") = "True", "true", "false")) %>'
-                                            CssClass="btn btn-primary form-control" OnClick="btnViewDetail_Click"  />--%>
-                                        <asp:HyperLink ID="HyperLink1" runat="server" Visible='<%# If(IsDBNull(Eval("JabatanAgensi_IsLesen")), "true", If(Eval("JabatanAgensi_IsLesen") = "1", "true", "false")) %>'
-                                            CssClass="btn btn-primary form-control" NavigateUrl='<%# "~/lesen/appregister.aspx?p_Id=3348&m_Id=3349&pid=" + Eval("Permohonan_ID").ToString() %>' Target="_blank">Lihat Maklumat Permohonan</asp:HyperLink>
-                                    </div>
-                                </div>
-
-                                <!-- /.col -->
-                            </div>
-                            <!-- /.row -->
-							
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>Alamat Pemohon</label>
-                                        <asp:TextBox ID="txtAlamatPemohon" runat="server" Text='<%# Eval("Pemohon_Address") %>' CssClass="form-control" BackColor="White" TextMode="MultiLine" Rows="4" Enabled="false"></asp:TextBox>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-3">
-
-                                    <div class="form-group">
-                                        <label>Alamat Lokasi</label>
-                                        <asp:TextBox ID="TextBox1" runat="server" Text='<%# Eval("AlamatPremis") %>' CssClass="form-control" BackColor="White" TextMode="MultiLine" Rows="4" Enabled="false"></asp:TextBox>
-                                    </div>
-
-                                </div>
-
-                                <div class="col-md-3">
-
-                                    <div class="form-group">
-                                        <label>No. Fail</label>
-                                        <asp:Label ID="Label26" runat="server" Text='<%# Eval("Rujukan") %>' CssClass="form-control" ></asp:Label>
-                                    </div>
-
-                                </div>
-
-                                <div class="col-md-3">
-
-                                    <div class="form-group">
-                                        <label>No. Tel. Pemohon</label>
-                                        <asp:Label ID="Label27" runat="server" Text='<%# Eval("Pemohon_MobileNo") %>' CssClass="form-control"></asp:Label>
-                                    </div>
-
-                                </div>
-
-                            </div>
-							
-                            <hr />
-                            <div class="row">
-                                <div class="col-md-6">
-
-                                    <div class="form-group">
-
-                                        <label>Jabatan/Agensi</label><br />
-                                        <asp:Label ID="Label4" runat="server" Text='<%# Bind("JabatanAgensi_Description") %>' CssClass="form-control"></asp:Label>
-                                    </div>
-                                    <!-- /.form-group -->
-
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>Status</label>
-                                        <asp:Label ID="Label5" runat="server" Text='<%# Eval("Description") %>' CssClass="form-control"></asp:Label>
-                                    </div>
-                                </div>
-
-
-                            </div>
-
-
+                        <div class="info-card-header-right">
+                            <div class="label"><i class="bi bi-calendar3"></i> Tarikh Mohon</div>
+                            <div class="value"><asp:Label ID="Label2" runat="server" Text='<%# Eval("TarikhMohon", "{0:dd MMM yyyy}") %>'></asp:Label></div>
+                            <br />
+                            <div class="label" style="margin-top:8px;">Status Semasa</div>
+                            <span class="badge-status-pill"><asp:Label ID="Label5" runat="server" Text='<%# Eval("Description") %>'></asp:Label></span>
                         </div>
-                        <!-- /.card-body -->
+                    </div>
+
+                    <div runat="server" id="idWindowTitle2" style="display:none;">Maklumat</div>
+
+                    <div class="section-title">Maklumat Permohonan</div>
+                    <div class="info-grid">
+
+                        <div class="info-item">
+                            <i class="bi bi-person"></i>
+                            <div>
+                                <div class="info-label">Nama Pemohon</div>
+                                <div class="info-value"><asp:Label ID="Label1b" runat="server" Text='<%# Eval("Pemohon_Name") %>'></asp:Label></div>
+                            </div>
+                        </div>
+
+                        <div class="info-item">
+                            <i class="bi bi-building"></i>
+                            <div>
+                                <div class="info-label">Nama Syarikat</div>
+                                <div class="info-value"><asp:Label ID="Label145" runat="server" Text='<%# Eval("NamaSyarikat") %>'></asp:Label></div>
+                            </div>
+                        </div>
+
+                        <div class="info-item">
+                            <i class="bi bi-calendar3"></i>
+                            <div>
+                                <div class="info-label">Tarikh Mohon</div>
+                                <div class="info-value"><asp:Label ID="Label2b" runat="server" Text='<%# Eval("TarikhMohon", "{0:dd MMM yyyy}") %>'></asp:Label></div>
+                            </div>
+                        </div>
+
+                        <div class="info-item">
+                            <i class="bi bi-file-earmark-text"></i>
+                            <div>
+                                <div class="info-label">Jenis Lesen</div>
+                                <div class="info-value"><asp:Label ID="Label3b" runat="server" Text='<%# Bind("JenisLesen_Description") %>'></asp:Label></div>
+                            </div>
+                        </div>
+
+                        <div class="info-item">
+                            <i class="bi bi-person-badge"></i>
+                            <div>
+                                <div class="info-label">Jenis Perniagaan</div>
+                                <div class="info-value"><asp:Label ID="Label22" runat="server" Text='<%# Bind("JenisPerniagaan") %>'></asp:Label></div>
+                            </div>
+                        </div>
+
+                        <div class="info-item">
+                            <i class="bi bi-telephone"></i>
+                            <div>
+                                <div class="info-label">No. Tel. Pemohon</div>
+                                <div class="info-value"><asp:Label ID="Label27" runat="server" Text='<%# Eval("Pemohon_MobileNo") %>'></asp:Label></div>
+                            </div>
+                        </div>
+
+                        <div class="info-item">
+                            <i class="bi bi-file-earmark"></i>
+                            <div>
+                                <div class="info-label">No. Fail</div>
+                                <div class="info-value"><asp:Label ID="Label26b" runat="server" Text='<%# Eval("Rujukan") %>'></asp:Label></div>
+                            </div>
+                        </div>
+
+                        <div class="info-item">
+                            <i class="bi bi-diagram-3"></i>
+                            <div>
+                                <div class="info-label">Jabatan/Agensi</div>
+                                <div class="info-value"><asp:Label ID="Label4" runat="server" Text='<%# Bind("JabatanAgensi_Description") %>'></asp:Label></div>
+                            </div>
+                        </div>
 
                     </div>
+
+                    <hr style="margin: 20px 0; border-color: #e9ecef;" />
+
+                    <div class="section-title">Alamat</div>
+                    <div class="address-grid">
+
+                        <div class="address-card">
+                            <i class="bi bi-geo-alt"></i>
+                            <div style="flex:1;">
+                                <div class="addr-label">Alamat Pemohon</div>
+                                <asp:TextBox ID="txtAlamatPemohon" runat="server" Text='<%# Eval("Pemohon_Address") %>' CssClass="form-control-plain" TextMode="MultiLine" Rows="4" Enabled="false"></asp:TextBox>
+                            </div>
+                        </div>
+
+                        <div class="address-card">
+                            <i class="bi bi-geo-alt-fill"></i>
+                            <div style="flex:1;">
+                                <div class="addr-label">Alamat Lokasi</div>
+                                <asp:TextBox ID="TextBox1" runat="server" Text='<%# Eval("AlamatPremis") %>' CssClass="form-control-plain" TextMode="MultiLine" Rows="4" Enabled="false"></asp:TextBox>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Lihat Maklumat Permohonan (kekalkan logic visibility asal) -->
+                    <div runat="server" visible='<%# If(IsDBNull(Eval("JabatanAgensi_IsLesen")), "true", If(Eval("JabatanAgensi_IsLesen") = "1", "true", "false")) %>' style="margin-top: 15px;">
+                        <asp:HyperLink ID="HyperLink1" runat="server"
+                            CssClass="btn btn-primary btn-sm"
+                            NavigateUrl='<%# "~/lesen/appregister.aspx?p_Id=3348&m_Id=3349&pid=" + Eval("Permohonan_ID").ToString() %>'
+                            Target="_blank">Lihat Maklumat Permohonan</asp:HyperLink>
+                    </div>
+
+                </div>        
+
+                <!-- Sejarah Ulasan -->
+                <%--<div class="info-card">
+                    <div class="sejarah-header">
+                        <div class="section-title" style="margin-bottom:0;">Sejarah Ulasan</div>
+                        <a href="#" style="font-size: 8.5pt; color:#2E3192; font-weight:600; text-decoration:none;">Lihat Sejarah Penuh <i class="bi bi-chevron-right"></i></a>
+                    </div>
+
+                    <div class="sejarah-item">
+                        <div class="sejarah-icon success"><i class="bi bi-eye"></i></div>
+                        <div class="sejarah-date">10 Jul 2026<br />10:15 AM</div>
+                        <div class="sejarah-body">
+                            <div class="row-top">
+                                <span class="actor">Ketua Bahagian Pelesenan</span>
+                                <span class="badge-mini blue">DISEMAK</span>
+                            </div>
+                            <div class="desc">Surat telah disemak.</div>
+                        </div>
+                    </div>
+
+                    <div class="sejarah-item">
+                        <div class="sejarah-icon"><i class="bi bi-send"></i></div>
+                        <div class="sejarah-date">09 Jul 2026<br />03:20 PM</div>
+                        <div class="sejarah-body">
+                            <div class="row-top">
+                                <span class="actor">Kerani Pelesenan</span>
+                                <span class="badge-mini">DIHANTAR</span>
+                            </div>
+                            <div class="desc">Surat telah dikemas kini dan dihantar untuk ulasan.</div>
+                        </div>
+                    </div>
+
+                    <div class="sejarah-item">
+                        <div class="sejarah-icon"><i class="bi bi-send"></i></div>
+                        <div class="sejarah-date">08 Jul 2026<br />09:05 AM</div>
+                        <div class="sejarah-body">
+                            <div class="row-top">
+                                <span class="actor">Kerani Pelesenan</span>
+                                <span class="badge-mini">DIHANTAR</span>
+                            </div>
+                            <div class="desc">Permohonan dihantar untuk ulasan.</div>
+                        </div>
+                    </div>
+                </div>--%>
+
+                </div>  
+                    
+                <!-- ===== KANAN: sidebar ===== -->
+                <div>
+
+                    <!-- Status Proses -->
+                    <div class="status-proses-card">
+                        <div class="status-proses-title">Status Proses</div>
+                        <div class="status-timeline">
+
+                            <div class="status-step done">
+                                <div class="status-step-icon"><i class="bi bi-check-lg"></i></div>
+                                <div class="status-step-title">Permohonan Direkod</div>
+                                <div class="status-step-date">08 Jul 2026 09:05 AM</div>
+                            </div>
+
+                            <div class="status-step done">
+                                <div class="status-step-icon"><i class="bi bi-check-lg"></i></div>
+                                <div class="status-step-title">Surat Mohon Ulasan Dihantar</div>
+                                <div class="status-step-date">09 Jul 2026 03:20 PM</div>
+                            </div>
+
+                            <div class="status-step done">
+                                <div class="status-step-icon"><i class="bi bi-check-lg"></i></div>
+                                <div class="status-step-title">Surat Mohon Ulasan Disemak (KB)</div>
+                                <div class="status-step-date">10 Jul 2026 10:15 AM</div>
+                            </div>
+
+                            <div class="status-step current">
+                                <div class="status-step-icon"><i class="bi bi-circle-fill" style="font-size:8px;"></i></div>
+                                <div class="status-step-title">Semakan KB Pelesenan</div>
+                                <div class="status-step-date">Menunggu tindakan</div>
+                            </div>
+
+                            <div class="status-step pending">
+                                <div class="status-step-icon"></div>
+                                <div class="status-step-title">Kelulusan KJ Pelesenan</div>
+                                <div class="status-step-date">Belum selesai</div>
+                            </div>
+
+                            <div class="status-step pending">
+                                <div class="status-step-icon"></div>
+                                <div class="status-step-title">Kelulusan Lesen</div>
+                                <div class="status-step-date">Belum selesai</div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- Lampiran Permohonan -->
+                        <div class="lampiran-card">
+                            <div class="section-title">Lampiran Permohonan</div>
+
+                            <asp:GridView ID="GridView2" runat="server"
+                                ShowHeaderWhenEmpty="False"
+                                ShowHeader="False"
+                                AutoGenerateColumns="False"
+                                DataKeyNames="PermohonanFail_ID"
+                                DataSourceID="SqlDataSourceTabLampiran"
+                                CssClass="lampiran-gridview"
+                                GridLines="None"
+                                EmptyDataText="Tiada lampiran direkodkan.">
+
+                                <Columns>
+
+                                    <asp:TemplateField>
+                                        <ItemTemplate>
+
+                                            <asp:HiddenField ID="hdnFldPermohonanFail_FileName" Value='<%# Bind("PermohonanFail_FileName") %>' runat="server" />
+                                            <asp:HiddenField ID="hdnFldPermohonanFail_ContentType" Value='<%# Bind("PermohonanFail_ContentType") %>' runat="server" />
+                                            <asp:HiddenField ID="hdnFldPermohonanFail_FilePath" Value='<%# Bind("PermohonanFail_FilePath") %>' runat="server" />
+
+                                            <div class="lampiran-item">
+                                                <div class="lampiran-icon"><i class="bi bi-file-earmark-pdf"></i></div>
+                                                <div class="lampiran-name" title='<%# Eval("PermohonanFail_FileName") %>'>
+                                                    <%# If(Len(Eval("PermohonanFail_Remarks").ToString()) > 0, Eval("PermohonanFail_Remarks"), Eval("PermohonanFail_FileName")) %>
+                                                </div>
+                                                <asp:HyperLink ID="hpFile" runat="server"
+                                                    CssClass="lampiran-download"
+                                                    NavigateUrl='<%# Eval("PermohonanFail_FilePath") %>'
+                                                    Target="_blank">
+                                                    <i class="bi bi-download"></i>
+                                                </asp:HyperLink>
+                                            </div>
+
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
+
+                                </Columns>
+
+                                <EmptyDataRowStyle CssClass="lampiran-empty" />
+
+                            </asp:GridView>
+
+                        </div>
+
+						<asp:SqlDataSource ID="SqlDataSourceTabLampiran" runat="server"
+							ConnectionString="<%$ ConnectionStrings:webcon_ConnectionStr %>"
+							SelectCommand=" SELECT a.*, b.StatusID FROM LESEN_PermohonanFail a INNER JOIN LESEN_Permohonan b ON a.PermohonanFail_PermohonanID = b.Permohonan_ID 
+							WHERE a.PermohonanFail_JenisLampiran = 'U' AND a.PermohonanFail_PermohonanID = @Permohonan_ID"
+							DeleteCommand=""
+							UpdateCommand="">
+							<DeleteParameters>
+								
+							</DeleteParameters>
+							<SelectParameters>
+								<asp:ControlParameter ControlID="GridView1" Name="Permohonan_ID" PropertyName="SelectedDataKey.Values[0]"></asp:ControlParameter>
+							</SelectParameters>
+							<UpdateParameters>
+				   
+							</UpdateParameters>
+						</asp:SqlDataSource>                    
+
+                </div>
+
+                </div>                
+
                 </EditItemTemplate>
                 <InsertItemTemplate>
                     <div class="card card-primary">
@@ -1734,13 +2448,13 @@
                     </ContentTemplate>
                 </asp:TabPanel>
 				
-				<asp:TabPanel runat="server" ID="TabLampiran" HeaderText="Ulasan">
+				<asp:TabPanel runat="server" ID="TabLampiran" HeaderText="Ulasan" Visible="false">
 					<HeaderTemplate>Lampiran</HeaderTemplate>
 					<ContentTemplate>
 
                         <%--<asp:LinkButton runat="server" Text="Lihat Surat Mohon Ulasan"  CausesValidation="False" ID="lbSurat" CssClass="btn btn-warning btn-sm" ></asp:LinkButton>--%>
 
-						<asp:GridView ID="GridView2" runat="server" ShowHeaderWhenEmpty="True"
+						<%--<asp:GridView ID="GridView2" runat="server" ShowHeaderWhenEmpty="True"
 							AllowSorting="True" AutoGenerateColumns="False" DataKeyNames="PermohonanFail_ID"
 							DataSourceID="SqlDataSourceTabLampiran"
 							CssClass="table table-bordered" Width="100%">
@@ -1799,24 +2513,9 @@
 							</Columns>
 
 							<PagerStyle CssClass="pgr" />
-						</asp:GridView>
+						</asp:GridView>--%>
 
-						<asp:SqlDataSource ID="SqlDataSourceTabLampiran" runat="server"
-							ConnectionString="<%$ ConnectionStrings:webcon_ConnectionStr %>"
-							SelectCommand=" SELECT a.*, b.StatusID FROM LESEN_PermohonanFail a INNER JOIN LESEN_Permohonan b ON a.PermohonanFail_PermohonanID = b.Permohonan_ID 
-							WHERE a.PermohonanFail_JenisLampiran = 'U' AND a.PermohonanFail_PermohonanID = @Permohonan_ID"
-							DeleteCommand=""
-							UpdateCommand="">
-							<DeleteParameters>
-								
-							</DeleteParameters>
-							<SelectParameters>
-								<asp:ControlParameter ControlID="GridView1" Name="Permohonan_ID" PropertyName="SelectedDataKey.Values[0]"></asp:ControlParameter>
-							</SelectParameters>
-							<UpdateParameters>
-				   
-							</UpdateParameters>
-						</asp:SqlDataSource>
+
 
 					</ContentTemplate>
 				</asp:TabPanel>					
@@ -1824,62 +2523,85 @@
             </asp:TabContainer>
 
 
+            <!-- Ulasan / Catatan + Action Buttons -->
+<%--            <div class="ulasan-footer-card">
+                <div class="section-title">Ulasan / Catatan</div>
+                <textarea placeholder="Masukkan ulasan atau catatan anda di sini..."></textarea>
+                <div class="ulasan-char-count">0 / 1000</div>
+
+                <div class="ulasan-actions">
+                    <button type="button" class="btn-action btn-kembalikan">
+                        <span><i class="bi bi-arrow-return-left"></i> KEMBALIKAN</span>
+                        <small>Kembalikan untuk pembetulan</small>
+                    </button>
+                    <button type="button" class="btn-action btn-simpan">
+                        <span><i class="bi bi-save"></i> SIMPAN</span>
+                        <small>Simpan draf ulasan</small>
+                    </button>
+                    <button type="button" class="btn-action btn-luluskan">
+                        <span><i class="bi bi-check-circle"></i> LULUSKAN</span>
+                        <small>Luluskan permohonan</small>
+                    </button>
+                </div>
+            </div>--%>
+
             <div class="card-footer" runat="server" visible="false" id="idFooter">
+                
                 <div runat="server" id="idNotaKelulusan"  visible="false">
                     <div class="card">
+                        
                         <div class="card-body">
+                            <div class="section-title">KELULUSAN</div>
                             <div class="row">
                                 <div class="col-md-6">
 
                                     <asp:FormView ID="fvNotaKelulusan" runat="server" DataKeyNames="JenisLesen_ID"
                                         DataSourceID="sdsNotaKelulusan" DefaultMode="Edit" Width="100%" CssClass="CustomTab">
                                         <EditItemTemplate>
-                                            <div class="form-group">
+                                            <div class="nota-card">
 
+                                                <!-- Nota Kelulusan (Bahagian Perlesenan) -->
+                                                <div class="nota-block">
+                                                    <div class="nota-label-row">
+                                                        <p class="nota-label">Nota Kelulusan (Bahagian Perlesenan)</p>
 
-                                                <div class="row">
-                                                    <div class="col-md-12">
-
-                                                        <div class="form-group">
-                                                            <label>Nota Kelulusan (Bahagian Perlesenan)</label>
-                                                            <div runat="server" visible='<%# If(Eval("ApprStatusID") > 5, True, False) %>'>
-                                                                <asp:Label ID="Label25" runat="server" Text='<%# Bind("Users_Fullname") %>'></asp:Label>
-                                                                <asp:Label ID="Label8" runat="server" Font-Bold="true"
-                                                                    ForeColor='<%#If(Eval("StatusIDPengesah2") = 1, System.Drawing.Color.Green, System.Drawing.Color.Red)%>'
-                                                                    Text='<%# "<< " + If(Eval("StatusIDPengesah2") = 1, "Sokong", "Tidak Sokong") + " >>"%>'></asp:Label>
-                                                            </div>
-
-
-                                                            <asp:TextBox ID="txtNotaKelulusanPengesah" runat="server" Text='<%# Bind("NotaKelulusanPengesah") %>'
-                                                                Enabled='<%# If(Eval("ApprStatusID") = "8", False, True) %>'
-                                                                CssClass="form-control" TextMode="MultiLine" Rows="3"></asp:TextBox>
+                                                        <div runat="server" visible='<%# If(Eval("ApprStatusID") > 5, True, False) %>' class="nota-signoff">
+                                                            <span class="actor-name"><asp:Label ID="Label25" runat="server" Text='<%# Bind("Users_Fullname") %>'></asp:Label></span>
+                                                            <asp:Label ID="Label8" runat="server"
+                                                                CssClass='<%# If(Eval("StatusIDPengesah2") = 1, "status-pill support", "status-pill reject") %>'
+                                                                Text='<%# If(Eval("StatusIDPengesah2") = 1, "SOKONG", "TIDAK SOKONG") %>'></asp:Label>
                                                         </div>
                                                     </div>
 
+                                                    <asp:TextBox ID="txtNotaKelulusanPengesah" runat="server" Text='<%# Bind("NotaKelulusanPengesah") %>'
+                                                        Enabled='<%# If(Eval("ApprStatusID") = "8", False, True) %>'
+                                                        CssClass="form-control" TextMode="MultiLine" Rows="3"></asp:TextBox>
                                                 </div>
 
-                                                <div class="row" runat="server" visible='<%# If(Eval("ApprStatusID") > 5  And Session.Item("sessionIsPeraku") = "True", True, False) %>'>
-                                                    <div class="col-md-12" runat="server" id="divNotaKelulusanPeraku" visible='<%# If(Eval("NotaKelulusanKJ2") = 0, False, True) %>'>
+                                                <!-- Nota Kelulusan (Peraku) + Kelulusan options -->
+                                                <div runat="server" visible='<%# If(Eval("ApprStatusID") > 5 And Session.Item("sessionIsPeraku") = "True", True, False) %>'>
 
-                                                        <div class="form-group">
-                                                            <label>Nota Kelulusan (Peraku)</label><br />
+                                                    <div class="nota-block" runat="server" id="divNotaKelulusanPeraku" visible='<%# If(Eval("NotaKelulusanKJ2") = 0, False, True) %>'>
+                                                        <p class="nota-label">Nota Kelulusan (Peraku)</p>
+                                                        <asp:TextBox ID="txtNotaKelulusan" runat="server" Text='<%# Bind("NotaKelulusan") %>' CssClass="form-control" TextMode="MultiLine" Rows="3"></asp:TextBox>
+                                                    </div>
 
-                                                            <asp:TextBox ID="txtNotaKelulusan" runat="server" Text='<%# Bind("NotaKelulusan") %>' CssClass="form-control" TextMode="MultiLine" Rows="3"></asp:TextBox>
+                                                    <div class="nota-block" runat="server" visible="true">
+                                                        <p class="nota-label">Kelulusan</p>
+                                                        <div class="nota-kelulusan-options">
+                                                            <asp:RadioButtonList ID="rblNotaKelulusanKJ" runat="server" AutoPostBack="true"
+                                                                SelectedValue='<%# Bind("NotaKelulusanKJ2") %>'
+                                                                OnSelectedIndexChanged="rblNotaKelulusanKJ_SelectedIndexChanged"
+                                                                RepeatDirection="Horizontal" RepeatLayout="Flow">
+                                                                <asp:ListItem Value="0">-- Menunggu kelulusan --</asp:ListItem>
+                                                                <asp:ListItem Value="1">Diluluskan</asp:ListItem>
+                                                                <asp:ListItem Value="2">Diluluskan dengan pindaan</asp:ListItem>
+                                                                <asp:ListItem Value="4">Ditolak</asp:ListItem>
+                                                                <asp:ListItem Value="6">Lain-lain</asp:ListItem>
+                                                            </asp:RadioButtonList>
                                                         </div>
                                                     </div>
 
-                                                    <div class="col-md-12" runat="server" visible="true">
-
-                                                        <div class="form-group">
-                                                        <asp:RadioButtonList  id="rblNotaKelulusanKJ" runat="server" AutoPostBack="true" SelectedValue='<%# Bind("NotaKelulusanKJ2") %>' OnSelectedIndexChanged="rblNotaKelulusanKJ_SelectedIndexChanged">
-                                                        <asp:ListItem Value="0">&nbsp;-- Kelulusan --</asp:ListItem>
-                                                        <asp:ListItem Value="1">&nbsp;Diluluskan</asp:ListItem>
-                                                        <asp:ListItem Value="2">&nbsp;Diluluskan dengan pindaan</asp:ListItem>                                                        
-                                                        <asp:ListItem Value="4">&nbsp;Ditolak</asp:ListItem>     
-														<asp:ListItem Value="6">&nbsp;Lain-lain</asp:ListItem>                                                        														
-                                                        </asp:RadioButtonList>
-                                                        </div>
-                                                    </div>	
                                                 </div>
 
                                             </div>
@@ -1917,67 +2639,67 @@
                                 </div>
 
                                 <div class="col-md-6">
-                                    <%--<asp:Label ID="Label7" runat="server" Text="ULASAN AGENSI / JABATAN"></asp:Label><br /><br />--%>
-                                    <div class="form-group" style="background-color: #EDECFC; padding: 10px !important; font-size: 10pt !important; border-radius: 5px; border: 1px solid #E9ECEF !important;">
+                                    <div class="section-title">Ulasan Agensi / Jabatan</div>
+
+                                    <div class="agensi-ulasan-card">
 
                                         <asp:Repeater ID="rptWeek" runat="server" DataSourceID="sdsAgensiUlasan">
                                             <ItemTemplate>
-												<asp:HiddenField ID="hdn24jam" runat="server" value='<%# Eval("Is24Jam") %>' />
-                                                <label runat="server" id="lblAgensiDesc"><%# Eval("JabatanAgensi_Description") %></label>
-                                                &nbsp;&nbsp;                                   
-                                    <asp:LinkButton ID="lbLihatSurat" runat="server" CausesValidation="False" Text="Lihat Surat" CssClass="btn btn-warning btn-sm"
-                                        Visible='<%#If(Eval("JabatanAgensi_Type") = "J", True, False)%>' OnClick="lbLihatSurat_Click"></asp:LinkButton>
-                                                <br />
-                                                <asp:Label CssClass="csslblUlasan" ID="Label6" runat="server" Text='<%# "<b>Pengesah</b> : " + Eval("Pengesah") %>'></asp:Label>
-                                                -
-                                    <asp:Label ID="Label8" runat="server" Font-Bold="true" ForeColor='<%#If(Eval("currStatusPengesah") = -1, System.Drawing.Color.Orange, If(Eval("currStatusPengesah") = 1, System.Drawing.Color.Green, System.Drawing.Color.Red))%>'
-                                        Text='<%#If(Eval("currStatusPengesah") = -1, If(Eval("Is24Jam") = 0, "Belum Selesai", "Belum Selesai (Kelulusan 24 Jam)"), If(Eval("currStatusPengesah") = 1, "SOKONG", "TIDAK SOKONG"))%>'></asp:Label>
-                                                <br />
-                                                <asp:Label CssClass="csslblUlasan" ID="Label21" runat="server" Text='<%# (Eval("PengesahNotaKelulusan")).Replace(vbCr, "").Replace(vbLf, vbCrLf).Replace(Environment.NewLine, "<br />") %>'></asp:Label>
 
-                                                <%--<br />                                    
+                                                <asp:HiddenField ID="hdn24jam" runat="server" Value='<%# Eval("Is24Jam") %>' />
 
-                                    <div runat="server" visible='<%# If(Eval("JabatanAgensi_Type") = "J", True, False) %>'>
-                                    <asp:Label CssClass="csslblUlasan" ID="Label22" runat="server" Text='<%# "<b>Peraku</b> : " + Eval("Peraku") %>'></asp:Label> -
-                                    <asp:Label ID="Label24" runat="server" Font-Bold="true" ForeColor='<%#If(Eval("currStatusPeraku") = -1, System.Drawing.Color.Orange, If(Eval("currStatusPeraku") = 1, System.Drawing.Color.Green, System.Drawing.Color.Red))%>' 
-                                    Text='<%#If(Eval("currStatusPeraku") = -1, If(Eval("Is24Jam") = 0, "Belum Selesai", "Belum Selesai (Kelulusan 24 Jam)"), If(Eval("currStatusPeraku") = 1, "SOKONG", "TIDAK SOKONG"))%>'></asp:Label>
-                                    <br />
-                                    <asp:Label CssClass="csslblUlasan" ID="Label23" runat="server" Text='<%# (Eval("NotaKelulusan")).Replace(vbCr, "").Replace(vbLf, vbCrLf).Replace(Environment.NewLine, "<br />") %>'></asp:Label>
-                                    </div>--%>
+                                                <div class="agensi-ulasan-item">
 
-                                                <hr style="border-color: #808080 !important" />
+                                                    <div class="agensi-ulasan-header">
+                                                        <span class="agensi-ulasan-name" id="lblAgensiDesc" runat="server"><%# Eval("JabatanAgensi_Description") %></span>
+
+                                                        <asp:LinkButton ID="lbLihatSurat" runat="server" CausesValidation="False" Text="Lihat Surat" CssClass="btn-lihat-surat"
+                                                            Visible='<%# If(Eval("JabatanAgensi_Type") = "J", True, False) %>' OnClick="lbLihatSurat_Click"></asp:LinkButton>
+                                                    </div>
+
+                                                    <div class="agensi-pengesah-row">
+                                                        <asp:Label ID="Label6" runat="server" Text='<%# "<b>Pengesah</b> : " + Eval("Pengesah") %>'></asp:Label>
+                                                        <asp:Label ID="Label8" runat="server"
+                                                            CssClass='<%# If(Eval("currStatusPengesah") = -1, "status-pill-sm pending", If(Eval("currStatusPengesah") = 1, "status-pill-sm support", "status-pill-sm reject")) %>'
+                                                            Text='<%# If(Eval("currStatusPengesah") = -1, If(Eval("Is24Jam") = 0, "Belum Selesai", "Belum Selesai (Kelulusan 24 Jam)"), If(Eval("currStatusPengesah") = 1, "SOKONG", "TIDAK SOKONG")) %>'></asp:Label>
+                                                    </div>
+
+                                                    <asp:Label CssClass="agensi-nota-text" ID="Label21" runat="server" Text='<%# (Eval("PengesahNotaKelulusan")).ToString().Replace(vbCr, "").Replace(vbLf, vbCrLf).Replace(Environment.NewLine, "<br />") %>'></asp:Label>
+
+                                                </div>
+
                                             </ItemTemplate>
                                         </asp:Repeater>
 
-                                        <asp:SqlDataSource runat="server" ID="sdsAgensiUlasan" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
-                                            SelectCommand="select isnull(JabatanAgensi_Type,'J') as JabatanAgensi_Type,JabatanAgensi_Description,isnull(NotaKelulusan,'') as NotaKelulusan,
-                            isnull(PengesahNotaKelulusan,'') as PengesahNotaKelulusan,
-                            case when IsPenilaian = 1 /*and IsPeraku = 1 and JabatanAgensi_Type = 'J' then StatusID 
-                            when IsPenilaian = 1 and JabatanAgensi_Type = 'L'*/ then isnull(PengesahStatusID,0)
-                            else -1 end as currStatusPengesah,
-                            case when IsPeraku = 1 then isnull(StatusID,0)
-                            else -1 end as currStatusPeraku,
-                            (select top 1 d.Users_Fullname from LESEN_ApprovalList c
-                            inner join TBL_USERS d on d.Users_Id = c.ApproverID
-                            where c.Permohonan_ID = a.Permohonan_ID and c.AgensiID = a.JabatanAgensi_ID and c.ApprStatusID = 4) as Pengesah2,
-                            (select top 1 d.Users_Fullname from TBL_USERS d 
-                            where d.Users_Id = a.PengesahID ) as Pengesah,							
-                            (select top 1 d.Users_Fullname from LESEN_ApprovalList c
-                            inner join TBL_USERS d on d.Users_Id = c.ApproverID
-                            where c.Permohonan_ID = a.Permohonan_ID and c.AgensiID = a.JabatanAgensi_ID and c.ApprStatusID = 8) as Peraku,
-							(select top 1 isnull(x.Is24Jam,0) from LESEN_Permohonan x where x.Permohonan_ID = @Permohonan_ID) as Is24Jam
-                            from LESEN_PermohonanAgensi a
-                            inner join LESEN_JabatanAgensi b on b.JabatanAgensi_ID = a.JabatanAgensi_ID
-                            where a.Permohonan_ID=@Permohonan_ID">
-                                            <SelectParameters>
-                                                <asp:ControlParameter ControlID="GridView1" PropertyName="SelectedDataKey.Values[0]" Name="Permohonan_ID"></asp:ControlParameter>
-
-
-                                            </SelectParameters>
-                                        </asp:SqlDataSource>
-
                                     </div>
-                                </div>
+                                </div>                                
+
+                                <asp:SqlDataSource runat="server" ID="sdsAgensiUlasan" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
+                                    SelectCommand="select isnull(JabatanAgensi_Type,'J') as JabatanAgensi_Type,JabatanAgensi_Description,isnull(NotaKelulusan,'') as NotaKelulusan,
+                                isnull(PengesahNotaKelulusan,'') as PengesahNotaKelulusan,
+                                case when IsPenilaian = 1 /*and IsPeraku = 1 and JabatanAgensi_Type = 'J' then StatusID 
+                                when IsPenilaian = 1 and JabatanAgensi_Type = 'L'*/ then isnull(PengesahStatusID,0)
+                                else -1 end as currStatusPengesah,
+                                case when IsPeraku = 1 then isnull(StatusID,0)
+                                else -1 end as currStatusPeraku,
+                                (select top 1 d.Users_Fullname from LESEN_ApprovalList c
+                                inner join TBL_USERS d on d.Users_Id = c.ApproverID
+                                where c.Permohonan_ID = a.Permohonan_ID and c.AgensiID = a.JabatanAgensi_ID and c.ApprStatusID = 4) as Pengesah2,
+                                (select top 1 d.Users_Fullname from TBL_USERS d 
+                                where d.Users_Id = a.PengesahID ) as Pengesah,							
+                                (select top 1 d.Users_Fullname from LESEN_ApprovalList c
+                                inner join TBL_USERS d on d.Users_Id = c.ApproverID
+                                where c.Permohonan_ID = a.Permohonan_ID and c.AgensiID = a.JabatanAgensi_ID and c.ApprStatusID = 8) as Peraku,
+                                (select top 1 isnull(x.Is24Jam,0) from LESEN_Permohonan x where x.Permohonan_ID = @Permohonan_ID) as Is24Jam
+                                from LESEN_PermohonanAgensi a
+                                inner join LESEN_JabatanAgensi b on b.JabatanAgensi_ID = a.JabatanAgensi_ID
+                                where a.Permohonan_ID=@Permohonan_ID">
+                                    <SelectParameters>
+                                        <asp:ControlParameter ControlID="GridView1" PropertyName="SelectedDataKey.Values[0]" Name="Permohonan_ID"></asp:ControlParameter>
+
+
+                                    </SelectParameters>
+                                </asp:SqlDataSource>
 
                             </div>
 
@@ -2352,7 +3074,7 @@
 
     <asp:SqlDataSource ID="SqlDataSourceGrid" runat="server"
         ConnectionString="<%$ ConnectionStrings:webcon_ConnectionStr %>"
-        SelectCommand="SELECT g.NamaSyarikat,a.*,d.*,e.*,f.*, g.Rujukan,g.IsSuratPemeriksaanFail,ISNULL(g.AlamatPremis,ISNULL(g.AlamatPenjajaan,ISNULL(g.AnjingAlamat,isnull(g.LokasiPasar1,ISNULL(g.LokasiPasar2,ISNULL(g.LokasiPasar3,'')))))) as AlamatPremis, isnull(h.IsPenilaian,0) as IsPenilaianStatus FROM 
+        SelectCommand="SELECT g.NamaSyarikat,a.*,d.*,e.*,f.*, g.Rujukan,g.IsSuratPemeriksaanFail,ISNULL(g.AlamatBaru,ISNULL(g.AlamatPremis,ISNULL(g.AlamatPenjajaan,ISNULL(g.AnjingAlamat,isnull(g.LokasiPasar1,ISNULL(g.LokasiPasar2,ISNULL(g.LokasiPasar3,''))))))) as AlamatPremis, isnull(h.IsPenilaian,0) as IsPenilaianStatus FROM
             v_LESEN_ApprovalList_Curr a
             inner join LESEN_JenisLesen d on d.JenisLesen_ID = a.JenisLesen_ID
             left join LESEN_JabatanAgensi e on e.JabatanAgensi_ID = a.AgensiID

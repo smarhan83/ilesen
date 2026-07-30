@@ -625,13 +625,23 @@ textarea.form-control {
 .btn-action-icon {
     width: 28px;
     height: 28px;
-    padding: 3px !important;
-    font-size: 0 !important;
+    padding: 0 !important;
     border-radius: 5px;
     display: inline-flex !important;
     align-items: center;
     justify-content: center;
 }
+
+    .btn-action-icon::before {
+        content: none !important;
+        display: none !important;
+    }
+
+    .btn-action-icon i {
+        font-size: 14px;
+        line-height: 1;
+        margin: 0 !important;
+    }
 
     .btn-action-icon.btn-warning::before {
         content: "\f4cb";
