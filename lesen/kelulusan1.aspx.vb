@@ -2390,7 +2390,7 @@ Partial Class kelulusan1
                 INNER JOIN LESEN_PermohonanPembetulan f ON a.Permohonan_ID = f.Permohonan_ID 
                 INNER JOIN LESEN_Pemohon b ON b.Pemohon_ID=a.Permohonan_PemohonID 
                 LEFT JOIN TBL_USERS c ON a.TandatanganPemeriksaanId=c.Users_Id 
-                LEFT JOIN LESEN_PermohonanSurat d ON d.Permohonan_ID=a.Permohonan_ID 
+                LEFT JOIN LESEN_PermohonanSurat d ON d.Permohonan_ID=a.Permohonan_ID AND d.JenisReport LIKE 'LI%' 
                 LEFT JOIN TBL_LOOKUPS e ON e.id = a.AnjingJenisPremis 
                 WHERE a.Permohonan_ID=@permohonanID ORDER BY d.P1, d.P2, d.P3"
 
