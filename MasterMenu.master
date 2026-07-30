@@ -801,7 +801,7 @@ h1{
 		    <a class="navbar-brand text-decoration-none" href="/" >
 		        <div class="brand-wrap">
 			    <div class="brand-logo">
-			        <img src="/images/logo.png" alt="Logo">
+			        <img src='<%= ResolveUrl("~/images/logo.png") %>' alt="Logo">
 			    </div>
 
 			    <div class="brand-title">
@@ -1001,7 +1001,7 @@ h1{
                         <!-- Logout -->
                         <li>
                             <a class="dropdown-item py-2 text-danger"
-                               href="/logout">
+                               href='<%= ResolveUrl("~/logout") %>'>
 
                                 <i class="bi bi-box-arrow-right me-2"></i>
                                 Log Keluar
