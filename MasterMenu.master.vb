@@ -275,12 +275,12 @@ Partial Class MasterMenu
             'MsgBox(GlobalClass.GlobalVariables.urlSessionEnd)
             If GlobalClass.GlobalVariables.urlSessionEnd = "" Then
 
-                Response.Redirect("/")
+                Response.Redirect("~/")
 
             Else
                 Session.Item("sessionSystemId") = GlobalClass.GlobalVariables.urlSessionSystemId
                 If Session.Item("sessionSystemId") = "0" Or Session.Item("sessionSystemId") = "" Then
-                    Response.Redirect("/")
+                    Response.Redirect("~/")
                 Else
                     Response.Redirect(GlobalClass.GlobalVariables.urlSessionEnd)
                 End If
