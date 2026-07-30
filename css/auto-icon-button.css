@@ -1,0 +1,23 @@
+/* Pastikan icon + text sejajar kemas dalam button */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn i {
+    font-size: 1em;
+    line-height: 1;
+}
+
+    /* Button yang hanya ada icon (text dibuang) — jadikan persegi/padat */
+/*    .btn[data-icon-converted="1"] {
+        width: 40px;
+        height: 40px;
+        padding: 0 !important;
+    }
+
+    .btn[data-icon-converted="1"] i {
+        font-size: 1.1rem;
+        margin: 0 !important;
+    }*/

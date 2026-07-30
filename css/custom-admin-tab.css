@@ -1,0 +1,88 @@
+.ajax__tab_xp .ajax__tab_header {
+    background: transparent !important;
+    background-image: none !important;
+    font-size: 9pt !important;
+    min-height: 40px !important;
+    height: auto !important;
+    color: #495057 !important;
+    border-bottom: 1px solid #dee2e6 !important;
+    display: flex !important;
+    flex-wrap: wrap !important;
+    row-gap: 4px !important;
+    white-space: nowrap !important;
+}
+
+    .ajax__tab_xp .ajax__tab_header .ajax__tab_outer,
+    .ajax__tab_xp .ajax__tab_header .ajax__tab_tab,
+    .ajax__tab_xp .ajax__tab_header .ajax__tab_hover .ajax__tab_outer,
+    .ajax__tab_xp .ajax__tab_header .ajax__tab_hover .ajax__tab_tab,
+    .ajax__tab_xp .ajax__tab_header .ajax__tab_active .ajax__tab_outer,
+    .ajax__tab_xp .ajax__tab_header .ajax__tab_active .ajax__tab_tab {
+        background: transparent !important;
+        background-image: none !important;
+        border: none !important;
+        white-space: nowrap !important;
+    }
+    /* default tab (tak active) */
+    .ajax__tab_xp .ajax__tab_header .ajax__tab_inner {
+        background: transparent !important;
+        background-image: none !important;
+        background-color: transparent !important;
+        width: auto !important;
+        min-width: auto !important;
+        white-space: nowrap !important;
+        padding: 0 18px !important;
+        text-align: center !important;
+        vertical-align: middle !important;
+        border: none !important;
+        border-bottom: 2px solid transparent !important;
+        border-radius: 0 !important;
+        transition: all 0.2s ease-in-out !important;
+    }
+
+        .ajax__tab_xp .ajax__tab_header .ajax__tab_inner a {
+            color: #6c757d !important;
+            font-weight: 600 !important;
+            font-size: 9pt !important;
+            text-decoration: none !important;
+            /*line-height: 40px !important;*/
+            white-space: nowrap !important;
+        }
+    /* hover */
+    .ajax__tab_xp .ajax__tab_header .ajax__tab_hover .ajax__tab_inner {
+        background: transparent !important;
+        border-bottom: 2px solid #adb5bd !important;
+    }
+
+        .ajax__tab_xp .ajax__tab_header .ajax__tab_hover .ajax__tab_inner a {
+            color: #343a40 !important;
+        }
+    /* active tab */
+    .ajax__tab_xp .ajax__tab_header .ajax__tab_active .ajax__tab_inner {
+        background: transparent !important;
+        background-image: none !important;
+        width: auto !important;
+        min-width: auto !important;
+        white-space: nowrap !important;
+        padding: 0 18px !important;
+        text-align: center !important;
+        vertical-align: middle !important;
+        border: none !important;
+        border-bottom: 2px solid #252096 !important;
+        border-radius: 0 !important;
+    }
+
+        .ajax__tab_xp .ajax__tab_header .ajax__tab_active .ajax__tab_inner a {
+            color: #252096 !important;
+            font-weight: 600 !important;
+            font-size: 9pt !important;
+            white-space: nowrap !important;
+        }
+/* body panel bawah tab */
+.ajax__tab_body {
+    border: 1px solid #dee2e6 !important;
+    border-top: none !important;
+    padding: 15px !important;
+    background: #fff !important;
+}
+

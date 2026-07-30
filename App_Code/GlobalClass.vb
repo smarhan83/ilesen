@@ -1,13 +1,13 @@
-Imports Microsoft.VisualBasic
 Imports System.Data
 Imports System.Data.SqlClient
 Imports System.IO
-Imports System.Web.SessionState.HttpSessionState
 Imports System.Net
-Imports System.Text
-Imports System.Security.Cryptography
 Imports System.Net.Mail
+Imports System.Security.Cryptography
+Imports System.Text
 Imports System.Web.Providers.Entities
+Imports System.Web.SessionState.HttpSessionState
+Imports Microsoft.VisualBasic
 
 Public Class GlobalClass
 
@@ -263,8 +263,161 @@ AND (HD_Ticket.ticketId IN (SELECT ticketId FROM HD_Support WHERE (EmpID = @sess
                 Dim UGM_Name = myReader.Item("UGM_SystemId")
                 Dim system_Name = myReader.Item("system_Name")
 
-                retval = String.Concat(retval, "<li class='nav-title'>" & system_Name & "</li>")
-                retval = String.Concat(retval, GlobalClass.WriteAdminMenu(0, 0, 0, UGM_Name))
+
+                retval = String.Concat(retval, "<div class='menu-title'>" & system_Name & "</div>")
+                retval = String.Concat(retval, GlobalClass.WriteAdminMenuV2(0, 0, 0, UGM_Name))
+
+
+            Loop
+
+            myReader.Close()
+
+            myConnection.Close()
+            myConnection.Dispose()
+        End Using
+
+        Return retval
+
+    End Function
+
+    Public Shared Function WriteAdminMenuV2(ByVal paraMenuId As Integer, ByVal userrole As Integer, ByVal isAdmin As Integer, Optional ByVal sessionSystemId As Integer = 1) As String
+
+        isAdmin = HttpContext.Current.Session.Item("sessionisadmin")
+        userrole = HttpContext.Current.Session.Item("sessionuserrole")
+        Dim sessionUserId As Integer = HttpContext.Current.Session.Item("sessionUsersId")
+        'Dim sessionSystemId As Integer = 0
+        Try
+            'sessionSystemId = HttpContext.Current.Session.Item("sessionSystemId")
+        Catch ex As Exception
+
+        End Try
+
+        Dim retval As String
+        Dim glblClass As New GlobalClass()
+        retval = ""
+
+        Using myConnection As New SqlConnection(ConfigurationManager.ConnectionStrings("webcon_ConnectionStr").ConnectionString)
+            myConnection.Open()
+
+            Dim myCommand As New SqlCommand("generateAdminMenu_PROC3", myConnection)
+            myCommand.Parameters.AddWithValue("@UGM_Id", paraMenuId)
+            myCommand.Parameters.AddWithValue("@UGR_UGN_Id", userrole)
+            myCommand.Parameters.AddWithValue("@UGN_IsAdmin", isAdmin)
+            myCommand.Parameters.AddWithValue("@userid", sessionUserId)
+            myCommand.Parameters.AddWithValue("@systemID", sessionSystemId)
+
+            myCommand.CommandType = CommandType.StoredProcedure
+
+            Dim myReader As SqlDataReader = myCommand.ExecuteReader
+            Dim j As Integer = 0
+            Dim isActive As String = ""
+
+            Do While myReader.Read()
+
+                Dim UGM_Name = myReader.Item("UGM_Name")
+                Dim UGM_ContentId = myReader.Item("UGM_ContentId")
+                Dim UGM_ParentId = myReader.Item("UGM_ParentId")
+                Dim UGM_Id = myReader.Item("UGM_Id")
+                Dim UGM_Filename = myReader.Item("UGM_Filename")
+                Dim UGR_UGN_Id = myReader.Item("UGR_UGN_Id")
+                Dim UGM_Level = myReader.Item("UGM_Level")
+                Dim UGN_IsAdmin = myReader.Item("UGN_IsAdmin")
+                Dim UGM_Menu_Icon = myReader.Item("UGM_Menu_Icon")
+                Dim UGM_Menu_SVG = myReader.Item("UGM_Menu_SVG")
+                Dim filepath As String
+
+                Dim pageFilename As String
+                pageFilename = System.IO.Path.GetFileName(HttpContext.Current.Request.ServerVariables("SCRIPT_NAME"))
+
+                j = j + 1
+
+                If j = 1 And HttpContext.Current.Request.QueryString("p_Id") = "" Then
+                    isActive = "active"
+                Else
+                    isActive = ""
+                End If
+
+                If InStr(UGM_Filename.ToString, "p_Id") > 0 Then
+                    filepath = UGM_Filename.ToString
+
+                Else
+                    filepath = UGM_Filename.ToString + "&p_Id=" + UGM_ParentId.ToString
+                End If
+
+                If InStr(UGM_Filename.ToString, "?") > 0 Then
+
+                    If InStr(UGM_Filename.ToString, "p_Id") > 0 Then
+                        filepath = UGM_Filename.ToString
+                    Else
+                        filepath = UGM_Filename.ToString + "&p_Id=" + UGM_ParentId.ToString
+                    End If
+
+                Else
+                    filepath = UGM_Filename.ToString + "?p_Id=" + UGM_ParentId.ToString
+                End If
+
+                '//append Menu ID
+                If InStr(filepath, "?") > 0 Then
+                    filepath = filepath + "&m_Id=" + UGM_Id.ToString
+                Else
+                    filepath = UGM_Filename.ToString + "?m_Id=" + UGM_Id.ToString
+                End If
+
+                If UGM_ContentId.ToString = "0" And UGM_Filename.ToString = "" Then '// ori : Menu_ContentId.ToString = "0" And Menu_ParentId.ToString = 0 And Menu_Filename.ToString <> "Default.aspx"
+
+                    'retval = String.Concat(retval, "<li Class='nav-group'><a class='nav-link nav-group-toggle' href='#'>
+                    '            <svg Class='nav-icon'>
+                    '                <use xlink :  href=' " & VirtualPathUtility.ToAbsolute("~/vendors/@coreui/icons/svg/free.svg#") & "" & UGM_Menu_SVG & "'></use>
+                    '            </svg> " + UGM_Name + "</a>
+                    '            <ul Class='nav-group-items'> " & GlobalClass.WriteAdminMenu_Sub(UGM_Id, 0, 0, sessionSystemId) & "</ul>
+                    '        </li>")
+
+                    retval = String.Concat(retval,
+                                "<div class='side-parent'>
+                                    <a href='#' class='side-item parent-menu'>
+                                        <span class='d-flex align-items-center gap-2'>
+                                            <svg class='nav-icon'>
+                                                <use xlink:href='" & VirtualPathUtility.ToAbsolute("~/vendors/@coreui/icons/svg/free.svg#") & UGM_Menu_SVG & "'></use>
+                                            </svg>
+                                            <span>" & UGM_Name & "</span>
+                                        </span>
+                                        <i class='bi bi-chevron-down menu-arrow'></i>
+                                    </a>
+
+                                    <div class='sub-menu'>
+                                        " & GlobalClass.WriteAdminMenu_SubV2(UGM_Id, 0, 0, sessionSystemId) & "
+                                    </div>
+                                </div>"
+                                )
+
+                    ''If UGM_Level = 1 Then
+                    ''    If UGM_Id = HttpContext.Current.Request.QueryString("p_Id") Then
+
+
+                    ''        retval = String.Concat(retval, "<li Class='nav-group'><a class='nav-link nav-group-toggle' href='#'>
+                    ''            <svg Class='nav-icon'>
+                    ''                <use xlink :  href=' " & VirtualPathUtility.ToAbsolute("~/vendors/@coreui/icons/svg/free.svg#") & "" & UGM_Menu_SVG & "'></use>
+                    ''            </svg> " + UGM_Name + "</a>
+                    ''            <ul Class='nav-group-items'> " & GlobalClass.WriteAdminMenu_Sub(UGM_Id, 0, 0, sessionSystemId) & "</ul>
+                    ''        </li>")
+
+
+                    ''    Else
+
+                    ''        retval = String.Concat(retval, "<li Class='nav-group'><a class='nav-link nav-group-toggle' href='#'>
+                    ''            <svg Class='nav-icon'>
+                    ''                <use xlink :  href='" & VirtualPathUtility.ToAbsolute("~/vendors/@coreui/icons/svg/free.svg#") & "" & UGM_Menu_SVG & "'></use>
+                    ''            </svg> " + UGM_Name + "</a>
+                    ''            <ul Class='nav-group-items'> " & GlobalClass.WriteAdminMenu_Sub(UGM_Id, 0, 0, sessionSystemId) & "</ul>
+                    ''        </li>")
+                    ''    End If
+
+                    ''Else
+
+                    ''End If
+                Else
+
+                End If
 
 
             Loop
@@ -412,6 +565,142 @@ AND (HD_Ticket.ticketId IN (SELECT ticketId FROM HD_Support WHERE (EmpID = @sess
 
     Private Shared parentMenu As String = ""
 
+    Public Shared Function WriteAdminMenu_SubV2(ByVal paraMenuId As Integer, ByVal userrole As Integer, ByVal isAdmin As Integer, Optional ByVal sessionSystemId As Integer = 1) As String
+        Dim retval As String = ""
+        isAdmin = HttpContext.Current.Session.Item("sessionisadmin")
+        'MsgBox(isAdmin)
+        userrole = HttpContext.Current.Session.Item("sessionuserrole")
+        Dim sessionUserId As Integer = HttpContext.Current.Session.Item("sessionUsersId")
+        'Dim sessionSystemId As Integer = 0
+        Try
+            'sessionSystemId = HttpContext.Current.Session.Item("sessionSystemId")
+        Catch ex As Exception
+
+        End Try
+
+        Dim glblClass As New GlobalClass()
+        retval = ""
+        Dim j As Integer = 0
+        Dim parentMenu2 As String = ""
+        Dim isActive As String = ""
+        Dim showSubTitle As Boolean = False
+        Dim UGM_NameParent As String = ""
+
+        Using myConnection As New SqlConnection(ConfigurationManager.ConnectionStrings("webcon_ConnectionStr").ConnectionString)
+            myConnection.Open()
+
+            Dim myCommand As New SqlCommand("generateAdminMenu_PROC3", myConnection)
+            myCommand.Parameters.AddWithValue("@UGM_Id", paraMenuId)
+            myCommand.Parameters.AddWithValue("@UGR_UGN_Id", userrole)
+            myCommand.Parameters.AddWithValue("@UGN_IsAdmin", isAdmin)
+            myCommand.Parameters.AddWithValue("@userid", sessionUserId)
+            myCommand.Parameters.AddWithValue("@systemID", sessionSystemId)
+
+            myCommand.CommandType = CommandType.StoredProcedure
+
+            Dim myReader As SqlDataReader = myCommand.ExecuteReader
+
+
+            Do While myReader.Read()
+
+                Dim UGM_Name = myReader.Item("UGM_Name")
+                Dim UGM_ContentId = myReader.Item("UGM_ContentId")
+                Dim UGM_ParentId = myReader.Item("UGM_ParentId")
+                Dim UGM_Id = myReader.Item("UGM_Id")
+                Dim UGM_Filename = myReader.Item("UGM_Filename")
+                Dim UGR_UGN_Id = myReader.Item("UGR_UGN_Id")
+                Dim UGM_Level = myReader.Item("UGM_Level")
+                Dim UGN_IsAdmin = myReader.Item("UGN_IsAdmin")
+                Dim UGM_Menu_Icon = myReader.Item("UGM_Menu_Icon")
+                Dim filepath As String
+
+                Dim pageFilename As String
+                pageFilename = System.IO.Path.GetFileName(HttpContext.Current.Request.ServerVariables("SCRIPT_NAME"))
+
+                j = j + 1
+
+
+                If UGM_ParentId = 0 Then
+                    parentMenu = CStr(UGM_Id)
+                Else
+                    parentMenu = CStr(UGM_ParentId)
+                End If
+
+
+
+                If InStr(UGM_Filename.ToString, "p_Id") > 0 Then
+                    filepath = UGM_Filename.ToString
+
+                Else
+                    filepath = UGM_Filename.ToString + "&p_Id=" + UGM_ParentId.ToString
+                End If
+
+
+                If InStr(UGM_Filename.ToString, "?") > 0 Then
+
+                    If InStr(UGM_Filename.ToString, "p_Id") > 0 Then
+                        filepath = UGM_Filename.ToString
+                    Else
+                        filepath = UGM_Filename.ToString + "&p_Id=" + UGM_ParentId.ToString
+                    End If
+
+                Else
+                    filepath = UGM_Filename.ToString + "?p_Id=" + UGM_ParentId.ToString
+                End If
+
+                '//append Menu ID
+                If InStr(filepath, "?") > 0 Then
+                    filepath = filepath + "&m_Id=" + UGM_Id.ToString
+                Else
+                    filepath = UGM_Filename.ToString + "?m_Id=" + UGM_Id.ToString
+                End If
+
+                If UGM_Level = 1 Then
+
+                Else
+
+                    If (UGM_Filename.ToString.Contains(pageFilename)) Then
+
+                        If showSubTitle = True Then
+
+
+                        End If
+
+
+                    Else
+
+                        If showSubTitle = True Then
+
+                        End If
+
+
+
+                    End If
+
+                    'retval = String.Concat(retval, "<li Class='nav-item'><a class='nav-link' href='" + VirtualPathUtility.ToAbsolute("~" + filepath) + "'><span class='nav-icon'></span> " + UGM_Name + "</a></li>")
+
+                    retval = String.Concat(retval,
+                    "<a href='" + VirtualPathUtility.ToAbsolute("~" + filepath) + "' class='side-item'>
+                        <i class='bi bi-dot'></i> " + UGM_Name + "
+                    </a>"
+                    )
+
+                    showSubTitle = False
+                End If
+
+
+            Loop
+
+            myReader.Close()
+
+            myConnection.Close()
+            myConnection.Dispose()
+        End Using
+
+
+        Return retval
+    End Function
+
     Public Shared Function WriteAdminMenu_Sub(ByVal paraMenuId As Integer, ByVal userrole As Integer, ByVal isAdmin As Integer, Optional ByVal sessionSystemId As Integer = 1) As String
         Dim retval As String = ""
         isAdmin = HttpContext.Current.Session.Item("sessionisadmin")
@@ -510,7 +799,7 @@ AND (HD_Ticket.ticketId IN (SELECT ticketId FROM HD_Support WHERE (EmpID = @sess
                     'End If
                     'showSubTitle = True
                     'UGM_NameParent = UGM_Name
-                Else
+                    Else
 
                     If (UGM_Filename.ToString.Contains(pageFilename)) Then
 
