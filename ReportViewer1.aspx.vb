@@ -1,8 +1,8 @@
 ﻿Imports System
 Imports System.Collections.Generic
 Imports System.Configuration
+Imports System.Collections.Generic
 Imports System.Data
-Imports System.Data.Entity.Infrastructure
 Imports System.Data.SqlClient
 Imports System.Globalization
 Imports System.IO
@@ -14,7 +14,6 @@ Imports CrystalDecisions.CrystalReports.Engine
 Imports CrystalDecisions.Shared
 Imports CrystalDecisions.[Shared].Json
 Imports DocumentFormat.OpenXml.Bibliography
-Imports DocumentFormat.OpenXml.Spreadsheet
 Imports iTextSharp.text
 Imports iTextSharp.text.pdf
 Imports Microsoft.SqlServer.Management.Smo.Mail
