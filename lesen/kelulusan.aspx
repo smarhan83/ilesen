@@ -367,6 +367,44 @@
     color: #adb5bd;
 }
 
+.status-step-agensi {
+    font-size: 8pt;
+    color: #6c757d;
+    margin-top: 3px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.status-step-agensi i {
+    font-size: 9pt;
+    color: #adb5bd;
+}
+
+.status-step-actionby {
+    font-size: 8pt;
+    font-weight: 600;
+    color: #495057;
+    margin-top: 4px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.status-step-actionby i {
+    font-size: 9pt;
+    color: #2E3192;
+}
+
+.status-step.current .status-step-actionby {
+    color: #2E3192;
+}
+
+.status-step.pending .status-step-agensi,
+.status-step.pending .status-step-actionby {
+    color: #adb5bd;
+}
+
 /* ===== Sidebar: Lampiran Permohonan ===== */
 .lampiran-card {
     background: #fff;
@@ -1049,7 +1087,7 @@
                 <div>
 
                     <!-- Status Proses -->
-                    <div class="status-proses-card">
+<%--                    <div class="status-proses-card">
                         <div class="status-proses-title">Status Proses</div>
                         <div class="status-timeline">
 
@@ -1090,7 +1128,107 @@
                             </div>
 
                         </div>
+                    </div>--%>
+                    <div class="status-proses-card">
+                        <div class="status-proses-title">Status Proses</div>
+                        <div class="status-timeline">
+
+<asp:Repeater ID="rptStatusProses" runat="server" DataSourceID="SqlDataSourceLogKelulusan">
+    <ItemTemplate>
+        <div class="status-step <%# Eval("StepStatus") %>">
+            <div class="status-step-icon">
+                <%# If(Eval("StepStatus").ToString() = "done", "<i class=""bi bi-check-lg""></i>",
+                     If(Eval("StepStatus").ToString() = "current", "<i class=""bi bi-circle-fill"" style=""font-size:8px;""></i>", "")) %>
+            </div>
+            <div class="status-step-title"><%# Eval("Description") %></div>
+
+            <div class="status-step-agensi" runat="server" visible='<%# Not IsDBNull(Eval("JabatanAgensi_Description")) AndAlso Eval("JabatanAgensi_Description").ToString() <> "" %>'>
+                <i class="bi bi-building"></i> <%# Eval("JabatanAgensi_Description") %>
+            </div>
+
+            <div class="status-step-date">
+                <%# If(Eval("StepStatus").ToString() = "pending", "Belum selesai",
+                     If(Eval("StepStatus").ToString() = "current", "Menunggu tindakan", Eval("ApprovalDate", "{0:dd MMM yyyy hh:mm tt}"))) %>
+            </div>
+
+            <div class="status-step-actionby" runat="server" visible='<%# Eval("StepStatus").ToString() = "done" AndAlso Not IsDBNull(Eval("ActionBy")) AndAlso Eval("ActionBy").ToString() <> "" %>'>
+                <i class="bi bi-person"></i> <%# Eval("ActionBy") %>
+            </div>
+        </div>
+    </ItemTemplate>
+</asp:Repeater>
+
+                        </div>
                     </div>
+
+                    <asp:SqlDataSource runat="server" ID="SqlDataSourceLogKelulusan" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
+                        SelectCommand="WITH StepDef AS (
+    SELECT StepGroup, ApprStatusID, SortOrder, PendingLabel FROM (VALUES
+        (1, 1, 1, 'Permohonan Baru'),
+        (2, 2, 2, 'Pilih Pegawai Lawatan Tapak Jabatan/Agensi'),
+        (3, 3, 3, 'Lawatan Tapak Jabatan/Agensi'),
+        (4, 4, 4, 'Pengesah Jabatan/Agensi'),
+        (5, 5, 5, 'Pengesah Jabatan Lesen'),
+        (6, 6, 6, 'Menunggu Pengesahan'),
+        (6, 7, 6, 'Menunggu Pengesahan'),
+        (7, 8, 7, 'Peraku Jabatan Lesen'),
+        (8, 9, 8, 'Kelulusan Peraku'),
+        (8, 10, 8, 'Kelulusan Peraku')
+    ) AS x(StepGroup, ApprStatusID, SortOrder, PendingLabel)
+),
+Actual AS (
+    SELECT 
+        d.StepGroup, d.SortOrder, d.ApprStatusID, d.PendingLabel,
+        a.ApprovalDate, a.ApprovalID, c.JabatanAgensi_Description,
+        b.Description,
+        (CASE WHEN d.ApprStatusID = 3 THEN 
+            (SELECT STRING_AGG(d1.Users_Fullname, ', ') FROM LESEN_PermohonanAgensiStaff a1 
+             INNER JOIN LESEN_PermohonanAgensi b1 ON b1.Permohonan_ID = @Permohonan_ID and b1.PermohonanAgensi_ID = a1.PermohonanAgensi_ID
+             INNER JOIN TBL_USERS d1 ON d1.Users_Id = a1.PermohonanAgensiStaffID_UsersID)
+         WHEN d.ApprStatusID = 1 THEN f.Users_Fullname 
+         ELSE dd.Users_Fullname END) AS ActionBy
+    FROM StepDef d
+    INNER JOIN ApprovalStatus b ON b.ApprStatusID = d.ApprStatusID
+    LEFT JOIN LESEN_ApprovalList a 
+        ON a.ApprStatusID = d.ApprStatusID 
+        AND a.Permohonan_ID = @Permohonan_ID 
+        AND a.ApprovalDate IS NOT NULL
+    LEFT JOIN LESEN_JabatanAgensi c ON c.JabatanAgensi_ID = a.AgensiID
+    LEFT JOIN TBL_USERS dd ON dd.Users_Id = a.ApproverID
+    LEFT JOIN LESEN_Permohonan e ON e.Permohonan_ID = @Permohonan_ID
+    LEFT JOIN TBL_USERS f ON f.Users_Name = e.CreatorID
+),
+Picked AS (
+    SELECT *,
+        ROW_NUMBER() OVER (
+            PARTITION BY StepGroup 
+            ORDER BY CASE WHEN ApprovalDate IS NOT NULL THEN 0 ELSE 1 END, ApprStatusID
+        ) AS rn
+    FROM Actual
+),
+Result AS (
+    SELECT StepGroup, SortOrder, 
+           CASE WHEN ApprovalDate IS NOT NULL THEN ApprStatusID ELSE NULL END AS ApprStatusID,
+           CASE WHEN ApprovalDate IS NOT NULL THEN Description ELSE PendingLabel END AS Description,
+           ApprovalDate, ApprovalID, 
+           JabatanAgensi_Description, ActionBy,
+        CASE 
+            WHEN ApprovalDate IS NOT NULL THEN 'done'
+            WHEN SortOrder = (SELECT MIN(SortOrder) FROM Picked WHERE rn = 1 AND ApprovalDate IS NULL) THEN 'current'
+            ELSE 'pending'
+        END AS StepStatus
+    FROM Picked
+    WHERE rn = 1
+)
+SELECT * FROM Result
+WHERE NOT (StepGroup IN (6, 8) AND StepStatus <> 'done')
+ORDER BY 
+    CASE StepStatus WHEN 'done' THEN 1 WHEN 'current' THEN 2 ELSE 3 END,
+    SortOrder">
+                        <SelectParameters>
+                            <asp:ControlParameter ControlID="GridView1" PropertyName="SelectedValue" Name="Permohonan_ID"></asp:ControlParameter>
+                        </SelectParameters>
+                    </asp:SqlDataSource>
 
                     <!-- Lampiran Permohonan -->
                         <div class="lampiran-card">
