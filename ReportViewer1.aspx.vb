@@ -99,7 +99,7 @@ Partial Class wfrmReport1
         Next
 
         ' Apply connection info to subreports
-        For Each crsection As Section In crRep.ReportDefinition.Sections
+        For Each crsection As CrystalDecisions.CrystalReports.Engine.Section In crRep.ReportDefinition.Sections
             For Each crrepobj As ReportObject In crsection.ReportObjects
                 If crrepobj.Kind = ReportObjectKind.SubreportObject Then
                     Dim crsubrepobj As SubreportObject = CType(crrepobj, SubreportObject)
