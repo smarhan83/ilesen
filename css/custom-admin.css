@@ -1584,11 +1584,24 @@ a.badge-dark:focus, a.badge-dark.focus {
 }
 
 .empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     text-align: center;
-    padding: 30px 20px 25px; 
-    color: #6b7280;
+    white-space: normal !important; /* reset nowrap yang mungkin inherit */
 }
 
+    .empty-state p {
+        font-size: 13px;
+        color: #9ca3af;
+        max-width: 380px;
+        width: 100%;
+        margin: 0 auto;
+        line-height: 1.4;
+        white-space: normal !important;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+    }
 .empty-state-icon-svg {
     width: 120px;
     margin: 0 auto 8px; 
