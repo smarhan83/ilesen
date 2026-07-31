@@ -332,16 +332,25 @@ Partial Class wfrmReport1
         crRep.Close()
         crRep.Dispose()
 
-        Dim serverPdfPath1 As String = Server.MapPath("~/lesen/report/extras/Portal_Rasmi_Larangan_Merokok.pdf")
-        Dim serverPdfPath2 As String = Server.MapPath("~/Uploads/file2.pdf") ' Update your path
+        Dim serverPdfs() As String = {
+            Server.MapPath("~/lesen/report/extras/Portal_Rasmi_Larangan_Merokok.pdf"),
+            Server.MapPath("~/Uploads/file2.pdf")
+        }
 
-        If File.Exists(serverPdfPath1) Then
-            pdfFiles.Add(File.ReadAllBytes(serverPdfPath1))
-        End If
+        For Each path In serverPdfs
+            If File.Exists(path) Then pdfFiles.Add(File.ReadAllBytes(path))
+        Next
 
-        If File.Exists(serverPdfPath2) Then
-            pdfFiles.Add(File.ReadAllBytes(serverPdfPath2))
-        End If
+        'Dim serverPdfPath1 As String = Server.MapPath("~/lesen/report/extras/Portal_Rasmi_Larangan_Merokok.pdf")
+        'Dim serverPdfPath2 As String = Server.MapPath("~/Uploads/file2.pdf") ' Update your path
+
+        'If File.Exists(serverPdfPath1) Then
+        '    pdfFiles.Add(File.ReadAllBytes(serverPdfPath1))
+        'End If
+
+        'If File.Exists(serverPdfPath2) Then
+        '    pdfFiles.Add(File.ReadAllBytes(serverPdfPath2))
+        'End If
 
         Try
             Using finalStream As New MemoryStream()
