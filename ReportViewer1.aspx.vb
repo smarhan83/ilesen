@@ -19,7 +19,7 @@ Imports iTextSharp.text
 Imports iTextSharp.text.pdf
 Imports Microsoft.SqlServer.Management.Smo.Mail
 
-Partial Class wfrmReport
+Partial Class wfrmReport1
     Inherits System.Web.UI.Page
 
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As EventArgs) Handles Me.Load
