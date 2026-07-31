@@ -165,7 +165,7 @@ Partial Class wfrmReport1
 
         ' 6. Append External PDF Files
         Dim serverPdfs() As String = {
-            Server.MapPath("~/lesen/report/extras/Portal_Rasmi_Larangan_Merokok.pdf"),
+            Server.MapPath("~/lesen/report/extras/Poster_Rasmi_Larangan_Merokok.pdf"),
             Server.MapPath("~/Uploads/file2.pdf")
         }
 
