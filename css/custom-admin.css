@@ -1980,3 +1980,8 @@ a.badge-dark:focus, a.badge-dark.focus {
     width: 100% !important;
 }
 
+.col-sm-6 .breadcrumb {
+    display: flex;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+}
