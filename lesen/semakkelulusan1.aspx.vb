@@ -771,7 +771,7 @@ Partial Class semakkelulusan1
                 Session.Item("reportPrintType") = "pdf"
             End If
 
-            ScriptManager.RegisterClientScriptBlock(Me.Page, Me.[GetType](), ReportVar, "window.open('../ReportViewer1.aspx?name=" + ReportVar + "', '_blank', '');", True)
+            ScriptManager.RegisterClientScriptBlock(Me.Page, Me.[GetType](), ReportVar, "window.open('../ReportViewer.aspx?name=" + ReportVar + "', '_blank', '');", True)
         Catch ex As Exception
             MessageBox(ex.Message, Me)
         End Try
