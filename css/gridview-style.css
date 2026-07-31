@@ -1,0 +1,166 @@
+/* ===== GridView Table - Clean Style ===== */
+.table.table-bordered {
+    border: 1px solid #e9ecef !important;
+    border-radius: 10px !important;
+    overflow: hidden !important;
+    border-collapse: separate !important;
+    border-spacing: 0 !important;
+}
+
+    .table.table-bordered th {
+        background-color: #f8f9fa !important;
+        color: #495057 !important;
+        font-weight: 600 !important;
+        font-size: 9pt !important;
+        text-transform: none !important;
+        padding: 14px 18px !important;
+        border: none !important;
+        border-bottom: 1px solid #e9ecef !important;
+        vertical-align: middle !important;
+    }
+
+    .table.table-bordered td {
+        padding: 14px 18px !important;
+        border: none !important;
+        border-bottom: 1px solid #f1f3f5 !important;
+        vertical-align: middle !important;
+        font-size: 9.5pt !important;
+        color: #212529 !important;
+    }
+
+    .table.table-bordered tr:last-child td {
+        border-bottom: none !important;
+    }
+
+    .table.table-bordered tr:hover td {
+        background-color: #f8f9fb !important;
+    }
+
+    /* Kolum No. - center align */
+    .table.table-bordered td:first-child,
+    .table.table-bordered th:first-child {
+        text-align: center !important;
+        color: #6c757d !important;
+        font-weight: 500 !important;
+    }
+
+    /* Title/Bayaran text bold + subtext */
+    .table.table-bordered td b,
+    .table.table-bordered td strong {
+        font-weight: 700 !important;
+        color: #212529 !important;
+    }
+
+    /* Checkbox styling */
+    .table.table-bordered input[type="checkbox"] {
+        width: 18px !important;
+        height: 18px !important;
+        accent-color: #252096 !important;
+        cursor: pointer !important;
+    }
+
+    /* Amount/Jumlah - bold, center */
+    .table.table-bordered td.amount-col,
+    .table.table-bordered .text-right {
+        font-weight: 700 !important;
+        text-align: center !important;
+    }
+
+/* ===== Action Button (3-dot dropdown trigger) ===== */
+.btn-action-dots {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+    background: #fff;
+    color: #495057;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.15s ease-in-out;
+}
+
+    .btn-action-dots:hover {
+        background: #f8f9fa;
+        border-color: #dee2e6;
+    }
+
+/* ===== Action Dropdown Menu ===== */
+.action-dropdown-menu {
+    border: 1px solid #e9ecef !important;
+    border-radius: 10px !important;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.08) !important;
+    padding: 8px !important;
+    min-width: 160px !important;
+}
+
+    .action-dropdown-menu .dropdown-item {
+        display: flex !important;
+        align-items: center !important;
+        gap: 10px !important;
+        padding: 8px 12px !important;
+        border-radius: 6px !important;
+        font-size: 9pt !important;
+        font-weight: 500 !important;
+        color: #495057 !important;
+    }
+
+        .action-dropdown-menu .dropdown-item:hover {
+            background-color: #f8f9fa !important;
+        }
+
+        .action-dropdown-menu .dropdown-item.text-primary {
+            color: #252096 !important;
+        }
+
+        .action-dropdown-menu .dropdown-item.text-danger {
+            color: #dc3545 !important;
+        }
+
+        .action-dropdown-menu .dropdown-item i {
+            font-size: 13px !important;
+            width: 16px !important;
+            text-align: center !important;
+        }
+
+/* ===== Search box "Cari kadar bayaran..." ===== */
+.table-search-box {
+    border: 1px solid #e9ecef !important;
+    border-radius: 8px !important;
+    padding: 10px 16px !important;
+    font-size: 9.5pt !important;
+    color: #495057 !important;
+}
+
+    .table-search-box:focus {
+        outline: none !important;
+        border-color: #252096 !important;
+        box-shadow: 0 0 0 3px rgba(37, 32, 150, 0.08) !important;
+    }
+
+/* ===== Pagination ===== */
+.table-pagination .page-btn {
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+    background: #fff;
+    color: #495057;
+    font-size: 9pt;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 2px;
+}
+
+    .table-pagination .page-btn.active {
+        background: #252096 !important;
+        color: #fff !important;
+        border-color: #252096 !important;
+    }
+
+    .table-pagination .page-btn:hover:not(.active) {
+        background: #f8f9fa;
+    }
