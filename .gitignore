@@ -58,3 +58,4 @@ msbuild.wrn
 # Jangan commit Web.config kalau nak kekalkan local setting
 /Web.config
 /webapp.Web/wwwroot/temp
+/Web.config
