@@ -2130,7 +2130,7 @@ h1{
 
     </script>
 
-    <script src="/js/auto-icon-button.js"></script>
+    <script src="<%= ResolveUrl("~/js/auto-icon-button.js") %>"></script>
 
 
     <script>
