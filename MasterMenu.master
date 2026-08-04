@@ -15,6 +15,8 @@
 
     <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
 
+    <!-- SweetAlert2 -->
+    <link rel="stylesheet" href="<%= ResolveUrl("~/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css") %>">
     <!-- Toastr -->
     <link rel="stylesheet" href="<%= ResolveUrl("~/plugins/toastr/toastr.min.css") %>">
     <!-- Theme style -->
@@ -1901,6 +1903,11 @@ h1{
         <script src="<%= ResolveUrl("~/plugins/jquery-ui/jquery-ui.min.js") %>"></script>
         <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
 
+
+        <!-- SweetAlert2 -->
+        <script src="<%= ResolveUrl("~/plugins/sweetalert2/sweetalert2.min.js") %>"></script>
+        <!-- Toastr -->
+        <script src="<%= ResolveUrl("~/plugins/toastr/toastr.min.js") %>"></script>
         <!-- Select2 -->
         <script src="<%= ResolveUrl("~/plugins/select2/js/select2.full.min.js") %>"></script>
         <!-- Bootstrap4 Duallistbox -->
@@ -2011,7 +2018,73 @@ h1{
             });
         </script>
 
+
+            <script>
+                function applyMobileLabels() {
+
+                    $('.table-bordered').each(function () {
+
+                        var headers = [];
+
+                        $(this).find('th').each(function () {
+
+                            // Auto add keep-header jika ada control
+                            if ($(this).find('.btn').length > 0) {
+                                $(this).addClass('keep-header');
+                            }
+
+                            headers.push($(this).text().trim());
+                        });
+
+                        $(this).find('tbody tr').each(function () {
+
+                            $(this).find('td').each(function (i) {
+
+                                $(this).attr('data-label', headers[i]);
+
+                                // Skip jika ada button/link/input
+                                if ($(this).find('.btn').length > 0) {
+                                    return;
+                                }
+
+                                var value = $(this)
+                                    .text()
+                                    .replace(/\u00A0/g, '')
+                                    .trim();
+
+                                //if (value === '') {
+                                //    $(this).hide();
+                                //} else {
+                                //    $(this).show();
+                                //}
+
+                            });
+
+                        });
+
+                    });
+
+                }
+
+                $(document).ready(function () {
+                    applyMobileLabels();
+                });
+
+                if (typeof (Sys) !== "undefined") {
+
+                    Sys.WebForms.PageRequestManager
+                        .getInstance()
+                        .add_endRequest(function () {
+                            applyMobileLabels();
+                        });
+
+                }
+
+            </script>
+
     </form>
+
+
 
     <script>
         function applyGridButtonIcon() {
@@ -2057,14 +2130,7 @@ h1{
     </script>
 
     <script src="/js/auto-icon-button.js"></script>
-    <script>
 
-        function applyGridButtonIcon() {
-
-
-ID t
-
-    </script>
 
     <script>
         function convertActionButtonsToDropdown() {
