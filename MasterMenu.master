@@ -758,6 +758,7 @@ h1{
     <link rel="stylesheet" href="~/css/gridview-style.css">
 
     <link rel="stylesheet" href="~/css/auto-icon-button.css" />
+    <link rel="stylesheet" href="~/css/custom-kelulusan-sepanduk.css">
     
 
 </head>

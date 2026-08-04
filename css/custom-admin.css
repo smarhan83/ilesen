@@ -74,7 +74,7 @@
 
 
 .card-header .card-title {
-    font-size: 0.9rem !important;
+    font-size: 0.85rem !important;
     font-weight: 700;
     color: #ffffff;
     margin: 0 !important;
@@ -162,8 +162,9 @@
     }
 
 .card-body {
-    font-size: 11pt;
+    font-size: 10pt;
     font-family: Segoe UI;
+    color: #6c757d !important;
 }
 
 /* Compact Form Control */
@@ -1985,3 +1986,4 @@ a.badge-dark:focus, a.badge-dark.focus {
     justify-content: flex-end;
     flex-wrap: wrap;
 }
+
