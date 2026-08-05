@@ -473,7 +473,9 @@ Partial Class appregister1
                 pnla3.Visible = True
                 pnla4.Visible = True
 
-                If lesenid = 29 Then
+                lblalamat.Text = "Alamat Baru"
+
+                If lesenid = 8 Then
                     lbljenisperniagaan.Text = "Jenis Perniagaan Tambahan"
                 Else
                     lbljenisperniagaan.Text = "Pengurangan Jenis Perniagaan"
@@ -1284,7 +1286,9 @@ Partial Class appregister1
                 pnlesen1c_ins.Visible = True
                 pnlesen1d_ins.Visible = True
 
-                If lesenid = 29 Then
+                Lbl_JenisPerniagaanBaru_ins.Text = "Alamat Baru"
+
+                If lesenid = 8 Then
                     Lbl_JenisPerniagaanBaru_ins.Text = "Jenis Perniagaan Tambahan"
                 Else
                     Lbl_JenisPerniagaanBaru_ins.Text = "Pengurangan Jenis Perniagaan"
@@ -2207,7 +2211,9 @@ Partial Class appregister1
                 pnla3.Visible = True
                 pnla4.Visible = True
 
-                If ddl.SelectedValue = 29 Then
+                lblalamat.Text = "Alamat Baru"
+
+                If ddl.SelectedValue = 8 Then
                     lbljenisperniagaan.Text = "Jenis Perniagaan Tambahan"
                 Else
                     lbljenisperniagaan.Text = "Pengurangan Jenis Perniagaan"
