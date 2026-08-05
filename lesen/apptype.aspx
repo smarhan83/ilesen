@@ -989,8 +989,8 @@
                                             </Columns>
                                         </asp:GridView>
                                         <asp:SqlDataSource runat="server" ID="SqlDataSourceGridUlasanIK" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
-                                            DeleteCommand="DELETE FROM LESEN_UlasanTemplate WHERE UTID = @UTID"
-                                            SelectCommand="SELECT * FROM LESEN_UlasanTemplate WHERE JenisLesen_ID = @JenisLesen_ID AND IsSokong=@IsSokong 
+                                            DeleteCommand="DELETE FROM LESEN_UlasanIKTemplate WHERE UTID = @UTID"
+                                            SelectCommand="SELECT * FROM LESEN_UlasanIKTemplate WHERE JenisLesen_ID = @JenisLesen_ID AND IsSokong=@IsSokong 
                                             ORDER BY NamaTemplat, UTID">
                                             <DeleteParameters>
                                                 <asp:Parameter Name="UTID"></asp:Parameter>
