@@ -340,8 +340,8 @@
                         <div class="card-footer">
                             <asp:LinkButton ID="btnBack" runat="server" CausesValidation="False" Text="Kembali ke senarai" CssClass="btn btn-default" OnClick="btnBack_Click" />
                             <asp:LinkButton runat="server" CssClass="btn btn-warning" CausesValidation="False" Text="Lihat Surat Mohon Ulasan" ID="BT_SuratMohonUlasan" Visible='<%# If(CInt(Session.Item("sessionEstateId")) = 1, False, True) %>' OnCommand="BT_SuratMohonUlasan_Command" />
-                            <asp:LinkButton runat="server" CssClass="btn btn-warning" ValidationGroup="updateForm" Text="Jana Surat" ID="BT_Generate" Visible='<%# If(Eval("IsPublish") = True Or Eval("ApprStatusID") < 9, False, True) %>' OnCommand="BT_Generate_Command" CausesValidation="True" OnClientClick="return confirm('Jana surat sekarang?');"/>
-                            <asp:LinkButton runat="server" CssClass="btn btn-warning" ValidationGroup="updateForm" Text="Lihat Surat" ID="BT_ViewMail" Visible='<%# If(Eval("ApprStatusID") < 9, False, True) %>' OnCommand="BT_ViewMail_Command" CausesValidation="False" />
+                            <%--<asp:LinkButton runat="server" CssClass="btn btn-warning" ValidationGroup="updateForm" Text="Jana Surat" ID="BT_Generate" Visible='<%# If(Eval("IsPublish") = True Or Eval("ApprStatusID") < 9, False, True) %>' OnCommand="BT_Generate_Command" CausesValidation="True" OnClientClick="return confirm('Jana surat sekarang?');"/>--%>
+                            <asp:LinkButton runat="server" CssClass="btn btn-warning" ValidationGroup="updateForm" Text="Lihat Surat Kelulusan" ID="BT_ViewMail" Visible='<%# If(Eval("ApprStatusID") < 9, False, True) %>' OnCommand="BT_ViewMail_Command" CausesValidation="False" />
                             <label style="margin-left: 50px;">Janaan Komputer?</label>
                             <asp:CheckBox ID="CB_IsDigitalSign" runat="server" Checked="true" AutoPostBack="true" Enabled='<%# If(Eval("ApprStatusID") < 9, False, True) %>'/>
 
@@ -394,6 +394,38 @@
                 <asp:TabPanel runat="server" ID="tabSurat" HeaderText="Surat">
                     <HeaderTemplate>Surat</HeaderTemplate>
                     <ContentTemplate>
+                                                <br />
+                        <div class="row">
+                            <div class="col-md-4" runat="server" id="divtemplatsurat">
+                                <div class="form-group">
+                                    <asp:DropDownList ID="DDL_SuratTemplat" CssClass="form-control select2" runat="server" AutoPostBack="false"
+                                        DataSourceID="SqlDataSourceSuratTemplat" DataTextField="NamaTemplatDesc" DataValueField="NamaTemplat">
+                                    </asp:DropDownList>
+                                    <asp:SqlDataSource runat="server" ID="SqlDataSourceSuratTemplat" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
+                                        SelectCommand="SELECT * FROM 
+                                        (SELECT '0' AS NamaTemplat, '-- Pilih Templat Surat --' AS NamaTemplatDesc
+                                        UNION ALL
+                                        SELECT DISTINCT CONCAT(JenisReport, ',',NamaTemplat) AS, NamaTemplat AS NamaTemplatDesc 
+                                        FROM LESEN_ReportTemplate 
+                                        WHERE JenisLesen_ID = TRY_CAST(
+                                            CASE 
+                                                WHEN CHARINDEX(',', LTRIM(@JenisLesenIdList)) > 0 
+                                                    THEN LEFT(LTRIM(@JenisLesenIdList), CHARINDEX(',', LTRIM(@JenisLesenIdList)) - 1)
+                                                ELSE LTRIM(@JenisLesenIdList)
+                                            END AS INT
+                                        ) AND JenisReport=IIF(@ApprStatus=9, 'SKB', 'SKL') AND NamaTemplat is not null) AS tbl1 ORDER BY NamaTemplatDesc ">
+                                        <SelectParameters>
+                                            <asp:ControlParameter ControlID="GridView1" PropertyName="SelectedDataKey.Values[1]" Name="ApprStatusID"></asp:ControlParameter>
+                                             <asp:ControlParameter ControlID="GridView1" PropertyName="SelectedDataKey.Values[2]" Name="JenisLesenIdList"></asp:ControlParameter>
+                                        </SelectParameters>
+                                    </asp:SqlDataSource>
+                                    
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <asp:LinkButton runat="server" CssClass="btn btn-warning" ValidationGroup="updateForm" Text="Jana Surat" ID="BT_Generate" OnCommand="BT_Generate_Command" CausesValidation="False" OnClientClick="return confirm('Jana surat sekarang?');" />													
+                            </div>
+                        </div>
                         <br />
                         <div class="row">
                             <div class="col-md-6">

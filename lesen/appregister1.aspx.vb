@@ -5,6 +5,7 @@ Imports System.Drawing
 Imports System.Drawing.Imaging
 Imports System.Security.Cryptography
 Imports System.Security.Policy
+Imports System.Web.UI.WebControls
 Imports Microsoft.SqlServer.Management.Smo
 
 <Serializable()>
@@ -380,6 +381,9 @@ Partial Class appregister1
 
         Dim noruj As TextBox = DirectCast(FormView1.FindControl("TB_Rujukan"), TextBox)
 
+        Dim lbljenisperniagaan As Label = DirectCast(FormView1.FindControl("Lbl_JenisPerniagaanBaru"), Label)
+        Dim lblalamat As Label = DirectCast(FormView1.FindControl("Lbl_AlamatBaru"), Label)
+
         If clrflag = True Then
 
             pnlbillboard.Visible = False
@@ -428,13 +432,21 @@ Partial Class appregister1
                 pnlb.Visible = True
             Case 4                      'Pasar Penjaja /
                 pnld.Visible = True
-            Case 1                       'Lesen Perniagaan /
+            Case 1, 30                       'Lesen Perniagaan / Permit Perniagaan Sementara
                 pnla.Visible = True
                 pnla1.Visible = True
-            Case 6, 7                     'Tukar Alamat Perniagaan, Tambah Premis /
+            Case 6, 7, 29                     'Tukar Alamat Perniagaan, Tambah Premis, Kurang Premis /
                 pnla.Visible = True
                 pnla1.Visible = True
                 pnla3.Visible = True
+
+                If lesenid = 28 Then
+                    lblalamat.Text = "Alamat Pengurangan Premis"
+                ElseIf lesenid = 7 Then
+                    lblalamat.Text = "Alamat Premis Tambahan"
+                Else
+                    lblalamat.Text = "Alamat Baru"
+                End If
             Case 13, 17, 18                      'Permit Kaki Lima, Lot Tepi Kedai, Lebuh Awam /
                 pnla.Visible = True
             Case 14                         'Pembatalan Lesen & Wang Amanah
@@ -450,17 +462,23 @@ Partial Class appregister1
                 pnla1.Visible = True
                 pnla3.Visible = True
                 pnla2.Visible = True
-            Case 10, 12, 16                     'Tukar, Pengurangan Visual Iklan /
+            Case 10, 12, 16                     'Tambah, Tukar, Pengurangan Visual Iklan /
                 pnla.Visible = True
                 pnla1.Visible = True
             Case 5                          ' billboard /
                 pnla.Visible = True
                 pnla1.Visible = True
                 pnlbillboard.Visible = True
-            Case 8                     'Jenis Perniagaan /
+            Case 8, 29                     'Tambah, pengurangan Jenis Perniagaan /
                 pnla.Visible = True
                 pnla3.Visible = True
                 pnla4.Visible = True
+
+                If lesenid = 29 Then
+                    lbljenisperniagaan.Text = "Jenis Perniagaan Tambahan"
+                Else
+                    lbljenisperniagaan.Text = "Pengurangan Jenis Perniagaan"
+                End If
             Case 15                     'Expo /
                 pnle.Visible = True
             Case 19
@@ -761,7 +779,7 @@ Partial Class appregister1
                     ROW_NUMBER() OVER (PARTITION BY Pemohon_ID ORDER BY CASE WHEN AlamatPenjajaan IS NOT NULL THEN Permohonan_ID END DESC) as rn9,
                     ROW_NUMBER() OVER (PARTITION BY Pemohon_ID ORDER BY CASE WHEN JenisPerniagaanPenjaja IS NOT NULL THEN Permohonan_ID END DESC) as rn10
                 FROM Lesen_Permohonan
-                WHERE Pemohon_ID = @Pemohon_ID AND YEAR(TarikhMohon) > YEAR(GETDATE())-5 
+                WHERE Pemohon_ID = @Pemohon_ID 
             )
             SELECT 
                 Pemohon_ID,
@@ -1225,13 +1243,21 @@ Partial Class appregister1
                 pnlesen2_ins.Visible = True
             Case 4                      'Pasar Penjaja /
                 pnlesen4_ins.Visible = True
-            Case 1                      'Lesen Perniagaan /
+            Case 1, 30                      'Lesen Perniagaan /
                 pnlesen1_ins.Visible = True
                 pnlesen1a_ins.Visible = True
-            Case 6, 7                     'Tukar Alamat Perniagaan, Tambah Premis /
+            Case 6, 7, 28                     'Tukar Alamat Perniagaan, Tambah Premis, Kurang Premis /
                 pnlesen1_ins.Visible = True
                 pnlesen1a_ins.Visible = True
                 pnlesen1c_ins.Visible = True
+
+                If lesenid = 28 Then
+                    Lbl_AlamatBaru_ins.Text = "Alamat Pengurangan Premis"
+                ElseIf lesenid = 7 Then
+                    Lbl_AlamatBaru_ins.Text = "Alamat Premis Tambahan"
+                Else
+                    Lbl_AlamatBaru_ins.Text = "Alamat Baru"
+                End If
             Case 13, 17, 18                      'Permit Kaki Lima, Lot Tepi Kedai, Lebuh Awam /
                 pnlesen1_ins.Visible = True
             Case 14                         'Pembatalan Lesen & Wang Amanah
@@ -1254,10 +1280,17 @@ Partial Class appregister1
                 pnlesen1_ins.Visible = True
                 pnlesen1a_ins.Visible = True
                 pnlbillboard_ins.Visible = True
-            Case 8                     'Jenis Perniagaan /
+            Case 8, 29                     'Tambah, Pengurangan Jenis Perniagaan /
                 pnlesen1_ins.Visible = True
                 pnlesen1c_ins.Visible = True
                 pnlesen1d_ins.Visible = True
+
+                If lesenid = 29 Then
+                    Lbl_JenisPerniagaanBaru_ins.Text = "Jenis Perniagaan Tambahan"
+                Else
+                    Lbl_JenisPerniagaanBaru_ins.Text = "Pengurangan Jenis Perniagaan"
+                End If
+
             Case 15                     'Expo /
                 pnlesen5_ins.Visible = True
             Case 19                             'Nama + Alamat + Visual Iklan /
@@ -2092,6 +2125,9 @@ Partial Class appregister1
 
         Dim noruj As TextBox = DirectCast(FormView1.FindControl("TB_Rujukan"), TextBox)
 
+        Dim lbljenisperniagaan As Label = DirectCast(FormView1.FindControl("Lbl_JenisPerniagaanBaru"), Label)
+        Dim lblalamat As Label = DirectCast(FormView1.FindControl("Lbl_AlamatBaru"), Label)
+
         pnlbillboard.Visible = False
         pnla.Visible = False
         pnla1.Visible = False
@@ -2130,13 +2166,21 @@ Partial Class appregister1
                 pnlb.Visible = True
             Case 4                      'Pasar Penjaja /
                 pnld.Visible = True
-            Case 1                       'Lesen Perniagaan /
+            Case 1, 30                       'Lesen Perniagaan /
                 pnla.Visible = True
                 pnla1.Visible = True
-            Case 6, 7                     'Tukar Alamat Perniagaan, Tambah Premis /
+            Case 6, 7, 28                     'Tukar Alamat Perniagaan, Tambah Premis, Pengurangan Premis /
                 pnla.Visible = True
                 pnla1.Visible = True
                 pnla3.Visible = True
+
+                If ddl.SelectedValue = 28 Then
+                    lblalamat.Text = "Alamat Pengurangan Premis"
+                ElseIf ddl.SelectedValue = 7 Then
+                    lblalamat.Text = "Alamat Premis Tambahan"
+                Else
+                    lblalamat.Text = "Alamat Baru"
+                End If
             Case 13, 17, 18                      'Permit Kaki Lima, Lot Tepi Kedai, Lebuh Awam /
                 pnla.Visible = True
             Case 14                         'Pembatalan Lesen & Wang Amanah
@@ -2152,17 +2196,23 @@ Partial Class appregister1
                 pnla1.Visible = True
                 pnla3.Visible = True
                 pnla2.Visible = True
-            Case 10, 12, 16                     'Tukar, Pengurangan Visual Iklan /
+            Case 10, 12, 16                     'Tambah, Tukar, Pengurangan Visual Iklan /
                 pnla.Visible = True
                 pnla1.Visible = True
             Case 5                          ' billboard /
                 pnla.Visible = True
                 pnla1.Visible = True
                 pnlbillboard.Visible = True
-            Case 8                     'Jenis Perniagaan /
+            Case 8, 29                     'Tambah, Pengurangan Jenis Perniagaan /
                 pnla.Visible = True
                 pnla3.Visible = True
                 pnla4.Visible = True
+
+                If ddl.SelectedValue = 29 Then
+                    lbljenisperniagaan.Text = "Jenis Perniagaan Tambahan"
+                Else
+                    lbljenisperniagaan.Text = "Pengurangan Jenis Perniagaan"
+                End If
             Case 15                     'Expo /
                 pnle.Visible = True
             Case 19

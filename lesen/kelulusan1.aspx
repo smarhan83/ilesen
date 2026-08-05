@@ -489,6 +489,38 @@
                 <asp:TabPanel runat="server" ID="tabUlasan" HeaderText="Ulasan">
                     <HeaderTemplate>Ulasan</HeaderTemplate>
                     <ContentTemplate>
+                        <br />
+                        <div class="row">
+                            <div class="col-md-3" runat="server" id="divulasanik">
+                                <div class="form-group">
+                                    <asp:DropDownList ID="DDL_UlasanIK" CssClass="form-control select2" runat="server" AutoPostBack="false"
+                                        DataSourceID="SqlDataSourceUlasanIK" DataTextField="NamaTemplatDesc" DataValueField="NamaTemplat">
+                                    </asp:DropDownList>
+                                    <asp:SqlDataSource runat="server" ID="SqlDataSourceUlasanIK" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
+                                        SelectCommand="SELECT * FROM 
+                                        (SELECT '0' AS NamaTemplat, '-- Pilih Templat Ulasan --' AS NamaTemplatDesc
+                                        UNION ALL
+                                        SELECT DISTINCT CONCAT(IsSokong, ',',NamaTemplat) AS NamaTemplat, NamaTemplat AS NamaTemplatDesc 
+                                        FROM LESEN_UlasanIKTemplate 
+                                        WHERE JenisLesen_ID = TRY_CAST(
+                                            CASE 
+                                                WHEN CHARINDEX(',', LTRIM(@JenisLesenIdList)) > 0 
+                                                    THEN LEFT(LTRIM(@JenisLesenIdList), CHARINDEX(',', LTRIM(@JenisLesenIdList)) - 1)
+                                                ELSE LTRIM(@JenisLesenIdList)
+                                            END AS INT
+                                        ) AND NamaTemplat is not null) AS tbl1 ORDER BY NamaTemplatDesc ">
+                                        <SelectParameters>
+                                             <asp:ControlParameter ControlID="GridView1" PropertyName="SelectedDataKey.Values[7]" Name="JenisLesenIdList"></asp:ControlParameter>
+                                        </SelectParameters>
+                                    </asp:SqlDataSource>
+                                    
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <asp:LinkButton runat="server" CssClass="btn btn-warning" ValidationGroup="updateForm" Text="Jana Ulasan" ID="BT_GenerateUlasan" OnCommand="BT_GenerateUlasan_Command" CausesValidation="True" />													
+                            </div>
+                        </div>
+                        <br />
 
                         <asp:GridView ID="gvTabUlasan" runat="server" ShowHeaderWhenEmpty="True"
                             AllowSorting="True" AutoGenerateColumns="False" DataKeyNames="UlasanFail_ID"
@@ -1044,7 +1076,7 @@
 
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label>Alamat Baru</label>
+                                        <asp:Label ID="Lbl_AlamatBaru" runat="server" Text="Alamat Baru" />
                                         <asp:TextBox ID="TB_AlamatBaru" runat="server" TextMode="MultiLine" Rows="3" CssClass="form-control" />
 
                                     </div>
@@ -1060,7 +1092,7 @@
 
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label>Jenis Perniagaan Tambahan</label>
+                                        <asp:Label ID="Lbl_JenisPerniagaanBaru" runat="server" Text="Jenis Perniagaan Tambahan" />
                                         <asp:TextBox ID="TB_JenisPerniagaanBaru" runat="server" CssClass="form-control" />
 
                                     </div>
@@ -1579,10 +1611,34 @@
                     <ContentTemplate>
                         <br />
                         <div class="row">
-
-                            <div class="col-md-12">
-                                <asp:LinkButton runat="server" CssClass="btn btn-warning" ValidationGroup="updateForm" Text="Jana Surat Sokong" ID="BT_Generate" OnCommand="BT_Generate_Command" CausesValidation="True" /> &nbsp;
-                                <asp:LinkButton runat="server" CssClass="btn btn-warning" ValidationGroup="updateForm" Text="Jana Surat Tidak Sokong" ID="BT_Generate1" OnCommand="BT_Generate1_Command" CausesValidation="True" /> &nbsp;
+                            <div class="col-md-3" runat="server" id="divtemplatsurat">
+                                <div class="form-group">
+                                    <asp:DropDownList ID="DDL_SuratTemplat" CssClass="form-control select2" runat="server" AutoPostBack="false"
+                                        DataSourceID="SqlDataSourceSuratTemplat" DataTextField="NamaTemplatDesc" DataValueField="NamaTemplat">
+                                    </asp:DropDownList>
+                                    <asp:SqlDataSource runat="server" ID="SqlDataSourceSuratTemplat" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
+                                        SelectCommand="SELECT * FROM 
+                                        (SELECT '0' AS NamaTemplat, '-- Pilih Templat Surat --' AS NamaTemplatDesc
+                                        UNION ALL
+                                        SELECT DISTINCT CONCAT(JenisReport, ',',NamaTemplat) AS, NamaTemplat AS NamaTemplatDesc 
+                                        FROM LESEN_ReportTemplate 
+                                        WHERE JenisLesen_ID = TRY_CAST(
+                                            CASE 
+                                                WHEN CHARINDEX(',', LTRIM(@JenisLesenIdList)) > 0 
+                                                    THEN LEFT(LTRIM(@JenisLesenIdList), CHARINDEX(',', LTRIM(@JenisLesenIdList)) - 1)
+                                                ELSE LTRIM(@JenisLesenIdList)
+                                            END AS INT
+                                        ) AND (JenisReport='LIL' OR JenisReport='LIB') AND NamaTemplat is not null) AS tbl1 ORDER BY NamaTemplatDesc ">
+                                        <SelectParameters>
+                                             <asp:ControlParameter ControlID="GridView1" PropertyName="SelectedDataKey.Values[7]" Name="JenisLesenIdList"></asp:ControlParameter>
+                                        </SelectParameters>
+                                    </asp:SqlDataSource>
+                                    
+                                </div>
+                            </div>
+                            <div class="col-md-9">
+                                <asp:LinkButton runat="server" CssClass="btn btn-warning" ValidationGroup="updateForm" Text="Jana Surat" ID="BT_Generate" OnCommand="BT_Generate_Command" CausesValidation="True" /> &nbsp;
+                                <%--<asp:LinkButton runat="server" CssClass="btn btn-warning" ValidationGroup="updateForm" Text="Jana Surat Tidak Sokong" ID="BT_Generate1" OnCommand="BT_Generate1_Command" CausesValidation="True" /> &nbsp;--%>
                                 <asp:LinkButton runat="server" CssClass="btn btn-warning" ValidationGroup="updateForm" Text="Lihat Surat" ID="BT_ViewMail" OnCommand="BT_ViewMail_Command" CausesValidation="True" />
 								<asp:LinkButton runat="server" CssClass="btn btn-warning" ValidationGroup="updateForm" Text="Surat Mohon Ulasan" ID="BT_ViewMU" OnCommand="BT_ViewMU_Command" CausesValidation="True" />																
                             </div>

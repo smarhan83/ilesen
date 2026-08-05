@@ -1,9 +1,13 @@
 ﻿
+Imports System
+Imports System.Collections.Generic
+Imports System.Configuration
 Imports System.Data
 Imports System.Data.SqlClient
 Imports System.Drawing
 Imports System.Drawing.Imaging
 Imports System.IO
+Imports System.Web.UI.WebControls
 Imports Microsoft.ReportingServices.Rendering.ExcelRenderer.ExcelGenerator.BIFF8
 
 Partial Class kelulusan1
@@ -163,11 +167,11 @@ Partial Class kelulusan1
                         Session.Item("isDisablePrintSession") = "Y"
                     End If
 
-                    'If Session.Item("sessionIsPenilai") = "True" Then
-                    'divTarikhSurat.Visible = True
-                    'Else
-                    'divTarikhSurat.Visible = False
-                    'End If
+                    If Session.Item("sessionIsPenilai") = "True" Then
+                        divTarikhSurat.Visible = True
+                    Else
+                        divTarikhSurat.Visible = False
+                    End If
 
                     GetSuratContent(PermohonanID)
 
@@ -1866,6 +1870,9 @@ Partial Class kelulusan1
         Dim jidList() As String = CStr(GridView1.SelectedDataKey.Values("JenisLesenIdList")).Split(","c)
         Dim jid As String = CStr(GridView1.SelectedDataKey.Values("JenisLesenIdList"))
         Dim pid As Integer = GridView1.SelectedDataKey.Values(0)
+        Dim namatemplatList() As String = CStr(DDL_SuratTemplat.SelectedValue).Split(","c)
+        Dim jenisrepot As String = namatemplatList(0)
+        Dim namatemplat As String = namatemplatList(1)
 
         If jid = "4" Then
 
@@ -1879,7 +1886,7 @@ Partial Class kelulusan1
 
         End If
 
-        Dim jenisReport As String = "LIL"
+        'Dim jenisReport As String = "LIL"
         Dim rujukan As String = ""
         Dim tarikhmohon As String = ""
         Dim jenispasar As String = ""
@@ -1948,11 +1955,12 @@ Partial Class kelulusan1
                     '{@LokasiPasar}',@@LokasiPasar) AS IsiKandungan, 
                     GETDATE() AS CreatedDt, GETDATE() AS ModDt 
                     FROM LESEN_ReportTemplate
-                    WHERE JenisLesen_ID=@JenisLesen_ID AND JenisReport=@JenisReport;"
+                    WHERE JenisLesen_ID=@JenisLesen_ID AND JenisReport=@JenisReport AND NamaTemplat=@NamaTemplat;"
 
             Dim myCommandSelect As New SqlCommand(SQL, myConnection)
             myCommandSelect.Parameters.AddWithValue("@JenisLesen_ID", jidList(0))
-            myCommandSelect.Parameters.AddWithValue("@JenisReport", jenisReport)
+            myCommandSelect.Parameters.AddWithValue("@JenisReport", jenisrepot)
+            myCommandSelect.Parameters.AddWithValue("@NamaTemplat", namatemplat)
             myCommandSelect.Parameters.AddWithValue("@Permohonan_ID", pid)
 
             myCommandSelect.Parameters.AddWithValue("@@TahunIni", DateTime.Now.Year.ToString)
@@ -2132,12 +2140,12 @@ Partial Class kelulusan1
 
             End If
 
-            If TB_TarikhSurat.Text.Length = 0 Then
+            'If TB_TarikhSurat.Text.Length = 0 Then
 
-                ShowAlert("error", "", "Sila pilih tarikh surat.")
-                Return
+            '    ShowAlert("error", "", "Sila pilih tarikh surat.")
+            '    Return
 
-            End If
+            'End If
 
             If TB_NoRujukan.Text.Length = 0 Or Trim(TB_NoRujukan.Text) = "MPK/599/401/" Then
 
@@ -2571,6 +2579,50 @@ Partial Class kelulusan1
                 myConnection.Close()
 
             Next
+
+        End Using
+
+    End Sub
+
+    Protected Sub BT_GenerateUlasan_Command(sender As Object, e As CommandEventArgs)
+
+        If DDL_UlasanIK.SelectedValue = "" Then
+            Exit Sub
+        End If
+
+        Dim jidList() As String = CStr(GridView1.SelectedDataKey.Values("JenisLesenIdList")).Split(","c)
+        Dim jid As String = CStr(GridView1.SelectedDataKey.Values("JenisLesenIdList"))
+        Dim pid As Integer = GridView1.SelectedDataKey.Values(0)
+        Dim namatemplatList() As String = CStr(DDL_UlasanIK.SelectedValue).Split(","c)
+        Dim isSokong As String = namatemplatList(0)
+        Dim namatemplat As String = namatemplatList(1)
+
+        Using myConnection As New SqlConnection(ConfigurationManager.ConnectionStrings("webcon_ConnectionStr").ConnectionString)
+
+            myConnection.Open()
+
+            Dim SQL As String = "DELETE FROM LESEN_UlasanFail WHERE Permohonan_ID=@Permohonan_ID; 
+                    INSERT INTO LESEN_UlasanFail (Permohonan_ID, UlasanFail_Remarks, CreatorID, CreatedDt, LastModDt)
+                    SELECT @Permohonan_ID AS Permohonan_ID, Ulasan AS UlasanFail_Remarks, 'AUTO' AS CreatorID, 
+                    GETDATE() AS CreatedDt, GETDATE() AS ModDt 
+                    FROM LESEN_UlasanTemplate
+                    WHERE JenisLesen_ID=@JenisLesen_ID AND IsSokong=@IsSokong AND NamaTemplat=@NamaTemplat;"
+
+            Dim myCommandSelect As New SqlCommand(SQL, myConnection)
+            myCommandSelect.Parameters.AddWithValue("@JenisLesen_ID", jidList(0))
+            myCommandSelect.Parameters.AddWithValue("@IsSokong", isSokong)
+            myCommandSelect.Parameters.AddWithValue("@NamaTemplat", namatemplat)
+            myCommandSelect.Parameters.AddWithValue("@Permohonan_ID", pid)
+
+            Try
+                myCommandSelect.ExecuteNonQuery()
+                ShowAlert("success", "", "Ulasan berjaya dijana.")
+                gvTabUlasan.DataBind()
+            Catch ex As Exception
+                MessageBox(ex.Message, Me)
+            End Try
+
+            myConnection.Close()
 
         End Using
 
@@ -3010,13 +3062,21 @@ Partial Class kelulusan1
                 pnlesen2.Visible = True
             Case 4                      'Pasar Penjaja /
                 pnlesen4.Visible = True
-            Case 1                      'Lesen Perniagaan /
+            Case 1, 30                      'Lesen Perniagaan, Permit sementara perniagaan /
                 pnlesen1.Visible = True
                 pnlesen1a.Visible = True
-            Case 6, 7                     'Tukar Alamat Perniagaan, Tambah Premis /
+            Case 6, 7, 28                     'Tukar Alamat Perniagaan, Tambah Premis, Pengurangan Premis /
                 pnlesen1.Visible = True
                 pnlesen1a.Visible = True
                 pnlesen1c.Visible = True
+
+                If lesenid = 28 Then
+                    Lbl_AlamatBaru.Text = "Alamat Pengurangan Premis"
+                ElseIf lesenid = 7 Then
+                    Lbl_AlamatBaru.Text = "Alamat Premis Tambahan"
+                Else
+                    Lbl_AlamatBaru.Text = "Alamat Baru"
+                End If
             Case 13, 17, 18                      'Permit Kaki Lima, Lot Tepi Kedai, Lebuh Awam /
                 pnlesen1.Visible = True
             Case 14                         'Pembatalan Lesen & Wang Amanah
@@ -3039,10 +3099,16 @@ Partial Class kelulusan1
                 pnlesen1.Visible = True
                 pnlesen1a.Visible = True
                 pnlbillboard.Visible = True
-            Case 8                     'Jenis Perniagaan /
+            Case 8, 29                     'Tambah, Pengurangan Jenis Perniagaan /
                 pnlesen1.Visible = True
                 pnlesen1c.Visible = True
                 pnlesen1d.Visible = True
+
+                If lesenid = 29 Then
+                    Lbl_JenisPerniagaanBaru.Text = "Jenis Perniagaan Tambahan"
+                Else
+                    Lbl_JenisPerniagaanBaru.Text = "Pengurangan Jenis Perniagaan"
+                End If
             Case 15                     'Expo /
                 pnlesen5.Visible = True
             Case 19                             'Nama + Alamat + Visual Iklan /
