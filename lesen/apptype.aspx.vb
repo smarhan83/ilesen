@@ -172,7 +172,7 @@ Partial Class apptype
         GridViewUlasanIK.DataBind()
     End Sub
 
-    Private Sub FormViewReportSKL_ItemUpdated(sender As Object, e As FormViewUpdatedEventArgs) Handles FormViewUlasanIK.ItemUpdated
+    Private Sub FormViewUlasanIK_ItemUpdated(sender As Object, e As FormViewUpdatedEventArgs) Handles FormViewUlasanIK.ItemUpdated
         ShowAlert("success", "", "Rekod berjaya dikemaskini")
         GridViewUlasanIK.DataBind()
     End Sub
