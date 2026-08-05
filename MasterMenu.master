@@ -804,7 +804,7 @@ h1{
         ======================== -->
         <nav class="navbar navbar-expand-lg sticky-top">
         <div class="container">
-		    <a class="navbar-brand text-decoration-none" href="/" >
+		    <a class="navbar-brand text-decoration-none" href='<%= ResolveUrl("~/") %>' >
 		        <div class="brand-wrap">
 			    <div class="brand-logo">
 			        <img src='<%= ResolveUrl("~/images/logo.png") %>' alt="Logo">
@@ -1925,6 +1925,10 @@ h1{
         <script src="<%= ResolveUrl("~/plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.min.js") %>"></script>
         <!-- Tempusdominus Bootstrap 4 -->
         <script src="<%= ResolveUrl("~/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js") %>"></script>
+
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
 
         <script>
             function showLoginModal() {

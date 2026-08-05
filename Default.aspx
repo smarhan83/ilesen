@@ -768,7 +768,7 @@ where x2.Permohonan_ID = g.Permohonan_ID and x2.JabatanAgensi_ID = @AgensiID uni
             <div class="row g-4 mt-4">
 
                 <!-- Telah Lulus -->
-                <div class="col-xl-4">
+                <%--<div class="col-xl-4">
 
                     <div class="soft-card p-4">
 
@@ -843,7 +843,7 @@ where x2.Permohonan_ID = g.Permohonan_ID and x2.JabatanAgensi_ID = @AgensiID uni
 
                     </div>
 
-                </div>
+                </div>--%>
 
                 <asp:SqlDataSource runat="server" ID="sdsJenisLesen" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
                 SelectCommand="select JenisLesen_Description,totPerniagaan,case when totAllPerniagaan = 0 then 1 else totAllPerniagaan end as totAllPerniagaan
@@ -871,7 +871,7 @@ where x2.Permohonan_ID = g.Permohonan_ID and x2.JabatanAgensi_ID = @AgensiID uni
                 </asp:SqlDataSource>
 
                 <!--Tempoh Kelulusan Lesen < 14 Hari -->
-                <div class="col-xl-4">
+                <%--<div class="col-xl-4">
 
                     <div class="soft-card p-4">
 
@@ -946,7 +946,7 @@ where x2.Permohonan_ID = g.Permohonan_ID and x2.JabatanAgensi_ID = @AgensiID uni
 
                     </div>
 
-                </div>
+                </div>--%>
 
                 <asp:SqlDataSource runat="server" ID="sdsTempohProsesLesen" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
                     SelectCommand="select JenisLesen_Description, totStatPerniagaan as totStatPerniagaan,
@@ -974,7 +974,7 @@ where x2.Permohonan_ID = g.Permohonan_ID and x2.JabatanAgensi_ID = @AgensiID uni
                 </asp:SqlDataSource>
 
                 <!--Tempoh Kelulusan Lesen >= 14 Hari -->
-                <div class="col-xl-4">
+                <%--<div class="col-xl-4">
 
                     <div class="soft-card p-4">
 
@@ -1051,7 +1051,7 @@ where x2.Permohonan_ID = g.Permohonan_ID and x2.JabatanAgensi_ID = @AgensiID uni
 
                     </div>
 
-                </div>
+                </div>--%>
 
                 <asp:SqlDataSource runat="server" ID="sdsTempohProsesLesen2" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
                     SelectCommand="select JenisLesen_Description, totStatPerniagaan as totStatPerniagaan,
@@ -1077,6 +1077,220 @@ where x2.Permohonan_ID = g.Permohonan_ID and x2.JabatanAgensi_ID = @AgensiID uni
                     <asp:SessionParameter SessionField="sessionUsersId" DefaultValue="0" Name="sessionUsersId"></asp:SessionParameter>		
                 </SelectParameters>
                 </asp:SqlDataSource>
+
+                <!-- NEW KELULUSAN DASHBOARD -->
+
+    <style>
+        .soft-card {
+            background: #fff;
+            border-radius: 14px;
+            box-shadow: 0 2px 10px rgba(0,0,0,.05);
+        }
+
+        .lesen-title { font-size: 1rem; font-weight: 700; color: #1f2937; }
+
+        /* ---- Search box with icon ---- */
+        .search-wrap { position: relative; flex: 1 1 auto; min-width: 220px; }
+        .search-wrap .search-icon {
+            position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
+            color: #9aa4b2; pointer-events: none;
+        }
+        .search-wrap input.form-control { padding-left: 34px; }
+
+        /* ---- Filter button ---- */
+        .btn-filter {
+            display: inline-flex; align-items: center; gap: 6px;
+            border: 1px solid #dfe3e8; background: #fff; color: #4b5563;
+        }
+
+        /* ---- Table ---- */
+        .lesen-table { margin-bottom: 0; }
+        .lesen-table thead th {
+            font-size: .72rem; text-transform: uppercase; letter-spacing: .03em;
+            border-bottom: 1px solid #eef1f5; color: #9aa4b2; font-weight: 700;
+            white-space: nowrap; padding-bottom: 10px;
+        }
+        .lesen-table thead th.col-lulus   { color: #1aab6f; }
+        .lesen-table thead th.col-kurang14 { color: #2f8fe0; }
+        .lesen-table thead th.col-lebih14  { color: #f0883e; }
+
+        .lesen-table td { vertical-align: middle; border-bottom: 1px solid #f4f6f8; padding: 12px 8px; }
+        .lesen-table td.text-end, .lesen-table th.text-end { text-align: right; }
+
+        .val-lulus   { color: #1aab6f; font-weight: 700; }
+        .val-kurang14 { color: #2f8fe0; font-weight: 700; }
+        .val-lebih14  { color: #f0883e; font-weight: 700; }
+
+        .sparkline-cell { width: 100px; height: 32px; margin-left: auto; }
+        .expand-btn { cursor: pointer; border: none; background: none; color: #9aa4b2; padding: 0 6px 0 0; }
+
+        /* ---- Pager ---- */
+        .pager-row { font-size: .85rem; }
+        .pager-info { color: #9aa4b2; }
+
+        .pager-numbers { display: flex; align-items: center; gap: 4px; }
+        .pager-btn {
+            min-width: 30px; height: 30px; padding: 0 8px;
+            display: inline-flex; align-items: center; justify-content: center;
+            border: 1px solid #e5e9ef; border-radius: 8px; background: #fff;
+            color: #4b5563; font-size: .82rem; text-decoration: none; cursor: pointer;
+        }
+        .pager-btn:hover { background: #f5f7fa; }
+        .pager-btn.active { border-color: #4c6fff; color: #4c6fff; background: #eef2ff; font-weight: 700; }
+        .pager-btn.disabled { color: #c9d0da; pointer-events: none; }
+        .pager-ellipsis { color: #9aa4b2; padding: 0 2px; }
+
+        .pagesize-select { width: auto; font-size: .82rem; }
+    </style>
+
+    <div class="soft-card p-4">
+
+        <div class="section-title fw-bold mb-3">Ringkasan Kelulusan Mengikut Jenis Lesen</div>
+
+        <!-- ============ Search & Filter Bar ============ -->
+        <div class="d-flex flex-wrap gap-2 mb-3">
+
+            <div class="flex-grow-1" style="min-width:220px;">
+                <asp:TextBox ID="txtSearch" runat="server" CssClass="form-control"
+                    placeholder="Cari jenis lesen..." AutoPostBack="true"
+                    OnTextChanged="txtSearch_TextChanged"></asp:TextBox>
+            </div>
+
+            <asp:DropDownList ID="ddlKategori" runat="server" CssClass="form-select" style="max-width:180px;"
+                AutoPostBack="true" OnSelectedIndexChanged="Filter_Changed">
+                <asp:ListItem Text="Semua Kategori" Value="0" />
+            </asp:DropDownList>
+
+            <asp:DropDownList ID="ddlAgensi" runat="server" CssClass="form-select" style="max-width:180px;"
+                AutoPostBack="true" OnSelectedIndexChanged="Filter_Changed">
+                <asp:ListItem Text="Semua Agensi" Value="0" />
+            </asp:DropDownList>
+
+            <asp:Button ID="btnFilter" runat="server" Text="⏷ Filter" CssClass="btn btn-outline-secondary"
+                OnClick="btnFilter_Click" />
+
+        </div>
+
+        <!-- ============ GridView ============ -->
+        <asp:GridView ID="gvLesenSummary" runat="server"
+            AutoGenerateColumns="false"
+            CssClass="table lesen-table"
+            AllowPaging="true" PageSize="6"
+            DataKeyNames="JenisLesen_ID"
+            OnPageIndexChanging="gvLesenSummary_PageIndexChanging"
+            OnRowDataBound="gvLesenSummary_RowDataBound">
+
+            <Columns>
+
+                <asp:TemplateField HeaderText="#" ItemStyle-Width="40">
+                    <ItemTemplate>
+                        
+                        <%# (Container.DataItemIndex + 1 + (gvLesenSummary.PageIndex * gvLesenSummary.PageSize)) %>
+                    </ItemTemplate>
+                </asp:TemplateField>
+
+                <asp:BoundField DataField="JenisLesen_Description" HeaderText="Jenis Lesen" />
+
+                <asp:TemplateField HeaderText="Telah Lulus">
+                    <ItemTemplate>
+                        <span class="text-success"><%# Eval("TelahLulus") %></span>
+                    </ItemTemplate>
+                </asp:TemplateField>
+
+                <asp:TemplateField HeaderText="< 14 Hari">
+                    <ItemTemplate>
+                        <span class="text-info"><%# Eval("Kurang14Hari") %></span>
+                    </ItemTemplate>
+                </asp:TemplateField>
+
+                <asp:TemplateField HeaderText="&gt;= 14 Hari">
+                    <ItemTemplate>
+                        <span class="text-danger"><%# Eval("Lebih14Hari") %></span>
+                    </ItemTemplate>
+                </asp:TemplateField>
+
+                <asp:BoundField DataField="Jumlah" HeaderText="Jumlah" />
+
+                <asp:TemplateField HeaderText="Purata SLA (Hari)">
+                    <ItemTemplate>
+                        <%# String.Format("{0:0.0}", Eval("PurataSLA")) %>
+                    </ItemTemplate>
+                </asp:TemplateField>
+
+                <asp:TemplateField HeaderText="Trend">
+                    <ItemTemplate>
+                        <div class="sparkline-cell">
+                            <canvas id="spark_<%# Eval("JenisLesen_ID") %>"
+                                    data-trend='<%# Eval("TrendJson") %>'></canvas>
+                        </div>
+                    </ItemTemplate>
+                </asp:TemplateField>
+
+            </Columns>
+
+            <PagerTemplate>
+                <div class="d-flex justify-content-between align-items-center pt-3 pager-row">
+
+                    <span class="pager-info" id="lblPagerInfo" runat="server"></span>
+
+                    <div class="pager-numbers" id="pnlPageNumbers" runat="server"></div>
+
+                    <asp:DropDownList ID="ddlPageSize" runat="server" CssClass="form-select pagesize-select"
+                        AutoPostBack="true" OnSelectedIndexChanged="ddlPageSize_SelectedIndexChanged">
+                        <asp:ListItem Text="6 / halaman"  Value="6" />
+                        <asp:ListItem Text="10 / halaman" Value="10" />
+                        <asp:ListItem Text="20 / halaman" Value="20" />
+                        <asp:ListItem Text="50 / halaman" Value="50" />
+                    </asp:DropDownList>
+
+                </div>
+            </PagerTemplate>
+
+        </asp:GridView>
+
+    </div>
+
+    <!-- ============ Chart.js sparkline renderer ============ -->
+    <script>
+        function renderAllSparklines() {
+            document.querySelectorAll('canvas[data-trend]').forEach(function (canvas) {
+                var raw = canvas.getAttribute('data-trend');
+                if (!raw) return;
+                var points = JSON.parse(raw); // e.g. [4,6,5,8,7,9]
+
+                var rising = points.length > 1 && points[points.length - 1] >= points[0];
+                var color = rising ? '#1aab6f' : '#e5533d';
+
+                new Chart(canvas.getContext('2d'), {
+                    type: 'line',
+                    data: {
+                        labels: points.map(function (_, i) { return i; }),
+                        datasets: [{
+                            data: points,
+                            borderColor: color,
+                            borderWidth: 2,
+                            pointRadius: 0,
+                            tension: 0.4,
+                            fill: false
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false }, tooltip: { enabled: false } },
+                        scales: { x: { display: false }, y: { display: false } }
+                    }
+                });
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', renderAllSparklines);
+
+        if (typeof Sys !== 'undefined' && Sys.WebForms && Sys.WebForms.PageRequestManager) {
+            Sys.WebForms.PageRequestManager.getInstance().add_endRequest(renderAllSparklines);
+        }
+    </script>
+                
 
             </div>
 
@@ -1359,59 +1573,94 @@ where x2.Permohonan_ID = g.Permohonan_ID and x2.JabatanAgensi_ID = @AgensiID uni
     </script>
 
 <!-- Chart.js -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <script>
     $(document).ready(function () {
+
+        LoadCharts();
+
+    });
+
+    Sys.WebForms.PageRequestManager.getInstance().add_endRequest(function () {
+        LoadCharts();
+    });
+</script>
+
+<script>
+    function LoadCharts() {
+
         // Bar Chart - Permohonan Bulanan
-        new Chart(document.getElementById("barMonthly"), {
-            type: "bar",
-            data: {
-                labels: ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Ogos", "Sep", "Okt", "Nov", "Dis"],
-                datasets: [{
-                    label: "Jumlah Permohonan",
-                    //data: [12, 19, 15, 25, 18, 22, 20, 30, 28, 24, 16, 10],
-                    data: <%= MonthlyData %>,
+        const canvasbarMonthly = document.getElementById("barMonthly");
+
+        if (canvasbarMonthly) {
+
+            Chart.getChart(canvasbarMonthly)?.destroy();
+            
+            new Chart(document.getElementById("barMonthly"), {
+                type: "bar",
+                data: {
+                    labels: ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Ogos", "Sep", "Okt", "Nov", "Dis"],
+                    datasets: [{
+                        label: "Jumlah Permohonan",
+                        //data: [12, 19, 15, 25, 18, 22, 20, 30, 28, 24, 16, 10],
+                        data: <%= MonthlyData %>,
                     backgroundColor: "#0ea5e9"
                 }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: { legend: { display: false } },
-                scales: { y: { beginAtZero: true } }
-            }
-        });
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: { y: { beginAtZero: true } }
+                }
+            });
+
+        }
 
         // Pie Chart - Status Permohonan
-        new Chart(document.getElementById("pieStatus"), {
-            type: "pie",
-            data: {
-                labels: ["Baru", "Proses", "Diluluskan", "Ditolak"],
-                datasets: [{
-                    //data: [50, 30, 70, 20],
-                    data: <%= StatusData %>,
+        const canvaspieStatus = document.getElementById("pieStatus");
+
+        if (canvaspieStatus) {
+
+            Chart.getChart(canvaspieStatus)?.destroy();
+            
+            new Chart(document.getElementById("pieStatus"), {
+                type: "pie",
+                data: {
+                    labels: ["Baru", "Proses", "Diluluskan", "Ditolak"],
+                    datasets: [{
+                        //data: [50, 30, 70, 20],
+                        data: <%= StatusData %>,
                     backgroundColor: ["#0ea5e9", "#0b3b7a", "#34d399", "#fb7185"]
                 }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: { legend: { position: 'bottom' } }
-            }
-        });
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { position: 'bottom' } }
+                }
+            });
+
+        }
 
         // Line Chart - Kelulusan Harian
-        new Chart(document.getElementById("lineDaily"), {
-            type: "line",
-            data: {
-                labels: [
-                    "1", "2", "3", "4", "5", "6", "7", "8", "9", "10",
-                    "11", "12", "13", "14", "15", "16", "17", "18", "19", "20",
-                    "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"
-                ],
-                datasets: [{
-                    label: "Kelulusan",
-                    data: <%= DailyData %>,
+        const canvaslineDaily = document.getElementById("lineDaily");
+
+        if (canvaslineDaily) {
+
+            Chart.getChart(canvaslineDaily)?.destroy();
+            
+            new Chart(document.getElementById("lineDaily"), {
+                type: "line",
+                data: {
+                    labels: [
+                        "1", "2", "3", "4", "5", "6", "7", "8", "9", "10",
+                        "11", "12", "13", "14", "15", "16", "17", "18", "19", "20",
+                        "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"
+                    ],
+                    datasets: [{
+                        label: "Kelulusan",
+                        data: <%= DailyData %>,
                     borderColor: "#34d399",
                     backgroundColor: "rgba(52,211,153,0.2)",
                     tension: 0.4,
@@ -1435,30 +1684,44 @@ where x2.Permohonan_ID = g.Permohonan_ID and x2.JabatanAgensi_ID = @AgensiID uni
                             display: true,
                             text: "JUMLAH KELULUSAN"
                         }
+                            }
+                        }
                     }
-                }
-            }
-        });
+                });
+
+        }
 
         // Scatter Chart - Proses vs Masa
-        new Chart(document.getElementById("scatterProcess"), {
-            type: "scatter",
-            data: {
-                datasets: [{
-                    label: "Proses vs Masa",
-                    data: [
-                        { x: 1, y: 2 }, { x: 2, y: 3 }, { x: 3, y: 1 }, { x: 4, y: 4 }, { x: 5, y: 2 }
-                    ],
-                    backgroundColor: "#facc15"
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: { legend: { position: 'top' } },
-                scales: { x: { title: { display: true, text: "Masa (hari)" } }, y: { title: { display: true, text: "Proses" } } }
-            }
-        });
+        const canvasscatterProcess = document.getElementById("scatterProcess");
+
+        if (canvasscatterProcess) {
+
+            Chart.getChart(canvasscatterProcess)?.destroy();
+
+            new Chart(document.getElementById("scatterProcess"), {
+                type: "scatter",
+                data: {
+                    datasets: [{
+                        label: "Proses vs Masa",
+                        data: [
+                            { x: 1, y: 2 }, { x: 2, y: 3 }, { x: 3, y: 1 }, { x: 4, y: 4 }, { x: 5, y: 2 }
+                        ],
+                        backgroundColor: "#facc15"
+                    }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { position: 'top' } },
+                        scales: { x: { title: { display: true, text: "Masa (hari)" } }, y: { title: { display: true, text: "Proses" } } }
+                    }
+                });
+
+        }
+
+
+<%--        
+
 
         // Radar Chart - Skor Jabatan
         new Chart(document.getElementById("radarDept"), {
@@ -1496,13 +1759,10 @@ where x2.Permohonan_ID = g.Permohonan_ID and x2.JabatanAgensi_ID = @AgensiID uni
                 maintainAspectRatio: false,
                 plugins: { legend: { position: 'bottom' } }
             }
-        });
+        });--%>
 
-
-
-    });
+    }
 </script>
-
 </asp:Content>
 
 
