@@ -1973,7 +1973,7 @@ Partial Class kelulusan1
             myCommandSelect.Parameters.AddWithValue("@@JumlahKadarBayaran", totalamount.ToString("N2"))
             myCommandSelect.Parameters.AddWithValue("@@Rujukan", rujukan)
             'myCommandSelect.Parameters.AddWithValue("@@TarikhMohon", tarikhmohon)
-            myCommandSelect.Parameters.AddWithValue("@@JenisPerniagaan", jenisperniagaan)
+            myCommandSelect.Parameters.AddWithValue("@@JenisPerniagaan", jenisperniagaan.ToLower())
             myCommandSelect.Parameters.AddWithValue("@@JenisPasar", jenispasar)
             myCommandSelect.Parameters.AddWithValue("@@JenisPerniagaanPasar", jenisperniagaanpasar)
             myCommandSelect.Parameters.AddWithValue("@@JumlahPetak", jumlahpetak)
