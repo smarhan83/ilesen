@@ -1076,7 +1076,7 @@
 
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <asp:Label ID="Lbl_AlamatBaru" runat="server" Text="Alamat Baru" />
+                                        <asp:Label ID="Lbl_AlamatBaru" runat="server" Text="Alamat Baru" Font-Bold="true"/>
                                         <asp:TextBox ID="TB_AlamatBaru" runat="server" TextMode="MultiLine" Rows="3" CssClass="form-control" />
 
                                     </div>
@@ -1092,7 +1092,7 @@
 
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <asp:Label ID="Lbl_JenisPerniagaanBaru" runat="server" Text="Jenis Perniagaan Tambahan" />
+                                        <asp:Label ID="Lbl_JenisPerniagaanBaru" runat="server" Text="Jenis Perniagaan Tambahan" Font-Bold="true"/>
                                         <asp:TextBox ID="TB_JenisPerniagaanBaru" runat="server" CssClass="form-control" />
 
                                     </div>
@@ -1624,7 +1624,7 @@
                                         FROM LESEN_ReportTemplate 
                                         WHERE JenisLesen_ID = TRY_CAST(
                                             CASE 
-                                                WHEN CHARINDEX(',', LTRIM('@JenisLesenIdList')) > 0 
+                                                WHEN CHARINDEX(',', LTRIM(@JenisLesenIdList)) > 0 
                                                     THEN LEFT(LTRIM(@JenisLesenIdList), CHARINDEX(',', LTRIM(@JenisLesenIdList)) - 1)
                                                 ELSE LTRIM(@JenisLesenIdList)
                                             END AS INT

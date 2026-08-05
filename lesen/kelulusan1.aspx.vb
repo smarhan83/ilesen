@@ -3103,7 +3103,9 @@ Partial Class kelulusan1
                 pnlesen1c.Visible = True
                 pnlesen1d.Visible = True
 
-                If lesenid = 29 Then
+                Lbl_AlamatBaru.Text = "Alamat Baru"
+
+                If lesenid = 8 Then
                     Lbl_JenisPerniagaanBaru.Text = "Jenis Perniagaan Tambahan"
                 Else
                     Lbl_JenisPerniagaanBaru.Text = "Pengurangan Jenis Perniagaan"
