@@ -184,7 +184,7 @@ Partial Class kelulusan1
 
                 If ApprStatusID = 3 Or ApprStatusID = 4 Then
                     BT_Generate.Visible = True
-                    BT_Generate1.Visible = True
+                    'BT_Generate1.Visible = True
 
                     tabMaklumat.Visible = True
 
@@ -201,13 +201,13 @@ Partial Class kelulusan1
                         pnlSuratAuto.Visible = False
                         pnlSuratFail.Visible = True
                         BT_Generate.Visible = False
-                        BT_Generate1.Visible = False
+                        'BT_Generate1.Visible = False
                     Else
                         CB_SuratFail.Checked = False
                         pnlSuratAuto.Visible = True
                         pnlSuratFail.Visible = False
                         BT_Generate.Visible = True
-                        BT_Generate1.Visible = True
+                        'BT_Generate1.Visible = True
 
                         If JenisLesenID = 4 And EditorSurat1.Text.Length > 0 Then
 
@@ -223,7 +223,7 @@ Partial Class kelulusan1
                 Else
 
                     BT_Generate.Visible = False
-                    BT_Generate1.Visible = False
+                    'BT_Generate1.Visible = False
 
                 End If
             End If
@@ -881,7 +881,7 @@ Partial Class kelulusan1
                     End If
 
                     BT_Generate.Visible = "false"
-                    BT_Generate1.Visible = "false"
+                    'BT_Generate1.Visible = "false"
                     'btnSaveLetter.Visible = "false"
                     BT_Maklumat.Visible = "false"
 
@@ -2726,12 +2726,12 @@ Partial Class kelulusan1
 
         If CB_SuratFail.Checked Then
             BT_Generate.Visible = False
-            BT_Generate1.Visible = False
+            'BT_Generate1.Visible = False
             pnlSuratFail.Visible = True
             pnlSuratAuto.Visible = False
         Else
             BT_Generate.Visible = True
-            BT_Generate1.Visible = True
+            'BT_Generate1.Visible = True
             pnlSuratFail.Visible = False
             pnlSuratAuto.Visible = True
         End If
