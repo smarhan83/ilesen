@@ -1888,6 +1888,7 @@ Partial Class kelulusan1
         'Dim jenisReport As String = "LIL"
         Dim rujukan As String = ""
         Dim tarikhmohon As String = ""
+        Dim jenisperniagaan As String = ""
         Dim jenispasar As String = ""
         Dim jumlahpetak As String = ""
         Dim jenisperniagaanpasar As String = ""
@@ -1898,7 +1899,10 @@ Partial Class kelulusan1
 
             myConnection.Open()
 
-            Dim SQL4 As String = "SELECT Rujukan, CONVERT(varchar, TarikhMohon, 103) AS TarikhMohon, JenisPasar, JenisPerniagaanPasar, JumlahPetak, LokasiPasar1, LokasiPasar2, LokasiPasar3 FROM LESEN_Permohonan WHERE Permohonan_ID = @Permohonan_ID"
+            Dim SQL4 As String = "SELECT Rujukan, CONVERT(varchar, TarikhMohon, 103) AS TarikhMohon, 
+                    IIF(JenisPerniagaanBaru is null, JenisPerniagaan, JenisPerniagaanBaru) AS JenisPerniagaan, JenisPasar, 
+                    JenisPerniagaanPasar, JumlahPetak, LokasiPasar1, LokasiPasar2, LokasiPasar3 
+                    FROM LESEN_Permohonan WHERE Permohonan_ID = @Permohonan_ID"
 
             Dim myCommandSelect4 As New SqlCommand(SQL4, myConnection)
             myCommandSelect4.Parameters.AddWithValue("@Permohonan_ID", pid)
@@ -1910,6 +1914,7 @@ Partial Class kelulusan1
 
                     rujukan = myReader4.Item("Rujukan").ToString
                     tarikhmohon = myReader4.Item("TarikhMohon").ToString
+                    jenisperniagaan = myReader4.Item("JenisPerniagaan").ToString
                     jenispasar = myReader4.Item("JenisPasar").ToString
                     jenisperniagaanpasar = myReader4.Item("JenisPerniagaanPasar").ToString
                     jumlahpetak = myReader4.Item("JumlahPetak").ToString
@@ -1934,7 +1939,7 @@ Partial Class kelulusan1
 
             myConnection.Open()
 
-            Dim SQL As String = "DELETE FROM LESEN_PermohonanSurat WHERE Permohonan_ID=@Permohonan_ID AND JenisReport=@JenisReport; 
+            Dim SQL As String = "DELETE FROM LESEN_PermohonanSurat WHERE Permohonan_ID=@Permohonan_ID AND JenisReport LIKE 'LIK%'; 
                     INSERT INTO LESEN_PermohonanSurat (Permohonan_ID, JenisReport, P1, P2, P3, IsiKandungan, CreatedDt, ModDt)
                     SELECT @Permohonan_ID AS Permohonan_ID, JenisReport, P1, P2, P3, 
                     REPLACE(
@@ -1944,14 +1949,16 @@ Partial Class kelulusan1
                                     REPLACE(
                                         REPLACE(
                                             REPLACE(
-                                                REPLACE(CAST(IsiKandungan AS VARCHAR(MAX)), '{@TahunIni}', @@TahunIni), 
-                                            '{@JumlahKadarBayaran}', @@JumlahKadarBayaran), 
-                                        '{@Rujukan}', IIF(CHARINDEX(' ', @@Rujukan) > 0, @@Rujukan, REPLACE(@@Rujukan, 'MPK/599/401/', 'MPK/599/401/ ')) ),
-                                    '{@TarikhPemeriksaan}',@@TarikhPemeriksaan),
-                                '{@JenisPasar}',@@JenisPasar),
-                            '{@JenisPerniagaanPasar}',@@JenisPerniagaanPasar),
-                        '{@JumlahPetak}',@@JumlahPetak),
-                    '{@LokasiPasar}',@@LokasiPasar) AS IsiKandungan, 
+                                                REPLACE(
+                                                    REPLACE(CAST(IsiKandungan AS VARCHAR(MAX)), '{@TahunIni}', @@TahunIni), 
+                                                '{@JumlahKadarBayaran}', @@JumlahKadarBayaran), 
+                                            '{@Rujukan}', IIF(CHARINDEX(' ', @@Rujukan) > 0, @@Rujukan, REPLACE(@@Rujukan, 'MPK/599/401/', 'MPK/599/401/ ')) ),
+                                        '{@TarikhPemeriksaan}',@@TarikhPemeriksaan),
+                                    '{@JenisPasar}',@@JenisPasar),
+                                '{@JenisPerniagaanPasar}',@@JenisPerniagaanPasar),
+                            '{@JumlahPetak}',@@JumlahPetak),
+                        '{@LokasiPasar}',@@LokasiPasar), 
+                    '{@JenisPerniagaan}',@@JenisPerniagaan) AS IsiKandungan, 
                     GETDATE() AS CreatedDt, GETDATE() AS ModDt 
                     FROM LESEN_ReportTemplate
                     WHERE JenisLesen_ID=@JenisLesen_ID AND JenisReport=@JenisReport AND NamaTemplat=@NamaTemplat;"
@@ -1966,6 +1973,7 @@ Partial Class kelulusan1
             myCommandSelect.Parameters.AddWithValue("@@JumlahKadarBayaran", totalamount.ToString("N2"))
             myCommandSelect.Parameters.AddWithValue("@@Rujukan", rujukan)
             'myCommandSelect.Parameters.AddWithValue("@@TarikhMohon", tarikhmohon)
+            myCommandSelect.Parameters.AddWithValue("@@JenisPerniagaan", jenisperniagaan)
             myCommandSelect.Parameters.AddWithValue("@@JenisPasar", jenispasar)
             myCommandSelect.Parameters.AddWithValue("@@JenisPerniagaanPasar", jenisperniagaanpasar)
             myCommandSelect.Parameters.AddWithValue("@@JumlahPetak", jumlahpetak)
