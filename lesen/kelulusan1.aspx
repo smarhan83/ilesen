@@ -1620,7 +1620,7 @@
                                         SelectCommand="SELECT * FROM 
                                         (SELECT '0' AS NamaTemplat, '-- Pilih Templat Surat --' AS NamaTemplatDesc
                                         UNION ALL
-                                        SELECT DISTINCT CONCAT(JenisReport, ',',NamaTemplat) AS NamaTemplat AS NamaTemplatDesc 
+                                        SELECT DISTINCT CONCAT(JenisReport, ',',NamaTemplat) AS NamaTemplat, NamaTemplat AS NamaTemplatDesc 
                                         FROM LESEN_ReportTemplate 
                                         WHERE JenisLesen_ID = TRY_CAST(
                                             CASE 
