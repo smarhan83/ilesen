@@ -1,4 +1,6 @@
 ﻿
+Imports System.Web.UI.WebControls
+
 Partial Class apptype
     Inherits System.Web.UI.Page
 
@@ -160,6 +162,24 @@ Partial Class apptype
     Private Sub GridViewReport_RowDeleted(sender As Object, e As GridViewDeletedEventArgs) Handles GridViewReport.RowDeleted
         ShowAlert("success", "", "Rekod berjaya dikemaskini")
         GridViewReport.DataBind()
+    End Sub
+
+    Protected Sub GridViewUlasanIK_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles GridViewUlasanIK.SelectedIndexChanged
+        FormViewUlasanIK.ChangeMode(DetailsViewMode.Edit)
+    End Sub
+
+    Private Sub FormViewUlasanIK_ItemInserted(sender As Object, e As FormViewInsertedEventArgs) Handles FormViewUlasanIK.ItemInserted
+        GridViewUlasanIK.DataBind()
+    End Sub
+
+    Private Sub FormViewReportSKL_ItemUpdated(sender As Object, e As FormViewUpdatedEventArgs) Handles FormViewUlasanIK.ItemUpdated
+        ShowAlert("success", "", "Rekod berjaya dikemaskini")
+        GridViewUlasanIK.DataBind()
+    End Sub
+
+    Private Sub GridViewUlasanIK_RowDeleted(sender As Object, e As GridViewDeletedEventArgs) Handles GridViewUlasanIK.RowDeleted
+        ShowAlert("success", "", "Rekod berjaya dikemaskini")
+        GridViewUlasanIK.DataBind()
     End Sub
 
     Private Sub FormView2_ItemUpdated(sender As Object, e As FormViewUpdatedEventArgs) Handles FormView2.ItemUpdated

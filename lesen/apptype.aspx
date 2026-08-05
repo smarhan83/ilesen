@@ -602,8 +602,10 @@
                                                 <asp:ListItem Value="SKB">Surat Kelulusan (Batal)</asp:ListItem>
                                                 <asp:ListItem Value="SPL">Surat Pembatalan (Lulus)</asp:ListItem>
                                                 <asp:ListItem Value="SPB">Surat Pembatalan (Batal)</asp:ListItem>
-                                                <asp:ListItem Value="LIL">Laporan Inspektorat (Lulus)</asp:ListItem>
-                                                <asp:ListItem Value="LIB">Laporan Inspektorat (Batal)</asp:ListItem>
+                                                <asp:ListItem Value="LIKL">Laporan Kelulusan Inspektorat (Lulus)</asp:ListItem>
+                                                <asp:ListItem Value="LIKB">Laporan Kelulusan Inspektorat (Batal)</asp:ListItem>
+                                                <asp:ListItem Value="LIBL">Laporan Pembatalan Inspektorat (Lulus)</asp:ListItem>
+                                                <asp:ListItem Value="LIBB">Laporan Pembatalan Inspektorat (Batal)</asp:ListItem>
                                             </asp:DropDownList>
                                         </div>
                                     </div>
@@ -954,7 +956,7 @@
                                             </InsertItemTemplate>
                                         </asp:FormView>
                                         <asp:SqlDataSource runat="server" ID="SqlDataSourceUlasanIK" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
-                                            InsertCommand="INSERT INTO LESEN_UlasanIKTemplate (JenisLesen_ID, IsSokong, NamaTemplat, Ulasan, CreatedDt) VALUES (@JenisLesen_ID, @IsSokong, @NamaTemplat, @Ulasan, GETDATE()); "
+                                            InsertCommand="INSERT INTO LESEN_UlasanIKTemplate (JenisLesen_ID, IsSokong, NamaTemplat, Ulasan, CreatorID, CreatedDt) VALUES (@JenisLesen_ID, @IsSokong, @NamaTemplat, @Ulasan, @CreatorID, GETDATE()); "
                                             UpdateCommand="UPDATE LESEN_UlasanIKTemplate SET NamaTemplat=@NamaTemplat, Ulasan=@Ulasan WHERE UTID=@UTID"
                                             SelectCommand="SELECT * FROM LESEN_UlasanIKTemplate WHERE UTID=@UTID">
                                             <InsertParameters>
@@ -962,6 +964,7 @@
                                                 <asp:ControlParameter ControlID="DDL_Sokong" PropertyName="SelectedValue" Name="IsSokong"></asp:ControlParameter>
                                                 <asp:Parameter Name="NamaTemplat"></asp:Parameter>
                                                 <asp:Parameter Name="Ulasan"></asp:Parameter>
+                                                <asp:SessionParameter SessionField="sessionUserName" Name="CreatorID"></asp:SessionParameter>  
                                                 <%--<asp:ControlParameter ControlID="GridView1" PropertyName="SelectedValue" Name="JenisLesen_ID"></asp:ControlParameter>--%>
                                             </InsertParameters>
                                             <UpdateParameters>
