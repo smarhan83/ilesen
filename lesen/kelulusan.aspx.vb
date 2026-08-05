@@ -1,4 +1,5 @@
 ﻿
+Imports System.Activities.Expressions
 Imports System.Data
 Imports System.Data.SqlClient
 Imports System.Drawing
@@ -61,6 +62,16 @@ Partial Class kelulusan
         btnReject.Visible = False
         idNotaKelulusan.Visible = False
 
+
+        '##### START NEW KEMBALI KE IK #########
+
+        GridView3.DataBind()
+
+        btnKembaliIK.Visible =
+        (Session("sessionEstateId")?.ToString() = "3" AndAlso
+        Session("sessionIsPenilai")?.ToString() = "True" AndAlso
+        ApprStatusID = 4)
+        '##### END NEW KEMBALI KE IK #########
 
         If ApprStatusID = 2 Or ApprStatusID = 3 Or ApprStatusID = 4 Then
             btnSubmit.Visible = True
@@ -2693,4 +2704,94 @@ Partial Class kelulusan
         ViewSuratMohon(pid, AgensiID, JenisLesenID)
 
     End Sub
+
+    Protected Sub btnKembaliIK_Click(sender As Object, e As EventArgs)
+        Dim Permohonan_ID As Integer = CInt(GridView1.SelectedDataKey.Values(0))
+        LoadKembaliIKList(Permohonan_ID)
+        OpenModalKembaliIK()
+    End Sub
+
+    Protected Sub btnTeruskanKembaliIK_Click(sender As Object, e As EventArgs)
+
+        Dim Permohonan_ID As Integer = CInt(GridView1.SelectedDataKey.Values(0))
+        Dim Catatan As String = txtCatatanKembaliIK.Text.Trim()
+
+        Using myConnection As New SqlConnection(ConfigurationManager.ConnectionStrings("webcon_ConnectionStr").ConnectionString)
+
+            Dim SQL As String = "
+            INSERT INTO LESEN_KembaliIK (Permohonan_ID, Catatan, CreatedBy, CreatedDt)
+            VALUES (@Permohonan_ID, @Catatan, @CreatedBy, GETDATE());
+
+            UPDATE a SET a.IsComplete = 0
+            FROM LESEN_ApprovalList a
+            INNER JOIN LESEN_Permohonan b ON a.Permohonan_ID = b.Permohonan_ID
+            INNER JOIN ApprovalStatus c ON a.ApprStatusID = c.ApprStatusID
+            WHERE a.Permohonan_ID = @Permohonan_ID
+            AND a.ApprStatusID = 3
+        "
+
+            Dim myCommand As New SqlCommand(SQL, myConnection)
+            myCommand.Parameters.AddWithValue("@Permohonan_ID", Permohonan_ID)
+            myCommand.Parameters.AddWithValue("@Catatan", Catatan)
+            myCommand.Parameters.AddWithValue("@CreatedBy", Session.Item("SessionUserName"))
+
+            myConnection.Open()
+            myCommand.ExecuteNonQuery()
+            myConnection.Close()
+
+        End Using
+
+        txtCatatanKembaliIK.Text = ""
+        ShowAlert("success", "", "Rekod berjaya dikembalikan ke IK")
+        GridView1.DataBind()
+        backToList()
+
+    End Sub
+
+    Private Sub LoadKembaliIKList(Permohonan_ID As Integer)
+
+        Using myConnection As New SqlConnection(ConfigurationManager.ConnectionStrings("webcon_ConnectionStr").ConnectionString)
+
+            Dim SQL As String = "SELECT Catatan, CreatedBy, CreatedDt 
+                              FROM LESEN_KembaliIK 
+                              WHERE Permohonan_ID = @Permohonan_ID 
+                              ORDER BY CreatedDt DESC"
+
+            Dim myCommand As New SqlCommand(SQL, myConnection)
+            myCommand.Parameters.AddWithValue("@Permohonan_ID", Permohonan_ID)
+
+            Dim da As New SqlDataAdapter(myCommand)
+            Dim dt As New DataTable()
+            da.Fill(dt)
+
+            rptKembaliIK.DataSource = dt
+            rptKembaliIK.DataBind()
+
+            lblNoRecordKembaliIK.Visible = (dt.Rows.Count = 0)
+
+        End Using
+
+    End Sub
+
+    Private Sub OpenModalKembaliIK()
+        ScriptManager.RegisterStartupScript(Me, Me.GetType(), "openModal",
+      "document.getElementById('modalKembaliIK').classList.add('show');", True)
+    End Sub
+
+    Protected Sub GridView3_DataBound(sender As Object, e As EventArgs)
+        Try
+            Dim ApprStatusID As Integer = CInt(GridView1.SelectedDataKey.Values(2))
+
+            If ApprStatusID = 3 Then
+                pnlInfoNoticeKembaliIK.Visible = (GridView3.Rows.Count > 0)
+            Else
+                pnlInfoNoticeKembaliIK.Visible = False
+            End If
+        Catch ex As Exception
+            pnlInfoNoticeKembaliIK.Visible = False
+        End Try
+
+
+    End Sub
+
 End Class

@@ -868,6 +868,87 @@
         }
     </style>
 
+<style>
+    .info-notice {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        background: #fef2f2;
+        border: 1px solid #e0e7ff;
+        border-radius: 8px;
+        padding: 14px 16px;
+        margin-bottom: 16px;
+    }
+
+    .info-notice-icon {
+        flex-shrink: 0;
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        background: #4338ca;
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        margin-top: 2px;
+    }
+
+    .info-notice-content {
+        flex: 1;
+    }
+
+    .info-notice-title {
+        font-weight: 700;
+        color: #3730a3;
+        font-size: 14px;
+        margin-bottom: 2px;
+    }
+
+    .info-notice-desc {
+        font-size: 13px;
+        color: #4338ca;
+        line-height: 1.5;
+        margin-bottom: 10px;
+    }
+
+    /* GridView list dalam info box */
+    .kik-gridview {
+        width: 100%;
+    }
+
+    .kik-item {
+        align-items: flex-start;
+        background: #fff;
+        border: 1px solid #e0e7ff;
+        border-radius: 6px;
+        padding: 10px 12px;
+        margin-bottom: 8px;
+    }
+
+    .kik-item:last-child {
+        margin-bottom: 0;
+    }
+
+    .kik-item-content {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .kik-item-catatan {
+        font-size: 13px;
+        color: #333;
+        line-height: 1.4;
+    }
+
+    .kik-item-meta {
+        font-size: 11px;
+        color: #999;
+    }
+</style>
+
 </asp:Content>
 
 <asp:Content ID="Content3" ContentPlaceHolderID="MainContent" runat="Server">
@@ -901,7 +982,62 @@
     <section class="content">
         <div class="container-fluid">
 
-           
+            
+
+            <asp:Panel ID="pnlInfoNoticeKembaliIK" runat="server" CssClass="info-notice">
+
+                <div class="info-notice-icon">
+                    <i class="bi bi-info-lg"></i>
+                </div>
+                <div class="info-notice-content">
+                    <div class="info-notice-title">Maklumat</div>
+                    <div class="info-notice-desc">
+                        Catatan Lawatan Tapak Sekali Lagi.
+                    </div>
+
+                    <asp:GridView ID="GridView3" runat="server"
+                        ShowHeaderWhenEmpty="False"
+                        ShowHeader="False"
+                        AutoGenerateColumns="False"
+                        DataKeyNames="ID"
+                        DataSourceID="SqlDataSourceKembaliIK"
+                        CssClass="lampiran-gridview kik-gridview"
+                        GridLines="None"
+                        OnDataBound="GridView3_DataBound">
+                        <Columns>
+                            <asp:TemplateField>
+                                <ItemTemplate>
+                                    <div class="lampiran-item kik-item">
+                                        <div class="lampiran-icon"><i class="bi bi-arrow-return-left"></i></div>
+                                        <div class="kik-item-content">
+                                            <div class="kik-item-catatan">
+                                                <%# Eval("Catatan") %>
+                                            </div>
+                                            <div class="kik-item-meta">
+                                                <%# Eval("CreatedBy") %> &middot; 
+                                                <%# CType(Eval("CreatedDt"), DateTime).ToString("dd/MM/yyyy hh:mm tt") %>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </ItemTemplate>
+                            </asp:TemplateField>
+                        </Columns>
+                    </asp:GridView>
+
+                </div>
+            </asp:Panel>
+
+        <asp:SqlDataSource ID="SqlDataSourceKembaliIK" runat="server"
+            ConnectionString="<%$ ConnectionStrings:webcon_ConnectionStr %>"
+            SelectCommand="SELECT ID, Permohonan_ID, Catatan, CreatedBy, CreatedDt 
+                            FROM LESEN_KembaliIK 
+                            WHERE Permohonan_ID = @Permohonan_ID 
+                            ORDER BY CreatedDt DESC">
+            <SelectParameters>
+                <asp:ControlParameter ControlID="GridView1" PropertyName="SelectedDataKey.Values[0]" Name="Permohonan_ID"></asp:ControlParameter>
+                
+            </SelectParameters>
+        </asp:SqlDataSource>
 
             <asp:FormView ID="FormView1" runat="server" DataKeyNames="JenisLesen_ID"
                 DataSourceID="SqlDataSourceForm" DefaultMode="Edit" Width="100%" CssClass="CustomTab">
@@ -2932,8 +3068,11 @@ ORDER BY
                         <div class="col-md-12" style="text-align: center">
 
                             <asp:LinkButton ID="btnSubmit" runat="server" CausesValidation="True" Text="Hantar Ulasan" OnClientClick="return confirm('Anda pasti untuk meneruskan proses ini?');" OnClick="btnSubmit_Click" ValidationGroup="frmEdit" CssClass="btn btn-warning" />
-
-
+                            
+                            <asp:LinkButton ID="btnKembaliIK" runat="server" CausesValidation="False" 
+                                Text="Kembalikan Ke IK" 
+                                OnClick="btnKembaliIK_Click" 
+                                ValidationGroup="frmEdit" CssClass="btn btn-danger" />
 
                             <asp:LinkButton ID="btnApprove" runat="server" CausesValidation="True" Text="Sokong" OnClientClick="return confirm('Anda pasti untuk Sokong Rekod Ini?');" OnClick="btnApprove_Click" ValidationGroup="frmEdit" CssClass="btn btn-warning" />
 
@@ -3288,6 +3427,202 @@ ORDER BY
             <asp:ControlParameter ControlID="ddlYear" PropertyName="SelectedValue" Name="yearValue"></asp:ControlParameter>			
         </SelectParameters>
     </asp:SqlDataSource>
+
+
+    <%-- Modal Popup --%>
+    <%-- Modal Overlay --%>
+    <div id="modalKembaliIK" class="kik-modal-overlay">
+        <div class="kik-modal-box">
+            <div class="kik-modal-header">
+                <span>Kembalikan Ke IK</span>
+                <span class="kik-modal-close" onclick="closeModalKembaliIK();">&times;</span>
+            </div>
+            <div class="kik-modal-body">
+                <label class="kik-label">Catatan / Remarks</label>
+                <asp:TextBox ID="txtCatatanKembaliIK" runat="server" TextMode="MultiLine" 
+                    Rows="4" CssClass="kik-textarea" placeholder="Sila nyatakan sebab kembalikan ke IK..." />
+            </div>
+            <div class="kik-modal-footer">
+                <button type="button" class="kik-btn kik-btn-cancel" onclick="closeModalKembaliIK();">Batal</button>
+                <asp:LinkButton ID="btnTeruskanKembaliIK" runat="server" Text="Teruskan" 
+                    CssClass="kik-btn kik-btn-primary" OnClick="btnTeruskanKembaliIK_Click" 
+                    CausesValidation="False" OnClientClick="return validateKembaliIK();" />
+            </div>
+
+            <%-- Senarai rujukan --%>
+            <div class="kik-list-section">
+                <div class="kik-list-title">Senarai Kembali Ke IK (Rujukan)</div>
+                <asp:Repeater ID="rptKembaliIK" runat="server">
+                    <HeaderTemplate>
+                        <table class="kik-table">
+                            <tr>
+                                <th style="width:20%">Tarikh</th>
+                                <th style="width:20%">Oleh</th>
+                                <th>Catatan</th>
+                            </tr>
+                    </HeaderTemplate>
+                    <ItemTemplate>
+                            <tr>
+                                <td><%# CType(Eval("CreatedDt"), DateTime).ToString("dd/MM/yyyy hh:mm tt") %></td>
+                                <td><%# Eval("CreatedBy") %></td>
+                                <td><%# Eval("Catatan") %></td>
+                            </tr>
+                    </ItemTemplate>
+                    <FooterTemplate>
+                        </table>
+                    </FooterTemplate>
+                </asp:Repeater>
+                <asp:Label ID="lblNoRecordKembaliIK" runat="server" Text="Tiada rekod." CssClass="kik-no-record" Visible="false" />
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .kik-modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .kik-modal-overlay.show {
+            display: flex;
+        }
+
+        .kik-modal-box {
+            background: #fff;
+            width: 620px;             /* was 420px */
+            max-width: 92%;
+            max-height: 85vh;
+            border-radius: 8px;
+            box-shadow: 0 6px 24px rgba(0,0,0,0.25);
+            overflow-y: auto;         /* scroll kalau list panjang */
+            font-family: Arial, sans-serif;
+        }
+
+        .kik-modal-header {
+            background: #f0ad4e;
+            color: #fff;
+            padding: 14px 18px;
+            font-size: 16px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1;
+        }
+
+        .kik-modal-close {
+            cursor: pointer;
+            font-size: 20px;
+            line-height: 1;
+        }
+
+        .kik-modal-body {
+            padding: 18px;
+        }
+
+        .kik-label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 13px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .kik-textarea {
+            width: 100%;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 8px;
+            font-size: 14px;
+            resize: vertical;
+        }
+
+        .kik-modal-footer {
+            padding: 12px 18px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+            background: #f9f9f9;
+            border-top: 1px solid #eee;
+            border-bottom: 1px solid #eee;
+        }
+
+        .kik-btn {
+            padding: 8px 16px;
+            border-radius: 4px;
+            border: none;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .kik-btn-cancel { background: #e0e0e0; color: #333; }
+        .kik-btn-cancel:hover { background: #d0d0d0; }
+        .kik-btn-primary { background: #f0ad4e; color: #fff; text-decoration: none; }
+        .kik-btn-primary:hover { background: #ec971f; color: #fff; }
+
+        /* Senarai rujukan */
+        .kik-list-section {
+            padding: 16px 18px 20px;
+        }
+
+        .kik-list-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: #555;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+
+        .kik-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        .kik-table th {
+            background: #f5f5f5;
+            text-align: left;
+            padding: 6px 8px;
+            border-bottom: 2px solid #ddd;
+            font-size: 12px;
+            color: #666;
+        }
+
+        .kik-table td {
+            padding: 6px 8px;
+            border-bottom: 1px solid #eee;
+            vertical-align: top;
+        }
+
+        .kik-no-record {
+            font-size: 13px;
+            color: #999;
+            font-style: italic;
+        }
+    </style>
+
+<script>
+    function closeModalKembaliIK() {
+        document.getElementById('modalKembaliIK').classList.remove('show');
+    }
+
+    function validateKembaliIK() {
+        var txt = document.getElementById('<%= txtCatatanKembaliIK.ClientID %>').value.trim();
+        if (txt === "") {
+            alert('Sila isi catatan sebelum teruskan.');
+            return false;
+        }
+        return confirm('Anda pasti untuk kembalikan rekod ini ke pegawai IK?');
+    }
+</script>
 
     <script>
 
