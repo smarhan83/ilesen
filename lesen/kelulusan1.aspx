@@ -1628,7 +1628,7 @@
                                                     THEN LEFT(LTRIM(@JenisLesenIdList), CHARINDEX(',', LTRIM(@JenisLesenIdList)) - 1)
                                                 ELSE LTRIM(@JenisLesenIdList)
                                             END AS INT
-                                        ) AND (JenisReport='LIL' OR JenisReport='LIB') AND NamaTemplat is not null) AS tbl1 ORDER BY NamaTemplatDesc ">
+                                        ) AND (JenisReport='LIKL' OR JenisReport='LIKB') AND NamaTemplat is not null) AS tbl1 ORDER BY NamaTemplatDesc ">
                                         <SelectParameters>
                                              <asp:ControlParameter ControlID="GridView1" PropertyName="SelectedDataKey.Values[7]" Name="JenisLesenIdList"></asp:ControlParameter>
                                         </SelectParameters>
@@ -1986,7 +1986,7 @@
                                             </asp:GridView>
                                             <asp:SqlDataSource runat="server" ID="SqlDataSourceGridReport" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
                                                 DeleteCommand="DELETE FROM LESEN_PermohonanSurat WHERE PSID=@PSID"
-                                                SelectCommand="SELECT * FROM LESEN_PermohonanSurat WHERE Permohonan_ID=@Permohonan_ID AND JenisReport=IIF(@StatusID=9, 'LIB', 'LIL') 
+                                                SelectCommand="SELECT * FROM LESEN_PermohonanSurat WHERE Permohonan_ID=@Permohonan_ID AND JenisReport=IIF(@StatusID=9, 'LIKB', 'LIKL') 
                                                 ORDER BY P1, P2, P3">
                                                 <DeleteParameters>
                                                     <asp:Parameter Name="PSID"></asp:Parameter>
