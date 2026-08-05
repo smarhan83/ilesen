@@ -1624,9 +1624,9 @@
                                         FROM LESEN_ReportTemplate 
                                         WHERE JenisLesen_ID = TRY_CAST(
                                             CASE 
-                                                WHEN CHARINDEX(',', LTRIM(@JenisLesenIdList)) > 0 
-                                                    THEN LEFT(LTRIM(@JenisLesenIdList), CHARINDEX(',', LTRIM(@JenisLesenIdList)) - 1)
-                                                ELSE LTRIM(@JenisLesenIdList)
+                                                WHEN CHARINDEX(',', LTRIM('@JenisLesenIdList')) > 0 
+                                                    THEN LEFT(LTRIM('@JenisLesenIdList'), CHARINDEX(',', LTRIM('@JenisLesenIdList')) - 1)
+                                                ELSE LTRIM('@JenisLesenIdList')
                                             END AS INT
                                         ) AND (JenisReport='LIKL' OR JenisReport='LIKB') AND NamaTemplat is not null) AS tbl1 ORDER BY NamaTemplatDesc ">
                                         <SelectParameters>
