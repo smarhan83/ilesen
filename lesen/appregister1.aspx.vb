@@ -434,7 +434,7 @@ Partial Class appregister1
             Case 1, 30                       'Lesen Perniagaan / Permit Perniagaan Sementara
                 pnla.Visible = True
                 pnla1.Visible = True
-            Case 6, 7, 29                     'Tukar Alamat Perniagaan, Tambah Premis, Kurang Premis /
+            Case 6, 7, 28                     'Tukar Alamat Perniagaan, Tambah Premis, Kurang Premis /
                 pnla.Visible = True
                 pnla1.Visible = True
                 pnla3.Visible = True

@@ -584,7 +584,7 @@
 
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <asp:Label ID="Lbl_AlamatBaru" runat="server" Text="Alamat Baru" />
+                                                <asp:Label ID="Lbl_AlamatBaru" runat="server" Text="Alamat Baru" Font-Bold="true"/>
                                                 <asp:TextBox ID="TB_AlamatBaru" runat="server"
                                                     Text='<%# Bind("AlamatBaru") %>' TextMode="MultiLine" Rows="3" CssClass="form-control" />
 
@@ -601,7 +601,7 @@
 
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <asp:Label ID="Lbl_JenisPerniagaanBaru" runat="server" Text="Jenis Perniagaan Tambahan" />
+                                                <asp:Label ID="Lbl_JenisPerniagaanBaru" runat="server" Text="Jenis Perniagaan Tambahan" Font-Bold="true"/>
                                                 <asp:TextBox ID="TB_JenisPerniagaanBaru" runat="server"
                                                     Text='<%# Bind("JenisPerniagaanBaru") %>' CssClass="form-control" />
 
