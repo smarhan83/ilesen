@@ -1295,7 +1295,8 @@ a.badge-dark:focus, a.badge-dark.focus {
 /* MODAL SIZE */
 
 #modalSemak .modal-dialog {
-    max-width: 900px;
+    width: 85vw;
+    max-width: 85vw;
 }
 
 #modalSemak .input-group .form-control {
