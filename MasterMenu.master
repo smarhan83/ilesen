@@ -2323,6 +2323,25 @@ h1{
     });
 </script>
 
+    <script>
+        $(document).on('select2:open', function (e) {
+            setTimeout(function () {
+                var $dropdown = $('.select2-container--open .select2-dropdown');
+                if (!$dropdown.length) return;
+
+                var dropdownRect = $dropdown[0].getBoundingClientRect();
+                var viewportWidth = window.innerWidth;
+
+                // Kalau dropdown terkeluar right edge
+                if (dropdownRect.right > viewportWidth) {
+                    var overflowAmount = dropdownRect.right - viewportWidth;
+                    var currentLeft = parseFloat($dropdown.css('left'));
+                    $dropdown.css('left', (currentLeft - overflowAmount - 15) + 'px'); // -10 buffer
+                }
+            }, 0);
+        });
+    </script>
+
 </body>
 </html>
 
