@@ -609,6 +609,8 @@
                                     </div>
                                 </div>
 
+                                <br />
+
                                 <div class="row">
                                     <div class="col-12">
 
@@ -623,7 +625,7 @@
                                                     <div class="card-body">
                                                         <div class="row">
 
-                                                            <div class="col-md-8">
+                                                            <div class="col-md-6">
                                                                 <div class="form-group">
                                                                     <label>Nama Templat</label>
                                                                     <asp:TextBox ID="TB_NamaTemplat" runat="server" 
@@ -856,10 +858,12 @@
                                     </div>
                                 </div>
 
+                                <br />
+
                                 <div class="row">
                                     <div class="col-12">
 
-                                        <asp:FormView ID="FormView6" Width="100%" DefaultMode="Insert" runat="server" DataKeyNames="UTID" DataSourceID="SqlDataSourceUlasanIK">
+                                        <asp:FormView ID="FormViewUlasanIK" Width="100%" DefaultMode="Insert" runat="server" DataKeyNames="UTID" DataSourceID="SqlDataSourceUlasanIK">
                                             <EditItemTemplate>
                                                 <asp:Panel runat ="server">
                                                     <div class="card card-default">
@@ -870,13 +874,13 @@
                                                     <div class="card-body">
                                                         <div class="row">
 
-                                                            <div class="col-md-8">
+                                                            <div class="col-md-6">
                                                                 <div class="form-group">
                                                                     <label>Nama Templat</label>
                                                                     <asp:TextBox ID="TB_NamaTemplatIK" runat="server" 
                                                                         Text='<%# Bind("NamaTemplat") %>' CssClass="form-control" />
                                                                     <asp:RequiredFieldValidator ID="RequiredFieldValidator6" runat="server" CssClass="cssRequiredField"
-                                                                        ControlToValidate="TB_NamaTemplatIK" ErrorMessage="Sila Isi" ValidationGroup="frmEdit" Display="Dynamic"></asp:RequiredFieldValidator>
+                                                                        ControlToValidate="TB_NamaTemplatIK" ErrorMessage="Sila Isi" ValidationGroup="frmEditUlasanIK" Display="Dynamic"></asp:RequiredFieldValidator>
                                                                 </div>
                                                             </div>
 
@@ -890,14 +894,14 @@
                                                                     <asp:TextBox ID="TB_UlasanIK" runat="server"  TextMode="Multiline"
                                                                         Text='<%# Bind("Ulasan") %>' CssClass="form-control" />
                                                                     <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" CssClass="cssRequiredField"
-                                                                        ControlToValidate="TB_UlasanIK" ErrorMessage="Sila Isi" ValidationGroup="frmEdit" Display="Dynamic"></asp:RequiredFieldValidator>
+                                                                        ControlToValidate="TB_UlasanIK" ErrorMessage="Sila Isi" ValidationGroup="frmEditUlasanIK" Display="Dynamic"></asp:RequiredFieldValidator>
                                                                 </div>
                                                             </div>
 
                                                         </div>
                                                     </div>
                                                     <div class="card-footer">
-                                                        <asp:LinkButton ID="UpdateButton" runat="server" CausesValidation="True" CommandName="Update" Text="Simpan" ValidationGroup="frmEdit" CssClass="btn btn-primary" />
+                                                        <asp:LinkButton ID="UpdateButton" runat="server" CausesValidation="True" CommandName="Update" Text="Simpan" ValidationGroup="frmEditUlasanIK" CssClass="btn btn-primary" />
                                                         &nbsp;
                                                         <asp:LinkButton ID="UpdateCancelButton" runat="server" CausesValidation="False" CommandName="Cancel" Text="Set Semula" CssClass="btn btn-default" />
                                                     </div>
@@ -920,7 +924,7 @@
                                                                     <asp:TextBox ID="TB_NamaTemplatIK" runat="server" 
                                                                         Text='<%# Bind("NamaTemplat") %>' CssClass="form-control" />
                                                                     <asp:RequiredFieldValidator ID="RequiredFieldValidator7" runat="server" CssClass="cssRequiredField"
-                                                                        ControlToValidate="TB_NamaTemplatIK" ErrorMessage="Sila Isi" ValidationGroup="frmInsert" Display="Dynamic"></asp:RequiredFieldValidator>
+                                                                        ControlToValidate="TB_NamaTemplatIK" ErrorMessage="Sila Isi" ValidationGroup="frmInsertUlasanIK" Display="Dynamic"></asp:RequiredFieldValidator>
                                                                 </div>
                                                             </div>
 
@@ -934,14 +938,14 @@
                                                                     <asp:TextBox ID="TB_UlasanIK" runat="server"  TextMode="Multiline"
                                                                         Text='<%# Bind("Ulasan") %>' CssClass="form-control" />
                                                                     <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" CssClass="cssRequiredField"
-                                                                        ControlToValidate="TB_UlasanIK" ErrorMessage="Sila Isi" ValidationGroup="frmInsert" Display="Dynamic"></asp:RequiredFieldValidator>
+                                                                        ControlToValidate="TB_UlasanIK" ErrorMessage="Sila Isi" ValidationGroup="frmInsertUlasanIK" Display="Dynamic"></asp:RequiredFieldValidator>
                                                                 </div>
                                                             </div>
 
                                                         </div>
                                                     </div>
                                                     <div class="card-footer">
-                                                        <asp:LinkButton ID="InsertButton" runat="server" CausesValidation="True" CommandName="Insert" Text="Kunci Masuk" ValidationGroup="frmInsert" CssClass="btn btn-primary" />
+                                                        <asp:LinkButton ID="InsertButton" runat="server" CausesValidation="True" CommandName="Insert" Text="Kunci Masuk" ValidationGroup="frmInsertUlasanIK" CssClass="btn btn-primary" />
                                                         &nbsp;
                                                         <asp:LinkButton ID="InsertCancelButton" runat="server" CausesValidation="False" CommandName="Cancel" Text="Set Semula" CssClass="btn btn-default" />
                                                     </div>
