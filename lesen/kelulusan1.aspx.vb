@@ -2605,7 +2605,7 @@ Partial Class kelulusan1
                     INSERT INTO LESEN_UlasanFail (Permohonan_ID, UlasanFail_Remarks, CreatorID, CreatedDt, LastModDt)
                     SELECT @Permohonan_ID AS Permohonan_ID, Ulasan AS UlasanFail_Remarks, 'AUTO' AS CreatorID, 
                     GETDATE() AS CreatedDt, GETDATE() AS ModDt 
-                    FROM LESEN_UlasanTemplate
+                    FROM LESEN_UlasanIKTemplate
                     WHERE JenisLesen_ID=@JenisLesen_ID AND IsSokong=@IsSokong AND NamaTemplat=@NamaTemplat;"
 
             Dim myCommandSelect As New SqlCommand(SQL, myConnection)
