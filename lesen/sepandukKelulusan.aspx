@@ -72,7 +72,25 @@
 
             <asp:SqlDataSource ID="SqlDataSourceGridKelulusan" runat="server"
                 ConnectionString="<%$ ConnectionStrings:webcon_ConnectionStr %>"
-                SelectCommand="SELECT * FROM (SELECT * FROM LESEN_SepandukPermohonan WHERE SepandukPermohonan_IsActive = 1 AND SepandukPermohonan_Status IN ('Semakan KB Inspektorat','Semakan KB Lesen','Perakuan KJ Lesen')) as TBL1 WHERE 1=1 ORDER BY SepandukPermohonan_ID DESC">
+                SelectCommand="SELECT * FROM (
+                                    SELECT * FROM LESEN_SepandukPermohonan 
+                                    WHERE SepandukPermohonan_IsActive = 1 
+                                    AND SepandukPermohonan_Status IN ('Semakan KB Inspektorat','Semakan KB Lesen','Perakuan KJ Lesen')
+                               ) as TBL1 
+                               WHERE 1=1
+                               AND (
+                                   (SepandukPermohonan_Status = 'Semakan KB Inspektorat' AND @sessionIsPenilai = 1 AND @sessionEstateID = 3)
+                                   OR
+                                   (SepandukPermohonan_Status = 'Semakan KB Lesen' AND @sessionIsPenilai = 1 AND @sessionEstateID = 1)
+                                   OR
+                                   (SepandukPermohonan_Status = 'Perakuan KJ Lesen' AND @sessionIsPeraku = 1 AND @sessionEstateID = 1)
+                               )
+                               ORDER BY SepandukPermohonan_ID DESC">
+                <SelectParameters>
+                    <asp:SessionParameter SessionField="sessionIsPenilai" DefaultValue="0" Name="sessionIsPenilai"></asp:SessionParameter>                    
+                    <asp:SessionParameter SessionField="sessionIsPeraku" DefaultValue="0" Name="sessionIsPeraku"></asp:SessionParameter>
+                    <asp:SessionParameter SessionField="sessionEstateID" DefaultValue="0" Name="sessionEstateID"></asp:SessionParameter>
+                </SelectParameters>
             </asp:SqlDataSource>
 
             <asp:Panel ID="pnlDetail" runat="server" Visible="false">
@@ -381,8 +399,6 @@
                         </InsertParameters>
                     </asp:SqlDataSource>
                 </asp:Panel>
-
-
 
                 <%--# =========================== BORANG KJ LESEN =========================== #--%>
                 <asp:Panel ID="pnlKJLesen" runat="server" Visible="false">
