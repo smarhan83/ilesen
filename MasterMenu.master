@@ -1063,7 +1063,7 @@ h1{
                             </p>--%>
 
                             <label class="fw-bold mb-2">
-                                No. Kad Pengenalan / No. Passport
+                                No. Kad Pengenalan / No. Passport / No. Pendaftaran Syarikat (SSM)
                                 <span class="text-danger">*</span>
                             </label>
 
@@ -1089,7 +1089,7 @@ h1{
 
                             <small class="text-muted d-block mt-3 hint-text">
                                 <i class="bi bi-info-circle-fill hint-icon"></i>
-                                <asp:Label runat="server" id="lblMessage">Sila masukkan No. Kad Pengenalan (tanpa -) atau No. Passport (tanpa simbol).</asp:Label>
+                                <asp:Label runat="server" id="lblMessage">Sila masukkan No. Kad Pengenalan (tanpa -) atau No. Passport / No. Pendaftaran Syarikat (SSM) (tanpa simbol).</asp:Label>
                             </small>                         
 
                             <%--STATUS--%>
@@ -1220,6 +1220,9 @@ h1{
                                         or
                                         REPLACE(REPLACE(REPLACE(f.Pemohon_PassportNo, '-', ''), ' ', ''), CHAR(9), '') =
                                         REPLACE(REPLACE(REPLACE(@Pemohon_ICNo, '-', ''), ' ', ''), CHAR(9), '')
+                                        or
+                                        REPLACE(REPLACE(REPLACE(g.NoPendaftaran, '-', ''), ' ', ''), CHAR(9), '') like
+                                        '%'+REPLACE(REPLACE(REPLACE(@Pemohon_ICNo, '-', ''), ' ', ''), CHAR(9), '')+'%'
                                     )
 
                                 ) AS tbl WHERE RepNo = 1 order by TarikhMohon desc, Permohonan_ID desc"
