@@ -1,10 +1,13 @@
 ﻿
+Imports System
+Imports System.Configuration
 Imports System.Data
 Imports System.Data.SqlClient
 Imports System.Drawing
 Imports System.Drawing.Imaging
 Imports System.IO
 Imports System.Security.Policy
+Imports System.Web.UI.WebControls
 Imports Microsoft.ReportingServices.Rendering.ExcelRenderer.ExcelGenerator.BIFF8
 Imports Microsoft.SqlServer.Management.Smo
 
@@ -941,6 +944,150 @@ Partial Class semakkelulusan1
             Dim myCommandSelect As New SqlCommand(SQL, myConnection)
             myCommandSelect.Parameters.AddWithValue("@JenisLesen_ID", jidList(0))
             myCommandSelect.Parameters.AddWithValue("@JenisReport", jenisReport)
+            myCommandSelect.Parameters.AddWithValue("@Permohonan_ID", pid)
+
+            myCommandSelect.Parameters.AddWithValue("@@TahunIni", DateTime.Now.Year.ToString)
+            myCommandSelect.Parameters.AddWithValue("@@JumlahKadarBayaran", totalamount.ToString("N2"))
+            myCommandSelect.Parameters.AddWithValue("@@Rujukan", rujukan)
+            myCommandSelect.Parameters.AddWithValue("@@TarikhMohon", tarikhmohon)
+            myCommandSelect.Parameters.AddWithValue("@@JenisPasar", jenispasar)
+            myCommandSelect.Parameters.AddWithValue("@@JenisPerniagaanPasar", jenisperniagaanpasar)
+            myCommandSelect.Parameters.AddWithValue("@@JumlahPetak", jumlahpetak)
+            myCommandSelect.Parameters.AddWithValue("@@LokasiPasar", lokasipasar)
+
+            Try
+                myCommandSelect.ExecuteNonQuery()
+                ShowAlert("success", "", "Surat kelulusan berjaya dijana.")
+                GridViewReport.DataBind()
+            Catch ex As Exception
+                MessageBox(ex.Message, Me)
+            End Try
+
+            myConnection.Close()
+
+        End Using
+
+    End Sub
+
+    Protected Sub BT_Generate_Command(sender As Object, e As CommandEventArgs)
+
+        'Dim jid As String = CStr(Me.FormView1.DataKey("JenisLesenIdList"))
+        Dim jidList() As String = CStr(GridView1.SelectedDataKey.Values("JenisLesenIdList")).Split(","c)
+        Dim pid As Integer = CInt(GridView1.SelectedDataKey.Values("Permohonan_ID"))
+        Dim sid As Integer = CInt(GridView1.SelectedDataKey.Values("ApprStatusID"))
+        Dim namatemplatList() As String = CStr(DDL_SuratTemplat.SelectedValue).Split(","c)
+        'Dim jenisrepot As String = namatemplatList(0)
+        Dim namatemplat As String = namatemplatList(1)
+
+        'MessageBox("Generate Mail " & pid.ToString & "/" & jid.ToString, Me)
+
+        Dim jenisReport As String = "SKL"
+        Dim rujukan As String = ""
+        Dim tarikhmohon As String = ""
+        Dim jenispasar As String = ""
+        Dim jumlahpetak As String = ""
+        Dim jenisperniagaanpasar As String = ""
+        Dim lokasipasar As String = ""
+        Dim totalamount As Double = 0
+
+        Using myConnection As New SqlConnection(ConfigurationManager.ConnectionStrings("webcon_ConnectionStr").ConnectionString)
+
+            myConnection.Open()
+
+            Dim SQL3 As String = "SELECT ISNULL(SUM(KadarBayaran_Amount), 0) AS TotalAmount FROM LESEN_KadarBayaran WHERE KadarBayaran_PermohonanID = @Permohonan_ID AND IsSelect = 1"
+
+            Dim myCommandSelect3 As New SqlCommand(SQL3, myConnection)
+            myCommandSelect3.Parameters.AddWithValue("@Permohonan_ID", pid)
+
+            Dim myReader3 As SqlDataReader = myCommandSelect3.ExecuteReader
+
+            Try
+                If myReader3.Read Then
+
+                    totalamount = myReader3.Item("TotalAmount")
+
+                End If
+
+            Catch ex As Exception
+                MessageBox(ex.Message, Me)
+            End Try
+
+            myReader3.Close()
+            myConnection.Close()
+
+            If totalamount = 0 Then
+                ShowAlert("error", "", "Sila semak semula dan pilih kadar bayaran yang berkenaan.")
+                Exit Sub
+            End If
+
+            myConnection.Open()
+
+            Dim SQL4 As String = "SELECT Rujukan, CONVERT(varchar, TarikhMohon, 103) AS TarikhMohon, JenisPasar, JenisPerniagaanPasar, JumlahPetak, LokasiPasar1, LokasiPasar2, LokasiPasar3 FROM LESEN_Permohonan WHERE Permohonan_ID = @Permohonan_ID"
+
+            Dim myCommandSelect4 As New SqlCommand(SQL4, myConnection)
+            myCommandSelect4.Parameters.AddWithValue("@Permohonan_ID", pid)
+
+            Dim myReader4 As SqlDataReader = myCommandSelect4.ExecuteReader
+
+            Try
+                If myReader4.Read Then
+
+                    rujukan = myReader4.Item("Rujukan").ToString
+                    tarikhmohon = myReader4.Item("TarikhMohon").ToString
+                    jenispasar = myReader4.Item("JenisPasar").ToString
+                    jenisperniagaanpasar = myReader4.Item("JenisPerniagaanPasar").ToString
+                    jumlahpetak = myReader4.Item("JumlahPetak").ToString
+                    lokasipasar = myReader4.Item("LokasiPasar1").ToString
+
+                    If myReader4.Item("LokasiPasar2").ToString.Length > 0 Then
+                        lokasipasar = lokasipasar & ", " & myReader4.Item("LokasiPasar2").ToString
+                    End If
+
+                    If myReader4.Item("LokasiPasar3").ToString.Length > 0 Then
+                        lokasipasar = lokasipasar & ", " & myReader4.Item("LokasiPasar3").ToString
+                    End If
+
+                End If
+
+            Catch ex As Exception
+                MessageBox(ex.Message, Me)
+            End Try
+
+            myReader4.Close()
+            myConnection.Close()
+
+            myConnection.Open()
+
+            Dim SQL As String = "DELETE FROM LESEN_PermohonanSurat WHERE Permohonan_ID=@Permohonan_ID AND JenisReport=@JenisReport; 
+                    INSERT INTO LESEN_PermohonanSurat (Permohonan_ID, JenisReport, P1, P2, P3, IsiKandungan, CreatedDt, ModDt)
+                    SELECT @Permohonan_ID AS Permohonan_ID, JenisReport, P1, P2, P3, 
+                    REPLACE(
+                        REPLACE(
+                            REPLACE(
+                                REPLACE(
+                                    REPLACE(
+                                        REPLACE(
+                                            REPLACE(
+                                                REPLACE(CAST(IsiKandungan AS VARCHAR(MAX)), '{@TahunIni}', @@TahunIni), 
+                                            '{@JumlahKadarBayaran}', @@JumlahKadarBayaran), 
+                                        '{@Rujukan}', IIF(CHARINDEX(' ', @@Rujukan) > 0, @@Rujukan, REPLACE(@@Rujukan, 'MPK/599/401/', 'MPK/599/401/ ')) ),
+                                    '{@TarikhMohon}',@@TarikhMohon),
+                                '{@JenisPasar}',@@JenisPasar),
+                            '{@JenisPerniagaanPasar}',@@JenisPerniagaanPasar),
+                        '{@JumlahPetak}',@@JumlahPetak),
+                    '{@LokasiPasar}',@@LokasiPasar) AS IsiKandungan, 
+                    GETDATE() AS CreatedDt, GETDATE() AS ModDt 
+                    FROM LESEN_ReportTemplate
+                    WHERE JenisLesen_ID=@JenisLesen_ID AND JenisReport=@JenisReport AND NamaTemplat=@NamaTemplat;"
+
+            If sid = 9 Then
+                jenisReport = "SKB"
+            End If
+
+            Dim myCommandSelect As New SqlCommand(SQL, myConnection)
+            myCommandSelect.Parameters.AddWithValue("@JenisLesen_ID", jidList(0))
+            myCommandSelect.Parameters.AddWithValue("@JenisReport", jenisReport)
+            myCommandSelect.Parameters.AddWithValue("@NamaTemplat", namatemplat)
             myCommandSelect.Parameters.AddWithValue("@Permohonan_ID", pid)
 
             myCommandSelect.Parameters.AddWithValue("@@TahunIni", DateTime.Now.Year.ToString)

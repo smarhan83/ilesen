@@ -584,7 +584,7 @@
 
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label>Alamat Baru</label>
+                                                <asp:Label ID="Lbl_AlamatBaru" runat="server" Text="Alamat Baru" />
                                                 <asp:TextBox ID="TB_AlamatBaru" runat="server"
                                                     Text='<%# Bind("AlamatBaru") %>' TextMode="MultiLine" Rows="3" CssClass="form-control" />
 
@@ -601,7 +601,7 @@
 
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label>Jenis Perniagaan Tambahan</label>
+                                                <asp:Label ID="Lbl_JenisPerniagaanBaru" runat="server" Text="Jenis Perniagaan Tambahan" />
                                                 <asp:TextBox ID="TB_JenisPerniagaanBaru" runat="server"
                                                     Text='<%# Bind("JenisPerniagaanBaru") %>' CssClass="form-control" />
 
@@ -1579,7 +1579,7 @@
 
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label>Alamat Baru</label>
+                                                <asp:Label ID="Lbl_AlamatBaru" runat="server" Text="Alamat Baru" />
                                                 <asp:TextBox ID="TB_AlamatBaru" runat="server"
                                                     Text='<%# Bind("AlamatBaru") %>' TextMode="MultiLine" Rows="3" CssClass="form-control" />
                                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator13" runat="server" CssClass="cssRequiredField"
@@ -1598,7 +1598,7 @@
 
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label>Jenis Perniagaan Tambahan</label>
+                                                <asp:Label ID="Lbl_JenisPerniagaanBaru" runat="server" Text="Jenis Perniagaan Tambahan" />
                                                 <asp:TextBox ID="TB_JenisPerniagaanBaru" runat="server"
                                                     Text='<%# Bind("JenisPerniagaanBaru") %>' CssClass="form-control" />
                                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator14" runat="server" CssClass="cssRequiredField"
@@ -3124,7 +3124,7 @@
 
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label>Alamat Baru</label>
+                                        <asp:Label ID="Lbl_AlamatBaru_ins" runat="server" Text="Alamat Baru" />
                                         <asp:TextBox ID="TB_AlamatBaru_ins" runat="server" TextMode="MultiLine" Rows="3" CssClass="form-control" />
 
                                     </div>
@@ -3140,7 +3140,7 @@
 
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label>Jenis Perniagaan Tambahan</label>
+                                        <asp:Label ID="Lbl_JenisPerniagaanBaru_ins" runat="server" Text="Jenis Perniagaan Tambahan" />
                                         <asp:TextBox ID="TB_JenisPerniagaanBaru_ins" runat="server" CssClass="form-control" />
 
                                     </div>

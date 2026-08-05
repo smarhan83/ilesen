@@ -623,6 +623,20 @@
                                                     <div class="card-body">
                                                         <div class="row">
 
+                                                            <div class="col-md-8">
+                                                                <div class="form-group">
+                                                                    <label>Nama Templat</label>
+                                                                    <asp:TextBox ID="TB_NamaTemplat" runat="server" 
+                                                                        Text='<%# Bind("NamaTemplat") %>' CssClass="form-control" />
+                                                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator6" runat="server" CssClass="cssRequiredField"
+                                                                        ControlToValidate="TB_NamaTemplat" ErrorMessage="Sila Isi" ValidationGroup="frmEdit" Display="Dynamic"></asp:RequiredFieldValidator>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+
+                                                        <div class="row">
+
                                                             <div class="col-md-2">
                                                                 <div class="form-group">
                                                                     <label>No Perenggan Utama</label>
@@ -687,6 +701,20 @@
                                                     <div class="card-body">
                                                         <div class="row">
 
+                                                            <div class="col-md-8">
+                                                                <div class="form-group">
+                                                                    <label>Nama Templat</label>
+                                                                    <asp:TextBox ID="TB_NamaTemplat" runat="server" 
+                                                                        Text='<%# Bind("NamaTemplat") %>' CssClass="form-control" />
+                                                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator7" runat="server" CssClass="cssRequiredField"
+                                                                        ControlToValidate="TB_NamaTemplat" ErrorMessage="Sila Isi" ValidationGroup="frmInsert" Display="Dynamic"></asp:RequiredFieldValidator>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+
+                                                        <div class="row">
+
                                                             <div class="col-md-2">
                                                                 <div class="form-group">
                                                                     <label>No Perenggan Utama</label>
@@ -743,12 +771,13 @@
                                             </InsertItemTemplate>
                                         </asp:FormView>
                                         <asp:SqlDataSource runat="server" ID="SqlDataSourceReport" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
-                                            InsertCommand="INSERT INTO LESEN_ReportTemplate (JenisLesen_ID, JenisReport, P1, P2, P3, IsiKandungan, CreatedDt) VALUES (@JenisLesen_ID, @JenisReport, @P1, @P2, @P3, @IsiKandungan, GETDATE()); "
-                                            UpdateCommand="UPDATE LESEN_ReportTemplate SET P1=@P1, P2=@P2, P3=@P3, IsiKandungan=@IsiKandungan WHERE RTID=@RTID"
+                                            InsertCommand="INSERT INTO LESEN_ReportTemplate (JenisLesen_ID, JenisReport, NamaTemplat, P1, P2, P3, IsiKandungan, CreatedDt) VALUES (@JenisLesen_ID, @JenisReport, @NamaTemplat, @P1, @P2, @P3, @IsiKandungan, GETDATE()); "
+                                            UpdateCommand="UPDATE LESEN_ReportTemplate SET NamaTemplat=@NamaTemplat, P1=@P1, P2=@P2, P3=@P3, IsiKandungan=@IsiKandungan WHERE RTID=@RTID"
                                             SelectCommand="SELECT * FROM LESEN_ReportTemplate WHERE RTID=@RTID">
                                             <InsertParameters>
                                                 <asp:ControlParameter ControlID="GridView1" PropertyName="SelectedValue" Name="JenisLesen_ID"></asp:ControlParameter>
                                                 <asp:ControlParameter ControlID="DDL_ReportType" PropertyName="SelectedValue" Name="JenisReport"></asp:ControlParameter>
+                                                <asp:Parameter Name="NamaTemplat"></asp:Parameter>
                                                 <asp:Parameter Name="P1"></asp:Parameter>
                                                 <asp:Parameter Name="P2"></asp:Parameter>
                                                 <asp:Parameter Name="P3"></asp:Parameter>
@@ -756,6 +785,7 @@
                                                 <%--<asp:ControlParameter ControlID="GridView1" PropertyName="SelectedValue" Name="JenisLesen_ID"></asp:ControlParameter>--%>
                                             </InsertParameters>
                                             <UpdateParameters>
+                                                <asp:Parameter Name="NamaTemplat"></asp:Parameter>
                                                 <asp:Parameter Name="P1"></asp:Parameter>
                                                 <asp:Parameter Name="P2"></asp:Parameter>
                                                 <asp:Parameter Name="P3"></asp:Parameter>
@@ -774,6 +804,7 @@
                                     <div class="col-12">
                                         <asp:GridView ID="GridViewReport" HeaderStyle-ForeColor="Black" CssClass="table table-bordered" AllowPaging="True" ShowHeaderWhenEmpty="True" EmptyDataText="No records Found" AllowSorting="True" runat="server" AutoGenerateColumns="False" DataKeyNames="RTID" DataSourceID="SqlDataSourceGridReport">
                                             <Columns>
+                                                <asp:BoundField DataField="NamaTemplat" HeaderText="Nama Templat" SortExpression="NamaTemplat"></asp:BoundField>
                                                 <asp:BoundField DataField="P1" HeaderText="No Perenggan Utama" SortExpression="P1"></asp:BoundField>
                                                 <asp:BoundField DataField="P2" HeaderText="No Perenggan Sekunder" SortExpression="P2"></asp:BoundField>
                                                 <asp:BoundField DataField="P3" HeaderText="No Perenggan Tertier" SortExpression="P3"></asp:BoundField>
@@ -790,13 +821,183 @@
                                         <asp:SqlDataSource runat="server" ID="SqlDataSourceGridReport" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
                                             DeleteCommand="DELETE FROM LESEN_ReportTemplate WHERE RTID = @RTID"
                                             SelectCommand="SELECT * FROM LESEN_ReportTemplate WHERE JenisLesen_ID = @JenisLesen_ID AND JenisReport=@JenisReport 
-                                            ORDER BY P1, P2, P3">
+                                            ORDER BY NamaTemplat, P1, P2, P3">
                                             <DeleteParameters>
-                                                <asp:Parameter Name="JenisLesenAgensi_ID"></asp:Parameter>
+                                                <asp:Parameter Name="RTID"></asp:Parameter>
                                             </DeleteParameters>
                                             <SelectParameters>
                                                 <asp:ControlParameter ControlID="GridView1" PropertyName="SelectedValue" Name="JenisLesen_ID"></asp:ControlParameter>
                                                 <asp:ControlParameter ControlID="DDL_ReportType" PropertyName="SelectedValue" Name="JenisReport"></asp:ControlParameter>
+                                            </SelectParameters>
+                                        </asp:SqlDataSource>
+                                    </div>
+                                </div>
+                                <!-- /.tab-1 Gridview -->
+                            </div>
+                        </div>
+                    </ContentTemplate>
+                </asp:TabPanel>
+
+                <asp:TabPanel runat="server" ID="TabPanel8" HeaderText="Templat Ulasan IK">
+                    <HeaderTemplate>Templat Ulasan IK</HeaderTemplate>
+                    <ContentTemplate>
+                        <div class="card">
+                            <div class="card-body">
+
+                                <div class="row">
+                                    <div class="col-4">
+                                        <div class="form-group">
+                                            <label>Sokong/Tidak Sokong</label>
+                                            <asp:DropDownList ID="DDL_Sokong" AutoPostBack="true" runat="server" CssClass="form-control">
+                                                <asp:ListItem Value="1" Selected="True">Sokong</asp:ListItem>
+                                                <asp:ListItem Value="0">Tidak Sokong</asp:ListItem>
+                                            </asp:DropDownList>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-12">
+
+                                        <asp:FormView ID="FormView6" Width="100%" DefaultMode="Insert" runat="server" DataKeyNames="UTID" DataSourceID="SqlDataSourceUlasanIK">
+                                            <EditItemTemplate>
+                                                <asp:Panel runat ="server">
+                                                    <div class="card card-default">
+                                                   <div class="card-header">
+                                                        <h3 class="card-title" style="color: black">Kemaskini Ulasan IK</h3>
+                                                    </div>
+                                                    <!-- /.card-header -->
+                                                    <div class="card-body">
+                                                        <div class="row">
+
+                                                            <div class="col-md-8">
+                                                                <div class="form-group">
+                                                                    <label>Nama Templat</label>
+                                                                    <asp:TextBox ID="TB_NamaTemplatIK" runat="server" 
+                                                                        Text='<%# Bind("NamaTemplat") %>' CssClass="form-control" />
+                                                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator6" runat="server" CssClass="cssRequiredField"
+                                                                        ControlToValidate="TB_NamaTemplatIK" ErrorMessage="Sila Isi" ValidationGroup="frmEdit" Display="Dynamic"></asp:RequiredFieldValidator>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+
+                                                        <div class="row">
+
+                                                            <div class="col-md-8">
+                                                                <div class="form-group">
+                                                                    <label>Ulasan</label>
+                                                                    <asp:TextBox ID="TB_UlasanIK" runat="server"  TextMode="Multiline"
+                                                                        Text='<%# Bind("Ulasan") %>' CssClass="form-control" />
+                                                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" CssClass="cssRequiredField"
+                                                                        ControlToValidate="TB_UlasanIK" ErrorMessage="Sila Isi" ValidationGroup="frmEdit" Display="Dynamic"></asp:RequiredFieldValidator>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="card-footer">
+                                                        <asp:LinkButton ID="UpdateButton" runat="server" CausesValidation="True" CommandName="Update" Text="Simpan" ValidationGroup="frmEdit" CssClass="btn btn-primary" />
+                                                        &nbsp;
+                                                        <asp:LinkButton ID="UpdateCancelButton" runat="server" CausesValidation="False" CommandName="Cancel" Text="Set Semula" CssClass="btn btn-default" />
+                                                    </div>
+                                                </div>
+                                                </asp:Panel>
+                                            </EditItemTemplate>
+                                            <InsertItemTemplate>
+                                                <asp:Panel runat ="server">
+                                                    <div class="card card-default">
+                                                   <div class="card-header">
+                                                        <h3 class="card-title" style="color: black">Tambah Ulasan</h3>
+                                                    </div>
+                                                    <!-- /.card-header -->
+                                                    <div class="card-body">
+                                                        <div class="row">
+
+                                                            <div class="col-md-8">
+                                                                <div class="form-group">
+                                                                    <label>Nama Templat</label>
+                                                                    <asp:TextBox ID="TB_NamaTemplatIK" runat="server" 
+                                                                        Text='<%# Bind("NamaTemplat") %>' CssClass="form-control" />
+                                                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator7" runat="server" CssClass="cssRequiredField"
+                                                                        ControlToValidate="TB_NamaTemplatIK" ErrorMessage="Sila Isi" ValidationGroup="frmInsert" Display="Dynamic"></asp:RequiredFieldValidator>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+
+                                                        <div class="row">
+
+                                                            <div class="col-md-8">
+                                                                <div class="form-group">
+                                                                    <label>Ulasan</label>
+                                                                    <asp:TextBox ID="TB_UlasanIK" runat="server"  TextMode="Multiline"
+                                                                        Text='<%# Bind("Ulasan") %>' CssClass="form-control" />
+                                                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" CssClass="cssRequiredField"
+                                                                        ControlToValidate="TB_UlasanIK" ErrorMessage="Sila Isi" ValidationGroup="frmInsert" Display="Dynamic"></asp:RequiredFieldValidator>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="card-footer">
+                                                        <asp:LinkButton ID="InsertButton" runat="server" CausesValidation="True" CommandName="Insert" Text="Kunci Masuk" ValidationGroup="frmInsert" CssClass="btn btn-primary" />
+                                                        &nbsp;
+                                                        <asp:LinkButton ID="InsertCancelButton" runat="server" CausesValidation="False" CommandName="Cancel" Text="Set Semula" CssClass="btn btn-default" />
+                                                    </div>
+                                                </div>
+                                                </asp:Panel>
+                                            </InsertItemTemplate>
+                                        </asp:FormView>
+                                        <asp:SqlDataSource runat="server" ID="SqlDataSourceUlasanIK" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
+                                            InsertCommand="INSERT INTO LESEN_UlasanIKTemplate (JenisLesen_ID, IsSokong, NamaTemplat, Ulasan, CreatedDt) VALUES (@JenisLesen_ID, @IsSokong, @NamaTemplat, @Ulasan, GETDATE()); "
+                                            UpdateCommand="UPDATE LESEN_UlasanIKTemplate SET NamaTemplat=@NamaTemplat, Ulasan=@Ulasan WHERE UTID=@UTID"
+                                            SelectCommand="SELECT * FROM LESEN_UlasanIKTemplate WHERE UTID=@UTID">
+                                            <InsertParameters>
+                                                <asp:ControlParameter ControlID="GridView1" PropertyName="SelectedValue" Name="JenisLesen_ID"></asp:ControlParameter>
+                                                <asp:ControlParameter ControlID="DDL_Sokong" PropertyName="SelectedValue" Name="IsSokong"></asp:ControlParameter>
+                                                <asp:Parameter Name="NamaTemplat"></asp:Parameter>
+                                                <asp:Parameter Name="Ulasan"></asp:Parameter>
+                                                <%--<asp:ControlParameter ControlID="GridView1" PropertyName="SelectedValue" Name="JenisLesen_ID"></asp:ControlParameter>--%>
+                                            </InsertParameters>
+                                            <UpdateParameters>
+                                                <asp:Parameter Name="NamaTemplat"></asp:Parameter>
+                                                <asp:Parameter Name="Ulasan"></asp:Parameter>
+                                                <asp:ControlParameter ControlID="DDL_Sokong" PropertyName="SelectedValue" Name="IsSokong" />
+                                                <asp:ControlParameter ControlID="GridViewUlasanIK" DefaultValue="" Name="UTID" PropertyName="SelectedValue" />
+                                            </UpdateParameters>
+                                            <SelectParameters>
+                                                <asp:ControlParameter ControlID="GridViewUlasanIK" PropertyName="SelectedValue" Name="UTID"></asp:ControlParameter>
+                                            </SelectParameters>
+                                        </asp:SqlDataSource>
+                                    </div>
+                                </div>
+                                <!-- /.tab-1 Formview -->
+                                <div class="row">
+                                    <div class="col-12">
+                                        <asp:GridView ID="GridViewUlasanIK" HeaderStyle-ForeColor="Black" CssClass="table table-bordered" AllowPaging="True" ShowHeaderWhenEmpty="True" EmptyDataText="No records Found" AllowSorting="True" runat="server" AutoGenerateColumns="False" DataKeyNames="UTID" DataSourceID="SqlDataSourceGridUlasanIK">
+                                            <Columns>
+                                                <asp:BoundField DataField="NamaTemplat" HeaderText="Nama Templat" SortExpression="NamaTemplat"></asp:BoundField>
+                                                <asp:BoundField DataField="Ulasan" HeaderText="Ulasan" SortExpression="Ulasan"></asp:BoundField>
+                                                <asp:TemplateField ShowHeader="False">
+                                                    <ItemTemplate>
+                                                        <asp:LinkButton runat="server" Text="Kemaskini" CommandName="Select" CausesValidation="False" ID="LinkButton4" CssClass="btn btn-warning btn-sm"></asp:LinkButton>
+                                                        <br />
+                                                        <asp:LinkButton runat="server" CommandName="Delete" CssClass="btn btn-danger btn-sm" OnClientClick="return confirm('Padam pilihan ini?');" data-toggle="tooltip" data-placement="top" title="Delete" CausesValidation="False" ID="LinkButton5">Padam</asp:LinkButton>
+                                                    </ItemTemplate>
+                                                </asp:TemplateField>
+                                            </Columns>
+                                        </asp:GridView>
+                                        <asp:SqlDataSource runat="server" ID="SqlDataSourceGridUlasanIK" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
+                                            DeleteCommand="DELETE FROM LESEN_UlasanTemplate WHERE UTID = @UTID"
+                                            SelectCommand="SELECT * FROM LESEN_UlasanTemplate WHERE JenisLesen_ID = @JenisLesen_ID AND IsSokong=@IsSokong 
+                                            ORDER BY NamaTemplat, UTID">
+                                            <DeleteParameters>
+                                                <asp:Parameter Name="UTID"></asp:Parameter>
+                                            </DeleteParameters>
+                                            <SelectParameters>
+                                                <asp:ControlParameter ControlID="GridView1" PropertyName="SelectedValue" Name="JenisLesen_ID"></asp:ControlParameter>
+                                                <asp:ControlParameter ControlID="DDL_Sokong" PropertyName="SelectedValue" Name="IsSokong"></asp:ControlParameter>
                                             </SelectParameters>
                                         </asp:SqlDataSource>
                                     </div>
