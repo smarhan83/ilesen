@@ -497,7 +497,18 @@
                                         DataSourceID="SqlDataSourceUlasanIK" DataTextField="NamaTemplatDesc" DataValueField="NamaTemplat">
                                     </asp:DropDownList>
                                     <asp:SqlDataSource runat="server" ID="SqlDataSourceUlasanIK" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
-                                        SelectCommand="SELECT * FROM LESEN_UlasanIKTemplate ">
+                                        SelectCommand="SELECT * FROM 
+                                        (SELECT '0' AS NamaTemplat, '-- Pilih Templat Ulasan --' AS NamaTemplatDesc
+                                        UNION ALL
+                                        SELECT DISTINCT CONCAT(IsSokong, ',',NamaTemplat) AS NamaTemplat, NamaTemplat AS NamaTemplatDesc 
+                                        FROM LESEN_UlasanIKTemplate 
+                                        WHERE JenisLesen_ID = TRY_CAST(
+                                            CASE 
+                                                WHEN CHARINDEX(',', LTRIM(@JenisLesenIdList)) > 0 
+                                                    THEN LEFT(LTRIM(@JenisLesenIdList), CHARINDEX(',', LTRIM(@JenisLesenIdList)) - 1)
+                                                ELSE LTRIM(@JenisLesenIdList)
+                                            END AS INT
+                                        ) AND NamaTemplat is not null) AS tbl1 ORDER BY NamaTemplatDesc">
                                         <SelectParameters>
                                              <asp:ControlParameter ControlID="GridView1" PropertyName="SelectedDataKey.Values[7]" Name="JenisLesenIdList"></asp:ControlParameter>
                                         </SelectParameters>
@@ -1606,7 +1617,18 @@
                                         DataSourceID="SqlDataSourceSuratTemplat" DataTextField="NamaTemplatDesc" DataValueField="NamaTemplat">
                                     </asp:DropDownList>
                                     <asp:SqlDataSource runat="server" ID="SqlDataSourceSuratTemplat" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
-                                        SelectCommand="SELECT * FROM LESEN_ReportTemplate ">
+                                        SelectCommand="SELECT * FROM 
+                                        (SELECT '0' AS NamaTemplat, '-- Pilih Templat Surat --' AS NamaTemplatDesc
+                                        UNION ALL
+                                        SELECT DISTINCT CONCAT(JenisReport, ',',NamaTemplat) AS NamaTemplat AS NamaTemplatDesc 
+                                        FROM LESEN_ReportTemplate 
+                                        WHERE JenisLesen_ID = TRY_CAST(
+                                            CASE 
+                                                WHEN CHARINDEX(',', LTRIM('@JenisLesenIdList')) > 0 
+                                                    THEN LEFT(LTRIM(@JenisLesenIdList), CHARINDEX(',', LTRIM(@JenisLesenIdList)) - 1)
+                                                ELSE LTRIM(@JenisLesenIdList)
+                                            END AS INT
+                                        ) AND (JenisReport='LIKL' OR JenisReport='LIKB') AND NamaTemplat is not null) AS tbl1 ORDER BY NamaTemplatDesc">
                                         <SelectParameters>
                                              <asp:ControlParameter ControlID="GridView1" PropertyName="SelectedDataKey.Values[7]" Name="JenisLesenIdList"></asp:ControlParameter>
                                         </SelectParameters>
