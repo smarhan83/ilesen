@@ -315,10 +315,10 @@
                                 </p>
                             </div>
 
-                            <button class="btn btn-soft btn-sm">
+                            <%--<button class="btn btn-soft btn-sm">
                                 <i class="bi bi-arrow-repeat me-1"></i>
                                 Refresh
-                            </button>
+                            </button>--%>
                         </div>
 
 
@@ -490,10 +490,10 @@
                                 </p>
                             </div>
 
-                            <button class="btn btn-soft btn-sm">
+                            <%--<button class="btn btn-soft btn-sm">
                                 <i class="bi bi-arrow-repeat me-1"></i>
                                 Refresh
-                            </button>
+                            </button>--%>
 
                         </div>
 
@@ -1185,7 +1185,7 @@ where x2.Permohonan_ID = g.Permohonan_ID and x2.JabatanAgensi_ID = @AgensiID uni
                 <asp:TemplateField HeaderText="#" ItemStyle-Width="40">
                     <ItemTemplate>
                         
-                        <%# (Container.DataItemIndex + 1 + (gvLesenSummary.PageIndex * gvLesenSummary.PageSize)) %>
+                        <%# (Container.DisplayIndex + 1 + (gvLesenSummary.PageIndex * gvLesenSummary.PageSize)) %>
                     </ItemTemplate>
                 </asp:TemplateField>
 
@@ -1312,16 +1312,91 @@ where x2.Permohonan_ID = g.Permohonan_ID and x2.JabatanAgensi_ID = @AgensiID uni
                                 </p>
                             </div>
 
-                            <button class="btn btn-soft btn-sm">
+                            <%--<button class="btn btn-soft btn-sm">
                                 <i class="bi bi-arrow-repeat me-1"></i>Refresh
-                            </button>
+                            </button>--%>
                         </div>
 
 
                         <div class="mt-3">
 
                             <div class="table-responsive">
+
                                 <table class="table align-items-center mb-0">
+                                    <asp:GridView ID="gvListStaffIK" runat="server"
+                                        AutoGenerateColumns="false"
+                                        CssClass="table align-items-center mb-0"
+                                        GridLines="None"
+                                        DataSourceID="sdsListStaffIK"
+                                        AllowPaging="true"
+                                        PageSize="10"
+                                        OnRowDataBound="gvListStaffIK_RowDataBound"
+                                        OnPageIndexChanging="gvListStaffIK_PageIndexChanging">
+
+                                        <HeaderStyle CssClass="text-uppercase text-secondary text-xxs" />
+
+                                        <Columns>
+
+                                            <asp:TemplateField HeaderText="Bil." ItemStyle-CssClass="text-center">
+                                                <ItemTemplate>
+                                                    <span class="small fw-bold">
+                                                        <%# (Container.DisplayIndex + 1 + (gvListStaffIK.PageIndex * gvListStaffIK.PageSize)) %>
+                                                    </span>
+                                                </ItemTemplate>
+                                            </asp:TemplateField>
+
+                                            <asp:TemplateField HeaderText="No. Rujukan">
+                                                <ItemTemplate>
+                                                    <div class="fw-bold"><%# Eval("Rujukan") %></div>
+                                                    <div class="small text-muted"><%# Eval("JenisLesen_Description") %></div>
+                                                </ItemTemplate>
+                                            </asp:TemplateField>
+
+                                            <asp:TemplateField HeaderText="Nama Pemohon">
+                                                <ItemTemplate>
+                                                    <div class="small fw-bold"><%# Eval("Pemohon_Name") %></div>
+                                                </ItemTemplate>
+                                            </asp:TemplateField>
+
+                                            <asp:TemplateField HeaderText="Tarikh Mohon" ItemStyle-CssClass="text-center">
+                                                <ItemTemplate>
+                                                    <span class="small text-muted"><%# Eval("TarikhMohon") %></span>
+                                                </ItemTemplate>
+                                            </asp:TemplateField>
+
+                                            <asp:TemplateField HeaderText="Staff Agensi">
+                                                <ItemTemplate>
+                                                    <div class="small fw-bold"><%# Eval("StaffName") %></div>
+                                                    <div class="small text-muted"><%# Eval("JabatanAgensi_Description") %></div>
+                                                </ItemTemplate>
+                                            </asp:TemplateField>
+
+                                            <asp:TemplateField HeaderText="Status" ItemStyle-CssClass="text-center">
+                                                <ItemTemplate>
+                                                    <span class="badge rounded-pill bg-warning-subtle text-warning">Belum Selesai</span>
+                                                </ItemTemplate>
+                                            </asp:TemplateField>
+
+                                        </Columns>
+
+                                        <PagerTemplate>
+                                            <div class="d-flex justify-content-between align-items-center pt-3 pager-row">
+                                                <span class="pager-info" id="lblPagerInfoIK" runat="server"></span>
+                                                <div class="pager-numbers" id="pnlPageNumbersIK" runat="server"></div>
+                                                <asp:DropDownList ID="ddlPageSizeIK" runat="server" CssClass="form-select pagesize-select"
+                                                    AutoPostBack="true" OnSelectedIndexChanged="ddlPageSizeIK_SelectedIndexChanged">
+                                                    <asp:ListItem Text="6 / halaman"  Value="6" />
+                                                    <asp:ListItem Text="10 / halaman" Value="10" />
+                                                    <asp:ListItem Text="20 / halaman" Value="20" />
+                                                    <asp:ListItem Text="50 / halaman" Value="50" />
+                                                </asp:DropDownList>
+                                            </div>
+                                        </PagerTemplate>
+
+                                    </asp:GridView>
+                                </table>
+                                
+                                <%--<table class="table align-items-center mb-0">
 
                                     <thead>
                                         <tr>
@@ -1398,7 +1473,7 @@ where x2.Permohonan_ID = g.Permohonan_ID and x2.JabatanAgensi_ID = @AgensiID uni
 
                                     </tbody>
 
-                                </table>
+                                </table>--%>
                             </div>
 
                         </div>

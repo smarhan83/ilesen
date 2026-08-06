@@ -35,6 +35,7 @@ Partial Class _Default
 
             Try
                 BindGrid()
+                gvListStaffIK.DataBind()
             Catch ex As Exception
                 ' Log error
             End Try
@@ -971,6 +972,122 @@ ORDER BY a.JenisLesen_ID, BulanKey;"
         BindGrid()
     End Sub
 
+
+    ''''' NEW LESEN SUMMARY IK
+
+    ' TotalRecords khusus untuk grid IK ni — key ViewState lain drpd grid lain
+    Private Property TotalRecordsIK As Integer
+        Get
+            If ViewState("TotalRecordsIK") Is Nothing Then Return 0
+            Return CInt(ViewState("TotalRecordsIK"))
+        End Get
+        Set(value As Integer)
+            ViewState("TotalRecordsIK") = value
+        End Set
+    End Property
+
+    Protected Sub gvListStaffIK_PageIndexChanging(sender As Object, e As GridViewPageEventArgs)
+        gvListStaffIK.PageIndex = e.NewPageIndex
+        gvListStaffIK.DataBind() ' SqlDataSource akan auto refetch data
+    End Sub
+
+    Protected Sub gvListStaffIK_RowDataBound(sender As Object, e As GridViewRowEventArgs)
+
+        If e.Row.RowType <> DataControlRowType.Pager Then Exit Sub
+
+        Dim gv As GridView = CType(sender, GridView)
+
+        ' Kira TotalRecords sekali di sini (SqlDataSource select tanpa paging)
+        TotalRecordsIK = sdsListStaffIK.Select(DataSourceSelectArguments.Empty).Cast(Of DataRowView).Count()
+
+        Dim totalPages As Integer = gv.PageCount
+        Dim currentPage As Integer = gv.PageIndex + 1
+
+        Dim lblInfo As HtmlGenericControl = CType(e.Row.FindControl("lblPagerInfoIK"), HtmlGenericControl)
+        If lblInfo IsNot Nothing Then
+            If TotalRecordsIK = 0 Then
+                lblInfo.InnerText = "Tiada rekod"
+            Else
+                Dim startRec As Integer = (gv.PageIndex * gv.PageSize) + 1
+                Dim endRec As Integer = Math.Min((gv.PageIndex + 1) * gv.PageSize, TotalRecordsIK)
+                lblInfo.InnerText = String.Format("Paparan {0} hingga {1} dari {2} rekod", startRec, endRec, TotalRecordsIK)
+            End If
+        End If
+
+        Dim ddlSize As DropDownList = CType(e.Row.FindControl("ddlPageSizeIK"), DropDownList)
+        If ddlSize IsNot Nothing Then
+            Dim item As System.Web.UI.WebControls.ListItem = ddlSize.Items.FindByValue(gv.PageSize.ToString())
+            If item IsNot Nothing Then
+                ddlSize.ClearSelection()
+                item.Selected = True
+            End If
+        End If
+
+        Dim pnl As HtmlGenericControl = CType(e.Row.FindControl("pnlPageNumbersIK"), HtmlGenericControl)
+        If pnl IsNot Nothing Then
+            BuildPagerButtonsIK(pnl, currentPage, totalPages)
+        End If
+
+    End Sub
+
+    Private Sub BuildPagerButtonsIK(container As HtmlGenericControl, currentPage As Integer, totalPages As Integer)
+
+        container.Controls.Clear()
+        If totalPages <= 0 Then Exit Sub
+
+        AddPagerLinkIK(container, "&lsaquo;", currentPage - 1, currentPage > 1)
+
+        Dim pagesToShow As New SortedSet(Of Integer)
+        pagesToShow.Add(1)
+        pagesToShow.Add(totalPages)
+        For p As Integer = Math.Max(1, currentPage - 1) To Math.Min(totalPages, currentPage + 1)
+            pagesToShow.Add(p)
+        Next
+
+        Dim lastRendered As Integer = 0
+        For Each pageNum As Integer In pagesToShow
+            If pageNum > lastRendered + 1 Then
+                Dim ellipsis As New HtmlGenericControl("span")
+                ellipsis.Attributes("class") = "pager-ellipsis"
+                ellipsis.InnerText = "..."
+                container.Controls.Add(ellipsis)
+            End If
+
+            AddPagerLinkIK(container, pageNum.ToString(), pageNum, True, pageNum = currentPage)
+            lastRendered = pageNum
+        Next
+
+        AddPagerLinkIK(container, "&rsaquo;", currentPage + 1, currentPage < totalPages)
+
+    End Sub
+
+    Private Sub AddPagerLinkIK(container As HtmlGenericControl, text As String, targetPage As Integer,
+                            enabled As Boolean, Optional isActive As Boolean = False)
+
+        Dim lnk As New LinkButton()
+        lnk.Text = text
+        lnk.CommandName = "GotoPageIK"
+        lnk.CommandArgument = targetPage.ToString()
+        lnk.CssClass = "pager-btn" & If(isActive, " active", "") & If(Not enabled, " disabled", "")
+        lnk.Enabled = enabled
+        AddHandler lnk.Click, AddressOf PagerLinkIK_Click
+        container.Controls.Add(lnk)
+
+    End Sub
+
+    Private Sub PagerLinkIK_Click(sender As Object, e As EventArgs)
+        Dim lnk As LinkButton = CType(sender, LinkButton)
+        Dim targetPage As Integer = Convert.ToInt32(lnk.CommandArgument)
+        gvListStaffIK.PageIndex = targetPage - 1
+        gvListStaffIK.DataBind()
+    End Sub
+
+    Protected Sub ddlPageSizeIK_SelectedIndexChanged(sender As Object, e As EventArgs)
+        Dim ddlSize As DropDownList = CType(sender, DropDownList)
+        gvListStaffIK.PageSize = Convert.ToInt32(ddlSize.SelectedValue)
+        gvListStaffIK.PageIndex = 0
+        gvListStaffIK.DataBind()
+    End Sub
 
 
 End Class
