@@ -413,7 +413,7 @@
                                                     THEN LEFT(LTRIM(@JenisLesenIdList), CHARINDEX(',', LTRIM(@JenisLesenIdList)) - 1)
                                                 ELSE LTRIM(@JenisLesenIdList)
                                             END AS INT
-                                        ) AND JenisReport=IIF(@ApprStatus=9, 'SKB', 'SKL') AND NamaTemplat is not null) AS tbl1 ORDER BY NamaTemplatDesc ">
+                                        ) AND JenisReport=IIF(@ApprStatusID=9, 'SKB', 'SKL') AND NamaTemplat is not null) AS tbl1 ORDER BY NamaTemplatDesc ">
                                         <SelectParameters>
                                             <asp:ControlParameter ControlID="GridView1" PropertyName="SelectedDataKey.Values[1]" Name="ApprStatusID"></asp:ControlParameter>
                                              <asp:ControlParameter ControlID="GridView1" PropertyName="SelectedDataKey.Values[2]" Name="JenisLesenIdList"></asp:ControlParameter>
