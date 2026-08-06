@@ -731,6 +731,37 @@ Partial Class semakkelulusan1
 
     Private Sub ViewSuratKelulusanAuto(permohonanID As String, isPDF As Boolean)
         'Dim cb As CheckBox = DirectCast(FormView1.FindControl("CB_IsDigitalSign"), CheckBox)
+        Dim totalid As Integer = 0
+
+        'To check if lampiran larangan merokok is needed
+        Using myConnection As New SqlConnection(ConfigurationManager.ConnectionStrings("webcon_ConnectionStr").ConnectionString)
+
+            myConnection.Open()
+
+            Dim sql1 As String = "SELECT COUNT(PSID) AS TotalID FROM LESEN_PermohonanSurat WHERE Permohonan_ID = @permohonanID 
+            AND JenisReport LIKE 'SK%' AND IsiKandungan like '%merokok%' "
+
+            Dim myCommandSelect As New SqlCommand(sql1, myConnection)
+            myCommandSelect.Parameters.AddWithValue("@permohonanID", permohonanID)
+
+            Dim myReader As SqlDataReader = myCommandSelect.ExecuteReader
+
+            Try
+                If myReader.Read Then
+                    totalid = CInt(myReader.Item("TotalID"))
+                Else
+                    ShowAlert("error", "", "Checking Lampiran Larangan Merokok.")
+                End If
+
+            Catch ex As Exception
+
+            End Try
+
+            myReader.Close()
+            myConnection.Close()
+
+        End Using
+
 
         Dim sql As String = ""
 
@@ -774,7 +805,12 @@ Partial Class semakkelulusan1
                 Session.Item("reportPrintType") = "pdf"
             End If
 
-            ScriptManager.RegisterClientScriptBlock(Me.Page, Me.[GetType](), ReportVar, "window.open('../ReportViewer1.aspx?name=" + ReportVar + "', '_blank', '');", True)
+            If totalid = 0 Then
+                ScriptManager.RegisterClientScriptBlock(Me.Page, Me.[GetType](), ReportVar, "window.open('../ReportViewer.aspx?name=" + ReportVar + "', '_blank', '');", True)
+            Else
+                ScriptManager.RegisterClientScriptBlock(Me.Page, Me.[GetType](), ReportVar, "window.open('../ReportViewer1.aspx?name=" + ReportVar + "', '_blank', '');", True)
+            End If
+
         Catch ex As Exception
             MessageBox(ex.Message, Me)
         End Try
