@@ -28,6 +28,7 @@
             background-color : #EDECFC !important;
         }		
     </style>
+
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="Server">
@@ -1229,7 +1230,100 @@
                         <!-- Weekly Progress -->
                         <div class="mt-4">
 
-                            <asp:Repeater ID="Repeater6" runat="server" DataSourceID="sdsWeek">
+<style>
+.traffic-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 20px 24px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+.traffic-header { margin-bottom: 14px; }
+.traffic-title {
+    font-weight: 600;
+    font-size: 15px;
+    color: #1f2937;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+.traffic-info { color: #9ca3af; font-size: 13px; cursor: help; }
+.traffic-legend {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: #4b5563;
+    margin-bottom: 10px;
+}
+.legend-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-left: 12px;
+}
+.legend-dot:first-child { margin-left: 0; }
+.dot-selesai { background: #16a34a; }
+.dot-proses { background: #f59e0b; }
+</style>
+
+
+                            <div class="mt-4">
+                                <div class="traffic-card">
+                                    <div class="traffic-header">
+                                        <span class="traffic-title">
+                                            Trafik Permohonan
+                                            <i class="bi bi-info-circle traffic-info" title="Jumlah permohonan mengikut hari"></i>
+                                        </span>
+                                    </div>
+                                    <div class="traffic-legend">
+                                        <span class="legend-dot dot-selesai"></span> Selesai
+                                        <span class="legend-dot dot-proses"></span> Dalam Proses
+                                    </div>
+                                    <canvas id="trafikPermohonanChart" height="220"></canvas>
+                                </div>
+
+                                <asp:Repeater ID="Repeater6" runat="server" DataSourceID="sdsWeek">
+                                    <HeaderTemplate><div id="trafikData" style="display:none">[</HeaderTemplate>
+                                    <ItemTemplate>
+                                        {"day":"<%# GetDayLabel(Eval("dayName").ToString()) %>","selesai":<%# Eval("selesai") %>,"proses":<%# Eval("takSelesai") %>},
+                                    </ItemTemplate>
+                                    <FooterTemplate>]</div></FooterTemplate>
+                                </asp:Repeater>
+                            </div>
+
+                            <asp:SqlDataSource runat="server" ID="sdsWeek" 
+                                ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
+                                SelectCommand="
+                                select tbl1.dayName, tbl1.ord,
+                                (select count(*) from LESEN_Permohonan a 
+                                 where 
+                                (a.TarikhMohon &gt;= DATEADD(dd, -1, DATEADD(ww, DATEDIFF(ww, 0, GETDATE()) - 1, 0)) 
+                                and a.TarikhMohon &lt; DATEADD(dd,  6, DATEADD(ww, DATEDIFF(ww, 0, GETDATE()) - 1, 0)))
+                                and 
+                                iif(@AgensiID = 0 or @AgensiID = 1,0,@AgensiID) = iif(@AgensiID = 0 or @AgensiID = 1,0,(select top 1 x2.AgensiID from LESEN_ApprovalList x2 where x2.agensiID = @AgensiID and x2.Permohonan_ID = a.Permohonan_ID))
+                                 and a.StatusID IN (9,10) and UPPER(datename(weekday,a.TarikhMohon)) = tbl1.dayName) as selesai,
+                                (select count(*) from LESEN_Permohonan a 
+                                 where (a.TarikhMohon &gt;= DATEADD(dd, -1, DATEADD(ww, DATEDIFF(ww, 0, GETDATE()) - 1, 0)) 
+                                 and a.TarikhMohon &lt; DATEADD(dd,  6, DATEADD(ww, DATEDIFF(ww, 0, GETDATE()) - 1, 0)))
+                                 and iif(@AgensiID = 0 or @AgensiID = 1,0,@AgensiID) = iif(@AgensiID = 0 or @AgensiID = 1,0,(select top 1 x2.AgensiID from LESEN_ApprovalList x2 where x2.agensiID = @AgensiID and x2.Permohonan_ID = a.Permohonan_ID))
+                                 and a.StatusID NOT IN (9,10) and UPPER(datename(weekday,a.TarikhMohon)) = tbl1.dayName) as takSelesai
+                                from (
+                                    select 'SUNDAY' as dayName, 1 as ord union all 
+                                    select 'MONDAY', 2 union all 
+                                    select 'TUESDAY', 3 union all 
+                                    select 'WEDNESDAY', 4 union all 
+                                    select 'THURSDAY', 5 union all 
+                                    select 'FRIDAY', 6 union all 
+                                    select 'SATURDAY', 7
+                                ) tbl1
+                                order by tbl1.ord">
+                                <SelectParameters>
+                                    <asp:SessionParameter SessionField="sessionEstateID" Name="AgensiID"></asp:SessionParameter>
+                                </SelectParameters>
+                            </asp:SqlDataSource>
+
+                            <%--<asp:Repeater ID="Repeater6" runat="server" DataSourceID="sdsWeek">
 
                                 <ItemTemplate>
 
@@ -1297,7 +1391,7 @@
                             <SelectParameters>
                             <asp:SessionParameter SessionField="sessionEstateID" Name="AgensiID"></asp:SessionParameter>
                             </SelectParameters>
-                            </asp:SqlDataSource>
+                            </asp:SqlDataSource>--%>
                         </div>
 
 
@@ -1324,7 +1418,7 @@
                     <div class="soft-card p-4">
 
                         <!-- Header -->
-                        <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
+                        <%--<div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
 
                             <div>
                                 <div class="section-title">
@@ -1338,16 +1432,11 @@
                                 </p>
                             </div>
 
-                            <%--<button class="btn btn-soft btn-sm">
-                                <i class="bi bi-arrow-repeat me-1"></i>
-                                Refresh
-                            </button>--%>
 
-                        </div>
-
+                        </div>--%>
 
                         <!-- KPI -->
-                        <div class="row mt-3 pb-3 border-bottom">
+                        <%--<div class="row mt-3 pb-3 border-bottom">
 
 
                             <div class="col-6">
@@ -1485,19 +1574,492 @@ where x2.Permohonan_ID = g.Permohonan_ID and x2.JabatanAgensi_ID = @AgensiID uni
                             </div>
 
 
+                        </div>--%>
+
+                        <%--HEADER NEW--%>
+
+<style>
+
+.tugasan-card {
+    background: #fff;
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 2px 14px rgba(0,0,0,0.06);
+    /*max-width: 320px;*/
+}
+.tugasan-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    color: #1e293b;
+    margin-bottom: 16px;
+}
+.tugasan-header i { font-size: 16px; color: #475569; }
+
+.tugasan-main {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 18px;
+}
+.tugasan-icon-wrap {
+    width: 56px;
+    height: 56px;
+    min-width: 56px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #a78bfa, #7c3aed);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 22px;
+    box-shadow: 0 0 0 6px rgba(124,58,237,0.12);
+}
+.tugasan-count { font-size: 30px; font-weight: 800; color: #6d28d9; line-height: 1; }
+.tugasan-label { font-size: 14px; font-weight: 600; color: #1e293b; margin-top: 2px; }
+.tugasan-sub { font-size: 12px; color: #94a3b8; }
+
+.tugasan-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 16px;
+}
+.stat-box {
+    background: #f8fafc;
+    border-radius: 14px;
+    padding: 10px 6px;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    min-height: 64px;
+    transition: background 0.15s ease;
+}
+.stat-box:hover { background: #eef2f7; }
+.stat-num { font-size: 20px; font-weight: 800; }
+.stat-label { font-size: 11px; color: #64748b; margin-top: 2px; }
+.stat-blue .stat-num { color: #2563eb; }
+.stat-red .stat-num { color: #ef4444; }
+
+.tugasan-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    background: linear-gradient(135deg, #a78bfa, #7c3aed);
+    color: #fff;
+    font-weight: 600;
+    font-size: 14px;
+    padding: 12px;
+    border-radius: 14px;
+    text-decoration: none;
+    transition: opacity 0.15s ease;
+}
+.tugasan-btn:hover { opacity: 0.9; color: #fff; }
+</style>
+
+                        <div class="tugasan-card">
+                            <div class="tugasan-header">
+                                <i class="bi bi-person-circle"></i>
+                                <span>Tugasan Saya</span>
+                            </div>
+
+                            <div class="tugasan-main">
+                                <div class="tugasan-icon-wrap">
+                                    <i class="bi bi-clipboard2-check-fill"></i>
+                                </div>
+                                <div>
+                                    <asp:FormView ID="FormViewTugasan" runat="server" DataSourceID="sdsTugasanSaya">
+                                        <ItemTemplate>
+                                            <div class="tugasan-count"><%# Eval("jumlahBelumSelesai") %></div>
+                                        </ItemTemplate>
+                                    </asp:FormView>
+                                    <div class="tugasan-label">Belum Selesai</div>
+                                    <div class="tugasan-sub">Semua Agensi</div>
+                                </div>
+                            </div>
+
+                            <div class="tugasan-stats">
+                                <a href="<%= ResolveUrl("~/lesen/kelulusan.aspx?p_Id=3351&m_Id=3352") %>" class="stat-box stat-blue">
+                                    <asp:FormView ID="FormView11" runat="server" DataSourceID="sdsPemohonBaru">
+                                        <ItemTemplate>
+                                            <div class="stat-num"><%# Eval("cnt") %></div>
+                                        </ItemTemplate>
+                                    </asp:FormView>
+                                    <div class="stat-label">Pendaftaran</div>
+                                </a>
+
+                                <a href="<%= ResolveUrl("~/lesen/pembatalan.aspx?p_Id=3351&m_Id=4351") %>" class="stat-box stat-red">
+                                    <asp:FormView ID="FormView12" runat="server" DataSourceID="sdsPembatalanBaru">
+                                        <ItemTemplate>
+                                            <div class="stat-num"><%# Eval("cnt") %></div>
+                                        </ItemTemplate>
+                                    </asp:FormView>
+                                    <div class="stat-label">Pembatalan</div>
+                                </a>
+                            </div>
+
+                            <a href="<%= ResolveUrl("~/lesen/kelulusan.aspx?p_Id=3351&m_Id=3352") %>" class="tugasan-btn">
+                                Lihat Semua Tugasan <i class="bi bi-chevron-right"></i>
+                            </a>
                         </div>
+
+                        <asp:SqlDataSource ID="sdsTugasanSaya" runat="server" ConnectionString="<%$ ConnectionStrings:webcon_ConnectionStr %>"
+                            SelectCommand="
+                            SELECT COUNT(*) as jumlahBelumSelesai
+                            FROM (
+                                SELECT a.Permohonan_ID FROM v_LESEN_ApprovalList_Curr a
+                                inner join LESEN_JenisLesen d on d.JenisLesen_ID = a.JenisLesen_ID
+                                left join LESEN_JabatanAgensi e on e.JabatanAgensi_ID = a.AgensiID
+                                inner join LESEN_Pemohon f on f.Pemohon_ID = a.Permohonan_PemohonID
+                                inner join LESEN_Permohonan g on g.Permohonan_ID = a.Permohonan_ID
+                                where 1=1 and (
+                                    a.ApprStatusID = case when @isPenyedia = 1 then 3 else 99 end 
+                                    or a.ApprStatusID = case when @isPenilai = 1 then 2 else 99 end
+                                    or a.ApprStatusID = case when @isPenilai = 1 then 5 else 99 end
+                                    or a.ApprStatusID = case when @isPenilai = 1 then 4 else 99 end
+                                    or a.ApprStatusID = case when @isPeraku = 1 then 8 else 99 end
+                                )
+                                and case when isnull((select top 1 x.JabatanAgensi_IsLesen from LESEN_JabatanAgensi x where x.JabatanAgensi_ID = @AgensiID),0) = 1 then isnull(a.AgensiID,@AgensiID) else a.AgensiID end 
+                                    = case when isnull((select top 1 x.JabatanAgensi_IsLesen from LESEN_JabatanAgensi x where x.JabatanAgensi_ID = @AgensiID),0) = 1 then @AgensiID else @AgensiID end
+                                and case when a.ApprStatusID = 3 then @sessionUsersId else 0 end IN 
+                                    (select x.PermohonanAgensiStaffID_UsersID from LESEN_PermohonanAgensiStaff x 
+                                    inner join LESEN_PermohonanAgensi x2 on x2.PermohonanAgensi_ID = x.PermohonanAgensi_ID
+                                    where x2.Permohonan_ID = g.Permohonan_ID and x2.JabatanAgensi_ID = @AgensiID union all select 0)
+
+                                UNION ALL
+
+                                SELECT a.Permohonan_ID FROM v_LESEN_ApprovalListBatal_Curr a
+                                inner join LESEN_JenisLesen d on d.JenisLesen_ID = a.JenisLesen_ID
+                                left join LESEN_JabatanAgensi e on e.JabatanAgensi_ID = a.AgensiID
+                                inner join LESEN_Pemohon f on f.Pemohon_ID = a.Permohonan_PemohonID
+                                inner join LESEN_Permohonan g on g.Permohonan_ID = a.Permohonan_ID
+                                where 1=1 and (
+                                    a.ApprStatusID = case when @isPenyedia = 1 then 3 else 99 end 
+                                    or a.ApprStatusID = case when @isPenilai = 1 then 2 else 99 end
+                                    or a.ApprStatusID = case when @isPenilai = 1 then 5 else 99 end
+                                    or a.ApprStatusID = case when @isPenilai = 1 then 4 else 99 end
+                                    or a.ApprStatusID = case when @isPeraku = 1 then 8 else 99 end
+                                )
+                                and case when isnull((select top 1 x.JabatanAgensi_IsLesen from LESEN_JabatanAgensi x where x.JabatanAgensi_ID = @AgensiID),0) = 1 then isnull(a.AgensiID,@AgensiID) else a.AgensiID end 
+                                    = case when isnull((select top 1 x.JabatanAgensi_IsLesen from LESEN_JabatanAgensi x where x.JabatanAgensi_ID = @AgensiID),0) = 1 then @AgensiID else @AgensiID end
+                                and case when a.ApprStatusID = 3 then @sessionUsersId else 0 end IN 
+                                    (select x.PermohonanAgensiStaffID_UsersID from LESEN_PermohonanAgensiStaffBatal x 
+                                    inner join LESEN_PermohonanAgensiBatal x2 on x2.PermohonanAgensi_ID = x.PermohonanAgensi_ID
+                                    where x2.Permohonan_ID = g.Permohonan_ID and x2.JabatanAgensi_ID = @AgensiID union all select 0)
+                            ) tbl">
+                            <SelectParameters>
+                                <asp:SessionParameter SessionField="sessionEstateID" Name="AgensiID"></asp:SessionParameter>
+                                <asp:SessionParameter SessionField="sessionIsPenyedia" Name="isPenyedia"></asp:SessionParameter>
+                                <asp:SessionParameter SessionField="sessionIsPenilai" Name="isPenilai"></asp:SessionParameter>
+                                <asp:SessionParameter SessionField="sessionIsPeraku" Name="isPeraku"></asp:SessionParameter>
+                                <asp:SessionParameter SessionField="sessionUsersId" Name="sessionUsersId"></asp:SessionParameter>
+                            </SelectParameters>
+                        </asp:SqlDataSource>
+
+                        <asp:SqlDataSource ID="sdsPemohonBaru" runat="server" ConnectionString="<%$ ConnectionStrings:webcon_ConnectionStr %>"
+                            SelectCommand="SELECT count(*) as cnt FROM 
+                        v_LESEN_ApprovalList_Curr a
+                        inner join LESEN_JenisLesen d on d.JenisLesen_ID = a.JenisLesen_ID
+                        left join LESEN_JabatanAgensi e on e.JabatanAgensi_ID = a.AgensiID
+                        inner join LESEN_Pemohon f on f.Pemohon_ID = a.Permohonan_PemohonID
+                        inner join LESEN_Permohonan g on g.Permohonan_ID = a.Permohonan_ID
+                        where 1=1 and (
+                        a.ApprStatusID = case when @isPenyedia = 1 then 3 else 99 end 
+                        or a.ApprStatusID = case when @isPenilai = 1 then 2 else 99 end
+                        or a.ApprStatusID = case when @isPenilai = 1 then 5 else 99 end
+                        or a.ApprStatusID = case when @isPenilai = 1 then 4 else 99 end
+                        or a.ApprStatusID = case when @isPenilai = 1 and @isReadOnly = 1 and 1 = 2 then 6 else 99 end
+                        or a.ApprStatusID = case when @isPenilai = 1 and @isReadOnly = 1 and 1 = 2 then 7 else 99 end
+                        or a.ApprStatusID = case when @isPenilai = 1 and @isReadOnly = 1 and 1 = 2 then 8 else 99 end
+                        or a.ApprStatusID = case when @isPenilai = 1 and @isReadOnly = 1 and 1 = 2 then 9 else 99 end
+                        or a.ApprStatusID = case when @isPenilai = 1 and @isReadOnly = 1 and 1 = 2 then 10 else 99 end		
+                        or a.ApprStatusID = case when @isPeraku = 1 then 8 else 99 end
+            
+                        )
+                        and case when isnull((select top 1 x.JabatanAgensi_IsLesen from LESEN_JabatanAgensi x where x.JabatanAgensi_ID = @AgensiID),0) = 1  then isnull(a.AgensiID,@AgensiID) else a.AgensiID end 
+                        = case when isnull((select top 1 x.JabatanAgensi_IsLesen from LESEN_JabatanAgensi x where x.JabatanAgensi_ID = @AgensiID),0) = 1  then @AgensiID else @AgensiID end                                 
+
+                        and case when a.ApprStatusID = 3 then @sessionUsersId else 0 end IN 
+                        (select x.PermohonanAgensiStaffID_UsersID 
+                        from LESEN_PermohonanAgensiStaff x 
+                        inner join LESEN_PermohonanAgensi x2 on x2.PermohonanAgensi_ID = x.PermohonanAgensi_ID
+                        where x2.Permohonan_ID = g.Permohonan_ID and x2.JabatanAgensi_ID = @AgensiID union all select 0  )">
+                                                                        <SelectParameters>
+                                                                            <asp:SessionParameter SessionField="sessionEstateID" Name="AgensiID"></asp:SessionParameter>
+                                                                            <asp:SessionParameter SessionField="sessionIsPenyedia" Name="isPenyedia"></asp:SessionParameter>
+                                                                            <asp:SessionParameter SessionField="sessionIsPenilai" Name="isPenilai"></asp:SessionParameter>
+                                                                            <asp:SessionParameter SessionField="sessionIsPeraku" Name="isPeraku"></asp:SessionParameter>
+													                        <asp:SessionParameter SessionField="sessionIsReadOnly" Name="isReadOnly"></asp:SessionParameter>
+													                        <asp:SessionParameter SessionField="sessionUsersId" Name="sessionUsersId"></asp:SessionParameter>
+																	
+                                                                        </SelectParameters>
+																
+                                                                    </asp:SqlDataSource>
+
+                        <asp:SqlDataSource ID="sdsPembatalanBaru" runat="server" ConnectionString="<%$ ConnectionStrings:webcon_ConnectionStr %>"
+                            SelectCommand="SELECT count(*) as cnt FROM 
+                        v_LESEN_ApprovalListBatal_Curr a
+                        inner join LESEN_JenisLesen d on d.JenisLesen_ID = a.JenisLesen_ID
+                        left join LESEN_JabatanAgensi e on e.JabatanAgensi_ID = a.AgensiID
+                        inner join LESEN_Pemohon f on f.Pemohon_ID = a.Permohonan_PemohonID
+                        inner join LESEN_Permohonan g on g.Permohonan_ID = a.Permohonan_ID
+                        where 1=1 and (
+                        a.ApprStatusID = case when @isPenyedia = 1 then 3 else 99 end 
+                        or a.ApprStatusID = case when @isPenilai = 1 then 2 else 99 end
+                        or a.ApprStatusID = case when @isPenilai = 1 then 5 else 99 end
+                        or a.ApprStatusID = case when @isPenilai = 1 then 4 else 99 end
+                        or a.ApprStatusID = case when @isPenilai = 1 and @isReadOnly = 1 and 1 = 2 then 6 else 99 end
+                        or a.ApprStatusID = case when @isPenilai = 1 and @isReadOnly = 1 and 1 = 2 then 7 else 99 end
+                        or a.ApprStatusID = case when @isPenilai = 1 and @isReadOnly = 1 and 1 = 2 then 8 else 99 end
+                        or a.ApprStatusID = case when @isPenilai = 1 and @isReadOnly = 1 and 1 = 2 then 9 else 99 end
+                        or a.ApprStatusID = case when @isPenilai = 1 and @isReadOnly = 1 and 1 = 2 then 10 else 99 end			
+                        or a.ApprStatusID = case when @isPeraku = 1 then 8 else 99 end
+
+                        )
+                        and case when isnull((select top 1 x.JabatanAgensi_IsLesen from LESEN_JabatanAgensi x where x.JabatanAgensi_ID = @AgensiID),0) = 1 then isnull(a.AgensiID,@AgensiID) else a.AgensiID end 
+                        = case when isnull((select top 1 x.JabatanAgensi_IsLesen from LESEN_JabatanAgensi x where x.JabatanAgensi_ID = @AgensiID),0) = 1 then @AgensiID else @AgensiID end
+                                  
+                        and case when a.ApprStatusID = 3 then @sessionUsersId else 0 end IN 
+                        (select x.PermohonanAgensiStaffID_UsersID 
+                        from LESEN_PermohonanAgensiStaffBatal x 
+                        inner join LESEN_PermohonanAgensiBatal x2 on x2.PermohonanAgensi_ID = x.PermohonanAgensi_ID
+                        where x2.Permohonan_ID = g.Permohonan_ID and x2.JabatanAgensi_ID = @AgensiID union all select 0  )">
+                                                            <SelectParameters>
+                                                                <asp:SessionParameter SessionField="sessionEstateID" Name="AgensiID"></asp:SessionParameter>
+                                                                <asp:SessionParameter SessionField="sessionIsPenyedia" Name="isPenyedia"></asp:SessionParameter>
+                                                                <asp:SessionParameter SessionField="sessionIsPenilai" Name="isPenilai"></asp:SessionParameter>
+                                                                <asp:SessionParameter SessionField="sessionIsPeraku" Name="isPeraku"></asp:SessionParameter>
+										                        <asp:SessionParameter SessionField="sessionIsReadOnly" Name="isReadOnly"></asp:SessionParameter>
+										                        <asp:SessionParameter SessionField="sessionUsersId" Name="sessionUsersId"></asp:SessionParameter>
+                                                            </SelectParameters>
+                                                        </asp:SqlDataSource>
+
 
 
 
                         <!-- Pecahan Status -->
+
+<style>
+.status-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 18px 22px;
+    box-shadow: 0 2px 14px rgba(0,0,0,0.05);
+}
+.status-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+.status-title-main { font-size: 16px; font-weight: 700; color: #1e293b; }
+.status-subtitle { font-size: 12px; color: #94a3b8; margin-top: 1px; }
+.status-legend { display: flex; align-items: center; gap: 8px; font-size: 12px; color: #475569; }
+.legend-pill { width: 18px; height: 5px; border-radius: 4px; display: inline-block; margin-right: 4px; }
+.legend-blue { background: #2563eb; }
+.legend-red { background: #ef4444; }
+
+.status-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 8px 0;
+    border-bottom: 1px solid #f1f5f9;
+}
+.status-row:last-child { border-bottom: none; }
+
+.status-icon-wrap {
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 14px;
+}
+
+.status-content { flex: 1; }
+.status-name { font-size: 13px; font-weight: 600; color: #1e293b; margin-bottom: 4px; }
+
+.status-bar-line {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 3px;
+}
+.status-bar-track {
+    flex: 1;
+    height: 5px;
+    background: #eef2f7;
+    border-radius: 4px;
+    overflow: hidden;
+}
+.status-bar-fill { height: 100%; border-radius: 4px; }
+.fill-blue { background: #2563eb; }
+.fill-red { background: #ef4444; }
+
+.status-count { width: 40px; text-align: right; font-weight: 700; font-size: 12px; }
+.text-blue { color: #2563eb; }
+.text-red { color: #ef4444; }
+
+.status-pct {
+    min-width: 42px;
+    text-align: center;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 1px 6px;
+    border-radius: 999px;
+}
+.pct-blue { background: #dbeafe; color: #2563eb; }
+.pct-red { background: #fee2e2; color: #ef4444; }
+
+.status-footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    margin-top: 14px;
+    padding: 10px;
+    background: #f8fafc;
+    border-radius: 12px;
+}
+.footer-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #475569; }
+.footer-total { font-size: 15px; font-weight: 700; margin-left: 2px; }
+.footer-divider { width: 1px; height: 18px; background: #e2e8f0; }
+</style>
+
                         <div class="mt-4">
+                            <div class="status-card">
+                                <div class="status-header">
+                                    <div>
+                                        <div class="status-title-main">Status Permohonan dan Pembatalan</div>
+                                        <div class="status-subtitle">Bilangan mengikut proses semasa</div>
+                                    </div>
+                                    <%--<div class="status-legend">
+                                        <span class="legend-pill legend-blue"></span> Permohonan
+                                        <span class="legend-pill legend-red"></span> Pembatalan
+                                    </div>--%>
+                                </div>
+
+                                <asp:Repeater ID="Repeater8" runat="server" DataSourceID="sdsPermohonanStatus">
+                                    <ItemTemplate>
+                                        <div class="status-row">
+                                            <div class="status-icon-wrap" style="background:<%# GetStatusColor(Eval("statusName").ToString()) %>">
+                                                <i class="bi <%# GetStatusIcon(Eval("statusName").ToString()) %>"></i>
+                                            </div>
+
+                                            <div class="status-content">
+                                                <div class="status-name"><%# Eval("statusName") %></div>
+
+                                                <!-- Permohonan -->
+                                                <div class="status-bar-line">
+                                                    <div class="status-bar-track">
+                                                        <div class="status-bar-fill fill-blue"
+                                                                style='<%# "width:" & (Convert.ToDouble(Eval("cntMohon")) / Convert.ToDouble(Eval("cntMohonTtl")) * 100).ToString("0.##") & "%" %>'>
+                                                        </div>
+                                                    </div>
+                                                    <span class="status-count text-blue"><%# Eval("cntMohon") %></span>
+                                                    <span class="status-pct pct-blue">
+                                                        <%# CInt((Convert.ToDouble(Eval("cntMohon")) / Convert.ToDouble(Eval("cntMohonTtl"))) * 100) %>%
+                                                    </span>
+                                                </div>
+
+                                                <!-- Pembatalan -->
+                                                <div class="status-bar-line">
+                                                    <div class="status-bar-track">
+                                                        <div class="status-bar-fill fill-red"
+                                                                style='<%# "width:" & (Convert.ToDouble(Eval("cntBatal")) / Convert.ToDouble(Eval("cntBatalTtl")) * 100).ToString("0.##") & "%" %>'>
+                                                        </div>
+                                                    </div>
+                                                    <span class="status-count text-red"><%# Eval("cntBatal") %></span>
+                                                    <span class="status-pct pct-red">
+                                                        <%# CInt((Convert.ToDouble(Eval("cntBatal")) / Convert.ToDouble(Eval("cntBatalTtl"))) * 100) %>%
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </ItemTemplate>
+                                </asp:Repeater>
+
+                                <div class="status-footer">
+                                    <div class="footer-item">
+                                        <span class="legend-pill legend-blue"></span> Jumlah Permohonan
+                                        <asp:Label ID="lblTotalMohon" runat="server" CssClass="footer-total text-blue" />
+                                    </div>
+                                    <div class="footer-divider"></div>
+                                    <div class="footer-item">
+                                        <span class="legend-pill legend-red"></span> Jumlah Pembatalan
+                                        <asp:Label ID="lblTotalBatal" runat="server" CssClass="footer-total text-red" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <asp:SqlDataSource runat="server" ID="sdsPermohonanStatus" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>' 
+                                SelectCommand="SELECT Description as statusName, sum(cnt1) as cntMohon, IIF(max(cnt1Ttl)=0,1,max(cnt1Ttl)) as cntMohonTtl, sum(cnt2) as cntBatal, IIF(max(cnt2Ttl)=0,1,max(cnt2Ttl)) as cntBatalTtl FROM
+                                (
+                                    SELECT ApprStatusID, Description, count(*) as cnt1,0 as cnt2,
+                                    (
+                                        SELECT count(*) as cnt1Ttl FROM 
+                                        v_LESEN_ApprovalList_Curr a
+                                        inner join LESEN_JenisLesen d on d.JenisLesen_ID = a.JenisLesen_ID
+                                        left join LESEN_JabatanAgensi e on e.JabatanAgensi_ID = a.AgensiID
+                                        inner join LESEN_Pemohon f on f.Pemohon_ID = a.Permohonan_PemohonID
+                                        where iif(@AgensiID = 0 or @AgensiID = 1,0,@AgensiID) = iif(@AgensiID = 0 or @AgensiID = 1,0,(select top 1 x2.AgensiID from LESEN_ApprovalList x2 where x2.agensiID = @AgensiID and x2.Permohonan_ID = a.Permohonan_ID)) 
+                                    ) cnt1Ttl, 0 as cnt2Ttl
+                                    FROM 
+                                    v_LESEN_ApprovalList_Curr a
+                                    inner join LESEN_JenisLesen d on d.JenisLesen_ID = a.JenisLesen_ID
+                                    left join LESEN_JabatanAgensi e on e.JabatanAgensi_ID = a.AgensiID
+                                    inner join LESEN_Pemohon f on f.Pemohon_ID = a.Permohonan_PemohonID
+                                    where iif(@AgensiID = 0 or @AgensiID = 1,0,@AgensiID) = iif(@AgensiID = 0 or @AgensiID = 1,0,(select top 1 x2.AgensiID from LESEN_ApprovalList x2 where x2.agensiID = @AgensiID and x2.Permohonan_ID = a.Permohonan_ID)) 
+                                    group by ApprStatusID, Description
+                                    union all
+                                    SELECT ApprStatusID, Description, 0 as cnt1, count(*) as cnt2, 0 as cnt1Ttl,
+                                    (
+                                        SELECT count(*) as cnt2Ttl FROM
+                                        v_LESEN_ApprovalListBatal_Curr a
+                                        inner join LESEN_JenisLesen d on d.JenisLesen_ID = a.JenisLesen_ID
+                                        left join LESEN_JabatanAgensi e on e.JabatanAgensi_ID = a.AgensiID
+                                        inner join LESEN_Pemohon f on f.Pemohon_ID = a.Permohonan_PemohonID
+                                    ) cnt2Ttl
+                                    FROM 
+                                    v_LESEN_ApprovalListBatal_Curr a
+                                    inner join LESEN_JenisLesen d on d.JenisLesen_ID = a.JenisLesen_ID
+                                    left join LESEN_JabatanAgensi e on e.JabatanAgensi_ID = a.AgensiID
+                                    inner join LESEN_Pemohon f on f.Pemohon_ID = a.Permohonan_PemohonID
+                                    where iif(@AgensiID = 0 or @AgensiID = 1,0,@AgensiID) = iif(@AgensiID = 0 or @AgensiID = 1,0,(select top 1 x2.AgensiID from LESEN_ApprovalList x2 where x2.agensiID = @AgensiID and x2.Permohonan_ID = a.Permohonan_ID)) 
+                                    group by ApprStatusID, Description
+                                ) tbl 
+                                group by ApprStatusID, Description
+                                order by ApprStatusID">
+                                <SelectParameters>
+                                    <asp:SessionParameter SessionField="sessionIsPenyedia" DefaultValue="0" Name="isPenyedia"></asp:SessionParameter>
+                                    <asp:SessionParameter SessionField="sessionIsPenilai" DefaultValue="0" Name="isPenilai"></asp:SessionParameter>
+                                    <asp:SessionParameter SessionField="sessionIsPeraku" DefaultValue="0" Name="isPeraku"></asp:SessionParameter>
+                                    <asp:SessionParameter SessionField="sessionEstateID" DefaultValue="0" Name="AgensiID"></asp:SessionParameter>
+                                    <asp:SessionParameter SessionField="sessionUsersId" DefaultValue="0" Name="sessionUsersId"></asp:SessionParameter>		
+                                </SelectParameters>
+                            </asp:SqlDataSource>
+                        </div>
+
+                        <%--<div class="mt-4">
 
                             <div class="section-subtitle mb-3">
                                 Pecahan Status Permohonan dan Pembatalan
                             </div>
 
 
-                            <asp:Repeater ID="Repeater8" runat="server" DataSourceID="sdsPermohonanStatus">
+                            <asp:Repeater ID="Repeater8A" runat="server" DataSourceID="sdsPermohonanStatusA">
 
                                 <ItemTemplate>
 
@@ -1554,7 +2116,7 @@ where x2.Permohonan_ID = g.Permohonan_ID and x2.JabatanAgensi_ID = @AgensiID uni
 
                             </asp:Repeater>
 
-                                        <asp:SqlDataSource runat="server" ID="sdsPermohonanStatus" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>' 
+                                        <asp:SqlDataSource runat="server" ID="sdsPermohonanStatusA" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>' 
                                             SelectCommand="SELECT Description as statusName, sum(cnt1) as cntMohon, IIF(max(cnt1Ttl)=0,1,max(cnt1Ttl)) as cntMohonTtl, sum(cnt2) as cntBatal, IIF(max(cnt2Ttl)=0,1,max(cnt2Ttl)) as cntBatalTtl FROM
                                             (
 	                                            SELECT ApprStatusID, Description, count(*) as cnt1,0 as cnt2,
@@ -1603,7 +2165,7 @@ where x2.Permohonan_ID = g.Permohonan_ID and x2.JabatanAgensi_ID = @AgensiID uni
                                         </asp:SqlDataSource>
 
 
-                        </div>
+                        </div>--%>
 
 
                     </div>
@@ -1836,6 +2398,72 @@ where x2.Permohonan_ID = g.Permohonan_ID and x2.JabatanAgensi_ID = @AgensiID uni
         });--%>
 
     }
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var rawEl = document.getElementById('trafikData');
+        var jsonText = rawEl.innerText.trim().replace(/,\s*\]$/, ']');
+        var data = JSON.parse(jsonText);
+
+        var labels = data.map(function (d) { return d.day; });
+        var selesai = data.map(function (d) { return d.selesai; });
+        var proses = data.map(function (d) { return d.proses; });
+
+        var ctx = document.getElementById('trafikPermohonanChart').getContext('2d');
+
+        var gradientSelesai = ctx.createLinearGradient(0, 0, 0, 220);
+        gradientSelesai.addColorStop(0, 'rgba(22, 163, 74, 0.30)');
+        gradientSelesai.addColorStop(1, 'rgba(22, 163, 74, 0)');
+
+        var gradientProses = ctx.createLinearGradient(0, 0, 0, 220);
+        gradientProses.addColorStop(0, 'rgba(245, 158, 11, 0.30)');
+        gradientProses.addColorStop(1, 'rgba(245, 158, 11, 0)');
+
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'Selesai',
+                        data: selesai,
+                        borderColor: '#16a34a',
+                        backgroundColor: gradientSelesai,
+                        pointBackgroundColor: '#16a34a',
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 2,
+                        pointRadius: 5,
+                        pointHoverRadius: 6,
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.35
+                    },
+                    {
+                        label: 'Dalam Proses',
+                        data: proses,
+                        borderColor: '#f59e0b',
+                        backgroundColor: gradientProses,
+                        pointBackgroundColor: '#f59e0b',
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 2,
+                        pointRadius: 5,
+                        pointHoverRadius: 6,
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.35
+                    }
+                ]
+            },
+            options: {
+                plugins: { legend: { display: false } }, // guna legend custom kita sendiri
+                scales: {
+                    y: { beginAtZero: true, grid: { color: '#eef1f6' }, ticks: { stepSize: 20 } },
+                    x: { grid: { display: false } }
+                }
+            }
+        });
+    });
 </script>
 </asp:Content>
 

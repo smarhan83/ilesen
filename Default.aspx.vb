@@ -1089,5 +1089,65 @@ ORDER BY a.JenisLesen_ID, BulanKey;"
         gvListStaffIK.DataBind()
     End Sub
 
+    '' START WEEKLY REPORT
+    Protected Function GetDayLabel(ByVal dayName As String) As String
+        Select Case dayName
+            Case "SUNDAY" : Return "Ahad"
+            Case "MONDAY" : Return "Isnin"
+            Case "TUESDAY" : Return "Selasa"
+            Case "WEDNESDAY" : Return "Rabu"
+            Case "THURSDAY" : Return "Khamis"
+            Case "FRIDAY" : Return "Jumaat"
+            Case "SATURDAY" : Return "Sabtu"
+            Case Else : Return dayName
+        End Select
+    End Function
+
+    'START PECAHAN STATUS
+
+    Protected Function GetStatusIcon(ByVal statusName As String) As String
+        Select Case statusName
+            Case "Permohonan Lulus" : Return "bi-check-circle-fill"
+            Case "Semakan Agensi Belum Selesai" : Return "bi-file-earmark-check-fill"
+            Case "Pilih Pegawai Lawatan Tapak" : Return "bi-person-badge-fill"
+            Case "Lawatan Tapak Jabatan/Agensi" : Return "bi-geo-alt-fill"
+            Case "Pengesah Jabatan/Agensi" : Return "bi-shield-check"
+            Case "Pengesah Jabatan Lesen" : Return "bi-camera-fill"
+            Case "Peraku Jabatan Lesen" : Return "bi-patch-check-fill"
+            Case "Peraku Tidak Sokong" : Return "bi-x-circle-fill"
+            Case Else : Return "bi-circle-fill"
+        End Select
+    End Function
+
+    Protected Function GetStatusColor(ByVal statusName As String) As String
+        Select Case statusName
+            Case "Permohonan Lulus" : Return "#22c55e"      ' hijau
+            Case "Semakan Agensi Belum Selesai" : Return "#2563eb" ' biru
+            Case "Pilih Pegawai Lawatan Tapak" : Return "#f59e0b"  ' oren
+            Case "Lawatan Tapak Jabatan/Agensi" : Return "#8b5cf6" ' ungu
+            Case "Pengesah Jabatan/Agensi" : Return "#14b8a6"      ' teal
+            Case "Pengesah Jabatan Lesen" : Return "#ec4899"       ' pink
+            Case "Peraku Jabatan Lesen" : Return "#a855f7"         ' ungu terang
+            Case "Peraku Tidak Sokong" : Return "#ef4444"          ' merah
+            Case Else : Return "#94a3b8"
+        End Select
+    End Function
+
+    Private totalMohon As Integer = 0
+    Private totalBatal As Integer = 0
+
+    Protected Sub Repeater8_ItemDataBound(sender As Object, e As RepeaterItemEventArgs)
+        If e.Item.ItemType = ListItemType.Item OrElse e.Item.ItemType = ListItemType.AlternatingItem Then
+            Dim rowView As System.Data.DataRowView = CType(e.Item.DataItem, System.Data.DataRowView)
+            totalMohon += Convert.ToInt32(rowView("cntMohon"))
+            totalBatal += Convert.ToInt32(rowView("cntBatal"))
+        End If
+    End Sub
+
+    'Protected Sub Repeater8_DataBound(sender As Object, e As EventArgs)
+    '    lblTotalMohon.Text = totalMohon.ToString("N0")
+    '    lblTotalBatal.Text = totalBatal.ToString("N0")
+    'End Sub
+
 
 End Class
