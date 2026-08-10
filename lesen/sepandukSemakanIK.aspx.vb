@@ -77,10 +77,10 @@ Partial Class sepandukSemakanIK
         Dim statusSemasa As String = Trim(GridView1.SelectedRow.Cells(COL_STATUS).Text)
         Dim semakanIkId As Integer = CInt(GridView1.SelectedValue)
 
-        pnlKBInspektorat.Visible = (statusSemasa = "Semakan KB Inspektorat")
-        pnlKBLesen.Visible = (statusSemasa = "Semakan KB Lesen")
-        pnlKJLesen.Visible = (statusSemasa = "Perakuan KJ Lesen")
-        pnlKeraniLesen.Visible = (statusSemasa = "Kemaskini Kewangan")
+        pnlKBInspektorat.Visible = (statusSemasa = "Semakan KB Inspektorat") AndAlso CanSemak(statusSemasa)
+        pnlKBLesen.Visible = (statusSemasa = "Semakan KB Lesen") AndAlso CanSemak(statusSemasa)
+        pnlKJLesen.Visible = (statusSemasa = "Perakuan KJ Lesen") AndAlso CanSemak(statusSemasa)
+        pnlKeraniLesen.Visible = (statusSemasa = "Kemaskini Kewangan") AndAlso CanSemak(statusSemasa)
         pnlTrailKelulusan.Visible = True
 
         FormView1.ChangeMode(FormViewMode.ReadOnly)
@@ -613,4 +613,65 @@ Partial Class sepandukSemakanIK
 
     End Sub
 
+    'Private Sub GridView1_RowDataBound(sender As Object, e As GridViewRowEventArgs) Handles GridView1.RowDataBound
+    '    If e.Row.RowType <> DataControlRowType.DataRow Then Exit Sub
+
+    '    Dim status As String = DataBinder.Eval(e.Row.DataItem, "SemakanIK_Status").ToString()
+
+    '    Dim btnAction As LinkButton = CType(e.Row.FindControl("btnAction"), LinkButton)
+
+    '    If btnAction Is Nothing Then Exit Sub
+
+    '    Dim canAction As Boolean = False
+
+    '    Select Case status
+
+    '        Case "Semakan KB Inspektorat"
+    '            canAction = (Session.Item("sessionIsPenilai") = 1 AndAlso Session.Item("sessionEstateID") = 3)
+
+    '        Case "Semakan KB Lesen"
+    '            canAction = (Session.Item("sessionIsPenilai") = 1 AndAlso Session.Item("sessionEstateID") = 1)
+
+    '        Case "Perakuan KJ Lesen"
+    '            canAction = (Session.Item("sessionIsPeraku") = 1 AndAlso Session.Item("sessionEstateID") = 1)
+
+    '        Case "Kemaskini Kewangan"
+    '            canAction = (
+    '            Session.Item("sessionEstateID") = 1 AndAlso
+    '            Session.Item("sessionIsPeraku") <> 1 AndAlso
+    '            Session.Item("sessionIsPenilai") <> 1
+    '        )
+
+    '    End Select
+
+    '    btnAction.Visible = canAction
+    'End Sub
+
+    Protected Function CanSemak(status As Object) As Boolean
+
+        Dim sessionIsPenilai As Integer = Convert.ToInt32(Session("sessionIsPenilai"))
+        Dim sessionIsPeraku As Integer = Convert.ToInt32(Session("sessionIsPeraku"))
+        Dim sessionEstateID As Integer = Convert.ToInt32(Session("sessionEstateID"))
+
+        Select Case status.ToString()
+
+            Case "Semakan KB Inspektorat"
+                Return sessionIsPenilai = 1 AndAlso sessionEstateID = 3
+
+            Case "Semakan KB Lesen"
+                Return sessionIsPenilai = 1 AndAlso sessionEstateID = 1
+
+            Case "Perakuan KJ Lesen"
+                Return sessionIsPeraku = 1 AndAlso sessionEstateID = 1
+
+            Case "Kemaskini Kewangan"
+                Return sessionEstateID = 1 AndAlso
+                   sessionIsPeraku <> 1 AndAlso
+                   sessionIsPenilai <> 1
+
+        End Select
+
+        Return False
+
+    End Function
 End Class

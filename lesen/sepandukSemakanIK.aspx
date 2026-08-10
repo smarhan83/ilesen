@@ -296,15 +296,20 @@
 
             <%--# =========================== SENARAI (LISTING) =========================== #--%>
             <div class="card" runat="server" id="idListing">
-<div class="d-flex justify-content-end mb-3">
-    <asp:LinkButton ID="btnTambahSemakan"
-        runat="server"
-        CssClass="btn btn-warning btn-tambah-semakan">
-        <span class="btn-tambah-icon">+</span>
-        <span>Tambah Semakan Baharu</span>
-    </asp:LinkButton>
-</div>
+                <div class="d-flex justify-content-end mb-3">
+                    <asp:LinkButton ID="btnTambahSemakan"
+                        runat="server"
+                        CssClass="btn btn-primary btn-tambah-semakan">
+                        <span class="btn-tambah-icon">+</span>
+                        <span>Tambah Semakan Baharu</span>
+                    </asp:LinkButton>
+                </div>
                 <div class="card-body" style="overflow-x: auto;">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <asp:CheckBox ID="chkAll" AutoPostBack="True" runat="server" Text="Semua Rekod" />
+                        </div>
+                    </div>
                     <%--# START FILTER #--%>
                     <div class="row">
                         <div class="col-md-10">
@@ -340,7 +345,15 @@
                             <asp:BoundField DataField="SemakanIK_Status" HeaderText="Status" SortExpression="SemakanIK_Status" />
                             <asp:TemplateField ShowHeader="False">
                                 <ItemTemplate>
-                                    <asp:LinkButton runat="server" Text="Semak &rsaquo;" CommandName="Select" CausesValidation="False" ID="LinkButton2" CssClass="btn btn-primary btn-sm"></asp:LinkButton>
+                                    <asp:LinkButton
+                                        runat="server"
+                                        Text="Lihat &rsaquo;"
+                                        CommandName="Select"
+                                        CausesValidation="False"
+                                        ID="LinkButton2"
+                                        CssClass='<%# If(CanSemak(Eval("SemakanIK_Status")), "btn btn-warning btn-sm", "btn btn-primary btn-sm") %>'
+                                        ><%--Visible='<%# CanSemak(Eval("SemakanIK_Status")) %>'--%>
+                                    </asp:LinkButton>
                                 </ItemTemplate>
                             </asp:TemplateField>
                         </Columns>
@@ -360,22 +373,97 @@
                                     AND SemakanIK_Status IN ('Semakan KB Inspektorat','Semakan KB Lesen','Perakuan KJ Lesen','Kemaskini Kewangan')
                                ) as TBL1
                                WHERE 1=1
-                               AND (
-                                   (SemakanIK_Status = 'Semakan KB Inspektorat' AND @sessionIsPenilai = 1 AND @sessionEstateID = 3)
-                                   OR
-                                   (SemakanIK_Status = 'Semakan KB Lesen' AND @sessionIsPenilai = 1 AND @sessionEstateID = 1)
-                                   OR
-                                   (SemakanIK_Status = 'Perakuan KJ Lesen' AND @sessionIsPeraku = 1 AND @sessionEstateID = 1)
-                                   OR
-                                   (SemakanIK_Status = 'Kemaskini Kewangan' AND @sessionIsKerani = 1 AND @sessionEstateID = 1)
+                                AND
+                                (
+                                    -- LEVEL 0.5
+                                    (
+                                        @sessionIsPenyedia = 1
+                                        AND @sessionEstateID = 3
+                                        AND SemakanIK_Status IN (
+                                            'Semakan KB Inspektorat',
+                                            'Semakan KB Lesen',
+                                            'Perakuan KJ Lesen',
+                                            'Kemaskini Kewangan'
+                                        )
+                                    )
+
+                                    OR
+                                    -- LEVEL 1
+                                    (
+                                        @sessionIsPenilai = 1
+                                        AND @sessionEstateID = 3
+                                        AND SemakanIK_Status IN (
+                                            'Semakan KB Inspektorat',
+                                            'Semakan KB Lesen',
+                                            'Perakuan KJ Lesen',
+                                            'Kemaskini Kewangan'
+                                        )
+                                    )
+
+                                    OR
+
+                                    -- LEVEL 2
+                                    (
+                                        @sessionIsPenilai = 1
+                                        AND @sessionEstateID = 1
+                                        AND SemakanIK_Status IN (
+                                            'Semakan KB Lesen',
+                                            'Perakuan KJ Lesen',
+                                            'Kemaskini Kewangan'
+                                        )
+                                    )
+
+                                    OR
+
+                                    -- LEVEL 3
+                                    (
+                                        @sessionIsPeraku = 1
+                                        AND @sessionEstateID = 1
+                                        AND SemakanIK_Status IN (
+                                            'Perakuan KJ Lesen',
+                                            'Kemaskini Kewangan'
+                                        )
+                                    )
+
+                                    OR
+
+                                    -- LEVEL 4
+                                    (
+                                        @sessionEstateID = 1
+                                        AND @sessionIsPeraku &lt;&gt; 1
+                                        AND @sessionIsPenilai &lt;&gt; 1
+                                        AND SemakanIK_Status = 'Kemaskini Kewangan'
+                                    )
+                                )
+                               AND 
+                               (
+                                   @chkAll = 1
+                                   OR (
+                                        (SemakanIK_Status = 'Semakan KB Inspektorat' AND @sessionIsPenyedia = 1 AND @sessionEstateID = 3)
+                                        OR
+                                        (SemakanIK_Status = 'Semakan KB Inspektorat' AND @sessionIsPenilai = 1 AND @sessionEstateID = 3)
+                                        OR
+                                        (SemakanIK_Status = 'Semakan KB Lesen' AND @sessionIsPenilai = 1 AND @sessionEstateID = 1)
+                                        OR
+                                        (SemakanIK_Status = 'Perakuan KJ Lesen' AND @sessionIsPeraku = 1 AND @sessionEstateID = 1)
+                                        OR
+				                        (SemakanIK_Status = 'Kemaskini Kewangan' AND @sessionEstateID = 1 AND @sessionIsPeraku &lt;&gt; 1 AND @sessionIsPenilai &lt;&gt; 1)
+                                    )
                                )
                                ORDER BY SemakanIK_ID DESC">
                 <SelectParameters>
+                    <asp:SessionParameter SessionField="sessionIsPenyedia" DefaultValue="0" Name="sessionIsPenyedia"></asp:SessionParameter>
                     <asp:SessionParameter SessionField="sessionIsPenilai" DefaultValue="0" Name="sessionIsPenilai"></asp:SessionParameter>
                     <asp:SessionParameter SessionField="sessionIsPeraku" DefaultValue="0" Name="sessionIsPeraku"></asp:SessionParameter>
                     <%--# TODO: sahkan session field sebenar untuk Kerani Lesen, contoh sementara "sessionIsKerani" #--%>
                     <asp:SessionParameter SessionField="sessionIsKerani" DefaultValue="0" Name="sessionIsKerani"></asp:SessionParameter>
                     <asp:SessionParameter SessionField="sessionEstateID" DefaultValue="0" Name="sessionEstateID"></asp:SessionParameter>
+                    <asp:ControlParameter
+                        Name="chkAll"
+                        ControlID="chkAll"
+                        PropertyName="Checked"
+                        Type="Boolean"
+                        DefaultValue="False" />
                 </SelectParameters>
             </asp:SqlDataSource>
 
