@@ -1,15 +1,15 @@
 ﻿
 Imports System
-Imports System.Collections.Generic
 Imports System.Configuration
 Imports System.Data
 Imports System.Data.SqlClient
 Imports System.Drawing
 Imports System.Drawing.Imaging
 Imports System.IO
+Imports System.Web.UI.WebControls
 Imports Microsoft.ReportingServices.Rendering.ExcelRenderer.ExcelGenerator.BIFF8
 
-Partial Class kelulusan1
+Partial Class pembatalan1
     Inherits System.Web.UI.Page
 
     Protected Sub FormView1_ItemInserted(ByVal sender As Object, ByVal e As System.Web.UI.WebControls.FormViewInsertedEventArgs) Handles FormView1.ItemInserted
@@ -26,20 +26,232 @@ Partial Class kelulusan1
     End Sub
 
     Protected Sub GridView1_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles GridView1.SelectedIndexChanged
+        ' FormView1.ChangeMode(DetailsViewMode.Edit)
+        ' TabContainer1.Visible = True
+        ' idFooter.Visible = True
+        ' idListing.Visible = False
+        ' showOtherControl(GridView1)
+
         FormView1.ChangeMode(DetailsViewMode.Edit)
         TabContainer1.Visible = True
         idFooter.Visible = True
         idListing.Visible = False
         idNotaKelulusan.Visible = False
 
-        showFormControl(GridView1)
+        showOtherControl(GridView1)
+
+        'showFormControl(GridView1)		
+        ' Try
+        ' showOtherControl(GridView1)
+        ' Catch ex As Exception
+
+        ' End Try		
+
+    End Sub
+
+    Private Sub showOtherControl(gv1 As GridView)
+
+        Session.Item("isDisablePrintSession") = "Y"
+
+        Dim idSokongUlasan As HtmlGenericControl = DirectCast(fvSokongUlasan.FindControl("idSokongUlasan"), HtmlGenericControl)
+        Dim idSokongUlasanPengesah As HtmlGenericControl = DirectCast(fvSokongUlasan.FindControl("idSokongUlasanPengesah"), HtmlGenericControl)
+        Dim hdnFiedlJabatanAgensiType As HiddenField = DirectCast(fvSokongUlasan.FindControl("hdnFiedlJabatanAgensiType"), HiddenField)
+        Dim txtNotaKelulusanPengesah As TextBox = DirectCast(fvNotaKelulusan.FindControl("txtNotaKelulusanPengesah"), TextBox)
+        Dim txtNotaKelulusanPengesah2 As TextBox = DirectCast(fvNotaKelulusan.FindControl("txtNotaKelulusanPengesah2"), TextBox)
+        Dim txtNotaKelulusan2 As TextBox = DirectCast(fvNotaKelulusan.FindControl("txtNotaKelulusan2"), TextBox)
+        Dim txtNotaKelulusan As TextBox = DirectCast(fvNotaKelulusan.FindControl("txtNotaKelulusan"), TextBox)
+
+        Dim ApprStatusID As Integer = CInt(gv1.SelectedDataKey.Values(2))
+        Dim PermohonanID As Integer = CInt(gv1.SelectedDataKey.Values(0))
+        Dim JenisLesenID As Integer = CInt(gv1.SelectedDataKey.Values(4))
+        Dim IsFail As Boolean = CBool(gv1.SelectedDataKey.Values(5))
+        Dim IsPenilaianStatus As Integer = CInt(gv1.SelectedDataKey.Values(6))
+
+        '##### START NEW KEMBALI KE IK #########
+
+        GridView3.DataBind()
+
+        btnKembaliIK.Visible =
+        (Session("sessionEstateId")?.ToString() = "3" AndAlso
+        Session("sessionIsPenilai")?.ToString() = "True" AndAlso
+        ApprStatusID = 4)
+        '##### END NEW KEMBALI KE IK #########
+
+        Dim agensiType As String = "L"
+        '//hide tab kadar bayaran
+        Try
+            tabKadarBayaran.Visible = False
+            TabLampiran.Visible = False
+            agensiType = If(IsDBNull(gv1.SelectedDataKey.Values(3)), "J", gv1.SelectedDataKey.Values(3))
+
+            If agensiType = "J" Then
+                tabKadarBayaran.Visible = True
+                TabLampiran.Visible = True
+            End If
+
+            '//tab surat
+            If agensiType = "J" Then
+
+                If Session.Item("sessionOCS") = "3" Then
 
 
+                    tabSurat.Visible = True
+
+                    If IsPenilaianStatus <> 0 Or Session.Item("sessionIsPenilai") = "True" Then
+                        BT_ViewMail.Visible = True
+                        Session.Item("isDisablePrintSession") = "N"
+                    Else
+                        'BT_ViewMail.Visible = False
+                        Session.Item("isDisablePrintSession") = "Y"
+                    End If
+
+                    If Session.Item("sessionIsPenilai") = "True" Then
+                        divTarikhSurat.Visible = True
+                    Else
+                        divTarikhSurat.Visible = False
+                    End If
+
+                    GetSuratContent(PermohonanID)
+
+                    '//hide for kerani inspektorat
+                    If Session.Item("sessionIsPenyedia") = "True" And Session.Item("sessionIsReadOnly") = "True" Then
+                        btnSubmit.Visible = False
+                        tabSurat.Visible = False
+                    End If
+
+                End If
+
+                If ApprStatusID = 3 Or ApprStatusID = 4 Then
+                    BT_Generate.Visible = True
+                    BT_Generate1.Visible = True
+
+                    If Request.Browser.IsMobileDevice Then
+                        tabSurat.Visible = False
+                        tabKadarBayaran.Visible = False
+                    Else
+
+                    End If
+
+
+                    If IsFail Then
+                        CB_SuratFail.Checked = True
+                        pnlSuratAuto.Visible = False
+                        pnlSuratFail.Visible = True
+                        BT_Generate.Visible = False
+                        BT_Generate1.Visible = False
+                    Else
+                        CB_SuratFail.Checked = False
+                        pnlSuratAuto.Visible = True
+                        pnlSuratFail.Visible = False
+                        BT_Generate.Visible = True
+                        BT_Generate1.Visible = True
+                    End If
+
+                    GetSuratFail(PermohonanID)
+
+                Else
+
+                    BT_Generate.Visible = False
+                    BT_Generate1.Visible = False
+
+                End If
+
+                '//for approval remarks
+                If ApprStatusID = 6 Or ApprStatusID = 7 Or ApprStatusID = 9 Or ApprStatusID = 10 Then
+
+                    If Session.Item("sessionIsPeraku") = "True" Or Session.Item("sessionIsPenilai") = "True" Then
+
+                        If getJabatanLesen(CInt(Session.Item("sessionEstateID"))) = True Then
+                            btnApprove.Visible = False
+                            btnReject.Visible = False
+                            idNotaKelulusan.Visible = True
+
+
+                            Dim divNotaKelulusanPeraku As HtmlGenericControl = DirectCast(fvNotaKelulusan.FindControl("divNotaKelulusanPeraku"), HtmlGenericControl)
+
+                            divNotaKelulusanPeraku.Visible = True
+
+                            fvNotaKelulusan.Enabled = False
+
+
+                        End If
+                    End If
+
+                ElseIf ApprStatusID = 5 Or ApprStatusID = 8 Then
+
+                    If Session.Item("sessionIsPeraku") = "True" Or Session.Item("sessionIsPenilai") = "True" Then
+                        'btnApprove.Visible = True
+                        'btnReject.Visible = True
+                        'idNotaKelulusan.Visible = True
+
+                        If getJabatanLesen(CInt(Session.Item("sessionEstateID"))) = True Then
+                            If ApprStatusID = 8 And Session.Item("sessionIsPeraku") <> "True" Then
+                                btnApprove.Visible = False
+                                btnReject.Visible = False
+                            Else
+                                btnApprove.Visible = True
+                                btnReject.Visible = True
+                            End If
+                            idNotaKelulusan.Visible = True
+                            fvNotaKelulusan.Enabled = True
+                        End If
+
+                    End If
+
+                End If
+
+            End If
+
+        Catch ex As Exception
+
+        End Try
+
+        Try
+
+            '//hide tab tetapan ik
+            If ApprStatusID = 2 Then
+                ' tabUlasan.Visible = False
+                ' tabKadarBayaran.Visible = False
+                'tabTetapan.Visible = True
+                ' tabSurat.Visible = False
+                'gvIK.Columns(1).Visible = "true"
+
+                If CInt(Session.Item("sessionOCS")) = 3 Then
+                    tabTetapan.Visible = True
+                    gvIK.Columns(1).Visible = "True"
+                End If
+            Else
+                tabTetapan.Visible = False
+                'tabUlasan.Visible = True
+
+
+                If CInt(Session.Item("sessionOCS")) = 3 Then
+                    tabTetapan.Visible = True
+                    gvIK.Columns(1).Visible = "false"
+                End If
+
+
+            End If
+
+            ' If cint(Session.Item("sessionOCS")) = 3 Then
+            ' tabTetapan.Visible = True
+            ' gvIK.Columns(1).Visible = "false"
+            ' End If
+
+        Catch ex As Exception
+
+        End Try
+
+        '//hide column edit for kadar bayaran
+        'If ApprStatusID = 5 Or ApprStatusID = 8 Then
+        '    gvTabBayaran.Columns(5).Visible = "false"
+        '    gvTabBayaran.Columns(6).Visible = "false"
+        'End If
 
     End Sub
 
     Private Sub showFormControl(gv1 As GridView)
-        Session.Item("isDisablePrintSession") = "Y"
+        'Session.Item("isDisablePrintSession") = "Y"
 
         Dim idSokongUlasan As HtmlGenericControl = DirectCast(fvSokongUlasan.FindControl("idSokongUlasan"), HtmlGenericControl)
         Dim idSokongUlasanPengesah As HtmlGenericControl = DirectCast(fvSokongUlasan.FindControl("idSokongUlasanPengesah"), HtmlGenericControl)
@@ -49,10 +261,7 @@ Partial Class kelulusan1
 
         Dim ApprStatusID As Integer = CInt(gv1.SelectedDataKey.Values(2))
         Dim PermohonanID As Integer = CInt(gv1.SelectedDataKey.Values(0))
-        Dim JenisLesenID As Integer = CInt(gv1.SelectedDataKey.Values(4))
         Dim IsFail As Boolean = CBool(gv1.SelectedDataKey.Values(5))
-        Dim IsPenilaianStatus As Integer = CInt(gv1.SelectedDataKey.Values(6))
-        Dim jidList() As String = CStr(gv1.SelectedDataKey.Values("JenisLesenIdList")).Split(","c)
 
         '2  mohon ulasan
         '3  Penilaian Jabatan/Agensi
@@ -64,7 +273,6 @@ Partial Class kelulusan1
         btnApprove.Visible = False
         btnReject.Visible = False
         idNotaKelulusan.Visible = False
-
 
         If ApprStatusID = 2 Or ApprStatusID = 3 Or ApprStatusID = 4 Then
             btnSubmit.Visible = True
@@ -78,12 +286,14 @@ Partial Class kelulusan1
             '//hide for kerani inspektorat
             If Session.Item("sessionIsPenyedia") = "True" And Session.Item("sessionIsReadOnly") = "True" Then
                 btnSubmit.Visible = False
-                tabSurat.Visible = False
             End If
 
         ElseIf ApprStatusID = 5 Or ApprStatusID = 8 Then
 
             If Session.Item("sessionIsPeraku") = "True" Or Session.Item("sessionIsPenilai") = "True" Then
+                'btnApprove.Visible = True
+                'btnReject.Visible = True
+                'idNotaKelulusan.Visible = True
 
                 If getJabatanLesen(CInt(Session.Item("sessionEstateID"))) = True Then
                     If ApprStatusID = 8 And Session.Item("sessionIsPeraku") <> "True" Then
@@ -96,7 +306,6 @@ Partial Class kelulusan1
                     idNotaKelulusan.Visible = True
                     fvNotaKelulusan.Enabled = True
                 End If
-
 
             End If
 
@@ -132,147 +341,9 @@ Partial Class kelulusan1
 
             'End Try
 
-
-        End If
-        Dim agensiType As String = "L"
-        '//hide tab kadar bayaran
-        Try
-            tabKadarBayaran.Visible = False
-            tabMaklumat.Visible = False
-            tabSurat.Visible = False
-            TabPenjajaUlasan.Visible = False
-            TabLampiran.Visible = False
-            divulasanik.Visible = False
-
-            agensiType = If(IsDBNull(gv1.SelectedDataKey.Values(3)), "J", gv1.SelectedDataKey.Values(3))
-
-            If getJabatanLesen(CInt(Session.Item("sessionEstateID"))) = True Or getJabatanDalaman(CInt(Session.Item("sessionEstateID"))) = True Then '//agensiType = "J"
-                tabKadarBayaran.Visible = True
-                TabLampiran.Visible = True
-                divulasanik.Visible = True
-
-            End If
-
-            '//tab surat
-            If agensiType = "J" Then
-
-                If Session.Item("sessionOCS") = "3" Then
-                    tabSurat.Visible = True
-                    divulasanik.Visible = True
-                    'BT_ViewMail.Text = IsPenilaianStatus
-
-                    If IsPenilaianStatus <> 0 Or Session.Item("sessionIsPenilai") = "True" Then
-                        BT_ViewMail.Visible = True
-                        Session.Item("isDisablePrintSession") = "N"
-                    Else
-                        'BT_ViewMail.Visible = False
-                        Session.Item("isDisablePrintSession") = "Y"
-                    End If
-
-                    If Session.Item("sessionIsPenilai") = "True" Then
-                        divTarikhSurat.Visible = True
-                    Else
-                        divTarikhSurat.Visible = False
-                    End If
-
-                    GetSuratContent(PermohonanID)
-
-                    '//hide for kerani inspektorat
-                    If Session.Item("sessionIsPenyedia") = "True" And Session.Item("sessionIsReadOnly") = "True" Then
-                        btnSubmit.Visible = False
-                        tabSurat.Visible = False
-                    End If
-
-                End If
-
-                If ApprStatusID = 3 Or ApprStatusID = 4 Then
-                    BT_Generate.Visible = True
-                    'BT_Generate1.Visible = True
-
-                    tabMaklumat.Visible = True
-
-                    PanelAccessPembetulan(0, True)
-
-                    For Each item In jidList
-                        PanelAccessPembetulan(item, False)
-                    Next
-
-                    GetPermohonanPembetulan(PermohonanID)
-
-                    If IsFail Then
-                        CB_SuratFail.Checked = True
-                        pnlSuratAuto.Visible = False
-                        pnlSuratFail.Visible = True
-                        BT_Generate.Visible = False
-                        'BT_Generate1.Visible = False
-                    Else
-                        CB_SuratFail.Checked = False
-                        pnlSuratAuto.Visible = True
-                        pnlSuratFail.Visible = False
-                        BT_Generate.Visible = True
-                        'BT_Generate1.Visible = True
-
-                        If JenisLesenID = 4 And EditorSurat1.Text.Length > 0 Then
-
-                            TabPenjajaUlasan.Visible = True
-
-                        End If
-
-
-                    End If
-
-                    GetSuratFail(PermohonanID)
-
-                Else
-
-                    BT_Generate.Visible = False
-                    'BT_Generate1.Visible = False
-
-                End If
-            End If
-
-
-        Catch ex As Exception
-
-        End Try
-
-        '//hide tab tetapan ik
-        If ApprStatusID = 2 Then
-            tabUlasan.Visible = False
-            tabKadarBayaran.Visible = False
-            tabTetapan.Visible = True
-            gvIK.Columns(1).Visible = "true"
-        Else
-            tabTetapan.Visible = False
-            tabUlasan.Visible = True
-
-            If getJabatanLesen(CInt(Session.Item("sessionEstateID"))) = True Or getJabatanDalaman(CInt(Session.Item("sessionEstateID"))) = True Then '//If agensiType = "J" Then
-                'tabKadarBayaran.Visible = True
-            End If
-
-            Try
-                If Session.Item("sessionOCS") = "3" Then
-                    tabTetapan.Visible = True
-                    gvIK.Columns(1).Visible = "false"
-                End If
-            Catch ex As Exception
-
-            End Try
-
         End If
 
 
-
-        '//hide column edit for kadar bayaran
-        If ApprStatusID = 5 Or ApprStatusID >= 8 Then
-            If Session.Item("sessionIsPenilai") = "True" Then
-            Else
-
-                gvTabBayaran.Columns(5).Visible = "false"
-                gvTabBayaran.Columns(6).Visible = "false"
-
-            End If
-        End If
 
     End Sub
 
@@ -316,6 +387,7 @@ Partial Class kelulusan1
                     gvTabUlasan.Columns(3).Visible = "false"
                     gvTabUlasan.Columns(5).Visible = "false"
                     gvTabUlasan.Columns(4).Visible = "true"
+                    tabSurat.Visible = False
                 Else
 
                     gvTabUlasan.Columns(4).Visible = "false"
@@ -331,42 +403,20 @@ Partial Class kelulusan1
             '//mobile view
             If Not Page.IsPostBack Then
 
-                If Request.Browser.IsMobileDevice Then
-                    gvTabBayaran.Columns(2).Visible = "false"
-                    gvTabBayaran.Columns(3).Visible = "false"
-                    gvTabBayaran.Columns(5).Visible = "false"
-                    gvTabBayaran.Columns(4).Visible = "true"
-                Else
+                'If Request.Browser.IsMobileDevice Then
+                '    gvTabBayaran.Columns(2).Visible = "false"
+                '    gvTabBayaran.Columns(3).Visible = "false"
+                '    gvTabBayaran.Columns(5).Visible = "false"
+                '    gvTabBayaran.Columns(4).Visible = "true"
+                'Else
 
-                    gvTabBayaran.Columns(4).Visible = "false"
-                End If
+                '    gvTabBayaran.Columns(4).Visible = "false"
+                'End If
             End If
 
         Catch ex As Exception
 
         End Try
-
-        Try
-
-            '//mobile view
-            If Not Page.IsPostBack Then
-
-                If Request.Browser.IsMobileDevice Then
-                    gvTabPenjajaUlasan.Columns(2).Visible = "false"
-                    gvTabPenjajaUlasan.Columns(4).Visible = "false"
-                    gvTabPenjajaUlasan.Columns(3).Visible = "true"
-
-                Else
-
-                    gvTabPenjajaUlasan.Columns(3).Visible = "false"
-                End If
-            End If
-
-        Catch ex As Exception
-
-        End Try
-
-
 
         '//show filter
         If getJabatanLesen(CInt(Session.Item("sessionEstateID"))) = False Then
@@ -382,319 +432,6 @@ Partial Class kelulusan1
         End If
     End Sub
 
-    Private Sub GetPermohonanPembetulan(permohonanID As Integer)
-
-        Using myConnection As New SqlConnection(ConfigurationManager.ConnectionStrings("webcon_ConnectionStr").ConnectionString)
-
-            myConnection.Open()
-
-            Dim SQL As String = "SELECT * FROM LESEN_PermohonanPembetulan WHERE Permohonan_ID = @Permohonan_ID"
-
-            Dim myCommandSelect As New SqlCommand(SQL, myConnection)
-            myCommandSelect.Parameters.AddWithValue("@Permohonan_ID", permohonanID)
-
-            Dim myReader As SqlDataReader = myCommandSelect.ExecuteReader
-
-            Try
-                If myReader.Read Then
-
-                    If myReader.Item("SaizIklanList").ToString().Length > 0 Then
-                        HF_SaizIklanList.Value = myReader.Item("SaizIklanList").ToString()
-                    End If
-
-                    If myReader.Item("CahayaIklanList").ToString().Length > 0 Then
-                        HF_CahayaIklanList.Value = myReader.Item("CahayaIklanList").ToString()
-                    End If
-
-                    If myReader.Item("UnitIklanList").ToString().Length > 0 Then
-                        HF_UnitIklanList.Value = myReader.Item("UnitIklanList").ToString()
-                    End If
-
-                    If myReader.Item("BakaAnjingList").ToString().Length > 0 Then
-                        HF_BakaAnjingList.Value = myReader.Item("BakaAnjingList").ToString()
-                    End If
-
-                    If myReader.Item("AnjingJantanList").ToString().Length > 0 Then
-                        HF_AnjingJantanList.Value = myReader.Item("AnjingJantanList").ToString()
-                    End If
-
-                    If myReader.Item("AnjingBetinaList").ToString().Length > 0 Then
-                        HF_AnjingBetinaList.Value = myReader.Item("AnjingBetinaList").ToString()
-                    End If
-
-                    If myReader.Item("AnjingJantanMandulList").ToString().Length > 0 Then
-                        HF_AnjingJantanMandulList.Value = myReader.Item("AnjingJantanMandulList").ToString()
-                    End If
-
-                    If myReader.Item("AnjingBetinaMandulList").ToString().Length > 0 Then
-                        HF_AnjingBetinaMandulList.Value = myReader.Item("AnjingBetinaMandulList").ToString()
-                    End If
-
-                    If myReader.Item("NamaSyarikat").ToString().Length > 0 Then
-                        TB_NamaSyarikat.Text = myReader.Item("NamaSyarikat").ToString()
-                    End If
-
-                    If myReader.Item("NoPendaftaran").ToString().Length > 0 Then
-                        TB_NoPendaftaran.Text = myReader.Item("NoPendaftaran").ToString()
-                    End If
-
-                    If myReader.Item("NoAkaun").ToString().Length > 0 Then
-                        TB_NoAkaun.Text = myReader.Item("NoAkaun").ToString()
-                    End If
-
-                    If myReader.Item("AlamatPremis").ToString().Length > 0 Then
-                        TB_AlamatPremis.Text = myReader.Item("AlamatPremis").ToString()
-                    End If
-
-                    If myReader.Item("JenisPerniagaan").ToString().Length > 0 Then
-                        TB_JenisPerniagaan.Text = myReader.Item("JenisPerniagaan").ToString()
-                    End If
-
-                    If myReader.Item("PemilikBaru").ToString().Length > 0 Then
-                        TB_PemilikBaru.Text = myReader.Item("PemilikBaru").ToString()
-                    End If
-
-                    If myReader.Item("AlamatBaru").ToString().Length > 0 Then
-                        TB_AlamatBaru.Text = myReader.Item("AlamatBaru").ToString()
-                    End If
-
-                    If myReader.Item("JenisPerniagaanBaru").ToString().Length > 0 Then
-                        TB_JenisPerniagaanBaru.Text = myReader.Item("JenisPerniagaanBaru").ToString()
-                    End If
-
-                    If myReader.Item("NamaBaruSyarikat").ToString().Length > 0 Then
-                        TB_NamaBaruSyarikat.Text = myReader.Item("NamaBaruSyarikat").ToString()
-                    End If
-
-                    If myReader.Item("BillboardLokasi").ToString().Length > 0 Then
-                        TB_BillboardLokasi.Text = myReader.Item("BillboardLokasi").ToString()
-                    End If
-
-                    If myReader.Item("LokasiPasar1").ToString().Length > 0 Then
-                        TB_LokasiPasar1.Text = myReader.Item("LokasiPasar1").ToString()
-                    End If
-
-                    If myReader.Item("LokasiPasar2").ToString().Length > 0 Then
-                        TB_LokasiPasar2.Text = myReader.Item("LokasiPasar2").ToString()
-                    End If
-
-                    If myReader.Item("LokasiPasar3").ToString().Length > 0 Then
-                        TB_LokasiPasar3.Text = myReader.Item("LokasiPasar3").ToString()
-                    End If
-
-                    If myReader.Item("JenisPasar").ToString().Length > 0 Then
-                        DDL_JenisPasar.SelectedValue = myReader.Item("JenisPasar").ToString()
-                    End If
-
-                    If myReader.Item("JenisPerniagaanPasar").ToString().Length > 0 Then
-                        TB_JenisPerniagaanPasar.Text = myReader.Item("JenisPerniagaanPasar").ToString()
-                    End If
-
-                    If myReader.Item("JumlahPetak").ToString().Length > 0 Then
-                        TB_JumlahPetak.Text = myReader.Item("JumlahPetak").ToString()
-                    End If
-
-                    If myReader.Item("AnjingAlamat").ToString().Length > 0 Then
-                        TB_AnjingAlamat.Text = myReader.Item("AnjingAlamat").ToString()
-                    End If
-
-                    If myReader.Item("AnjingJenisPremis").ToString().Length > 0 Then
-                        DDL_AnjingJenisPremis.SelectedValue = CInt(myReader.Item("AnjingJenisPremis").ToString())
-                    End If
-
-                    If myReader.Item("AlamatPenjajaan").ToString().Length > 0 Then
-                        TB_AlamatPenjajaan.Text = myReader.Item("AlamatPenjajaan").ToString()
-                    End If
-
-                    If myReader.Item("JenisPerniagaanPenjaja").ToString().Length > 0 Then
-                        TB_JenisPerniagaanPenjaja.Text = myReader.Item("JenisPerniagaanPenjaja").ToString()
-                    End If
-
-                    If myReader.Item("PenganjurEkspo").ToString().Length > 0 Then
-                        TB_PenganjurEkspo.Text = myReader.Item("PenganjurEkspo").ToString()
-                    End If
-
-                    If myReader.Item("NamaEkspo").ToString().Length > 0 Then
-                        TB_NamaEkspo.Text = myReader.Item("NamaEkspo").ToString()
-                    End If
-
-                    If myReader.Item("LokasiEkspo").ToString().Length > 0 Then
-                        TB_LokasiEkspo.Text = myReader.Item("LokasiEkspo").ToString()
-                    End If
-
-                    If myReader.Item("NoTelEkspo").ToString().Length > 0 Then
-                        TB_NoTel.Text = myReader.Item("NoTelEkspo").ToString()
-                    End If
-
-                    If myReader.Item("TarikhEkspo1").ToString().Length > 0 Then
-                        TB_TarikhEkspo1.Text = CDate(myReader.Item("TarikhEkspo1")).ToString("yyyy-MM-dd")
-                    End If
-
-                    If myReader.Item("TarikhEkspo2").ToString().Length > 0 Then
-                        TB_TarikhEkspo2.Text = CDate(myReader.Item("TarikhEkspo2")).ToString("yyyy-MM-dd")
-                    End If
-
-                    If myReader.Item("MasaEkspo1").ToString().Length > 0 Then
-                        TB_MasaEkspo1.Text = myReader.Item("MasaEkspo1").ToString()
-                    End If
-
-                    If myReader.Item("MasaEkspo2").ToString().Length > 0 Then
-                        TB_MasaEkspo2.Text = myReader.Item("MasaEkspo2").ToString()
-                    End If
-
-                    If myReader.Item("KontraktorIklan").ToString().Length > 0 Then
-                        TB_KontraktorIklan.Text = myReader.Item("KontraktorIklan").ToString()
-                    End If
-
-                    If myReader.Item("NoTelKontraktor").ToString().Length > 0 Then
-                        TB_NoTelKontraktor.Text = myReader.Item("NoTelKontraktor").ToString()
-                    End If
-
-                    If myReader.Item("UkuranBanting").ToString().Length > 0 Then
-                        TB_UkuranBanting.Text = myReader.Item("UkuranBanting").ToString()
-                    End If
-
-                    If myReader.Item("BilBanting").ToString().Length > 0 Then
-                        TB_BilBanting.Text = CInt(myReader.Item("BilBanting").ToString())
-                    End If
-
-                    If IsDBNull(myReader.Item("TarikhBanting1")) = False Then
-                        TB_TarikhBanting1.Text = CDate(myReader.Item("TarikhBanting1")).ToString("yyyy-MM-dd")
-                    End If
-
-                    If IsDBNull(myReader.Item("TarikhBanting2")) = False Then
-                        TB_TarikhBanting2.Text = CDate(myReader.Item("TarikhBanting2")).ToString("yyyy-MM-dd")
-                    End If
-
-                    If myReader.Item("NoResitBanting").ToString().Length > 0 Then
-                        TB_NoResitBanting.Text = myReader.Item("NoResitBanting").ToString()
-                    End If
-
-                    If myReader.Item("NoSiriStiker").ToString().Length > 0 Then
-                        TB_NoSiriStiker.Text = myReader.Item("NoSiriStiker").ToString()
-                    End If
-
-                    If IsDBNull(myReader.Item("TarikhBanting3")) = False Then
-                        TB_TarikhBanting3.Text = CDate(myReader.Item("TarikhBanting3")).ToString("yyyy-MM-dd")
-                    End If
-
-                End If
-
-            Catch ex As Exception
-                MessageBox("ERROR", Me)
-            End Try
-
-            myReader.Close()
-            myConnection.Close()
-
-        End Using
-
-        'Load Senarai Iklan
-        Dim SaizIklanList() = Split(HF_SaizIklanList.Value, ",")
-        Dim CahayaIklanList() = Split(HF_CahayaIklanList.Value, ",")
-        Dim UnitIklanList() = Split(HF_UnitIklanList.Value, ",")
-
-        If SaizIklanList.Length > 0 Then
-
-            Dim dt As DataTable
-
-            If ViewState("IklanTable_ins") IsNot Nothing Then
-                dt = DirectCast(ViewState("IklanTable_ins"), DataTable)
-                dt.Clear()
-            Else
-                dt = New DataTable()
-                dt.Columns.Add("SaizIklan", GetType(String))
-                dt.Columns.Add("Bercahaya", GetType(String))
-                dt.Columns.Add("Unit", GetType(String))
-            End If
-
-            For i As Integer = 0 To SaizIklanList.Length - 1
-                Dim newRow As DataRow = dt.NewRow()
-                newRow("SaizIklan") = SaizIklanList(i).Trim()
-                newRow("Bercahaya") = CahayaIklanList(i).Trim()
-                newRow("Unit") = UnitIklanList(i).Trim()
-
-                dt.Rows.Add(newRow)
-            Next
-
-            ViewState("IklanTable_ins") = dt
-            gvIklanList.DataSource = dt
-            gvIklanList.DataBind()
-
-        End If
-
-        'Load Senarai Anjing
-        Dim BakaAnjingList() = Split(HF_BakaAnjingList.Value, ",")
-        Dim JantanList() = Split(HF_AnjingJantanList.Value, ",")
-        Dim BetinaList() = Split(HF_AnjingBetinaList.Value, ",")
-        Dim JantanMandulList() = Split(HF_AnjingJantanMandulList.Value, ",")
-        Dim BetinaMandulList() = Split(HF_AnjingBetinaMandulList.Value, ",")
-
-        If BakaAnjingList.Length > 0 Then
-
-            Dim dt As DataTable
-
-            If ViewState("AnjingTable_ins") IsNot Nothing Then
-                dt = DirectCast(ViewState("AnjingTable_ins"), DataTable)
-                dt.Clear()
-            Else
-                dt = New DataTable()
-                dt.Columns.Add("Baka", GetType(String))
-                dt.Columns.Add("Jantan", GetType(String))
-                dt.Columns.Add("Betina", GetType(String))
-                dt.Columns.Add("JantanMandul", GetType(String))
-                dt.Columns.Add("BetinaMandul", GetType(String))
-            End If
-
-            For i As Integer = 0 To BakaAnjingList.Length - 1
-                Dim newRow As DataRow = dt.NewRow()
-                newRow("Baka") = BakaAnjingList(i).Trim()
-                newRow("Jantan") = JantanList(i).Trim()
-                newRow("Betina") = BetinaList(i).Trim()
-                newRow("JantanMandul") = JantanMandulList(i).Trim()
-                newRow("BetinaMandul") = BetinaMandulList(i).Trim()
-
-                dt.Rows.Add(newRow)
-            Next
-
-            ViewState("AnjingTable_ins") = dt
-            gvAnjingList.DataSource = dt
-            gvAnjingList.DataBind()
-
-        End If
-
-        'Load Senarai Lokasi
-        Dim LokasiList() = Split(HF_LokasiList.Value, "||")
-
-        If LokasiList.Length > 0 Then
-
-            Dim dt As DataTable
-
-            If ViewState("LokasiTable_ins") IsNot Nothing Then
-                dt = DirectCast(ViewState("LokasiTable_ins"), DataTable)
-                dt.Clear()
-            Else
-                dt = New DataTable()
-                dt.Columns.Add("No", GetType(String))
-                dt.Columns.Add("Lokasi", GetType(String))
-            End If
-
-            For i As Integer = 0 To LokasiList.Length - 1
-                Dim newRow As DataRow = dt.NewRow()
-                newRow("No") = (i + 1).ToString
-                newRow("Lokasi") = LokasiList(i).Trim()
-
-                dt.Rows.Add(newRow)
-            Next
-
-            ViewState("LokasiTable_ins") = dt
-            gvLokasiList.DataSource = dt
-            gvLokasiList.DataBind()
-
-        End If
-
-    End Sub
-
     Private Function getJabatanLesen(agensiID As Integer) As Boolean
         Dim retval As Boolean = False
 
@@ -702,43 +439,6 @@ Partial Class kelulusan1
 
             Dim SQL As String = ""
             SQL = "select * from LESEN_JabatanAgensi where JabatanAgensi_IsLesen=1 
-            and JabatanAgensi_IsActive=1 and JabatanAgensi_ID = @JabatanAgensi_ID "
-
-
-            Dim myCommand As New SqlCommand(SQL, myConnection)
-            myCommand.Parameters.AddWithValue("@JabatanAgensi_ID", agensiID)
-
-
-            myConnection.Open()
-
-            Dim myReader As SqlDataReader = myCommand.ExecuteReader
-
-            Dim i As Integer = 0
-            While myReader.Read
-                'monthValueApprove = myReader("totCntApprove")
-                retval = True
-
-            End While
-
-            myReader.Close()
-            myConnection.Close()
-
-        End Using
-
-        If agensiID = 0 Then
-            retval = True
-        End If
-
-        Return retval
-    End Function
-
-    Private Function getJabatanDalaman(agensiID As Integer) As Boolean
-        Dim retval As Boolean = False
-
-        Using myConnection As New SqlConnection(ConfigurationManager.ConnectionStrings("webcon_ConnectionStr").ConnectionString)
-
-            Dim SQL As String = ""
-            SQL = "select * from LESEN_JabatanAgensi where JabatanAgensi_Type='J'
             and JabatanAgensi_IsActive=1 and JabatanAgensi_ID = @JabatanAgensi_ID "
 
 
@@ -875,28 +575,18 @@ Partial Class kelulusan1
                     gvTabUlasan.Columns(5).Visible = "false"
                     gvTabUlasan.Columns(6).Visible = "false"
 
-                    If Session.Item("sessionIsPenilai") = "True" Then
-                    Else
-
-                        gvTabBayaran.Columns(5).Visible = "false"
-                        gvTabBayaran.Columns(6).Visible = "false"
-
-                    End If
+                    ' gvTabBayaran.Columns(5).Visible = "false"
+                    ' gvTabBayaran.Columns(6).Visible = "false"
 
                     BT_Generate.Visible = "false"
-                    'BT_Generate1.Visible = "false"
+                    BT_Generate1.Visible = "false"
                     'btnSaveLetter.Visible = "false"
-                    BT_Maklumat.Visible = "false"
 
                     idFooter.Visible = "false"
                     divBtnKembali.Visible = "true"
 
                 End If
 
-            End If
-            If getJabatanLesen(CInt(Session.Item("sessionEstateID"))) = False And ApprStatusID >= 5 Then
-                gvTabUlasan.Columns(5).Visible = "false"
-                gvTabUlasan.Columns(6).Visible = "false"
             End If
 
             If Session.Item("sessionIsPeraku") = "True" Or Session.Item("sessionIsPenilai") = "True" Then
@@ -923,6 +613,7 @@ Partial Class kelulusan1
 
     Protected Sub btnBack_Click(sender As Object, e As EventArgs)
         backToList()
+        'Response.Redirect("/lesen/pembatalan.aspx")
     End Sub
 
     Private Sub backToList()
@@ -940,8 +631,8 @@ Partial Class kelulusan1
     Private Function checkMandatoryField() As Boolean
 
         Dim ApprStatusID As Integer = CInt(GridView1.SelectedDataKey.Values(2))
-
         Dim retval As Boolean = True
+
 
         If ApprStatusID = 4 Then
 
@@ -1004,8 +695,6 @@ Partial Class kelulusan1
             End If
         End If
 
-
-
     End Sub
 
     Private Sub processSubmit()
@@ -1036,7 +725,7 @@ Partial Class kelulusan1
                     If ApprStatusID = 2 Then
                         fldName = "StatusID"
 
-                        SQL = "UPDATE LESEN_PermohonanAgensi set " & fldName & " = 3, LastModDt = getdate(), ikAssign = @PengesahID /*,PengesahID = @PengesahID */ 
+                        SQL = "UPDATE LESEN_PermohonanAgensiBatal set " & fldName & " = 3, LastModDt = getdate(), ikAssign = @PengesahID /*,PengesahID = @PengesahID  */
 					where Permohonan_ID = @Permohonan_ID 
 					and case when JabatanAgensi_ID is null then 0 else JabatanAgensi_ID end = @AgensiId "
 
@@ -1045,16 +734,16 @@ Partial Class kelulusan1
                     ElseIf ApprStatusID = 3 Then
                         fldName = "IsLawatanTapakUlasan"
 
-                        SQL = "UPDATE LESEN_PermohonanAgensi set " & fldName & " = 1, LastModDt = getdate() 
+                        SQL = "UPDATE LESEN_PermohonanAgensiBatal set " & fldName & " = 1, LastModDt = getdate() 
 					where Permohonan_ID = @Permohonan_ID 
 					and case when JabatanAgensi_ID is null then 0 else JabatanAgensi_ID end = @AgensiId "
 
                     ElseIf ApprStatusID = 4 Then
                         fldName = "IsPenilaian"
 
-                        SQL = "UPDATE LESEN_PermohonanAgensi set " & fldName & " = 1, LastModDt = getdate(), 
+                        SQL = "UPDATE LESEN_PermohonanAgensiBatal set " & fldName & " = 1, LastModDt = getdate(), 
 					PengesahStatusID = @PengesahStatusID, PengesahNotaKelulusan = @PengesahNotaKelulusan,
-					PengesahID = @PengesahID
+					PengesahID = @PengesahID				
 					where Permohonan_ID = @Permohonan_ID 
 					and case when JabatanAgensi_ID is null then 0 else JabatanAgensi_ID end = @AgensiId "
 
@@ -1062,7 +751,7 @@ Partial Class kelulusan1
                             Dim hdnFiedlJabatanAgensiType As HiddenField = DirectCast(fvSokongUlasan.FindControl("hdnFiedlJabatanAgensiType"), HiddenField)
 
                             If hdnFiedlJabatanAgensiType.Value = "L" Then
-                                SQL = SQL & ";UPDATE LESEN_PermohonanAgensi set " & fldName & " = 1, LastModDt = getdate(),
+                                SQL = SQL & ";UPDATE LESEN_PermohonanAgensiBatal set " & fldName & " = 1, LastModDt = getdate(),
 								StatusID = @PengesahStatusID, NotaKelulusan = @PengesahNotaKelulusan
 								where Permohonan_ID = @Permohonan_ID 
 								and case when JabatanAgensi_ID is null then 0 else JabatanAgensi_ID end = @AgensiId "
@@ -1075,7 +764,7 @@ Partial Class kelulusan1
                     ElseIf ApprStatusID = 5 Then
                         fldName = "IsPeraku"
 
-                        SQL = "UPDATE LESEN_PermohonanAgensi set " & fldName & " = 1, LastModDt = getdate(),
+                        SQL = "UPDATE LESEN_PermohonanAgensiBatal set " & fldName & " = 1, LastModDt = getdate(),
 					StatusID = @StatusID, NotaKelulusan = @NotaKelulusan
 					where Permohonan_ID = @Permohonan_ID 
 					and case when JabatanAgensi_ID is null then 0 else JabatanAgensi_ID end = @AgensiId "
@@ -1120,7 +809,6 @@ Partial Class kelulusan1
                 End If
 
             End Using
-
         End If
     End Sub
 
@@ -1130,8 +818,8 @@ Partial Class kelulusan1
         Using myConnection As New SqlConnection(ConfigurationManager.ConnectionStrings("webcon_ConnectionStr").ConnectionString)
 
             Dim Sql As String = "select * from 
-            LESEN_PermohonanAgensi a
-            inner join LESEN_PermohonanAgensiStaff b on b.PermohonanAgensi_ID = a.PermohonanAgensi_ID
+            LESEN_PermohonanAgensiBatal a
+            inner join LESEN_PermohonanAgensiStaffBatal b on b.PermohonanAgensi_ID = a.PermohonanAgensi_ID
             where a.Permohonan_ID=@Permohonan_ID"
 
             Dim myCommand As New SqlCommand(Sql, myConnection)
@@ -1184,11 +872,11 @@ Partial Class kelulusan1
             If AgensiID = 0 Then
                 If ApprStatusID = 5 Then
                     SQL = "UPDATE LESEN_Permohonan set StatusID = " & statusUpdate & ", StatusIDPengesah = 1, LastModDt = getdate(), 
-                LastModID = @SessionUserName ,NotaKelulusanPengesah = @NotaKelulusanPengesah
+                LastModID = @SessionUserName ,NotaKelulusanPengesahBatal = @NotaKelulusanPengesahBatal
                 where Permohonan_ID = @Permohonan_ID "
                 ElseIf ApprStatusID = 8 Then
                     SQL = "UPDATE LESEN_Permohonan set StatusID = " & statusUpdate & ", LastModDt = getdate(), 
-                LastModID = @SessionUserName ,NotaKelulusan = @NotaKelulusan, NotaKelulusanKJ = @NotaKelulusanKJ
+                LastModID = @SessionUserName ,NotaKelulusanBatal = @NotaKelulusanBatal, NotaKelulusanKJ = @NotaKelulusanKJ
                 where Permohonan_ID = @Permohonan_ID "
                 End If
 
@@ -1200,8 +888,8 @@ Partial Class kelulusan1
             myCommand.Parameters.AddWithValue("@AgensiId", AgensiID)
             myCommand.Parameters.AddWithValue("@ApprStatusID", ApprStatusID)
             myCommand.Parameters.AddWithValue("@SessionUserName", Session.Item("SessionUserName"))
-            myCommand.Parameters.AddWithValue("@NotaKelulusanPengesah", txtNotaKelulusanPengesah.Text)
-            myCommand.Parameters.AddWithValue("@NotaKelulusan", txtNotaKelulusan.Text)
+            myCommand.Parameters.AddWithValue("@NotaKelulusanPengesahBatal", txtNotaKelulusanPengesah.Text)
+            myCommand.Parameters.AddWithValue("@NotaKelulusanBatal", txtNotaKelulusan.Text)
             myCommand.Parameters.AddWithValue("@NotaKelulusanKJ", rblNotaKelulusanKJ.SelectedValue)
 
             myConnection.Open()
@@ -1254,11 +942,11 @@ Partial Class kelulusan1
 
                 If ApprStatusID = 5 Then
                     SQL = "UPDATE LESEN_Permohonan set StatusID = " & statusUpdate & ",StatusIDPengesah = 0, 
-                    LastModDt = getdate(), LastModID = @SessionUserName ,NotaKelulusanPengesah = @NotaKelulusanPengesah
+                    LastModDt = getdate(), LastModID = @SessionUserName ,NotaKelulusanPengesahBatal = @NotaKelulusanPengesahBatal
                 where Permohonan_ID = @Permohonan_ID "
                 Else
                     SQL = "UPDATE LESEN_Permohonan set StatusID = " & statusUpdate & ", LastModDt = getdate(), 
-                LastModID = @SessionUserName ,NotaKelulusan = @NotaKelulusan
+                LastModID = @SessionUserName ,NotaKelulusanBatal = @NotaKelulusanBatal
                 where Permohonan_ID = @Permohonan_ID "
                 End If
 
@@ -1270,8 +958,8 @@ Partial Class kelulusan1
             myCommand.Parameters.AddWithValue("@AgensiId", AgensiID)
             myCommand.Parameters.AddWithValue("@ApprStatusID", ApprStatusID)
             myCommand.Parameters.AddWithValue("@SessionUserName", Session.Item("SessionUserName"))
-            myCommand.Parameters.AddWithValue("@NotaKelulusanPengesah", txtNotaKelulusanPengesah.Text)
-            myCommand.Parameters.AddWithValue("@NotaKelulusan", txtNotaKelulusan.Text)
+            myCommand.Parameters.AddWithValue("@NotaKelulusanPengesahBatal", txtNotaKelulusanPengesah.Text)
+            myCommand.Parameters.AddWithValue("@NotaKelulusanBatal", txtNotaKelulusan.Text)
 
             myConnection.Open()
 
@@ -1291,88 +979,47 @@ Partial Class kelulusan1
 
     End Sub
 
-    Protected Sub btnAddNewPenjaja_Click(sender As Object, e As EventArgs)
-        Dim Permohonan_ID As Integer = CInt(GridView1.SelectedDataKey.Values(0))
-        Dim IsSokong As Integer = 0
-
-        If EditorSurat1.Text.ToLower().Contains("tiada halangan") Then
-
-            IsSokong = 1
-
-        End If
-
-        Using myConnection As New SqlConnection(ConfigurationManager.ConnectionStrings("webcon_ConnectionStr").ConnectionString)
-
-            Dim SQL As String = ""
-
-            SQL = "Insert Into LESEN_PenjajaUlasan (PermohonanID, CreatedDt, CreatorID) Values 
-                 (@Permohonan_ID, getdate(), @SessionUserName) "
-
-            Dim myCommand As New SqlCommand(SQL, myConnection)
-
-            myCommand.Parameters.AddWithValue("@Permohonan_ID", Permohonan_ID)
-            myCommand.Parameters.AddWithValue("@SessionUsersId", Session.Item("SessionUsersId"))
-            myCommand.Parameters.AddWithValue("@SessionUserName", Session.Item("SessionUserName"))
-
-            myConnection.Open()
-
-            Dim recordset As Integer = myCommand.ExecuteNonQuery()
-
-            If recordset Then
-                gvTabPenjajaUlasan.EditIndex = CInt(gvTabPenjajaUlasan.Rows.Count)
-
-            End If
-
-            myConnection.Close()
-
-            gvTabPenjajaUlasan.DataBind()
-
-            Page.SetFocus(Me.ui_btnPageBottom.ClientID)
-
-        End Using
-    End Sub
 
 
+    'Protected Sub btnAddNew_Click(sender As Object, e As EventArgs)
+    '    Dim Permohonan_ID As Integer = CInt(GridView1.SelectedDataKey.Values(0))
+    '    Dim AgensiID As Integer = If(IsDBNull(GridView1.SelectedDataKey.Values(1)), 0, CInt(GridView1.SelectedDataKey.Values(1)))
+    '    Dim ApprStatusID As Integer = CInt(GridView1.SelectedDataKey.Values(2))
 
-    Protected Sub btnAddNew_Click(sender As Object, e As EventArgs)
-        Dim Permohonan_ID As Integer = CInt(GridView1.SelectedDataKey.Values(0))
-        Dim AgensiID As Integer = If(IsDBNull(GridView1.SelectedDataKey.Values(1)), 0, CInt(GridView1.SelectedDataKey.Values(1)))
-        Dim ApprStatusID As Integer = CInt(GridView1.SelectedDataKey.Values(2))
+    '    Using myConnection As New SqlConnection(ConfigurationManager.ConnectionStrings("webcon_ConnectionStr").ConnectionString)
 
-        Using myConnection As New SqlConnection(ConfigurationManager.ConnectionStrings("webcon_ConnectionStr").ConnectionString)
+    '        Dim SQL As String = ""
 
-            Dim SQL As String = ""
+    '        SQL = "Insert Into LESEN_KadarBayaran (KadarBayaran_PermohonanID,KadarBayaran_PermohonanAgensiID,KadarBayaran_UserID,CreatedDt,CreatorID) Values 
+    '             (@Permohonan_ID,case when @AgensiId = 0 then NULL else @AgensiId end,@SessionUsersID, getdate(), @SessionUserName)  "
 
-            SQL = "Insert Into LESEN_KadarBayaran (KadarBayaran_PermohonanID,KadarBayaran_PermohonanAgensiID,KadarBayaran_UserID,CreatedDt,CreatorID) Values 
-                 (@Permohonan_ID,case when @AgensiId = 0 then NULL else @AgensiId end,@SessionUsersID, getdate(), @SessionUserName)  "
+    '        Dim myCommand As New SqlCommand(SQL, myConnection)
 
-            Dim myCommand As New SqlCommand(SQL, myConnection)
+    '        myCommand.Parameters.AddWithValue("@Permohonan_ID", Permohonan_ID)
+    '        myCommand.Parameters.AddWithValue("@AgensiId", AgensiID)
+    '        myCommand.Parameters.AddWithValue("@ApprStatusID", ApprStatusID)
+    '        myCommand.Parameters.AddWithValue("@SessionUsersId", Session.Item("SessionUsersId"))
+    '        myCommand.Parameters.AddWithValue("@SessionUserName", Session.Item("SessionUserName"))
 
-            myCommand.Parameters.AddWithValue("@Permohonan_ID", Permohonan_ID)
-            myCommand.Parameters.AddWithValue("@AgensiId", CInt(Session.Item("sessionEstateID")))
-            myCommand.Parameters.AddWithValue("@ApprStatusID", ApprStatusID)
-            myCommand.Parameters.AddWithValue("@SessionUsersId", Session.Item("SessionUsersId"))
-            myCommand.Parameters.AddWithValue("@SessionUserName", Session.Item("SessionUserName"))
+    '        myConnection.Open()
 
-            myConnection.Open()
+    '        Dim recordset As Integer = myCommand.ExecuteNonQuery()
 
-            Dim recordset As Integer = myCommand.ExecuteNonQuery()
+    '        '//start insert - tab bayaran
 
-            '//start insert - tab bayaran
+    '        If recordset Then
+    '            gvTabBayaran.EditIndex = CInt(gvTabBayaran.Rows.Count)
 
-            If recordset Then
-                gvTabBayaran.EditIndex = CInt(gvTabBayaran.Rows.Count)
+    '        End If
 
-            End If
+    '        myConnection.Close()
 
-            myConnection.Close()
+    '        gvTabBayaran.DataBind()
 
-            gvTabBayaran.DataBind()
+    '        Page.SetFocus(Me.ui_btnPageBottom.ClientID)
 
-            Page.SetFocus(Me.ui_btnPageBottom.ClientID)
-
-        End Using
-    End Sub
+    '    End Using
+    'End Sub
 
     Protected Sub btnAddNewUpload_Click(sender As Object, e As EventArgs)
         Dim Permohonan_ID As Integer = CInt(GridView1.SelectedDataKey.Values(0))
@@ -1383,13 +1030,13 @@ Partial Class kelulusan1
 
             Dim SQL As String = ""
 
-            SQL = "Insert Into LESEN_UlasanFail (UlasanFail_PermohonanID,UlasanFail_PermohonanAgensiID,UlasanFail_UserID,CreatedDt,CreatorID) Values 
+            SQL = "Insert Into LESEN_UlasanFailBatal (UlasanFail_PermohonanID,UlasanFail_PermohonanAgensiID,UlasanFail_UserID,CreatedDt,CreatorID) Values 
                  (@Permohonan_ID,case when @AgensiId = 0 then NULL else @AgensiId end,@SessionUsersID, getdate(), @SessionUserName)  "
 
             Dim myCommand As New SqlCommand(SQL, myConnection)
 
             myCommand.Parameters.AddWithValue("@Permohonan_ID", Permohonan_ID)
-            myCommand.Parameters.AddWithValue("@AgensiId", CInt(Session.Item("sessionEstateID")))
+            myCommand.Parameters.AddWithValue("@AgensiId", AgensiID)
             myCommand.Parameters.AddWithValue("@ApprStatusID", ApprStatusID)
             myCommand.Parameters.AddWithValue("@SessionUsersId", Session.Item("SessionUsersId"))
             myCommand.Parameters.AddWithValue("@SessionUserName", Session.Item("SessionUserName"))
@@ -1489,8 +1136,7 @@ Partial Class kelulusan1
                     '//image
                     If fileLenght <= (1048576 * 10) Then '1048576 => 1M
                         Dim bmpPostedImage As System.Drawing.Bitmap = New System.Drawing.Bitmap(txtUlasanFail_FilePath.PostedFile.InputStream)
-                        Dim fixedImage As Image = FixImageOrientation(bmpPostedImage)
-                        Dim objImage As System.Drawing.Image = ScaleImage(fixedImage, 1024)
+                        Dim objImage As System.Drawing.Image = ScaleImage(bmpPostedImage, 1024)
                         objImage.Save(saveLocation, ImageFormat.Jpeg)
 
                         'MessageBox("Fail berjaya dimuatnaik", Me)
@@ -1547,42 +1193,6 @@ Partial Class kelulusan1
         End If
 
         Return retval
-    End Function
-    Public Shared Function FixImageOrientation(img As Image) As Image
-        Const OrientationKey As Integer = &H112
-        If img.PropertyIdList.Contains(OrientationKey) Then
-            Dim prop = img.GetPropertyItem(OrientationKey)
-            Dim orientation As Integer = BitConverter.ToUInt16(prop.Value, 0)
-
-            Select Case orientation
-                ' Case 3
-                    ' img.RotateFlip(RotateFlipType.Rotate180FlipNone)
-                ' Case 6
-                    ' img.RotateFlip(RotateFlipType.Rotate90FlipNone)
-                ' Case 8
-                    ' img.RotateFlip(RotateFlipType.Rotate270FlipNone)
-                Case 0, 1
-                    ' No rotation required.
-                Case 2
-                    img.RotateFlip(RotateFlipType.RotateNoneFlipX)
-                Case 3
-                    img.RotateFlip(RotateFlipType.Rotate180FlipNone)
-                Case 4
-                    img.RotateFlip(RotateFlipType.Rotate180FlipX)
-                Case 5
-                    img.RotateFlip(RotateFlipType.Rotate90FlipX)
-                Case 6
-                    img.RotateFlip(RotateFlipType.Rotate90FlipNone)
-                Case 7
-                    img.RotateFlip(RotateFlipType.Rotate270FlipX)
-                Case 8
-                    img.RotateFlip(RotateFlipType.Rotate270FlipNone)
-            End Select
-
-            ' buang metadata supaya tak kacau lagi
-            img.RemovePropertyItem(OrientationKey)
-        End If
-        Return img
     End Function
 
     Public Sub MessageBox(ByVal Msg As String, ByVal obj As System.Web.UI.Page)
@@ -1695,7 +1305,7 @@ Partial Class kelulusan1
             "a.MasaEkspo1, a.MasaEkspo2, a.Rujukan, a.NoAkaunCukai, a.IsBatal, a.JenisLesenDescList, a.JenisLesenIdList, a.SaizIklanList, a.CahayaIklanList, a.UnitIklanList, a.LokasiList, a.BakaAnjingList, a.AnjingJantanList, " &
             "a.AnjingBetinaList, a.AnjingJantanMandulList, a.AnjingBetinaMandulList, e.JabatanAgensi_Address, e.JabatanAgensi_Kepada, b.Pemohon_Name, b.Pemohon_ICNo, b.Pemohon_PassportNo, b.Pemohon_Address, " &
             "b.Pemohon_Email, b.Pemohon_MobileNo, b.Pemohon_TelNo, g.Users_Fullname, g.Users_Signature " &
-            "FROM LESEN_Permohonan a INNER JOIN LESEN_Pemohon b ON a.Permohonan_PemohonID = b.Pemohon_ID INNER JOIN LESEN_PermohonanAgensi d ON a.Permohonan_ID = d.Permohonan_ID " &
+            "FROM LESEN_Permohonan a INNER JOIN LESEN_Pemohon b ON a.Permohonan_PemohonID = b.Pemohon_ID INNER JOIN LESEN_PermohonanAgensiBatal d ON a.Permohonan_ID = d.Permohonan_ID " &
             "INNER JOIN LESEN_JabatanAgensi e ON d.JabatanAgensi_ID = e.JabatanAgensi_ID " &
             "LEFT JOIN TBL_USERS g ON g.Users_Id = (case when e.JabatanAgensi_Type = 'J' then a.TandatanganMohonUlasanId when e.JabatanAgensi_Type = 'L' then a.TandatanganMohonUlasanLuarId end) " &
             "WHERE a.Permohonan_ID=" & permohonanID & " AND e.JabatanAgensi_ID = " & agensiID
@@ -1750,8 +1360,6 @@ Partial Class kelulusan1
         End Try
     End Sub
 
-
-
     Protected Sub CheckBox1_CheckedChanged(sender As Object, e As EventArgs)
 
         Try
@@ -1768,14 +1376,14 @@ Partial Class kelulusan1
                 Dim SQL As String = ""
 
                 If cb1.Checked Then
-                    SQL = "insert into LESEN_PermohonanAgensiStaff (PermohonanAgensiStaffID_UsersID,PermohonanAgensi_ID)
-							select top 1 @usersID, a.PermohonanAgensi_ID from LESEN_PermohonanAgensi a 
-							where a.Permohonan_ID = @Permohonan_ID and a.JabatanAgensi_ID = @AgensiId "
+                    SQL = "insert into LESEN_PermohonanAgensiStaffBatal (PermohonanAgensiStaffID_UsersID,PermohonanAgensi_ID)
+                        select top 1 @usersID, a.PermohonanAgensi_ID from LESEN_PermohonanAgensiBatal a 
+                        where a.Permohonan_ID = @Permohonan_ID and a.JabatanAgensi_ID = @AgensiId "
                 Else
                     SQL = "delete a
-					from LESEN_PermohonanAgensiStaff a
+					from LESEN_PermohonanAgensiStaffBatal a
 					where a.PermohonanAgensiStaffID_UsersID = @usersID
-					and PermohonanAgensi_ID IN (select x.PermohonanAgensi_ID from LESEN_PermohonanAgensi x where x.Permohonan_ID=@Permohonan_ID 
+					and PermohonanAgensi_ID IN (select x.PermohonanAgensi_ID from LESEN_PermohonanAgensiBatal x where x.Permohonan_ID=@Permohonan_ID 
 					and x.JabatanAgensi_ID=@AgensiId) "
                 End If
 
@@ -1802,7 +1410,7 @@ Partial Class kelulusan1
             End Using
 
         Catch ex As Exception
-            MessageBox(ex.Message, Me)
+
         End Try
 
     End Sub
@@ -1850,12 +1458,13 @@ Partial Class kelulusan1
         If GetIsSuratFail(pid) Then
             ViewSuratPemeriksaanFail(pid)
         Else
+            'ViewSuratPemeriksaanAuto(pid, jid, True)
+
             If Session.Item("isDisablePrintSession") = "Y" Then
                 ViewSuratPemeriksaanAuto(pid, False)
             Else
                 ViewSuratPemeriksaanAuto(pid, True)
             End If
-
         End If
 
     End Sub
@@ -1875,18 +1484,6 @@ Partial Class kelulusan1
         Dim namatemplatList() As String = CStr(DDL_SuratTemplat.SelectedValue).Split(","c)
         Dim jenisrepot As String = namatemplatList(0)
         Dim namatemplat As String = namatemplatList(1)
-
-        If jid = "4" Then
-
-            If TabPenjajaUlasan.Visible = False Then
-                TabPenjajaUlasan.Visible = True
-            End If
-
-            insertPenjajaUlasan(pid, 1)
-
-            Return
-
-        End If
 
         'Dim jenisReport As String = "LIL"
         Dim rujukan As String = ""
@@ -2001,123 +1598,59 @@ Partial Class kelulusan1
 
     Protected Sub BT_Generate1_Command(sender As Object, e As CommandEventArgs)
 
-        If TB_TarikhPeriksa.Text.Length = 0 Then
-
-            ShowAlert("error", "", "Sila pilih tarikh pemeriksaan.")
-            Return
-
-        End If
-
-        Dim jidList() As String = CStr(GridView1.SelectedDataKey.Values("JenisLesenIdList")).Split(","c)
-        Dim jid As String = CStr(GridView1.SelectedDataKey.Values("JenisLesenIdList"))
+        Dim jid As Integer = CInt(Me.FormView1.DataKey("JenisLesen_ID"))
         Dim pid As Integer = GridView1.SelectedDataKey.Values(0)
+        'Dim pid As Integer = CInt(Me.FormView1.DataKey("Permohonan_ID"))
 
-        If jid = "4" Then
+        'MessageBox("Generate Mail " & pid.ToString & "/" & jid.ToString, Me)
 
-            If TabPenjajaUlasan.Visible = False Then
-                TabPenjajaUlasan.Visible = True
-            End If
-
-            insertPenjajaUlasan(pid, 0)
-
-            Return
-
-        End If
-
-        Dim jenisReport As String = "LIB"
         Dim rujukan As String = ""
+        Dim isi1 As String = ""
+        Dim isi2 As String = ""
         Dim tarikhmohon As String = ""
-        Dim jenispasar As String = ""
-        Dim jumlahpetak As String = ""
-        Dim jenisperniagaanpasar As String = ""
-        Dim lokasipasar As String = ""
-        Dim totalamount As Double = 0
+        Dim totalamount As Integer = 0
 
         Using myConnection As New SqlConnection(ConfigurationManager.ConnectionStrings("webcon_ConnectionStr").ConnectionString)
 
             myConnection.Open()
 
-            Dim SQL4 As String = "SELECT Rujukan, CONVERT(varchar, TarikhMohon, 103) AS TarikhMohon, JenisPasar, JenisPerniagaanPasar, JumlahPetak, LokasiPasar1, LokasiPasar2, LokasiPasar3 FROM LESEN_Permohonan WHERE Permohonan_ID = @Permohonan_ID"
+            Dim SQL As String = "SELECT JenisLesen_SuratBatalIKGagal1 AS isi1, JenisLesen_SuratBatalIKGagal2 AS isi2 FROM LESEN_JenisLesen WHERE JenisLesen_ID = @JenisLesen_ID"
 
-            Dim myCommandSelect4 As New SqlCommand(SQL4, myConnection)
-            myCommandSelect4.Parameters.AddWithValue("@Permohonan_ID", pid)
+            Dim myCommandSelect As New SqlCommand(SQL, myConnection)
+            myCommandSelect.Parameters.AddWithValue("@JenisLesen_ID", jid)
 
-            Dim myReader4 As SqlDataReader = myCommandSelect4.ExecuteReader
+            Dim myReader As SqlDataReader = myCommandSelect.ExecuteReader
 
             Try
-                If myReader4.Read Then
+                If myReader.Read Then
 
-                    rujukan = myReader4.Item("Rujukan").ToString
-                    tarikhmohon = myReader4.Item("TarikhMohon").ToString
-                    jenispasar = myReader4.Item("JenisPasar").ToString
-                    jenisperniagaanpasar = myReader4.Item("JenisPerniagaanPasar").ToString
-                    jumlahpetak = myReader4.Item("JumlahPetak").ToString
-                    lokasipasar = myReader4.Item("LokasiPasar1").ToString
-
-                    If myReader4.Item("LokasiPasar2").ToString.Length > 0 Then
-                        lokasipasar = lokasipasar & ", " & myReader4.Item("LokasiPasar2").ToString
-                    End If
-
-                    If myReader4.Item("LokasiPasar3").ToString.Length > 0 Then
-                        lokasipasar = lokasipasar & ", " & myReader4.Item("LokasiPasar3").ToString
-                    End If
+                    isi1 = myReader.Item("isi1")
+                    isi2 = myReader.Item("isi2")
 
                 End If
 
             Catch ex As Exception
-                MessageBox(ex.Message, Me)
+
             End Try
 
-            myReader4.Close()
+            myReader.Close()
             myConnection.Close()
 
             myConnection.Open()
 
-            Dim SQL As String = "DELETE FROM LESEN_PermohonanSurat WHERE Permohonan_ID=@Permohonan_ID AND JenisReport=@JenisReport; 
-                    INSERT INTO LESEN_PermohonanSurat (Permohonan_ID, JenisReport, P1, P2, P3, IsiKandungan, CreatedDt, ModDt)
-                    SELECT @Permohonan_ID AS Permohonan_ID, JenisReport, P1, P2, P3, 
-                    REPLACE(
-                        REPLACE(
-                            REPLACE(
-                                REPLACE(
-                                    REPLACE(
-                                        REPLACE(
-                                            REPLACE(
-                                                REPLACE(CAST(IsiKandungan AS VARCHAR(MAX)), '{@TahunIni}', @@TahunIni), 
-                                            '{@JumlahKadarBayaran}', @@JumlahKadarBayaran), 
-                                        '{@Rujukan}', IIF(CHARINDEX(' ', @@Rujukan) > 0, @@Rujukan, REPLACE(@@Rujukan, 'MPK/599/401/', 'MPK/599/401/ ')) ),
-                                    '{@TarikhPemeriksaan}',@@TarikhPemeriksaan),
-                                '{@JenisPasar}',@@JenisPasar),
-                            '{@JenisPerniagaanPasar}',@@JenisPerniagaanPasar),
-                        '{@JumlahPetak}',@@JumlahPetak),
-                    '{@LokasiPasar}',@@LokasiPasar) AS IsiKandungan, 
-                    GETDATE() AS CreatedDt, GETDATE() AS ModDt 
-                    FROM LESEN_ReportTemplate
-                    WHERE JenisLesen_ID=@JenisLesen_ID AND JenisReport=@JenisReport;"
+            Dim SQL1 As String = "UPDATE LESEN_Permohonan SET SuratPemeriksaan1 = @SuratPemeriksaan1, SuratPemeriksaan2 = @SuratPemeriksaan2 WHERE (Permohonan_ID = @Permohonan_ID)"
 
-            Dim myCommandSelect As New SqlCommand(SQL, myConnection)
-            myCommandSelect.Parameters.AddWithValue("@JenisLesen_ID", jidList(0))
-            myCommandSelect.Parameters.AddWithValue("@JenisReport", jenisReport)
-            myCommandSelect.Parameters.AddWithValue("@Permohonan_ID", pid)
-
-            myCommandSelect.Parameters.AddWithValue("@@TahunIni", DateTime.Now.Year.ToString)
-            myCommandSelect.Parameters.AddWithValue("@@JumlahKadarBayaran", totalamount.ToString("N2"))
-            myCommandSelect.Parameters.AddWithValue("@@Rujukan", rujukan)
-            'myCommandSelect.Parameters.AddWithValue("@@TarikhMohon", tarikhmohon)
-            myCommandSelect.Parameters.AddWithValue("@@JenisPasar", jenispasar)
-            myCommandSelect.Parameters.AddWithValue("@@JenisPerniagaanPasar", jenisperniagaanpasar)
-            myCommandSelect.Parameters.AddWithValue("@@JumlahPetak", jumlahpetak)
-            myCommandSelect.Parameters.AddWithValue("@@LokasiPasar", lokasipasar)
-
-            Dim cvtDate = CDate(TB_TarikhPeriksa.Text).ToString("dd/MM/yyyy")
-            myCommandSelect.Parameters.AddWithValue("@@TarikhPemeriksaan", cvtDate)
+            Dim myCommandSelect1 As New SqlCommand(SQL1, myConnection)
+            myCommandSelect1.Parameters.AddWithValue("@SuratPemeriksaan1", isi1)
+            myCommandSelect1.Parameters.AddWithValue("@SuratPemeriksaan2", isi2)
+            myCommandSelect1.Parameters.AddWithValue("@Permohonan_ID", pid)
 
             Try
-                myCommandSelect.ExecuteNonQuery()
-                ShowAlert("success", "", "Laporan pemeriksaan berjaya dijana.")
-                GridViewReport.DataBind()
+                Dim result = myCommandSelect1.ExecuteNonQuery()
+                GetSuratContent(pid)
+                ShowAlert("success", "", "Surat pemeriksaan telah dijana.")
             Catch ex As Exception
-                MessageBox(ex.Message, Me)
+                MessageBox("Error", Me)
             End Try
 
             myConnection.Close()
@@ -2136,6 +1669,7 @@ Partial Class kelulusan1
 
         End If
 
+        'Dim errStr As String = ""
         Dim isSuccess As Boolean = True
         Dim PermohonanID As Integer = CInt(GridView1.SelectedDataKey.Values(0))
 
@@ -2150,12 +1684,12 @@ Partial Class kelulusan1
 
             End If
 
-            'If TB_TarikhSurat.Text.Length = 0 Then
+            If TB_TarikhPeriksa.Text.Length = 0 Then
 
-            '    ShowAlert("error", "", "Sila pilih tarikh surat.")
-            '    Return
+                ShowAlert("error", "", "Sila pilih tarikh surat.")
+                Return
 
-            'End If
+            End If
 
             If TB_NoRujukan.Text.Length = 0 Or Trim(TB_NoRujukan.Text) = "MPK/599/401/" Then
 
@@ -2173,16 +1707,28 @@ Partial Class kelulusan1
 
             Dim cvtDate = CDate(TB_TarikhPeriksa.Text).ToString("dd/MM/yyyy")
 
+            EditorSurat1.Text = EditorSurat1.Text.Replace("{@TarikhPemeriksaan}", cvtDate)
+            EditorSurat2.Text = EditorSurat2.Text.Replace("{@TarikhPemeriksaan}", cvtDate)
+
+            Dim str1 = EditorSurat1.Text
+            Dim str2 = EditorSurat2.Text
+
+            str1 = str1.Replace("<div>", "").Replace("</div>", "")
+            str2 = str2.Replace("<div>", "").Replace("</div>", "")
+
             Using myConnection As New SqlConnection(ConfigurationManager.ConnectionStrings("webcon_ConnectionStr").ConnectionString)
 
                 myConnection.Open()
 
-                Dim SQL As String = "UPDATE LESEN_Permohonan SET TandatanganPemeriksaanId = @TandatanganPemeriksaanId, TarikhPemeriksaan = @TarikhPemeriksaan,
+                Dim SQL As String = "UPDATE LESEN_Permohonan SET SuratPemeriksaan1 = @SuratPemeriksaan1, SuratPemeriksaan2 = @SuratPemeriksaan2, 
+                                    TandatanganPemeriksaanId = @TandatanganPemeriksaanId, TarikhPemeriksaan = @TarikhPemeriksaan,
                                     TarikhSuratPemeriksaan = @TarikhSuratPemeriksaan, RujukanInspektorat = @RujukanInspektorat 
                                     WHERE Permohonan_ID = @Permohonan_ID"
 
                 Dim myCommandSelect As New SqlCommand(SQL, myConnection)
                 myCommandSelect.Parameters.AddWithValue("@Permohonan_ID", PermohonanID)
+                myCommandSelect.Parameters.AddWithValue("@SuratPemeriksaan1", str1)
+                myCommandSelect.Parameters.AddWithValue("@SuratPemeriksaan2", str2)
                 myCommandSelect.Parameters.AddWithValue("@TandatanganPemeriksaanId", ddlTandatangan.SelectedValue)
                 myCommandSelect.Parameters.AddWithValue("@TarikhPemeriksaan", TB_TarikhPeriksa.Text)
                 myCommandSelect.Parameters.AddWithValue("@TarikhSuratPemeriksaan", TB_TarikhSurat.Text)
@@ -2190,11 +1736,11 @@ Partial Class kelulusan1
 
                 Try
                     Dim recordset As Integer = myCommandSelect.ExecuteNonQuery()
-
+                    'ShowAlert("success", "", "Surat pemeriksaan telah dikemaskini.")
                 Catch ex As Exception
-                    isSuccess = False
-                    MessageBox("ERROR", Me)
-
+                    'isSuccess = False
+                    'MessageBox("ERROR1", Me)
+                    'errStr = ex.Message
                 End Try
 
                 myConnection.Close()
@@ -2234,7 +1780,7 @@ Partial Class kelulusan1
                             GetSuratFail(PermohonanID)
                         Catch ex As Exception
                             isSuccess = False
-                            MessageBox("ERROR", Me)
+                            MessageBox("ERROR2", Me)
                         End Try
 
                         myConnection.Close()
@@ -2253,9 +1799,7 @@ Partial Class kelulusan1
         End If
 
         If isSuccess Then
-
             ShowAlert("success", "", "Surat pemeriksaan telah dikemaskini.")
-
         End If
 
     End Sub
@@ -2294,7 +1838,7 @@ Partial Class kelulusan1
                 End If
 
             Catch ex As Exception
-                'MessageBox("ERROR", Me)
+                MessageBox("ERROR", Me)
             End Try
 
             myReader.Close()
@@ -2309,7 +1853,7 @@ Partial Class kelulusan1
 
             myConnection.Open()
 
-            Dim SQL As String = "SELECT TandatanganPemeriksaanId, TarikhPemeriksaan, TarikhSuratPemeriksaan, RujukanInspektorat FROM LESEN_Permohonan WHERE Permohonan_ID = @Permohonan_ID"
+            Dim SQL As String = "SELECT TarikhSuratPemeriksaan,SuratPemeriksaan1, SuratPemeriksaan2, TandatanganPemeriksaanId, TarikhPemeriksaan, RujukanInspektorat FROM LESEN_Permohonan WHERE Permohonan_ID = @Permohonan_ID"
 
             Dim myCommandSelect As New SqlCommand(SQL, myConnection)
             myCommandSelect.Parameters.AddWithValue("@Permohonan_ID", pid)
@@ -2318,6 +1862,9 @@ Partial Class kelulusan1
 
             Try
                 If myReader.Read Then
+
+                    EditorSurat1.Text = myReader.Item("SuratPemeriksaan1").ToString
+                    EditorSurat2.Text = myReader.Item("SuratPemeriksaan2").ToString
 
                     If myReader.Item("TandatanganPemeriksaanId").ToString().Length > 0 Then
                         ddlTandatangan.SelectedValue = myReader.Item("TandatanganPemeriksaanId")
@@ -2385,7 +1932,6 @@ Partial Class kelulusan1
     End Sub
 
     Private Sub ViewSuratPemeriksaanAuto(permohonanID As String, isPDF As Boolean)
-
         Dim sql As String = ""
         Dim jenisLesenDesc = {"mpk_suratpemeriksaan"}
 
@@ -2393,22 +1939,21 @@ Partial Class kelulusan1
 
             sql = "SELECT a.Permohonan_ID, a.TarikhPemeriksaan, 'True' AS IsDigitalSign, CAST(a.TarikhSuratPemeriksaan AS datetime) AS TarikhSuratPemeriksaan, 
                 CAST(a.NamaSyarikat AS varchar(200)) AS NamaSyarikat, 
-                f.NoPendaftaran, f.NoAkaun, f.AlamatPremis, f.JenisPerniagaan, f.PemilikBaru, f.AlamatBaru, 
-                f.JenisPerniagaanBaru, f.NamaBaruSyarikat, f.BillboardLokasi, f.LokasiPasar1, f.LokasiPasar2, 
-                f.LokasiPasar3, f.JenisPasar, f.JenisPerniagaanPasar, f.JumlahPetak, f.AnjingAlamat, e.name AS AnjingJenisPremisDesc, 
-                f.AnjingJenisPremis, f.AlamatPenjajaan, f.JenisPerniagaanPenjaja, f.TarikhBatal, f.PenganjurEkspo, 
-                f.NamaEkspo, f.LokasiEkspo, f.NoTelEkspo, f.TarikhEkspo1, f.TarikhEkspo2, f.MasaEkspo1, f.MasaEkspo2, 
-                f.KontraktorIklan, f.NoTelKontraktor, f.UkuranBanting, f.BilBanting, f.TarikhBanting1, f.TarikhBanting2, f.NoResitBanting, f.NoSiriStiker, f.TarikhBanting3, 
-                a.Rujukan, a.RujukanInspektorat, a.NoAkaunCukai, a.IsBatal, a.JenisLesenDescList, a.JenisLesenIdList, f.SaizIklanList, 
-                f.CahayaIklanList, f.UnitIklanList, f.LokasiList, f.BakaAnjingList, f.AnjingJantanList, f.AnjingBetinaList, 
-                f.AnjingJantanMandulList, f.AnjingBetinaMandulList, 
+                a.NoPendaftaran, a.NoAkaun, a.AlamatPremis, a.JenisPerniagaan, a.PemilikBaru, a.AlamatBaru, 
+                a.JenisPerniagaanBaru, a.NamaBaruSyarikat, a.BillboardLokasi, a.LokasiPasar1, a.LokasiPasar2, 
+                a.LokasiPasar3, a.JenisPasar, a.JenisPerniagaanPasar, a.JumlahPetak, a.AnjingAlamat, e.name AS AnjingJenisPremisDesc, 
+                a.AnjingJenisPremis, a.AlamatPenjajaan, a.JenisPerniagaanPenjaja, a.TarikhBatal, a.PenganjurEkspo, 
+                a.NamaEkspo, a.LokasiEkspo, a.NoTelEkspo, a.TarikhEkspo1, a.TarikhEkspo2, a.MasaEkspo1, a.MasaEkspo2, 
+                a.KontraktorIklan, a.NoTelKontraktor, a.UkuranBanting, a.BilBanting, a.TarikhBanting1, a.TarikhBanting2, a.NoResitBanting, a.NoSiriStiker, a.TarikhBanting3, 
+                a.Rujukan, a.RujukanInspektorat, a.NoAkaunCukai, a.IsBatal, a.JenisLesenDescList, a.JenisLesenIdList, a.SaizIklanList, 
+                a.CahayaIklanList, a.UnitIklanList, a.LokasiList, a.BakaAnjingList, a.AnjingJantanList, a.AnjingBetinaList, 
+                a.AnjingJantanMandulList, a.AnjingBetinaMandulList, 
                 b.Pemohon_Name, b.Pemohon_Address, b.Pemohon_ICNo, b.Pemohon_MobileNo, b.Pemohon_TelNo, 
                 c.Users_Fullname, c.Users_Signature, d.P1, d.P2, d.P3, d.IsiKandungan 
                 FROM LESEN_Permohonan a 
-                INNER JOIN LESEN_PermohonanPembetulan f ON a.Permohonan_ID = f.Permohonan_ID 
                 INNER JOIN LESEN_Pemohon b ON b.Pemohon_ID=a.Permohonan_PemohonID 
                 LEFT JOIN TBL_USERS c ON a.TandatanganPemeriksaanId=c.Users_Id 
-                LEFT JOIN LESEN_PermohonanSurat d ON d.Permohonan_ID=a.Permohonan_ID AND d.JenisReport LIKE 'LIK%' 
+                LEFT JOIN LESEN_PermohonanSurat d ON d.Permohonan_ID=a.Permohonan_ID AND d.JenisReport LIKE 'LIB%' 
                 LEFT JOIN TBL_LOOKUPS e ON e.id = a.AnjingJenisPremis 
                 WHERE a.Permohonan_ID=@permohonanID ORDER BY d.P1, d.P2, d.P3"
 
@@ -2440,228 +1985,11 @@ Partial Class kelulusan1
         End Try
     End Sub
 
-    Protected Sub btnSaveInfo_Click(sender As Object, e As EventArgs)
 
-        Dim isSuccess As Boolean = True
-        Dim PermohonanID As Integer = CInt(GridView1.SelectedDataKey.Values(0))
-
-        Using myConnection As New SqlConnection(ConfigurationManager.ConnectionStrings("webcon_ConnectionStr").ConnectionString)
-
-            myConnection.Open()
-
-            Dim SQL As String = "UPDATE LESEN_PermohonanPembetulan SET SaizIklanList=@SaizIklanList, CahayaIklanList=@CahayaIklanList, UnitIklanList=@UnitIklanList, LokasiList = @LokasiList,
-                        BakaAnjingList=@BakaAnjingList, AnjingJantanList=@AnjingJantanList, AnjingBetinaList=@AnjingBetinaList, AnjingJantanMandulList=@AnjingJantanMandulList, AnjingBetinaMandulList=@AnjingBetinaMandulList, 
-                        NamaSyarikat = @NamaSyarikat, NoPendaftaran = @NoPendaftaran, NoAkaun = @NoAkaun, AlamatPremis = @AlamatPremis, JenisPerniagaan = @JenisPerniagaan, PemilikBaru = @PemilikBaru, 
-                        AlamatBaru = @AlamatBaru, JenisPerniagaanBaru = @JenisPerniagaanBaru, NamaBaruSyarikat = @NamaBaruSyarikat, 
-                        BillboardLokasi = @BillboardLokasi, LokasiPasar1 = @LokasiPasar1, LokasiPasar2 = @LokasiPasar2, LokasiPasar3 = @LokasiPasar3,
-                        JenisPasar = @JenisPasar, JenisPerniagaanPasar = @JenisPerniagaanPasar, JumlahPetak = @JumlahPetak, AnjingAlamat = @AnjingAlamat, AnjingJenisPremis = @AnjingJenisPremis, 
-                        AlamatPenjajaan = @AlamatPenjajaan, JenisPerniagaanPenjaja = @JenisPerniagaanPenjaja, PenganjurEkspo = @PenganjurEkspo, NamaEkspo = @NamaEkspo, LokasiEkspo = @LokasiEkspo, NoTelEkspo = @NoTelEkspo, 
-                        TarikhEkspo1 = @TarikhEkspo1, TarikhEkspo2 = @TarikhEkspo2, MasaEkspo1 = @MasaEkspo1, MasaEkspo2 = @MasaEkspo2, 
-                        KontraktorIklan = @KontraktorIklan, NoTelKontraktor = @NoTelKontraktor, UkuranBanting = @UkuranBanting, BilBanting = @BilBanting, TarikhBanting1 = @TarikhBanting1, TarikhBanting2 = @TarikhBanting2, 
-                        NoResitBanting = @NoResitBanting, NoSiriStiker=@NoSiriStiker, TarikhBanting3=@TarikhBanting3, LastModDt = GETDATE() 
-                        WHERE Permohonan_ID = @Permohonan_ID"
-
-            Dim myCommandSelect As New SqlCommand(SQL, myConnection)
-            myCommandSelect.Parameters.AddWithValue("@Permohonan_ID", PermohonanID)
-            myCommandSelect.Parameters.AddWithValue("@NamaSyarikat", TB_NamaSyarikat.Text)
-            myCommandSelect.Parameters.AddWithValue("@SaizIklanList", HF_SaizIklanList.Value)
-            myCommandSelect.Parameters.AddWithValue("@CahayaIklanList", HF_CahayaIklanList.Value)
-            myCommandSelect.Parameters.AddWithValue("@UnitIklanList", HF_UnitIklanList.Value)
-            myCommandSelect.Parameters.AddWithValue("@LokasiList", HF_LokasiList.Value)
-            myCommandSelect.Parameters.AddWithValue("@BakaAnjingList", HF_BakaAnjingList.Value)
-            myCommandSelect.Parameters.AddWithValue("@AnjingJantanList", HF_AnjingJantanList.Value)
-            myCommandSelect.Parameters.AddWithValue("@AnjingBetinaList", HF_AnjingBetinaList.Value)
-            myCommandSelect.Parameters.AddWithValue("@AnjingJantanMandulList", HF_AnjingJantanMandulList.Value)
-            myCommandSelect.Parameters.AddWithValue("@AnjingBetinaMandulList", HF_AnjingBetinaMandulList.Value)
-            myCommandSelect.Parameters.AddWithValue("@NoPendaftaran", TB_NoPendaftaran.Text)
-            myCommandSelect.Parameters.AddWithValue("@NoAkaun", TB_NoAkaun.Text)
-            myCommandSelect.Parameters.AddWithValue("@AlamatPremis", TB_AlamatPremis.Text)
-            myCommandSelect.Parameters.AddWithValue("@JenisPerniagaan", TB_JenisPerniagaan.Text)
-            myCommandSelect.Parameters.AddWithValue("@PemilikBaru", TB_PemilikBaru.Text)
-            myCommandSelect.Parameters.AddWithValue("@AlamatBaru", TB_AlamatBaru.Text)
-            myCommandSelect.Parameters.AddWithValue("@JenisPerniagaanBaru", TB_JenisPerniagaanBaru.Text)
-            myCommandSelect.Parameters.AddWithValue("@NamaBaruSyarikat", TB_NamaBaruSyarikat.Text)
-            myCommandSelect.Parameters.AddWithValue("@BillboardLokasi", TB_BillboardLokasi.Text)
-            myCommandSelect.Parameters.AddWithValue("@LokasiPasar1", TB_LokasiPasar1.Text)
-            myCommandSelect.Parameters.AddWithValue("@LokasiPasar2", TB_LokasiPasar2.Text)
-            myCommandSelect.Parameters.AddWithValue("@LokasiPasar3", TB_LokasiPasar3.Text)
-            myCommandSelect.Parameters.AddWithValue("@JenisPasar", DDL_JenisPasar.SelectedValue)
-            myCommandSelect.Parameters.AddWithValue("@JenisPerniagaanPasar", TB_JenisPerniagaanPasar.Text)
-            myCommandSelect.Parameters.AddWithValue("@JumlahPetak", TB_JumlahPetak.Text)
-            myCommandSelect.Parameters.AddWithValue("@AnjingAlamat", TB_AnjingAlamat.Text)
-            myCommandSelect.Parameters.AddWithValue("@AnjingJenisPremis", DDL_AnjingJenisPremis.SelectedValue)
-            myCommandSelect.Parameters.AddWithValue("@AlamatPenjajaan", TB_AlamatPenjajaan.Text)
-            myCommandSelect.Parameters.AddWithValue("@JenisPerniagaanPenjaja", TB_JenisPerniagaanPenjaja.Text)
-            myCommandSelect.Parameters.AddWithValue("@PenganjurEkspo", TB_PenganjurEkspo.Text)
-            myCommandSelect.Parameters.AddWithValue("@NamaEkspo", TB_NamaEkspo.Text)
-            myCommandSelect.Parameters.AddWithValue("@LokasiEkspo", TB_LokasiEkspo.Text)
-            myCommandSelect.Parameters.AddWithValue("@NoTelEkspo", TB_NoTel.Text)
-            myCommandSelect.Parameters.AddWithValue("@TarikhEkspo1", TB_TarikhEkspo1.Text)
-            myCommandSelect.Parameters.AddWithValue("@TarikhEkspo2", TB_TarikhEkspo2.Text)
-            myCommandSelect.Parameters.AddWithValue("@MasaEkspo1", TB_MasaEkspo1.Text)
-            myCommandSelect.Parameters.AddWithValue("@MasaEkspo2", TB_MasaEkspo2.Text)
-            myCommandSelect.Parameters.AddWithValue("@KontraktorIklan", TB_KontraktorIklan.Text)
-            myCommandSelect.Parameters.AddWithValue("@NoTelKontraktor", TB_NoTelKontraktor.Text)
-            myCommandSelect.Parameters.AddWithValue("@UkuranBanting", TB_UkuranBanting.Text)
-            myCommandSelect.Parameters.AddWithValue("@BilBanting", TB_BilBanting.Text)
-            myCommandSelect.Parameters.AddWithValue("@TarikhBanting1", TB_TarikhBanting1.Text)
-            myCommandSelect.Parameters.AddWithValue("@TarikhBanting2", TB_TarikhBanting2.Text)
-            myCommandSelect.Parameters.AddWithValue("@NoResitBanting", TB_NoResitBanting.Text)
-            myCommandSelect.Parameters.AddWithValue("@NoSiriStiker", TB_NoSiriStiker.Text)
-            myCommandSelect.Parameters.AddWithValue("@TarikhBanting3", TB_TarikhBanting3.Text)
-
-            Try
-                Dim recordset As Integer = myCommandSelect.ExecuteNonQuery()
-                ShowAlert("success", "", "Maklumat pemeriksaan telah dikemaskini.")
-            Catch ex As Exception
-                isSuccess = False
-                MessageBox("ERROR", Me)
-            End Try
-
-            myConnection.Close()
-
-        End Using
-
-    End Sub
-
-    Private Sub insertPenjajaUlasan(pid As Integer, isSokong As Integer)
-
-        Dim listdesc As List(Of String) = New List(Of String)
-
-        Using myConnection As New SqlConnection(ConfigurationManager.ConnectionStrings("webcon_ConnectionStr").ConnectionString)
-
-            myConnection.Open()
-
-            Dim SQL As String = "SELECT SyaratSebabDesc FROM LESEN_PenjajaSyaratSebab WHERE IsSokong=@IsSokong"
-
-            Dim myCommandSelect As New SqlCommand(SQL, myConnection)
-            myCommandSelect.Parameters.AddWithValue("@IsSokong", isSokong)
-
-            Dim myReader As SqlDataReader = myCommandSelect.ExecuteReader
-
-            Try
-                While myReader.Read
-
-                    listdesc.Add(myReader.Item("SyaratSebabDesc"))
-
-                End While
-
-            Catch ex As Exception
-
-            End Try
-
-            myReader.Close()
-            myConnection.Close()
-
-            myConnection.Open()
-
-            Dim Sql2 = "DELETE FROM LESEN_PenjajaUlasan WHERE PermohonanID= @PermohonanID"
-
-            Dim myCommand1 = New SqlCommand(Sql2, myConnection)
-            myCommand1.Parameters.AddWithValue("@PermohonanID", pid)
-
-            Dim result1 = myCommand1.ExecuteNonQuery()
-
-            myCommand1.Dispose()
-            myConnection.Close()
-
-            For counter As Integer = 0 To listdesc.Count - 1
-
-                myConnection.Open()
-
-                Dim SQL1 As String = "INSERT INTO LESEN_PenjajaUlasan(PermohonanID, UlasanDesc, LastModID, LastModDt) 
-                    VALUES (@PermohonanID, @UlasanDesc, @LastModID, GETDATE())"
-
-                Dim myCommandSelect1 As New SqlCommand(SQL1, myConnection)
-                myCommandSelect1.Parameters.AddWithValue("@PermohonanID", pid)
-                myCommandSelect1.Parameters.AddWithValue("@LastModID", Session.Item("SessionUsersId"))
-                myCommandSelect1.Parameters.AddWithValue("@UlasanDesc", listdesc(counter))
-
-                Try
-                    Dim result = myCommandSelect1.ExecuteNonQuery()
-                    ShowAlert("success", "", "Laporan pemeriksaan berjaya dijana.")
-
-                Catch ex As Exception
-                    ShowAlert("error", "", "Gagal menjana laporan pemeriksaan.")
-
-                End Try
-
-                myConnection.Close()
-
-            Next
-
-        End Using
-
-    End Sub
-
-    Protected Sub BT_GenerateUlasan_Command(sender As Object, e As CommandEventArgs)
-
-        If DDL_UlasanIK.SelectedValue = "" Then
-            Exit Sub
-        End If
-
-        Dim jidList() As String = CStr(GridView1.SelectedDataKey.Values("JenisLesenIdList")).Split(","c)
-        Dim jid As String = CStr(GridView1.SelectedDataKey.Values("JenisLesenIdList"))
-        Dim pid As Integer = GridView1.SelectedDataKey.Values(0)
-        Dim namatemplatList() As String = CStr(DDL_UlasanIK.SelectedValue).Split(","c)
-        Dim isSokong As String = namatemplatList(0)
-        Dim namatemplat As String = namatemplatList(1)
-
-        Using myConnection As New SqlConnection(ConfigurationManager.ConnectionStrings("webcon_ConnectionStr").ConnectionString)
-
-            myConnection.Open()
-
-            Dim SQL As String = "DELETE FROM LESEN_UlasanFail WHERE Permohonan_ID=@Permohonan_ID; 
-                    INSERT INTO LESEN_UlasanFail (Permohonan_ID, UlasanFail_Remarks, CreatorID, CreatedDt, LastModDt)
-                    SELECT @Permohonan_ID AS Permohonan_ID, Ulasan AS UlasanFail_Remarks, 'AUTO' AS CreatorID, 
-                    GETDATE() AS CreatedDt, GETDATE() AS ModDt 
-                    FROM LESEN_UlasanIKTemplate
-                    WHERE JenisLesen_ID=@JenisLesen_ID AND IsSokong=@IsSokong AND NamaTemplat=@NamaTemplat;"
-
-            Dim myCommandSelect As New SqlCommand(SQL, myConnection)
-            myCommandSelect.Parameters.AddWithValue("@JenisLesen_ID", jidList(0))
-            myCommandSelect.Parameters.AddWithValue("@IsSokong", isSokong)
-            myCommandSelect.Parameters.AddWithValue("@NamaTemplat", namatemplat)
-            myCommandSelect.Parameters.AddWithValue("@Permohonan_ID", pid)
-
-            Try
-                myCommandSelect.ExecuteNonQuery()
-                ShowAlert("success", "", "Ulasan berjaya dijana.")
-                gvTabUlasan.DataBind()
-            Catch ex As Exception
-                MessageBox(ex.Message, Me)
-            End Try
-
-            myConnection.Close()
-
-        End Using
-
-    End Sub
-
-    Private Sub gvTabBayaran_Load(sender As Object, e As EventArgs) Handles gvTabBayaran.Load
-
-        'Try
-        '    Dim ApprStatusID As Integer = CInt(GridView1.SelectedDataKey.Values(2))
-
-        '    MsgBox(ApprStatusID)
-        '    '2  mohon ulasan
-        '    '3  Penilaian Jabatan/Agensi
-        '    '4	Peraku Jabatan/Agensi
-        '    '5	Penilaian Jabatan Lesen
-        '    '8	Peraku Jabatan Lesen
-
-        '    If ApprStatusID = 5 Or ApprStatusID = 8 Then
-        '        gvTabBayaran.Columns(5).Visible = "false"
-        '        gvTabBayaran.Columns(6).Visible = "false"
-        '    End If
-        'Catch ex As Exception
-
-        'End Try
-
-    End Sub
 
     Protected Sub lbLihatSurat_Click(sender As Object, e As EventArgs)
 
+        Dim jid As Integer = CInt(GridView1.SelectedDataKey.Values(4))
         Dim pid As Integer = CInt(GridView1.SelectedDataKey.Values(0))
 
         If GetIsSuratFail(pid) Then
@@ -2736,13 +2064,9 @@ Partial Class kelulusan1
     Protected Sub CB_SuratFail_CheckedChanged(sender As Object, e As EventArgs)
 
         If CB_SuratFail.Checked Then
-            BT_Generate.Visible = False
-            'BT_Generate1.Visible = False
             pnlSuratFail.Visible = True
             pnlSuratAuto.Visible = False
         Else
-            BT_Generate.Visible = True
-            'BT_Generate1.Visible = True
             pnlSuratFail.Visible = False
             pnlSuratAuto.Visible = True
         End If
@@ -2752,10 +2076,22 @@ Partial Class kelulusan1
     Private Sub rptWeek_ItemDataBound(sender As Object, e As RepeaterItemEventArgs) Handles rptWeek.ItemDataBound
         Try
 
+            ' If e.Item.ItemType = ListItemType.AlternatingItem OrElse e.Item.ItemType = ListItemType.Item Then
+            ' Dim hdn24jam As HiddenField = TryCast(e.Item.FindControl("hdn24jam"), HiddenField)
+
+            ' If hdn24jam.Value = "True" Or Session.Item("sessionIsPeraku") = "True" Then
+            ' btnApprove.Text = "Lulus"
+            ' btnReject.Text = "Tolak"
+            ' End If
+
+            ' End If
+
+            Dim txtNotaKelulusanPengesah As TextBox = DirectCast(fvNotaKelulusan.FindControl("txtNotaKelulusanPengesah"), TextBox)
             If e.Item.ItemType = ListItemType.AlternatingItem OrElse e.Item.ItemType = ListItemType.Item Then
                 Dim hdn24jam As HiddenField = TryCast(e.Item.FindControl("hdn24jam"), HiddenField)
+                'Dim hdnIsPelarasan As HiddenField = TryCast(e.Item.FindControl("hdnIsPelarasan"), HiddenField)
 
-                If hdn24jam.Value = "True" Or Session.Item("sessionIsPeraku") = "True" Then
+                If Session.Item("sessionIsPeraku") = "True" Then
                     btnApprove.Text = "Lulus"
                     btnReject.Text = "Tolak"
                 End If
@@ -2767,11 +2103,15 @@ Partial Class kelulusan1
         End Try
     End Sub
 
+    Private Sub fvNotaKelulusan_DataBound(sender As Object, e As EventArgs) Handles fvNotaKelulusan.DataBound
+        showFormControl(GridView1)
+    End Sub
+
     Protected Sub rblNotaKelulusanKJ_SelectedIndexChanged(sender As Object, e As EventArgs)
         Dim rblNotaKelulusanKJ As RadioButtonList = DirectCast(fvNotaKelulusan.FindControl("rblNotaKelulusanKJ"), RadioButtonList)
         Dim divNotaKelulusanPeraku As HtmlGenericControl = DirectCast(fvNotaKelulusan.FindControl("divNotaKelulusanPeraku"), HtmlGenericControl)
 
-        If rblNotaKelulusanKJ.SelectedValue = 1 Or rblNotaKelulusanKJ.SelectedValue = 2 Then
+        If rblNotaKelulusanKJ.SelectedValue = 1 Or rblNotaKelulusanKJ.SelectedValue = 2 Or rblNotaKelulusanKJ.SelectedValue = 3 Then
             btnApprove.Visible = True
             btnReject.Visible = False
         ElseIf rblNotaKelulusanKJ.SelectedValue = 4 Then
@@ -2792,352 +2132,99 @@ Partial Class kelulusan1
 
     Protected Sub BT_ViewMU_Command(sender As Object, e As CommandEventArgs)
         Dim pid As Integer = GridView1.SelectedDataKey.Values(0)
-        Dim JenisLesenID As Integer = GridView1.SelectedDataKey.Values(4)
         Dim AgensiID As String = "3"
+        Dim JenisLesenID As Integer = GridView1.SelectedDataKey.Values(4)
 
         ViewSuratMohon(pid, AgensiID, JenisLesenID)
 
     End Sub
 
-    Private Sub updateIklanList(ByVal saizVal As String, ByVal cahayaVal As String, ByVal unitVal As String)
+    Protected Sub btnKembaliIK_Click(sender As Object, e As EventArgs)
+        Dim Permohonan_ID As Integer = CInt(GridView1.SelectedDataKey.Values(0))
+        LoadKembaliIKList(Permohonan_ID)
+        OpenModalKembaliIK()
+    End Sub
 
-        If HF_SaizIklanList.Value.ToString.Length = 0 Then
-            HF_SaizIklanList.Value = saizVal
-        Else
-            HF_SaizIklanList.Value += "," + saizVal
-        End If
+    Protected Sub btnTeruskanKembaliIK_Click(sender As Object, e As EventArgs)
 
-        If HF_CahayaIklanList.Value.ToString.Length = 0 Then
-            HF_CahayaIklanList.Value = cahayaVal
-        Else
-            HF_CahayaIklanList.Value += "," + cahayaVal
-        End If
+        Dim Permohonan_ID As Integer = CInt(GridView1.SelectedDataKey.Values(0))
+        Dim Catatan As String = txtCatatanKembaliIK.Text.Trim()
 
-        If HF_UnitIklanList.Value.ToString.Length = 0 Then
-            HF_UnitIklanList.Value = unitVal
-        Else
-            HF_UnitIklanList.Value += "," + unitVal
-        End If
+        Using myConnection As New SqlConnection(ConfigurationManager.ConnectionStrings("webcon_ConnectionStr").ConnectionString)
+
+            Dim SQL As String = "
+            INSERT INTO LESEN_KembaliIK (Permohonan_ID, Catatan, CreatedBy, CreatedDt)
+            VALUES (@Permohonan_ID, @Catatan, @CreatedBy, GETDATE());
+
+            UPDATE a SET a.IsComplete = 0
+            FROM LESEN_ApprovalListBatal a
+            INNER JOIN LESEN_Permohonan b ON a.Permohonan_ID = b.Permohonan_ID
+            INNER JOIN ApprovalStatusBatal c ON a.ApprStatusID = c.ApprStatusID
+            WHERE a.Permohonan_ID = @Permohonan_ID
+            AND a.ApprStatusID = 3
+        "
+
+            Dim myCommand As New SqlCommand(SQL, myConnection)
+            myCommand.Parameters.AddWithValue("@Permohonan_ID", Permohonan_ID)
+            myCommand.Parameters.AddWithValue("@Catatan", Catatan)
+            myCommand.Parameters.AddWithValue("@CreatedBy", Session.Item("SessionUserName"))
+
+            myConnection.Open()
+            myCommand.ExecuteNonQuery()
+            myConnection.Close()
+
+        End Using
+
+        txtCatatanKembaliIK.Text = ""
+        ShowAlert("success", "", "Rekod berjaya dikembalikan ke IK")
+        GridView1.DataBind()
+        backToList()
 
     End Sub
 
-    Private Sub updateAnjingList(ByVal bakaVal As String, ByVal jantanVal As String, ByVal betinaVal As String, ByVal jMandulVal As String, ByVal bMandulVal As String)
+    Private Sub LoadKembaliIKList(Permohonan_ID As Integer)
 
-        If HF_BakaAnjingList.Value.ToString.Length = 0 Then
-            HF_BakaAnjingList.Value = bakaVal
-        Else
-            HF_BakaAnjingList.Value += "," + bakaVal
-        End If
+        Using myConnection As New SqlConnection(ConfigurationManager.ConnectionStrings("webcon_ConnectionStr").ConnectionString)
 
-        If HF_AnjingJantanList.Value.ToString.Length = 0 Then
-            HF_AnjingJantanList.Value = jantanVal
-        Else
-            HF_AnjingJantanList.Value += "," + jantanVal
-        End If
+            Dim SQL As String = "SELECT Catatan, CreatedBy, CreatedDt 
+                              FROM LESEN_KembaliIK 
+                              WHERE Permohonan_ID = @Permohonan_ID 
+                              ORDER BY CreatedDt DESC"
 
-        If HF_AnjingBetinaList.Value.ToString.Length = 0 Then
-            HF_AnjingBetinaList.Value = betinaVal
-        Else
-            HF_AnjingBetinaList.Value += "," + betinaVal
-        End If
+            Dim myCommand As New SqlCommand(SQL, myConnection)
+            myCommand.Parameters.AddWithValue("@Permohonan_ID", Permohonan_ID)
 
-        If HF_AnjingJantanMandulList.Value.ToString.Length = 0 Then
-            HF_AnjingJantanMandulList.Value = jMandulVal
-        Else
-            HF_AnjingJantanMandulList.Value += "," + jMandulVal
-        End If
+            Dim da As New SqlDataAdapter(myCommand)
+            Dim dt As New DataTable()
+            da.Fill(dt)
 
-        If HF_AnjingBetinaMandulList.Value.ToString.Length = 0 Then
-            HF_AnjingBetinaMandulList.Value = bMandulVal
-        Else
-            HF_AnjingBetinaMandulList.Value += "," + bMandulVal
-        End If
+            rptKembaliIK.DataSource = dt
+            rptKembaliIK.DataBind()
+
+            lblNoRecordKembaliIK.Visible = (dt.Rows.Count = 0)
+
+        End Using
 
     End Sub
 
-    Private Sub updateLokasiList(ByVal lokasiVal As String)
-
-        If HF_LokasiList.Value.ToString.Length = 0 Then
-            HF_LokasiList.Value = lokasiVal
-        Else
-            HF_LokasiList.Value += "||" + lokasiVal
-        End If
-
+    Private Sub OpenModalKembaliIK()
+        ScriptManager.RegisterStartupScript(Me, Me.GetType(), "openModal",
+      "document.getElementById('modalKembaliIK').classList.add('show');", True)
     End Sub
 
+    Protected Sub GridView3_DataBound(sender As Object, e As EventArgs)
+        Try
+            Dim ApprStatusID As Integer = CInt(GridView1.SelectedDataKey.Values(2))
 
-    Protected Sub btnAddIklan_Click(sender As Object, e As EventArgs)
-
-        If Not String.IsNullOrWhiteSpace(TB_SaizIklan1.Text) And DDL_Iklan1.SelectedValue <> "" And Not String.IsNullOrWhiteSpace(TB_UnitIklan1.Text) Then
-            Dim dt As DataTable
-
-            If ViewState("IklanTable_ins") IsNot Nothing Then
-                dt = DirectCast(ViewState("IklanTable_ins"), DataTable)
+            If ApprStatusID = 3 Then
+                pnlInfoNoticeKembaliIK.Visible = (GridView3.Rows.Count > 0)
             Else
-                dt = New DataTable()
-                dt.Columns.Add("SaizIklan", GetType(String))
-                dt.Columns.Add("Bercahaya", GetType(String))
-                dt.Columns.Add("Unit", GetType(String))
+                pnlInfoNoticeKembaliIK.Visible = False
             End If
+        Catch ex As Exception
+            pnlInfoNoticeKembaliIK.Visible = False
+        End Try
 
-            Dim newRow As DataRow = dt.NewRow()
-            newRow("SaizIklan") = TB_SaizIklan1.Text
-            newRow("Bercahaya") = DDL_Iklan1.SelectedValue.ToString
-            newRow("Unit") = TB_UnitIklan1.Text 'If(IsNumeric(txtRank.Text), Convert.ToInt32(txtRank.Text), 0)
-            dt.Rows.Add(newRow)
-
-            ViewState("IklanTable_ins") = dt
-            gvIklanList.DataSource = dt
-            gvIklanList.DataBind()
-
-            updateIklanList(newRow("SaizIklan"), newRow("Bercahaya"), newRow("Unit"))
-
-            'Clear textboxes for next entry
-            TB_SaizIklan1.Text = ""
-            TB_UnitIklan1.Text = ""
-            DDL_Iklan1.SelectedIndex = 0
-
-        End If
-    End Sub
-
-    Protected Sub gvIklanList_RowDeleting(sender As Object, e As GridViewDeleteEventArgs)
-
-        If ViewState("IklanTable_ins") IsNot Nothing Then
-            Dim dt As DataTable = DirectCast(ViewState("IklanTable_ins"), DataTable)
-
-            dt.Rows.RemoveAt(e.RowIndex)
-
-            ViewState("IklanTable_ins") = dt
-
-            gvIklanList.DataSource = dt
-            gvIklanList.DataBind()
-
-            HF_SaizIklanList.Value = ""
-            HF_CahayaIklanList.Value = ""
-            HF_UnitIklanList.Value = ""
-
-            For Each row As DataRow In dt.Rows
-                updateIklanList(row("SaizIklan"), row("Bercahaya"), row("Unit"))
-            Next
-
-        End If
-
-    End Sub
-
-    Protected Sub btnAddAnjing_Click(sender As Object, e As EventArgs)
-
-        If Not String.IsNullOrWhiteSpace(TB_Jantan1.Text) And Not String.IsNullOrWhiteSpace(TB_Betina1.Text) And
-            Not String.IsNullOrWhiteSpace(TB_JantanMandul1.Text) And Not String.IsNullOrWhiteSpace(TB_BetinaMandul1.Text) And
-            Not String.IsNullOrWhiteSpace(DDL_BakaAnjing1.SelectedValue) Then
-            Dim dt As DataTable
-
-            If ViewState("AnjingTable_ins") IsNot Nothing Then
-                dt = DirectCast(ViewState("AnjingTable_ins"), DataTable)
-            Else
-                dt = New DataTable()
-                dt.Columns.Add("Baka", GetType(String))
-                dt.Columns.Add("Jantan", GetType(String))
-                dt.Columns.Add("Betina", GetType(String))
-                dt.Columns.Add("JantanMandul", GetType(String))
-                dt.Columns.Add("BetinaMandul", GetType(String))
-            End If
-
-            Dim newRow As DataRow = dt.NewRow()
-            newRow("Baka") = DDL_BakaAnjing1.SelectedItem.Text
-            newRow("Jantan") = TB_Jantan1.Text
-            newRow("Betina") = TB_Betina1.Text
-            newRow("JantanMandul") = TB_JantanMandul1.Text
-            newRow("BetinaMandul") = TB_BetinaMandul1.Text
-            dt.Rows.Add(newRow)
-
-            ViewState("AnjingTable_ins") = dt
-            gvAnjingList.DataSource = dt
-            gvAnjingList.DataBind()
-
-            updateAnjingList(newRow("Baka"), newRow("Jantan"), newRow("Betina"), newRow("JantanMandul"), newRow("BetinaMandul"))
-
-            'Clear textboxes for next entry
-            TB_Jantan1.Text = ""
-            TB_Betina1.Text = ""
-            TB_JantanMandul1.Text = ""
-            TB_BetinaMandul1.Text = ""
-            DDL_BakaAnjing1.SelectedIndex = 0
-
-        End If
-    End Sub
-
-    Protected Sub gvAnjingList_RowDeleting(sender As Object, e As GridViewDeleteEventArgs)
-
-        If ViewState("AnjingTable_ins") IsNot Nothing Then
-            Dim dt As DataTable = DirectCast(ViewState("AnjingTable_ins"), DataTable)
-
-            dt.Rows.RemoveAt(e.RowIndex)
-
-            ViewState("AnjingTable_ins") = dt
-
-            gvAnjingList.DataSource = dt
-            gvAnjingList.DataBind()
-
-            HF_BakaAnjingList.Value = ""
-            HF_AnjingJantanList.Value = ""
-            HF_AnjingBetinaList.Value = ""
-            HF_AnjingJantanMandulList.Value = ""
-            HF_AnjingBetinaMandulList.Value = ""
-
-            For Each row As DataRow In dt.Rows
-                updateAnjingList(row("Baka"), row("Jantan"), row("Betina"), row("JantanMandul"), row("BetinaMandul"))
-            Next
-
-        End If
-
-    End Sub
-
-    Protected Sub btnAddLokasi_Click(sender As Object, e As EventArgs)
-
-        If Not String.IsNullOrWhiteSpace(TB_LokasiBanting.Text) Then
-            Dim dt As DataTable
-
-            If ViewState("LokasiTable_ins") IsNot Nothing Then
-                dt = DirectCast(ViewState("LokasiTable_ins"), DataTable)
-            Else
-                dt = New DataTable()
-                dt.Columns.Add("No", GetType(String))
-                dt.Columns.Add("Lokasi", GetType(String))
-            End If
-
-            Dim newRow As DataRow = dt.NewRow()
-            newRow("No") = (dt.Rows.Count + 1).ToString
-            newRow("Lokasi") = TB_LokasiBanting.Text
-            dt.Rows.Add(newRow)
-
-            ViewState("LokasiTable_ins") = dt
-            gvLokasiList.DataSource = dt
-            gvLokasiList.DataBind()
-
-            updateLokasiList(newRow("Lokasi"))
-
-            'Clear textboxes for next entry
-            TB_LokasiBanting.Text = ""
-
-        End If
-    End Sub
-
-    Protected Sub gvLokasiList_RowDeleting(sender As Object, e As GridViewDeleteEventArgs)
-
-        If ViewState("LokasiTable_ins") IsNot Nothing Then
-            Dim dt As DataTable = DirectCast(ViewState("LokasiTable_ins"), DataTable)
-
-            dt.Rows.RemoveAt(e.RowIndex)
-
-            ViewState("LokasiTable_ins") = dt
-
-            gvLokasiList.DataSource = dt
-            gvLokasiList.DataBind()
-
-            HF_LokasiList.Value = ""
-
-            For Each row As DataRow In dt.Rows
-                updateLokasiList(row("Lokasi"))
-            Next
-
-        End If
-
-    End Sub
-
-    Private Sub PanelAccessPembetulan(lesenid As Integer, clrflag As Boolean)
-
-        If clrflag = True Then
-
-            pnlbillboard.Visible = False
-            pnlesen1.Visible = False
-            pnlesen1a.Visible = False
-            pnlesen1b.Visible = False
-            pnlesen1c.Visible = False
-            pnlesen1d.Visible = False
-            pnlesen1e.Visible = False
-            pnlesen2.Visible = False
-            pnlesen3.Visible = False
-            pnlesen4.Visible = False
-            pnlesen5.Visible = False
-            pnlesen6.Visible = False
-
-            Exit Sub
-
-        End If
-
-        Select Case lesenid
-            Case 3                      'Lesen Anjing /
-                pnlesen3.Visible = True
-            Case 2, 25                      'Pasar Lambak, Tambah Petak /
-                pnlesen2.Visible = True
-            Case 4                      'Pasar Penjaja /
-                pnlesen4.Visible = True
-            Case 1, 30                      'Lesen Perniagaan, Permit sementara perniagaan /
-                pnlesen1.Visible = True
-                pnlesen1a.Visible = True
-            Case 6, 7, 28                     'Tukar Alamat Perniagaan, Tambah Premis, Pengurangan Premis /
-                pnlesen1.Visible = True
-                pnlesen1a.Visible = True
-                pnlesen1c.Visible = True
-
-                If lesenid = 28 Then
-                    Lbl_AlamatBaru.Text = "Alamat Pengurangan Premis"
-                ElseIf lesenid = 7 Then
-                    Lbl_AlamatBaru.Text = "Alamat Premis Tambahan"
-                Else
-                    Lbl_AlamatBaru.Text = "Alamat Baru"
-                End If
-            Case 13, 17, 18                      'Permit Kaki Lima, Lot Tepi Kedai, Lebuh Awam /
-                pnlesen1.Visible = True
-            Case 14                         'Pembatalan Lesen & Wang Amanah
-                pnlesen1.Visible = True
-                'pnlbatal.Visible = True
-            Case 11, 23, 26                     'Tukar Nama Syarikat /
-                pnlesen1.Visible = True
-                pnlesen1a.Visible = True
-                pnlesen1c.Visible = True
-                pnlesen1e.Visible = True
-            Case 9, 24                          'Tukar Pemilik Perniagaan /
-                pnlesen1.Visible = True
-                pnlesen1a.Visible = True
-                pnlesen1c.Visible = True
-                pnlesen1b.Visible = True
-            Case 10, 12, 16                     'Tambah, Tukar, Pengurangan Visual Iklan /
-                pnlesen1.Visible = True
-                pnlesen1a.Visible = True
-            Case 5                          ' billboard /
-                pnlesen1.Visible = True
-                pnlesen1a.Visible = True
-                pnlbillboard.Visible = True
-            Case 8, 29                     'Tambah, Pengurangan Jenis Perniagaan /
-                pnlesen1.Visible = True
-                pnlesen1c.Visible = True
-                pnlesen1d.Visible = True
-
-                Lbl_AlamatBaru.Text = "Alamat Baru"
-
-                If lesenid = 8 Then
-                    Lbl_JenisPerniagaanBaru.Text = "Jenis Perniagaan Tambahan"
-                Else
-                    Lbl_JenisPerniagaanBaru.Text = "Pengurangan Jenis Perniagaan"
-                End If
-            Case 15                     'Expo /
-                pnlesen5.Visible = True
-            Case 19                             'Nama + Alamat + Visual Iklan /
-                pnlesen1.Visible = True
-                pnlesen1a.Visible = True
-                pnlesen1c.Visible = True
-                pnlesen1e.Visible = True
-            Case 20                             'Pemilik + Alamat + Visual Iklan /
-                pnlesen1.Visible = True
-                pnlesen1a.Visible = True
-                pnlesen1b.Visible = True
-                pnlesen1c.Visible = True
-            Case 27                             'Banting
-                pnlesen1.Visible = True
-                pnlesen6.Visible = True
-
-        End Select
 
     End Sub
 
