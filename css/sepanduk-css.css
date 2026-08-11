@@ -44,8 +44,8 @@
 }
 
 .step.active .step-number {
-    background: #2563eb;
-    border-color: #2563eb;
+    background: #3730a3;
+    border-color: #3730a3;
     color: #fff;
     box-shadow: 0 5px 15px rgba(37, 99, 235, .25);
 }
@@ -58,7 +58,7 @@
 }
 
 .step.active .step-label {
-    color: #2563eb;
+    color: #3730a3;
     font-weight: 700;
 }
 
@@ -93,7 +93,7 @@
     gap: 15px;
     padding: 22px 28px;
     color: #fff;
-    background: linear-gradient(135deg, #1557d6, #2563eb);
+    background: linear-gradient(135deg,#123f70 0%, #194f8a 30%, #4a86c5 100%) !important;
 }
 
 .search-header-icon {
@@ -139,7 +139,7 @@
 }
 
     .section-title i {
-        color: #2563eb;
+        color: #3730a3;
         margin-right: 6px;
     }
 
@@ -190,7 +190,7 @@
 
     .modern-input:focus {
         outline: none;
-        border-color: #2563eb;
+        border-color: #3730a3;
         box-shadow: 0 0 0 3px rgba(37,99,235,.10);
     }
 
@@ -212,7 +212,7 @@
 
 .btn-blue {
     color: #fff;
-    background: #2563eb;
+    background: #3730a3;
 }
 
     .btn-blue:hover {
@@ -224,7 +224,7 @@
 .btn-search {
     width: 90px;
     color: #fff;
-    background: #2563eb;
+    background: #3730a3;
 }
 
     .btn-search:hover {
@@ -236,7 +236,7 @@
     min-height: 36px;
     padding: 0 14px;
     color: #fff !important;
-    background: #2563eb;
+    background: #3730a3;
     display: inline-flex;
     align-items: center;
     gap: 6px;
@@ -311,7 +311,7 @@
 }
 
     .result-title i {
-        color: #2563eb;
+        color: #3730a3;
         margin-right: 6px;
     }
 
@@ -387,7 +387,7 @@
     justify-content: center;
     border-radius: 50%;
     background: #eff6ff;
-    color: #2563eb;
+    color: #3730a3;
     font-size: 25px;
 }
 
@@ -787,7 +787,7 @@
     display: flex;
     align-items: center;
     gap: 16px;
-    background: linear-gradient(135deg, #1d4ed8, #2563eb 55%, #3b82f6);
+    background: linear-gradient(135deg, #1d4ed8, #3730a3 55%, #3b82f6);
     color: #fff;
 }
 
@@ -856,7 +856,7 @@
     height: 40px;
     border-radius: 10px;
     background: #eff6ff;
-    color: #2563eb;
+    color: #3730a3;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -894,7 +894,7 @@
     height: 34px;
     border-radius: 9px;
     background: #eff6ff;
-    color: #2563eb;
+    color: #3730a3;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -930,7 +930,7 @@
     .ru-textarea:focus,
     .ru-field:focus {
         outline: none;
-        border-color: #2563eb;
+        border-color: #3730a3;
         box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
     }
 
@@ -948,7 +948,7 @@
 
 /* ---------- Buttons ---------- */
 .ru-btn-primary {
-    background: #2563eb;
+    background: #3730a3;
     color: #fff;
     border: none;
     border-radius: 10px;
@@ -1034,7 +1034,7 @@
     height: 44px;
     border-radius: 50%;
     background: #eff6ff;
-    color: #2563eb;
+    color: #3730a3;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1080,7 +1080,7 @@
     height: 42px;
     border-radius: 50%;
     background: #eff6ff;
-    color: #2563eb;
+    color: #3730a3;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1158,7 +1158,7 @@
     align-items: center;
     gap: 12px;
     padding: 16px 22px;
-    background: linear-gradient(135deg, #1d4ed8, #2563eb 55%, #3b82f6);
+    background: linear-gradient(135deg, #1d4ed8, #3730a3 55%, #3b82f6);
     color: #fff;
 }
 
@@ -1211,7 +1211,7 @@
     height: 34px;
     border-radius: 9px;
     background: #eff6ff;
-    color: #2563eb;
+    color: #3730a3;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1276,7 +1276,7 @@
     height: 28px;
     border-radius: 8px;
     background: #eff6ff;
-    color: #2563eb;
+    color: #3730a3;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1304,7 +1304,7 @@
     border: 1px solid #e5e7eb;
     border-radius: 10px;
     text-decoration: none;
-    color: #2563eb;
+    color: #3730a3;
     font-size: 13.5px;
     font-weight: 500;
 }
@@ -1372,7 +1372,7 @@
 }
 
 .wf-head-ik {
-    background: linear-gradient(135deg, #1d4ed8, #2563eb 55%, #3b82f6);
+    background: linear-gradient(135deg, #1d4ed8, #3730a3 55%, #3b82f6);
 }
 
 .wf-head-kblesen {
@@ -1485,7 +1485,7 @@ textarea.wf-field {
 
 .wf-field:focus {
     outline: none;
-    border-color: #2563eb;
+    border-color: #3730a3;
     box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
 }
 
@@ -1523,7 +1523,7 @@ textarea.wf-field {
 }
 
 .wf-btn-primary {
-    background: #2563eb;
+    background: #3730a3;
     color: #fff !important;
     border: none;
     border-radius: 10px;
