@@ -674,4 +674,12 @@ Partial Class sepandukSemakanIK
         Return False
 
     End Function
+
+    Protected Sub GridViewCarian_RowCreated(sender As Object, e As GridViewRowEventArgs)
+
+        If e.Row.RowType = DataControlRowType.Header Then
+            e.Row.CssClass = "mobile-grid-header"
+        End If
+
+    End Sub
 End Class

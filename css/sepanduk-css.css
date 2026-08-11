@@ -1,0 +1,1568 @@
+/* =========================================================
+   SEARCH PAGE
+========================================================= */
+
+.search-page {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 15px;
+}
+
+
+/* =========================================================
+   STEP INDICATOR
+========================================================= */
+
+.search-steps {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    max-width: 600px;
+    margin: 0 auto 25px;
+}
+
+.step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 70px;
+}
+
+.step-number {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f1f4f7;
+    border: 1px solid #dce2e8;
+    color: #6c757d;
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.step.active .step-number {
+    background: #2563eb;
+    border-color: #2563eb;
+    color: #fff;
+    box-shadow: 0 5px 15px rgba(37, 99, 235, .25);
+}
+
+.step-label {
+    margin-top: 7px;
+    font-size: 13px;
+    color: #6b7280;
+    font-weight: 500;
+}
+
+.step.active .step-label {
+    color: #2563eb;
+    font-weight: 700;
+}
+
+.step-line {
+    width: 90px;
+    height: 2px;
+    background: #e5e7eb;
+    margin: 20px 10px 0;
+}
+
+
+/* =========================================================
+   MAIN CARD
+========================================================= */
+
+.search-card {
+    background: #fff;
+    border: 1px solid #e4e8ed;
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 8px 30px rgba(31, 41, 55, .07);
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.search-card-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 22px 28px;
+    color: #fff;
+    background: linear-gradient(135deg, #1557d6, #2563eb);
+}
+
+.search-header-icon {
+    width: 52px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 14px;
+    background: rgba(255,255,255,.16);
+    font-size: 25px;
+}
+
+.search-card-header h4 {
+    margin: 0 0 4px;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.search-card-header p {
+    margin: 0;
+    opacity: .9;
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   BODY
+========================================================= */
+
+.search-card-body {
+    padding: 30px;
+}
+
+.search-section {
+    margin-bottom: 10px;
+}
+
+.section-title {
+    color: #27364b;
+    font-size: 15px;
+    font-weight: 700;
+}
+
+    .section-title i {
+        color: #2563eb;
+        margin-right: 6px;
+    }
+
+.section-description {
+    margin-top: 5px;
+    margin-bottom: 15px;
+    color: #7b8491;
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   SEARCH INPUT
+========================================================= */
+
+.qr-search-row,
+.manual-search-row {
+    display: flex;
+    align-items: stretch;
+    gap: 10px;
+}
+
+.search-input-wrapper {
+    position: relative;
+    flex: 1;
+}
+
+.input-icon {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #8a94a3;
+    z-index: 2;
+}
+
+.modern-input {
+    width: 100%;
+    height: 46px;
+    padding: 0 15px 0 42px;
+    border: 1px solid #d8dee6;
+    border-radius: 10px !important;
+    background: #fff;
+    color: #27364b;
+    font-size: 14px;
+    transition: all .2s ease;
+}
+
+    .modern-input:focus {
+        outline: none;
+        border-color: #2563eb;
+        box-shadow: 0 0 0 3px rgba(37,99,235,.10);
+    }
+
+
+/* =========================================================
+   BUTTONS
+========================================================= */
+
+.btn-modern {
+    min-height: 46px;
+    border: 0;
+    border-radius: 10px !important;
+    padding: 0 18px;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all .2s ease;
+    cursor: pointer;
+}
+
+.btn-blue {
+    color: #fff;
+    background: #2563eb;
+}
+
+    .btn-blue:hover {
+        background: #1d4ed8;
+        color: #fff;
+        transform: translateY(-1px);
+    }
+
+.btn-search {
+    width: 90px;
+    color: #fff;
+    background: #2563eb;
+}
+
+    .btn-search:hover {
+        background: #1d4ed8;
+        color: #fff;
+    }
+
+.btn-select {
+    min-height: 36px;
+    padding: 0 14px;
+    color: #fff !important;
+    background: #2563eb;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+    .btn-select:hover {
+        background: #1d4ed8;
+        color: #fff !important;
+    }
+
+.btn-warning-modern {
+    color: #7a4a00 !important;
+    background: #fbbf24;
+}
+
+    .btn-warning-modern:hover {
+        background: #f59e0b;
+    }
+
+.btn-back {
+    color: #4b5563 !important;
+    background: #f3f4f6;
+}
+
+    .btn-back:hover {
+        background: #e5e7eb;
+    }
+
+
+/* =========================================================
+   DIVIDER
+========================================================= */
+
+.search-divider {
+    display: flex;
+    align-items: center;
+    margin: 28px 0;
+}
+
+    .search-divider::before,
+    .search-divider::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: #e5e7eb;
+    }
+
+    .search-divider span {
+        padding: 0 15px;
+        color: #9ca3af;
+        font-size: 11px;
+        font-weight: 700;
+    }
+
+
+/* =========================================================
+   RESULT
+========================================================= */
+
+.result-section {
+    margin-top: 30px;
+}
+
+.result-header {
+    margin-bottom: 12px;
+}
+
+.result-title {
+    color: #27364b;
+    font-size: 15px;
+    font-weight: 700;
+}
+
+    .result-title i {
+        color: #2563eb;
+        margin-right: 6px;
+    }
+
+.result-subtitle {
+    margin-top: 3px;
+    color: #8a94a3;
+    font-size: 12px;
+}
+
+.result-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+}
+
+
+/* =========================================================
+   GRIDVIEW
+========================================================= */
+
+.modern-grid {
+    margin: 0 !important;
+    border: 0 !important;
+    border-collapse: collapse;
+}
+
+    .modern-grid th {
+        padding: 13px 15px !important;
+        background: #f8fafc;
+        color: #64748b;
+        border: 0 !important;
+        border-bottom: 1px solid #e5e7eb !important;
+        font-size: 12px;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+    .modern-grid td {
+        padding: 14px 15px !important;
+        border: 0 !important;
+        border-bottom: 1px solid #eef1f4 !important;
+        color: #374151;
+        font-size: 13px;
+        vertical-align: middle !important;
+    }
+
+    .modern-grid tr:last-child td {
+        border-bottom: 0 !important;
+    }
+
+    .modern-grid tr:hover td {
+        background: #f8fbff;
+    }
+
+
+/* =========================================================
+   EMPTY STATE
+========================================================= */
+
+.empty-state {
+    padding: 45px 20px;
+    text-align: center;
+    min-width: 300px;
+}
+
+.empty-icon {
+    width: 60px;
+    height: 60px;
+    margin: 0 auto 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #eff6ff;
+    color: #2563eb;
+    font-size: 25px;
+}
+
+.empty-title {
+    color: #374151;
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.empty-description {
+    max-width: 400px;
+    margin: 7px auto 0;
+    color: #8a94a3;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+.search-card-footer {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 30px 25px;
+    background: #fff;
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 767.98px) {
+
+    .search-page {
+        padding: 8px;
+    }
+
+    .search-steps {
+        margin-bottom: 15px;
+    }
+
+    .step-number {
+        width: 34px;
+        height: 34px;
+        font-size: 13px;
+    }
+
+    .step-label {
+        font-size: 11px;
+    }
+
+    .step-line {
+        width: 45px;
+        margin-top: 17px;
+    }
+
+    .search-card {
+        border-radius: 14px;
+    }
+
+    .search-card-header {
+        padding: 18px;
+    }
+
+    .search-header-icon {
+        width: 44px;
+        height: 44px;
+        min-width: 44px;
+        font-size: 20px;
+    }
+
+    .search-card-header h4 {
+        font-size: 17px;
+    }
+
+    .search-card-header p {
+        font-size: 12px;
+    }
+
+    .search-card-body {
+        padding: 20px 16px;
+    }
+
+    .qr-search-row,
+    .manual-search-row {
+        flex-direction: column;
+    }
+
+    .btn-blue,
+    .btn-search {
+        width: 100%;
+    }
+
+    .modern-input {
+        height: 44px;
+    }
+
+    .btn-modern {
+        min-height: 44px;
+    }
+
+    .result-section {
+        margin-top: 25px;
+    }
+
+    .result-table-wrapper {
+        border: 0;
+        overflow: visible;
+    }
+
+    /*
+       Mobile GridView jadi card
+    */
+
+    @media (max-width: 767.98px) {
+
+        /* EMPTY DATA ROW */
+        .modern-grid tbody tr:has(.empty-state) {
+            display: block !important;
+            padding: 0 !important;
+            margin-bottom: 12px !important;
+        }
+
+            .modern-grid tbody tr:has(.empty-state) td {
+                display: block !important;
+                width: 100% !important;
+                padding: 0 !important;
+                text-align: center !important;
+                border: 0 !important;
+            }
+
+        .modern-grid .empty-state {
+            width: 100% !important;
+            min-width: 0 !important;
+            margin: 0 auto !important;
+            padding: 45px 15px !important;
+            box-sizing: border-box;
+            text-align: center !important;
+        }
+
+        .modern-grid .empty-icon {
+            margin-left: auto !important;
+            margin-right: auto !important;
+        }
+
+        .modern-grid .empty-title,
+        .modern-grid .empty-description {
+            width: 100% !important;
+            margin-left: auto !important;
+            margin-right: auto !important;
+            text-align: center !important;
+        }
+
+        .modern-grid .empty-state {
+            padding: 30px 15px !important;
+        }
+
+        .modern-grid .empty-icon {
+            width: 58px;
+            height: 58px;
+            margin-bottom: 14px !important;
+        }
+    }
+
+    @media (max-width: 767.98px) {
+
+        /* ==========================================
+       GRIDVIEW MOBILE CARD
+    ========================================== */
+
+        .modern-grid tr.mobile-grid-header,
+        .modern-grid .mobile-grid-header {
+            display: none !important;
+            visibility: hidden !important;
+            height: 0 !important;
+            min-height: 0 !important;
+            padding: 0 !important;
+            border: 0 !important;
+        }
+
+            .modern-grid tr.mobile-grid-header th,
+            .modern-grid .mobile-grid-header th {
+                display: none !important;
+                height: 0 !important;
+                padding: 0 !important;
+                border: 0 !important;
+            }
+
+        .modern-grid .mobile-grid-header {
+            display: none !important;
+        }
+
+        .result-table-wrapper {
+            border: 0 !important;
+            overflow: visible !important;
+        }
+
+        /* Hide table header */
+        .modern-grid > thead,
+        .modern-grid thead {
+            display: none !important;
+            visibility: hidden !important;
+            height: 0 !important;
+        }
+
+        /* Table itself */
+        .modern-grid {
+            display: block !important;
+            width: 100% !important;
+            border: 0 !important;
+            background: transparent !important;
+        }
+
+            .modern-grid > tbody {
+                display: block !important;
+                width: 100% !important;
+            }
+
+                /* EACH RECORD = CARD */
+                .modern-grid > tbody > tr {
+                    display: block !important;
+                    width: 100% !important;
+                    margin: 0 0 12px 0 !important;
+                    padding: 15px 16px !important;
+                    border: 1px solid #e2e6eb !important;
+                    border-radius: 14px !important;
+                    background: #fff !important;
+                    box-shadow: 0 2px 8px rgba(0, 0, 0, .04);
+                    box-sizing: border-box;
+                }
+
+                    /* Remove normal table row styling */
+                    .modern-grid > tbody > tr:hover {
+                        background: #fff !important;
+                    }
+
+                    /* EACH FIELD */
+                    .modern-grid > tbody > tr > td {
+                        display: flex !important;
+                        width: 100% !important;
+                        align-items: center;
+                        justify-content: space-between;
+                        padding: 7px 5px !important;
+                        border: 0 !important;
+                        background: transparent !important;
+                        box-sizing: border-box;
+                        font-size: 13px;
+                        color: #24324a;
+                        text-align: right;
+                    }
+
+                        /* Label */
+                        .modern-grid > tbody > tr > td::before {
+                            flex: 0 0 auto;
+                            margin-right: 20px;
+                            color: #7b8798;
+                            font-size: 12px;
+                            font-weight: 500;
+                            text-align: left;
+                        }
+
+                        /* Labels ikut column */
+                        .modern-grid > tbody > tr > td:nth-child(1)::before {
+                            content: "ID";
+                        }
+
+                        .modern-grid > tbody > tr > td:nth-child(2)::before {
+                            content: "Nama Syarikat";
+                        }
+
+                        .modern-grid > tbody > tr > td:nth-child(3)::before {
+                            content: "No Pendaftaran";
+                        }
+
+                        .modern-grid > tbody > tr > td:nth-child(4)::before {
+                            content: "Alamat";
+                        }
+
+                        .modern-grid > tbody > tr > td:nth-child(5)::before {
+                            content: "Tarikh Lulus";
+                        }
+
+                        /* Action button */
+                        .modern-grid > tbody > tr > td:last-child {
+                            display: flex !important;
+                            justify-content: flex-end !important;
+                            margin-top: 8px !important;
+                            padding-top: 12px !important;
+                            border-top: 1px solid #edf0f3 !important;
+                        }
+
+                            .modern-grid > tbody > tr > td:last-child::before {
+                                display: none;
+                            }
+
+            /* Pilih button */
+            .modern-grid .btn-select {
+                width: 48px;
+                height: 48px;
+                min-height: 48px !important;
+                padding: 0 !important;
+                display: flex !important;
+                align-items: center;
+                justify-content: center;
+                border-radius: 12px !important;
+                font-size: 0;
+            }
+
+                .modern-grid .btn-select i {
+                    font-size: 20px;
+                    margin: 0;
+                }
+    }
+
+        .modern-grid tr {
+            margin-bottom: 10px;
+            padding: 12px;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            background: #fff;
+            box-shadow: 0 2px 8px rgba(0,0,0,.03);
+        }
+
+        .modern-grid td {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 7px 4px !important;
+            border: 0 !important;
+            font-size: 13px;
+        }
+
+            .modern-grid td::before {
+                color: #8a94a3;
+                font-size: 11px;
+                font-weight: 600;
+                margin-right: 15px;
+            }
+
+            .modern-grid td:nth-child(1)::before {
+                content: "ID";
+            }
+
+            .modern-grid td:nth-child(2)::before {
+                content: "Nama Syarikat";
+            }
+
+            .modern-grid td:nth-child(3)::before {
+                content: "No Pendaftaran";
+            }
+
+            .modern-grid td:nth-child(4)::before {
+                content: "Alamat";
+            }
+
+            .modern-grid td:nth-child(5)::before {
+                content: "Tarikh Lulus";
+            }
+
+            .modern-grid td:nth-child(6) {
+                margin-top: 7px;
+                padding-top: 10px !important;
+                border-top: 1px solid #f0f1f3 !important;
+                justify-content: flex-end;
+            }
+
+    .search-card-footer {
+        flex-direction: column;
+        padding: 0 16px 20px;
+    }
+
+        .search-card-footer .btn-modern {
+            width: 100%;
+        }
+}
+
+
+/*START 2nd PAGE*/
+
+.ru-wrap {
+    max-width: 100%;
+    margin: 0 auto;
+    font-family: "Segoe UI", Arial, sans-serif;
+    color: #1f2937;
+}
+
+/* ---------- Header banner ---------- */
+.ru-header {
+    position: relative;
+    overflow: hidden;
+    border-radius: 16px 16px 0 0;
+    padding: 28px 32px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: linear-gradient(135deg, #1d4ed8, #2563eb 55%, #3b82f6);
+    color: #fff;
+}
+
+.ru-header-icon {
+    flex: 0 0 auto;
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.18);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ru-header-text h3 {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 600;
+    line-height: 1.25;
+}
+
+.ru-header-text p {
+    margin: 4px 0 0;
+    font-size: 13px;
+    color: #dbeafe;
+}
+
+.ru-header-illustration {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0.9;
+}
+
+/* ---------- Body card ---------- */
+.ru-body {
+    background: #f8fafc;
+    border: 1px solid #e5e7eb;
+    border-top: none;
+    border-radius: 0 0 16px 16px;
+    padding: 28px 32px 96px;
+}
+
+/* ---------- Info summary grid ---------- */
+.ru-info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 18px 20px;
+    margin-bottom: 24px;
+}
+
+.ru-info-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.ru-info-icon {
+    flex: 0 0 auto;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: #eff6ff;
+    color: #2563eb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ru-info-label {
+    display: block;
+    font-size: 12px;
+    color: #6b7280;
+    margin-bottom: 2px;
+}
+
+.ru-info-value {
+    display: block;
+    font-size: 15px;
+    font-weight: 600;
+    color: #111827;
+}
+
+/* ---------- Section heading ---------- */
+.ru-section {
+    margin-bottom: 22px;
+}
+
+.ru-section-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 6px;
+}
+
+.ru-section-icon {
+    flex: 0 0 auto;
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    background: #eff6ff;
+    color: #2563eb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ru-section-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #111827;
+    margin: 0;
+}
+
+.ru-section-sub {
+    font-size: 12.5px;
+    color: #6b7280;
+    margin: 2px 0 0 44px;
+}
+
+/* ---------- Form elements ---------- */
+.ru-textarea,
+.ru-field {
+    width: 100%;
+    border: 1px solid #d1d5db;
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 14px;
+    font-family: inherit;
+    resize: vertical;
+    background: #fff;
+    box-sizing: border-box;
+}
+
+    .ru-textarea:focus,
+    .ru-field:focus {
+        outline: none;
+        border-color: #2563eb;
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+    }
+
+.ru-alamat-wrap {
+    max-width: 480px;
+    margin-bottom: 8px;
+}
+
+.cssRequiredField {
+    display: block;
+    color: #dc2626;
+    font-size: 12px;
+    margin-top: 4px;
+}
+
+/* ---------- Buttons ---------- */
+.ru-btn-primary {
+    background: #2563eb;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: 11px 18px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+    .ru-btn-primary:hover {
+        background: #1d4ed8;
+    }
+
+.ru-btn-outline {
+    background: #fff;
+    color: #374151;
+    border: 1px solid #d1d5db;
+    border-radius: 10px;
+    padding: 11px 18px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+    .ru-btn-outline:hover {
+        background: #f3f4f6;
+    }
+
+.ru-btn-danger-sm {
+    background: #fef2f2;
+    color: #dc2626;
+    border: 1px solid #fecaca;
+    border-radius: 8px;
+    padding: 5px 10px;
+    font-size: 12.5px;
+    cursor: pointer;
+}
+
+    .ru-btn-danger-sm:hover {
+        background: #fee2e2;
+    }
+
+/* ---------- Lists / GridView ---------- */
+.ru-list {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+    .ru-list th {
+        text-align: left;
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.02em;
+        color: #6b7280;
+        background: #f9fafb;
+        padding: 10px 16px;
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    .ru-list td {
+        padding: 10px 16px;
+        font-size: 14px;
+        border-bottom: 1px solid #f1f5f9;
+        vertical-align: middle;
+    }
+
+.ru-list-empty {
+    text-align: center;
+    padding: 34px 20px;
+    background: #fff;
+    border: 1px dashed #e5e7eb;
+    border-radius: 12px;
+}
+
+.ru-list-empty-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: #eff6ff;
+    color: #2563eb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 10px;
+}
+
+.ru-list-empty-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: #111827;
+    margin: 0 0 2px;
+}
+
+.ru-list-empty-sub {
+    font-size: 13px;
+    color: #6b7280;
+    margin: 0;
+}
+
+.ru-row-add {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    margin-top: 12px;
+    flex-wrap: wrap;
+}
+
+    .ru-row-add .ru-textarea {
+        flex: 1 1 320px;
+    }
+
+/* ---------- Upload dropzone ---------- */
+.ru-dropzone {
+    border: 1.5px dashed #c7d2fe;
+    background: #fff;
+    border-radius: 12px;
+    padding: 26px 20px;
+    text-align: center;
+}
+
+.ru-dropzone-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: #eff6ff;
+    color: #2563eb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 10px;
+}
+
+.ru-dropzone-text {
+    font-size: 14px;
+    color: #374151;
+    margin: 0 0 4px;
+}
+
+.ru-dropzone-hint {
+    font-size: 12px;
+    color: #9ca3af;
+    margin: 0;
+}
+
+.ru-dropzone input[type="file"] {
+    margin-top: 12px;
+    font-size: 13px;
+}
+
+/* ---------- Sticky action bar ---------- */
+.ru-actions {
+    position: sticky;
+    bottom: 0;
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+    padding: 16px 32px;
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-top: none;
+    border-radius: 0 0 16px 16px;
+    margin-top: -1px;
+}
+
+@media (max-width: 640px) {
+    .ru-header, .ru-body, .ru-actions {
+        padding-left: 18px;
+        padding-right: 18px;
+    }
+
+    .ru-header-illustration {
+        display: none;
+    }
+
+    .ru-actions {
+        flex-direction: column-reverse;
+    }
+
+        .ru-actions .btn-primary, .ru-actions .btn {
+            width: 100%;
+        }
+}
+
+/*START kbd INSPEKTORAT*/
+
+.bs-wrap {
+    font-family: "Segoe UI", Arial, sans-serif;
+    color: #1f2937;
+}
+
+.bs-card {
+    background: #f8fafc;
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+    overflow: hidden;
+    height: 100%;
+}
+
+.bs-card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 22px;
+    background: linear-gradient(135deg, #1d4ed8, #2563eb 55%, #3b82f6);
+    color: #fff;
+}
+
+    .bs-card-header.bs-secondary {
+        background: linear-gradient(135deg, #0f766e, #14b8a6 60%, #2dd4bf);
+    }
+
+.bs-card-header-icon {
+    flex: 0 0 auto;
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    background: rgba(255, 255, 255, 0.18);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.bs-card-header h3 {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.bs-card-body {
+    padding: 18px 22px 22px;
+}
+
+/* ---------- Info rows (FormView) ---------- */
+.bs-info-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid #eef0f2;
+}
+
+    .bs-info-row:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+    }
+
+    .bs-info-row:first-child {
+        padding-top: 0;
+    }
+
+.bs-info-icon {
+    flex: 0 0 auto;
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    background: #eff6ff;
+    color: #2563eb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 2px;
+}
+
+.bs-info-label {
+    font-size: 12px;
+    color: #6b7280;
+    margin-bottom: 2px;
+}
+
+.bs-info-value {
+    font-size: 14.5px;
+    font-weight: 600;
+    color: #111827;
+    word-break: break-word;
+}
+
+/* ---------- GridView (ulasan) ---------- */
+.bs-list {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    overflow: hidden;
+    font-size: 13.5px;
+}
+
+    .bs-list th {
+        text-align: left;
+        font-size: 11.5px;
+        text-transform: uppercase;
+        letter-spacing: 0.02em;
+        color: #6b7280;
+        background: #f9fafb;
+        padding: 10px 14px;
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    .bs-list td {
+        padding: 10px 14px;
+        border-bottom: 1px solid #f1f5f9;
+        vertical-align: top;
+    }
+
+    .bs-list tr:last-child td {
+        border-bottom: none;
+    }
+
+/* ---------- Lampiran (Repeater) ---------- */
+.bs-attach-heading {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 20px 0 10px;
+}
+
+.bs-attach-heading-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    background: #eff6ff;
+    color: #2563eb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.bs-attach-heading h5 {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 600;
+    color: #111827;
+}
+
+.bs-attach-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.bs-attach-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    text-decoration: none;
+    color: #2563eb;
+    font-size: 13.5px;
+    font-weight: 500;
+}
+
+    .bs-attach-item:hover {
+        background: #f9fafb;
+        border-color: #c7d2fe;
+    }
+
+    .bs-attach-item svg {
+        flex: 0 0 auto;
+        color: #6b7280;
+    }
+
+@media (max-width: 767px) {
+    .bs-card {
+        margin-bottom: 16px;
+    }
+}
+
+/*START TRAIL KELULUSAN & APPROVAL*/
+
+.wf-wrap {
+    font-family: "Segoe UI", Arial, sans-serif;
+    color: #1f2937;
+    margin : 30px 0 0 0;
+}
+
+.wf-card {
+    background: #f8fafc;
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+.wf-head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 22px;
+    color: #fff;
+}
+
+.wf-head-icon {
+    flex: 0 0 auto;
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    background: rgba(255, 255, 255, 0.18);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.wf-head h3 {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+/* peringkat colour cues - warna sama tema (biru) dgn kecerahan berbeza ikut peringkat */
+.wf-head-trail {
+    background: linear-gradient(135deg, #475569, #64748b 60%, #94a3b8);
+}
+
+.wf-head-ik {
+    background: linear-gradient(135deg, #1d4ed8, #2563eb 55%, #3b82f6);
+}
+
+.wf-head-kblesen {
+    background: linear-gradient(135deg, #4338ca, #4f46e5 55%, #6366f1);
+}
+
+.wf-head-kj {
+    background: linear-gradient(135deg, #6d28d9, #7c3aed 55%, #a78bfa);
+}
+
+.wf-head-kerani {
+    background: linear-gradient(135deg, #0f766e, #14b8a6 60%, #2dd4bf);
+}
+
+.wf-body {
+    padding: 20px 22px 24px;
+}
+
+/* ---------- table (Trail Kelulusan) ---------- */
+.wf-list {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    overflow: hidden;
+    font-size: 13.5px;
+}
+
+    .wf-list th {
+        text-align: left;
+        font-size: 11.5px;
+        text-transform: uppercase;
+        letter-spacing: 0.02em;
+        color: #6b7280;
+        background: #f9fafb;
+        padding: 10px 14px;
+        border-bottom: 1px solid #e5e7eb;
+        white-space: nowrap;
+    }
+
+    .wf-list td {
+        padding: 10px 14px;
+        border-bottom: 1px solid #f1f5f9;
+        vertical-align: top;
+    }
+
+    .wf-list tr:last-child td {
+        border-bottom: none;
+    }
+
+/* ---------- callout ---------- */
+.wf-callout {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-size: 13.5px;
+    color: #1e3a8a;
+    margin-bottom: 18px;
+}
+
+    .wf-callout.wf-callout-warning {
+        background: #fffbeb;
+        border-color: #fde68a;
+        color: #92400e;
+    }
+
+    .wf-callout svg {
+        flex: 0 0 auto;
+        margin-top: 2px;
+    }
+
+    .wf-callout b {
+        font-weight: 600;
+    }
+
+/* ---------- form ---------- */
+.wf-label {
+    display: block;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 5px;
+}
+
+.wf-form-group {
+    margin-bottom: 16px;
+}
+
+.wf-field,
+select.wf-field,
+textarea.wf-field {
+    width: 100%;
+    border: 1px solid #d1d5db;
+    border-radius: 10px;
+    padding: 9px 13px;
+    font-size: 14px;
+    font-family: inherit;
+    background: #fff;
+    box-sizing: border-box;
+}
+
+textarea.wf-field {
+    resize: vertical;
+}
+
+.wf-field:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+.cssRequiredField {
+    display: block;
+    color: #dc2626;
+    font-size: 12px;
+    margin-top: 4px;
+}
+
+.wf-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 4px;
+}
+
+.wf-col-4 {
+    flex: 1 1 220px;
+}
+
+.wf-col-8 {
+    flex: 2 1 380px;
+}
+
+/* ---------- actions ---------- */
+.wf-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+    margin-top: 18px;
+    padding-top: 16px;
+    border-top: 1px solid #e5e7eb;
+    flex-wrap: wrap;
+}
+
+.wf-btn-primary {
+    background: #2563eb;
+    color: #fff !important;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 18px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none !important;
+    display: inline-block;
+}
+
+    .wf-btn-primary:hover {
+        background: #1d4ed8;
+    }
+
+.wf-btn-outline {
+    background: #fff;
+    color: #374151 !important;
+    border: 1px solid #d1d5db;
+    border-radius: 10px;
+    padding: 10px 18px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none !important;
+    display: inline-block;
+}
+
+    .wf-btn-outline:hover {
+        background: #f3f4f6;
+    }
+
+@media (max-width: 640px) {
+    .wf-actions {
+        flex-direction: column-reverse;
+    }
+
+        .wf-actions a {
+            width: 100%;
+            text-align: center;
+        }
+}
