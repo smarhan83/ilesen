@@ -2591,7 +2591,7 @@ Partial Class appregister1
 
                 myConnection.Open()
 
-                Dim Sql1 = "SELECT COUNT(PermohonanAgensi_ID) AS agensi FROM LESEN_PermohonanAgensi" & extstr & " WHERE Permohonan_ID=" & hfid.Value
+                Dim Sql1 = "SELECT COUNT(PermohonanAgensi_ID) AS agensi FROM LESEN_PermohonanAgensi" & extstr & " WHERE Permohonan_ID=" & hfid
 
                 Dim myCommand1 = New SqlCommand(Sql1, myConnection)
 
@@ -2608,13 +2608,13 @@ Partial Class appregister1
                 Dim result2 = insertMaklumatPembetulan(hfid)
 
                 If result2 = False Then
-                    ShowAlert("error", "", "Gagal proses database. Sila tekan Hantar sekali lagi." & hfid.Value)
+                    ShowAlert("error", "", "Gagal proses database. Sila tekan Hantar sekali lagi." & hfid)
                     Return
                 End If
 
                 myConnection.Open()
 
-                Dim Sql = "UPDATE LESEN_Permohonan SET StatusID=1 WHERE StatusID=0 AND Permohonan_ID=" & hfid.Value
+                Dim Sql = "UPDATE LESEN_Permohonan SET StatusID=1 WHERE StatusID=0 AND Permohonan_ID=" & hfid
 
                 Dim myCommand = New SqlCommand(Sql, myConnection)
 
@@ -2717,7 +2717,8 @@ Partial Class appregister1
 
     Private Function reviewSurat(checked As Boolean) As Boolean
         Dim retval As Boolean = True
-        Dim hfid As HiddenField = DirectCast(FormView1.FindControl("HF_PermohonanID"), HiddenField)
+        'Dim hfid As HiddenField = DirectCast(FormView1.FindControl("HF_PermohonanID"), HiddenField)
+        Dim hfid = CInt(GridView1.SelectedDataKey.Values("Permohonan_ID"))
 
         Using myConnection As New SqlConnection(ConfigurationManager.ConnectionStrings("webcon_ConnectionStr").ConnectionString)
 
@@ -2732,7 +2733,7 @@ Partial Class appregister1
             End If
 
             Dim myCommandSelect As New SqlCommand(SQL, myConnection)
-            myCommandSelect.Parameters.AddWithValue("@Permohonan_ID", CInt(hfid.Value))
+            myCommandSelect.Parameters.AddWithValue("@Permohonan_ID", hfid)
 
             Dim myReader As SqlDataReader = myCommandSelect.ExecuteReader
 
