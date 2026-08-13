@@ -1,10 +1,13 @@
 ﻿Imports System
+Imports System.Configuration
 Imports System.Data
 Imports System.Data.SqlClient
 Imports System.Drawing
 Imports System.Drawing.Imaging
 Imports System.Security.Cryptography
 Imports System.Security.Policy
+Imports System.Web.UI.WebControls
+Imports AjaxControlToolkit
 Imports Microsoft.SqlServer.Management.Smo
 
 <Serializable()>
@@ -2570,13 +2573,80 @@ Partial Class appregister1
 
     End Sub
 
+    Protected Sub OnClickBtnSubmitGv(ByVal sender As Object, ByVal e As CommandEventArgs)
+
+        Dim counter As Integer = 0
+        Dim counter1 As Integer = 0
+        Dim extstr As String = ""
+        Dim hfid = CInt(GridView1.SelectedDataKey.Values("Permohonan_ID"))
+        Dim cb = CBool(GridView1.SelectedDataKey.Values("IsBatal"))
+
+        If reviewSurat(cb) Then
+
+            If cb = True Then
+                extstr = "Batal"
+            End If
+
+            Using myConnection As New SqlConnection(ConfigurationManager.ConnectionStrings("webcon_ConnectionStr").ConnectionString)
+
+                myConnection.Open()
+
+                Dim Sql1 = "SELECT COUNT(PermohonanAgensi_ID) AS agensi FROM LESEN_PermohonanAgensi" & extstr & " WHERE Permohonan_ID=" & hfid.Value
+
+                Dim myCommand1 = New SqlCommand(Sql1, myConnection)
+
+                Dim myReader As SqlDataReader = myCommand1.ExecuteReader
+
+                If myReader.Read Then
+                    counter = myReader.Item("agensi")
+                End If
+
+                myCommand1.Dispose()
+                myConnection.Close()
+
+                '//
+                Dim result2 = insertMaklumatPembetulan(hfid)
+
+                If result2 = False Then
+                    ShowAlert("error", "", "Gagal proses database. Sila tekan Hantar sekali lagi." & hfid.Value)
+                    Return
+                End If
+
+                myConnection.Open()
+
+                Dim Sql = "UPDATE LESEN_Permohonan SET StatusID=1 WHERE StatusID=0 AND Permohonan_ID=" & hfid.Value
+
+                Dim myCommand = New SqlCommand(Sql, myConnection)
+
+                'Dim myReader As SqlDataReader = myCommand.ExecuteReader
+                Dim result = myCommand.ExecuteNonQuery()
+
+                myCommand.Dispose()
+                myConnection.Close()
+
+                If result < 1 Then
+                    ShowAlert("error", "", "Gagal hantar")
+                Else
+                    ShowAlert("success", "", "Berjaya hantar")
+                    GridView1.DataBind()
+                    'backToList()
+                End If
+
+            End Using
+
+        Else
+            ShowAlert("error", "", "Surat Belum Habis Disemak")
+        End If
+
+    End Sub
+
     Protected Sub OnClickBtnSubmit(ByVal sender As Object, ByVal e As CommandEventArgs)
 
         Dim counter As Integer = 0
         Dim counter1 As Integer = 0
         Dim extstr As String = ""
         Dim hfid As HiddenField = DirectCast(FormView1.FindControl("HF_PermohonanID"), HiddenField)
-        Dim ddl As HiddenField = DirectCast(FormView1.FindControl("HF_JenisLesenIdList"), HiddenField)
+        'Dim ddl As HiddenField = DirectCast(FormView1.FindControl("HF_JenisLesenIdList"), HiddenField)
         Dim cb As CheckBox = DirectCast(FormView1.FindControl("CB_IsBatal"), CheckBox)
         'Dim ddl As DropDownList = DirectCast(FormView1.FindControl("DDL_JenisLesen"), DropDownList)
 
@@ -2603,10 +2673,10 @@ Partial Class appregister1
                 myCommand1.Dispose()
                 myConnection.Close()
 
-                If counter < 1 And cb.Checked = False And ddl.Value <> "9" Then
-                    ShowAlert("error", "", "Gagal hantar. Sila tambah jabatan agensi")
-                    Return
-                End If
+                'If counter < 1 And cb.Checked = False And ddl.Value <> "9" Then
+                '    ShowAlert("error", "", "Gagal hantar. Sila tambah jabatan agensi")
+                '    Return
+                'End If
 
                 '//
                 Dim result2 = insertMaklumatPembetulan(CInt(hfid.Value))
