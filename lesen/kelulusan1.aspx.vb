@@ -1850,11 +1850,12 @@ Partial Class kelulusan1
         If GetIsSuratFail(pid) Then
             ViewSuratPemeriksaanFail(pid)
         Else
-            If Session.Item("isDisablePrintSession") = "Y" Then
-                ViewSuratPemeriksaanAuto(pid, False)
-            Else
-                ViewSuratPemeriksaanAuto(pid, True)
-            End If
+            ViewSuratPemeriksaanAuto(pid, True)
+            'If Session.Item("isDisablePrintSession") = "Y" Then
+            '    ViewSuratPemeriksaanAuto(pid, False)
+            'Else
+            '    ViewSuratPemeriksaanAuto(pid, True)
+            'End If
 
         End If
 
