@@ -2052,7 +2052,7 @@
 
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label>Jenis Perniagaan</label>
+                                            <label>Jenis Jualan</label>
                                             <asp:TextBox ID="TB_JenisPerniagaanPasar" runat="server"
                                                 Text='<%# Bind("JenisPerniagaanPasar") %>' CssClass="form-control" />
                                             <asp:RequiredFieldValidator ID="RequiredFieldValidator18" runat="server" CssClass="cssRequiredField"
@@ -3735,7 +3735,7 @@
 
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label>Jenis Perniagaan</label>
+                                        <label>Jenis Jualan</label>
                                         <asp:TextBox ID="TB_JenisPerniagaanPasar_ins" runat="server" CssClass="form-control" />
 
                                     </div>
