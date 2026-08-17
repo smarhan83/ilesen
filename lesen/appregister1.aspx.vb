@@ -1504,6 +1504,14 @@ Partial Class appregister1
                         DDL_AnjingJenisPremis_ins.SelectedValue = CInt(myReader.Item("AnjingJenisPremis").ToString())
                     End If
 
+                    If myReader.Item("JenisPenjaja").ToString().Length > 0 Then
+                        DDL_JenisPenjaja_ins.SelectedValue = CInt(myReader.Item("JenisPenjaja").ToString())
+                    End If
+
+                    If myReader.Item("StatusTanahPenjaja").ToString().Length > 0 Then
+                        DDL_StatusTanahPenjaja_ins.SelectedValue = CInt(myReader.Item("StatusTanahPenjaja").ToString())
+                    End If
+
                     If myReader.Item("AlamatPenjajaan").ToString().Length > 0 Then
                         TB_AlamatPenjajaan_ins.Text = myReader.Item("AlamatPenjajaan").ToString()
                     End If
@@ -1512,8 +1520,28 @@ Partial Class appregister1
                         TB_JenisPerniagaanPenjaja_ins.Text = myReader.Item("JenisPerniagaanPenjaja").ToString()
                     End If
 
+                    If myReader.Item("MasaPenjaja1").ToString().Length > 0 Then
+                        TB_MasaPenjaja1_ins.Text = myReader.Item("MasaPenjaja1").ToString()
+                    End If
+
+                    If myReader.Item("MasaPenjaja2").ToString().Length > 0 Then
+                        TB_MasaPenjaja2_ins.Text = myReader.Item("MasaPenjaja2").ToString()
+                    End If
+
+                    If myReader.Item("JenisKenderaanPenjaja").ToString().Length > 0 Then
+                        DDL_JenisKenderaanPenjaja_ins.SelectedValue = CInt(myReader.Item("JenisKenderaanPenjaja").ToString())
+                    End If
+
+                    If myReader.Item("NoKenderaanPenjaja").ToString().Length > 0 Then
+                        TB_NoKenderaanPenjaja_ins.Text = myReader.Item("NoKenderaanPenjaja").ToString()
+                    End If
+
                     If myReader.Item("PenganjurEkspo").ToString().Length > 0 Then
                         TB_PenganjurEkspo_ins.Text = myReader.Item("PenganjurEkspo").ToString()
+                    End If
+
+                    If myReader.Item("AlamatPenganjurEkspo").ToString().Length > 0 Then
+                        TB_AlamatPenganjurEkspo_ins.Text = myReader.Item("AlamatPenganjurEkspo").ToString()
                     End If
 
                     If myReader.Item("NamaEkspo").ToString().Length > 0 Then
@@ -1522,6 +1550,10 @@ Partial Class appregister1
 
                     If myReader.Item("LokasiEkspo").ToString().Length > 0 Then
                         TB_LokasiEkspo_ins.Text = myReader.Item("LokasiEkspo").ToString()
+                    End If
+
+                    If myReader.Item("PicEkspo").ToString().Length > 0 Then
+                        TB_PicEkspo_ins.Text = myReader.Item("PicEkspo").ToString()
                     End If
 
                     If myReader.Item("NoTelEkspo").ToString().Length > 0 Then
@@ -1542,6 +1574,26 @@ Partial Class appregister1
 
                     If myReader.Item("MasaEkspo2").ToString().Length > 0 Then
                         TB_MasaEkspo2_ins.Text = myReader.Item("MasaEkspo2").ToString()
+                    End If
+
+                    If myReader.Item("TentatifEkspo").ToString().Length > 0 Then
+                        TB_TentatifEkspo_ins.Text = myReader.Item("TentatifEkspo").ToString()
+                    End If
+
+                    If myReader.Item("JemputanEkspo").ToString().Length > 0 Then
+                        TB_JemputanEkspo_ins.Text = myReader.Item("JemputanEkspo").ToString()
+                    End If
+
+                    If myReader.Item("PembersihanEkspo").ToString().Length > 0 Then
+                        TB_PembersihanEkspo_ins.Text = myReader.Item("PembersihanEkspo").ToString()
+                    End If
+
+                    If IsDBNull(myReader.Item("TarikhKhemahEkspo1")) = False Then
+                        TB_TarikhKhemahEkspo1.Text = CDate(myReader.Item("TarikhKhemahEkspo1")).ToString("yyyy-MM-dd")
+                    End If
+
+                    If IsDBNull(myReader.Item("TarikhKhemahEkspo2")) = False Then
+                        TB_TarikhKhemahEkspo2.Text = CDate(myReader.Item("TarikhKhemahEkspo2")).ToString("yyyy-MM-dd")
                     End If
 
                     If myReader.Item("KontraktorIklan").ToString().Length > 0 Then
@@ -3712,8 +3764,11 @@ Partial Class appregister1
                         AlamatBaru = @AlamatBaru, JenisPerniagaanBaru = @JenisPerniagaanBaru, NamaBaruSyarikat = @NamaBaruSyarikat, 
                         BillboardLokasi = @BillboardLokasi, LokasiPasar1 = @LokasiPasar1, LokasiPasar2 = @LokasiPasar2, LokasiPasar3 = @LokasiPasar3,
                         JenisPasar = @JenisPasar, JenisPerniagaanPasar = @JenisPerniagaanPasar, JumlahPetak = @JumlahPetak, AnjingAlamat = @AnjingAlamat, AnjingJenisPremis = @AnjingJenisPremis, 
-                        AlamatPenjajaan = @AlamatPenjajaan, JenisPerniagaanPenjaja = @JenisPerniagaanPenjaja, PenganjurEkspo = @PenganjurEkspo, NamaEkspo = @NamaEkspo, LokasiEkspo = @LokasiEkspo, NoTelEkspo = @NoTelEkspo, 
-                        TarikhEkspo1 = @TarikhEkspo1, TarikhEkspo2 = @TarikhEkspo2, MasaEkspo1 = @MasaEkspo1, MasaEkspo2 = @MasaEkspo2, 
+                        JenisPenjaja = @JenisPenjaja, StatusTanahPenjaja = @StatusTanahPenjaja, AlamatPenjajaan = @AlamatPenjajaan, JenisPerniagaanPenjaja = @JenisPerniagaanPenjaja, 
+                        MasaPenjaja1 = @MasaPenjaja1, MasaPenjaja2 = @MasaPenjaja2, JenisKenderaanPenjaja = @JenisKenderaanPenjaja, NoKenderaanPenjaja = @NoKenderaanPenjaja, 
+                        PenganjurEkspo = @PenganjurEkspo, AlamatPenganjurEkspo = @AlamatPenganjurEkspo, PicEkspo = @PicEkspo, NoTelEkspo = @NoTelEkspo,  NamaEkspo = @NamaEkspo, LokasiEkspo = @LokasiEkspo, 
+                        TarikhEkspo1 = @TarikhEkspo1, TarikhEkspo2 = @TarikhEkspo2, MasaEkspo1 = @MasaEkspo1, MasaEkspo2 = @MasaEkspo2, TentatifEkspo = @TentatifEkspo, JemputanEkspo = @JemputanEkspo, 
+                        PembersihanEkspo = @PembersihanEkspo, TarikhKhemahEkspo1 = @TarikhKhemahEkspo1, TarikhKhemahEkspo2 = @TarikhKhemahEkspo2, 
                         KontraktorIklan = @KontraktorIklan, NoTelKontraktor = @NoTelKontraktor, UkuranBanting = @UkuranBanting, BilBanting = @BilBanting, TarikhBanting1 = @TarikhBanting1, TarikhBanting2 = @TarikhBanting2, 
                         NoResitBanting = @NoResitBanting, NoSiriStiker=@NoSiriStiker, TarikhBanting3=@TarikhBanting3, LastModDt = GETDATE() 
                         WHERE Permohonan_ID = @Permohonan_ID"
@@ -3747,16 +3802,29 @@ Partial Class appregister1
             myCommandSelect.Parameters.AddWithValue("@JumlahPetak", TB_JumlahPetak_ins.Text)
             myCommandSelect.Parameters.AddWithValue("@AnjingAlamat", TB_AnjingAlamat_ins.Text)
             myCommandSelect.Parameters.AddWithValue("@AnjingJenisPremis", DDL_AnjingJenisPremis_ins.SelectedValue)
+            myCommandSelect.Parameters.AddWithValue("@JenisPenjaja", DDL_JenisPenjaja_ins.SelectedValue)
+            myCommandSelect.Parameters.AddWithValue("@StatusTanahPenjaja", DDL_StatusTanahPenjaja_ins.SelectedValue)
             myCommandSelect.Parameters.AddWithValue("@AlamatPenjajaan", TB_AlamatPenjajaan_ins.Text)
             myCommandSelect.Parameters.AddWithValue("@JenisPerniagaanPenjaja", TB_JenisPerniagaanPenjaja_ins.Text)
+            myCommandSelect.Parameters.AddWithValue("@MasaPenjaja1", TB_MasaPenjaja1_ins.Text)
+            myCommandSelect.Parameters.AddWithValue("@MasaPenjaja2", TB_MasaPenjaja2_ins.Text)
+            myCommandSelect.Parameters.AddWithValue("@JenisKenderaanPenjaja", TB_JenisKenderaanPenjaja_ins.Text)
+            myCommandSelect.Parameters.AddWithValue("@NoKenderaanPenjaja", TB_NoKenderaanPenjaja_ins.Text)
             myCommandSelect.Parameters.AddWithValue("@PenganjurEkspo", TB_PenganjurEkspo_ins.Text)
+            myCommandSelect.Parameters.AddWithValue("@AlamatPenganjurEkspo", TB_AlamatPenganjurEkspo_ins.Text)
             myCommandSelect.Parameters.AddWithValue("@NamaEkspo", TB_NamaEkspo_ins.Text)
             myCommandSelect.Parameters.AddWithValue("@LokasiEkspo", TB_LokasiEkspo_ins.Text)
+            myCommandSelect.Parameters.AddWithValue("@PicEkspo", TB_PicEkspo_ins.Text)
             myCommandSelect.Parameters.AddWithValue("@NoTelEkspo", TB_NoTel_ins.Text)
             myCommandSelect.Parameters.AddWithValue("@TarikhEkspo1", TB_TarikhEkspo1_ins.Text)
             myCommandSelect.Parameters.AddWithValue("@TarikhEkspo2", TB_TarikhEkspo2_ins.Text)
             myCommandSelect.Parameters.AddWithValue("@MasaEkspo1", TB_MasaEkspo1_ins.Text)
             myCommandSelect.Parameters.AddWithValue("@MasaEkspo2", TB_MasaEkspo2_ins.Text)
+            myCommandSelect.Parameters.AddWithValue("@TentatifEkspo", TB_TentatifEkspo_ins.Text)
+            myCommandSelect.Parameters.AddWithValue("@JemputanEkspo", TB_JemputanEkspo_ins.Text)
+            myCommandSelect.Parameters.AddWithValue("@PembersihanEkspo", TB_PembersihanEkspo_ins.Text)
+            myCommandSelect.Parameters.AddWithValue("@TarikhKhemahEkspo1", TB_TarikhKhemahEkspo1_ins.Text)
+            myCommandSelect.Parameters.AddWithValue("@TarikhKhemahEkspo2", TB_TarikhKhemahEkspo2_ins.Text)
             myCommandSelect.Parameters.AddWithValue("@KontraktorIklan", TB_KontraktorIklan_ins.Text)
             myCommandSelect.Parameters.AddWithValue("@NoTelKontraktor", TB_NoTelKontraktor_ins.Text)
             myCommandSelect.Parameters.AddWithValue("@UkuranBanting", TB_UkuranBanting_ins.Text)
