@@ -732,15 +732,11 @@ Partial Class appregister1
 
         Dim myList = DirectCast(ViewState("SelectedList"), List(Of SelectedItem))
 
-        If myList.Any(Function(x) x.ItemValue = "2") Or
-            myList.Any(Function(x) x.ItemValue = "3") Or
-            myList.Any(Function(x) x.ItemValue = "4") Or
+        If myList.Any(Function(x) x.ItemValue = "3") Or
             myList.Any(Function(x) x.ItemValue = "5") Or
             myList.Any(Function(x) x.ItemValue = "25") Or
             (myList.Count > 0 And
-            (ddlItems.SelectedValue = "2" Or
-            ddlItems.SelectedValue = "3" Or
-            ddlItems.SelectedValue = "4" Or
+            (ddlItems.SelectedValue = "3" Or
             ddlItems.SelectedValue = "5" Or
             ddlItems.SelectedValue = "25")) Then
 
