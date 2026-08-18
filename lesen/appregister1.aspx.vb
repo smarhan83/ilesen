@@ -3808,7 +3808,7 @@ Partial Class appregister1
             myCommandSelect.Parameters.AddWithValue("@JenisPerniagaanPenjaja", TB_JenisPerniagaanPenjaja_ins.Text)
             myCommandSelect.Parameters.AddWithValue("@MasaPenjaja1", TB_MasaPenjaja1_ins.Text)
             myCommandSelect.Parameters.AddWithValue("@MasaPenjaja2", TB_MasaPenjaja2_ins.Text)
-            myCommandSelect.Parameters.AddWithValue("@JenisKenderaanPenjaja", TB_JenisKenderaanPenjaja_ins.Text)
+            myCommandSelect.Parameters.AddWithValue("@JenisKenderaanPenjaja", DDL_JenisKenderaanPenjaja_ins.SelectedValue)
             myCommandSelect.Parameters.AddWithValue("@NoKenderaanPenjaja", TB_NoKenderaanPenjaja_ins.Text)
             myCommandSelect.Parameters.AddWithValue("@PenganjurEkspo", TB_PenganjurEkspo_ins.Text)
             myCommandSelect.Parameters.AddWithValue("@AlamatPenganjurEkspo", TB_AlamatPenganjurEkspo_ins.Text)
