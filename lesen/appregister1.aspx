@@ -3175,7 +3175,7 @@
                                         AND a.Is24Jam = CASE WHEN @risikoID = 2 THEN a.Is24Jam ELSE @risikoID END 
                                         AND a.StatusID = CASE WHEN @statusID = -1 THEN a.StatusID ELSE @statusID END 
                                         AND a.CreatorID = CASE WHEN @creatorID = '0' THEN a.CreatorID ELSE @creatorID END 
-                                        AND a.AlamatPremis LIKE CASE WHEN ISNULL(@Alamat, '')='' THEN a.AlamatPremis ELSE '%'+@Alamat+'%' END 
+                                        AND (ISNULL(@Alamat, '')='' OR a.AlamatPremis LIKE '%'+@Alamat+'%') 
                                         /*AND a.AlamatBaru LIKE CASE WHEN @Alamat='' THEN a.AlamatBaru ELSE '%'+@Alamat+'%' END */
                                         /*AND a.AnjingAlamat LIKE CASE WHEN @Alamat='%%' THEN a.AnjingAlamat ELSE '%'+@Alamat+'%' END*/ 
                                         AND a.TarikhMohon LIKE '%'+@TarikhMohon+'%' 
