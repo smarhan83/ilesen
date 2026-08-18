@@ -3970,7 +3970,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>Alamat Penganjur</label>
-                                        <asp:TextBox ID="TB_AlamatPenganjurEkspo" runat="server" TextMode="MultiLine" Rows="3" CssClass="form-control" />
+                                        <asp:TextBox ID="TB_AlamatPenganjurEkspo_ins" runat="server" TextMode="MultiLine" Rows="3" CssClass="form-control" />
 
                                     </div>
                                 </div>
@@ -3982,8 +3982,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>PIC Penganjur</label>
-                                        <asp:TextBox ID="TB_PicEkspo" runat="server"
-                                            Text='<%# Bind("TB_PicEkspo") %>' CssClass="form-control" />
+                                        <asp:TextBox ID="TB_PicEkspo_ins" runat="server" CssClass="form-control" />
 
                                     </div>
                                 </div>
@@ -4075,7 +4074,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>Kontraktor Pembersihan</label>
-                                        <asp:TextBox ID="TB_PermbersihanEkspo" runat="server" CssClass="form-control" />
+                                        <asp:TextBox ID="TB_PermbersihanEkspo_ins" runat="server" CssClass="form-control" />
 
                                     </div>
                                 </div>
@@ -4086,7 +4085,7 @@
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label>Cadangan Tarikh Mula Pasang Khemah</label>
-                                        <asp:TextBox ID="TB_TarikhKhemahEkspo1" runat="server" TextMode="Date" CssClass="form-control" />
+                                        <asp:TextBox ID="TB_TarikhKhemahEkspo1_ins" runat="server" TextMode="Date" CssClass="form-control" />
 
                                     </div>
                                 </div>
@@ -4094,7 +4093,7 @@
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label>Cadangan Tarikh Buka Khemah</label>
-                                        <asp:TextBox ID="TB_TarikhKhemahEkspo2" runat="server" TextMode="Date" CssClass="form-control" />
+                                        <asp:TextBox ID="TB_TarikhKhemahEkspo2_ins" runat="server" TextMode="Date" CssClass="form-control" />
 
                                     </div>
                                 </div>
