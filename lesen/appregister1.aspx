@@ -1250,8 +1250,8 @@
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label>Kontraktor Pembersihan</label>
-                                                <asp:TextBox ID="TB_PermbersihanEkspo" runat="server"
-                                                    Text='<%# Bind("PermbersihanEkspo") %>' CssClass="form-control" />
+                                                <asp:TextBox ID="TB_PembersihanEkspo" runat="server"
+                                                    Text='<%# Bind("PembersihanEkspo") %>' CssClass="form-control" />
 
                                             </div>
                                         </div>
@@ -2426,8 +2426,8 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label>Kontraktor Pembersihan</label>
-                                            <asp:TextBox ID="TB_PermbersihanEkspo" runat="server"
-                                                Text='<%# Bind("PermbersihanEkspo") %>' CssClass="form-control" />
+                                            <asp:TextBox ID="TB_PembersihanEkspo" runat="server"
+                                                Text='<%# Bind("PembersihanEkspo") %>' CssClass="form-control" />
 
                                         </div>
                                     </div>
@@ -4074,7 +4074,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>Kontraktor Pembersihan</label>
-                                        <asp:TextBox ID="TB_PermbersihanEkspo_ins" runat="server" CssClass="form-control" />
+                                        <asp:TextBox ID="TB_PembersihanEkspo_ins" runat="server" CssClass="form-control" />
 
                                     </div>
                                 </div>
