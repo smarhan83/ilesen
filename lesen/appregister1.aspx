@@ -1034,7 +1034,7 @@
                                                 </asp:DropDownList>
                                                 <asp:SqlDataSource runat="server" ID="SqlDataSourceJenisPenjaja" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
                                                     SelectCommand="SELECT NULL AS id, '-- Sila Pilih --' AS name UNION ALL SELECT id, name 
-                                                            FROM TBL_LOOKUPS WHERE lookupgrp_id = 10004 AND status = 1"></asp:SqlDataSource>
+                                                            FROM TBL_LOOKUPS WHERE lookupgrp_id = 10006 AND status = 1"></asp:SqlDataSource>
                                             </div>
                                         </div>
 
@@ -1046,7 +1046,7 @@
                                                 </asp:DropDownList>
                                                 <asp:SqlDataSource runat="server" ID="SqlDataSourceStatusTanahPenjaja" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
                                                     SelectCommand="SELECT NULL AS id, '-- Sila Pilih --' AS name UNION ALL SELECT id, name 
-                                                            FROM TBL_LOOKUPS WHERE lookupgrp_id = 10004 AND status = 1"></asp:SqlDataSource>
+                                                            FROM TBL_LOOKUPS WHERE lookupgrp_id = 10007 AND status = 1"></asp:SqlDataSource>
                                             </div>
                                         </div>
 
@@ -1102,7 +1102,7 @@
                                                 </asp:DropDownList>
                                                 <asp:SqlDataSource runat="server" ID="SqlDataSourceJenisKenderaanPenjaja" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
                                                     SelectCommand="SELECT NULL AS id, '-- Sila Pilih --' AS name UNION ALL SELECT id, name 
-                                                            FROM TBL_LOOKUPS WHERE lookupgrp_id = 10004 AND status = 1"></asp:SqlDataSource>
+                                                            FROM TBL_LOOKUPS WHERE lookupgrp_id = 10008 AND status = 1"></asp:SqlDataSource>
                                             </div>
                                         </div>
 
@@ -2195,7 +2195,7 @@
                                             </asp:DropDownList>
                                             <asp:SqlDataSource runat="server" ID="SqlDataSourceJenisPenjaja" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
                                                 SelectCommand="SELECT NULL AS id, '-- Sila Pilih --' AS name UNION ALL SELECT id, name 
-                                                        FROM TBL_LOOKUPS WHERE lookupgrp_id = 10004 AND status = 1"></asp:SqlDataSource>
+                                                        FROM TBL_LOOKUPS WHERE lookupgrp_id = 10006 AND status = 1"></asp:SqlDataSource>
                                         </div>
                                     </div>
 
@@ -2207,7 +2207,7 @@
                                             </asp:DropDownList>
                                             <asp:SqlDataSource runat="server" ID="SqlDataSourceStatusTanahPenjaja" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
                                                 SelectCommand="SELECT NULL AS id, '-- Sila Pilih --' AS name UNION ALL SELECT id, name 
-                                                        FROM TBL_LOOKUPS WHERE lookupgrp_id = 10004 AND status = 1"></asp:SqlDataSource>
+                                                        FROM TBL_LOOKUPS WHERE lookupgrp_id = 10007 AND status = 1"></asp:SqlDataSource>
                                         </div>
                                     </div>
 
@@ -2266,7 +2266,7 @@
                                             </asp:DropDownList>
                                             <asp:SqlDataSource runat="server" ID="SqlDataSourceJenisKenderaanPenjaja" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
                                                 SelectCommand="SELECT NULL AS id, '-- Sila Pilih --' AS name UNION ALL SELECT id, name 
-                                                        FROM TBL_LOOKUPS WHERE lookupgrp_id = 10004 AND status = 1"></asp:SqlDataSource>
+                                                        FROM TBL_LOOKUPS WHERE lookupgrp_id = 10008 AND status = 1"></asp:SqlDataSource>
                                         </div>
                                     </div>
 
@@ -3876,7 +3876,7 @@
                                         </asp:DropDownList>
                                         <asp:SqlDataSource runat="server" ID="SqlDataSourceJenisPenjaja_ins" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
                                             SelectCommand="SELECT NULL AS id, '-- Sila Pilih --' AS name UNION ALL SELECT id, name 
-                                                    FROM TBL_LOOKUPS WHERE lookupgrp_id = 10004 AND status = 1"></asp:SqlDataSource>
+                                                    FROM TBL_LOOKUPS WHERE lookupgrp_id = 10006 AND status = 1"></asp:SqlDataSource>
                                     </div>
                                 </div>
 
@@ -3888,7 +3888,7 @@
                                         </asp:DropDownList>
                                         <asp:SqlDataSource runat="server" ID="SqlDataSourceStatusTanahPenjaja_ins" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
                                             SelectCommand="SELECT NULL AS id, '-- Sila Pilih --' AS name UNION ALL SELECT id, name 
-                                                    FROM TBL_LOOKUPS WHERE lookupgrp_id = 10004 AND status = 1"></asp:SqlDataSource>
+                                                    FROM TBL_LOOKUPS WHERE lookupgrp_id = 10007 AND status = 1"></asp:SqlDataSource>
                                     </div>
                                 </div>
 
@@ -3934,12 +3934,12 @@
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label>Jenis Kenderaan (Penjaja Berkenderaan)</label>
-                                        <asp:DropDownList ID="DDL_JenisKenderaanPenjaja" CssClass="form-control select2" runat="server"
+                                        <asp:DropDownList ID="DDL_JenisKenderaanPenjaja_ins" CssClass="form-control select2" runat="server"
                                             DataSourceID="SqlDataSourceJenisKenderaanPenjaja_ins" DataTextField="name" DataValueField="id">
                                         </asp:DropDownList>
                                         <asp:SqlDataSource runat="server" ID="SqlDataSourceJenisKenderaanPenjaja_ins" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
                                             SelectCommand="SELECT NULL AS id, '-- Sila Pilih --' AS name UNION ALL SELECT id, name 
-                                                    FROM TBL_LOOKUPS WHERE lookupgrp_id = 10004 AND status = 1"></asp:SqlDataSource>
+                                                    FROM TBL_LOOKUPS WHERE lookupgrp_id = 10008 AND status = 1"></asp:SqlDataSource>
                                     </div>
                                 </div>
 
