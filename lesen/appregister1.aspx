@@ -1149,7 +1149,7 @@
                                             <div class="form-group">
                                                 <label>PIC Penganjur</label>
                                                 <asp:TextBox ID="TB_PicEkspo" runat="server"
-                                                    Text='<%# Bind("TB_PicEkspo") %>' CssClass="form-control" />
+                                                    Text='<%# Bind("PicEkspo") %>' CssClass="form-control" />
 
                                             </div>
                                         </div>
@@ -2319,7 +2319,7 @@
                                         <div class="form-group">
                                             <label>PIC Penganjur</label>
                                             <asp:TextBox ID="TB_PicEkspo" runat="server"
-                                                Text='<%# Bind("TB_PicEkspo") %>' CssClass="form-control" />
+                                                Text='<%# Bind("PicEkspo") %>' CssClass="form-control" />
 
                                         </div>
                                     </div>
