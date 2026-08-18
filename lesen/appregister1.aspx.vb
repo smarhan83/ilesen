@@ -1589,11 +1589,11 @@ Partial Class appregister1
                     End If
 
                     If IsDBNull(myReader.Item("TarikhKhemahEkspo1")) = False Then
-                        TB_TarikhKhemahEkspo1.Text = CDate(myReader.Item("TarikhKhemahEkspo1")).ToString("yyyy-MM-dd")
+                        TB_TarikhKhemahEkspo1_ins.Text = CDate(myReader.Item("TarikhKhemahEkspo1")).ToString("yyyy-MM-dd")
                     End If
 
                     If IsDBNull(myReader.Item("TarikhKhemahEkspo2")) = False Then
-                        TB_TarikhKhemahEkspo2.Text = CDate(myReader.Item("TarikhKhemahEkspo2")).ToString("yyyy-MM-dd")
+                        TB_TarikhKhemahEkspo2_ins.Text = CDate(myReader.Item("TarikhKhemahEkspo2")).ToString("yyyy-MM-dd")
                     End If
 
                     If myReader.Item("KontraktorIklan").ToString().Length > 0 Then
