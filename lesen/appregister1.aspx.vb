@@ -255,6 +255,9 @@ Partial Class appregister1
                 extstr = "Batal"
             End If
 
+            'ShowAlert("error", "", "intRow=" & intRow & "/hfid=" & hfid & "/cb" & cb)
+            'Return
+
             Using myConnection As New SqlConnection(ConfigurationManager.ConnectionStrings("webcon_ConnectionStr").ConnectionString)
 
                 myConnection.Open()
