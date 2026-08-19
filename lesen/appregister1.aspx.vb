@@ -558,7 +558,7 @@ Partial Class appregister1
                 pnla1.Visible = True
                 pnla2.Visible = True
                 pnla3.Visible = True
-            Case 27
+            Case 27   'Banting
                 pnla.Visible = True
                 pnl6.Visible = True
 
@@ -1695,10 +1695,12 @@ Partial Class appregister1
             End If
 
             For i As Integer = 0 To SaizIklanList.Length - 1
-                Dim newRow As DataRow = dt.NewRow()
-                newRow("SaizIklan") = SaizIklanList(i).Trim()
-                newRow("Bercahaya") = CahayaIklanList(i).Trim()
-                newRow("Unit") = UnitIklanList(i).Trim()
+                If Not String.IsNullOrWhiteSpace(SaizIklanList(i)) Then
+                    Dim newRow As DataRow = dt.NewRow()
+                    newRow("SaizIklan") = SaizIklanList(i).Trim()
+                    newRow("Bercahaya") = CahayaIklanList(i).Trim()
+                    newRow("Unit") = UnitIklanList(i).Trim()
+                End If
 
                 dt.Rows.Add(newRow)
             Next
@@ -1733,14 +1735,16 @@ Partial Class appregister1
             End If
 
             For i As Integer = 0 To BakaAnjingList.Length - 1
-                Dim newRow As DataRow = dt.NewRow()
-                newRow("Baka") = BakaAnjingList(i).Trim()
-                newRow("Jantan") = JantanList(i).Trim()
-                newRow("Betina") = BetinaList(i).Trim()
-                newRow("JantanMandul") = JantanMandulList(i).Trim()
-                newRow("BetinaMandul") = BetinaMandulList(i).Trim()
+                If Not String.IsNullOrWhiteSpace(BakaAnjingList(i)) Then
+                    Dim newRow As DataRow = dt.NewRow()
+                    newRow("Baka") = BakaAnjingList(i).Trim()
+                    newRow("Jantan") = JantanList(i).Trim()
+                    newRow("Betina") = BetinaList(i).Trim()
+                    newRow("JantanMandul") = JantanMandulList(i).Trim()
+                    newRow("BetinaMandul") = BetinaMandulList(i).Trim()
 
-                dt.Rows.Add(newRow)
+                    dt.Rows.Add(newRow)
+                End If
             Next
 
             ViewState("AnjingTable_ins") = dt
@@ -1766,11 +1770,13 @@ Partial Class appregister1
             End If
 
             For i As Integer = 0 To LokasiList.Length - 1
-                Dim newRow As DataRow = dt.NewRow()
-                newRow("No") = (i + 1).ToString
-                newRow("Lokasi") = LokasiList(i).Trim()
+                If Not String.IsNullOrWhiteSpace(LokasiList(i)) Then
+                    Dim newRow As DataRow = dt.NewRow()
+                    newRow("No") = (i + 1).ToString
+                    newRow("Lokasi") = LokasiList(i).Trim()
 
-                dt.Rows.Add(newRow)
+                    dt.Rows.Add(newRow)
+                End If
             Next
 
             ViewState("LokasiTable_ins") = dt
@@ -2527,13 +2533,16 @@ Partial Class appregister1
                         dt.Columns.Add("Unit", GetType(String))
                     End If
 
-                    For i As Integer = 0 To SaizIklanList.Length - 1
-                        Dim newRow As DataRow = dt.NewRow()
-                        newRow("SaizIklan") = SaizIklanList(i).Trim()
-                        newRow("Bercahaya") = CahayaIklanList(i).Trim()
-                        newRow("Unit") = UnitIklanList(i).Trim()
 
-                        dt.Rows.Add(newRow)
+                    For i As Integer = 0 To SaizIklanList.Length - 1
+                        If Not String.IsNullOrWhiteSpace(SaizIklanList(i)) Then
+                            Dim newRow As DataRow = dt.NewRow()
+                            newRow("SaizIklan") = SaizIklanList(i).Trim()
+                            newRow("Bercahaya") = CahayaIklanList(i).Trim()
+                            newRow("Unit") = UnitIklanList(i).Trim()
+
+                            dt.Rows.Add(newRow)
+                        End If
                     Next
 
                     ViewState("IklanTable") = dt
@@ -2566,14 +2575,17 @@ Partial Class appregister1
                     End If
 
                     For i As Integer = 0 To BakaAnjingList.Length - 1
-                        Dim newRow As DataRow = dt.NewRow()
-                        newRow("Baka") = BakaAnjingList(i).Trim()
-                        newRow("Jantan") = JantanList(i).Trim()
-                        newRow("Betina") = BetinaList(i).Trim()
-                        newRow("JantanMandul") = JantanMandulList(i).Trim()
-                        newRow("BetinaMandul") = BetinaMandulList(i).Trim()
+                        If Not String.IsNullOrWhiteSpace(BakaAnjingList(i)) Then
+                            Dim newRow As DataRow = dt.NewRow()
+                            newRow("Baka") = BakaAnjingList(i).Trim()
+                            newRow("Jantan") = JantanList(i).Trim()
+                            newRow("Betina") = BetinaList(i).Trim()
+                            newRow("JantanMandul") = JantanMandulList(i).Trim()
+                            newRow("BetinaMandul") = BetinaMandulList(i).Trim()
 
-                        dt.Rows.Add(newRow)
+                            dt.Rows.Add(newRow)
+                        End If
+
                     Next
 
                     ViewState("AnjingTable") = dt
@@ -2599,11 +2611,13 @@ Partial Class appregister1
                     End If
 
                     For i As Integer = 0 To LokasiList.Length - 1
-                        Dim newRow As DataRow = dt.NewRow()
-                        newRow("No") = (i + 1).ToString
-                        newRow("Lokasi") = LokasiList(i).Trim()
+                        If Not String.IsNullOrWhiteSpace(LokasiList(i)) Then
+                            Dim newRow As DataRow = dt.NewRow()
+                            newRow("No") = (i + 1).ToString
+                            newRow("Lokasi") = LokasiList(i).Trim()
 
-                        dt.Rows.Add(newRow)
+                            dt.Rows.Add(newRow)
+                        End If
                     Next
 
                     ViewState("LokasiTable") = dt
@@ -2690,7 +2704,7 @@ Partial Class appregister1
         Dim counter1 As Integer = 0
         Dim extstr As String = ""
         Dim hfid As HiddenField = DirectCast(FormView1.FindControl("HF_PermohonanID"), HiddenField)
-        'Dim ddl As HiddenField = DirectCast(FormView1.FindControl("HF_JenisLesenIdList"), HiddenField)
+        Dim ddl As HiddenField = DirectCast(FormView1.FindControl("HF_JenisLesenIdList"), HiddenField)
         Dim cb As CheckBox = DirectCast(FormView1.FindControl("CB_IsBatal"), CheckBox)
         'Dim ddl As DropDownList = DirectCast(FormView1.FindControl("DDL_JenisLesen"), DropDownList)
 
@@ -2717,10 +2731,10 @@ Partial Class appregister1
                 myCommand1.Dispose()
                 myConnection.Close()
 
-                'If counter < 1 And cb.Checked = False And ddl.Value <> "9" Then
-                '    ShowAlert("error", "", "Gagal hantar. Sila tambah jabatan agensi")
-                '    Return
-                'End If
+                If counter < 1 And cb.Checked = False And (ddl.Value <> "9" Or ddl.Value <> "27") Then
+                    ShowAlert("error", "", "Gagal hantar. Sila tambah jabatan agensi")
+                    Return
+                End If
 
                 '//
                 Dim result2 = insertMaklumatPembetulan(CInt(hfid.Value))
@@ -2777,7 +2791,7 @@ Partial Class appregister1
             End If
 
             Dim myCommandSelect As New SqlCommand(SQL, myConnection)
-            myCommandSelect.Parameters.AddWithValue("@Permohonan_ID", hfid)
+            myCommandSelect.Parameters.AddWithValue("@Permohonan_ID", CInt(hfid.Value))
 
             Dim myReader As SqlDataReader = myCommandSelect.ExecuteReader
 
