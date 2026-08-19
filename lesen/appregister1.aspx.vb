@@ -1700,9 +1700,10 @@ Partial Class appregister1
                     newRow("SaizIklan") = SaizIklanList(i).Trim()
                     newRow("Bercahaya") = CahayaIklanList(i).Trim()
                     newRow("Unit") = UnitIklanList(i).Trim()
+
+                    dt.Rows.Add(newRow)
                 End If
 
-                dt.Rows.Add(newRow)
             Next
 
             ViewState("IklanTable_ins") = dt
