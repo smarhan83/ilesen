@@ -273,7 +273,7 @@ Partial Class appregister1
                 myConnection.Close()
 
                 '//
-                Dim result2 = insertMaklumatPembetulan(hfid)
+                Dim result2 = insertMaklumatPembetulan(CInt(hfid))
 
                 If result2 = False Then
                     ShowAlert("error", "", "Gagal proses database. Sila tekan Hantar sekali lagi." & hfid)
