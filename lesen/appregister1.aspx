@@ -3013,7 +3013,7 @@
                                             <asp:Label ID="lblNamaSyarikatOrAlamat" runat="server" Text='<%# If(Not String.IsNullOrEmpty(Eval("NamaBaruSyarikat")?.ToString()), Eval("NamaBaruSyarikat"), If(Not String.IsNullOrEmpty(Eval("NamaSyarikat")?.ToString()), Eval("NamaSyarikat"), Eval("DisplayAlamat"))) %>' 
                                                 Font-Size="10pt"></asp:Label><br />
                                             <asp:Label ID="lblNamaAlamat" runat="server" Visible='<%# If(String.IsNullOrEmpty(Eval("NamaSyarikat")?.ToString()) And String.IsNullOrEmpty(Eval("NamaBaruSyarikat")?.ToString()), False, True) %>' 
-                                                Text='<%# Eval("NamaSyarikat") %>' Font-Size="10pt"></asp:Label>
+                                                Text='<%# Eval("DisplayAlamat") %>' Font-Size="10pt"></asp:Label>
                                
                                         </ItemTemplate>
                                     </asp:TemplateField>
