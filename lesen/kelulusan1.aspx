@@ -1365,7 +1365,7 @@
 
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label>Jenis Perniagaan</label>
+                                        <label>Jenis Jualan</label>
                                         <asp:TextBox ID="TB_JenisPerniagaanPasar" runat="server" CssClass="form-control" />
 
                                     </div>
@@ -1380,6 +1380,7 @@
                                             <asp:ListItem>Pasar Pagi</asp:ListItem>
                                             <asp:ListItem>Pasar Malam</asp:ListItem>
                                             <asp:ListItem>Pasar Lambak</asp:ListItem>
+                                            <asp:ListItem>Pasar Sehari</asp:ListItem>
                                         </asp:DropDownList>
 
                                     </div>
@@ -1499,6 +1500,34 @@
 
                             <div class="row">
 
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Jenis Penjaja</label>
+                                        <asp:DropDownList ID="DDL_JenisPenjaja" CssClass="form-control select2" runat="server"
+                                            DataSourceID="SqlDataSourceJenisPenjaja" DataTextField="name" DataValueField="id">
+                                        </asp:DropDownList>
+                                        <asp:SqlDataSource runat="server" ID="SqlDataSourceJenisPenjaja" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
+                                            SelectCommand="SELECT NULL AS id, '-- Sila Pilih --' AS name UNION ALL SELECT id, name 
+                                                    FROM TBL_LOOKUPS WHERE lookupgrp_id = 10006 AND status = 1"></asp:SqlDataSource>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Status Tanah</label>
+                                        <asp:DropDownList ID="DDL_StatusTanahPenjaja" CssClass="form-control select2" runat="server"
+                                            DataSourceID="SqlDataSourceStatusTanahPenjaja" DataTextField="name" DataValueField="id">
+                                        </asp:DropDownList>
+                                        <asp:SqlDataSource runat="server" ID="SqlDataSourceStatusTanahPenjaja" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
+                                            SelectCommand="SELECT NULL AS id, '-- Sila Pilih --' AS name UNION ALL SELECT id, name 
+                                                    FROM TBL_LOOKUPS WHERE lookupgrp_id = 10007 AND status = 1"></asp:SqlDataSource>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="row">
+
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>Alamat aktiviti penjajaan</label>
@@ -1509,12 +1538,50 @@
 
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label>Jenis Perniagaan</label>
+                                        <label>Jenis Jualan</label>
                                         <asp:TextBox ID="TB_JenisPerniagaanPenjaja" runat="server" CssClass="form-control" />
 
                                     </div>
                                 </div>
 
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Masa Mula Jualan</label>
+                                        <asp:TextBox ID="TB_MasaPenjaja1" runat="server" TextMode="Time" CssClass="form-control" />
+
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Masa Tamat Jualan</label>
+                                        <asp:TextBox ID="TB_MasaPenjaja2" runat="server" TextMode="Time" CssClass="form-control" />
+
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Jenis Kenderaan (Penjaja Berkenderaan)</label>
+                                        <asp:DropDownList ID="DDL_JenisKenderaanPenjaja" CssClass="form-control select2" runat="server"
+                                            DataSourceID="SqlDataSourceJenisKenderaanPenjaja" DataTextField="name" DataValueField="id">
+                                        </asp:DropDownList>
+                                        <asp:SqlDataSource runat="server" ID="SqlDataSourceJenisKenderaanPenjaja" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
+                                            SelectCommand="SELECT NULL AS id, '-- Sila Pilih --' AS name UNION ALL SELECT id, name 
+                                                    FROM TBL_LOOKUPS WHERE lookupgrp_id = 10008 AND status = 1"></asp:SqlDataSource>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>No Pendaftaran Kenderaan</label>
+                                        <asp:TextBox ID="TB_NoKenderaanPenjaja" runat="server" CssClass="form-control" />
+
+                                    </div>
+                                </div>
                             </div>
 
                         </asp:Panel>
@@ -1534,8 +1601,8 @@
 
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label>Nama Aktiviti/Program</label>
-                                        <asp:TextBox ID="TB_NamaEkspo" runat="server" CssClass="form-control" />
+                                        <label>Alamat Penganjur</label>
+                                        <asp:TextBox ID="TB_AlamatPenganjurEkspo" runat="server" TextMode="MultiLine" Rows="3" CssClass="form-control" />
 
                                     </div>
                                 </div>
@@ -1546,16 +1613,36 @@
 
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label>Lokasi</label>
-                                        <asp:TextBox ID="TB_LokasiEkspo" runat="server" TextMode="MultiLine" Rows="3" CssClass="form-control" />
+                                        <label>PIC Penganjur</label>
+                                        <asp:TextBox ID="TB_PicEkspo" runat="server" CssClass="form-control" />
+
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>No. Tel.</label>
+                                        <asp:TextBox ID="TB_NoTel" runat="server" CssClass="form-control" />
+
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="row">
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Nama Aktiviti/Program</label>
+                                        <asp:TextBox ID="TB_NamaEkspo" runat="server" CssClass="form-control" />
 
                                     </div>
                                 </div>
 
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label>No. Tel.</label>
-                                        <asp:TextBox ID="TB_NoTel" runat="server" CssClass="form-control" />
+                                        <label>Lokasi Program</label>
+                                        <asp:TextBox ID="TB_LokasiEkspo" runat="server" TextMode="MultiLine" Rows="3" CssClass="form-control" />
 
                                     </div>
                                 </div>
@@ -1573,6 +1660,13 @@
 
                                 <div class="col-md-3">
                                     <div class="form-group">
+                                        <label>Tarikh Tamat</label>
+                                        <asp:TextBox ID="TB_TarikhEkspo2" runat="server" TextMode="Date" CssClass="form-control" />
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="form-group">
                                         <label>Masa Mula</label>
                                         <asp:TextBox ID="TB_MasaEkspo1" runat="server" TextMode="Time" CssClass="form-control" />
                                     </div>
@@ -1580,15 +1674,58 @@
 
                                 <div class="col-md-3">
                                     <div class="form-group">
-                                        <label>Tarikh Akhir</label>
-                                        <asp:TextBox ID="TB_TarikhEkspo2" runat="server" TextMode="Date" CssClass="form-control" />
+                                        <label>Masa Tamat</label>
+                                        <asp:TextBox ID="TB_MasaEkspo2" runat="server" TextMode="Time" CssClass="form-control" />
+
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="row">
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Tentatif Program</label>
+                                        <asp:TextBox ID="TB_TentatifEkspo" runat="server" TextMode="MultiLine" Rows="3" CssClass="form-control" />
+
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Selebriti/Penceramah/Artis Yang Dijangka Terlibat</label>
+                                        <asp:TextBox ID="TB_JemputanEkspo" runat="server" TextMode="MultiLine" Rows="3" CssClass="form-control" />
+
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Kontraktor Pembersihan</label>
+                                        <asp:TextBox ID="TB_PembersihanEkspo" runat="server" CssClass="form-control" />
+
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Cadangan Tarikh Mula Pasang Khemah</label>
+                                        <asp:TextBox ID="TB_TarikhKhemahEkspo1" runat="server" TextMode="Date" CssClass="form-control" />
+
                                     </div>
                                 </div>
 
                                 <div class="col-md-3">
                                     <div class="form-group">
-                                        <label>Masa Akhir</label>
-                                        <asp:TextBox ID="TB_MasaEkspo2" runat="server" TextMode="Time" CssClass="form-control" />
+                                        <label>Cadangan Tarikh Buka Khemah</label>
+                                        <asp:TextBox ID="TB_TarikhKhemahEkspo2" runat="server" TextMode="Date" CssClass="form-control" />
 
                                     </div>
                                 </div>

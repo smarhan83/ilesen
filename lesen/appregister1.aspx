@@ -580,7 +580,7 @@
 
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <asp:Label ID="Lbl_AlamatBaru" runat="server" Text="Alamat Baru" Font-Bold="true"/>
+                                                <asp:Label ID="Lbl_AlamatBaru" runat="server" Text="Alamat Baru" style="font-weight:600;"/>
                                                 <asp:TextBox ID="TB_AlamatBaru" runat="server"
                                                     Text='<%# Bind("AlamatBaru") %>' TextMode="MultiLine" Rows="3" CssClass="form-control" />
 
@@ -597,7 +597,7 @@
 
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <asp:Label ID="Lbl_JenisPerniagaanBaru" runat="server" Text="Jenis Perniagaan Tambahan" Font-Bold="true"/>
+                                                <asp:Label ID="Lbl_JenisPerniagaanBaru" runat="server" Text="Jenis Perniagaan Tambahan" style="font-weight:600;"/>
                                                 <asp:TextBox ID="TB_JenisPerniagaanBaru" runat="server"
                                                     Text='<%# Bind("JenisPerniagaanBaru") %>' CssClass="form-control" />
 
@@ -1723,7 +1723,7 @@
 
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <asp:Label ID="Lbl_AlamatBaru" runat="server" Text="Alamat Baru" />
+                                                <asp:Label ID="Lbl_AlamatBaru" runat="server" Text="Alamat Baru" style="font-weight:600;"/>
                                                 <asp:TextBox ID="TB_AlamatBaru" runat="server"
                                                     Text='<%# Bind("AlamatBaru") %>' TextMode="MultiLine" Rows="3" CssClass="form-control" />
                                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator13" runat="server" CssClass="cssRequiredField"
@@ -1742,7 +1742,7 @@
 
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <asp:Label ID="Lbl_JenisPerniagaanBaru" runat="server" Text="Jenis Perniagaan Tambahan" Font-Bold="true" />
+                                                <asp:Label ID="Lbl_JenisPerniagaanBaru" runat="server" Text="Jenis Perniagaan Tambahan" style="font-weight:600;" />
                                                 <asp:TextBox ID="TB_JenisPerniagaanBaru" runat="server"
                                                     Text='<%# Bind("JenisPerniagaanBaru") %>' CssClass="form-control" />
                                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator14" runat="server" CssClass="cssRequiredField"
@@ -3010,10 +3010,10 @@
                                     <asp:TemplateField HeaderText="Pemohon">
                                         <ItemTemplate>
                                             <asp:Label ID="lblNamaPemohon" runat="server" Text='<%# Eval("Pemohon_Name") %>'></asp:Label><br />
-                                            <asp:Label ID="lblNamaSyarikat" runat="server" Visible='<%# If(String.IsNullOrEmpty(Eval("NamaSyarikat")?.ToString()) And String.IsNullOrEmpty(Eval("NamaBaruSyarikat")?.ToString()), False, True) %>' 
-                                                Text='<%# If(String.IsNullOrEmpty(Eval("NamaBaruSyarikat")?.ToString()), Eval("NamaSyarikat"), Eval("NamaBaruSyarikat")) %>' Font-Size="10pt"></asp:Label><br />
-                                            <asp:Label ID="lblAlamatPremis" runat="server" Visible='<%# If(String.IsNullOrEmpty(Eval("AlamatPremis")?.ToString()) And String.IsNullOrEmpty(Eval("AlamatBaru")?.ToString()), False, True) %>' 
-                                                Text='<%# If(String.IsNullOrEmpty(Eval("AlamatBaru")?.ToString()), Eval("AlamatPremis"), Eval("AlamatBaru")) %>' Font-Size="10pt"></asp:Label><br />
+                                            <asp:Label ID="lblNamaSyarikatOrAlamat" runat="server" Text='<%# If(Not String.IsNullOrEmpty(Eval("NamaBaruSyarikat")?.ToString()), Eval("NamaBaruSyarikat"), If(Not String.IsNullOrEmpty(Eval("NamaSyarikat")?.ToString()), Eval("NamaSyarikat"), Eval("DisplayAlamat"))) %>' 
+                                                Font-Size="10pt"></asp:Label><br />
+                                            <asp:Label ID="lblNamaAlamat" runat="server" Visible='<%# If(String.IsNullOrEmpty(Eval("NamaSyarikat")?.ToString()) And String.IsNullOrEmpty(Eval("NamaBaruSyarikat")?.ToString()), False, True) %>' 
+                                                Text='<%# Eval("NamaSyarikat") %>' Font-Size="10pt"></asp:Label>
                                
                                         </ItemTemplate>
                                     </asp:TemplateField>
@@ -3093,6 +3093,7 @@
                             <asp:SqlDataSource runat="server" ID="SqlDataSourceGrid" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
                                 DeleteCommand="DELETE FROM LESEN_Permohonan WHERE Permohonan_ID = @Permohonan_ID"
                                 SelectCommand="SELECT ROW_NUMBER() OVER(ORDER BY a.TarikhMohon desc) as RowNo, a.*, c.Pemohon_Name, 
+                                        ISNULL(a.AlamatBaru,ISNULL(a.AlamatPremis,ISNULL(a.AlamatPenjajaan,ISNULL(a.AnjingAlamat,isnull(a.LokasiPasar1,ISNULL(a.LokasiPasar2,ISNULL(a.LokasiPasar3,''))))))) as DisplayAlamat, 
                                         CASE WHEN a.StatusID = 0 and a.IsBatal = 0 then ISNULL(d.Description + 
                                         (SELECT CASE WHEN MIN(ISNULL(reviewStatusID,0)) = 0 THEN ' (Belum Disemak)' 
                                         WHEN MIN(ISNULL(reviewStatusID,0)) = 1 THEN ' (Dalam Proses Semakan)'
@@ -3171,7 +3172,13 @@
                                         AND a.Is24Jam = CASE WHEN @risikoID = 2 THEN a.Is24Jam ELSE @risikoID END 
                                         AND a.StatusID = CASE WHEN @statusID = -1 THEN a.StatusID ELSE @statusID END 
                                         AND a.CreatorID = CASE WHEN @creatorID = '0' THEN a.CreatorID ELSE @creatorID END 
+                                        AND ISNULL(a.AlamatPremis,'') LIKE CASE WHEN @Alamat='' THEN ISNULL(a.AlamatPremis,'') ELSE '%'+@Alamat+'%' END
                                         AND ISNULL(a.AlamatBaru,'') LIKE CASE WHEN @Alamat='' THEN ISNULL(a.AlamatBaru,'') ELSE '%'+@Alamat+'%' END
+                                        AND ISNULL(a.AnjingAlamat,'') LIKE CASE WHEN @Alamat='' THEN ISNULL(a.AnjingAlamat,'') ELSE '%'+@Alamat+'%' END
+                                        AND ISNULL(a.AlamatPenjajaan,'') LIKE CASE WHEN @Alamat='' THEN ISNULL(a.AlamatPenjajaan,'') ELSE '%'+@Alamat+'%' END
+                                        AND ISNULL(a.LokasiPasar1,'') LIKE CASE WHEN @Alamat='' THEN ISNULL(a.LokasiPasar1,'') ELSE '%'+@Alamat+'%' END
+                                        AND ISNULL(a.LokasiPasar2,'') LIKE CASE WHEN @Alamat='' THEN ISNULL(a.LokasiPasar2,'') ELSE '%'+@Alamat+'%' END
+                                        AND ISNULL(a.LokasiPasar2,'') LIKE CASE WHEN @Alamat='' THEN ISNULL(a.LokasiPasar3,'') ELSE '%'+@Alamat+'%' END
                                         /*AND a.AlamatBaru LIKE CASE WHEN @Alamat='' THEN a.AlamatBaru ELSE '%'+@Alamat+'%' END */
                                         /*AND a.AnjingAlamat LIKE CASE WHEN @Alamat='%%' THEN a.AnjingAlamat ELSE '%'+@Alamat+'%' END*/ 
                                         AND a.TarikhMohon LIKE '%'+@TarikhMohon+'%' 
@@ -3356,9 +3363,10 @@
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <asp:Label runat="server" Font-Bold="true">Pembetulan Maklumat Permohonan</asp:Label>
+                                    <asp:Label runat="server" Font-Bold="true" Font-Underline="true">Pembetulan Maklumat Permohonan</asp:Label>
                                 </div>
                             </div>
+                            <br />
 
                             <asp:HiddenField ID="HF_SaizIklanList_ins" runat="server" />
                             <asp:HiddenField ID="HF_CahayaIklanList_ins" runat="server" />
@@ -3446,7 +3454,7 @@
 
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <asp:Label ID="Lbl_AlamatBaru_ins" runat="server" Text="Alamat Baru" />
+                                        <asp:Label ID="Lbl_AlamatBaru_ins" runat="server" Text="Alamat Baru" Font-Bold="true"/>
                                         <asp:TextBox ID="TB_AlamatBaru_ins" runat="server" TextMode="MultiLine" Rows="3" CssClass="form-control" />
 
                                     </div>
