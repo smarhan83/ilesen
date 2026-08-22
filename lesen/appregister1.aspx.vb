@@ -2010,16 +2010,18 @@ Partial Class appregister1
                         BakaAnjingList, AnjingJantanList, AnjingBetinaList, AnjingJantanMandulList, AnjingBetinaMandulList, 
                         NamaSyarikat, NoPendaftaran, NoAkaun, AlamatPremis, JenisPerniagaan,
                         PemilikBaru, AlamatBaru, JenisPerniagaanBaru, NamaBaruSyarikat, BillboardLokasi, LokasiPasar1, LokasiPasar2, LokasiPasar3, JenisPasar,
-                        JenisPerniagaanPasar, JumlahPetak, AnjingAlamat, AnjingJenisPremis, AlamatPenjajaan, JenisPerniagaanPenjaja, 
-                        TarikhBatal, PenganjurEkspo, NamaEkspo, LokasiEkspo, NoTelEkspo, TarikhEkspo1, TarikhEkspo2, MasaEkspo1, MasaEkspo2, 
+                        JenisPerniagaanPasar, JumlahPetak, AnjingAlamat, AnjingJenisPremis, JenisPenjaja, StatusTanahPenjaja, AlamatPenjajaan, JenisPerniagaanPenjaja, MasaPenjaja1, MasaPenjaja2,
+                        JenisKenderaanPenjaja, NoKenderaanPenjaja, TarikhBatal, PenganjurEkspo, AlamatPenganjurEkspo, PicEkspo, NoTelEkspo, NamaEkspo, LokasiEkspo, TarikhEkspo1, TarikhEkspo2, 
+                        MasaEkspo1, MasaEkspo2, TentatifEkspo, JemputanEkspo, PembersihanEkspo, TarikhKhemahEkspo1, TarikhKhemahEkspo2, 
                         KontraktorIklan, NoTelKontraktor, UkuranBanting, BilBanting, TarikhBanting1, TarikhBanting2, NoResitBanting, NoSiriStiker, TarikhBanting3, 
                         CreatorID, CreatedDt, LastModID, LastModDt) 
                     SELECT Permohonan_ID, SaizIklanList, CahayaIklanList, UnitIklanList, LokasiList, 
                         BakaAnjingList, AnjingJantanList, AnjingBetinaList, AnjingJantanMandulList, AnjingBetinaMandulList, 
                         NamaSyarikat, NoPendaftaran, NoAkaun, AlamatPremis, JenisPerniagaan, 
                         PemilikBaru, AlamatBaru, JenisPerniagaanBaru, NamaBaruSyarikat, BillboardLokasi, LokasiPasar1, LokasiPasar2, LokasiPasar3, JenisPasar,
-                        JenisPerniagaanPasar, JumlahPetak, AnjingAlamat, AnjingJenisPremis, AlamatPenjajaan, JenisPerniagaanPenjaja, 
-                        TarikhBatal, PenganjurEkspo, NamaEkspo, LokasiEkspo, NoTelEkspo, TarikhEkspo1, TarikhEkspo2, MasaEkspo1, MasaEkspo2, 
+                        JenisPerniagaanPasar, JumlahPetak, AnjingAlamat, AnjingJenisPremis, JenisPenjaja, StatusTanahPenjaja, AlamatPenjajaan, JenisPerniagaanPenjaja, MasaPenjaja1, MasaPenjaja2,
+                        JenisKenderaanPenjaja, NoKenderaanPenjaja, TarikhBatal, PenganjurEkspo, AlamatPenganjurEkspo, PicEkspo, NoTelEkspo, NamaEkspo, LokasiEkspo, TarikhEkspo1, TarikhEkspo2, 
+                        MasaEkspo1, MasaEkspo2, TentatifEkspo, JemputanEkspo, PembersihanEkspo, TarikhKhemahEkspo1, TarikhKhemahEkspo2, 
                         KontraktorIklan, NoTelKontraktor, UkuranBanting, BilBanting, TarikhBanting1, TarikhBanting2, NoResitBanting, NoSiriStiker, TarikhBanting3, 
                         CreatorID, CreatedDt, LastModID, LastModDt FROM LESEN_Permohonan 
                     WHERE LESEN_Permohonan.Permohonan_ID = @Permohonan_ID
