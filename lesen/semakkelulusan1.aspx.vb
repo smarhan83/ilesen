@@ -42,7 +42,7 @@ Partial Class semakkelulusan1
         Dim IsPublish As Boolean = CBool(GridView1.SelectedDataKey.Values(4))
 
         If getJabatanLesen(CInt(Session.Item("sessionEstateID"))) = False Or ApprStatusID < 9 Then
-            tabSurat.Visible = False
+            'tabSurat.Visible = False
             tabLampiran.Visible = False
         Else
 
@@ -1332,7 +1332,7 @@ Partial Class semakkelulusan1
                 End If
 
             Catch ex As Exception
-                MessageBox("ERROR: " & ex.ToString, Me)
+                MessageBox("ERROR: " & ex.ToString(), Me)
             End Try
 
             myConnection.Close()
