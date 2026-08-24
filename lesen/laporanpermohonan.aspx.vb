@@ -10,7 +10,7 @@ Partial Class laporanpermohonan
 
         Dim sql As String = ""
         Dim sqlwhere As String = ""
-        Dim jenisLaporan = {"mpk_laporan_png", "mpk_laporan_btl", "mpk_laporan_ins", "mpk_laporan_spd", "mpk_laporan_pl", "mpk_laporan_anj", "mpk_laporan_pjj"}
+        Dim jenisLaporan = {"laporanpermohonan_png", "laporanpermohonan_btl", "laporanpermohonan_ins", "laporanpermohonan_spd", "laporanpermohonan_pl", "laporanpermohonan_anj", "laporanpermohonan_pjj"}
 
         Try
             If ddlReport.SelectedValue = "1" Then
