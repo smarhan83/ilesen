@@ -1584,7 +1584,7 @@ Partial Class kelulusan1
 
                     Else
                         'MessageBox("Format Fail PDF Sahaja!", Me)
-                        ShowAlert("error", "", "Format Fail PDF Sahaja!")
+                        ShowAlert("error", "", "Format fail JPEG atau PDF sahaja dibenarkan!")
                         retval = False
                     End If
 
