@@ -1332,7 +1332,7 @@ Partial Class semakkelulusan1
                 End If
 
             Catch ex As Exception
-                MessageBox("ERROR", Me)
+                MessageBox("ERROR: " & ex.ToString, Me)
             End Try
 
             myConnection.Close()
