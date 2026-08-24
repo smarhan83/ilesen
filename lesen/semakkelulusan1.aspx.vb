@@ -45,7 +45,7 @@ Partial Class semakkelulusan1
             tabSurat.Visible = False
             tabLampiran.Visible = False
         Else
-
+            tabSurat.Visible = True
             GetSuratContent(PermohonanID)
             GetLampiran(PermohonanID)
 
@@ -63,11 +63,9 @@ Partial Class semakkelulusan1
 
             GetSuratFail(PermohonanID)
 
-            tabSurat.Visible = True
-
-            'If IsPublish Then
-            '    tabSurat.Visible = False
-            'End If
+            If IsPublish Then
+                tabSurat.Visible = False
+            End If
 
         End If
 
@@ -1325,11 +1323,11 @@ Partial Class semakkelulusan1
 
                 If cb.Checked Then
                     'BT_Generate.Visible = False
-                    'tabSurat.Visible = False
+                    tabSurat.Visible = False
                     ShowAlert("success", "", "Surat kelulusan diterbitkan.")
                 Else
                     'BT_Generate.Visible = True
-                    'tabSurat.Visible = True
+                    tabSurat.Visible = True
                     ShowAlert("error", "", "Surat kelulusan tidak diterbitkan.")
                 End If
 
