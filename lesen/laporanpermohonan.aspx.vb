@@ -83,7 +83,7 @@ Partial Class laporanpermohonan
             Session.Item("pathUrl" + ReportVar) = "~/lesen/report/extras"
 
             Session.Item("reportPrintType") = "pdf"
-            ScriptManager.RegisterClientScriptBlock(Me.Page, Me.[GetType](), ReportVar, "window.open('/ReportViewer.aspx?name=" + ReportVar + "', '_blank', '');", True)
+            ScriptManager.RegisterClientScriptBlock(Me.Page, Me.[GetType](), ReportVar, "window.open('../ReportViewer.aspx?name=" + ReportVar + "', '_blank', '');", True)
 
         Catch ex As Exception
             Label1.Text = ex.Message
