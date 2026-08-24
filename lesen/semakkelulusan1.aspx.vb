@@ -1339,7 +1339,7 @@ Partial Class semakkelulusan1
 
             myConnection.Close()
 
-        'End Using
+        End Using
 
     End Sub
 
