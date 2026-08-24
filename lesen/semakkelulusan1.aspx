@@ -423,7 +423,7 @@
                                 </div>
                             </div>
                             <div class="col-md-4">
-                                <asp:LinkButton runat="server" CssClass="btn btn-warning" ValidationGroup="updateForm" Text="Jana Surat" ID="BT_Generate" OnCommand="BT_Generate_Command" CausesValidation="False" OnClientClick="return confirm('Jana surat sekarang?');" />													
+                                <asp:LinkButton runat="server" CssClass="btn btn-warning" Text="Jana Surat" ID="BT_Generate" OnCommand="BT_Generate_Command" OnClientClick="return confirm('Jana surat sekarang?');" />													
                             </div>
                         </div>
                         <br />
