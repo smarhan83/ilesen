@@ -1307,37 +1307,37 @@ Partial Class semakkelulusan1
         Dim cb As CheckBox = DirectCast(FormView1.FindControl("CB_IsPublish"), CheckBox)
         'Dim bt As LinkButton = DirectCast(FormView1.FindControl("BT_Generate"), LinkButton)
 
-        'Using myConnection As New SqlConnection(ConfigurationManager.ConnectionStrings("webcon_ConnectionStr").ConnectionString)
+        Using myConnection As New SqlConnection(ConfigurationManager.ConnectionStrings("webcon_ConnectionStr").ConnectionString)
 
-        '    myConnection.Open()
+            myConnection.Open()
 
-        '    Dim SQL As String = "UPDATE LESEN_Permohonan SET IsPublish = @IsPublish, LastModDt = GETDATE()   
-        '                            WHERE Permohonan_ID = @Permohonan_ID"
+            Dim SQL As String = "UPDATE LESEN_Permohonan SET IsPublish = @IsPublish, LastModDt = GETDATE()   
+                                    WHERE Permohonan_ID = @Permohonan_ID"
 
-        '    Dim myCommandSelect As New SqlCommand(SQL, myConnection)
-        '    myCommandSelect.Parameters.AddWithValue("@Permohonan_ID", PermohonanID)
-        '    myCommandSelect.Parameters.AddWithValue("@IsPublish", cb.Checked.ToString)
+            Dim myCommandSelect As New SqlCommand(SQL, myConnection)
+            myCommandSelect.Parameters.AddWithValue("@Permohonan_ID", PermohonanID)
+            myCommandSelect.Parameters.AddWithValue("@IsPublish", cb.Checked.ToString)
 
-        '    Try
-        '        Dim recordset As Integer = myCommandSelect.ExecuteNonQuery()
+            Try
+                Dim recordset As Integer = myCommandSelect.ExecuteNonQuery()
 
-        '        gvTabBayaran.DataBind()
+                gvTabBayaran.DataBind()
 
-        '        If cb.Checked Then
-        '            BT_Generate.Visible = False
-        '            tabSurat.Visible = False
-        '            ShowAlert("success", "", "Surat kelulusan diterbitkan.")
-        '        Else
-        '            BT_Generate.Visible = True
-        '            tabSurat.Visible = True
-        '            ShowAlert("error", "", "Surat kelulusan tidak diterbitkan.")
-        '        End If
+                If cb.Checked Then
+                    'BT_Generate.Visible = False
+                    'tabSurat.Visible = False
+                    ShowAlert("success", "", "Surat kelulusan diterbitkan.")
+                Else
+                    'BT_Generate.Visible = True
+                    'tabSurat.Visible = True
+                    ShowAlert("error", "", "Surat kelulusan tidak diterbitkan.")
+                End If
 
-        '    Catch ex As Exception
-        '        MessageBox("Error", Me)
-        '    End Try
+            Catch ex As Exception
+                MessageBox("Error", Me)
+            End Try
 
-        '    myConnection.Close()
+            myConnection.Close()
 
         'End Using
 
