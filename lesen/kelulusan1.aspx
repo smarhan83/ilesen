@@ -2079,12 +2079,11 @@
                                                 </InsertItemTemplate>
                                             </asp:FormView>
                                             <asp:SqlDataSource runat="server" ID="SqlDataSourceReport" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
-                                                InsertCommand="INSERT INTO LESEN_PermohonanSurat (Permohonan_ID, JenisReport, P1, P2, P3, IsiKandungan, CreatedDt, ModDt) VALUES (@Permohonan_ID, 'LI', @P1, @P2, @P3, @IsiKandungan, GETDATE(), GETDATE()); "
+                                                InsertCommand="INSERT INTO LESEN_PermohonanSurat (Permohonan_ID, JenisReport, P1, P2, P3, IsiKandungan, CreatedDt, ModDt) VALUES 'LIK', @P1, @P2, @P3, @IsiKandungan, GETDATE(), GETDATE()); "
                                                 UpdateCommand="UPDATE LESEN_PermohonanSurat SET P1=@P1, P2=@P2, P3=@P3, IsiKandungan=@IsiKandungan WHERE PSID=@PSID"
                                                 SelectCommand="SELECT * FROM LESEN_PermohonanSurat WHERE PSID=@PSID">
                                                 <InsertParameters>
                                                     <asp:ControlParameter ControlID="GridView1" PropertyName="SelectedDataKey.Values[0]" Name="Permohonan_ID"></asp:ControlParameter>
-                                                    <asp:ControlParameter ControlID="GridView1" PropertyName="SelectedDataKey.Values[2]" Name="StatusID"></asp:ControlParameter>
                                                     <asp:Parameter Name="P1"></asp:Parameter>
                                                     <asp:Parameter Name="P2"></asp:Parameter>
                                                     <asp:Parameter Name="P3"></asp:Parameter>
