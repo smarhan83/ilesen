@@ -9,9 +9,32 @@ Partial Class laporanpermohonan
         End If
 
         Dim sql As String = ""
+        Dim sqlwhere As String = ""
         Dim jenisLaporan = {"mpk_laporan_png", "mpk_laporan_btl", "mpk_laporan_ins", "mpk_laporan_spd", "mpk_laporan_pl", "mpk_laporan_anj", "mpk_laporan_pjj"}
 
         Try
+            If ddlReport.SelectedValue = "1" Then
+
+                sqlwhere = "a.IsBatal = 0 AND a.JenisLesenDescList LIKE '%PERNIAGAAN%' AND"
+
+            ElseIf ddlReport.SelectedValue = "2" Then
+
+                sqlwhere = "a.IsBatal = 0 AND"
+
+            ElseIf ddlReport.SelectedValue = "5" Then
+
+                sqlwhere = "a.IsBatal = 0 AND a.JenisLesenDescList LIKE '%PASAR%' AND"
+
+            ElseIf ddlReport.SelectedValue = "6" Then
+
+                sqlwhere = "a.IsBatal = 0 AND a.JenisLesenDescList LIKE '%ANJING%' AND"
+
+            ElseIf ddlReport.SelectedValue = "7" Then
+
+                sqlwhere = "a.IsBatal = 0 AND a.JenisLesenDescList LIKE '%PENJAJA%' AND"
+
+            End If
+
             sql = "SELECT a.Permohonan_ID, a.Is24Jam, a.Rujukan, b.Pemohon_Name, b.Pemohon_MobileNo, ISNULL(a.NamaBaruSyarikat, a.NamaSyarikat) AS NamaSyarikat, 
             ISNULL(a.JenisPerniagaanBaru, a.JenisPerniagaan) AS JenisPerniagaan, a.JenisPerniagaanPasar, a.JenisPerniagaanPenjaja, a.JumlahPetak, 
             b.Pemohon_Address, ISNULL(a.AlamatBaru, a.AlamatPremis) AS AlamatPremis, a.AnjingAlamat, a.AlamatPenjajaan, a.LokasiPasar1, a.LokasiPasar2, a.LokasiPasar3, a.JenisLesenDescList, a.TarikhMohon, 
@@ -37,7 +60,7 @@ Partial Class laporanpermohonan
                 WHERE IsSelect = 1 
                 GROUP BY KadarBayaran_PermohonanID 
             ) kb ON kb.KadarBayaran_PermohonanID = a.Permohonan_ID 
-            WHERE a.IsBatal = 0 AND a.TarikhMohon BETWEEN '@entrydatea' AND '@entrydateb' 
+            WHERE " & sqlwhere & " a.TarikhMohon BETWEEN '@entrydatea' AND '@entrydateb' 
             ORDER BY a.TarikhMohon ASC"
 
             sql = sql.Replace("@entrydatea", TB_Date1.Text)
