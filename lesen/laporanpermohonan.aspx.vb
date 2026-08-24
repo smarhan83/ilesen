@@ -74,9 +74,9 @@ Partial Class laporanpermohonan
             Dim lStrReportName = ReportVar + ".rpt"
 
             pobjData(0, 0) = "paraSQL" : pobjData(0, 1) = sql
-            'pobjData(1, 0) = "paraType" : pobjData(1, 1) = DropDownListFieldStatus.SelectedItem.Text
-            pobjData(1, 0) = "paraDateA" : pobjData(1, 1) = TB_Date1.Text
-            pobjData(2, 0) = "paraDateB" : pobjData(2, 1) = TB_Date2.Text
+            pobjData(1, 0) = "paraType" : pobjData(1, 1) = ddlReport.SelectedItem.Text
+            pobjData(2, 0) = "paraDateA" : pobjData(2, 1) = TB_Date1.Text
+            pobjData(3, 0) = "paraDateB" : pobjData(3, 1) = TB_Date2.Text
 
             Session.Item("ReportName" + ReportVar) = lStrReportName
             Session.Item("pobjData" + ReportVar) = pobjData
