@@ -7,6 +7,7 @@ Imports System.Data.SqlClient
 Imports System.Drawing
 Imports System.Drawing.Imaging
 Imports System.IO
+'Imports System.Web.UI.WebControls
 Imports Microsoft.ReportingServices.Rendering.ExcelRenderer.ExcelGenerator.BIFF8
 
 Partial Class kelulusan1
@@ -1721,6 +1722,24 @@ Partial Class kelulusan1
 
     Private Sub gvTabUlasan_DataBound(sender As Object, e As EventArgs) Handles gvTabUlasan.DataBound
 
+    End Sub
+
+    Protected Sub GridViewReport_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles GridViewReport.SelectedIndexChanged
+        FormViewReport.ChangeMode(DetailsViewMode.Edit)
+    End Sub
+
+    Private Sub FormViewReport_ItemInserted(sender As Object, e As FormViewInsertedEventArgs) Handles FormViewReport.ItemInserted
+        GridViewReport.DataBind()
+    End Sub
+
+    Private Sub FormViewReport_ItemUpdated(sender As Object, e As FormViewUpdatedEventArgs) Handles FormViewReport.ItemUpdated
+        ShowAlert("success", "", "Rekod berjaya dikemaskini")
+        GridViewReport.DataBind()
+    End Sub
+
+    Private Sub GridViewReport_RowDeleted(sender As Object, e As GridViewDeletedEventArgs) Handles GridViewReport.RowDeleted
+        ShowAlert("success", "", "Rekod berjaya dikemaskini")
+        GridViewReport.DataBind()
     End Sub
 
     Private Sub GridView1_RowCommand(sender As Object, e As GridViewCommandEventArgs) Handles GridView1.RowCommand
