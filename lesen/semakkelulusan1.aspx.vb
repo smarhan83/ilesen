@@ -1316,24 +1316,24 @@ Partial Class semakkelulusan1
             myCommandSelect.Parameters.AddWithValue("@Permohonan_ID", PermohonanID)
             myCommandSelect.Parameters.AddWithValue("@IsPublish", cb.Checked.ToString)
 
-            Try
-                Dim recordset As Integer = myCommandSelect.ExecuteNonQuery()
+            'Try
+            Dim recordset As Integer = myCommandSelect.ExecuteNonQuery()
 
-                gvTabBayaran.DataBind()
+            gvTabBayaran.DataBind()
 
-                If cb.Checked Then
-                    bt.Visible = False
-                    tabSurat.Visible = False
-                    ShowAlert("success", "", "Surat kelulusan diterbitkan.")
-                Else
-                    bt.Visible = True
-                    tabSurat.Visible = True
-                    ShowAlert("error", "", "Surat kelulusan tidak diterbitkan.")
-                End If
+            If cb.Checked Then
+                bt.Visible = False
+                tabSurat.Visible = False
+                ShowAlert("success", "", "Surat kelulusan diterbitkan.")
+            Else
+                bt.Visible = True
+                tabSurat.Visible = True
+                ShowAlert("error", "", "Surat kelulusan tidak diterbitkan.")
+            End If
 
-            Catch ex As Exception
-                MessageBox(ex.ToString, Me)
-            End Try
+            'Catch ex As Exception
+            '    MessageBox("Error", Me)
+            'End Try
 
             myConnection.Close()
 
