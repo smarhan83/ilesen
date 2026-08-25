@@ -7,6 +7,8 @@ Imports System.Data.SqlClient
 Imports System.Drawing
 Imports System.Drawing.Imaging
 Imports System.IO
+Imports System.Web.UI.WebControls
+
 'Imports System.Web.UI.WebControls
 Imports Microsoft.ReportingServices.Rendering.ExcelRenderer.ExcelGenerator.BIFF8
 
@@ -2734,18 +2736,22 @@ Partial Class kelulusan1
 
     Protected Sub BT_GenerateUlasan_Command(sender As Object, e As CommandEventArgs)
 
-        If DDL_UlasanIK.SelectedValue = "" Then
+        If DDL_UlasanIK.SelectedValue = "0" Then
             Return
         End If
 
-        ShowAlert("success", "", "Test jana ulasan.")
+        Try
+            Dim jidList() As String = CStr(GridView1.SelectedDataKey.Values("JenisLesenIdList")).Split(","c)
+            Dim jid As String = CStr(GridView1.SelectedDataKey.Values("JenisLesenIdList"))
+            Dim pid As Integer = GridView1.SelectedDataKey.Values(0)
+            Dim namatemplatList() As String = CStr(DDL_UlasanIK.SelectedValue).Split(","c)
+            Dim isSokong As String = namatemplatList(0)
+            Dim namatemplat As String = namatemplatList(1)
+        Catch ex As Exception
+            ShowAlert("error", "", "test ulasan failed")
+        End Try
 
-        'Dim jidList() As String = CStr(GridView1.SelectedDataKey.Values("JenisLesenIdList")).Split(","c)
-        'Dim jid As String = CStr(GridView1.SelectedDataKey.Values("JenisLesenIdList"))
-        'Dim pid As Integer = GridView1.SelectedDataKey.Values(0)
-        'Dim namatemplatList() As String = CStr(DDL_UlasanIK.SelectedValue).Split(","c)
-        'Dim isSokong As String = namatemplatList(0)
-        'Dim namatemplat As String = namatemplatList(1)
+        ShowAlert("success", "", "Ulasan berjaya dijana.")
 
         'Using myConnection As New SqlConnection(ConfigurationManager.ConnectionStrings("webcon_ConnectionStr").ConnectionString)
 
