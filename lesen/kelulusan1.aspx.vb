@@ -2745,35 +2745,37 @@ Partial Class kelulusan1
         Dim isSokong As String = namatemplatList(0)
         Dim namatemplat As String = namatemplatList(1)
 
-        Using myConnection As New SqlConnection(ConfigurationManager.ConnectionStrings("webcon_ConnectionStr").ConnectionString)
+        ShowAlert("success", "", "JID:" & jidList(0) & "/IsSokong:" & isSokong & "/NamaTemplat:" & namatemplat & "/PID:" & pid)
 
-            myConnection.Open()
+        'Using myConnection As New SqlConnection(ConfigurationManager.ConnectionStrings("webcon_ConnectionStr").ConnectionString)
 
-            Dim SQL As String = "DELETE FROM LESEN_UlasanFail WHERE Permohonan_ID=@Permohonan_ID; 
-                    INSERT INTO LESEN_UlasanFail (Permohonan_ID, UlasanFail_Remarks, CreatorID, CreatedDt, LastModDt)
-                    SELECT @Permohonan_ID AS Permohonan_ID, Ulasan AS UlasanFail_Remarks, 'AUTO' AS CreatorID, 
-                    GETDATE() AS CreatedDt, GETDATE() AS LastModDt 
-                    FROM LESEN_UlasanIKTemplate
-                    WHERE JenisLesen_ID=@JenisLesen_ID AND IsSokong=@IsSokong AND NamaTemplat=@NamaTemplat;"
+        '    myConnection.Open()
 
-            Dim myCommandSelect As New SqlCommand(SQL, myConnection)
-            myCommandSelect.Parameters.AddWithValue("@JenisLesen_ID", jidList(0))
-            myCommandSelect.Parameters.AddWithValue("@IsSokong", isSokong)
-            myCommandSelect.Parameters.AddWithValue("@NamaTemplat", namatemplat)
-            myCommandSelect.Parameters.AddWithValue("@Permohonan_ID", pid)
+        '    Dim SQL As String = "DELETE FROM LESEN_UlasanFail WHERE Permohonan_ID=@Permohonan_ID; 
+        '            INSERT INTO LESEN_UlasanFail (Permohonan_ID, UlasanFail_Remarks, CreatorID, CreatedDt, LastModDt)
+        '            SELECT @Permohonan_ID AS Permohonan_ID, Ulasan AS UlasanFail_Remarks, 'AUTO' AS CreatorID, 
+        '            GETDATE() AS CreatedDt, GETDATE() AS LastModDt 
+        '            FROM LESEN_UlasanIKTemplate
+        '            WHERE JenisLesen_ID=@JenisLesen_ID AND IsSokong=@IsSokong AND NamaTemplat=@NamaTemplat;"
 
-            Try
-                myCommandSelect.ExecuteNonQuery()
-                ShowAlert("success", "", "Ulasan berjaya dijana.")
-                gvTabUlasan.DataBind()
-            Catch ex As Exception
-                ShowAlert("success", "", "Ulasan tidak berjaya dijana.")
-                'MessageBox(ex.Message, Me)
-            End Try
+        '    Dim myCommandSelect As New SqlCommand(SQL, myConnection)
+        '    myCommandSelect.Parameters.AddWithValue("@JenisLesen_ID", jidList(0))
+        '    myCommandSelect.Parameters.AddWithValue("@IsSokong", isSokong)
+        '    myCommandSelect.Parameters.AddWithValue("@NamaTemplat", namatemplat)
+        '    myCommandSelect.Parameters.AddWithValue("@Permohonan_ID", pid)
 
-            myConnection.Close()
+        '    Try
+        '        myCommandSelect.ExecuteNonQuery()
+        '        ShowAlert("success", "", "Ulasan berjaya dijana.")
+        '        gvTabUlasan.DataBind()
+        '    Catch ex As Exception
+        '        ShowAlert("success", "", "Ulasan tidak berjaya dijana:" & ex.Message)
+        '        'MessageBox(ex.Message, Me)
+        '    End Try
 
-        End Using
+        '    myConnection.Close()
+
+        'End Using
 
     End Sub
 
