@@ -7,6 +7,8 @@ Imports System.Data.SqlClient
 Imports System.Drawing
 Imports System.Drawing.Imaging
 Imports System.IO
+Imports System.Web.UI.WebControls
+
 'Imports System.Web.UI.WebControls
 Imports Microsoft.ReportingServices.Rendering.ExcelRenderer.ExcelGenerator.BIFF8
 
@@ -2738,47 +2740,42 @@ Partial Class kelulusan1
             Return
         End If
 
-        Try
-            Dim jidList() As String = CStr(GridView1.SelectedDataKey.Values("JenisLesenIdList")).Split(","c)
-            Dim jid As String = CStr(GridView1.SelectedDataKey.Values("JenisLesenIdList"))
-            Dim pid As Integer = GridView1.SelectedDataKey.Values(0)
-            Dim namatemplatList() As String = CStr(DDL_UlasanIK.SelectedValue).Split(","c)
-            Dim isSokong As String = namatemplatList(0)
-            Dim namatemplat As String = namatemplatList(1)
-        Catch ex As Exception
-            ShowAlert("error", "", "test ulasan failed")
-        End Try
+        Dim jidList() As String = CStr(GridView1.SelectedDataKey.Values("JenisLesenIdList")).Split(","c)
+        'Dim jid As String = CStr(GridView1.SelectedDataKey.Values("JenisLesenIdList"))
+        Dim pid As Integer = GridView1.SelectedDataKey.Values(0)
+        Dim namatemplatList() As String = CStr(DDL_UlasanIK.SelectedValue).Split(","c)
+        Dim isSokong As String = namatemplatList(0)
+        Dim namatemplat As String = namatemplatList(1)
 
-        ShowAlert("success", "", "Ulasan berjaya dijana.")
+        Using myConnection As New SqlConnection(ConfigurationManager.ConnectionStrings("webcon_ConnectionStr").ConnectionString)
 
-        'Using myConnection As New SqlConnection(ConfigurationManager.ConnectionStrings("webcon_ConnectionStr").ConnectionString)
+            myConnection.Open()
 
-        '    myConnection.Open()
+            Dim SQL As String = "DELETE FROM LESEN_UlasanFail WHERE Permohonan_ID=@Permohonan_ID; 
+                    INSERT INTO LESEN_UlasanFail (Permohonan_ID, UlasanFail_Remarks, CreatorID, CreatedDt, LastModDt)
+                    SELECT @Permohonan_ID AS Permohonan_ID, Ulasan AS UlasanFail_Remarks, 'AUTO' AS CreatorID, 
+                    GETDATE() AS CreatedDt, GETDATE() AS ModDt 
+                    FROM LESEN_UlasanIKTemplate
+                    WHERE JenisLesen_ID=@JenisLesen_ID AND IsSokong=@IsSokong AND NamaTemplat=@NamaTemplat;"
 
-        '    Dim SQL As String = "DELETE FROM LESEN_UlasanFail WHERE Permohonan_ID=@Permohonan_ID; 
-        '            INSERT INTO LESEN_UlasanFail (Permohonan_ID, UlasanFail_Remarks, CreatorID, CreatedDt, LastModDt)
-        '            SELECT @Permohonan_ID AS Permohonan_ID, Ulasan AS UlasanFail_Remarks, 'AUTO' AS CreatorID, 
-        '            GETDATE() AS CreatedDt, GETDATE() AS ModDt 
-        '            FROM LESEN_UlasanIKTemplate
-        '            WHERE JenisLesen_ID=@JenisLesen_ID AND IsSokong=@IsSokong AND NamaTemplat=@NamaTemplat;"
+            Dim myCommandSelect As New SqlCommand(SQL, myConnection)
+            myCommandSelect.Parameters.AddWithValue("@JenisLesen_ID", jidList(0))
+            myCommandSelect.Parameters.AddWithValue("@IsSokong", isSokong)
+            myCommandSelect.Parameters.AddWithValue("@NamaTemplat", namatemplat)
+            myCommandSelect.Parameters.AddWithValue("@Permohonan_ID", pid)
 
-        '    Dim myCommandSelect As New SqlCommand(SQL, myConnection)
-        '    myCommandSelect.Parameters.AddWithValue("@JenisLesen_ID", jidList(0))
-        '    myCommandSelect.Parameters.AddWithValue("@IsSokong", isSokong)
-        '    myCommandSelect.Parameters.AddWithValue("@NamaTemplat", namatemplat)
-        '    myCommandSelect.Parameters.AddWithValue("@Permohonan_ID", pid)
+            Try
+                myCommandSelect.ExecuteNonQuery()
+                ShowAlert("success", "", "Ulasan berjaya dijana.")
+                gvTabUlasan.DataBind()
+            Catch ex As Exception
+                ShowAlert("success", "", ex.Message)
+                'MessageBox(ex.Message, Me)
+            End Try
 
-        '    Try
-        '        myCommandSelect.ExecuteNonQuery()
-        '        ShowAlert("success", "", "Ulasan berjaya dijana.")
-        '        gvTabUlasan.DataBind()
-        '    Catch ex As Exception
-        '        MessageBox(ex.Message, Me)
-        '    End Try
+            myConnection.Close()
 
-        '    myConnection.Close()
-
-        'End Using
+        End Using
 
     End Sub
 
