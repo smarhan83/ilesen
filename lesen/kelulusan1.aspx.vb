@@ -2752,9 +2752,11 @@ Partial Class kelulusan1
             myConnection.Open()
 
             Dim SQL As String = "DELETE FROM LESEN_UlasanFail WHERE UlasanFail_PermohonanID=@Permohonan_ID; 
-                    INSERT INTO LESEN_UlasanFail (UlasanFail_PermohonanID, UlasanFail_Remarks, CreatorID, CreatedDt, LastModDt)
-                    SELECT @Permohonan_ID AS UlasanFail_PermohonanID, Ulasan AS UlasanFail_Remarks, 'AUTO' AS CreatorID, 
-                    GETDATE() AS CreatedDt, GETDATE() AS LastModDt 
+                    INSERT INTO LESEN_UlasanFail (UlasanFail_PermohonanID, UlasanFail_Remarks, 
+                    UlasanFail_PermohonanAgensiID, UlasanFail_UserID, CreatorID, CreatedDt, LastModDt)
+                    SELECT @Permohonan_ID AS UlasanFail_PermohonanID, Ulasan AS UlasanFail_Remarks, 
+                    CASE WHEN @AgensiId = 0 THEN NULL ELSE @AgensiId END AS UlasanFail_PermohonanAgensiID, 
+                    @SessionUsersId AS UlasanFail_UserID, 'AUTO' AS CreatorID, GETDATE() AS CreatedDt, GETDATE() AS LastModDt 
                     FROM LESEN_UlasanIKTemplate
                     WHERE JenisLesen_ID=@JenisLesen_ID AND IsSokong=@IsSokong AND NamaTemplat=@NamaTemplat;"
 
@@ -2763,6 +2765,8 @@ Partial Class kelulusan1
             myCommandSelect.Parameters.AddWithValue("@IsSokong", isSokong)
             myCommandSelect.Parameters.AddWithValue("@NamaTemplat", namatemplat)
             myCommandSelect.Parameters.AddWithValue("@Permohonan_ID", pid)
+            myCommandSelect.Parameters.AddWithValue("@AgensiId", CInt(Session.Item("sessionEstateID")))
+            myCommandSelect.Parameters.AddWithValue("@SessionUsersId", Session.Item("SessionUsersId"))
 
             Try
                 myCommandSelect.ExecuteNonQuery()
