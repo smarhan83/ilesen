@@ -517,7 +517,7 @@
                                 </div>
                             </div>
                             <div class="col-md-3">
-                                <asp:LinkButton runat="server" CssClass="btn btn-warning" ValidationGroup="updateForm" Text="Jana Ulasan" ID="BT_GenerateUlasan" OnCommand="BT_GenerateUlasan_Command" CausesValidation="True" />													
+                                <asp:LinkButton runat="server" CssClass="btn btn-warning" Text="Jana Ulasan" ID="BT_GenerateUlasan" OnCommand="BT_GenerateUlasan_Command" />													
                             </div>
                         </div>
                         <br />
@@ -2122,7 +2122,7 @@
                                             </asp:GridView>
                                             <asp:SqlDataSource runat="server" ID="SqlDataSourceGridReport" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
                                                 DeleteCommand="DELETE FROM LESEN_PermohonanSurat WHERE PSID=@PSID"
-                                                SelectCommand="SELECT * FROM LESEN_PermohonanSurat WHERE Permohonan_ID=@Permohonan_ID AND JenisReport=IIF(@StatusID=9, 'LIKB', 'LIKL') 
+                                                SelectCommand="SELECT * FROM LESEN_PermohonanSurat WHERE Permohonan_ID=@Permohonan_ID AND (JenisReport='LIKB' OR JenisReport='LIKL') 
                                                 ORDER BY P1, P2, P3">
                                                 <DeleteParameters>
                                                     <asp:Parameter Name="PSID"></asp:Parameter>
