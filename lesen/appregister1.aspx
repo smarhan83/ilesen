@@ -4494,6 +4494,7 @@
                                                         <asp:CheckBox ID="cbman" runat="server" Enabled='<%# If(Eval("StatusID") < 1, True, False) %>' Checked='<%# Eval("IsMandatory") %>' OnCheckedChanged="cbman_CheckedChanged" AutoPostBack="true" />
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
+                                                <asp:BoundField DataField="totalViews" HeaderText="Jumlah Paparan Surat" SortExpression="totalViews"></asp:BoundField>
                                                 <asp:TemplateField ShowHeader="False">
                                                     <EditItemTemplate>
                                                     </EditItemTemplate>
@@ -4526,7 +4527,9 @@
                                         </asp:GridView>
                                         <asp:SqlDataSource runat="server" ID="SqlDataSourceGridMaintenanceTemplate" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
                                             DeleteCommand="DELETE FROM LESEN_PermohonanAgensi WHERE PermohonanAgensi_ID = @PermohonanAgensi_ID"
-                                            SelectCommand="SELECT kbReview,kjReview,reviewStatusID,a.PermohonanAgensi_ID, a.Permohonan_ID, b.JabatanAgensi_ID, b.JabatanAgensi_Description, a.StatusID AS StatusAgensi, c.StatusID, a.IsMandatory, c.JenisLesenIdList FROM LESEN_PermohonanAgensi a 
+                                            SelectCommand="SELECT kbReview,kjReview,reviewStatusID,a.PermohonanAgensi_ID, a.Permohonan_ID, b.JabatanAgensi_ID, b.JabatanAgensi_Description, 
+                                            a.StatusID AS StatusAgensi, c.StatusID, a.IsMandatory, c.JenisLesenIdList, a.totalViews 
+                                            FROM LESEN_PermohonanAgensi a 
                                             INNER JOIN LESEN_JabatanAgensi b ON a.JabatanAgensi_ID = b.JabatanAgensi_ID 
                                             INNER JOIN LESEN_Permohonan c ON a.Permohonan_ID = c.Permohonan_ID
                                             WHERE a.Permohonan_ID = @Permohonan_ID">
@@ -4560,13 +4563,14 @@
                                                         <asp:Label ID="itemID" runat="server" Text='<%# Eval("PermohonanAgensi_ID") %>'></asp:Label>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
-                                                <asp:TemplateField ShowHeader="True" HeaderText="IsWajib?">
+                                                <asp:TemplateField ShowHeader="True" HeaderText="Tindakan Wajib">
                                                     <EditItemTemplate>
                                                     </EditItemTemplate>
                                                     <ItemTemplate>
                                                         <asp:CheckBox ID="cbman" runat="server" Enabled='<%# If(Eval("StatusID") < 1, True, False) %>' Checked='<%# Eval("IsMandatory") %>' OnCheckedChanged="cbman_CheckedChanged2" AutoPostBack="true" />
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
+                                                <asp:BoundField DataField="totalViews" HeaderText="Jumlah Paparan Surat" SortExpression="totalViews"></asp:BoundField>
                                                 <asp:TemplateField ShowHeader="False">
                                                     <EditItemTemplate>
                                                     </EditItemTemplate>
@@ -4599,7 +4603,8 @@
                                         </asp:GridView>
                                         <asp:SqlDataSource runat="server" ID="SqlDataSourceGridJabatanAgensiBatal" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
                                             DeleteCommand="DELETE FROM LESEN_PermohonanAgensiBatal WHERE PermohonanAgensi_ID = @PermohonanAgensi_ID"
-                                            SelectCommand="SELECT kbReview,kjReview,reviewStatusID,a.PermohonanAgensi_ID, a.Permohonan_ID, b.JabatanAgensi_ID, b.JabatanAgensi_Description, a.StatusID AS StatusAgensi, c.StatusID, a.IsMandatory, c.JenisLesenIdlist FROM LESEN_PermohonanAgensiBatal a 
+                                            SelectCommand="SELECT kbReview,kjReview,reviewStatusID,a.PermohonanAgensi_ID, a.Permohonan_ID, b.JabatanAgensi_ID, b.JabatanAgensi_Description, a.StatusID AS StatusAgensi, c.StatusID, a.IsMandatory, c.JenisLesenIdlist, a.totalViews  
+                                            FROM LESEN_PermohonanAgensiBatal a 
                                             INNER JOIN LESEN_JabatanAgensi b ON a.JabatanAgensi_ID = b.JabatanAgensi_ID 
                                             INNER JOIN LESEN_Permohonan c ON a.Permohonan_ID = c.Permohonan_ID
                                             WHERE a.Permohonan_ID = @Permohonan_ID">
