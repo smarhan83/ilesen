@@ -1894,7 +1894,7 @@ Partial Class kelulusan1
 
             Using myConnection As New SqlConnection(ConfigurationManager.ConnectionStrings("webcon_ConnectionStr").ConnectionString)
 
-                Dim SQL As String = "UPDATE table_name SET totalViews = totalViews + 1 
+                Dim SQL As String = "UPDATE LESEN_PermohonanAgensi SET totalViews = totalViews + 1 
                 WHERE Permohonan_ID = @Permohonan_ID AND JabatanAgensi_ID = @AgensiId"
 
 
