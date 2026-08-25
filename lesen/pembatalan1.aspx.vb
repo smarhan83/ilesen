@@ -1,12 +1,12 @@
 ﻿
 Imports System
-Imports System.Configuration
+'Imports System.Configuration
 Imports System.Data
 Imports System.Data.SqlClient
 Imports System.Drawing
 Imports System.Drawing.Imaging
 Imports System.IO
-Imports System.Web.UI.WebControls
+'Imports System.Web.UI.WebControls
 Imports Microsoft.ReportingServices.Rendering.ExcelRenderer.ExcelGenerator.BIFF8
 
 Partial Class pembatalan1
@@ -1286,6 +1286,12 @@ Partial Class pembatalan1
             Dim AgensiID As String = If(IsDBNull(Me.GridView1.DataKeys(intRow)("AgensiID")), Session.Item("sessionOCS"), CStr(Me.GridView1.DataKeys(intRow)("AgensiID")))
             Dim JenisLesenIdList As String = CStr(Me.GridView1.DataKeys(intRow)("JenisLesenIdList"))
 
+            Dim res As Boolean = UpdateTotalViews(Permohonan_ID, AgensiID)
+
+            If res = False Then
+                MessageBox("ERROR_UpdateTotalViews", Me)
+            End If
+
             ViewSuratMohon(Permohonan_ID, AgensiID, JenisLesenIdList)
 
         End If
@@ -1414,6 +1420,46 @@ Partial Class pembatalan1
         End Try
 
     End Sub
+
+    Private Function UpdateTotalViews(permohonanID As String, agensiID As String) As Boolean
+
+        Try
+
+            Using myConnection As New SqlConnection(ConfigurationManager.ConnectionStrings("webcon_ConnectionStr").ConnectionString)
+
+                Dim SQL As String = "UPDATE LESEN_PermohonanAgensi SET totalViews = totalViews + 1 
+                WHERE Permohonan_ID = @Permohonan_ID AND JabatanAgensi_ID = @AgensiId"
+
+
+                Dim myCommand As New SqlCommand(SQL, myConnection)
+
+                myCommand.Parameters.AddWithValue("@Permohonan_ID", permohonanID)
+                myCommand.Parameters.AddWithValue("@AgensiId", agensiID)
+
+                myConnection.Open()
+
+                Dim recordset As Integer = myCommand.ExecuteNonQuery()
+
+                If recordset > 0 Then
+                    Return True
+
+                Else
+                    Return False
+
+                End If
+
+                myConnection.Close()
+
+            End Using
+
+        Catch ex As Exception
+            MessageBox(ex.Message, Me)
+            'Return False
+        End Try
+
+        Return False
+
+    End Function
 
     Private Function GetIsSuratFail(pid As Integer) As Boolean
 
@@ -2134,6 +2180,12 @@ Partial Class pembatalan1
         Dim pid As Integer = GridView1.SelectedDataKey.Values(0)
         Dim AgensiID As String = "3"
         Dim JenisLesenID As Integer = GridView1.SelectedDataKey.Values(4)
+
+        Dim res As Boolean = UpdateTotalViews(pid, AgensiID)
+
+        If res = False Then
+            MessageBox("ERROR_UpdateTotalViews", Me)
+        End If
 
         ViewSuratMohon(pid, AgensiID, JenisLesenID)
 
