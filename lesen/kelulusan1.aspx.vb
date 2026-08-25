@@ -2735,7 +2735,7 @@ Partial Class kelulusan1
     Protected Sub BT_GenerateUlasan_Command(sender As Object, e As CommandEventArgs)
 
         If DDL_UlasanIK.SelectedValue = "0" Then
-            Return
+            Exit Sub
         End If
 
         Dim jidList() As String = CStr(GridView1.SelectedDataKey.Values("JenisLesenIdList")).Split(","c)
@@ -2752,7 +2752,7 @@ Partial Class kelulusan1
             Dim SQL As String = "DELETE FROM LESEN_UlasanFail WHERE Permohonan_ID=@Permohonan_ID; 
                     INSERT INTO LESEN_UlasanFail (Permohonan_ID, UlasanFail_Remarks, CreatorID, CreatedDt, LastModDt)
                     SELECT @Permohonan_ID AS Permohonan_ID, Ulasan AS UlasanFail_Remarks, 'AUTO' AS CreatorID, 
-                    GETDATE() AS CreatedDt, GETDATE() AS ModDt 
+                    GETDATE() AS CreatedDt, GETDATE() AS LastModDt 
                     FROM LESEN_UlasanIKTemplate
                     WHERE JenisLesen_ID=@JenisLesen_ID AND IsSokong=@IsSokong AND NamaTemplat=@NamaTemplat;"
 
@@ -2767,7 +2767,7 @@ Partial Class kelulusan1
                 ShowAlert("success", "", "Ulasan berjaya dijana.")
                 gvTabUlasan.DataBind()
             Catch ex As Exception
-                ShowAlert("success", "", ex.Message)
+                ShowAlert("success", "", "Ulasan tidak berjaya dijana.")
                 'MessageBox(ex.Message, Me)
             End Try
 
