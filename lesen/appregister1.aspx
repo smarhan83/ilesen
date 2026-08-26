@@ -895,7 +895,7 @@
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label>Jenis Pasar</label>
-                                                <asp:DropDownList ID="DDL_JenisPasar" Text='<%# Bind("JenisPasar") %>' runat="server"
+                                                <asp:DropDownList ID="DDL_JenisPasar" Text='<%# Bind("JenisPasar") %>' runat="server" 
                                                     CssClass="form-control select2">
                                                     <asp:ListItem Value="">-- Sila Pilih --</asp:ListItem>
                                                     <asp:ListItem>Pasar Pagi</asp:ListItem>
@@ -2029,7 +2029,7 @@
                                         <div class="form-group">
                                             <label>Jenis Pasar</label>
                                             <asp:DropDownList ID="DDL_JenisPasar" Text='<%# Bind("JenisPasar") %>' runat="server" OnSelectedIndexChanged="DDL_JenisPasar_SelectedIndexChanged"
-                                                CssClass="form-control select2">
+                                                CssClass="form-control select2" AutoPostBack="true">
                                                 <asp:ListItem Value="">-- Sila Pilih --</asp:ListItem>
                                                 <asp:ListItem>Pasar Pagi</asp:ListItem>
                                                 <asp:ListItem>Pasar Malam</asp:ListItem>
