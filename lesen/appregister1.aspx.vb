@@ -3612,7 +3612,7 @@ Partial Class appregister1
 
     Protected Sub DDL_JenisPasar_SelectedIndexChanged(sender As Object, e As EventArgs)
 
-        Dim ddl As DropDownList = DirectCast(FormView1.FindControl("DDL_JenisLesen"), DropDownList)
+        Dim ddl As DropDownList = DirectCast(FormView1.FindControl("DDL_JenisPasar"), DropDownList)
         Dim noruj As TextBox = DirectCast(FormView1.FindControl("TB_Rujukan"), TextBox)
 
         Select Case ddl.SelectedIndex
@@ -3622,7 +3622,7 @@ Partial Class appregister1
             Case 2                      'Pasar Malam /
                 noruj.Text = "MPK/599/401/3/33"
 
-            Case 3                      'Pasar Lambak /
+            Case Else                      'Pasar Lambak /
                 noruj.Text = "MPK/599/401/"
 
         End Select
