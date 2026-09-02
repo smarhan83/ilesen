@@ -653,7 +653,7 @@ Partial Class appregister1
     End Sub
 
     Private Sub updateLokasiList(ByVal lokasiVal As String)
-        Dim HF_LokasiList As HiddenField = DirectCast(FormView1.FindControl("HF_SaizIklanList"), HiddenField)
+        Dim HF_LokasiList As HiddenField = DirectCast(FormView1.FindControl("HF_LokasiList"), HiddenField)
 
         If HF_LokasiList.Value.ToString.Length = 0 Then
             HF_LokasiList.Value = lokasiVal
