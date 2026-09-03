@@ -310,6 +310,56 @@
         .table-bordered {
             text-align: center;
         }
+
+        .status-pill {
+            display: inline-flex;
+            align-items: flex-start;
+            min-width: 190px;
+            padding: 10px 12px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 13px;
+            text-align: left;
+        }
+
+        .status-pill-icon {
+            margin: 2px 10px 0 0;
+            font-size: 15px;
+            line-height: 1;
+        }
+
+        .status-pill-content {
+            display: block;
+        }
+
+        .status-pill-label {
+            display: block;
+            line-height: 1.25;
+        }
+
+        .status-pill-description {
+            display: block;
+            margin-top: 3px;
+            color: #6c757d;
+            font-size: 11px;
+            font-weight: 400;
+            line-height: 1.25;
+        }
+
+        .status-pill-sent {
+            background-color: #e7f8ee;
+            color: #1e9e57;
+        }
+
+        .status-pill-pending {
+            background-color: #fdf3dd;
+            color: #d99b1f;
+        }
+
+        .status-pill-notrequired {
+            background-color: #f0f1f4;
+            color: #6f7786;
+        }
     </style>
 </asp:Content>
 
@@ -4494,7 +4544,17 @@
                                                         <asp:CheckBox ID="cbman" runat="server" Enabled='<%# If(Eval("StatusID") < 1, True, False) %>' Checked='<%# Eval("IsMandatory") %>' OnCheckedChanged="cbman_CheckedChanged" AutoPostBack="true" />
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
-                                                <asp:BoundField DataField="SendStatus" HeaderText="Status Dihantar" SortExpression="SendStatus"></asp:BoundField>
+                                                <asp:TemplateField HeaderText="Status Dihantar" SortExpression="SendStatus">
+                                                    <ItemTemplate>
+                                                        <span class='<%# If(Eval("SendStatus") = "Dihantar", "status-pill status-pill-sent", If(Eval("SendStatus") = "Belum Dihantar", "status-pill status-pill-pending", "status-pill status-pill-notrequired")) %>'>
+                                                            <i class='<%# If(Eval("SendStatus") = "Dihantar", "bi bi-check-circle-fill status-pill-icon", If(Eval("SendStatus") = "Belum Dihantar", "bi bi-clock-fill status-pill-icon", "bi bi-info-circle-fill status-pill-icon")) %>' aria-hidden="true"></i>
+                                                            <span class="status-pill-content">
+                                                                <span class="status-pill-label"><%# If(Eval("SendStatus") = "Dihantar", "Telah Dihantar", If(Eval("SendStatus") = "Belum Dihantar", "Belum Dihantar", "Tidak Diperlukan")) %></span>
+                                                                <span class="status-pill-description"><%# If(Eval("SendStatus") = "Dihantar", "Surat telah berjaya dihantar", If(Eval("SendStatus") = "Belum Dihantar", "Surat belum dihantar ke agensi", "Tiada tindakan diperlukan")) %></span>
+                                                            </span>
+                                                        </span>
+                                                    </ItemTemplate>
+                                                </asp:TemplateField>
                                                 <asp:BoundField DataField="ViewStatus" HeaderText="Status Dibaca" SortExpression="ViewStatus"></asp:BoundField>
                                                 <asp:TemplateField ShowHeader="False">
                                                     <EditItemTemplate>
@@ -4529,8 +4589,8 @@
                                         <asp:SqlDataSource runat="server" ID="SqlDataSourceGridMaintenanceTemplate" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
                                             DeleteCommand="DELETE FROM LESEN_PermohonanAgensi WHERE PermohonanAgensi_ID = @PermohonanAgensi_ID"
                                             SelectCommand="SELECT kbReview,kjReview,reviewStatusID,a.PermohonanAgensi_ID, a.Permohonan_ID, b.JabatanAgensi_ID, b.JabatanAgensi_Description, 
-                                            a.StatusID AS StatusAgensi, c.StatusID, a.IsMandatory, c.JenisLesenIdList, IIF(c.StatusID &gt; 0, 'DIHANTAR', 'BELUM DIHANTAR') AS SendStatus, 
-                                            IIF(a.totalViews &gt; 0, 'DIBACA', 'BELUM DIBACA') AS ViewStatus 
+                                            a.StatusID AS StatusAgensi, c.StatusID, a.IsMandatory, c.JenisLesenIdList, IIF(c.StatusID &gt; 0, 'Dihantar', 'Belum Dihantar') AS SendStatus, 
+                                            IIF(a.totalViews &gt; 0, 'Dibaca', 'Belum Dibaca') AS ViewStatus 
                                             FROM LESEN_PermohonanAgensi a 
                                             INNER JOIN LESEN_JabatanAgensi b ON a.JabatanAgensi_ID = b.JabatanAgensi_ID 
                                             INNER JOIN LESEN_Permohonan c ON a.Permohonan_ID = c.Permohonan_ID 
@@ -4572,7 +4632,17 @@
                                                         <asp:CheckBox ID="cbman" runat="server" Enabled='<%# If(Eval("StatusID") < 1, True, False) %>' Checked='<%# Eval("IsMandatory") %>' OnCheckedChanged="cbman_CheckedChanged2" AutoPostBack="true" />
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
-                                                <asp:BoundField DataField="SendStatus" HeaderText="Status Dihantar" SortExpression="SendStatus"></asp:BoundField>
+                                                <asp:TemplateField HeaderText="Status Dihantar" SortExpression="SendStatus">
+                                                    <ItemTemplate>
+                                                        <span class='<%# If(Eval("SendStatus") = "Dihantar", "status-pill status-pill-sent", If(Eval("SendStatus") = "Belum Dihantar", "status-pill status-pill-pending", "status-pill status-pill-notrequired")) %>'>
+                                                            <i class='<%# If(Eval("SendStatus") = "Dihantar", "bi bi-check-circle-fill status-pill-icon", If(Eval("SendStatus") = "BELUM Dihantar", "bi bi-clock-fill status-pill-icon", "bi bi-info-circle-fill status-pill-icon")) %>' aria-hidden="true"></i>
+                                                            <span class="status-pill-content">
+                                                                <span class="status-pill-label"><%# If(Eval("SendStatus") = "Dihantar", "Telah Dihantar", If(Eval("SendStatus") = "Belum Dihantar", "Belum Dihantar", "Tidak Diperlukan")) %></span>
+                                                                <span class="status-pill-description"><%# If(Eval("SendStatus") = "Dihantar", "Surat telah berjaya dihantar", If(Eval("SendStatus") = "Belum Dihantar", "Surat belum dihantar ke agensi", "Tiada tindakan diperlukan")) %></span>
+                                                            </span>
+                                                        </span>
+                                                    </ItemTemplate>
+                                                </asp:TemplateField>
                                                 <asp:BoundField DataField="ViewStatus" HeaderText="Status Dibaca" SortExpression="ViewStatus"></asp:BoundField>
                                                 <asp:TemplateField ShowHeader="False">
                                                     <EditItemTemplate>
@@ -4607,8 +4677,8 @@
                                         <asp:SqlDataSource runat="server" ID="SqlDataSourceGridJabatanAgensiBatal" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
                                             DeleteCommand="DELETE FROM LESEN_PermohonanAgensiBatal WHERE PermohonanAgensi_ID = @PermohonanAgensi_ID"
                                             SelectCommand="SELECT kbReview,kjReview,reviewStatusID,a.PermohonanAgensi_ID, a.Permohonan_ID, b.JabatanAgensi_ID, b.JabatanAgensi_Description, 
-                                            a.StatusID AS StatusAgensi, c.StatusID, a.IsMandatory, c.JenisLesenIdlist, IIF(c.StatusID &gt; 0, 'DIHANTAR', 'BELUM DIHANTAR') AS SendStatus, 
-                                            IIF(a.totalViews &gt; 0, 'DIBACA', 'BELUM DIBACA') AS ViewStatus 
+                                            a.StatusID AS StatusAgensi, c.StatusID, a.IsMandatory, c.JenisLesenIdlist, IIF(c.StatusID &gt; 0, 'Dihantar', 'Belum Dihantar') AS SendStatus, 
+                                            IIF(a.totalViews &gt; 0, 'Dibaca', 'Belum Dibaca') AS ViewStatus 
                                             FROM LESEN_PermohonanAgensiBatal a 
                                             INNER JOIN LESEN_JabatanAgensi b ON a.JabatanAgensi_ID = b.JabatanAgensi_ID 
                                             INNER JOIN LESEN_Permohonan c ON a.Permohonan_ID = c.Permohonan_ID
@@ -4645,10 +4715,10 @@
                                         </asp:GridView>
                                         <asp:SqlDataSource runat="server" ID="SqlDataSourceLogKelulusan" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
                                             SelectCommand="SELECT a.ApprovalDate, a.ApprStatusID, c.JabatanAgensi_Description, b.Description, a.ApprovalID, d.Users_Fullname, 
-(CASE WHEN a.ApprStatusID = 3 then (SELECT STRING_AGG(d1.Users_Fullname, ', ') FROM LESEN_PermohonanAgensiStaff a1 
-INNER JOIN LESEN_PermohonanAgensi b1 ON b1.Permohonan_ID = @Permohonan_ID and b1.PermohonanAgensi_ID = a1.PermohonanAgensi_ID
-INNER JOIN TBL_USERS d1 ON d1.Users_Id = a1.PermohonanAgensiStaffID_UsersID) WHEN a.ApprStatusID = 1 then f.Users_Fullname ELSE d.Users_Fullname END) AS ActionBy
-FROM LESEN_ApprovalList a 
+                                            (CASE WHEN a.ApprStatusID = 3 then (SELECT STRING_AGG(d1.Users_Fullname, ', ') FROM LESEN_PermohonanAgensiStaff a1 
+                                            INNER JOIN LESEN_PermohonanAgensi b1 ON b1.Permohonan_ID = @Permohonan_ID and b1.PermohonanAgensi_ID = a1.PermohonanAgensi_ID
+                                            INNER JOIN TBL_USERS d1 ON d1.Users_Id = a1.PermohonanAgensiStaffID_UsersID) WHEN a.ApprStatusID = 1 then f.Users_Fullname ELSE d.Users_Fullname END) AS ActionBy
+                                            FROM LESEN_ApprovalList a 
                                                 inner join ApprovalStatus b on b.ApprStatusID = a.ApprStatusID 
                                                 left join LESEN_JabatanAgensi c on c.JabatanAgensi_ID = a.AgensiID
                                                 left join TBL_USERS d on d.Users_Id = a.ApproverID
@@ -4658,9 +4728,9 @@ FROM LESEN_ApprovalList a
 												UNION ALL
 												(SELECT TOP(1) a.ApprovalDate,  a.ApprStatusID, b.JabatanAgensi_Description, a.Description, a.ApprovalID, d.Users_Fullname,
 												(CASE WHEN a.ApprStatusID = 3 then (SELECT STRING_AGG(d1.Users_Fullname, ', ') FROM LESEN_PermohonanAgensiStaff a1 
-INNER JOIN LESEN_PermohonanAgensi b1 ON b1.Permohonan_ID = @Permohonan_ID and b1.PermohonanAgensi_ID = a1.PermohonanAgensi_ID
-INNER JOIN TBL_USERS d1 ON d1.Users_Id = a1.PermohonanAgensiStaffID_UsersID) ELSE d.Users_Fullname END) AS ActionBy 
-FROM v_LESEN_ApprovalList_Curr a 
+                                            INNER JOIN LESEN_PermohonanAgensi b1 ON b1.Permohonan_ID = @Permohonan_ID and b1.PermohonanAgensi_ID = a1.PermohonanAgensi_ID
+                                            INNER JOIN TBL_USERS d1 ON d1.Users_Id = a1.PermohonanAgensiStaffID_UsersID) ELSE d.Users_Fullname END) AS ActionBy 
+                                            FROM v_LESEN_ApprovalList_Curr a 
                                                 left join LESEN_JabatanAgensi b on b.JabatanAgensi_ID = a.AgensiID 
                                                 left join TBL_USERS d on d.Users_Id = a.ApproverID 
                                                 WHERE a.Permohonan_ID = @Permohonan_ID and ApprovalDate is null)">
@@ -4693,10 +4763,10 @@ FROM v_LESEN_ApprovalList_Curr a
                                         </asp:GridView>
                                         <asp:SqlDataSource runat="server" ID="SqlDataSourceLogBatal" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
                                             SelectCommand="SELECT a.ApprovalDate, a.ApprStatusID, c.JabatanAgensi_Description, b.Description, a.ApprovalID, d.Users_Fullname, 
-(CASE WHEN a.ApprStatusID = 3 then (SELECT STRING_AGG(d1.Users_Fullname, ', ') FROM LESEN_PermohonanAgensiStaffBatal a1 
-INNER JOIN LESEN_PermohonanAgensiBatal b1 ON b1.Permohonan_ID = @Permohonan_ID and b1.PermohonanAgensi_ID = a1.PermohonanAgensi_ID
-INNER JOIN TBL_USERS d1 ON d1.Users_Id = a1.PermohonanAgensiStaffID_UsersID) ELSE d.Users_Fullname END) AS ActionBy
-FROM LESEN_ApprovalListBatal a 
+                                            (CASE WHEN a.ApprStatusID = 3 then (SELECT STRING_AGG(d1.Users_Fullname, ', ') FROM LESEN_PermohonanAgensiStaffBatal a1 
+                                            INNER JOIN LESEN_PermohonanAgensiBatal b1 ON b1.Permohonan_ID = @Permohonan_ID and b1.PermohonanAgensi_ID = a1.PermohonanAgensi_ID
+                                            INNER JOIN TBL_USERS d1 ON d1.Users_Id = a1.PermohonanAgensiStaffID_UsersID) ELSE d.Users_Fullname END) AS ActionBy
+                                            FROM LESEN_ApprovalListBatal a 
                                                 inner join ApprovalStatus b on b.ApprStatusID = a.ApprStatusID 
                                                 left join LESEN_JabatanAgensi c on c.JabatanAgensi_ID = a.AgensiID
                                                 left join TBL_USERS d on d.Users_Id = a.ApproverID
@@ -4704,9 +4774,9 @@ FROM LESEN_ApprovalListBatal a
 												UNION ALL
 												(SELECT TOP(1) a.ApprovalDate,  a.ApprStatusID, b.JabatanAgensi_Description, a.Description, a.ApprovalID, d.Users_Fullname,
 												(CASE WHEN a.ApprStatusID = 3 then (SELECT STRING_AGG(d1.Users_Fullname, ', ') FROM LESEN_PermohonanAgensiStaffBatal a1 
-INNER JOIN LESEN_PermohonanAgensiBatal b1 ON b1.Permohonan_ID = @Permohonan_ID and b1.PermohonanAgensi_ID = a1.PermohonanAgensi_ID
-INNER JOIN TBL_USERS d1 ON d1.Users_Id = a1.PermohonanAgensiStaffID_UsersID) ELSE d.Users_Fullname END) AS ActionBy 
-FROM v_LESEN_ApprovalListBatal_Curr a 
+                                            INNER JOIN LESEN_PermohonanAgensiBatal b1 ON b1.Permohonan_ID = @Permohonan_ID and b1.PermohonanAgensi_ID = a1.PermohonanAgensi_ID
+                                            INNER JOIN TBL_USERS d1 ON d1.Users_Id = a1.PermohonanAgensiStaffID_UsersID) ELSE d.Users_Fullname END) AS ActionBy 
+                                            FROM v_LESEN_ApprovalListBatal_Curr a 
                                                 left join LESEN_JabatanAgensi b on b.JabatanAgensi_ID = a.AgensiID 
                                                 left join TBL_USERS d on d.Users_Id = a.ApproverID 
                                                 WHERE a.Permohonan_ID = @Permohonan_ID and ApprovalDate is null)">
