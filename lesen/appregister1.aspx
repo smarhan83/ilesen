@@ -4494,7 +4494,8 @@
                                                         <asp:CheckBox ID="cbman" runat="server" Enabled='<%# If(Eval("StatusID") < 1, True, False) %>' Checked='<%# Eval("IsMandatory") %>' OnCheckedChanged="cbman_CheckedChanged" AutoPostBack="true" />
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
-                                                <asp:BoundField DataField="totalViews" HeaderText="Jumlah Paparan Surat" SortExpression="totalViews"></asp:BoundField>
+                                                <asp:BoundField DataField="SendStatus" HeaderText="Status Dihantar" SortExpression="SendStatus"></asp:BoundField>
+                                                <asp:BoundField DataField="ViewStatus" HeaderText="Status Dibaca" SortExpression="ViewStatus" Visible='<%# If(Eval("StatusID") > 0, True, False) %>'></asp:BoundField>
                                                 <asp:TemplateField ShowHeader="False">
                                                     <EditItemTemplate>
                                                     </EditItemTemplate>
@@ -4528,10 +4529,11 @@
                                         <asp:SqlDataSource runat="server" ID="SqlDataSourceGridMaintenanceTemplate" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
                                             DeleteCommand="DELETE FROM LESEN_PermohonanAgensi WHERE PermohonanAgensi_ID = @PermohonanAgensi_ID"
                                             SelectCommand="SELECT kbReview,kjReview,reviewStatusID,a.PermohonanAgensi_ID, a.Permohonan_ID, b.JabatanAgensi_ID, b.JabatanAgensi_Description, 
-                                            a.StatusID AS StatusAgensi, c.StatusID, a.IsMandatory, c.JenisLesenIdList, a.totalViews 
+                                            a.StatusID AS StatusAgensi, c.StatusID, a.IsMandatory, c.JenisLesenIdList, IIF(c.StatusID &gt; 0, 'DIHANTAR', 'BELUM DIHANTAR') AS SendStatus, 
+                                            IIF(a.totalViews &gt; 0, 'DIBACA', 'BELUM DIBACA') AS ViewStatus 
                                             FROM LESEN_PermohonanAgensi a 
                                             INNER JOIN LESEN_JabatanAgensi b ON a.JabatanAgensi_ID = b.JabatanAgensi_ID 
-                                            INNER JOIN LESEN_Permohonan c ON a.Permohonan_ID = c.Permohonan_ID
+                                            INNER JOIN LESEN_Permohonan c ON a.Permohonan_ID = c.Permohonan_ID 
                                             WHERE a.Permohonan_ID = @Permohonan_ID">
                                             <DeleteParameters>
                                                 <asp:Parameter Name="PermohonanAgensi_ID"></asp:Parameter>
@@ -4570,7 +4572,8 @@
                                                         <asp:CheckBox ID="cbman" runat="server" Enabled='<%# If(Eval("StatusID") < 1, True, False) %>' Checked='<%# Eval("IsMandatory") %>' OnCheckedChanged="cbman_CheckedChanged2" AutoPostBack="true" />
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
-                                                <asp:BoundField DataField="totalViews" HeaderText="Jumlah Paparan Surat" SortExpression="totalViews"></asp:BoundField>
+                                                <asp:BoundField DataField="SendStatus" HeaderText="Status Dihantar" SortExpression="SendStatus"></asp:BoundField>
+                                                <asp:BoundField DataField="ViewStatus" HeaderText="Status Dibaca" SortExpression="ViewStatus" Visible='<%# If(Eval("StatusID") > 0, True, False) %>'></asp:BoundField>
                                                 <asp:TemplateField ShowHeader="False">
                                                     <EditItemTemplate>
                                                     </EditItemTemplate>
@@ -4603,7 +4606,9 @@
                                         </asp:GridView>
                                         <asp:SqlDataSource runat="server" ID="SqlDataSourceGridJabatanAgensiBatal" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
                                             DeleteCommand="DELETE FROM LESEN_PermohonanAgensiBatal WHERE PermohonanAgensi_ID = @PermohonanAgensi_ID"
-                                            SelectCommand="SELECT kbReview,kjReview,reviewStatusID,a.PermohonanAgensi_ID, a.Permohonan_ID, b.JabatanAgensi_ID, b.JabatanAgensi_Description, a.StatusID AS StatusAgensi, c.StatusID, a.IsMandatory, c.JenisLesenIdlist, a.totalViews  
+                                            SelectCommand="SELECT kbReview,kjReview,reviewStatusID,a.PermohonanAgensi_ID, a.Permohonan_ID, b.JabatanAgensi_ID, b.JabatanAgensi_Description, 
+                                            a.StatusID AS StatusAgensi, c.StatusID, a.IsMandatory, c.JenisLesenIdlist, IIF(c.StatusID &gt; 0, 'DIHANTAR', 'BELUM DIHANTAR') AS SendStatus, 
+                                            IIF(a.totalViews &gt; 0, 'DIBACA', 'BELUM DIBACA') AS ViewStatus 
                                             FROM LESEN_PermohonanAgensiBatal a 
                                             INNER JOIN LESEN_JabatanAgensi b ON a.JabatanAgensi_ID = b.JabatanAgensi_ID 
                                             INNER JOIN LESEN_Permohonan c ON a.Permohonan_ID = c.Permohonan_ID
