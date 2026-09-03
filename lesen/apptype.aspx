@@ -1015,7 +1015,7 @@
                     </ContentTemplate>
                 </asp:TabPanel>
 
-                <asp:TabPanel runat="server" ID="TabPanel3" HeaderText="Surat Kelulusan">
+                <asp:TabPanel runat="server" ID="TabPanel3" HeaderText="Surat Kelulusan" Visible="false">
                     <HeaderTemplate>Surat Kelulusan</HeaderTemplate>
                     <ContentTemplate>
 
@@ -1140,7 +1140,7 @@
                     </ContentTemplate>
                 </asp:TabPanel>
 
-                <asp:TabPanel runat="server" ID="TabPanel4" HeaderText="Surat Pemeriksaan">
+                <asp:TabPanel runat="server" ID="TabPanel4" HeaderText="Surat Pemeriksaan" Visible="false">
                     <HeaderTemplate>Surat Pemeriksaan</HeaderTemplate>
                     <ContentTemplate>                 
 
@@ -1268,7 +1268,7 @@
                     </ContentTemplate>
                 </asp:TabPanel>
 				
-                <asp:TabPanel runat="server" ID="TabPanel5" HeaderText="Surat Batal">
+                <asp:TabPanel runat="server" ID="TabPanel5" HeaderText="Surat Batal" Visible="false">
                     <HeaderTemplate>Surat Batal</HeaderTemplate>
                     <ContentTemplate>                 
 
@@ -1373,7 +1373,7 @@
                     </ContentTemplate>
                 </asp:TabPanel>			
                 
-                <asp:TabPanel runat="server" ID="TabPanel6" HeaderText="Surat Batal IK">
+                <asp:TabPanel runat="server" ID="TabPanel6" HeaderText="Surat Batal IK" Visible="false">
                     <HeaderTemplate>Surat Batal IK</HeaderTemplate>
                     <ContentTemplate>                 
 

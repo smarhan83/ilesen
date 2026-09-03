@@ -812,11 +812,9 @@ Partial Class appregister1
         Dim TB_NoAkaun As TextBox = DirectCast(FormView1.FindControl("TB_NoAkaun"), TextBox)
         Dim TB_AlamatPremis As TextBox = DirectCast(FormView1.FindControl("TB_AlamatPremis"), TextBox)
         Dim TB_JenisPerniagaan As TextBox = DirectCast(FormView1.FindControl("TB_JenisPerniagaan"), TextBox)
-        Dim TB_PemilikBaru As TextBox = DirectCast(FormView1.FindControl("TB_PemilikBaru"), TextBox)
         Dim TB_AlamatBaru As TextBox = DirectCast(FormView1.FindControl("TB_AlamatBaru"), TextBox)
         Dim TB_JenisPerniagaanBaru As TextBox = DirectCast(FormView1.FindControl("TB_JenisPerniagaanBaru"), TextBox)
         Dim TB_NamaBaruSyarikat As TextBox = DirectCast(FormView1.FindControl("TB_NamaBaruSyarikat"), TextBox)
-        Dim TB_BillboardLokasi As TextBox = DirectCast(FormView1.FindControl("TB_BillboardLokasi"), TextBox)
         Dim TB_AlamatPenjajaan As TextBox = DirectCast(FormView1.FindControl("TB_AlamatPenjajaan"), TextBox)
         Dim TB_JenisPerniagaanPenjaja As TextBox = DirectCast(FormView1.FindControl("TB_JenisPerniagaanPenjaja"), TextBox)
 
@@ -831,8 +829,8 @@ Partial Class appregister1
                 SELECT 
                     Pemohon_ID,
                     NamaSyarikat, NoPendaftaran, NoAkaun, AlamatPremis, JenisPerniagaan, 
-                    PemilikBaru, AlamatBaru, JenisPerniagaanBaru, NamaBaruSyarikat, 
-                    BillboardLokasi, AlamatPenjajaan, JenisPerniagaanPenjaja,
+                    AlamatBaru, JenisPerniagaanBaru, NamaBaruSyarikat, 
+                    AlamatPenjajaan, JenisPerniagaanPenjaja,
                     -- This ranks rows for each column individually, putting the latest non-null value at rank 1
                     ROW_NUMBER() OVER (PARTITION BY Pemohon_ID ORDER BY CASE WHEN NamaSyarikat IS NOT NULL THEN Permohonan_ID END DESC) as rn1,
                     ROW_NUMBER() OVER (PARTITION BY Pemohon_ID ORDER BY CASE WHEN NoPendaftaran IS NOT NULL THEN Permohonan_ID END DESC) as rn2,
