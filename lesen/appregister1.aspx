@@ -4589,7 +4589,8 @@
                                         <asp:SqlDataSource runat="server" ID="SqlDataSourceGridMaintenanceTemplate" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
                                             DeleteCommand="DELETE FROM LESEN_PermohonanAgensi WHERE PermohonanAgensi_ID = @PermohonanAgensi_ID"
                                             SelectCommand="SELECT kbReview,kjReview,reviewStatusID,a.PermohonanAgensi_ID, a.Permohonan_ID, b.JabatanAgensi_ID, b.JabatanAgensi_Description, 
-                                            a.StatusID AS StatusAgensi, c.StatusID, a.IsMandatory, c.JenisLesenIdList, IIF(c.StatusID &gt; 0, 'Dihantar', 'Belum Dihantar') AS SendStatus, 
+                                            a.StatusID AS StatusAgensi, c.StatusID, a.IsMandatory, c.JenisLesenIdList, 
+                                            IIF(ISNULL(a.IsMandatory,0)=0, 'TIDAK DIPERLUKAN' ,IIF(c.StatusID &gt; 0, 'DIHANTAR', 'BELUM DIHANTAR')) AS SendStatus, 
                                             IIF(a.totalViews &gt; 0, 'Dibaca', 'Belum Dibaca') AS ViewStatus 
                                             FROM LESEN_PermohonanAgensi a 
                                             INNER JOIN LESEN_JabatanAgensi b ON a.JabatanAgensi_ID = b.JabatanAgensi_ID 
@@ -4677,7 +4678,8 @@
                                         <asp:SqlDataSource runat="server" ID="SqlDataSourceGridJabatanAgensiBatal" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
                                             DeleteCommand="DELETE FROM LESEN_PermohonanAgensiBatal WHERE PermohonanAgensi_ID = @PermohonanAgensi_ID"
                                             SelectCommand="SELECT kbReview,kjReview,reviewStatusID,a.PermohonanAgensi_ID, a.Permohonan_ID, b.JabatanAgensi_ID, b.JabatanAgensi_Description, 
-                                            a.StatusID AS StatusAgensi, c.StatusID, a.IsMandatory, c.JenisLesenIdlist, IIF(c.StatusID &gt; 0, 'Dihantar', 'Belum Dihantar') AS SendStatus, 
+                                            a.StatusID AS StatusAgensi, c.StatusID, a.IsMandatory, c.JenisLesenIdlist, 
+                                            IIF(ISNULL(a.IsMandatory,0)=0, 'TIDAK DIPERLUKAN' ,IIF(c.StatusID &gt; 0, 'DIHANTAR', 'BELUM DIHANTAR')) AS SendStatus, 
                                             IIF(a.totalViews &gt; 0, 'Dibaca', 'Belum Dibaca') AS ViewStatus 
                                             FROM LESEN_PermohonanAgensiBatal a 
                                             INNER JOIN LESEN_JabatanAgensi b ON a.JabatanAgensi_ID = b.JabatanAgensi_ID 
