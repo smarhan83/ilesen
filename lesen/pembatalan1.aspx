@@ -1954,35 +1954,6 @@ ORDER BY
 
                             </div>
 
-                            <div class="row" hidden="hidden">
-
-                                <div class="col-md-10">
-
-                                    <div class="form-group">
-                                        <label>Isi Kandungan (Seksyen atas)</label>
-                                        <asp:TextBox ID="EditorSurat1" runat="server" Text="" TextMode="MultiLine" Rows="12" CssClass="form-control"></asp:TextBox>
-                                        <asp:HtmlEditorExtender ID="HtmlEditorExtender2" runat="server" TargetControlID="EditorSurat1" DisplaySourceTab="True">
-                                         
-                                        </asp:HtmlEditorExtender>
-                                    </div>
-                                </div>
-
-                            </div>
-                            <div class="row" hidden="hidden">
-
-                                <div class="col-md-10">
-
-                                    <div class="form-group">
-                                        <label>Isi Kandungan (Seksyen bawah)</label>
-                                        <asp:TextBox ID="EditorSurat2" runat="server" Text="" TextMode="MultiLine" Rows="12" CssClass="form-control"></asp:TextBox>
-                                        <asp:HtmlEditorExtender ID="HtmlEditorExtender1" runat="server" TargetControlID="EditorSurat2" DisplaySourceTab="True">
-                                          
-                                        </asp:HtmlEditorExtender>
-                                    </div>
-                                </div>
-
-                            </div>
-
                             <div class="row">
                                 <div class="col-md-6">
 
@@ -2027,6 +1998,207 @@ ORDER BY
                             </div>
                         </div>
                         <br />
+
+                        <asp:Panel ID="pnlSuratContentAuto" runat="server">
+
+                            <div class="card">
+                                <div class="card-body">
+
+                                    <div class="row">
+                                        <div class="col-12">
+
+                                            <asp:FormView ID="FormViewReport" Width="100%" DefaultMode="Insert" runat="server" DataKeyNames="PSID" DataSourceID="SqlDataSourceReport">
+                                                <EditItemTemplate>
+                                                    <asp:Panel runat ="server">
+                                                        <div class="card card-default">
+                                                       <div class="card-header">
+                                                            <h3 class="card-title" style="color: black">Kemaskini Isi Surat</h3>
+                                                        </div>
+                                                        <!-- /.card-header -->
+                                                        <div class="card-body">
+                                                            <div class="row">
+
+                                                                <div class="col-md-2">
+                                                                    <div class="form-group">
+                                                                        <label>No Perenggan Utama</label>
+                                                                        <asp:TextBox ID="TB_P1" runat="server"  TextMode="Number"
+                                                                            Text='<%# Bind("P1") %>' CssClass="form-control" />
+                                                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator5" runat="server" CssClass="cssRequiredField"
+                                                                            ControlToValidate="TB_P1" ErrorMessage="Sila Isi" ValidationGroup="frmEdit" Display="Dynamic"></asp:RequiredFieldValidator>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="col-md-2">
+                                                                    <div class="form-group">
+                                                                        <label>No Perenggan Sekunder</label>
+                                                                        <asp:TextBox ID="TB_P2" runat="server"  TextMode="Number"
+                                                                            Text='<%# Bind("P2") %>' CssClass="form-control" />
+                                                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" CssClass="cssRequiredField"
+                                                                            ControlToValidate="TB_P2" ErrorMessage="Sila Isi" ValidationGroup="frmEdit" Display="Dynamic"></asp:RequiredFieldValidator>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="col-md-2">
+                                                                    <div class="form-group">
+                                                                        <label>No Perenggan Tertier</label>
+                                                                        <asp:TextBox ID="TB_P3" runat="server"  TextMode="Number"
+                                                                            Text='<%# Bind("P3") %>' CssClass="form-control" />
+                                                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" CssClass="cssRequiredField"
+                                                                            ControlToValidate="TB_P3" ErrorMessage="Sila Isi" ValidationGroup="frmEdit" Display="Dynamic"></asp:RequiredFieldValidator>
+                                                                    </div>
+                                                                </div>
+
+                                                            </div>
+
+                                                            <div class="row">
+
+                                                                <div class="col-md-8">
+                                                                    <div class="form-group">
+                                                                        <label>Isi Kandungan</label>
+                                                                        <asp:TextBox ID="TB_IsiKandungan" runat="server"  TextMode="Multiline"
+                                                                            Text='<%# Bind("IsiKandungan") %>' CssClass="form-control" />
+                                                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" CssClass="cssRequiredField"
+                                                                            ControlToValidate="TB_IsiKandungan" ErrorMessage="Sila Isi" ValidationGroup="frmEdit" Display="Dynamic"></asp:RequiredFieldValidator>
+                                                                    </div>
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+                                                        <div class="card-footer">
+                                                            <asp:LinkButton ID="UpdateButton" runat="server" CausesValidation="True" CommandName="Update" Text="Simpan" ValidationGroup="frmEdit" CssClass="btn btn-primary" />
+                                                            &nbsp;
+                                                            <asp:LinkButton ID="UpdateCancelButton" runat="server" CausesValidation="False" CommandName="Cancel" Text="Set Semula" CssClass="btn btn-default" />
+                                                        </div>
+                                                    </div>
+                                                    </asp:Panel>
+                                                </EditItemTemplate>
+                                                <InsertItemTemplate>
+                                                    <asp:Panel runat ="server">
+                                                        <div class="card card-default">
+                                                       <div class="card-header">
+                                                            <h3 class="card-title" style="color: black">Tambah Isi Surat</h3>
+                                                        </div>
+                                                        <!-- /.card-header -->
+                                                        <div class="card-body">
+                                                            <div class="row">
+
+                                                                <div class="col-md-2">
+                                                                    <div class="form-group">
+                                                                        <label>No Perenggan Utama</label>
+                                                                        <asp:TextBox ID="TB_P1" runat="server"  TextMode="Number"
+                                                                            Text='<%# Bind("P1") %>' CssClass="form-control" />
+                                                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator5" runat="server" CssClass="cssRequiredField"
+                                                                            ControlToValidate="TB_P1" ErrorMessage="Sila Isi" ValidationGroup="frmInsert" Display="Dynamic"></asp:RequiredFieldValidator>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="col-md-2">
+                                                                    <div class="form-group">
+                                                                        <label>No Perenggan Sekunder</label>
+                                                                        <asp:TextBox ID="TB_P2" runat="server"  TextMode="Number"
+                                                                            Text='<%# Bind("P2") %>' CssClass="form-control" />
+                                                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" CssClass="cssRequiredField"
+                                                                            ControlToValidate="TB_P2" ErrorMessage="Sila Isi" ValidationGroup="frmInsert" Display="Dynamic"></asp:RequiredFieldValidator>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="col-md-2">
+                                                                    <div class="form-group">
+                                                                        <label>No Perenggan Tertier</label>
+                                                                        <asp:TextBox ID="TB_P3" runat="server"  TextMode="Number"
+                                                                            Text='<%# Bind("P3") %>' CssClass="form-control" />
+                                                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" CssClass="cssRequiredField"
+                                                                            ControlToValidate="TB_P3" ErrorMessage="Sila Isi" ValidationGroup="frmInsert" Display="Dynamic"></asp:RequiredFieldValidator>
+                                                                    </div>
+                                                                </div>
+
+                                                            </div>
+
+                                                            <div class="row">
+
+                                                                <div class="col-md-8">
+                                                                    <div class="form-group">
+                                                                        <label>Isi Kandungan</label>
+                                                                        <asp:TextBox ID="TB_IsiKandungan" runat="server"  TextMode="Multiline"
+                                                                            Text='<%# Bind("IsiKandungan") %>' CssClass="form-control" />
+                                                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" CssClass="cssRequiredField"
+                                                                            ControlToValidate="TB_IsiKandungan" ErrorMessage="Sila Isi" ValidationGroup="frmInsert" Display="Dynamic"></asp:RequiredFieldValidator>
+                                                                    </div>
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+                                                        <div class="card-footer">
+                                                            <asp:LinkButton ID="InsertButton" runat="server" CausesValidation="True" CommandName="Insert" Text="Kunci Masuk" ValidationGroup="frmInsert" CssClass="btn btn-primary" />
+                                                            &nbsp;
+                                                            <asp:LinkButton ID="InsertCancelButton" runat="server" CausesValidation="False" CommandName="Cancel" Text="Set Semula" CssClass="btn btn-default" />
+                                                        </div>
+                                                    </div>
+                                                    </asp:Panel>
+                                                </InsertItemTemplate>
+                                            </asp:FormView>
+                                            <asp:SqlDataSource runat="server" ID="SqlDataSourceReport" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
+                                                InsertCommand="INSERT INTO LESEN_PermohonanSurat (Permohonan_ID, JenisReport, P1, P2, P3, IsiKandungan, CreatedDt, ModDt) VALUES 'LIB', @P1, @P2, @P3, @IsiKandungan, GETDATE(), GETDATE()); "
+                                                UpdateCommand="UPDATE LESEN_PermohonanSurat SET P1=@P1, P2=@P2, P3=@P3, IsiKandungan=@IsiKandungan WHERE PSID=@PSID"
+                                                SelectCommand="SELECT * FROM LESEN_PermohonanSurat WHERE PSID=@PSID">
+                                                <InsertParameters>
+                                                    <asp:ControlParameter ControlID="GridView1" PropertyName="SelectedDataKey.Values[0]" Name="Permohonan_ID"></asp:ControlParameter>
+                                                    <asp:Parameter Name="P1"></asp:Parameter>
+                                                    <asp:Parameter Name="P2"></asp:Parameter>
+                                                    <asp:Parameter Name="P3"></asp:Parameter>
+                                                    <asp:Parameter Name="IsiKandungan"></asp:Parameter>
+                                                </InsertParameters>
+                                                <UpdateParameters>
+                                                    <asp:Parameter Name="P1"></asp:Parameter>
+                                                    <asp:Parameter Name="P2"></asp:Parameter>
+                                                    <asp:Parameter Name="P3"></asp:Parameter>
+                                                    <asp:Parameter Name="IsiKandungan"></asp:Parameter>
+                                                    <asp:ControlParameter ControlID="GridViewReport" DefaultValue="" Name="PSID" PropertyName="SelectedValue" />
+                                                </UpdateParameters>
+                                                <SelectParameters>
+                                                    <asp:ControlParameter ControlID="GridViewReport" PropertyName="SelectedValue" Name="PSID"></asp:ControlParameter>
+                                                </SelectParameters>
+                                            </asp:SqlDataSource>
+                                        </div>
+                                    </div>
+                                    <!-- /.tab-1 Formview -->
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <asp:GridView ID="GridViewReport" HeaderStyle-ForeColor="Black" CssClass="table table-bordered" AllowPaging="True" ShowHeaderWhenEmpty="True" EmptyDataText="No records Found" AllowSorting="True" runat="server" AutoGenerateColumns="False" DataKeyNames="PSID" DataSourceID="SqlDataSourceGridReport">
+                                                <Columns>
+                                                    <asp:BoundField DataField="P1" HeaderText="No Perenggan Utama" SortExpression="P1"></asp:BoundField>
+                                                    <asp:BoundField DataField="P2" HeaderText="No Perenggan Sekunder" SortExpression="P2"></asp:BoundField>
+                                                    <asp:BoundField DataField="P3" HeaderText="No Perenggan Tertier" SortExpression="P3"></asp:BoundField>
+                                                    <asp:BoundField DataField="IsiKandungan" HeaderText="Isi Kandungan" SortExpression="IsiKandungan"></asp:BoundField>
+                                                    <asp:TemplateField ShowHeader="False">
+                                                        <ItemTemplate>
+                                                            <asp:LinkButton runat="server" Text="Kemaskini" CommandName="Select" CausesValidation="False" ID="LinkButton4" CssClass="btn btn-warning btn-sm"></asp:LinkButton>
+                                                            <br />
+                                                            <asp:LinkButton runat="server" CommandName="Delete" CssClass="btn btn-danger btn-sm" OnClientClick="return confirm('Padam pilihan ini?');" data-toggle="tooltip" data-placement="top" title="Delete" CausesValidation="False" ID="LinkButton5">Padam</asp:LinkButton>
+                                                        </ItemTemplate>
+                                                    </asp:TemplateField>
+                                                </Columns>
+                                            </asp:GridView>
+                                            <asp:SqlDataSource runat="server" ID="SqlDataSourceGridReport" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
+                                                DeleteCommand="DELETE FROM LESEN_PermohonanSurat WHERE PSID=@PSID"
+                                                SelectCommand="SELECT * FROM LESEN_PermohonanSurat WHERE Permohonan_ID=@Permohonan_ID AND (JenisReport='LIBB' OR JenisReport='LIBL') 
+                                                ORDER BY P1, P2, P3">
+                                                <DeleteParameters>
+                                                    <asp:Parameter Name="PSID"></asp:Parameter>
+                                                </DeleteParameters>
+                                                <SelectParameters>
+                                                    <asp:ControlParameter ControlID="GridView1" PropertyName="SelectedDataKey.Values[0]" Name="Permohonan_ID"></asp:ControlParameter>
+                                                    <asp:ControlParameter ControlID="GridView1" PropertyName="SelectedDataKey.Values[2]" Name="StatusID"></asp:ControlParameter>
+                                                </SelectParameters>
+                                            </asp:SqlDataSource>
+                                        </div>
+                                    </div>
+                                    <!-- /.tab-1 Gridview -->
+                                </div>
+                            </div>
+
+                        </asp:Panel>
+
                     </ContentTemplate>
                 </asp:TabPanel>
 				

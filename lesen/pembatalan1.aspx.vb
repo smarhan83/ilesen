@@ -123,7 +123,7 @@ Partial Class pembatalan1
 
                 If ApprStatusID = 3 Or ApprStatusID = 4 Then
                     BT_Generate.Visible = True
-                    BT_Generate1.Visible = True
+                    'BT_Generate1.Visible = True
 
                     If Request.Browser.IsMobileDevice Then
                         tabSurat.Visible = False
@@ -138,13 +138,13 @@ Partial Class pembatalan1
                         pnlSuratAuto.Visible = False
                         pnlSuratFail.Visible = True
                         BT_Generate.Visible = False
-                        BT_Generate1.Visible = False
+                        'BT_Generate1.Visible = False
                     Else
                         CB_SuratFail.Checked = False
                         pnlSuratAuto.Visible = True
                         pnlSuratFail.Visible = False
                         BT_Generate.Visible = True
-                        BT_Generate1.Visible = True
+                        'BT_Generate1.Visible = True
                     End If
 
                     GetSuratFail(PermohonanID)
@@ -152,7 +152,7 @@ Partial Class pembatalan1
                 Else
 
                     BT_Generate.Visible = False
-                    BT_Generate1.Visible = False
+                    'BT_Generate1.Visible = False
 
                 End If
 
@@ -579,7 +579,7 @@ Partial Class pembatalan1
                     ' gvTabBayaran.Columns(6).Visible = "false"
 
                     BT_Generate.Visible = "false"
-                    BT_Generate1.Visible = "false"
+                    'BT_Generate1.Visible = "false"
                     'btnSaveLetter.Visible = "false"
 
                     idFooter.Visible = "false"
@@ -1730,12 +1730,12 @@ Partial Class pembatalan1
 
             End If
 
-            If TB_TarikhPeriksa.Text.Length = 0 Then
+            'If TB_TarikhPeriksa.Text.Length = 0 Then
 
-                ShowAlert("error", "", "Sila pilih tarikh surat.")
-                Return
+            '    ShowAlert("error", "", "Sila pilih tarikh surat.")
+            '    Return
 
-            End If
+            'End If
 
             If TB_NoRujukan.Text.Length = 0 Or Trim(TB_NoRujukan.Text) = "MPK/599/401/" Then
 
@@ -1753,28 +1753,16 @@ Partial Class pembatalan1
 
             Dim cvtDate = CDate(TB_TarikhPeriksa.Text).ToString("dd/MM/yyyy")
 
-            EditorSurat1.Text = EditorSurat1.Text.Replace("{@TarikhPemeriksaan}", cvtDate)
-            EditorSurat2.Text = EditorSurat2.Text.Replace("{@TarikhPemeriksaan}", cvtDate)
-
-            Dim str1 = EditorSurat1.Text
-            Dim str2 = EditorSurat2.Text
-
-            str1 = str1.Replace("<div>", "").Replace("</div>", "")
-            str2 = str2.Replace("<div>", "").Replace("</div>", "")
-
             Using myConnection As New SqlConnection(ConfigurationManager.ConnectionStrings("webcon_ConnectionStr").ConnectionString)
 
                 myConnection.Open()
 
-                Dim SQL As String = "UPDATE LESEN_Permohonan SET SuratPemeriksaan1 = @SuratPemeriksaan1, SuratPemeriksaan2 = @SuratPemeriksaan2, 
-                                    TandatanganPemeriksaanId = @TandatanganPemeriksaanId, TarikhPemeriksaan = @TarikhPemeriksaan,
+                Dim SQL As String = "UPDATE LESEN_Permohonan SET TandatanganPemeriksaanId = @TandatanganPemeriksaanId, TarikhPemeriksaan = @TarikhPemeriksaan,
                                     TarikhSuratPemeriksaan = @TarikhSuratPemeriksaan, RujukanInspektorat = @RujukanInspektorat 
                                     WHERE Permohonan_ID = @Permohonan_ID"
 
                 Dim myCommandSelect As New SqlCommand(SQL, myConnection)
                 myCommandSelect.Parameters.AddWithValue("@Permohonan_ID", PermohonanID)
-                myCommandSelect.Parameters.AddWithValue("@SuratPemeriksaan1", str1)
-                myCommandSelect.Parameters.AddWithValue("@SuratPemeriksaan2", str2)
                 myCommandSelect.Parameters.AddWithValue("@TandatanganPemeriksaanId", ddlTandatangan.SelectedValue)
                 myCommandSelect.Parameters.AddWithValue("@TarikhPemeriksaan", TB_TarikhPeriksa.Text)
                 myCommandSelect.Parameters.AddWithValue("@TarikhSuratPemeriksaan", TB_TarikhSurat.Text)
@@ -1782,11 +1770,11 @@ Partial Class pembatalan1
 
                 Try
                     Dim recordset As Integer = myCommandSelect.ExecuteNonQuery()
-                    'ShowAlert("success", "", "Surat pemeriksaan telah dikemaskini.")
+
                 Catch ex As Exception
-                    'isSuccess = False
-                    'MessageBox("ERROR1", Me)
-                    'errStr = ex.Message
+                    isSuccess = False
+                    MessageBox("ERROR", Me)
+
                 End Try
 
                 myConnection.Close()
@@ -1899,7 +1887,7 @@ Partial Class pembatalan1
 
             myConnection.Open()
 
-            Dim SQL As String = "SELECT TarikhSuratPemeriksaan,SuratPemeriksaan1, SuratPemeriksaan2, TandatanganPemeriksaanId, TarikhPemeriksaan, RujukanInspektorat FROM LESEN_Permohonan WHERE Permohonan_ID = @Permohonan_ID"
+            Dim SQL As String = "SELECT TandatanganPemeriksaanId, TarikhPemeriksaan, TarikhSuratPemeriksaan, RujukanInspektorat FROM LESEN_Permohonan WHERE Permohonan_ID = @Permohonan_ID"
 
             Dim myCommandSelect As New SqlCommand(SQL, myConnection)
             myCommandSelect.Parameters.AddWithValue("@Permohonan_ID", pid)
@@ -1908,9 +1896,6 @@ Partial Class pembatalan1
 
             Try
                 If myReader.Read Then
-
-                    EditorSurat1.Text = myReader.Item("SuratPemeriksaan1").ToString
-                    EditorSurat2.Text = myReader.Item("SuratPemeriksaan2").ToString
 
                     If myReader.Item("TandatanganPemeriksaanId").ToString().Length > 0 Then
                         ddlTandatangan.SelectedValue = myReader.Item("TandatanganPemeriksaanId")

@@ -213,7 +213,7 @@ Partial Class kelulusan1
                         BT_Generate.Visible = True
                         'BT_Generate1.Visible = True
 
-                        If JenisLesenID = 4 And EditorSurat1.Text.Length > 0 Then
+                        If JenisLesenID = 4 Then
 
                             TabPenjajaUlasan.Visible = True
 
@@ -1350,13 +1350,6 @@ Partial Class kelulusan1
 
     Protected Sub btnAddNewPenjaja_Click(sender As Object, e As EventArgs)
         Dim Permohonan_ID As Integer = CInt(GridView1.SelectedDataKey.Values(0))
-        Dim IsSokong As Integer = 0
-
-        If EditorSurat1.Text.ToLower().Contains("tiada halangan") Then
-
-            IsSokong = 1
-
-        End If
 
         Using myConnection As New SqlConnection(ConfigurationManager.ConnectionStrings("webcon_ConnectionStr").ConnectionString)
 
