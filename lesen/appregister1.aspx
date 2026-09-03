@@ -4495,11 +4495,7 @@
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
                                                 <asp:BoundField DataField="SendStatus" HeaderText="Status Dihantar" SortExpression="SendStatus"></asp:BoundField>
-                                                <asp:TemplateField HeaderText="Status Dibaca" SortExpression="ViewStatus" Visible='<%# If(Eval("StatusID") > 0, True, False) %>'>
-                                                    <ItemTemplate>
-                                                        <%# Eval("ViewStatus") %>
-                                                    </ItemTemplate>
-                                                </asp:TemplateField>
+                                                <asp:BoundField DataField="ViewStatus" HeaderText="Status Dibaca" SortExpression="ViewStatus"></asp:BoundField>
                                                 <asp:TemplateField ShowHeader="False">
                                                     <EditItemTemplate>
                                                     </EditItemTemplate>
@@ -4577,11 +4573,7 @@
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
                                                 <asp:BoundField DataField="SendStatus" HeaderText="Status Dihantar" SortExpression="SendStatus"></asp:BoundField>
-                                                <asp:TemplateField HeaderText="Status Dibaca" SortExpression="ViewStatus" Visible='<%# If(Eval("StatusID") > 0, True, False) %>'>
-                                                    <ItemTemplate>
-                                                        <%# Eval("ViewStatus") %>
-                                                    </ItemTemplate>
-                                                </asp:TemplateField>
+                                                <asp:BoundField DataField="ViewStatus" HeaderText="Status Dibaca" SortExpression="ViewStatus"></asp:BoundField>
                                                 <asp:TemplateField ShowHeader="False">
                                                     <EditItemTemplate>
                                                     </EditItemTemplate>
