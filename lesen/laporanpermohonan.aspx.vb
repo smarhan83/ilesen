@@ -35,17 +35,21 @@ Partial Class laporanpermohonan
 
             End If
 
-            sql = "SELECT a.Permohonan_ID, a.Is24Jam, a.Rujukan, b.Pemohon_Name, b.Pemohon_MobileNo, ISNULL(a.NamaBaruSyarikat, a.NamaSyarikat) AS NamaSyarikat, 
+            sql = "SELECT a.Permohonan_ID, a.StatusID, a.Is24Jam, a.Rujukan, b.Pemohon_Name, b.Pemohon_MobileNo, ISNULL(a.NamaBaruSyarikat, a.NamaSyarikat) AS NamaSyarikat, 
             ISNULL(a.JenisPerniagaanBaru, a.JenisPerniagaan) AS JenisPerniagaan, a.JenisPerniagaanPasar, a.JenisPerniagaanPenjaja, a.JumlahPetak, 
-            b.Pemohon_Address, ISNULL(a.AlamatBaru, a.AlamatPremis) AS AlamatPremis, a.AnjingAlamat, a.AlamatPenjajaan, a.LokasiPasar1, a.LokasiPasar2, a.LokasiPasar3, a.JenisLesenDescList, a.TarikhMohon, 
+            b.Pemohon_Address, ISNULL(a.AlamatBaru, a.AlamatPremis) AS AlamatPremis, a.BakaAnjingList, a.AnjingJantanList, a.AnjingBetinaList,
+            a.AnjingJantanMandulList, a.AnjingBetinaMandulList, c.name AS AnjingJenisPremis, a.AnjingAlamat, a.AlamatPenjajaan, 
+            a.LokasiPasar1, a.LokasiPasar2, a.LokasiPasar3, a.JenisLesenDescList, a.TarikhMohon, 
 
-            (SELECT a1.CreatedDt FROM LESEN_ApprovalList a1 WHERE a1.Permohonan_ID = a.Permohonan_ID AND ApprStatusID = 10) AS TarikhLulus, 
+            (SELECT TOP(1) a1.CreatedDt FROM LESEN_ApprovalList a1 WHERE a1.Permohonan_ID = a.Permohonan_ID AND (
+            ApprStatusID = 10 OR ApprStatusID = 6 OR ApprStatusID = 9) ORDER BY a1.CreatedDt DESC) AS TarikhLulus, 
 
             ISNULL(kb.KadarLesen, 0) AS KadarLesen, ISNULL(kb.KadarIklan, 0) AS KadarIklan, ISNULL(kb.KadarPatil, 0) AS KadarPatil, ISNULL(kb.KadarLencana, 0) AS KadarLencana, 
             ISNULL(kb.KadarJantan, 0) AS KadarJantan, ISNULL(kb.KadarBetina, 0) AS KadarBetina, ISNULL(kb.KadarMandul, 0) AS KadarMandul
 
             FROM LESEN_Permohonan a 
             INNER JOIN LESEN_Pemohon b ON a.Permohonan_PemohonID = b.Pemohon_ID 
+            LEFT JOIN TBL_LOOKUPS c ON a.AnjingJenisMohon = c.id 
             LEFT JOIN (
                 SELECT 
                     KadarBayaran_PermohonanID,
