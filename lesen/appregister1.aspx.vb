@@ -1617,6 +1617,22 @@ Partial Class appregister1
                         TB_TarikhBanting2_ins.Text = CDate(myReader.Item("TarikhBanting2")).ToString("yyyy-MM-dd")
                     End If
 
+                    If myReader.Item("StatusBanting").ToString().Length > 0 Then
+                        DDL_StatusDBP_ins.SelectedValue = CInt(myReader.Item("StatusBanting").ToString())
+                    End If
+
+                    If myReader.Item("NoPengesahanBanting").ToString().Length > 0 Then
+                        TB_NoPengesahan_ins.Text = myReader.Item("NoPengesahanBanting").ToString()
+                    End If
+
+                    If IsDBNull(myReader.Item("TarikhPengesahanBanting1")) = False Then
+                        TB_TarikhPengesahanBanting1_ins.Text = CDate(myReader.Item("TarikhPengesahanBanting1")).ToString("yyyy-MM-dd")
+                    End If
+
+                    If IsDBNull(myReader.Item("TarikhPengesahanBanting2")) = False Then
+                        TB_TarikhPengesahanBanting2_ins.Text = CDate(myReader.Item("TarikhPengesahanBanting2")).ToString("yyyy-MM-dd")
+                    End If
+
                     If myReader.Item("NoResitBanting").ToString().Length > 0 Then
                         TB_NoResitBanting_ins.Text = myReader.Item("NoResitBanting").ToString()
                     End If
@@ -2477,6 +2493,7 @@ Partial Class appregister1
         Dim ddl2 As DropDownList = DirectCast(FormView1.FindControl("DDL_JenisBatal"), DropDownList)
         Dim pnlbatal1 As Panel = DirectCast(FormView1.FindControl("pnlbatal3"), Panel)
         Dim pnlbatal2 As Panel = DirectCast(FormView1.FindControl("pnlbatal4"), Panel)
+        Dim pnlbatal3 As Panel = DirectCast(FormView1.FindControl("pnlbatal5"), Panel)
 
         Try
             If FormView1.CurrentMode = FormViewMode.Edit Then
@@ -2512,10 +2529,11 @@ Partial Class appregister1
 
                 If ddl2.SelectedIndex = 1 Then
                     pnlbatal1.Visible = True
+                    pnlbatal3.Visible = True
 
                 ElseIf ddl2.SelectedIndex = 2 Then
                     pnlbatal2.Visible = True
-
+                    pnlbatal3.Visible = True
                 End If
 
                 'Load Senarai Iklan
@@ -3431,14 +3449,17 @@ Partial Class appregister1
         Dim ddl As DropDownList = DirectCast(FormView1.FindControl("DDL_JenisBatal"), DropDownList)
         Dim pnl As Panel = DirectCast(FormView1.FindControl("pnlbatal3"), Panel)
         Dim pnl1 As Panel = DirectCast(FormView1.FindControl("pnlbatal4"), Panel)
+        Dim pnl2 As Panel = DirectCast(FormView1.FindControl("pnlbatal5"), Panel)
 
         pnl.Visible = False
         pnl1.Visible = False
 
         If ddl.SelectedIndex = 1 Then
             pnl.Visible = True
+            pnl2.Visible = True
         ElseIf ddl.SelectedIndex = 2 Then
             pnl1.Visible = True
+            pnl2.Visible = True
         End If
 
     End Sub
