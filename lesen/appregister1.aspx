@@ -742,7 +742,7 @@
 
                                          <div class="col-md-6">
                                              <div class="form-group">
-                                                 <label>Lokasi/Tempat Pemasagan</label>
+                                                 <label>Lokasi/Tempat Pemasangan</label>
                                                  <asp:TextBox ID="TB_LokasiBanting" runat="server" TextMode="MultiLine" Rows="3" CssClass="form-control" />
                                              </div>
                                          </div>
@@ -777,6 +777,45 @@
                                     <div class="row">
                                         <div class="col-md-3">
                                             <div class="form-group">
+                                                <label>Status Kelulusan DBP</label>
+                                                <asp:DropDownList ID="DDL_StatusDBP" Text='<%# Bind("StatusBanting") %>' runat="server" 
+                                                    CssClass="form-control select2">
+                                                    <asp:ListItem Value="">-- Sila Pilih --</asp:ListItem>
+                                                    <asp:ListItem Value="1">Lulus</asp:ListItem>
+                                                    <asp:ListItem Value="0">Tidak Diluluskan</asp:ListItem>
+                                                </asp:DropDownList>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label>No Pengesahan</label>
+                                                <asp:TextBox ID="TB_NoPengesahan" runat="server"
+                                                    Text='<%# Bind("NoPengesahanBanting") %>' CssClass="form-control" />
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label>Tarikh Mula Pengesahan</label>
+                                                <asp:TextBox ID="TB_TarikhPengesahanBanting1" runat="server"
+                                                    Text='<%# Bind("TarikhPengesahanBanting1", "{0:yyyy-MM-dd}") %>' TextMode="Date" CssClass="form-control" />
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label>Tarikh Akhir Pengesahan</label>
+                                                <asp:TextBox ID="TB_TarikhPengesahanBanting2" runat="server"
+                                                    Text='<%# Bind("TarikhPengesahanBanting2", "{0:yyyy-MM-dd}") %>' TextMode="Date" CssClass="form-control" />
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <div class="form-group">
                                                 <label>No Resit</label>
                                                 <asp:TextBox ID="TB_NoResit1" runat="server"
                                                     Text='<%# Bind("NoResitBanting") %>' CssClass="form-control" />
@@ -801,6 +840,8 @@
 
                                             </div>
                                         </div>
+
+
 
                                     </div>
 
@@ -1489,6 +1530,12 @@
                                                     ControlToValidate="DDL_SebabBatal2" ErrorMessage="Sila Pilih" ForeColor="Red" ValidationGroup="updateForm" Display="Dynamic"></asp:RequiredFieldValidator>
                                             </asp:Panel>
 
+                                            <asp:Panel ID="pnlbatal5" runat="server" Visible="false">
+                                                <label>Catatan</label>
+                                                <asp:TextBox ID="TB_Remarks2" runat="server" TextMode="MultiLine" Rows="2"
+                                                    Text='<%# Bind("RemarksBatal") %>' CssClass="form-control" />
+                                            </asp:Panel>
+
                                         </div>
                                     </div>
 
@@ -1927,9 +1974,62 @@
                                 <div class="row">
                                     <div class="col-md-3">
                                         <div class="form-group">
+                                            <label>Status Kelulusan DBP</label>
+                                            <asp:DropDownList ID="DDL_StatusDBP" Text='<%# Bind("StatusBanting") %>' runat="server" 
+                                                CssClass="form-control select2">
+                                                <asp:ListItem Value="">-- Sila Pilih --</asp:ListItem>
+                                                <asp:ListItem Value="1">Lulus</asp:ListItem>
+                                                <asp:ListItem Value="2">Tidak Diluluskan</asp:ListItem>
+                                            </asp:DropDownList>
+                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator7" runat="server" CssClass="cssRequiredField"
+                                                ControlToValidate="DDL_StatusDBP" ErrorMessage="Sila Pilih" ForeColor="Red" ValidationGroup="insertForm" Display="Dynamic"></asp:RequiredFieldValidator>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>No Pengesahan</label>
+                                            <asp:TextBox ID="TB_NoPengesahan" runat="server"
+                                                Text='<%# Bind("NoPengesahanBanting") %>' CssClass="form-control" />
+                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator26" runat="server" CssClass="cssRequiredField"
+                                                ControlToValidate="TB_NoPengesahan" ErrorMessage="Sila Isi" ForeColor="Red" ValidationGroup="insertForm" Display="Dynamic"></asp:RequiredFieldValidator>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Tarikh Mula Pengesahan</label>
+                                            <asp:TextBox ID="TB_TarikhPengesahanBanting1" runat="server"
+                                                Text='<%# Bind("TarikhPengesahanBanting1", "{0:yyyy-MM-dd}") %>' TextMode="Date" CssClass="form-control" />
+                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator30" runat="server" CssClass="cssRequiredField"
+                                                ControlToValidate="TB_TarikhPengesahanBanting1" ErrorMessage="Sila Pilih" ForeColor="Red" ValidationGroup="insertForm" Display="Dynamic"></asp:RequiredFieldValidator>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Tarikh Akhir Pengesahan</label>
+                                            <asp:TextBox ID="TB_TarikhPengesahanBanting2" runat="server"
+                                                Text='<%# Bind("TarikhPengesahanBanting2", "{0:yyyy-MM-dd}") %>' TextMode="Date" CssClass="form-control" />
+                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator31" runat="server" CssClass="cssRequiredField"
+                                                ControlToValidate="TB_TarikhPengesahanBanting2" ErrorMessage="Sila Pilih" ForeColor="Red" ValidationGroup="insertForm" Display="Dynamic"></asp:RequiredFieldValidator>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
                                             <label>No Resit</label>
                                             <asp:TextBox ID="TB_NoResit1" runat="server"
                                                 Text='<%# Bind("NoResitBanting") %>' CssClass="form-control" />
+                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator39" runat="server" CssClass="cssRequiredField"
+                                                ControlToValidate="TB_NoResit1" ErrorMessage="Sila Isi" ForeColor="Red" ValidationGroup="insertForm" Display="Dynamic"></asp:RequiredFieldValidator>
 
                                         </div>
                                     </div>
@@ -1939,6 +2039,8 @@
                                             <label>No Siri Stiker</label>
                                             <asp:TextBox ID="TB_NoSiriStiker" runat="server"
                                                 Text='<%# Bind("NoSiriStiker") %>' CssClass="form-control" />
+                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator40" runat="server" CssClass="cssRequiredField"
+                                                ControlToValidate="TB_NoSiriStiker" ErrorMessage="Sila Isi" ForeColor="Red" ValidationGroup="insertForm" Display="Dynamic"></asp:RequiredFieldValidator>
 
                                         </div>
                                     </div>
@@ -2670,6 +2772,12 @@
                                                     ControlToValidate="DDL_SebabBatal2" ErrorMessage="Sila Pilih" ForeColor="Red" ValidationGroup="insertForm" Display="Dynamic"></asp:RequiredFieldValidator>
                                             </asp:Panel>
 
+                                            <asp:Panel ID="pnlbatal5" runat="server" Visible="false">
+                                                <label>Catatan</label>
+                                                <asp:TextBox ID="TB_Remarks2" runat="server" TextMode="MultiLine" Rows="2"
+                                                    Text='<%# Bind("RemarksBatal") %>' CssClass="form-control" />
+                                            </asp:Panel>
+
                                         </div>
                                     </div>
 
@@ -2709,18 +2817,18 @@
                         JenisPerniagaanPasar, JumlahPetak, AnjingAlamat, AnjingJenisPremis, JenisPenjaja, StatusTanahPenjaja, AlamatPenjajaan, JenisPerniagaanPenjaja, MasaPenjaja1, MasaPenjaja2,
                         JenisKenderaanPenjaja, NoKenderaanPenjaja, TarikhBatal, PenganjurEkspo, AlamatPenganjurEkspo, PicEkspo, NoTelEkspo, NamaEkspo, LokasiEkspo, TarikhEkspo1, TarikhEkspo2, MasaEkspo1, MasaEkspo2, 
                         TentatifEkspo, JemputanEkspo, PembersihanEkspo, TarikhKhemahEkspo1, TarikhKhemahEkspo2, 
-                        KontraktorIklan, NoTelKontraktor, UkuranBanting, BilBanting, TarikhBanting1, TarikhBanting2, NoResitBanting, NoSiriStiker, TarikhBanting3, 
+                        KontraktorIklan, NoTelKontraktor, UkuranBanting, BilBanting, TarikhBanting1, TarikhBanting2, StatusBanting, NoPengesahanBanting, TarikhPengesahanBanting1, TarikhPengesahanBanting2, NoResitBanting, NoSiriStiker, TarikhBanting3, 
                         Rujukan, NoAkaunCukai, DepositAmount, DepositDate, DepositResitNo, DepositPulangAmount, 
-                        Is24jam, IsBatal, JenisBatal, SebabBatalPerm, SebabBatalTanpaPerm, TindakanBatal, IsPulang, IsSuratKelulusanFail, IsSuratPembatalanFail, IsSuratPemeriksaanFail, RemarksFail, CreatorID, CreatedDt, LastModID, LastModDt) 
+                        Is24jam, IsBatal, JenisBatal, SebabBatalPerm, SebabBatalTanpaPerm, RemarksBatal, TindakanBatal, IsPulang, IsSuratKelulusanFail, IsSuratPembatalanFail, IsSuratPemeriksaanFail, RemarksFail, CreatorID, CreatedDt, LastModID, LastModDt) 
                         VALUES (@JenisLesenDescList, @JenisLesenIdList, @SaizIklanList, @CahayaIklanList, @UnitIklanList, @LokasiList, 
                         @Permohonan_PemohonID, @TarikhMohon, 0, 0, @NamaSyarikat, @NoPendaftaran, @NoAkaun, @AlamatPremis, @JenisPerniagaan, @PemilikBaru, @AlamatBaru,
                         @JenisPerniagaanBaru, @NamaBaruSyarikat, @BillboardLokasi, @LokasiPasar1, @LokasiPasar3, @LokasiPasar3, @JenisPasar, @JenisPerniagaanPasar,
                         @JumlahPetak, @AnjingAlamat, @AnjingJenisPremis, @JenisPenjaja, @StatusTanahPenjaja, @AlamatPenjajaan, @JenisPerniagaanPenjaja, @MasaPenjaja1, @MasaPenjaja2, @JenisKenderaanPenjaja, @NoKenderaanPenjaja,
                         @TarikhBatal, @PenganjurEkspo, @AlamatPenganjurEkspo, @NamaEkspo, @LokasiEkspo, @PicEkspo, @NoTelEkspo, @TarikhEkspo1, @TarikhEkspo2, @MasaEkspo1, @MasaEkspo2, 
                         @TentatifEkspo, @JemputanEkspo, @PembersihanEkspo, @TarikhKhemahEkspo1, @TarikhKhemahEkspo2, 
-                        @KontraktorIklan, @NoTelKontraktor, @UkuranBanting, @BilBanting, @TarikhBanting1, @TarikhBanting2, @NoResitBanting, @NoSiriStiker, @TarikhBanting3,
+                        @KontraktorIklan, @NoTelKontraktor, @UkuranBanting, @BilBanting, @TarikhBanting1, @TarikhBanting2, @StatusBanting, @NoPengesahanBanting, @TarikhPengesahanBanting1, @TarikhPengesahanBanting2, @NoResitBanting, @NoSiriStiker, @TarikhBanting3,
                         @Rujukan, @NoAkaunCukai, @DepositAmount, @DepositDate, @DepositResitNo, @DepositPulangAmount, 
-                        @Is24jam, @IsBatal, @JenisBatal, @SebabBatalPerm, @SebabBatalTanpaPerm, @TindakanBatal, 0, 0, 0, 0, @RemarksFail, @CreatorId, GETDATE(), @CreatorId, GETDATE()); SELECT @Permohonan_ID = SCOPE_IDENTITY();"
+                        @Is24jam, @IsBatal, @JenisBatal, @SebabBatalPerm, @SebabBatalTanpaPerm, @RemarksBatal, @TindakanBatal, 0, 0, 0, 0, @RemarksFail, @CreatorId, GETDATE(), @CreatorId, GETDATE()); SELECT @Permohonan_ID = SCOPE_IDENTITY();"
                 SelectCommand="SELECT * FROM LESEN_Permohonan WHERE Permohonan_ID = @Permohonan_ID"
                 UpdateCommand="UPDATE LESEN_Permohonan SET JenisLesenDescList = @JenisLesenDescList, JenisLesenIdList = @JenisLesenIdList, SaizIklanList = @SaizIklanList, CahayaIklanList = @CahayaIklanList, UnitIklanList = @UnitIklanList, LokasiList = @LokasiList, 
                         Permohonan_PemohonID = @Permohonan_PemohonID, TarikhMohon = @TarikhMohon, StatusID = @StatusID, NamaSyarikat = @NamaSyarikat, NoPendaftaran = @NoPendaftaran, NoAkaun = @NoAkaun, AlamatPremis = @AlamatPremis, 
@@ -2731,10 +2839,11 @@
                         TarikhBatal = @TarikhBatal, PenganjurEkspo = @PenganjurEkspo, AlamatPenganjurEkspo = @AlamatPenganjurEkspo, PicEkspo = @PicEkspo, NoTelEkspo = @NoTelEkspo, NamaEkspo = @NamaEkspo, LokasiEkspo = @LokasiEkspo, 
                         TarikhEkspo1 = @TarikhEkspo1, TarikhEkspo2 = @TarikhEkspo2, MasaEkspo1 = @MasaEkspo1, MasaEkspo2 = @MasaEkspo2, TentatifEkspo = @TentatifEkspo, JemputanEkspo = @JemputanEkspo, PembersihanEkspo = @PembersihanEkspo, 
                         TarikhKhemahEkspo1 = @TarikhKhemahEkspo1, TarikhKhemahEkspo2 = @TarikhKhemahEkspo2, 
-                        KontraktorIklan = @KontraktorIklan, NoTelKontraktor = @NoTelKontraktor, UkuranBanting = @UkuranBanting, BilBanting = @BilBanting, TarikhBanting1 = @TarikhBanting1, TarikhBanting2 = @TarikhBanting2, NoResitBanting = @NoResitBanting, NoSiriStiker=@NoSiriStiker, TarikhBanting3=@TarikhBanting3,
+                        KontraktorIklan = @KontraktorIklan, NoTelKontraktor = @NoTelKontraktor, UkuranBanting = @UkuranBanting, BilBanting = @BilBanting, TarikhBanting1 = @TarikhBanting1, TarikhBanting2 = @TarikhBanting2, StatusBanting = @StatusBanting, 
+                        NoPengesahanBanting = @NoPengesahanBanting, TarikhPengesahanBanting1 = @TarikhPengesahanBanting1, TarikhPengesahanBanting2 = TarikhPengesahanBanting2, NoResitBanting = @NoResitBanting, NoSiriStiker = @NoSiriStiker, TarikhBanting3 = @TarikhBanting3,
                         Rujukan = @Rujukan, NoAkaunCukai = @NoAkaunCukai, DepositAmount = @DepositAmount, 
                         DepositDate = @DepositDate, DepositResitNo = @DepositResitNo, DepositPulangAmount = @DepositPulangAmount, Is24jam = @Is24jam, IsBatal = @IsBatal, JenisBatal = @JenisBatal, SebabBatalPerm = @SebabBatalPerm, 
-                        SebabBatalTanpaPerm = @SebabBatalTanpaPerm, TindakanBatal = @TindakanBatal, RemarksFail = @RemarksFail, LastModId = @LastModId, LastModDt = GETDATE() 
+                        SebabBatalTanpaPerm = @SebabBatalTanpaPerm, RemarksBatal = @RemarksBatal, TindakanBatal = @TindakanBatal, RemarksFail = @RemarksFail, LastModId = @LastModId, LastModDt = GETDATE() 
                         WHERE (Permohonan_ID = @Permohonan_ID)">
                 <InsertParameters>
                     <asp:Parameter Name="JenisLesenDescList"></asp:Parameter>
@@ -2793,6 +2902,10 @@
                     <asp:Parameter Name="BilBanting"></asp:Parameter>
                     <asp:Parameter Name="TarikhBanting1"></asp:Parameter>
                     <asp:Parameter Name="TarikhBanting2"></asp:Parameter>
+                    <asp:Parameter Name="StatusBanting"></asp:Parameter>
+                    <asp:Parameter Name="NoPengesahanBanting"></asp:Parameter>
+                    <asp:Parameter Name="TarikhPengesahanBanting1"></asp:Parameter>
+                    <asp:Parameter Name="TarikhPengesahanBanting2"></asp:Parameter>
                     <asp:Parameter Name="NoResitBanting"></asp:Parameter>
                     <asp:Parameter Name="NoSiriStiker"></asp:Parameter>
                     <asp:Parameter Name="TarikhBanting3"></asp:Parameter>
@@ -2808,6 +2921,7 @@
                     <asp:Parameter Name="JenisBatal"></asp:Parameter>
                     <asp:Parameter Name="SebabBatalPerm"></asp:Parameter>
                     <asp:Parameter Name="SebabBatalTanpaPerm"></asp:Parameter>
+                    <asp:Parameter Name="RemarksBatal"></asp:Parameter>
                     <asp:Parameter Name="TindakanBatal"></asp:Parameter>
                     <asp:SessionParameter SessionField="sessionUserName" Name="CreatorID"></asp:SessionParameter>
                     <asp:Parameter Name="Permohonan_ID" Type="Int32" Direction="Output" />
@@ -2872,6 +2986,10 @@
                     <asp:Parameter Name="BilBanting"></asp:Parameter>
                     <asp:Parameter Name="TarikhBanting1"></asp:Parameter>
                     <asp:Parameter Name="TarikhBanting2"></asp:Parameter>
+                    <asp:Parameter Name="StatusBanting"></asp:Parameter>
+                    <asp:Parameter Name="NoPengesahanBanting"></asp:Parameter>
+                    <asp:Parameter Name="TarikhPengesahanBanting1"></asp:Parameter>
+                    <asp:Parameter Name="TarikhPengesahanBanting2"></asp:Parameter>
                     <asp:Parameter Name="NoResitBanting"></asp:Parameter>
                     <asp:Parameter Name="NoSiriStiker"></asp:Parameter>
                     <asp:Parameter Name="TarikhBanting3"></asp:Parameter>
@@ -2887,6 +3005,7 @@
                     <asp:Parameter Name="JenisBatal"></asp:Parameter>
                     <asp:Parameter Name="SebabBatalPerm"></asp:Parameter>
                     <asp:Parameter Name="SebabBatalTanpaPerm"></asp:Parameter>
+                    <asp:Parameter Name="RemarksBatal"></asp:Parameter>
                     <asp:Parameter Name="TindakanBatal"></asp:Parameter>
                     <asp:SessionParameter SessionField="sessionUserName" Name="LastModId"></asp:SessionParameter>
                     <asp:Parameter Name="Permohonan_ID"></asp:Parameter>
@@ -3637,6 +3756,42 @@
                                         </Columns>
                                     </asp:GridView>
                                 </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Status Kelulusan DBP</label>
+                                        <asp:DropDownList ID="DDL_StatusDBP_ins" runat="server" 
+                                            CssClass="form-control select2">
+                                            <asp:ListItem Value="">-- Sila Pilih --</asp:ListItem>
+                                            <asp:ListItem Value="1">Lulus</asp:ListItem>
+                                            <asp:ListItem Value="0">Tidak Diluluskan</asp:ListItem>
+                                        </asp:DropDownList>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>No Pengesahan</label>
+                                        <asp:TextBox ID="TB_NoPengesahan_ins" runat="server" CssClass="form-control" />
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Tarikh Mula Pengesahan</label>
+                                        <asp:TextBox ID="TB_TarikhPengesahanBanting1_ins" runat="server" TextMode="Date" CssClass="form-control" />
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Tarikh Akhir Pengesahan</label>
+                                        <asp:TextBox ID="TB_TarikhPengesahanBanting2_ins" runat="server" TextMode="Date" CssClass="form-control" />
+                                    </div>
+                                </div>
+
                             </div>
 
                             <div class="row">
