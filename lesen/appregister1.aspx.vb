@@ -2730,68 +2730,68 @@ Partial Class appregister1
         Dim cb As CheckBox = DirectCast(FormView1.FindControl("CB_IsBatal"), CheckBox)
         'Dim ddl As DropDownList = DirectCast(FormView1.FindControl("DDL_JenisLesen"), DropDownList)
 
-        If reviewSurat(cb.Checked) Then
+        'If reviewSurat(cb.Checked) Then
 
-            If cb.Checked Then
-                extstr = "Batal"
+        If cb.Checked Then
+            extstr = "Batal"
+        End If
+
+        Using myConnection As New SqlConnection(ConfigurationManager.ConnectionStrings("webcon_ConnectionStr").ConnectionString)
+
+            myConnection.Open()
+
+            Dim Sql1 = "SELECT COUNT(PermohonanAgensi_ID) AS agensi FROM LESEN_PermohonanAgensi" & extstr & " WHERE Permohonan_ID=" & hfid.Value
+
+            Dim myCommand1 = New SqlCommand(Sql1, myConnection)
+
+            Dim myReader As SqlDataReader = myCommand1.ExecuteReader
+
+            If myReader.Read Then
+                counter = myReader.Item("agensi")
             End If
 
-            Using myConnection As New SqlConnection(ConfigurationManager.ConnectionStrings("webcon_ConnectionStr").ConnectionString)
+            myCommand1.Dispose()
+            myConnection.Close()
 
-                myConnection.Open()
+            If counter < 1 And cb.Checked = False And (ddl.Value <> "9" Or ddl.Value <> "27") Then
+                ShowAlert("error", "", "Gagal hantar. Sila tambah jabatan agensi")
+                Return
+            End If
 
-                Dim Sql1 = "SELECT COUNT(PermohonanAgensi_ID) AS agensi FROM LESEN_PermohonanAgensi" & extstr & " WHERE Permohonan_ID=" & hfid.Value
+            '//
+            Dim result2 = insertMaklumatPembetulan(CInt(hfid.Value))
 
-                Dim myCommand1 = New SqlCommand(Sql1, myConnection)
+            If result2 = False Then
+                ShowAlert("error", "", "Gagal proses database. Sila tekan Hantar sekali lagi." & hfid.Value)
+                Return
+            End If
 
-                Dim myReader As SqlDataReader = myCommand1.ExecuteReader
+            myConnection.Open()
 
-                If myReader.Read Then
-                    counter = myReader.Item("agensi")
-                End If
+            Dim Sql = "UPDATE LESEN_Permohonan SET StatusID=1 WHERE StatusID=0 AND Permohonan_ID=" & hfid.Value
 
-                myCommand1.Dispose()
-                myConnection.Close()
+            Dim myCommand = New SqlCommand(Sql, myConnection)
 
-                If counter < 1 And cb.Checked = False And (ddl.Value <> "9" Or ddl.Value <> "27") Then
-                    ShowAlert("error", "", "Gagal hantar. Sila tambah jabatan agensi")
-                    Return
-                End If
+            'Dim myReader As SqlDataReader = myCommand.ExecuteReader
+            Dim result = myCommand.ExecuteNonQuery()
 
-                '//
-                Dim result2 = insertMaklumatPembetulan(CInt(hfid.Value))
+            myCommand.Dispose()
+            myConnection.Close()
 
-                If result2 = False Then
-                    ShowAlert("error", "", "Gagal proses database. Sila tekan Hantar sekali lagi." & hfid.Value)
-                    Return
-                End If
+            If result < 1 Then
+                ShowAlert("error", "", "Gagal hantar")
+            Else
+                ShowAlert("success", "", "Berjaya hantar")
+                'GridView1.DataBind()
+                backToList()
+            End If
 
-                myConnection.Open()
+        End Using
 
-                Dim Sql = "UPDATE LESEN_Permohonan SET StatusID=1 WHERE StatusID=0 AND Permohonan_ID=" & hfid.Value
-
-                Dim myCommand = New SqlCommand(Sql, myConnection)
-
-                'Dim myReader As SqlDataReader = myCommand.ExecuteReader
-                Dim result = myCommand.ExecuteNonQuery()
-
-                myCommand.Dispose()
-                myConnection.Close()
-
-                If result < 1 Then
-                    ShowAlert("error", "", "Gagal hantar")
-                Else
-                    ShowAlert("success", "", "Berjaya hantar")
-                    'GridView1.DataBind()
-                    backToList()
-                End If
-
-            End Using
-
-        Else
-            ShowAlert("error", "", "Surat Belum Habis Disemak")
-            TabContainer1.ActiveTabIndex = 5
-        End If
+        'Else
+        '    ShowAlert("error", "", "Surat Belum Habis Disemak")
+        '    TabContainer1.ActiveTabIndex = 5
+        'End If
 
     End Sub
 
@@ -3178,8 +3178,8 @@ Partial Class appregister1
     Private Sub ViewSuratMohonAuto(permohonanAgensiID As String, jabatanAgensiID As Integer, jenislesenIdList As String, isBatal As Boolean)
         Dim strBatal As String = ""
         Dim sql As String = ""
-        Dim jenisLesenDesc = {"mpk_suratmohonulasan", "mpk_suratmohonulasan_psr", "mpk_suratmohonulasan_anj", "mpk_suratmohonulasan_pjj", "mpk_suratmohonulasan_bb"}
-        Dim jenisLesenDescLuar = {"mpk_suratmohonulasan_l", "mpk_suratmohonulasan_psr_l", "mpk_suratmohonulasan_anj_l", "mpk_suratmohonulasan_pjj_l", "mpk_suratmohonulasan_bb_l"}
+        Dim jenisLesenDesc = {"mpk_suratmohonulasan", "mpk_suratmohonulasan_psr", "mpk_suratmohonulasan_anj", "mpk_suratmohonulasan_pjj", "mpk_suratmohonulasan_bb", "mpk_suratmohonulasan_ep"}
+        Dim jenisLesenDescLuar = {"mpk_suratmohonulasan_l", "mpk_suratmohonulasan_psr_l", "mpk_suratmohonulasan_anj_l", "mpk_suratmohonulasan_pjj_l", "mpk_suratmohonulasan_bb_l", "mpk_suratmohonulasan_ep_l"}
 
         If isBatal = True Then
             strBatal = "Batal"
@@ -3209,6 +3209,8 @@ Partial Class appregister1
                     ReportVar = jenisLesenDesc(3)
                 Case "5"
                     ReportVar = jenisLesenDesc(4)
+                Case "15"
+                    ReportVar = jenisLesenDesc(5)
             End Select
 
             If jabatanAgensiID > 3 Then
@@ -3224,6 +3226,8 @@ Partial Class appregister1
                         ReportVar = jenisLesenDescLuar(3)
                     Case "5"
                         ReportVar = jenisLesenDescLuar(4)
+                    Case "15"
+                        ReportVar = jenisLesenDescLuar(5)
                 End Select
 
             End If
