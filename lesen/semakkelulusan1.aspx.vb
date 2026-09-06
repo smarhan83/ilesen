@@ -1767,8 +1767,8 @@ Partial Class semakkelulusan1
 
 
         Dim sql As String = ""
-        Dim jenisLesenDesc = {"mpk_suratmohonulasan_l", "mpk_suratmohonulasan_psr", "mpk_suratmohonulasan_anj", "mpk_suratmohonulasan_pjj", "mpk_suratmohonulasan_bb"}
-        Dim jenisLesenDescLuar = {"mpk_suratmohonulasan_l", "mpk_suratmohonulasan_psr_l", "mpk_suratmohonulasan_anj_l", "mpk_suratmohonulasan_pjj_l", "mpk_suratmohonulasan_bb_l"}
+        Dim jenisLesenDesc = {"mpk_suratmohonulasan_l", "mpk_suratmohonulasan_psr", "mpk_suratmohonulasan_anj", "mpk_suratmohonulasan_pjj", "mpk_suratmohonulasan_bb", "mpk_suratmohonulasan_ep"}
+        Dim jenisLesenDescLuar = {"mpk_suratmohonulasan_l", "mpk_suratmohonulasan_psr_l", "mpk_suratmohonulasan_anj_l", "mpk_suratmohonulasan_pjj_l", "mpk_suratmohonulasan_bb_l", "mpk_suratmohonulasan_ep_l"}
 
         Try
             sql = "SELECT a.Permohonan_ID, a.TarikhMohon, a.CreatedDt, CAST(a.NamaSyarikat AS varchar(200)) AS NamaSyarikat, a.NoPendaftaran, a.NoAkaun, a.AlamatPremis, a.JenisPerniagaan, a.PemilikBaru, " &
@@ -1793,6 +1793,8 @@ Partial Class semakkelulusan1
                     ReportVar = jenisLesenDesc(3)
                 Case "5"
                     ReportVar = jenisLesenDesc(4)
+                Case "15"
+                    ReportVar = jenisLesenDesc(5)
             End Select
 
             If getJabatanLesen(CInt(Session.Item("sessionEstateID"))) = False Then
@@ -1806,6 +1808,8 @@ Partial Class semakkelulusan1
                         ReportVar = jenisLesenDescLuar(3)
                     Case "5"
                         ReportVar = jenisLesenDescLuar(4)
+                    Case "15"
+                        ReportVar = jenisLesenDescLuar(5)
                 End Select
 
             End If
