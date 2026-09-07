@@ -4873,7 +4873,7 @@
                                         <asp:SqlDataSource runat="server" ID="SqlDataSourceLogKelulusan" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
                                             SelectCommand="SELECT a.ApprovalDate, a.ApprStatusID, c.JabatanAgensi_Description, b.Description, a.ApprovalID, d.Users_Fullname, 
                                             (CASE WHEN a.ApprStatusID = 3 then (SELECT STRING_AGG(d1.Users_Fullname, ', ') FROM LESEN_PermohonanAgensiStaff a1 
-                                            INNER JOIN LESEN_PermohonanAgensi b1 ON b1.Permohonan_ID = @Permohonan_ID and b1.PermohonanAgensi_ID = a1.PermohonanAgensi_ID
+                                            INNER JOIN LESEN_PermohonanAgensi b1 ON b1.Permohonan_ID = @Permohonan_ID and b1.PermohonanAgensi_ID = a1.PermohonanAgensi_ID AND b1.JabatanAgensi_ID = a.AgensiID 
                                             INNER JOIN TBL_USERS d1 ON d1.Users_Id = a1.PermohonanAgensiStaffID_UsersID) WHEN a.ApprStatusID = 1 then f.Users_Fullname ELSE d.Users_Fullname END) AS ActionBy
                                             FROM LESEN_ApprovalList a 
                                                 inner join ApprovalStatus b on b.ApprStatusID = a.ApprStatusID 
@@ -4884,7 +4884,7 @@
                                                 WHERE a.Permohonan_ID = @Permohonan_ID and ApprovalDate is not null
 												UNION ALL
 												(SELECT TOP(1) a.ApprovalDate,  a.ApprStatusID, b.JabatanAgensi_Description, a.Description, a.ApprovalID, d.Users_Fullname,
-												(CASE WHEN a.ApprStatusID = 3 then (SELECT STRING_AGG(d1.Users_Fullname, ', ') FROM LESEN_PermohonanAgensiStaff a1 
+												(CASE WHEN a.ApprStatusID = 3 then (SELECT STRING_AGG(d1.Users_Fullname, ', ') FROM LESEN_PermohonanAgensiStaff a1 AND b1.JabatanAgensi_ID = a.AgensiID 
                                             INNER JOIN LESEN_PermohonanAgensi b1 ON b1.Permohonan_ID = @Permohonan_ID and b1.PermohonanAgensi_ID = a1.PermohonanAgensi_ID
                                             INNER JOIN TBL_USERS d1 ON d1.Users_Id = a1.PermohonanAgensiStaffID_UsersID) ELSE d.Users_Fullname END) AS ActionBy 
                                             FROM v_LESEN_ApprovalList_Curr a 
@@ -4921,7 +4921,7 @@
                                         <asp:SqlDataSource runat="server" ID="SqlDataSourceLogBatal" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
                                             SelectCommand="SELECT a.ApprovalDate, a.ApprStatusID, c.JabatanAgensi_Description, b.Description, a.ApprovalID, d.Users_Fullname, 
                                             (CASE WHEN a.ApprStatusID = 3 then (SELECT STRING_AGG(d1.Users_Fullname, ', ') FROM LESEN_PermohonanAgensiStaffBatal a1 
-                                            INNER JOIN LESEN_PermohonanAgensiBatal b1 ON b1.Permohonan_ID = @Permohonan_ID and b1.PermohonanAgensi_ID = a1.PermohonanAgensi_ID
+                                            INNER JOIN LESEN_PermohonanAgensiBatal b1 ON b1.Permohonan_ID = @Permohonan_ID and b1.PermohonanAgensi_ID = a1.PermohonanAgensi_ID AND b1.JabatanAgensi_ID = a.AgensiID 
                                             INNER JOIN TBL_USERS d1 ON d1.Users_Id = a1.PermohonanAgensiStaffID_UsersID) ELSE d.Users_Fullname END) AS ActionBy
                                             FROM LESEN_ApprovalListBatal a 
                                                 inner join ApprovalStatus b on b.ApprStatusID = a.ApprStatusID 
@@ -4931,7 +4931,7 @@
 												UNION ALL
 												(SELECT TOP(1) a.ApprovalDate,  a.ApprStatusID, b.JabatanAgensi_Description, a.Description, a.ApprovalID, d.Users_Fullname,
 												(CASE WHEN a.ApprStatusID = 3 then (SELECT STRING_AGG(d1.Users_Fullname, ', ') FROM LESEN_PermohonanAgensiStaffBatal a1 
-                                            INNER JOIN LESEN_PermohonanAgensiBatal b1 ON b1.Permohonan_ID = @Permohonan_ID and b1.PermohonanAgensi_ID = a1.PermohonanAgensi_ID
+                                            INNER JOIN LESEN_PermohonanAgensiBatal b1 ON b1.Permohonan_ID = @Permohonan_ID and b1.PermohonanAgensi_ID = a1.PermohonanAgensi_ID AND b1.JabatanAgensi_ID = a.AgensiID 
                                             INNER JOIN TBL_USERS d1 ON d1.Users_Id = a1.PermohonanAgensiStaffID_UsersID) ELSE d.Users_Fullname END) AS ActionBy 
                                             FROM v_LESEN_ApprovalListBatal_Curr a 
                                                 left join LESEN_JabatanAgensi b on b.JabatanAgensi_ID = a.AgensiID 
