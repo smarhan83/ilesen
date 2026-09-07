@@ -40,6 +40,8 @@ Partial Class appregister1
                     '//gridview select view
                     GridView1.Columns.Item(12).Visible = False '//grid delete
                     'GridView1.Columns.Item(10).Visible = False '//grid delete
+                    gvTabPublicAttach.Columns.Item(4).Visible = False
+                    gvTabPublicAttach.Columns.Item(5).Visible = False
                     gvTabUlasan.Columns.Item(4).Visible = False '//grid delete
                     gvTabUlasan.Columns.Item(5).Visible = False '//grid delete
                     GridViewJabatanAgensiBatal.Columns.Item(3).Visible = False '//grid delete
@@ -2894,6 +2896,101 @@ Partial Class appregister1
 
     End Sub
 
+    Protected Sub btnAddNewUpload1_Click(sender As Object, e As EventArgs)
+
+        Dim Permohonan_ID As Integer = CInt(GridView1.SelectedValue)
+
+        Using myConnection As New SqlConnection(ConfigurationManager.ConnectionStrings("webcon_ConnectionStr").ConnectionString)
+
+            Dim SQL As String = ""
+
+            SQL = "INSERT INTO LESEN_PermohonanFail (PermohonanFail_PermohonanID,CreatedDt,CreatorID) VALUES 
+                 (@Permohonan_ID, getdate(), @SessionUserName) "
+
+            Dim myCommand As New SqlCommand(SQL, myConnection)
+
+            myCommand.Parameters.AddWithValue("@Permohonan_ID", Permohonan_ID)
+            myCommand.Parameters.AddWithValue("@SessionUsersId", Session.Item("SessionUsersId"))
+            myCommand.Parameters.AddWithValue("@SessionUserName", Session.Item("SessionUserName"))
+
+            myConnection.Open()
+
+            Dim recordset As Integer = myCommand.ExecuteNonQuery()
+
+            '//start insert
+
+            If recordset Then
+                gvTabPublicAttach.EditIndex = CInt(gvTabPublicAttach.Rows.Count)
+
+            End If
+
+            myConnection.Close()
+
+            gvTabPublicAttach.DataBind()
+
+            Page.SetFocus(Me.ui_btnPageBottom.ClientID)
+
+        End Using
+
+    End Sub
+
+    Private Sub gvTabPublicAttach_RowUpdated(sender As Object, e As GridViewUpdatedEventArgs) Handles gvTabPublicAttach.RowUpdated
+        '//
+    End Sub
+    Private Sub gvTabPublicAttach_RowUpdating(sender As Object, e As GridViewUpdateEventArgs) Handles gvTabPublicAttach.RowUpdating
+
+
+        Dim LinkButton1 As LinkButton = CType(gvTabPublicAttach.Rows(e.RowIndex).FindControl("LinkButton1"), LinkButton)
+        'Dim updatePanelUlasan As UpdatePanel = CType(gvTabUlasan.Rows(e.RowIndex).FindControl("updatePanelUlasan"), UpdatePanel)
+        Dim fu As FileUpload = CType(gvTabPublicAttach.Rows(e.RowIndex).FindControl("FU_PermohonanFail"), FileUpload)
+        'Dim txtPermohonanFail_FilePath As FileUpload = CType(gvTabUlasan.Rows(e.RowIndex).FindControl("txtPermohonanFail_FilePath"), FileUpload)
+        Dim btnUpload As Button = CType(gvTabPublicAttach.Rows(e.RowIndex).FindControl("btnUpload"), Button)
+
+        If fu.HasFiles = False Then
+            'MessageBox("Muat naik fail gagal.", Me)
+            Return
+        End If
+
+        Dim uid As Guid = Guid.NewGuid()
+        Dim fn As String = System.IO.Path.GetFileName(fu.PostedFile.FileName)
+        Dim localPath As String = "~/doc/" & "" & uid.ToString & fn
+        Dim SaveLocation As String = Server.MapPath(localPath)
+
+        If (fu.PostedFile IsNot Nothing) AndAlso (fu.PostedFile.ContentLength > 0) Then
+
+            '//delete previous file
+            If e.OldValues("PermohonanFail_FilePath") <> "" Then
+
+                Dim deleteFilePath As String = Server.MapPath(e.OldValues("PermohonanFail_FilePath"))
+
+                If System.IO.File.Exists(deleteFilePath) Then
+                    System.IO.File.Delete(deleteFilePath)
+                End If
+
+            End If
+
+            If updateUploadFile(fu, SaveLocation) Then
+
+                e.NewValues("PermohonanFail_FileName") = fu.PostedFile.FileName
+                e.NewValues("PermohonanFail_ContentType") = fu.PostedFile.ContentType
+                e.NewValues("PermohonanFail_FilePath") = localPath
+
+            Else
+
+            End If
+
+
+        Else
+
+            'e.NewValues("UlasanFail_FileName") = e.OldValues("UlasanFail_FileName")
+            'e.NewValues("UlasanFail_ContentType") = e.OldValues("UlasanFail_ContentType")
+            'e.NewValues("UlasanFail_FilePath") = e.OldValues("UlasanFail_FilePath")
+        End If
+
+
+
+    End Sub
+
     Private Sub gvTabUlasan_RowUpdated(sender As Object, e As GridViewUpdatedEventArgs) Handles gvTabUlasan.RowUpdated
         '//
     End Sub
@@ -3028,6 +3125,44 @@ Partial Class appregister1
 
         Return newImage
     End Function
+
+    Private Sub gvTabPublicAttach_RowDataBound(sender As Object, e As GridViewRowEventArgs) Handles gvTabPublicAttach.RowDataBound
+
+        If e.Row.RowType = DataControlRowType.DataRow Then
+            Dim btnUpload As Button = CType(e.Row.Cells(0).FindControl("btnUpload"), Button)
+            Dim LinkButton1 As LinkButton = CType(e.Row.Cells(0).FindControl("LinkButton1"), LinkButton)
+
+            If btnUpload IsNot Nothing Then
+
+                Dim currPageScriptManager As ScriptManager = TryCast(ScriptManager.GetCurrent(Page), ScriptManager)
+
+                'RegisterAsyncPostBackControl
+                'currPageScriptManager.RegisterPostBackControl(btnUpload)
+                currPageScriptManager.RegisterPostBackControl(LinkButton1)
+
+            End If
+        End If
+
+
+    End Sub
+
+    Private Sub gvTabPublicAttach_RowDeleting(sender As Object, e As GridViewDeleteEventArgs) Handles gvTabPublicAttach.RowDeleting
+
+
+        If e.Values("PermohonanFail_FilePath") <> "" Then
+
+            Dim deleteFilePath As String = Server.MapPath(e.Values("PermohonanFail_FilePath"))
+
+            If System.IO.File.Exists(deleteFilePath) Then
+                System.IO.File.Delete(deleteFilePath)
+            End If
+
+        End If
+
+    End Sub
+
+    Private Sub gvTabPublicAttach_DataBound(sender As Object, e As EventArgs) Handles gvTabPublicAttach.DataBound
+    End Sub
 
     Private Sub gvTabUlasan_RowDataBound(sender As Object, e As GridViewRowEventArgs) Handles gvTabUlasan.RowDataBound
 
