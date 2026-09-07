@@ -1833,7 +1833,7 @@
                                 WHERE a.PermohonanFail_JenisLampiran = 'LA' AND a.PermohonanFail_PermohonanID = @Permohonan_ID">
 
                             <SelectParameters>
-                                <asp:ControlParameter ControlID="GridView1" PropertyName="SelectedDataKey.Values[0]" Name="PermohonanID"></asp:ControlParameter>
+                                <asp:ControlParameter ControlID="GridView1" PropertyName="SelectedDataKey.Values[0]" Name="Permohonan_ID"></asp:ControlParameter>
                             </SelectParameters>
                         </asp:SqlDataSource>
 
