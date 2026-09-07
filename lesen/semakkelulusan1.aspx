@@ -394,11 +394,11 @@
                 <asp:TabPanel runat="server" ID="tabSurat" HeaderText="Surat">
                     <HeaderTemplate>Surat</HeaderTemplate>
                     <ContentTemplate>
-                                                <br />
-                        <div class="row">
+                        <br />
+                        <div class="row mb-2">
                             <div class="col-md-4" runat="server" id="divtemplatsurat">
                                 <div class="form-group">
-                                    <asp:DropDownList ID="DDL_SuratTemplat" CssClass="form-control select2" runat="server" AutoPostBack="false"
+                                    <asp:DropDownList ID="DDL_SuratTemplat" CssClass="form-control select2" style="width: 100%;" runat="server" AutoPostBack="false"
                                         DataSourceID="SqlDataSourceSuratTemplat" DataTextField="NamaTemplatDesc" DataValueField="NamaTemplat">
                                     </asp:DropDownList>
                                     <asp:SqlDataSource runat="server" ID="SqlDataSourceSuratTemplat" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
@@ -426,8 +426,7 @@
                                 <asp:LinkButton runat="server" CssClass="btn btn-warning" Text="Jana Surat" ID="BT_Generate" OnCommand="BT_Generate_Command" OnClientClick="return confirm('Jana surat sekarang?');" />													
                             </div>
                         </div>
-                        <br />
-                        <div class="row">
+                        <div class="row mb-2">
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Muat naik fail surat?</label>
@@ -457,7 +456,7 @@
                         </asp:Panel>
 
                         <asp:Panel ID="pnlSuratAuto" runat="server">
-                            <div class="card">
+                            <div class="card mb-2">
                                 <div class="card-body">
 
                                     <div class="row">
@@ -472,8 +471,8 @@
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label>Tandatangan</label>
-                                                <asp:DropDownList ID="ddlTandatangan" CssClass="form-control select2" runat="server" AutoPostBack="false"
+                                                <label>Tandatangan</label><br />
+                                                <asp:DropDownList ID="ddlTandatangan" CssClass="form-control select2" style="width: 100%;" runat="server" AutoPostBack="false"
                                                     DataSourceID="sdsSignature" DataTextField="Users_Fullname" DataValueField="Users_Id">
                                                 </asp:DropDownList>
                                                 <asp:SqlDataSource runat="server" ID="sdsSignature" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
@@ -511,11 +510,10 @@
                                     </div>
                                 </div>
                             </div>
-
                             <div class="card">
                                 <div class="card-body">
 
-                                    <div class="row">
+                                    <div class="row mb-2">
                                         <div class="col-12">
 
                                             <asp:FormView ID="FormViewReport" Width="100%" DefaultMode="Insert" runat="server" DataKeyNames="PSID" DataSourceID="SqlDataSourceReport">
@@ -771,12 +769,12 @@
                 </asp:TabPanel>
 
                 <asp:TabPanel runat="server" ID="tabUlasan" HeaderText="Ulasan">
-                    <HeaderTemplate>Ulasan</HeaderTemplate>
+                    <HeaderTemplate>Ulasan IK</HeaderTemplate>
                     <ContentTemplate>
 
                         <asp:GridView ID="gvTabUlasan" runat="server" ShowHeaderWhenEmpty="True"
                             AllowSorting="True" AutoGenerateColumns="False" DataKeyNames="UlasanFail_ID"
-                            DataSourceID="SqlDataSourceTabUlasan"
+                            DataSourceID="SqlDataSourceTabUlasanIK"
                             CssClass="table table-bordered" Width="100%">
                             <AlternatingRowStyle CssClass="alt" />
                             <Columns>
@@ -886,17 +884,150 @@
                             <PagerStyle CssClass="pgr" />
                         </asp:GridView>
 
-                        <asp:SqlDataSource ID="SqlDataSourceTabUlasan" runat="server"
+                        <asp:SqlDataSource ID="SqlDataSourceTabUlasanIK" runat="server"
                             ConnectionString="<%$ ConnectionStrings:webcon_ConnectionStr %>"
                             SelectCommand=" SELECT a.*,b.JabatanAgensi_Description FROM LESEN_UlasanFail a
                                 left join LESEN_JabatanAgensi b on b.JabatanAgensi_ID = a.UlasanFail_PermohonanAgensiID
-                                where UlasanFail_PermohonanID = @PermohonanID 
+                                where UlasanFail_PermohonanID = @PermohonanID AND UlasanFail_PermohonanAgensiID = 3 
                                 order by CreatedDt asc, UlasanFail_ID asc">
 
                             <SelectParameters>
                                 <asp:ControlParameter ControlID="GridView1" PropertyName="SelectedDataKey.Values[0]" Name="PermohonanID"></asp:ControlParameter>
                                 <%--<asp:ControlParameter ControlID="GridView1" PropertyName="SelectedDataKey.Values[1]" Name="AgensiID"></asp:ControlParameter>--%>
 								<%--<asp:SessionParameter SessionField="sessionEstateID" DefaultValue="0" Name="AgensiID"></asp:SessionParameter>--%>
+                            </SelectParameters>
+                        </asp:SqlDataSource>
+
+                    </ContentTemplate>
+                </asp:TabPanel>
+
+                <asp:TabPanel runat="server" ID="tabUlasanLuar" HeaderText="Ulasan Agensi Luar">
+                    <HeaderTemplate>Ulasan Agensi Luar</HeaderTemplate>
+                    <ContentTemplate>
+
+                        <asp:GridView ID="gvTabUlasanLuar" runat="server" ShowHeaderWhenEmpty="True"
+                            AllowSorting="True" AutoGenerateColumns="False" DataKeyNames="UlasanFail_ID"
+                            DataSourceID="SqlDataSourceTabUlasanLuar"
+                            CssClass="table table-bordered" Width="100%">
+                            <AlternatingRowStyle CssClass="alt" />
+                            <Columns>
+
+                                <asp:TemplateField HeaderText="ID" SortExpression="UlasanFail_ID">
+                                    <EditItemTemplate>
+                                        <asp:Label ID="Label1" runat="server" Text='<%# Eval("UlasanFail_ID") %>'></asp:Label>
+                                    </EditItemTemplate>
+                                    <ItemTemplate>
+                                        <asp:Label ID="Label1" runat="server" Text='<%# Bind("UlasanFail_ID") %>'></asp:Label>
+                                    </ItemTemplate>
+                                    <HeaderStyle CssClass="styleDisplayNone" />
+                                    <ItemStyle CssClass="styleDisplayNone" />
+                                </asp:TemplateField>
+
+
+                                <asp:TemplateField HeaderText="No.">
+                                    <ItemTemplate>
+                                        <%# Container.DataItemIndex + 1 %>
+                                    </ItemTemplate>
+                                    <EditItemTemplate>
+                                        <%# Container.DataItemIndex + 1 %>
+                                    </EditItemTemplate>
+                                    <HeaderStyle Width="5%" />
+                                </asp:TemplateField>
+
+                                <asp:TemplateField HeaderText="Ulasan">
+                                    <ItemTemplate>
+                                        <%--<asp:Label ID="lblUlasanFail_Remarks" runat="server" Text='<%# Eval("UlasanFail_Remarks") %>'></asp:Label>--%>
+                                        <asp:TextBox ID="txtUlasanFail_Remarks" runat="server" Text='<%# Bind("UlasanFail_Remarks") %>' CssClass="form-control" TextMode="MultiLine" Rows="4" ReadOnly="True" BorderStyle="None"></asp:TextBox><br />
+                                        Jabatan/Agensi :
+                                        <asp:Label ID="lblJabatanAgensi_Description" runat="server" Text='<%# Eval("JabatanAgensi_Description") %>'></asp:Label>
+                                    </ItemTemplate>
+                                    <EditItemTemplate>
+                                        <asp:TextBox ID="txtUlasanFail_Remarks" runat="server" Text='<%# Bind("UlasanFail_Remarks") %>' CssClass="form-control" TextMode="MultiLine" Rows="4"></asp:TextBox>
+                                        <asp:RequiredFieldValidator ID="rvUlasanFail_Remarks" runat="server" CssClass="cssRequiredField"
+                                            ControlToValidate="txtUlasanFail_Remarks" ErrorMessage="Sila Isi" ValidationGroup="frmEdit" Display="Dynamic"></asp:RequiredFieldValidator>
+                                    </EditItemTemplate>
+                                    <HeaderStyle Width="55%" HorizontalAlign="Left" />
+                                    <ItemStyle HorizontalAlign="Left" />
+                                </asp:TemplateField>
+
+                                <asp:TemplateField>
+                                    <ItemTemplate>
+                                        <%--<asp:Label ID="UlasanFail_FileName" runat="server" Text='<%# Eval("UlasanFail_FileName") %>'></asp:Label>--%>
+                                    Fail :
+                                        <asp:HyperLink ID="hpFile" runat="server" NavigateUrl='<%# Eval("UlasanFail_FilePath") %>' Target="_blank"><%#Eval("UlasanFail_FileName") %></asp:HyperLink>
+
+                                        <asp:HiddenField ID="hdnFldUlasanFail_FileName" Value='<%# Bind("UlasanFail_FileName") %>' runat="server" />
+                                        <asp:HiddenField ID="hdnFldUlasanFail_ContentType" Value='<%# Bind("UlasanFail_ContentType") %>' runat="server" />
+                                        <asp:HiddenField ID="hdnFldUlasanFail_FilePath" Value='<%# Bind("UlasanFail_FilePath") %>' runat="server" />
+                                    </ItemTemplate>
+                                    <EditItemTemplate>
+                                        <%--<asp:UpdatePanel runat="server" ID="updatePanelUlasan">
+                                        <ContentTemplate>--%>
+                                        <asp:FileUpload ID="txtUlasanFail_FilePath" runat="server" CssClass="form-control"></asp:FileUpload>
+                                        <asp:Button ID="btnUpload" runat="server" Text="Muat Naik" OnClick="btnUpload_Click" Visible="false"
+                                            OnClientClick="return confirm('Fail sedia ada akan ditukar ke fail yang baru.');" />
+
+                                        <asp:HiddenField ID="hdnFldUlasanFail_FileName" Value='<%# Bind("UlasanFail_FileName") %>' runat="server" />
+                                        <asp:HiddenField ID="hdnFldUlasanFail_ContentType" Value='<%# Bind("UlasanFail_ContentType") %>' runat="server" />
+                                        <asp:HiddenField ID="hdnFldUlasanFail_FilePath" Value='<%# Bind("UlasanFail_FilePath") %>' runat="server" />
+                                        <%--    </ContentTemplate>
+                                        <Triggers>
+                                            <asp:PostBackTrigger ControlID="btnUpload" />
+                                        </Triggers>
+                                    </asp:UpdatePanel>--%>
+
+
+                                        <%--<asp:RequiredFieldValidator ID="rvUlasanFail_FilePath" runat="server" CssClass="cssRequiredField"
+                                    ControlToValidate="txtUlasanFail_FilePath" ErrorMessage="Sila Isi" ValidationGroup="frmEdit" Display="Dynamic"></asp:RequiredFieldValidator>--%>
+                                    </EditItemTemplate>
+                                    <HeaderStyle Width="25%" />
+                                </asp:TemplateField>
+
+                                <asp:TemplateField HeaderText="Maklumat Ulasan"
+                                    HeaderStyle-Font-Size="10pt" HeaderStyle-Width="90%" ItemStyle-Width="90%">
+                                    <ItemTemplate>
+                                        <asp:Label ID="Label15" runat="server" Text="Ulasan :" Font-Bold="True" Font-Size="10pt"></asp:Label><br />
+                                        <asp:Label ID="Label16" runat="server" Text='<%# If(Len(Eval("UlasanFail_Remarks").ToString()) > 0, (Eval("UlasanFail_Remarks")).Replace(vbCr, "").Replace(vbLf, vbCrLf).Replace(Environment.NewLine, "<br />"), Eval("UlasanFail_Remarks")) %>' Font-Size="10pt"></asp:Label><br />
+                                        <asp:Label ID="Label9" runat="server" Text="Fail :" Font-Bold="True" Font-Size="10pt"></asp:Label><br />
+                                        <asp:HyperLink ID="hpFileMobile" CssClass="paraGraphtext" runat="server" NavigateUrl='<%# Eval("UlasanFail_FilePath") %>' Target="_blank" Font-Bold="True" Font-Size="10pt"><%#If(Len(Eval("UlasanFail_FileName").ToString()) > 0, Eval("UlasanFail_FileName").ToString.Substring(If(Len(Eval("UlasanFail_FileName").ToString()) > 25, Len(Eval("UlasanFail_FileName").ToString()) - 25, 0)), Eval("UlasanFail_FileName")) %></asp:HyperLink><br />
+                                        <asp:Label ID="Label13" runat="server" Text="Jabatan/Agensi :" Font-Bold="True" Font-Size="10pt"></asp:Label><br />
+                                        <asp:Label ID="Label19" runat="server" Text='<%# Eval("JabatanAgensi_Description") %>' Font-Size="10pt"></asp:Label><br />
+                                        <%--<br />
+                                        <asp:LinkButton ID="lbEditMobile" runat="server" CausesValidation="False" CommandName="Edit" Text="Kemaskini" CssClass="btn btn-warning btn-sm"></asp:LinkButton>
+                                    --%></ItemTemplate>
+                                    <EditItemTemplate>
+                                        <asp:Label ID="Label15" runat="server" Text="Ulasan :" Font-Bold="True" Font-Size="10pt"></asp:Label><br />
+                                        <asp:TextBox ID="txtUlasanFail_RemarksMobile" runat="server" Text='<%# Bind("UlasanFail_Remarks") %>' CssClass="form-control" TextMode="MultiLine" Rows="4"></asp:TextBox>
+                                        <asp:RequiredFieldValidator ID="rvUlasanFail_RemarksMobile" runat="server" CssClass="cssRequiredField"
+                                            ControlToValidate="txtUlasanFail_RemarksMobile" ErrorMessage="Sila Isi" ValidationGroup="frmEdit" Display="Dynamic"></asp:RequiredFieldValidator><br />
+                                        <asp:Label ID="Label9" runat="server" Text="Fail :" Font-Bold="True" Font-Size="10pt"></asp:Label><br />
+                                        <asp:FileUpload ID="txtUlasanFail_FilePathMobile" runat="server" CssClass="form-control"></asp:FileUpload>
+                                        <asp:Button ID="btnUploadMobile" runat="server" Text="Muat Naik" OnClick="btnUpload_Click" Visible="false"
+                                            OnClientClick="return confirm('Fail sedia ada akan ditukar ke fail yang baru.');" /><br />
+                                        <asp:Label ID="Label13" runat="server" Text="Jabatan/Agensi :" Font-Bold="True" Font-Size="10pt"></asp:Label><br />
+                                        <asp:Label ID="Label19" runat="server" Text='<%# Eval("JabatanAgensi_Description") %>' Font-Size="10pt"></asp:Label><br />
+                                        <br />
+
+                                    </EditItemTemplate>
+                                    <ItemStyle HorizontalAlign="Left" />
+                                </asp:TemplateField>
+
+                            </Columns>
+
+                            <PagerStyle CssClass="pgr" />
+                        </asp:GridView>
+
+                        <asp:SqlDataSource ID="SqlDataSourceTabUlasanLuar" runat="server"
+                            ConnectionString="<%$ ConnectionStrings:webcon_ConnectionStr %>"
+                            SelectCommand=" SELECT a.*,b.JabatanAgensi_Description FROM LESEN_UlasanFail a
+                                left join LESEN_JabatanAgensi b on b.JabatanAgensi_ID = a.UlasanFail_PermohonanAgensiID
+                                where UlasanFail_PermohonanID = @PermohonanID AND UlasanFail_PermohonanAgensiID <> 3 
+                                order by CreatedDt asc, UlasanFail_ID asc">
+
+                            <SelectParameters>
+                                <asp:ControlParameter ControlID="GridView1" PropertyName="SelectedDataKey.Values[0]" Name="PermohonanID"></asp:ControlParameter>
+                                <%--<asp:ControlParameter ControlID="GridView1" PropertyName="SelectedDataKey.Values[1]" Name="AgensiID"></asp:ControlParameter>--%>
+							                <%--<asp:SessionParameter SessionField="sessionEstateID" DefaultValue="0" Name="AgensiID"></asp:SessionParameter>--%>
                             </SelectParameters>
                         </asp:SqlDataSource>
 

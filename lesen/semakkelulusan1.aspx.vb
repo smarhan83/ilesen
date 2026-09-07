@@ -194,9 +194,15 @@ Partial Class semakkelulusan1
                     gvTabUlasan.Columns(3).Visible = "false"
                     gvTabUlasan.Columns(5).Visible = "false"
                     gvTabUlasan.Columns(4).Visible = "true"
+
+                    gvTabUlasanLuar.Columns(2).Visible = "false"
+                    gvTabUlasanLuar.Columns(3).Visible = "false"
+                    gvTabUlasanLuar.Columns(5).Visible = "false"
+                    gvTabUlasanLuar.Columns(4).Visible = "true"
                 Else
 
                     gvTabUlasan.Columns(4).Visible = "false"
+                    gvTabUlasanLuar.Columns(4).Visible = "false"
                 End If
             End If
 
@@ -467,6 +473,62 @@ Partial Class semakkelulusan1
 
     End Sub
 
+    Private Sub gvTabUlasanLuar_RowUpdated(sender As Object, e As GridViewUpdatedEventArgs) Handles gvTabUlasanLuar.RowUpdated
+        '//
+    End Sub
+    Private Sub gvTabUlasanLuar_RowUpdating(sender As Object, e As GridViewUpdateEventArgs) Handles gvTabUlasanLuar.RowUpdating
+        Dim LinkButton1 As LinkButton
+        Dim btnUpload As Button
+        Dim txtUlasanFail_FilePath As FileUpload
+        If Request.Browser.IsMobileDevice Then
+            LinkButton1 = CType(gvTabUlasanLuar.Rows(e.RowIndex).FindControl("LinkButton1Mobile"), LinkButton)
+            btnUpload = CType(gvTabUlasanLuar.Rows(e.RowIndex).FindControl("btnUploadMobile"), Button)
+            txtUlasanFail_FilePath = CType(gvTabUlasanLuar.Rows(e.RowIndex).FindControl("txtUlasanFail_FilePathMobile"), FileUpload)
+        Else
+            LinkButton1 = CType(gvTabUlasanLuar.Rows(e.RowIndex).FindControl("LinkButton1"), LinkButton)
+            btnUpload = CType(gvTabUlasanLuar.Rows(e.RowIndex).FindControl("btnUpload"), Button)
+            txtUlasanFail_FilePath = CType(gvTabUlasanLuar.Rows(e.RowIndex).FindControl("txtUlasanFail_FilePath"), FileUpload)
+        End If
+
+        Dim updatePanelUlasan As UpdatePanel = CType(gvTabUlasanLuar.Rows(e.RowIndex).FindControl("updatePanelUlasan"), UpdatePanel)
+        Dim uid As Guid = Guid.NewGuid()
+        Dim fn As String = System.IO.Path.GetFileName(txtUlasanFail_FilePath.PostedFile.FileName)
+
+        Dim localPath As String = "~/doc/" & "" & uid.ToString & fn
+        Dim SaveLocation As String = Server.MapPath(localPath)
+
+        If (txtUlasanFail_FilePath.PostedFile IsNot Nothing) AndAlso (txtUlasanFail_FilePath.PostedFile.ContentLength > 0) Then
+
+            '//delete previous file
+            If e.OldValues("UlasanFail_FilePath") <> "" Then
+
+                Dim deleteFilePath As String = Server.MapPath(e.OldValues("UlasanFail_FilePath"))
+
+                If System.IO.File.Exists(deleteFilePath) Then
+                    System.IO.File.Delete(deleteFilePath)
+                End If
+
+            End If
+
+            If updateUploadFile(txtUlasanFail_FilePath, SaveLocation) Then
+
+                e.NewValues("UlasanFail_FileName") = txtUlasanFail_FilePath.PostedFile.FileName
+                e.NewValues("UlasanFail_ContentType") = txtUlasanFail_FilePath.PostedFile.ContentType
+                e.NewValues("UlasanFail_FilePath") = localPath
+
+            Else
+
+            End If
+
+        Else
+
+            'e.NewValues("UlasanFail_FileName") = e.OldValues("UlasanFail_FileName")
+            'e.NewValues("UlasanFail_ContentType") = e.OldValues("UlasanFail_ContentType")
+            'e.NewValues("UlasanFail_FilePath") = e.OldValues("UlasanFail_FilePath")
+        End If
+
+    End Sub
+
     Private Function updateUploadFile(txtUlasanFail_FilePath As FileUpload, saveLocation As String) As Boolean
         'lblDummy.Text = saveLocation
         Dim retval As Boolean = True
@@ -606,6 +668,50 @@ Partial Class semakkelulusan1
     End Sub
 
     Private Sub gvTabUlasan_DataBound(sender As Object, e As EventArgs) Handles gvTabUlasan.DataBound
+
+    End Sub
+
+    Private Sub gvTabUlasanLuar_RowDataBound(sender As Object, e As GridViewRowEventArgs) Handles gvTabUlasanLuar.RowDataBound
+
+        If e.Row.RowType = DataControlRowType.DataRow Then
+            Dim btnUpload As Button = CType(e.Row.Cells(0).FindControl("btnUpload"), Button)
+            Dim LinkButton1 As LinkButton
+
+            If Request.Browser.IsMobileDevice Then
+                LinkButton1 = CType(e.Row.Cells(0).FindControl("LinkButton1Mobile"), LinkButton)
+            Else
+                LinkButton1 = CType(e.Row.Cells(0).FindControl("LinkButton1"), LinkButton)
+            End If
+
+            If btnUpload IsNot Nothing Then
+
+                Dim currPageScriptManager As ScriptManager = TryCast(ScriptManager.GetCurrent(Page), ScriptManager)
+
+                'RegisterAsyncPostBackControl
+                'currPageScriptManager.RegisterPostBackControl(btnUpload)
+                currPageScriptManager.RegisterPostBackControl(LinkButton1)
+
+            End If
+        End If
+
+    End Sub
+
+    Private Sub gvTabUlasanLuar_RowDeleting(sender As Object, e As GridViewDeleteEventArgs) Handles gvTabUlasanLuar.RowDeleting
+
+        If e.Values("UlasanFail_FilePath") <> "" Then
+
+            Dim deleteFilePath As String = Server.MapPath(e.Values("UlasanFail_FilePath"))
+
+            If System.IO.File.Exists(deleteFilePath) Then
+                System.IO.File.Delete(deleteFilePath)
+            End If
+
+
+        End If
+
+    End Sub
+
+    Private Sub gvTabUlasanLuar_DataBound(sender As Object, e As EventArgs) Handles gvTabUlasanLuar.DataBound
 
     End Sub
 
