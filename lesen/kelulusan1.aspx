@@ -988,7 +988,7 @@
                 </asp:TabPanel>
                 
                 <asp:TabPanel runat="server" ID="tabMaklumat" HeaderText="Maklumat" Visible="false">
-                    <HeaderTemplate>Kemaskini Info</HeaderTemplate>
+                    <HeaderTemplate>Kemaskini Maklumat Permohonan</HeaderTemplate>
                     <ContentTemplate>
                         <br />
 
@@ -1740,6 +1740,103 @@
                              </div>
                          </div>
                         <br />
+                    </ContentTemplate>
+                </asp:TabPanel>
+
+                <asp:TabPanel runat="server" ID="tabPublicAttach" HeaderText="Ulasan">
+                    <HeaderTemplate>Lampiran Permohonan</HeaderTemplate>
+                    <ContentTemplate>
+
+                        <asp:GridView ID="gvTabPublicAttach" runat="server" ShowHeaderWhenEmpty="True"
+                            AllowSorting="True" AutoGenerateColumns="False" DataKeyNames="UlasanFail_ID"
+                            DataSourceID="SqlDataSourceTabPublicAttach"
+                            CssClass="table table-bordered" Width="100%">
+                            <AlternatingRowStyle CssClass="alt" />
+                            <Columns>
+
+                                <asp:TemplateField HeaderText="ID" SortExpression="UlasanFail_ID">
+                                    <EditItemTemplate>
+                                        <asp:Label ID="Label1" runat="server" Text='<%# Eval("UlasanFail_ID") %>'></asp:Label>
+                                    </EditItemTemplate>
+                                    <ItemTemplate>
+                                        <asp:Label ID="Label1" runat="server" Text='<%# Bind("UlasanFail_ID") %>'></asp:Label>
+                                    </ItemTemplate>
+                                    <HeaderStyle CssClass="styleDisplayNone" />
+                                    <ItemStyle CssClass="styleDisplayNone" />
+                                </asp:TemplateField>
+
+
+                                <asp:TemplateField HeaderText="No.">
+                                    <ItemTemplate>
+                                        <%# Container.DataItemIndex + 1 %>
+                                    </ItemTemplate>
+                                    <EditItemTemplate>
+                                        <%# Container.DataItemIndex + 1 %>
+                                    </EditItemTemplate>
+                                    <HeaderStyle Width="5%" />
+                                </asp:TemplateField>
+
+                                <asp:TemplateField HeaderText="Ulasan">
+                                    <ItemTemplate>
+                                        <%--<asp:Label ID="lblUlasanFail_Remarks" runat="server" Text='<%# Eval("UlasanFail_Remarks") %>'></asp:Label>--%>
+                                        <asp:TextBox ID="txtUlasanFail_Remarks" runat="server" Text='<%# Bind("UlasanFail_Remarks") %>' CssClass="form-control" TextMode="MultiLine" Rows="2" ReadOnly="True" BorderStyle="None"></asp:TextBox>
+                                    </ItemTemplate>
+                                    <EditItemTemplate>
+                                        <asp:TextBox ID="txtUlasanFail_Remarks" runat="server" Text='<%# Bind("UlasanFail_Remarks") %>' CssClass="form-control" TextMode="MultiLine" Rows="2"></asp:TextBox>
+                                        <asp:RequiredFieldValidator ID="rvUlasanFail_Remarks" runat="server" CssClass="cssRequiredField"
+                                            ControlToValidate="txtUlasanFail_Remarks" ErrorMessage="Sila Isi" ValidationGroup="frmEdit" Display="Dynamic"></asp:RequiredFieldValidator>
+                                    </EditItemTemplate>
+                                    <HeaderStyle Width="55%" HorizontalAlign="Left" />
+                                    <ItemStyle HorizontalAlign="Left" />
+                                </asp:TemplateField>
+
+                                <asp:TemplateField>
+                                    <ItemTemplate>
+                                        <%--<asp:Label ID="UlasanFail_FileName" runat="server" Text='<%# Eval("UlasanFail_FileName") %>'></asp:Label>--%>
+                                    Fail :
+                                        <asp:HyperLink ID="hpFile" runat="server" NavigateUrl='<%# Eval("UlasanFail_FilePath") %>' Target="_blank"><%#Eval("UlasanFail_FileName") %></asp:HyperLink>
+
+                                        <asp:HiddenField ID="hdnFldUlasanFail_FileName" Value='<%# Bind("UlasanFail_FileName") %>' runat="server" />
+                                        <asp:HiddenField ID="hdnFldUlasanFail_ContentType" Value='<%# Bind("UlasanFail_ContentType") %>' runat="server" />
+                                        <asp:HiddenField ID="hdnFldUlasanFail_FilePath" Value='<%# Bind("UlasanFail_FilePath") %>' runat="server" />
+                                    </ItemTemplate>
+                                    <EditItemTemplate>
+
+                                    </EditItemTemplate>
+                                    <HeaderStyle Width="25%" />
+                                </asp:TemplateField>
+
+                                <asp:TemplateField HeaderText="Maklumat Ulasan"
+                                    HeaderStyle-Font-Size="10pt" HeaderStyle-Width="90%" ItemStyle-Width="90%">
+                                    <ItemTemplate>
+                                        <asp:Label ID="Label15" runat="server" Text="Ulasan :" Font-Bold="True" Font-Size="10pt"></asp:Label><br />
+                                        <asp:Label ID="Label16" runat="server" Text='<%# If(Len(Eval("UlasanFail_Remarks").ToString()) > 0, (Eval("UlasanFail_Remarks")).Replace(vbCr, "").Replace(vbLf, vbCrLf).Replace(Environment.NewLine, "<br />"), Eval("UlasanFail_Remarks")) %>' Font-Size="10pt"></asp:Label><br />
+                                        <asp:Label ID="Label9" runat="server" Text="Fail :" Font-Bold="True" Font-Size="10pt"></asp:Label><br />
+                                        <asp:HyperLink ID="hpFileMobile" CssClass="paraGraphtext" runat="server" NavigateUrl='<%# Eval("UlasanFail_FilePath") %>' Target="_blank" Font-Bold="True" Font-Size="10pt"><%#If(Len(Eval("UlasanFail_FileName").ToString()) > 0, Eval("UlasanFail_FileName").ToString.Substring(If(Len(Eval("UlasanFail_FileName").ToString()) > 25, Len(Eval("UlasanFail_FileName").ToString()) - 25, 0)), Eval("UlasanFail_FileName")) %></asp:HyperLink><br />
+                                        <%--<br />
+                                        <asp:LinkButton ID="lbEditMobile" runat="server" CausesValidation="False" CommandName="Edit" Text="Kemaskini" CssClass="btn btn-warning btn-sm"></asp:LinkButton>
+                                    --%></ItemTemplate>
+                                    <EditItemTemplate>
+
+                                    </EditItemTemplate>
+                                    <ItemStyle HorizontalAlign="Left" />
+                                </asp:TemplateField>
+
+                            </Columns>
+
+                            <PagerStyle CssClass="pgr" />
+                        </asp:GridView>
+
+                        <asp:SqlDataSource ID="SqlDataSourceTabPublicAttach" runat="server"
+                            ConnectionString="<%$ ConnectionStrings:webcon_ConnectionStr %>"
+                            SelectCommand=" SELECT a.*, b.StatusID FROM LESEN_PermohonanFail a INNER JOIN LESEN_Permohonan b ON a.PermohonanFail_PermohonanID = b.Permohonan_ID 
+                                WHERE a.PermohonanFail_JenisLampiran = 'LA' AND a.PermohonanFail_PermohonanID = @Permohonan_ID">
+
+                            <SelectParameters>
+                                <asp:ControlParameter ControlID="GridView1" PropertyName="SelectedDataKey.Values[0]" Name="PermohonanID"></asp:ControlParameter>
+                            </SelectParameters>
+                        </asp:SqlDataSource>
+
                     </ContentTemplate>
                 </asp:TabPanel>
 

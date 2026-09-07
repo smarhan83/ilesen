@@ -321,9 +321,15 @@ Partial Class kelulusan1
                     gvTabUlasan.Columns(3).Visible = "false"
                     gvTabUlasan.Columns(5).Visible = "false"
                     gvTabUlasan.Columns(4).Visible = "true"
+
+                    gvTabPublicAttach.Columns(2).Visible = "false"
+                    gvTabPublicAttach.Columns(3).Visible = "false"
+                    gvTabPublicAttach.Columns(5).Visible = "false"
+                    gvTabPublicAttach.Columns(4).Visible = "true"
                 Else
 
                     gvTabUlasan.Columns(4).Visible = "false"
+                    gvTabPublicAttach.Columns(4).Visible = "false"
                 End If
             End If
 
@@ -1718,6 +1724,18 @@ Partial Class kelulusan1
     End Sub
 
     Private Sub gvTabUlasan_DataBound(sender As Object, e As EventArgs) Handles gvTabUlasan.DataBound
+
+    End Sub
+
+    Private Sub gvTabPublicAttach_RowDataBound(sender As Object, e As GridViewRowEventArgs) Handles gvTabPublicAttach.RowDataBound
+
+    End Sub
+
+    Private Sub gvTabPublicAttach_RowDeleting(sender As Object, e As GridViewDeleteEventArgs) Handles gvTabPublicAttach.RowDeleting
+
+    End Sub
+
+    Private Sub gvTabPublicAttach_DataBound(sender As Object, e As EventArgs) Handles gvTabPublicAttach.DataBound
 
     End Sub
 
