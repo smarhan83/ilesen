@@ -2743,45 +2743,34 @@ Partial Class appregister1
             End If
 
             Using myConnection As New SqlConnection(ConfigurationManager.ConnectionStrings("webcon_ConnectionStr").ConnectionString)
-
                 myConnection.Open()
 
-                Dim Sql1 = "SELECT COUNT(PermohonanAgensi_ID) AS agensi FROM LESEN_PermohonanAgensi" & extstr & " WHERE Permohonan_ID=" & hfid.Value
+                ' 1. Use ExecuteScalar for COUNT queries
+                Dim Sql1 = "SELECT COUNT(PermohonanAgensi_ID) FROM LESEN_PermohonanAgensi" & extstr & " WHERE Permohonan_ID = @PermohonanID"
+                Using myCommand1 As New SqlCommand(Sql1, myConnection)
+                    myCommand1.Parameters.AddWithValue("@PermohonanID", hfid.Value)
+                    counter = Convert.ToInt32(myCommand1.ExecuteScalar())
+                End Using
 
-                Dim myCommand1 = New SqlCommand(Sql1, myConnection)
-
-                Dim myReader1 As SqlDataReader = myCommand1.ExecuteReader
-
-                If myReader1.Read Then
-                    counter = myReader1.Item("agensi")
-                End If
-
-                myCommand1.Dispose()
-                myConnection.Close()
-
+                ' Validation checks
                 If counter < 1 And cb.Checked = False And ddl.Value <> "9" And ddl.Value <> "27" Then
                     ShowAlert("error", "", "Gagal hantar. Sila tambah jabatan agensi")
                     Return
                 End If
 
                 Dim result2 = insertMaklumatPembetulan(CInt(hfid.Value))
-
-                If result2 = False Then
+                If Not result2 Then
                     ShowAlert("error", "", "Gagal proses database. Sila tekan Hantar sekali lagi." & hfid.Value)
                     Return
                 End If
 
-                myConnection.Open()
-
-                Dim Sql = "UPDATE LESEN_Permohonan SET StatusID=1 WHERE StatusID=0 AND Permohonan_ID=" & hfid.Value
-
-                Dim myCommand = New SqlCommand(Sql, myConnection)
-
-                Dim myReader As SqlDataReader = myCommand.ExecuteReader
-                Dim result = myCommand.ExecuteNonQuery()
-
-                myCommand.Dispose()
-                myConnection.Close()
+                ' 2. Execute UPDATE using ExecuteNonQuery only
+                Dim Sql = "UPDATE LESEN_Permohonan SET StatusID = 1 WHERE StatusID = 0 AND Permohonan_ID = @PermohonanID"
+                Dim result As Integer
+                Using myCommand As New SqlCommand(Sql, myConnection)
+                    myCommand.Parameters.AddWithValue("@PermohonanID", hfid.Value)
+                    result = myCommand.ExecuteNonQuery()
+                End Using
 
                 If result < 1 Then
                     ShowAlert("error", "", "Gagal hantar")
