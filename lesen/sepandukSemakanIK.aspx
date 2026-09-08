@@ -3,6 +3,13 @@
 
 <asp:Content ID="HeaderContent" ContentPlaceHolderID="HeadContent" runat="Server">
 <style>
+
+    .btn-danger-modern {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+}
+
     /* =====================================================================
        DESIGN TOKENS - Semakan Sepanduk
        Tema: pemeriksaan/pematuhan lapangan - deep teal (kepercayaan/rasmi)
@@ -893,7 +900,7 @@
                                                 <asp:Button
                                                     ID="btnTiadaRekod"
                                                     runat="server"
-                                                    CssClass="btn-modern btn-warning-modern"
+                                                    CssClass="btn-modern btn-danger-modern"
                                                     Text="Tiada Rekod / Tidak Berdaftar - Cipta Laporan Baru"
                                                     CausesValidation="False"
                                                     OnClick="btnTiadaRekod_Click" />
