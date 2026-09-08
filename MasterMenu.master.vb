@@ -112,10 +112,10 @@ Partial Class MasterMenu
         lblFullname1.Text = ""
         If CInt(Session.Item("sessionUsersId")) > 0 Then
             lblFullname1.Text = Session.Item("sessionFullname")
-            ProfileInfo.Visible = True '--
+            profileInfo.Visible = True '--
 
         Else
-            ProfileInfo.Visible = False '--
+            profileInfo.Visible = False '--
 
         End If
 
@@ -168,6 +168,21 @@ Partial Class MasterMenu
                 'idTitleHeader.Style.Add("font-size", "12pt !important")
             End If
 
+        End If
+
+
+        '//show login if have scancode
+        If Not Me.Page.IsPostBack Then
+            Dim savedUrl As String = GlobalClass.GlobalVariables.urlSessionEnd
+
+            If Not String.IsNullOrEmpty(savedUrl) AndAlso savedUrl.ToLower().Contains("scancode") Then
+
+
+                If CInt(Session.Item("sessionUsersId")) = 0 Then
+
+                    ScriptManager.RegisterStartupScript(Me, Me.GetType(), "showLoginModal", "showLoginModal();", True)
+                End If
+            End If
         End If
 
         'leftSubTitle.InnerText = system_Name '--
@@ -280,7 +295,8 @@ Partial Class MasterMenu
             Else
                 Session.Item("sessionSystemId") = GlobalClass.GlobalVariables.urlSessionSystemId
                 If Session.Item("sessionSystemId") = "0" Or Session.Item("sessionSystemId") = "" Then
-                    Response.Redirect("~/")
+                    'Response.Redirect("~/")
+                    Response.Redirect(GlobalClass.GlobalVariables.urlSessionEnd)
                 Else
                     Response.Redirect(GlobalClass.GlobalVariables.urlSessionEnd)
                 End If
