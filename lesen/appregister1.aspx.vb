@@ -2736,68 +2736,67 @@ Partial Class appregister1
         Dim cb As CheckBox = DirectCast(FormView1.FindControl("CB_IsBatal"), CheckBox)
         'Dim ddl As DropDownList = DirectCast(FormView1.FindControl("DDL_JenisLesen"), DropDownList)
 
-        'If reviewSurat(cb.Checked) Then
+        If reviewSurat(cb.Checked) Then
 
-        If cb.Checked Then
-            extstr = "Batal"
+            If cb.Checked Then
+                extstr = "Batal"
+            End If
+
+            Using myConnection As New SqlConnection(ConfigurationManager.ConnectionStrings("webcon_ConnectionStr").ConnectionString)
+
+                myConnection.Open()
+
+                Dim Sql1 = "SELECT COUNT(PermohonanAgensi_ID) AS agensi FROM LESEN_PermohonanAgensi" & extstr & " WHERE Permohonan_ID=" & hfid.Value
+
+                Dim myCommand1 = New SqlCommand(Sql1, myConnection)
+
+                Dim myReader1 As SqlDataReader = myCommand1.ExecuteReader
+
+                If myReader1.Read Then
+                    counter = myReader1.Item("agensi")
+                End If
+
+                myCommand1.Dispose()
+                myConnection.Close()
+
+                If counter < 1 And cb.Checked = False And ddl.Value <> "9" And ddl.Value <> "27" Then
+                    ShowAlert("error", "", "Gagal hantar. Sila tambah jabatan agensi")
+                    Return
+                End If
+
+                Dim result2 = insertMaklumatPembetulan(CInt(hfid.Value))
+
+                If result2 = False Then
+                    ShowAlert("error", "", "Gagal proses database. Sila tekan Hantar sekali lagi." & hfid.Value)
+                    Return
+                End If
+
+                myConnection.Open()
+
+                Dim Sql = "UPDATE LESEN_Permohonan SET StatusID=1 WHERE StatusID=0 AND Permohonan_ID=" & hfid.Value
+
+                Dim myCommand = New SqlCommand(Sql, myConnection)
+
+                Dim myReader As SqlDataReader = myCommand.ExecuteReader
+                Dim result = myCommand.ExecuteNonQuery()
+
+                myCommand.Dispose()
+                myConnection.Close()
+
+                If result < 1 Then
+                    ShowAlert("error", "", "Gagal hantar")
+                Else
+                    ShowAlert("success", "", "Berjaya hantar")
+                    GridView1.DataBind()
+                    backToList()
+                End If
+
+            End Using
+
+        Else
+            ShowAlert("error", "", "Surat belum dihantar untuk semakan.")
+            TabContainer1.ActiveTabIndex = 5
         End If
-
-        Using myConnection As New SqlConnection(ConfigurationManager.ConnectionStrings("webcon_ConnectionStr").ConnectionString)
-
-            myConnection.Open()
-
-            Dim Sql1 = "SELECT COUNT(PermohonanAgensi_ID) AS agensi FROM LESEN_PermohonanAgensi" & extstr & " WHERE Permohonan_ID=" & hfid.Value
-
-            Dim myCommand1 = New SqlCommand(Sql1, myConnection)
-
-            Dim myReader As SqlDataReader = myCommand1.ExecuteReader
-
-            If myReader.Read Then
-                counter = myReader.Item("agensi")
-            End If
-
-            myCommand1.Dispose()
-            myConnection.Close()
-
-            If counter < 1 And cb.Checked = False And (ddl.Value <> "9" Or ddl.Value <> "27") Then
-                ShowAlert("error", "", "Gagal hantar. Sila tambah jabatan agensi")
-                Return
-            End If
-
-            '//
-            Dim result2 = insertMaklumatPembetulan(CInt(hfid.Value))
-
-            If result2 = False Then
-                ShowAlert("error", "", "Gagal proses database. Sila tekan Hantar sekali lagi." & hfid.Value)
-                Return
-            End If
-
-            myConnection.Open()
-
-            Dim Sql = "UPDATE LESEN_Permohonan SET StatusID=1 WHERE StatusID=0 AND Permohonan_ID=" & hfid.Value
-
-            Dim myCommand = New SqlCommand(Sql, myConnection)
-
-            'Dim myReader As SqlDataReader = myCommand.ExecuteReader
-            Dim result = myCommand.ExecuteNonQuery()
-
-            myCommand.Dispose()
-            myConnection.Close()
-
-            If result < 1 Then
-                ShowAlert("error", "", "Gagal hantar")
-            Else
-                ShowAlert("success", "", "Berjaya hantar")
-                'GridView1.DataBind()
-                backToList()
-            End If
-
-        End Using
-
-        'Else
-        '    ShowAlert("error", "", "Surat Belum Habis Disemak")
-        '    TabContainer1.ActiveTabIndex = 5
-        'End If
 
     End Sub
 
@@ -2813,9 +2812,9 @@ Partial Class appregister1
             Dim SQL As String = ""
 
             If checked Then
-                SQL = "select * from LESEN_PermohonanAgensiBatal where Permohonan_ID = @Permohonan_ID and isnull(reviewStatusID,0) IN (0,1,3) "
+                SQL = "select * from LESEN_PermohonanAgensiBatal where Permohonan_ID = @Permohonan_ID and isnull(reviewStatusID,0) IN (0,3) " '(0,1,3)
             Else
-                SQL = "select * from LESEN_PermohonanAgensi where Permohonan_ID = @Permohonan_ID and isnull(reviewStatusID,0) IN (0,1,3) "
+                SQL = "select * from LESEN_PermohonanAgensi where Permohonan_ID = @Permohonan_ID and isnull(reviewStatusID,0) IN (0,3) " '(0,1,3)
             End If
 
             Dim myCommandSelect As New SqlCommand(SQL, myConnection)
