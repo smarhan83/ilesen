@@ -264,11 +264,20 @@ Partial Class sepandukSemakanIK
     End Sub
 
     '===================== PEGAWAI IK: TIADA REKOD / TIDAK BERDAFTAR =====================
-    Protected Sub btnTiadaRekod_Click(sender As Object, e As EventArgs) Handles btnTiadaRekod.Click
+    'Protected Sub btnTiadaRekod_Click(sender As Object, e As EventArgs) Handles btnTiadaRekod.Click
+    '    Session.Remove(SESS_PERMOHONANID)
+    '    Session.Remove(SESS_NAMASYARIKAT)
+    '    Session.Remove(SESS_NOPENDAFTARAN)
+    '    Session.Remove(SESS_TARIKHLUPUT)
+    '    BukaBorangRekod(statusLesen:="Tidak Berdaftar")
+    'End Sub
+
+    Protected Sub btnTiadaRekod_Click(sender As Object, e As EventArgs)
         Session.Remove(SESS_PERMOHONANID)
         Session.Remove(SESS_NAMASYARIKAT)
         Session.Remove(SESS_NOPENDAFTARAN)
         Session.Remove(SESS_TARIKHLUPUT)
+
         BukaBorangRekod(statusLesen:="Tidak Berdaftar")
     End Sub
 

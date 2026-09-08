@@ -889,7 +889,14 @@
                                             </div>
 
                                             <div class="empty-title">
-                                                Tiada rekod dijumpai
+                                                <%--Tiada rekod dijumpai--%>
+                                                <asp:Button
+                                                    ID="btnTiadaRekod"
+                                                    runat="server"
+                                                    CssClass="btn-modern btn-warning-modern"
+                                                    Text="Tiada Rekod / Tidak Berdaftar - Cipta Laporan Baru"
+                                                    CausesValidation="False"
+                                                    OnClick="btnTiadaRekod_Click" />
                                             </div>
 
                                             <div class="empty-description">
@@ -912,13 +919,6 @@
 
                     <!-- ================= FOOTER ================= -->
                     <div class="search-card-footer">
-
-                        <asp:Button
-                            ID="btnTiadaRekod"
-                            runat="server"
-                            CssClass="btn-modern btn-warning-modern"
-                            Text="Tiada Rekod / Tidak Berdaftar - Teruskan"
-                            CausesValidation="False" />
 
                         <asp:Button
                             ID="btnBatalCarian"
