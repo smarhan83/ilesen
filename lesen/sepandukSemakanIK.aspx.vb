@@ -46,11 +46,30 @@ Partial Class sepandukSemakanIK
 
         GlobalClass.GenerateFilter(gv, ds, pnlFilter)
 
+        '//auto fillup
         If Not IsPostBack Then
+
+            ClearSessionTemp()
+            GridViewCarian.DataSource = Nothing
+            GridViewCarian.DataBind()
+
+
             btnTambahSemakan.Visible =
             (Session.Item("sessionEstateID") IsNot Nothing AndAlso
              CStr(Session.Item("sessionEstateID")) = "3")
+
+            Dim scanCode As String = Request.QueryString("scancode")
+
+            If Not String.IsNullOrEmpty(scanCode) Then
+                ' Request.QueryString dah auto URL-decode, so "MPK%2F599%2F401%2F" jadi "MPK/599/401/"
+                txtQRCode.Text = scanCode.Trim()
+
+                ' Terus panggil logic "Semak QR" macam button diklik
+                btnScanQR_Click(sender, e)
+            End If
         End If
+
+
 
     End Sub
 
@@ -599,7 +618,7 @@ Partial Class sepandukSemakanIK
             menuName = "Jenis Lesen"
         End If
 
-        idWindowTitle.InnerText = menuName
+        'idWindowTitle.InnerText = menuName
         Try
             idWindowTitle2.InnerText = idWindowTitle2.InnerText & " " & menuName
         Catch ex As Exception

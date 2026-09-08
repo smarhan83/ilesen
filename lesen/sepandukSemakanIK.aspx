@@ -389,12 +389,12 @@
 <asp:Content ID="Content3" ContentPlaceHolderID="MainContent" runat="Server">
 <div class="sp-shell">
 
-    <section class="content-header">
+<%--    <section class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
                     <h1 class="m-0 sp-page-title"><div runat="server" id="idWindowTitle">Semakan Sepanduk</div></h1>
-                    <%--<div class="sp-page-subtitle">Sepanduk / Bunting / Sepanduk Besar</div>--%>
+                    
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
@@ -403,7 +403,7 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section>--%>
 
     <section class="content">
         <div class="container-fluid">
