@@ -273,6 +273,117 @@
 
 <link rel="stylesheet" href="<%= ResolveUrl("~/css/sepanduk-css.css") %>">
 
+<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+<script>
+    var currentTextBoxId = null;
+    var html5QrCode = null;
+    var allowManualFocus = false; // <-- flag baru
+
+    function handleFocus(el) {
+        if (allowManualFocus) {
+            // Ni focus dari closeModalAndFocus(), biarkan je, jangan buka modal / blur
+            allowManualFocus = false;
+            return;
+        }
+        currentTextBoxId = el.id;
+        document.getElementById('qrChoiceModal').style.display = 'flex';
+        el.blur();
+    }
+
+    function showQRModal(el) {
+        currentTextBoxId = el.id;
+        document.getElementById('qrChoiceModal').style.display = 'flex';
+    }
+
+    function closeQRModal() {
+        document.getElementById('qrChoiceModal').style.display = 'none';
+    }
+
+    function closeModalAndFocus() {
+        closeQRModal();
+        allowManualFocus = true;
+        var el = document.getElementById(currentTextBoxId);
+        el.focus(); // sekarang tak akan trigger modal/blur balik
+    }
+
+    function startQRScan() {
+        closeQRModal();
+        document.getElementById('qrScannerModal').style.display = 'flex';
+
+        html5QrCode = new Html5Qrcode("qrReader", /* verbose= */ true);
+
+        var config = {
+            fps: 10,
+            qrbox: function (viewfinderWidth, viewfinderHeight) {
+                // guna 70% dari saiz video, elak qrbox lebih besar dari video
+                var minEdge = Math.min(viewfinderWidth, viewfinderHeight);
+                var size = Math.floor(minEdge * 0.7);
+                return { width: size, height: size };
+            },
+            aspectRatio: 1.0
+        };
+
+        html5QrCode.start(
+            { facingMode: "environment" },
+            config,
+            function (decodedText, decodedResult) {
+                console.log("QR detected:", decodedText); // <-- confirm callback jalan
+                document.getElementById(currentTextBoxId).value = decodedText;
+                stopQRScan();
+
+                var el = document.getElementById(currentTextBoxId);
+                el.dispatchEvent(new Event('change', { bubbles: true }));
+            },
+            function (errorMessage) {
+                // ni akan spam banyak kali (normal, frame takde QR)
+                // console.log("scan error:", errorMessage);
+            }
+        ).catch(function (err) {
+            console.error("Camera start failed:", err);
+            alert("Tak dapat akses kamera: " + err);
+        });
+    }
+
+    //function startQRScan() {
+    //    closeQRModal();
+    //    document.getElementById('qrScannerModal').style.display = 'flex';
+
+    //    html5QrCode = new Html5Qrcode("qrReader");
+    //    html5QrCode.start(
+    //        { facingMode: "environment" }, // kamera belakang
+    //        { fps: 10, qrbox: 250 },
+    //        function (decodedText) {
+    //            // Berjaya scan
+    //            document.getElementById(currentTextBoxId).value = decodedText;
+    //            stopQRScan();
+
+    //            // Optional: trigger event supaya server-side tahu value berubah
+    //            var el = document.getElementById(currentTextBoxId);
+    //            var evt = new Event('change', { bubbles: true });
+    //            el.dispatchEvent(evt);
+    //        },
+    //        function (errorMessage) {
+    //            // scan error frame-by-frame, boleh diabaikan
+    //        }
+    //    ).catch(function (err) {
+    //        alert("Tak dapat akses kamera: " + err);
+    //    });
+    //}
+
+    function stopQRScan() {
+        if (html5QrCode) {
+            html5QrCode.stop().then(function () {
+                html5QrCode.clear();
+                document.getElementById('qrScannerModal').style.display = 'none';
+            }).catch(function () {
+                document.getElementById('qrScannerModal').style.display = 'none';
+            });
+        } else {
+            document.getElementById('qrScannerModal').style.display = 'none';
+        }
+    }
+</script>
+
 </asp:Content>
 
 <asp:Content ID="Content3" ContentPlaceHolderID="MainContent" runat="Server">
@@ -298,7 +409,7 @@
         <div class="container-fluid">
 
             <%--# =========================== SENARAI (LISTING) =========================== #--%>
-            <div class="card" runat="server" id="idListing">
+            <div class="card" runat="server" id="idListing" Visible="false">
                 <div class="d-flex justify-content-end mb-3">
                     <asp:LinkButton ID="btnTambahSemakan"
                         runat="server"
@@ -477,7 +588,7 @@
             <%--# =========================================================================================== #--%>
             <%--# PANEL 1: PEGAWAI IK - CARIAN / SCAN QR SEPANDUK                                              #--%>
             <%--# =========================================================================================== #--%>
-            <asp:Panel ID="pnlCarian" runat="server" Visible="false">
+            <asp:Panel ID="pnlCarian" runat="server" Visible="true">
 
             <div class="search-page">
 
@@ -551,7 +662,9 @@
                                         ID="txtQRCode"
                                         runat="server"
                                         CssClass="modern-input"
-                                        placeholder="Imbas / taip kod QR" />
+                                        placeholder="Imbas / taip kod QR"
+                                        onfocus="handleFocus(this);"
+                                        autocomplete="off" />
 
                                 </div>
 
@@ -564,6 +677,49 @@
 
                             </div>
 
+                        </div>
+
+
+                        <style>
+                        .qr-modal-overlay {
+                            position: fixed; top:0; left:0; width:100%; height:100%;
+                            background: rgba(0,0,0,0.5); z-index: 9999;
+                            display: flex; align-items: center; justify-content: center;
+                        }
+                        .qr-modal-box, .qr-scanner-box {
+                            background:#fff; padding:20px; border-radius:10px;
+                            width:90%; max-width:360px; text-align:center;
+                        }
+                        .qr-modal-box button, .qr-scanner-box button {
+                            display:block; width:100%; margin:8px 0; padding:12px;
+                            border-radius:8px; border:1px solid #ccc; font-size:15px; cursor:pointer;
+                        }
+                        .btn-scan { background:#2e7d32; color:#fff; border:none; }
+                        .btn-manual { background:#1565c0; color:#fff; border:none; }
+                        .btn-cancel { background:#eee; }
+                        </style>
+                        <!-- Modal pilihan -->
+                        <div id="qrChoiceModal" class="qr-modal-overlay" style="display:none;">
+                            <div class="qr-modal-box">
+                                <h4>Pilih cara masukkan kod QR</h4>
+                                <button type="button" class="btn-scan" onclick="startQRScan()">
+                                    📷 Imbas QR
+                                </button>
+                                <button type="button" class="btn-manual" onclick="closeModalAndFocus()">
+                                    ⌨️ Masukkan Manual
+                                </button>
+                                <button type="button" class="btn-cancel" onclick="closeQRModal()">
+                                    Batal
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Modal camera scanner -->
+                        <div id="qrScannerModal" class="qr-modal-overlay" style="display:none;">
+                            <div class="qr-scanner-box">
+                                <div id="qrReader" style="width:100%;"></div>
+                                <button type="button" class="btn-cancel" onclick="stopQRScan()">Tutup Kamera</button>
+                            </div>
                         </div>
 
 
@@ -768,7 +924,7 @@
                             ID="btnBatalCarian"
                             runat="server"
                             CssClass="btn-modern btn-back"
-                            Text="Kembali"
+                            Text="Lihat Senarai"
                             CausesValidation="False" />
 
                     </div>
