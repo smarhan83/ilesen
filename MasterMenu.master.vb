@@ -7,6 +7,7 @@ Partial Class MasterMenu
     'Public menuBar2 As String
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
 
+        Dim FullUrl As String
         '//define css
         Dim pageName As String = System.IO.Path.GetFileName(Request.Path).ToLower()
 
@@ -71,16 +72,18 @@ Partial Class MasterMenu
             'liLogout.Visible = False
             'liNotification.Visible = False
 
+
             Try
+                MessageBox(HttpContext.Current.Request.Url.PathAndQuery, Page)
                 If HttpContext.Current.Request.Url.PathAndQuery <> "/Default.aspx" Then
                     '// set redirect page when session expired
-                    Dim FullUrl As String = HttpContext.Current.Request.Url.PathAndQuery
+                    FullUrl = HttpContext.Current.Request.Url.PathAndQuery
 
                     GlobalClass.GlobalVariables.urlSessionEnd = FullUrl
 
                 End If
             Catch ex As Exception
-
+                MessageBox(ex.Message, Page)
             End Try
 
 
@@ -173,7 +176,10 @@ Partial Class MasterMenu
 
         '//show login if have scancode
         If Not Me.Page.IsPostBack Then
+
             Dim savedUrl As String = GlobalClass.GlobalVariables.urlSessionEnd
+
+            'ScriptManager.RegisterStartupScript(Me, Me.GetType(), "showLoginModal", "alert(" + savedUrl + ");", True)
 
             If Not String.IsNullOrEmpty(savedUrl) AndAlso savedUrl.ToLower().Contains("scancode") Then
 
