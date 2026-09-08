@@ -178,7 +178,7 @@ Partial Class sepandukSemakanIK
         Session.Item(SESS_QRCODE) = kod
 
         '// TODO: sesuaikan cara decode QR sebenar - andaian: QR menyimpan NoPendaftaran terus
-        CariRekodPermohonan("NoPendaftaran = @kw", kod)
+        CariRekodPermohonan("Rujukan = @kw", kod)
     End Sub
 
     '===================== PEGAWAI IK: CARIAN MANUAL =====================
