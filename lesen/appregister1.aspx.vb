@@ -761,7 +761,11 @@ Partial Class appregister1
             BindRepeater()
             updateJenisLesenList(newItem.ItemValue, newItem.ItemText)
             PanelAccess(ddlItems.SelectedValue, False)
-            'LoadPrevRekodPermohonan()
+
+            If FormView1.CurrentMode = FormViewMode.Insert Then
+                LoadPrevRekodPermohonan()
+            End If
+
         End If
 
         ' Reset dropdown to the first item
@@ -829,26 +833,26 @@ Partial Class appregister1
 
             Dim SQL As String = "WITH RankedData AS (
                 SELECT 
-                    Pemohon_ID,
+                    Permohonan_PemohonID,
                     NamaSyarikat, NoPendaftaran, NoAkaun, AlamatPremis, JenisPerniagaan, 
                     AlamatBaru, JenisPerniagaanBaru, NamaBaruSyarikat, 
                     AlamatPenjajaan, JenisPerniagaanPenjaja,
                     -- This ranks rows for each column individually, putting the latest non-null value at rank 1
-                    ROW_NUMBER() OVER (PARTITION BY Pemohon_ID ORDER BY CASE WHEN NamaSyarikat IS NOT NULL THEN Permohonan_ID END DESC) as rn1,
-                    ROW_NUMBER() OVER (PARTITION BY Pemohon_ID ORDER BY CASE WHEN NoPendaftaran IS NOT NULL THEN Permohonan_ID END DESC) as rn2,
-                    ROW_NUMBER() OVER (PARTITION BY Pemohon_ID ORDER BY CASE WHEN NoAkaun IS NOT NULL THEN Permohonan_ID END DESC) as rn3,
-                    ROW_NUMBER() OVER (PARTITION BY Pemohon_ID ORDER BY CASE WHEN AlamatPremis IS NOT NULL THEN Permohonan_ID END DESC) as rn4,
-                    ROW_NUMBER() OVER (PARTITION BY Pemohon_ID ORDER BY CASE WHEN JenisPerniagaan IS NOT NULL THEN Permohonan_ID END DESC) as rn5,
-                    ROW_NUMBER() OVER (PARTITION BY Pemohon_ID ORDER BY CASE WHEN AlamatBaru IS NOT NULL THEN Permohonan_ID END DESC) as rn6,
-                    ROW_NUMBER() OVER (PARTITION BY Pemohon_ID ORDER BY CASE WHEN JenisPerniagaanBaru IS NOT NULL THEN Permohonan_ID END DESC) as rn7,
-                    ROW_NUMBER() OVER (PARTITION BY Pemohon_ID ORDER BY CASE WHEN NamaBaruSyarikat IS NOT NULL THEN Permohonan_ID END DESC) as rn8,
-                    ROW_NUMBER() OVER (PARTITION BY Pemohon_ID ORDER BY CASE WHEN AlamatPenjajaan IS NOT NULL THEN Permohonan_ID END DESC) as rn9,
-                    ROW_NUMBER() OVER (PARTITION BY Pemohon_ID ORDER BY CASE WHEN JenisPerniagaanPenjaja IS NOT NULL THEN Permohonan_ID END DESC) as rn10
-                FROM Lesen_Permohonan
-                WHERE Pemohon_ID = @Pemohon_ID 
+                    ROW_NUMBER() OVER (PARTITION BY Permohonan_PemohonID ORDER BY CASE WHEN NamaSyarikat IS NOT NULL THEN Permohonan_ID END DESC) as rn1,
+                    ROW_NUMBER() OVER (PARTITION BY Permohonan_PemohonID ORDER BY CASE WHEN NoPendaftaran IS NOT NULL THEN Permohonan_ID END DESC) as rn2,
+                    ROW_NUMBER() OVER (PARTITION BY Permohonan_PemohonID ORDER BY CASE WHEN NoAkaun IS NOT NULL THEN Permohonan_ID END DESC) as rn3,
+                    ROW_NUMBER() OVER (PARTITION BY Permohonan_PemohonID ORDER BY CASE WHEN AlamatPremis IS NOT NULL THEN Permohonan_ID END DESC) as rn4,
+                    ROW_NUMBER() OVER (PARTITION BY Permohonan_PemohonID ORDER BY CASE WHEN JenisPerniagaan IS NOT NULL THEN Permohonan_ID END DESC) as rn5,
+                    ROW_NUMBER() OVER (PARTITION BY Permohonan_PemohonID ORDER BY CASE WHEN AlamatBaru IS NOT NULL THEN Permohonan_ID END DESC) as rn6,
+                    ROW_NUMBER() OVER (PARTITION BY Permohonan_PemohonID ORDER BY CASE WHEN JenisPerniagaanBaru IS NOT NULL THEN Permohonan_ID END DESC) as rn7,
+                    ROW_NUMBER() OVER (PARTITION BY Permohonan_PemohonID ORDER BY CASE WHEN NamaBaruSyarikat IS NOT NULL THEN Permohonan_ID END DESC) as rn8,
+                    ROW_NUMBER() OVER (PARTITION BY Permohonan_PemohonID ORDER BY CASE WHEN AlamatPenjajaan IS NOT NULL THEN Permohonan_ID END DESC) as rn9,
+                    ROW_NUMBER() OVER (PARTITION BY Permohonan_PemohonID ORDER BY CASE WHEN JenisPerniagaanPenjaja IS NOT NULL THEN Permohonan_ID END DESC) as rn10
+                FROM LESEN_Permohonan
+                WHERE Permohonan_PemohonID = @Pemohon_ID 
             )
             SELECT 
-                Pemohon_ID,
+                Permohonan_PemohonID,
                 MAX(CASE WHEN rn1 = 1 THEN NamaSyarikat END) AS NamaSyarikat,
                 MAX(CASE WHEN rn2 = 1 THEN NoPendaftaran END) AS NoPendaftaran,
                 MAX(CASE WHEN rn3 = 1 THEN NoAkaun END) AS NoAkaun,
@@ -860,7 +864,7 @@ Partial Class appregister1
                 MAX(CASE WHEN rn9 = 1 THEN AlamatPenjajaan END) AS AlamatPenjajaan,
                 MAX(CASE WHEN rn10 = 1 THEN JenisPerniagaanPenjaja END) AS JenisPerniagaanPenjaja
             FROM RankedData
-            GROUP BY Pemohon_ID;"
+            GROUP BY Permohonan_PemohonID;"
 
             Dim myCommandSelect As New SqlCommand(SQL, myConnection)
             myCommandSelect.Parameters.AddWithValue("@Pemohon_ID", tbid.Text)
@@ -889,7 +893,7 @@ Partial Class appregister1
 
             Catch ex As Exception
 
-                ShowAlert("error", "", ex.Message)
+                MessageBox("ERROR:" & ex.Message, Me)
 
             End Try
 
@@ -2837,6 +2841,7 @@ Partial Class appregister1
     End Function
 
     Private Sub backToList()
+        FormView1.Visible = False
         whiteCard.Visible = True
         TabContainer1.Visible = False
         GridView1.SelectedIndex = -1
@@ -3514,6 +3519,11 @@ Partial Class appregister1
             myConnection.Close()
 
         End Using
+
+        If FormView1.CurrentMode = FormViewMode.Insert Then
+            LoadPrevRekodPermohonan()
+        End If
+
     End Sub
 
     Protected Sub btnAddNew_Click(sender As Object, e As EventArgs)
