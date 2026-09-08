@@ -74,16 +74,15 @@ Partial Class MasterMenu
 
 
             Try
-                MessageBox(HttpContext.Current.Request.Url.PathAndQuery, Page)
-                If HttpContext.Current.Request.Url.PathAndQuery <> "/Default.aspx" Then
-                    '// set redirect page when session expired
+                'MessageBox(HttpContext.Current.Request.Url.PathAndQuery, Page)
+                If Not HttpContext.Current.Request.Url.PathAndQuery.ToLower().Contains("/default.aspx") Then                    '// set redirect page when session expired
                     FullUrl = HttpContext.Current.Request.Url.PathAndQuery
 
                     GlobalClass.GlobalVariables.urlSessionEnd = FullUrl
 
                 End If
             Catch ex As Exception
-                MessageBox(ex.Message, Page)
+                'MessageBox(ex.Message, Page)
             End Try
 
 
