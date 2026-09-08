@@ -3521,7 +3521,7 @@
                 </asp:TabPanel>
 
                 <asp:TabPanel runat="server" ID="tabUlasan" HeaderText="Ulasan">
-                    <HeaderTemplate>Lampiran Peribadi</HeaderTemplate>
+                    <HeaderTemplate>Lampiran MPK</HeaderTemplate>
                     <ContentTemplate>
 
                         <asp:GridView ID="gvTabUlasan" runat="server" ShowHeaderWhenEmpty="True"

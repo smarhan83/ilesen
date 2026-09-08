@@ -2904,8 +2904,8 @@ Partial Class appregister1
 
             Dim SQL As String = ""
 
-            SQL = "INSERT INTO LESEN_PermohonanFail (PermohonanFail_PermohonanID,CreatedDt,CreatorID) VALUES 
-                 (@Permohonan_ID, getdate(), @SessionUserName) "
+            SQL = "INSERT INTO LESEN_PermohonanFail (PermohonanFail_PermohonanID,PermohonanFail_JenisLampiran,CreatedDt,CreatorID) VALUES 
+                 (@Permohonan_ID, 'LA', getdate(), @SessionUserName) "
 
             Dim myCommand As New SqlCommand(SQL, myConnection)
 
