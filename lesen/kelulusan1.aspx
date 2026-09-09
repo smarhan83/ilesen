@@ -1457,7 +1457,7 @@ ORDER BY
             <asp:SqlDataSource ID="SqlDataSourceForm" runat="server"
                 ConnectionString="<%$ ConnectionStrings:webcon_ConnectionStr %>"
                 InsertCommand=""
-                SelectCommand="SELECT a.*,e.*,f.*,g.JenisLesenIdList,g.JenisLesenDescList,g.JenisPerniagaan,g.Rujukan,
+                SelectCommand="SELECT a.*,e.*,f.*,g.JenisLesenIdList,g.JenisLesenDescList,g.JenisPerniagaan,g.Rujukan,g.NamaSyarikat,
                 ISNULL(g.AlamatBaru,ISNULL(g.AlamatPremis,ISNULL(g.AlamatPenjajaan,ISNULL(g.AnjingAlamat,isnull(g.LokasiPasar1,ISNULL(g.LokasiPasar2,ISNULL(g.LokasiPasar3,''))))))) as AlamatPremis 
 				FROM 
                 v_LESEN_ApprovalList_Curr a 
@@ -4013,7 +4013,7 @@ ORDER BY
     <asp:SqlDataSource ID="SqlDataSourceGrid" runat="server"
         ConnectionString="<%$ ConnectionStrings:webcon_ConnectionStr %>"
         SelectCommand="SELECT a.*,e.*,f.*, g.Rujukan,g.IsSuratPemeriksaanFail,ISNULL(g.AlamatBaru,ISNULL(g.AlamatPremis,ISNULL(g.AlamatPenjajaan,ISNULL(g.AnjingAlamat,isnull(g.LokasiPasar1,ISNULL(g.LokasiPasar2,ISNULL(g.LokasiPasar3,''))))))) as AlamatPremis, isnull(h.IsPenilaian,0) as IsPenilaianStatus,   
-            g.JenisLesenDescList, g.JenisLesenIdList FROM 
+            g.NamaSyarikat, g.JenisLesenDescList, g.JenisLesenIdList FROM 
             v_LESEN_ApprovalList_Curr a 
             left join LESEN_JabatanAgensi e on e.JabatanAgensi_ID = a.AgensiID
             inner join LESEN_Pemohon f on f.Pemohon_ID = a.Permohonan_PemohonID
