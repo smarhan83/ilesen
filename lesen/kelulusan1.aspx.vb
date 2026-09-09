@@ -1,13 +1,10 @@
 ﻿
 Imports System
-'Imports System.Collections.Generic
-'Imports System.Configuration
 Imports System.Data
 Imports System.Data.SqlClient
 Imports System.Drawing
 Imports System.Drawing.Imaging
 Imports System.IO
-'Imports System.Web.UI.WebControls
 Imports Microsoft.ReportingServices.Rendering.ExcelRenderer.ExcelGenerator.BIFF8
 
 Partial Class kelulusan1
