@@ -1467,11 +1467,6 @@ ORDER BY
                 where a.Permohonan_ID = @Permohonan_ID and isnull(a.AgensiID,1) = case when a.AgensiID is null then 1 else @AgensiID end"
                 UpdateCommand="">
                 <InsertParameters>
-                    <asp:Parameter Name="JenisLesen_Description" />
-                    <asp:Parameter Name="JenisLesen_Remarks" />
-                    <asp:Parameter Name="JenisLesen_Category" />
-                    <asp:Parameter Name="JenisLesen_IsActive"></asp:Parameter>
-                    <asp:SessionParameter SessionField="sessionUserName" Name="CreatorID"></asp:SessionParameter>
                 </InsertParameters>
                 <SelectParameters>
                     <asp:ControlParameter ControlID="GridView1" PropertyName="SelectedDataKey.Values[0]" Name="Permohonan_ID"></asp:ControlParameter>
@@ -3934,8 +3929,8 @@ ORDER BY
                                 </ItemTemplate>
                             </asp:TemplateField>
 
-                            <asp:BoundField DataField="JenisLesen_Description" HeaderText="Jenis Lesen"
-                                SortExpression="JenisLesen_Description" />
+                            <asp:BoundField DataField="JenisLesenDescList" HeaderText="Jenis Lesen"
+                                SortExpression="JenisLesenDescList" />
                            <%-- <asp:BoundField DataField="Pemohon_Name" HeaderText="Nama Pemohon"
                                 SortExpression="Pemohon_Name" />--%>
 
