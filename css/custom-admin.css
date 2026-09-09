@@ -2001,6 +2001,12 @@ a.badge-dark:focus, a.badge-dark.focus {
     flex-wrap: wrap;
 }
 
+@media (max-width: 767px) {
+    .col-sm-6 .breadcrumb {
+        display: none;
+    }
+}
+
 .card card-primary {
     color: #fff !important;
 }
