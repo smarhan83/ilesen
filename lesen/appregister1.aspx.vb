@@ -6,6 +6,7 @@ Imports System.Drawing.Imaging
 Imports System.Security.Cryptography
 Imports System.Security.Policy
 Imports Microsoft.SqlServer.Management.Smo
+Imports QRCoder
 
 <Serializable()>
 Public Class SelectedItem
@@ -67,6 +68,35 @@ Partial Class appregister1
     Private Sub ShowAlert(statusMsg As String, titleMsg As String, strMsg As String)
 
         ScriptManager.RegisterStartupScript(Me, Page.GetType, "Script", "Swal.fire('" & titleMsg & "','" & strMsg & "','" & statusMsg & "')", True)
+
+    End Sub
+
+    Protected Sub btnQrCode_Click(ByVal sender As Object, ByVal e As EventArgs)
+
+        Dim btn As LinkButton = DirectCast(sender, LinkButton)
+        Dim imgQrCode As System.Web.UI.WebControls.Image = DirectCast(btn.NamingContainer.FindControl("imgQrCode"), System.Web.UI.WebControls.Image)
+        Dim txtRujukan As TextBox = DirectCast(btn.NamingContainer.FindControl("TB_Rujukan"), TextBox)
+
+        If txtRujukan Is Nothing OrElse String.IsNullOrWhiteSpace(txtRujukan.Text) Then
+            ScriptManager.RegisterStartupScript(Me, Me.GetType(), "noRujukan", "alert('Sila isi No Rujukan dahulu.');", True)
+            Exit Sub
+        End If
+
+        Dim baseUrl As String = Request.Url.Scheme & "://" & Request.Url.Authority
+        Dim encodedRujukan As String = Server.UrlEncode(txtRujukan.Text.Trim())
+        Dim fullUrl As String = baseUrl & "/lesen/sepandukSemakanIK.aspx?scancode=" & encodedRujukan
+
+        Using qrGenerator As New QRCodeGenerator()
+            Dim qrCodeData As QRCodeData = qrGenerator.CreateQrCode(fullUrl, QRCodeGenerator.ECCLevel.Q)
+            Using qrCode As New PngByteQRCode(qrCodeData)
+                Dim qrBytes As Byte() = qrCode.GetGraphic(20)
+                imgQrCode.ImageUrl = "data:image/png;base64," & Convert.ToBase64String(qrBytes)
+                imgQrCode.Visible = True
+            End Using
+        End Using
+
+        ' Trigger buka modal lepas postback selesai
+        ScriptManager.RegisterStartupScript(Me, Me.GetType(), "showQrModal", "$('#modalQrCode').modal('show');", True)
 
     End Sub
 

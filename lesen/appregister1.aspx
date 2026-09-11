@@ -446,7 +446,16 @@
                                         </div>
 
                                     </div>
+
+                                    <div class="col-md-6">
+                                        <asp:LinkButton runat="server" ID="btnQrCode" CssClass="btn btn-default btn-sm rounded-circle" 
+                                            OnClick="btnQrCode_Click" ToolTip="Print QR Code" 
+                                            Style="width: 34px; height: 34px; display: inline-flex; align-items: center; justify-content: center; padding: 0;">
+                                            <i class="bi bi-qr-code"></i>
+                                        </asp:LinkButton>
+                                    </div>
                                 </div>
+
                                 
                             </asp:Panel>
 
@@ -1611,6 +1620,14 @@
 
                                     </div>
 
+                                </div>
+
+                                <div class="col-md-6">
+                                    <asp:LinkButton runat="server" ID="btnQrCode" CssClass="btn btn-default btn-sm rounded-circle" 
+                                        OnClick="btnQrCode_Click" ToolTip="Print QR Code" 
+                                        Style="width: 34px; height: 34px; display: inline-flex; align-items: center; justify-content: center; padding: 0;">
+                                        <i class="bi bi-qr-code"></i>
+                                    </asp:LinkButton>
                                 </div>
                             </div>
 
@@ -2809,6 +2826,28 @@
                 </InsertItemTemplate>
                 <ItemTemplate></ItemTemplate>
             </asp:FormView>
+
+            <!-- Modal QR Code -->
+            <div class="modal fade" id="modalQrCode" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">QR Code</h5>
+                                                                
+                            </button>
+                        </div>
+                        <div class="modal-body text-center" id="qrPrintArea">
+                            <asp:Image runat="server" ID="imgQrCode" Visible="false" CssClass="img-fluid" Style="max-width: 250px;" />
+                        </div>
+                        <div class="modal-footer justify-content-center">
+                            <button type="button" class="btn btn-primary" onclick="printQrOnly()">
+                                <i class="fas fa-print"></i> Cetak
+                            </button>
+                            <button type="button" class="btn btn-secondary" onclick="closeQrModal()">Tutup</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <asp:SqlDataSource runat="server" ID="SqlDataSourceForm" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
                 InsertCommand="INSERT INTO LESEN_Permohonan(JenisLesenDescList, JenisLesenIdList, SaizIklanList, CahayaIklanList, UnitIklanList, LokasiList, 
@@ -5203,6 +5242,31 @@
 
         }
 
+    </script>
+
+    <script>
+        function printQrOnly() {
+            var printContents = document.getElementById('qrPrintArea').innerHTML;
+            var printWindow = window.open('', '_blank', 'width=400,height=500');
+            printWindow.document.write('<html><head><title>Cetak QR Code</title></head><body style="text-align:center; padding-top:40px;">' + printContents + '</body></html>');
+            printWindow.document.close();
+            printWindow.focus();
+            printWindow.print();
+            printWindow.close();
+        }
+
+        function closeQrModal() {
+            // Bootstrap 4/5 jQuery method
+            if (typeof $ !== 'undefined' && $.fn.modal) {
+                $('#modalQrCode').modal('hide');
+            }
+            // Bootstrap 5 native JS method (fallback)
+            else if (typeof bootstrap !== 'undefined') {
+                var modalEl = document.getElementById('modalQrCode');
+                var modalInstance = bootstrap.Modal.getInstance(modalEl);
+                if (modalInstance) modalInstance.hide();
+            }
+        }
     </script>
 
 </asp:Content>
