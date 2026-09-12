@@ -279,6 +279,7 @@
 </style>
 
 <link rel="stylesheet" href="<%= ResolveUrl("~/css/sepanduk-css.css") %>">
+<link rel="stylesheet" href="<%= ResolveUrl("~/css/ru-style.css") %>">
 
 <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 <script>
@@ -461,7 +462,7 @@
                                 </ItemTemplate>
                             </asp:TemplateField>
                             <asp:BoundField DataField="SemakanIK_NoRujukan" HeaderText="No Rujukan" SortExpression="SemakanIK_NoRujukan" />
-                            <asp:BoundField DataField="SemakanIK_StatusLesen" HeaderText="Jenis Kes" SortExpression="SemakanIK_StatusLesen" />
+                            <asp:BoundField DataField="SemakanIK_StatusPemeriksaan" HeaderText="Jenis Kes" SortExpression="SemakanIK_StatusPemeriksaan" />
                             <asp:BoundField DataField="SemakanIK_NamaSyarikat" HeaderText="Nama Syarikat" SortExpression="SemakanIK_NamaSyarikat" />
                             <asp:BoundField DataField="SemakanIK_AlamatLokasi" HeaderText="Lokasi" SortExpression="SemakanIK_AlamatLokasi" />
                             <asp:BoundField DataField="SemakanIK_TarikhSemakan" HeaderText="Tarikh Semakan" DataFormatString="{0:dd/MM/yyyy}" SortExpression="SemakanIK_TarikhSemakan" />
@@ -823,8 +824,8 @@
                                             HeaderText="Alamat" />
 
                                         <asp:BoundField
-                                            DataField="TarikhSuratKelulusan"
-                                            HeaderText="Tarikh Lulus"
+                                            DataField="TarikhPengesahanBanting2"
+                                            HeaderText="Tarikh Luput"
                                             DataFormatString="{0:dd/MM/yyyy}" />
 
                                         <asp:TemplateField
@@ -1075,50 +1076,212 @@
 
     <div class="ru-body">
 
+    <asp:Panel ID="pnlIklanBerdaftar" runat="server">
+        
+<%--            <div class="wf-head wf-head-ik">
+                <div class="wf-head-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+                </div>
+                <h3>Status Pendaftaran Iklan</h3>
+            </div>--%>
+            <div class="wf-body">
+
+                <asp:FormView ID="FormViewIklanBerdaftar" runat="server"
+                    DataSourceID="SqlDataSourceIklanBerdaftar"
+                    DefaultMode="ReadOnly" RenderOuterTable="false">
+                    <ItemTemplate>
+                        <div class='<%# "ru-berdaftar-banner " & GetBannerModifierClass(Container.DataItem) %>'>
+
+                            <div class="ru-berdaftar-check">
+                                <svg class="ru-icon-ok" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+                                <svg class="ru-icon-x" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                            </div>
+
+                            <div class="ru-berdaftar-main">
+                                <p class="ru-berdaftar-title"><%# GetTajukIklanBanner(Container.DataItem) %></p>
+                                <p class="ru-berdaftar-sub">No. Pendaftaran :
+                                    <span class="ru-berdaftar-strongval"><%# Eval("NoPendaftaran") %></span>
+                                </p>
+                                <p class="ru-berdaftar-sub"><b><i>
+                                    <%# GetSemakanIKText(Eval("cntSemakanIK")) %>
+                                </i></b></p>
+                            </div>
+
+                            <%--<div class="ru-berdaftar-divider"></div>--%>
+
+                            <div class="ru-berdaftar-item">
+                                <div class="ru-berdaftar-icon">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+                                </div>
+                                <div>
+                                    <p class="ru-berdaftar-label">Tempoh Iklan</p>
+                                    <p class="ru-berdaftar-value">
+                                        <%# Eval("TarikhPengesahanBanting1", "{0:dd MMM yyyy}") %> – <%# Eval("TarikhPengesahanBanting2", "{0:dd MMM yyyy}") %>
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="ru-berdaftar-divider"></div>
+
+                            <div class="ru-berdaftar-item">
+                                <div class="ru-berdaftar-icon">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4"/><rect x="3" y="3" width="18" height="18" rx="4"/></svg>
+                                </div>
+                                <div>
+                                    <p class="ru-berdaftar-label">Kelulusan DBP</p>
+                                    <p class="ru-berdaftar-value ru-berdaftar-value--strong">
+                                        <%# IIf(Eval("StatusBanting").ToString() = "1", "LULUS", IIf(Eval("StatusBanting").ToString() = "0", "TIDAK LULUS", "DALAM PROSES")) %></p>
+                                    <p class="ru-berdaftar-note">
+                                        No. Kelulusan :<br />
+                                        <%# Eval("NoPengesahanBanting") %>
+                                    </p>
+                                </div>
+                            </div>
+
+<%--<asp:Label ID="lblStatusAktifBanner" runat="server" CssClass="ru-pill-aktif"
+    Text='<%# GetStatusAktifBanner(Container.DataItem) %>' />--%>
+
+                                                    </div>
+                    </ItemTemplate>
+                    <EmptyDataTemplate>
+                        <p class="ru-list-empty-sub">Tiada data pendaftaran dijumpai.</p>
+                    </EmptyDataTemplate>
+                </asp:FormView>
+
+            </div>
+        
+    </asp:Panel>
+
+    <asp:SqlDataSource ID="SqlDataSourceIklanBerdaftar" runat="server"
+        ConnectionString="<%$ ConnectionStrings:webcon_ConnectionStr %>"
+        SelectCommand="
+        SELECT *,
+        (SELECT COUNT(*) FROM LESEN_SepandukSemakanIK x where x.SemakanIK_PermohonanID = a.Permohonan_ID ) as cntSemakanIK
+        FROM LESEN_Permohonan a
+        WHERE a.Permohonan_ID = @Permohonan_ID">
+        <SelectParameters>
+            <asp:ControlParameter ControlID="GridViewCarian" Name="Permohonan_ID" PropertyName="SelectedValue" />
+        </SelectParameters>
+    </asp:SqlDataSource>
+
         <%--# maklumat ringkas (jika rekod dijumpai) #--%>
         <asp:Panel ID="pnlMaklumatDijumpai" runat="server" Visible="false" CssClass="ru-info-grid">
-            <div class="ru-info-item">
-                <div class="ru-info-icon">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M6 21V7l6-4 6 4v14M9 9h1m4 0h1m-6 4h1m4 0h1m-6 4h1m4 0h1"/></svg>
-                </div>
-                <div>
-                    <span class="ru-info-label">Nama syarikat</span>
-                    <span class="ru-info-value"><asp:Literal ID="litNamaSyarikat" runat="server" /></span>
-                </div>
-            </div>
-            <div class="ru-info-item">
-                <div class="ru-info-icon">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 2v4M17 2v4M3 10h18"/></svg>
-                </div>
-                <div>
-                    <span class="ru-info-label">No pendaftaran</span>
-                    <span class="ru-info-value"><asp:Literal ID="litNoPendaftaran" runat="server" /></span>
-                </div>
-            </div>
-            <div class="ru-info-item">
-                <div class="ru-info-icon">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
-                </div>
-                <div>
-                    <span class="ru-info-label">Tarikh luput</span>
-                    <span class="ru-info-value"><asp:Literal ID="litTarikhLuput" runat="server" /></span>
-                </div>
-            </div>
-        </asp:Panel>
-
-        <%--# Alamat lokasi pemeriksaan #--%>
         <div class="ru-section">
             <div class="ru-section-head">
                 <div class="ru-section-icon">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 2 7l10 5 10-5-10-5Z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
                 </div>
-                <h4 class="ru-section-title">Alamat lokasi pemeriksaan</h4>
+                <h4 class="ru-section-title">Maklumat Iklan</h4>
             </div>
-            <div class="ru-alamat-wrap">
-                <asp:TextBox ID="txtAlamatLokasi" runat="server" CssClass="ru-field" TextMode="MultiLine" Rows="3" />
-                <asp:RequiredFieldValidator runat="server" ID="rfvAlamat" ControlToValidate="txtAlamatLokasi"
-                    ErrorMessage="Sila isi alamat lokasi" CssClass="cssRequiredField" Display="Dynamic" ValidationGroup="frmRekodSemakan" />
+
+            <asp:FormView ID="FormViewMaklumatIklan" runat="server"
+                DataSourceID="SqlDataSourceIklanBerdaftar"
+                DefaultMode="ReadOnly" RenderOuterTable="false">
+                <ItemTemplate>
+                    <div class="ru-detail-list">
+
+                        <div class="ru-detail-row">
+                            <div class="ru-detail-icon">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M6 21V7l6-4 6 4v14M9 9h1m4 0h1m-6 4h1m4 0h1m-6 4h1m4 0h1"/></svg>
+                            </div>
+                            <div class="ru-detail-text">
+                                <span class="ru-detail-label">Nama Pencetak / Syarikat</span>
+                                <span class="ru-detail-colon">:</span>
+                                <span class="ru-detail-value"><%# Eval("KontraktorIklan") %></span>
+                            </div>
+                        </div>
+
+                        <div class="ru-detail-row">
+                            <div class="ru-detail-icon">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                            </div>
+                            <div class="ru-detail-text">
+                                <span class="ru-detail-label">Nama Pemilik Iklan</span>
+                                <span class="ru-detail-colon">:</span>
+                                <span class="ru-detail-value"><%# Eval("NamaSyarikat") %></span>
+                            </div>
+                        </div>
+
+                        <div class="ru-detail-row">
+                            <div class="ru-detail-icon">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+                            </div>
+                            <div class="ru-detail-text">
+                                <span class="ru-detail-label">Tempoh Iklan</span>
+                                <span class="ru-detail-colon">:</span>
+                                <span class="ru-detail-value">
+                                    <%# Eval("TarikhPengesahanBanting1", "{0:dd MMM yyyy}") %> – <%# Eval("TarikhPengesahanBanting2", "{0:dd MMM yyyy}") %>
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="ru-detail-row">
+                            <div class="ru-detail-icon">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4"/><rect x="3" y="3" width="18" height="18" rx="4"/></svg>
+                            </div>
+                            <div class="ru-detail-text">
+                                <span class="ru-detail-label">Kelulusan DBP</span>
+                                <span class="ru-detail-colon">:</span>
+                                <span class="ru-detail-value ru-detail-value--status"><%# GetKelulusanStatusHtml(Container.DataItem) %></span>
+                            </div>
+                        </div>
+
+                        <div class="ru-detail-row">
+                            <div class="ru-detail-icon-empty"></div>
+                            <div class="ru-detail-text">
+                                <span class="ru-detail-label">No. Kelulusan DBP</span>
+                                <span class="ru-detail-colon">:</span>
+                                <span class="ru-detail-value"><%# Eval("NoPengesahanBanting") %></span>
+                            </div>
+                        </div>
+
+                    </div>
+                </ItemTemplate>
+                <EmptyDataTemplate>
+                    <p class="ru-list-empty-sub">Tiada maklumat iklan dijumpai.</p>
+                </EmptyDataTemplate>
+            </asp:FormView>
+        </div>
+        </asp:Panel>
+
+        <%--# Alamat lokasi pemeriksaan #--%>
+        <div class="ru-row-2col">
+
+            <%--# Alamat lokasi pemeriksaan #--%>
+            <div class="ru-section">
+                <div class="ru-section-head">
+                    <div class="ru-section-icon">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                    </div>
+                    <h4 class="ru-section-title">Alamat lokasi pemeriksaan</h4>
+                </div>
+                <div class="ru-alamat-wrap">
+                    <asp:TextBox ID="txtAlamatLokasi" runat="server" CssClass="ru-field" TextMode="MultiLine" Rows="3" />
+                    <asp:RequiredFieldValidator runat="server" ID="rfvAlamat" ControlToValidate="txtAlamatLokasi"
+                        ErrorMessage="Sila isi alamat lokasi" CssClass="cssRequiredField" Display="Dynamic" ValidationGroup="frmRekodSemakan" />
+                </div>
             </div>
+
+            <%--# Status Pemeriksaan #--%>
+            <div class="ru-section">
+                <div class="ru-section-head">
+                    <div class="ru-section-icon">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>
+                    </div>
+                    <h4 class="ru-section-title">Status Pemeriksaan</h4>
+                </div>
+
+                <asp:RadioButtonList ID="rblStatusPemeriksaan" runat="server"
+                    CssClass="ru-radio-list" RepeatLayout="Table"
+                    RepeatDirection="Vertical" RepeatColumns="2">
+                    <asp:ListItem Text="Mematuhi" Value="Mematuhi" Selected="True" />
+                    <asp:ListItem Text="Tidak Mematuhi" Value="TidakMematuhi" />
+                    <asp:ListItem Text="Iklan Tidak Dijumpai" Value="IklanTidakDijumpai" />
+                    <asp:ListItem Text="Lokasi Tidak Tepat" Value="LokasiTidakTepat" />
+                    <asp:ListItem Text="Iklan Berbeza Daripada Kelulusan" Value="IklanBerbezaDaripadaKelulusan" />
+                </asp:RadioButtonList>
+            </div>
+
         </div>
 
         <%--# Ulasan pemeriksaan #--%>
@@ -1217,96 +1380,7 @@
 
 </div>
 
-                <%--<div class="card card-info">
-                    <div class="card-header">
-                        <h3 class="card-title">
-                            <asp:Literal ID="litTajukRekod" runat="server" Text="Rekod Ulasan / Pemerhatian" />
-                        </h3>
-                    </div>
-                    <div class="card-body">
-
-                        
-                        <asp:Panel ID="pnlMaklumatDijumpai" runat="server" Visible="false" CssClass="callout callout-info">
-                            <div class="info-item"><span class="info-label">Nama Syarikat</span><span class="info-value"><asp:Literal ID="litNamaSyarikat" runat="server" /></span></div>
-                            <div class="info-item"><span class="info-label">No Pendaftaran</span><span class="info-value"><asp:Literal ID="litNoPendaftaran" runat="server" /></span></div>
-                            <div class="info-item"><span class="info-label">Tarikh Luput</span><span class="info-value"><asp:Literal ID="litTarikhLuput" runat="server" /></span></div>
-                        </asp:Panel>
-
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>Alamat Lokasi Pemeriksaan</label>
-                                    <asp:TextBox ID="txtAlamatLokasi" runat="server" CssClass="form-control" TextMode="MultiLine" Rows="2" />
-                                    <asp:RequiredFieldValidator runat="server" ID="rfvAlamat" ControlToValidate="txtAlamatLokasi"
-                                        ErrorMessage="Sila isi alamat lokasi" CssClass="cssRequiredField" Display="Dynamic" ValidationGroup="frmRekodSemakan" />
-                                </div>
-                            </div>
-                        </div>
-
-                        <hr />
-                        <h5><asp:Literal ID="litJenisCatatan" runat="server" Text="Ulasan" /></h5>
-
-                        
-                        <asp:GridView ID="GridViewUlasanSementara" runat="server" AutoGenerateColumns="False"
-                            CssClass="table table-sm table-bordered" Width="100%">
-                            <Columns>
-                                <asp:BoundField DataField="Catatan" HeaderText="Catatan" />
-                                <asp:TemplateField ShowHeader="False" ItemStyle-Width="80px">
-                                    <ItemTemplate>
-                                        <asp:LinkButton runat="server" ID="lnkBuangUlasan" Text="Buang" CommandName="BuangUlasan"
-                                            CommandArgument='<%# Container.DataItemIndex %>' CausesValidation="False" CssClass="btn btn-danger btn-sm" />
-                                    </ItemTemplate>
-                                </asp:TemplateField>
-                            </Columns>
-                            <EmptyDataTemplate>Belum ada catatan ditambah.</EmptyDataTemplate>
-                        </asp:GridView>
-
-                        <div class="row">
-                            <div class="col-md-8">
-                                <div class="form-group">
-                                    <asp:TextBox ID="txtCatatanBaru" runat="server" CssClass="form-control" TextMode="MultiLine" Rows="2" placeholder="Taip catatan..." />
-                                </div>
-                            </div>
-                            <div class="col-md-2">
-                                <asp:Button ID="btnTambahUlasan" runat="server" CssClass="btn btn-default btn-block" Text="+ Tambah Catatan" CausesValidation="False" />
-                            </div>
-                        </div>
-
-                        <hr />
-                        <h5>Lampiran</h5>
-
-                        <asp:GridView ID="GridViewLampiranSementara" runat="server" AutoGenerateColumns="False"
-                            CssClass="table table-sm table-bordered" Width="100%">
-                            <Columns>
-                                <asp:BoundField DataField="FileName" HeaderText="Nama Fail" />
-                                <asp:TemplateField ShowHeader="False" ItemStyle-Width="80px">
-                                    <ItemTemplate>
-                                        <asp:LinkButton runat="server" ID="lnkBuangLampiran" Text="Buang" CommandName="BuangLampiran"
-                                            CommandArgument='<%# Container.DataItemIndex %>' CausesValidation="False" CssClass="btn btn-danger btn-sm" />
-                                    </ItemTemplate>
-                                </asp:TemplateField>
-                            </Columns>
-                            <EmptyDataTemplate>Belum ada lampiran ditambah.</EmptyDataTemplate>
-                        </asp:GridView>
-
-                        <div class="row">
-                            <div class="col-md-8">
-                                <div class="form-group">
-                                    <asp:FileUpload ID="fuLampiran" runat="server" CssClass="form-control" />
-                                </div>
-                            </div>
-                            <div class="col-md-2">
-                                <asp:Button ID="btnTambahLampiran" runat="server" CssClass="btn btn-default btn-block" Text="+ Tambah Lampiran" CausesValidation="False" />
-                            </div>
-                        </div>
-
-                    </div>
-                    <div class="sp-sticky-actions">
-                        <asp:Button ID="btnHantarSemakan" runat="server" CssClass="btn-primary" Text="Hantar Kepada KB Inspektorat" 
-                            ValidationGroup="frmRekodSemakan" OnClientClick="return confirm('Anda pasti untuk menghantar rekod ini?');"/>
-                        <asp:Button ID="btnBatalRekod" runat="server" CssClass="btn btn-default" Text="Kembali" CausesValidation="False" />
-                    </div>
-                </div>--%>
+                
             </asp:Panel>
 
 
@@ -1334,6 +1408,16 @@
                                         <div class="bs-card-body">
                                             <asp:FormView ID="FormView1" runat="server" DataSourceID="SqlDataSourceDetail" DefaultMode="ReadOnly" RenderOuterTable="false">
                                                 <ItemTemplate>
+
+                                                    <div class="bs-info-row">
+                                                        <div class="bs-info-icon">
+                                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+                                                        </div>
+                                                        <div>
+                                                            <div class="bs-info-label">Tempoh Iklan</div>
+                                                            <div class="bs-info-value"><%# Eval("TarikhPengesahanBanting1", "{0:dd MMM yyyy}") %> – <%# Eval("TarikhPengesahanBanting2", "{0:dd MMM yyyy}") %></div>
+                                                        </div>
+                                                    </div>
                                                     <div class="bs-info-row">
                                                         <div class="bs-info-icon">
                                                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2"/></svg>
@@ -1349,7 +1433,7 @@
                                                         </div>
                                                         <div>
                                                             <div class="bs-info-label">Jenis kes</div>
-                                                            <div class="bs-info-value"><%# Eval("SemakanIK_StatusLesen") %></div>
+                                                            <div class="bs-info-value"><%# Eval("SemakanIK_StatusPemeriksaan") %></div>
                                                         </div>
                                                     </div>
                                                     <div class="bs-info-row">
@@ -1404,7 +1488,9 @@
 
                                     <asp:SqlDataSource ID="SqlDataSourceDetail" runat="server"
                                         ConnectionString="<%$ ConnectionStrings:webcon_ConnectionStr %>"
-                                        SelectCommand="SELECT * FROM LESEN_SepandukSemakanIK WHERE SemakanIK_ID = @SemakanIK_ID">
+                                        SelectCommand="SELECT a.*,b.TarikhPengesahanBanting1,b.TarikhPengesahanBanting2 FROM LESEN_SepandukSemakanIK a
+                                        INNER JOIN LESEN_Permohonan b ON a.SemakanIK_PermohonanID = b.Permohonan_ID
+                                        WHERE SemakanIK_ID = @SemakanIK_ID">
                                         <SelectParameters>
                                             <asp:ControlParameter ControlID="GridView1" Name="SemakanIK_ID" PropertyName="SelectedValue" />
                                         </SelectParameters>
