@@ -901,12 +901,13 @@
                                                     ID="btnTiadaRekod"
                                                     runat="server"
                                                     CssClass="btn-modern btn-danger-modern"
-                                                    Text="Tiada Rekod / Tidak Berdaftar - Cipta Laporan Baru"
+                                                    Text="Cipta Rekod Permeriksaan Baharu"
                                                     CausesValidation="False"
                                                     OnClick="btnTiadaRekod_Click" />
                                             </div>
 
                                             <div class="empty-description">
+                                                Tiada Rekod / Tidak Berdaftar.
                                                 Sila masukkan kod QR atau kata kunci carian
                                                 untuk mencari rekod.
                                             </div>
