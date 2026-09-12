@@ -74,7 +74,7 @@ Partial Class appregister1
     Protected Sub btnQrCode_Click(ByVal sender As Object, ByVal e As EventArgs)
 
         Dim btn As LinkButton = DirectCast(sender, LinkButton)
-        Dim imgQrCode As System.Web.UI.WebControls.Image = DirectCast(btn.NamingContainer.FindControl("imgQrCode"), System.Web.UI.WebControls.Image)
+        'Dim imgQrCode As System.Web.UI.WebControls.Image = DirectCast(btn.NamingContainer.FindControl("imgQrCode"), System.Web.UI.WebControls.Image)
         Dim txtRujukan As TextBox = DirectCast(btn.NamingContainer.FindControl("TB_Rujukan"), TextBox)
 
         If txtRujukan Is Nothing OrElse String.IsNullOrWhiteSpace(txtRujukan.Text) Then
@@ -87,6 +87,7 @@ Partial Class appregister1
         Dim fullUrl As String = baseUrl & "/lesen/sepandukSemakanIK.aspx?scancode=" & encodedRujukan
 
         Using qrGenerator As New QRCodeGenerator()
+
             Dim qrCodeData As QRCodeData = qrGenerator.CreateQrCode(fullUrl, QRCodeGenerator.ECCLevel.Q)
             Using qrCode As New PngByteQRCode(qrCodeData)
                 Dim qrBytes As Byte() = qrCode.GetGraphic(20)
