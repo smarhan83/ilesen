@@ -82,7 +82,7 @@ Partial Class appregister1
             Exit Sub
         End If
 
-        Dim baseUrl As String = Request.Url.Scheme & "://" & Request.Url.Authority
+        Dim baseUrl As String = Request.Url.Scheme & "://" & Request.Url.Authority & Request.ApplicationPath.TrimEnd("/"c)
         Dim encodedRujukan As String = Server.UrlEncode(txtRujukan.Text.Trim())
         Dim fullUrl As String = baseUrl & "/lesen/sepandukSemakanIK.aspx?scancode=" & encodedRujukan
 
