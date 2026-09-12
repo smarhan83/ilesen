@@ -20,6 +20,9 @@ Partial Class sepandukSemakanIK
     Private Const SESS_TARIKHLUPUT As String = "SepandukIK_TarikhLuput"
     Private Const SESS_KAEDAH As String = "SepandukIK_Kaedah"                      ' 'QR' / 'Carian'
     Private Const SESS_QRCODE As String = "SepandukIK_QRCode"
+    Private Const SESS_NOKELULUSAN As String = "NoPengesahanBanting"
+
+    Private DefaultScreen As String = ""
 
     Protected Sub Page_Init(sender As Object, e As EventArgs) Handles Me.Init
 
@@ -36,6 +39,16 @@ Partial Class sepandukSemakanIK
     Protected Sub Page_Load(sender As Object, e As EventArgs) Handles Me.Load
 
         Dim sm As ScriptManager = ScriptManager.GetCurrent(Page)
+
+        DefaultScreen = Request.QueryString("list")
+
+        If DefaultScreen = 1 Then
+            idListing.Visible = True
+            pnlCarian.Visible = False
+        Else
+            idListing.Visible = False
+            pnlCarian.Visible = True
+        End If
 
         If sm IsNot Nothing Then
             sm.RegisterPostBackControl(btnTambahLampiran)
@@ -149,10 +162,19 @@ Partial Class sepandukSemakanIK
     End Sub
 
     Private Sub ResetPanel()
+
+        If DefaultScreen = 1 Then
+            idListing.Visible = True
+            pnlCarian.Visible = False
+        Else
+            idListing.Visible = False
+            pnlCarian.Visible = True
+        End If
+
         pnlDetail.Visible = False
-        pnlCarian.Visible = False
+
         pnlRekodSemakan.Visible = False
-        idListing.Visible = True
+
         pnlKBInspektorat.Visible = False
         pnlKBLesen.Visible = False
         pnlKJLesen.Visible = False
@@ -169,6 +191,7 @@ Partial Class sepandukSemakanIK
         Session.Remove(SESS_NAMASYARIKAT)
         Session.Remove(SESS_NOPENDAFTARAN)
         Session.Remove(SESS_TARIKHLUPUT)
+        Session.Remove(SESS_NOKELULUSAN)
         Session.Remove(SESS_KAEDAH)
         Session.Remove(SESS_QRCODE)
     End Sub
@@ -215,7 +238,7 @@ Partial Class sepandukSemakanIK
         Dim dt As New DataTable()
 
         Using conn As New SqlConnection(connStr)
-            Dim sql As String = "SELECT Permohonan_ID, NamaSyarikat, NoPendaftaran, AlamatPremis, TarikhSuratKelulusan " &
+            Dim sql As String = "SELECT * " &
                                  "FROM LESEN_Permohonan WHERE (JenisLesen_ID = @JenisLesenID OR (',' + ISNULL(JenisLesenIdList,'') + ',') LIKE '%,' + CAST(@JenisLesenID AS VARCHAR(10)) + ',%')  AND " & whereClause
 
             Using cmd As New SqlCommand(sql, conn)
@@ -240,13 +263,20 @@ Partial Class sepandukSemakanIK
             Dim permohonanId As Integer = CInt(e.CommandArgument)
             MuatMaklumatPermohonan(permohonanId)
             BukaBorangRekod(statusLesen:="Tamat Tempoh")
+
+            ' Cari row index yang berkaitan dengan butang yang diklik
+            Dim btn As LinkButton = DirectCast(e.CommandSource, LinkButton)
+            Dim row As GridViewRow = DirectCast(btn.NamingContainer, GridViewRow)
+            GridViewCarian.SelectedIndex = row.RowIndex
+
+            FormViewIklanBerdaftar.DataBind()
         End If
     End Sub
 
     Private Sub MuatMaklumatPermohonan(permohonanId As Integer)
         Dim connStr As String = ConfigurationManager.ConnectionStrings("webcon_ConnectionStr").ConnectionString
         Using conn As New SqlConnection(connStr)
-            Dim sql As String = "SELECT NamaSyarikat, NoPendaftaran, AlamatPremis, TarikhSuratKelulusan FROM LESEN_Permohonan WHERE Permohonan_ID = @ID"
+            Dim sql As String = "SELECT * FROM LESEN_Permohonan WHERE Permohonan_ID = @ID"
             Using cmd As New SqlCommand(sql, conn)
                 cmd.Parameters.AddWithValue("@ID", permohonanId)
                 conn.Open()
@@ -255,8 +285,9 @@ Partial Class sepandukSemakanIK
                         Session.Item(SESS_PERMOHONANID) = permohonanId
                         Session.Item(SESS_NAMASYARIKAT) = If(IsDBNull(rdr("NamaSyarikat")), "", CStr(rdr("NamaSyarikat")))
                         Session.Item(SESS_NOPENDAFTARAN) = If(IsDBNull(rdr("NoPendaftaran")), "", CStr(rdr("NoPendaftaran")))
-                        Session.Item(SESS_TARIKHLUPUT) = If(IsDBNull(rdr("TarikhSuratKelulusan")), "", CStr(rdr("TarikhSuratKelulusan")))
+                        Session.Item(SESS_TARIKHLUPUT) = If(IsDBNull(rdr("TarikhPengesahanBanting2")), "", CStr(rdr("TarikhPengesahanBanting2")))
                         Session.Item(txtAlamatLokasi.UniqueID) = If(IsDBNull(rdr("AlamatPremis")), "", CStr(rdr("AlamatPremis")))
+                        Session.Item(SESS_NOKELULUSAN) = If(IsDBNull(rdr("NoPengesahanBanting")), "", CStr(rdr("NoPengesahanBanting")))
                     End If
                 End Using
             End Using
@@ -277,6 +308,7 @@ Partial Class sepandukSemakanIK
         Session.Remove(SESS_NAMASYARIKAT)
         Session.Remove(SESS_NOPENDAFTARAN)
         Session.Remove(SESS_TARIKHLUPUT)
+        Session.Remove(SESS_NOKELULUSAN)
 
         BukaBorangRekod(statusLesen:="Tidak Berdaftar")
     End Sub
@@ -293,9 +325,11 @@ Partial Class sepandukSemakanIK
             litTajukRekod.Text = "Rekod Ulasan - Lesen Tamat Tempoh"
             litJenisCatatan.Text = "Ulasan"
             pnlMaklumatDijumpai.Visible = True
-            litNamaSyarikat.Text = CStr(Session.Item(SESS_NAMASYARIKAT))
-            litNoPendaftaran.Text = CStr(Session.Item(SESS_NOPENDAFTARAN))
-            litTarikhLuput.Text = CStr(Session.Item(SESS_TARIKHLUPUT))
+            'litNamaSyarikat.Text = CStr(Session.Item(SESS_NAMASYARIKAT))
+            'litNoPendaftaran.Text = CStr(Session.Item(SESS_NOPENDAFTARAN))
+            'litNoPendaftaranBanner.Text = CStr(Session.Item(SESS_NOPENDAFTARAN))
+            'litTarikhLuput.Text = CStr(Session.Item(SESS_TARIKHLUPUT))
+            'litNoKelulusanBanner.Text = CStr(Session.Item(SESS_NOKELULUSAN))
         Else
             litTajukRekod.Text = "Rekod Pemerhatian - Tiada Rekod Lesen / Tidak Berdaftar"
             litJenisCatatan.Text = "Pemerhatian"
@@ -442,12 +476,12 @@ Partial Class sepandukSemakanIK
                         INSERT INTO LESEN_SepandukSemakanIK
                             (SemakanIK_PermohonanID, SemakanIK_NoRujukan, SemakanIK_JenisLesen_ID, SemakanIK_KaedahSemakan, SemakanIK_QRCode,
                              SemakanIK_TarikhSemakan, SemakanIK_AlamatLokasi, SemakanIK_StatusLesen, SemakanIK_NamaSyarikat, SemakanIK_NoPendaftaran,
-                             SemakanIK_TarikhLuput, SemakanIK_Status, SemakanIK_PegawaiID, CreatorID, CreatedDt, IsActive)
+                             SemakanIK_TarikhLuput, SemakanIK_Status, SemakanIK_PegawaiID, SemakanIK_StatusPemeriksaan, CreatorID, CreatedDt, IsActive)
                         OUTPUT INSERTED.SemakanIK_ID
                         VALUES
                             (@PermohonanID, @NoRujukan, @JenisLesenID, @Kaedah, @QRCode,
                              getdate(), @AlamatLokasi, @StatusLesen, @NamaSyarikat, @NoPendaftaran,
-                             @TarikhLuput, 'Semakan KB Inspektorat', @PegawaiID, @PegawaiID, getdate(), 1)", conn, trans)
+                             @TarikhLuput, 'Semakan KB Inspektorat', @PegawaiID, @SemakanIK_StatusPemeriksaan, @PegawaiID, getdate(), 1)", conn, trans)
 
                         cmd.Parameters.AddWithValue("@PermohonanID", permohonanId)
                         cmd.Parameters.AddWithValue("@NoRujukan", noRujukan)
@@ -460,6 +494,7 @@ Partial Class sepandukSemakanIK
                         cmd.Parameters.AddWithValue("@NoPendaftaran", noPendaftaran)
                         cmd.Parameters.AddWithValue("@TarikhLuput", tarikhLuput)
                         cmd.Parameters.AddWithValue("@PegawaiID", pegawaiId)
+                        cmd.Parameters.AddWithValue("@SemakanIK_StatusPemeriksaan", rblStatusPemeriksaan.SelectedValue)
 
                         newId = CInt(cmd.ExecuteScalar())
 
@@ -710,4 +745,108 @@ Partial Class sepandukSemakanIK
         End If
 
     End Sub
+
+    Protected Function GetStatusAktifBanner(ByVal dataItem As Object) As String
+        Dim d1 As Object = DataBinder.Eval(dataItem, "TarikhPengesahanBanting1")
+        Dim d2 As Object = DataBinder.Eval(dataItem, "TarikhPengesahanBanting2")
+
+        If d1 Is DBNull.Value OrElse d2 Is DBNull.Value OrElse d1 Is Nothing OrElse d2 Is Nothing Then
+            Return "Tidak Aktif"
+        End If
+
+        Dim tarikh1 As DateTime = Convert.ToDateTime(d1)
+        Dim tarikh2 As DateTime = Convert.ToDateTime(d2)
+
+        If DateTime.Now.Date >= tarikh1.Date AndAlso DateTime.Now.Date <= tarikh2.Date Then
+            Return "Aktif"
+        Else
+            Return "Tidak Aktif"
+        End If
+    End Function
+
+    Protected Function GetTajukIklanBanner(ByVal dataItem As Object) As String
+        Dim d1 As Object = DataBinder.Eval(dataItem, "TarikhPengesahanBanting1")
+        Dim d2 As Object = DataBinder.Eval(dataItem, "TarikhPengesahanBanting2")
+
+        If d1 Is DBNull.Value OrElse d2 Is DBNull.Value OrElse d1 Is Nothing OrElse d2 Is Nothing Then
+            Return "TAK BERDAFTAR"
+        End If
+
+        Dim tarikh1 As DateTime = Convert.ToDateTime(d1)
+        Dim tarikh2 As DateTime = Convert.ToDateTime(d2)
+
+        If DateTime.Now.Date >= tarikh1.Date AndAlso DateTime.Now.Date <= tarikh2.Date Then
+            Return "BERDAFTAR"
+        Else
+            Return "TEMPOH TAK SAH"
+        End If
+    End Function
+
+    Protected Function GetBannerModifierClass(ByVal dataItem As Object) As String
+
+
+        Select Case GetStatusIklan(dataItem)
+            Case 1 : Return ""                 ' Aktif/dalam tempoh -> style asal (hijau)
+            Case 0 : Return "ru-xberdaftar"     ' Luar julat / tamat tempoh
+            Case Else : Return "ru-xberdaftar"  ' Tiada tarikh langsung
+        End Select
+    End Function
+
+    Protected Function GetStatusIklan(ByVal dataItem As Object) As Integer
+        ' Pulangkan: -1 = tiada tarikh (tak berdaftar), 0 = ada tarikh tapi luar julat (tamat tempoh), 1 = dalam julat (aktif)
+        Dim d1 As Object = DataBinder.Eval(dataItem, "TarikhPengesahanBanting1")
+        Dim d2 As Object = DataBinder.Eval(dataItem, "TarikhPengesahanBanting2")
+
+        If d1 Is DBNull.Value OrElse d2 Is DBNull.Value OrElse d1 Is Nothing OrElse d2 Is Nothing Then
+            Return -1
+        End If
+
+        Dim tarikh1 As DateTime = Convert.ToDateTime(d1)
+        Dim tarikh2 As DateTime = Convert.ToDateTime(d2)
+
+        If DateTime.Now.Date >= tarikh1.Date AndAlso DateTime.Now.Date <= tarikh2.Date Then
+            Return 1
+        Else
+            Return 0
+        End If
+    End Function
+
+    Protected Function GetKelulusanStatusHtml(ByVal dataItem As Object) As String
+        Dim status As Object = DataBinder.Eval(dataItem, "StatusBanting")
+        Dim statusStr As String = If(status Is Nothing OrElse status Is DBNull.Value, "", status.ToString())
+
+        Dim iconSvg As String
+        Dim teksStatus As String
+        Dim cssClass As String
+
+        Select Case statusStr
+            Case "1"
+                iconSvg = "<svg width=""16"" height=""16"" viewBox=""0 0 24 24"" fill=""none"" stroke=""currentColor"" stroke-width=""2""><circle cx=""12"" cy=""12"" r=""10""/><path d=""M8 12l2.5 2.5L16 9""/></svg>"
+                teksStatus = "Diluluskan"
+                cssClass = "ru-status-lulus"
+            Case "0"
+                iconSvg = "<svg width=""16"" height=""16"" viewBox=""0 0 24 24"" fill=""none"" stroke=""currentColor"" stroke-width=""2""><circle cx=""12"" cy=""12"" r=""10""/><path d=""M15 9l-6 6M9 9l6 6""/></svg>"
+                teksStatus = "Tidak Diluluskan"
+                cssClass = "ru-status-tolak"
+            Case Else
+                iconSvg = "<svg width=""16"" height=""16"" viewBox=""0 0 24 24"" fill=""none"" stroke=""currentColor"" stroke-width=""2""><circle cx=""12"" cy=""12"" r=""10""/><path d=""M12 8v4m0 4h.01""/></svg>"
+                teksStatus = "Dalam Proses"
+                cssClass = "ru-status-proses"
+        End Select
+
+        Return "<span class=""ru-status-icon-inline " & cssClass & """>" & iconSvg & "</span><span class=""" & cssClass & """>" & teksStatus & "</span>"
+    End Function
+
+    Protected Function GetSemakanIKText(value As Object) As String
+        Dim count As Integer = Convert.ToInt32(value)
+
+        If count = 0 Then
+            Return ""
+        End If
+
+        Return String.Format(
+            "{0} Kali Hantar Kepada KB Inspektorat",
+            count
+        )
+    End Function
 End Class

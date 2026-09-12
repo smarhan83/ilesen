@@ -1,0 +1,651 @@
+/* =========================================================
+   ru-style.css
+   Style untuk Rekod Ulasan (ASP.NET Web Forms)
+   Tema: ProLesen (biru/hijau, kad bucu bulat)
+   ========================================================= */
+
+:root {
+    --ru-blue-900: #0b2e6b;
+    --ru-blue-700: #1554b3;
+    --ru-blue-600: #1d6fd1;
+    --ru-blue-50: #eef4fd;
+    --ru-green-600: #159a4a;
+    --ru-green-50: #e8f8ee;
+    --ru-red-600: #d33;
+    --ru-red-50: #fdecec;
+    --ru-border: #e1e8f2;
+    --ru-text: #1c2a3a;
+    --ru-text-muted: #5b6b80;
+    --ru-radius: 14px;
+    --ru-shadow: 0 2px 10px rgba(20,50,90,.06);
+}
+
+.ru-wrap{
+  font-family:"Segoe UI",Roboto,Arial,sans-serif;
+  color:var(--ru-text);
+  max-width:960px;
+  margin:0 auto;
+  background:#f5f8fc;
+  border-radius:var(--ru-radius);
+  overflow:hidden;
+  box-shadow:var(--ru-shadow);
+}
+
+/* ---------- Body ---------- */
+.ru-body{
+  padding:22px 26px;
+  display:flex;
+  flex-direction:column;
+  gap:20px;
+}
+
+/* ---------- Info grid (ringkasan lesen) ---------- */
+.ru-info-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:14px;
+  background:var(--ru-blue-50);
+  border:1px solid var(--ru-border);
+  border-radius:var(--ru-radius);
+  padding:18px;
+}
+.ru-info-item{
+  display:flex;
+  align-items:flex-start;
+  gap:10px;
+}
+.ru-info-icon{
+  flex:0 0 auto;
+  width:34px;height:34px;
+  display:flex;align-items:center;justify-content:center;
+  background:#fff;
+  color:var(--ru-blue-700);
+  border:1px solid var(--ru-border);
+  border-radius:10px;
+}
+.ru-info-item div:not(.ru-info-icon){
+  display:flex;
+  flex-direction:column;
+}
+.ru-info-label{
+  font-size:12px;
+  color:var(--ru-text-muted);
+}
+.ru-info-value{
+  font-size:14px;
+  font-weight:600;
+  color:var(--ru-text);
+}
+
+/* ---------- Section card ---------- */
+.ru-section{
+  background:#fff;
+  border:1px solid var(--ru-border);
+  border-radius:var(--ru-radius);
+  padding:18px 20px;
+  box-shadow:var(--ru-shadow);
+}
+.ru-section-head{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-bottom:4px;
+}
+.ru-section-icon{
+  width:30px;height:30px;
+  display:flex;align-items:center;justify-content:center;
+  background:var(--ru-blue-50);
+  color:var(--ru-blue-700);
+  border-radius:8px;
+}
+.ru-section-title{
+  margin:0;
+  font-size:15px;
+  font-weight:700;
+  color:var(--ru-blue-900);
+}
+.ru-section-sub{
+  margin:2px 0 14px;
+  font-size:13px;
+  color:var(--ru-text-muted);
+}
+
+/* ---------- Fields ---------- */
+.ru-field, .ru-textarea{
+  width:100%;
+  box-sizing:border-box;
+  border:1px solid var(--ru-border);
+  border-radius:10px;
+  padding:10px 12px;
+  font-size:14px;
+  font-family:inherit;
+  color:var(--ru-text);
+  background:#fbfcfe;
+  resize:vertical;
+}
+.ru-field:focus, .ru-textarea:focus{
+  outline:none;
+  border-color:var(--ru-blue-600);
+  box-shadow:0 0 0 3px rgba(29,111,209,.15);
+}
+.ru-alamat-wrap{ display:flex; flex-direction:column; gap:6px; }
+
+.ru-row-add{
+  display:flex;
+  gap:10px;
+  align-items:flex-start;
+  margin-top:12px;
+}
+.ru-row-add .ru-textarea{ flex:1; }
+
+/* ---------- Buttons ---------- */
+.ru-btn-primary{
+  background:var(--ru-blue-700);
+  color:#fff;
+  border:none;
+  border-radius:10px;
+  padding:10px 18px;
+  font-size:14px;
+  font-weight:600;
+  cursor:pointer;
+  white-space:nowrap;
+  transition:background .15s ease;
+}
+.ru-btn-primary:hover{ background:var(--ru-blue-900); }
+
+.ru-btn-outline{
+  background:#fff;
+  color:var(--ru-blue-700);
+  border:1px solid var(--ru-blue-600);
+  border-radius:10px;
+  padding:10px 18px;
+  font-size:14px;
+  font-weight:600;
+  cursor:pointer;
+}
+.ru-btn-outline:hover{ background:var(--ru-blue-50); }
+
+.ru-btn-danger-sm{
+  background:none;
+  border:none;
+  color:var(--ru-red-600);
+  font-size:13px;
+  font-weight:600;
+  cursor:pointer;
+  padding:2px 6px;
+}
+.ru-btn-danger-sm:hover{ text-decoration:underline; }
+
+/* ---------- Senarai (GridView) ---------- */
+.ru-list{
+  width:100%;
+  border-collapse:collapse;
+  font-size:14px;
+}
+.ru-list-header th, .ru-list th{
+  text-align:left;
+  background:var(--ru-blue-50);
+  color:var(--ru-blue-900);
+  font-size:12px;
+  text-transform:uppercase;
+  letter-spacing:.03em;
+  padding:8px 10px;
+  border-bottom:1px solid var(--ru-border);
+}
+.ru-list td{
+  padding:10px;
+  border-bottom:1px solid var(--ru-border);
+  color:var(--ru-text);
+}
+
+.ru-list-empty{
+  text-align:center;
+  padding:26px 10px;
+  color:var(--ru-text-muted);
+}
+.ru-list-empty-icon{
+  width:40px;height:40px;
+  margin:0 auto 8px;
+  display:flex;align-items:center;justify-content:center;
+  background:var(--ru-blue-50);
+  color:var(--ru-blue-600);
+  border-radius:10px;
+}
+.ru-list-empty-title{ margin:0; font-weight:600; color:var(--ru-text); }
+.ru-list-empty-sub{ margin:2px 0 0; font-size:13px; }
+
+/* ---------- Dropzone (lampiran) ---------- */
+.ru-dropzone{
+  border:1.5px dashed var(--ru-blue-600);
+  border-radius:12px;
+  background:var(--ru-blue-50);
+  padding:22px;
+  text-align:center;
+}
+.ru-dropzone-icon{
+  width:36px;height:36px;
+  margin:0 auto 8px;
+  display:flex;align-items:center;justify-content:center;
+  background:#fff;
+  color:var(--ru-blue-700);
+  border-radius:10px;
+  border:1px solid var(--ru-border);
+}
+.ru-dropzone-text{ margin:0; font-weight:600; font-size:14px; }
+.ru-dropzone-hint{ margin:4px 0 12px; font-size:12px; color:var(--ru-text-muted); }
+
+/* ---------- Bar tindakan (sticky) ---------- */
+.ru-actions{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  padding:16px 26px;
+  background:#fff;
+  border-top:1px solid var(--ru-border);
+}
+.sp-sticky-actions{
+  position:sticky;
+  bottom:0;
+  z-index:5;
+}
+
+/* ---------- Banner status hijau (contoh: "Diluluskan") ---------- */
+.ru-status-banner{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  background:var(--ru-green-50);
+  border:1px solid #bfe8cd;
+  border-radius:var(--ru-radius);
+  padding:16px 20px;
+}
+.ru-status-banner .ru-status-icon{
+  width:44px;height:44px;
+  border-radius:50%;
+  background:var(--ru-green-600);
+  color:#fff;
+  display:flex;align-items:center;justify-content:center;
+}
+.ru-status-banner .ru-status-title{
+  margin:0;
+  font-weight:700;
+  color:var(--ru-green-600);
+  font-size:16px;
+}
+.ru-status-banner .ru-status-sub{
+  margin:2px 0 0;
+  font-size:13px;
+  color:var(--ru-text-muted);
+}
+
+/* ---------- Row 2 kolum (Alamat + Status Pemeriksaan bersebelahan) ---------- */
+.ru-row-2col{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:20px;
+  align-items:start;
+}
+
+/* ---------- Status Pemeriksaan (RadioButtonList custom) ---------- */
+.ru-radio-list{
+  width:100%;
+  border-collapse:separate;
+  border-spacing:0 5px;
+}
+.ru-radio-list td{
+  position:relative;
+  padding:0 5px 0 0;
+  vertical-align:middle;
+}
+.ru-radio-list input[type="radio"]{
+  position:absolute;
+  left:0; top:2px;
+  width:22px; height:22px;
+  margin:0;
+  opacity:0;
+  cursor:pointer;
+  z-index:1;
+}
+.ru-radio-list label{
+  position:relative;
+  display:inline-block;
+  padding-left:32px;
+  font-size:12px;
+  color:var(--ru-text);
+  cursor:pointer;
+  line-height:22px;
+}
+.ru-radio-list label::before{
+  content:"";
+  position:absolute;
+  left:0; top:0;
+  width:22px; height:22px;
+  border-radius:50%;
+  border:2px solid #c9d3e0;
+  background:#fff;
+  box-sizing:border-box;
+  transition:border-color .15s ease;
+}
+.ru-radio-list input[type="radio"]:checked + label::before{
+  border-color:var(--ru-blue-600);
+}
+.ru-radio-list input[type="radio"]:checked + label::after{
+  content:"";
+  position:absolute;
+  left:6px; top:6px;
+  width:10px; height:10px;
+  border-radius:50%;
+  background:var(--ru-blue-600);
+}
+.ru-radio-list input[type="radio"]:focus + label::before{
+  box-shadow:0 0 0 3px rgba(29,111,209,.15);
+}
+
+/* ---------- Banner "IKLAN BERDAFTAR" (penuh, ikut rujukan) ---------- */
+.ru-berdaftar-banner {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    background: var(--ru-green-50);
+    border: 1px solid #bfe8cd;
+    border-radius: var(--ru-radius);
+    padding: 18px 24px;
+    flex-wrap: wrap;
+}
+
+.ru-berdaftar-check {
+    flex: 0 0 auto;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: var(--ru-green-600);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ru-berdaftar-main {
+    flex: 0 0 auto;
+}
+
+.ru-berdaftar-title {
+    margin: 0;
+    font-size: 19px;
+    font-weight: 800;
+    color: var(--ru-green-600);
+    letter-spacing: .01em;
+}
+
+.ru-berdaftar-sub {
+    margin: 2px 0 0;
+    font-size: 13px;
+    color: var(--ru-text-muted);
+}
+
+.ru-berdaftar-strongval {
+    font-weight: 700;
+    color: var(--ru-blue-900);
+}
+
+.ru-berdaftar-divider {
+    width: 1px;
+    align-self: stretch;
+    background: #bfe8cd;
+    flex: 0 0 auto;
+}
+
+.ru-berdaftar-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    flex: 0 0 auto;
+}
+
+.ru-berdaftar-icon {
+    flex: 0 0 auto;
+    width: 24px;
+    height: 24px;
+    color: var(--ru-green-600);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 2px;
+}
+
+.ru-berdaftar-label {
+    margin: 0;
+    font-size: 12px;
+    color: var(--ru-text-muted);
+}
+
+.ru-berdaftar-value {
+    margin: 1px 0 0;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--ru-blue-900);
+}
+
+.ru-berdaftar-value--strong {
+    color: var(--ru-green-600);
+}
+
+.ru-berdaftar-note {
+    margin: 2px 0 0;
+    font-size: 11px;
+    line-height: 1.4;
+    color: var(--ru-text-muted);
+}
+
+.ru-pill-aktif {
+    margin-left: auto;
+    background: var(--ru-green-600);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 8px 22px;
+    border-radius: 999px;
+    display: inline-block;
+    white-space: nowrap;
+}
+
+/* ---------- Modifier: bila TAK berdaftar / tamat tempoh (bukan dalam julat) ---------- */
+.ru-berdaftar-banner.ru-xberdaftar {
+    background: var(--ru-red-50);
+    border-color: #f3c9c9;
+}
+
+    .ru-berdaftar-banner.ru-xberdaftar .ru-berdaftar-check {
+        background: var(--ru-red-600);
+    }
+
+    .ru-berdaftar-banner.ru-xberdaftar .ru-berdaftar-title {
+        color: var(--ru-red-600);
+    }
+
+    .ru-berdaftar-banner.ru-xberdaftar .ru-berdaftar-divider {
+        background: #f3c9c9;
+    }
+
+    .ru-berdaftar-banner.ru-xberdaftar .ru-berdaftar-value--strong {
+        color: var(--ru-red-600);
+    }
+
+    .ru-berdaftar-banner.ru-xberdaftar .ru-pill-aktif {
+        background: var(--ru-red-600);
+    }
+
+/* Toggle icon check <-> X ikut status */
+.ru-berdaftar-check .ru-icon-x {
+    display: none;
+}
+
+.ru-xberdaftar .ru-berdaftar-check .ru-icon-ok {
+    display: none;
+}
+
+.ru-xberdaftar .ru-berdaftar-check .ru-icon-x {
+    display: block;
+}
+
+/* ---------- Maklumat Iklan (senarai icon + label : value) ---------- */
+.ru-detail-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.ru-detail-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.ru-detail-icon {
+    flex: 0 0 auto;
+    width: 26px;
+    height: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--ru-blue-700);
+    margin-top: 1px;
+}
+
+.ru-detail-icon-empty {
+    flex: 0 0 auto;
+    width: 26px;
+}
+
+.ru-detail-text {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 6px;
+    flex: 1;
+}
+
+.ru-detail-label {
+    flex: 0 0 190px;
+    font-size: 14px;
+    color: var(--ru-text);
+}
+
+.ru-detail-colon {
+    color: var(--ru-text-muted);
+}
+
+.ru-detail-value {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--ru-blue-900);
+    flex: 1 1 auto;
+}
+
+.ru-detail-value--status {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.ru-status-icon-inline {
+    display: inline-flex;
+    align-items: center;
+}
+
+.ru-status-lulus {
+    color: var(--ru-green-600);
+    font-weight: 700;
+}
+
+.ru-status-tolak {
+    color: var(--ru-red-600);
+    font-weight: 700;
+}
+
+.ru-status-proses {
+    color: var(--ru-amber-600);
+    font-weight: 700;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width:600px) {
+    .ru-header {
+        flex-wrap: wrap;
+    }
+
+    .ru-header-illustration {
+        display: none;
+    }
+
+    .ru-body {
+        padding: 16px;
+    }
+
+    .ru-row-add {
+        flex-direction: column;
+    }
+
+    .ru-actions {
+        flex-direction: column-reverse;
+    }
+
+        .ru-actions .ru-btn-primary,
+        .ru-actions .ru-btn-outline {
+            width: 100%;
+        }
+
+    .ru-row-2col {
+        grid-template-columns: 1fr;
+    }
+
+    .ru-berdaftar-banner {
+        padding: 16px;
+    }
+
+    .ru-berdaftar-check {
+        width: 42px;
+        height: 42px;
+    }
+
+    .ru-berdaftar-bottom {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .ru-berdaftar-item {
+        width: 100%;
+        flex-basis: auto;
+        padding-top: 10px;
+        border-top: 1px solid #d9ecd9;
+    }
+
+        .ru-berdaftar-item:first-child {
+            border-top: none;
+            padding-top: 0;
+        }
+
+    .ru-berdaftar-divider {
+        display: none;
+    }
+
+    .ru-pill-aktif {
+        margin-left: 0;
+        align-self: flex-start;
+    }
+
+    .ru-detail-text {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 2px;
+    }
+
+    .ru-detail-label {
+        flex-basis: auto;
+        font-weight: 600;
+    }
+
+    .ru-detail-colon {
+        display: none;
+    }
+}
