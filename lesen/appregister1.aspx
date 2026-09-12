@@ -468,6 +468,14 @@
                                             <asp:TextBox ID="TB_PemohonID" runat="server" Enabled="false" Text='<%# Bind("Permohonan_PemohonID") %>' CssClass="form-control" />
                                         </div>
                                     </div>
+
+                                    <div class="col-md-6">
+                                        <asp:LinkButton runat="server" ID="LinkButton8" CssClass="btn btn-default btn-sm rounded-circle" 
+                                            OnClick="btnQrCode_Click" ToolTip="Print QR Code" 
+                                            Style="width: 34px; height: 34px; display: inline-flex; align-items: center; justify-content: center; padding: 0;">
+                                            <i class="bi bi-qr-code"></i>
+                                        </asp:LinkButton>
+                                    </div>
                                 </div>
 
                                 <div class="row">
@@ -1640,6 +1648,14 @@
                                             <asp:TextBox ID="TB_PemohonID" runat="server" Enabled="false" Text='<%# Bind("Permohonan_PemohonID") %>' CssClass="form-control" />
                                         </div>
                                     </div>
+
+                                <div class="col-md-6">
+                                    <asp:LinkButton runat="server" ID="LinkButton7" CssClass="btn btn-default btn-sm rounded-circle" 
+                                        OnClick="btnQrCode_Click" ToolTip="Print QR Code" 
+                                        Style="width: 34px; height: 34px; display: inline-flex; align-items: center; justify-content: center; padding: 0;">
+                                        <i class="bi bi-qr-code"></i>
+                                    </asp:LinkButton>
+                                </div>
                                 </div>
 
                                 <div class="row">
@@ -2834,7 +2850,7 @@
                         <div class="modal-header">
                             <h5 class="modal-title">QR Code</h5>
                                                                 
-                            </button>
+                            
                         </div>
                         <div class="modal-body text-center" id="qrPrintArea">
                             <asp:Image runat="server" ID="imgQrCode" Visible="false" CssClass="img-fluid" Style="max-width: 250px;" />
