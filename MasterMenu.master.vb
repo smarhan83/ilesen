@@ -1396,46 +1396,64 @@ Partial Class MasterMenu
 
     Private Sub ViewSuratKelulusanAuto(permohonanID As String, jenislesenID As Integer, isPDF As Boolean)
         'Dim cb As CheckBox = DirectCast(FormView1.FindControl("CB_IsDigitalSign"), CheckBox)
+        Dim totalid As Integer = 0
+
+        'To check if lampiran larangan merokok is needed
+        Using myConnection As New SqlConnection(ConfigurationManager.ConnectionStrings("webcon_ConnectionStr").ConnectionString)
+
+            myConnection.Open()
+
+            Dim sql1 As String = "SELECT COUNT(PSID) AS TotalID FROM LESEN_PermohonanSurat WHERE Permohonan_ID = @permohonanID 
+            AND JenisReport LIKE 'SK%' AND IsiKandungan like '%merokok%' "
+
+            Dim myCommandSelect As New SqlCommand(sql1, myConnection)
+            myCommandSelect.Parameters.AddWithValue("@permohonanID", permohonanID)
+
+            Dim myReader As SqlDataReader = myCommandSelect.ExecuteReader
+
+            Try
+                If myReader.Read Then
+                    totalid = CInt(myReader.Item("TotalID"))
+                End If
+
+            Catch ex As Exception
+                'MessageBox(ex.Message, Me.Page)
+            End Try
+
+            myReader.Close()
+            myConnection.Close()
+
+        End Using
 
         Dim sql As String = ""
-        Dim jenisLesenDesc = {"", "suratkelulusan", "sk_pasar", "sk_anjing", "sk_penjaja", "sk_billboard", "sk_tukaralamat", "sk_tambahpremis", "sk_tambahjenis",
-            "sk_tukarpemilik", "sk_tukariklan", "sk_tukarnama", "sk_kurangiklan", "sk_kakilima", "sk_batal", "sk_ekspo", "sk_tambahiklan", "sk_tepikedai", "sk_lebuhawam",
-            "sk_tukaralamatnamaiklan", "sk_tukarpemilikalamatiklan", "", "", "sk_tukarnamaiklan", "sk_tukarpemilikiklan", "sk_pasartambahpetak", "sk_tukarnamatambahpremis"}
 
         Try
 
-            sql = "SELECT a.KadarBayaran_Desc, a.KadarBayaran_Amount, b.*, c.Pemohon_Name, c.Pemohon_Address, c.Pemohon_ICNo, c.Pemohon_MobileNo, c.Pemohon_TelNo, d.Users_Fullname, d.Users_Signature, e.name AS AnjingJenisPremisDesc " &
-                "FROM LESEN_Permohonan b " &
-                "LEFT JOIN LESEN_KadarBayaran a ON a.KadarBayaran_PermohonanID = b.Permohonan_ID " &
-                "INNER JOIN LESEN_Pemohon c ON b.Permohonan_PemohonID = c.Pemohon_ID " &
-                "INNER JOIN TBL_USERS d ON b.TandatanganKelulusanId = d.Users_Id " &
-                "LEFT JOIN TBL_LOOKUPS e ON e.id = b.AnjingJenisPremis " &
-                "WHERE a.IsSelect=1 AND b.Permohonan_ID=" & permohonanID & " ORDER BY a.SeqNo ASC"
+            sql = "SELECT a.Permohonan_ID, a.TarikhSuratKelulusan, a.CreatedDt, CAST(a.NamaSyarikat AS varchar(200)) AS NamaSyarikat, 
+                a.NoPendaftaran, a.NoAkaun, a.AlamatPremis, a.JenisPerniagaan, a.PemilikBaru, a.AlamatBaru, 
+                a.JenisPerniagaanBaru, a.NamaBaruSyarikat, a.BillboardLokasi, a.LokasiPasar1, a.LokasiPasar2, 
+                a.LokasiPasar3, a.JenisPasar, a.JenisPerniagaanPasar, a.JumlahPetak, a.AnjingAlamat, a.AnjingJenisMohon, 
+                a.AnjingJenisPremis, a.AlamatPenjajaan, a.JenisPerniagaanPenjaja, a.TarikhBatal, a.PenganjurEkspo, 
+                a.NamaEkspo, a.LokasiEkspo, a.NoTelEkspo, a.TarikhEkspo1, a.TarikhEkspo2, a.MasaEkspo1, a.MasaEkspo2, 
+                a.Rujukan, a.NoAkaunCukai, a.IsBatal, a.JenisLesenDescList, a.JenisLesenIdList, a.SaizIklanList, 
+                a.CahayaIklanList, a.UnitIklanList, a.BakaAnjingList, a.AnjingJantanList, a.AnjingBetinaList, 
+                a.AnjingJantanMandulList, a.AnjingBetinaMandulList, 
+                b.Pemohon_Name, b.Pemohon_Address, b.Pemohon_ICNo, b.Pemohon_MobileNo, b.Pemohon_TelNo, 
+                c.Users_Fullname, c.Users_Signature, d.P1, d.P2, d.P3, d.IsiKandungan 
+                FROM LESEN_Permohonan a 
+                INNER JOIN LESEN_Pemohon b ON b.Pemohon_ID=a.Permohonan_PemohonID 
+                LEFT JOIN TBL_USERS c ON a.TandatanganKelulusanId=c.Users_Id 
+                LEFT JOIN LESEN_PermohonanSurat d ON d.Permohonan_ID=a.Permohonan_ID AND d.JenisReport LIKE 'SK%' 
+                WHERE a.Permohonan_ID=@permohonanID AND a.IsPublish=1 ORDER BY d.P1, d.P2, d.P3"
+
+            sql = sql.Replace("@permohonanID", permohonanID)
 
             Dim ReportVar As String
 
-            ReportVar = jenisLesenDesc(jenislesenID)
-
-            If jenislesenID < 19 Or jenislesenID = 25 Then
-                sql = "SELECT f.JenisLesen_Description, a.*, b.Pemohon_Name, b.Pemohon_Address, b.Pemohon_ICNo, b.Pemohon_MobileNo, b.Pemohon_TelNo," &
-                "c.Users_Fullname, c.Users_Signature, d.name AS AnjingJenisPremisDesc, e.P1, e.P2, e.P3, e.IsiKandungan " &
-                "FROM LESEN_Permohonan a " &
-                "INNER JOIN LESEN_Pemohon b ON b.Pemohon_ID=a.Permohonan_PemohonID " &
-                "LEFT JOIN TBL_USERS c ON a.TandatanganKelulusanId=c.Users_Id " &
-                "LEFT JOIN TBL_LOOKUPS d ON d.id=a.AnjingJenisPremis " &
-                "LEFT JOIN LESEN_PermohonanSurat e ON e.Permohonan_ID=a.Permohonan_ID " &
-                "INNER JOIN LESEN_JenisLesen f ON f.JenisLesen_ID=a.JenisLesen_ID WHERE a.Permohonan_ID=" & permohonanID & " ORDER BY P1, P2, P3"
-
-                ReportVar = jenisLesenDesc(1)
-
-            End If
-
-
+            ReportVar = "suratkelulusan_v2"
 
             Dim pobjData(1, 1)
             Dim lStrReportName = ReportVar + ".rpt"
-
-            'Dim sessionActiveMonthYearID As String = GlobalClass.getIDActiveMonthByEstateID(Session.Item("sessionEstateCode"), DirectCast(FormView1.FindControl("cmbYear"), DropDownList).SelectedValue, DirectCast(FormView1.FindControl("cmbMonth"), DropDownList).SelectedValue)
 
             pobjData(0, 0) = "paraSQL" : pobjData(0, 1) = sql
             pobjData(1, 0) = "isDigitalSign" : pobjData(1, 1) = isPDF
@@ -1449,8 +1467,11 @@ Partial Class MasterMenu
                 Session.Item("reportPrintType") = "pdf"
             End If
 
-
             Dim reportUrl As String = ResolveUrl("~/ReportViewer.aspx?name=" & ReportVar)
+
+            If totalid > 0 Then
+                reportUrl = ResolveUrl("~/ReportViewer1.aspx?name=" & ReportVar)
+            End If
 
             ScriptManager.RegisterClientScriptBlock(Me.Page, Me.[GetType](), ReportVar,
                 "window.open('" & reportUrl & "', '_blank', '');", True)
