@@ -1158,6 +1158,7 @@
         SELECT *,
         (SELECT COUNT(*) FROM LESEN_SepandukSemakanIK x where x.SemakanIK_PermohonanID = a.Permohonan_ID ) as cntSemakanIK
         FROM LESEN_Permohonan a
+        
         WHERE a.Permohonan_ID = @Permohonan_ID">
         <SelectParameters>
             <asp:ControlParameter ControlID="GridViewCarian" Name="Permohonan_ID" PropertyName="SelectedValue" />
@@ -1165,7 +1166,9 @@
     </asp:SqlDataSource>
 
         <%--# maklumat ringkas (jika rekod dijumpai) #--%>
-        <asp:Panel ID="pnlMaklumatDijumpai" runat="server" Visible="false" CssClass="ru-info-grid">
+        <asp:Panel ID="pnlMaklumatDijumpai" runat="server" Visible="false" >
+
+        <%--maklumat iklan--%>
         <div class="ru-section">
             <div class="ru-section-head">
                 <div class="ru-section-icon">
@@ -1242,6 +1245,135 @@
                 </EmptyDataTemplate>
             </asp:FormView>
         </div>
+
+        <%--maklumat gambar--%>
+        <div class="ru-section">
+            <div class="ru-section-head">
+                <div class="ru-section-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+                </div>
+                <h4 class="ru-section-title">Ilustrasi / Gambar Sepanduk</h4>
+            </div>
+
+            <asp:FormView ID="FormViewGambarSepanduk" runat="server"
+                DataSourceID="SqlDataSourceIklanBerdaftar"
+                DefaultMode="ReadOnly" RenderOuterTable="false">
+                <ItemTemplate>
+                    <div class="ru-gambar-row">
+
+                        <div class="ru-gambar-preview">
+                            <asp:FormView ID="FormViewGambarPreview" runat="server"
+                                DataSourceID="SqlDataSourceGambarPreview"
+                                DefaultMode="ReadOnly" RenderOuterTable="false">
+                                <ItemTemplate>
+                                    <asp:Image ID="imgSepandukPreview" runat="server"
+                                        ImageUrl='<%# Eval("PermohonanFail_FilePath") %>'
+                                        AlternateText="Gambar Sepanduk"
+                                        CssClass="ru-gambar-img" />
+                                </ItemTemplate>
+                                <EmptyDataTemplate>
+                                    <div class="ru-gambar-img-placeholder">Tiada gambar</div>
+                                </EmptyDataTemplate>
+                            </asp:FormView>
+                        </div>
+
+                        <div class="ru-gambar-info">
+                            <div>
+                                <div class="ru-detail-row">
+                                    <div class="ru-detail-icon">
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41L11 3.83A2 2 0 0 0 9.59 3.17L4 3a1 1 0 0 0-1 1l.17 5.59a2 2 0 0 0 .66 1.41l9.58 9.58a2 2 0 0 0 2.83 0l4.35-4.35a2 2 0 0 0 0-2.83z"/><circle cx="7.5" cy="7.5" r="1.5"/></svg>
+                                    </div>
+                                    <div class="ru-detail-text">
+                                        <span class="ru-detail-label">Jenis Iklan</span>
+                                        <span class="ru-detail-colon">:</span>
+                                        <span class="ru-detail-value"><%# Eval("JenisLesenDescList") %></span>
+                                    </div>
+                                </div>
+
+                                <div class="ru-detail-row">
+                                    <div class="ru-detail-icon">
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+                                    </div>
+                                    <div class="ru-detail-text">
+                                        <span class="ru-detail-label">Saiz</span>
+                                        <span class="ru-detail-colon">:</span>
+                                        <span class="ru-detail-value"><%# Eval("UkuranBanting") %></span>
+                                    </div>
+                                </div>
+
+                                <div class="ru-detail-row">
+                                    <div class="ru-detail-icon">
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 2 7l10 5 10-5-10-5Z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+                                    </div>
+                                    <div class="ru-detail-text">
+                                        <span class="ru-detail-label">Bilangan</span>
+                                        <span class="ru-detail-colon">:</span>
+                                        <span class="ru-detail-value"><%# Eval("BilBanting") %> unit</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button type="button" class="ru-btn-lihat-gambar" onclick="ruBukaModalGambar()">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+                                Lihat Semua Gambar
+                            </button>
+                        </div>
+
+                    </div>
+                </ItemTemplate>
+                <EmptyDataTemplate>
+                    <p class="ru-list-empty-sub">Tiada gambar sepanduk dijumpai.</p>
+                </EmptyDataTemplate>
+            </asp:FormView>
+
+
+            <asp:SqlDataSource ID="SqlDataSourceGambarPreview" runat="server"
+                ConnectionString="<%$ ConnectionStrings:webcon_ConnectionStr %>"
+                SelectCommand="
+                SELECT TOP 1 a.* FROM LESEN_PermohonanFail a
+                INNER JOIN LESEN_Permohonan b ON a.PermohonanFail_PermohonanID = b.Permohonan_ID
+                WHERE a.PermohonanFail_JenisLampiran = 'U' AND a.PermohonanFail_PermohonanID = @Permohonan_ID
+                ORDER BY a.PermohonanFail_ID">
+                <SelectParameters>
+                    <asp:ControlParameter ControlID="GridViewCarian" Name="Permohonan_ID" PropertyName="SelectedValue" />
+                </SelectParameters>
+            </asp:SqlDataSource>
+
+            <asp:SqlDataSource ID="SqlDataSourceGambarSepanduk" runat="server"
+                ConnectionString="<%$ ConnectionStrings:webcon_ConnectionStr %>"
+                SelectCommand="
+                SELECT a.*, b.StatusID FROM LESEN_PermohonanFail a
+                INNER JOIN LESEN_Permohonan b ON a.PermohonanFail_PermohonanID = b.Permohonan_ID
+                WHERE a.PermohonanFail_JenisLampiran = 'U' 
+                AND PermohonanFail_ContentType like '%image%'
+                AND a.PermohonanFail_PermohonanID = @Permohonan_ID">
+                <SelectParameters>
+                    <asp:ControlParameter ControlID="GridViewCarian" Name="Permohonan_ID" PropertyName="SelectedValue" />
+                </SelectParameters>
+            </asp:SqlDataSource>
+
+        </div>
+
+        <div id="ruModalGambar" class="ru-modal-overlay">
+            <div class="ru-modal-content">
+                <button type="button" class="ru-modal-close" onclick="ruTutupModalGambar()">&times;</button>
+                <button type="button" class="ru-modal-arrow ru-modal-arrow-left" onclick="ruGambarSebelum()">&#10094;</button>
+
+                <div class="ru-modal-slides">
+                    <asp:Repeater ID="RepeaterGambarSepanduk" runat="server" DataSourceID="SqlDataSourceGambarSepanduk">
+                        <ItemTemplate>
+                            <div class="ru-modal-slide">
+                                <img src='<%# Eval("PermohonanFail_FilePath") %>' alt="Gambar Sepanduk" />
+                            </div>
+                        </ItemTemplate>
+                    </asp:Repeater>
+                </div>
+
+                <button type="button" class="ru-modal-arrow ru-modal-arrow-right" onclick="ruGambarSeterusnya()">&#10095;</button>
+                <div class="ru-modal-counter"><span id="ruModalCounterText">1 / 1</span></div>
+            </div>
+        </div>
+
         </asp:Panel>
 
         <%--# Alamat lokasi pemeriksaan #--%>
@@ -1902,5 +2034,42 @@
             sp_applyStatusBadges();
         }
     </script>
+
+<script>
+    var ruSlideIndex = 0;
+
+    function ruBukaModalGambar() {
+        document.getElementById('ruModalGambar').classList.add('is-open');
+        ruSlideIndex = 0;
+        ruPaparSlide();
+    }
+
+    function ruTutupModalGambar() {
+        document.getElementById('ruModalGambar').classList.remove('is-open');
+    }
+
+    function ruGambarSeterusnya() {
+        var slides = document.querySelectorAll('#ruModalGambar .ru-modal-slide');
+        if (slides.length === 0) return;
+        ruSlideIndex = (ruSlideIndex + 1) % slides.length;
+        ruPaparSlide();
+    }
+
+    function ruGambarSebelum() {
+        var slides = document.querySelectorAll('#ruModalGambar .ru-modal-slide');
+        if (slides.length === 0) return;
+        ruSlideIndex = (ruSlideIndex - 1 + slides.length) % slides.length;
+        ruPaparSlide();
+    }
+
+    function ruPaparSlide() {
+        var slides = document.querySelectorAll('#ruModalGambar .ru-modal-slide');
+        slides.forEach(function (slide, i) {
+            slide.style.display = (i === ruSlideIndex) ? 'flex' : 'none';
+        });
+        var counter = document.getElementById('ruModalCounterText');
+        if (counter) counter.innerText = (ruSlideIndex + 1) + ' / ' + slides.length;
+    }
+</script>
 
 </asp:Content>
