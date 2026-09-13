@@ -568,6 +568,173 @@
     font-weight: 700;
 }
 
+/* ---------- Ilustrasi / Gambar Sepanduk ---------- */
+.ru-gambar-row {
+    display: flex;
+    gap: 20px;
+    align-items: stretch;
+    flex-wrap: wrap;
+}
+
+.ru-gambar-preview {
+    flex: 2 1 320px;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #e9edf3;
+    min-height: 180px;
+}
+
+.ru-gambar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.ru-gambar-info {
+    flex: 1 1 220px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 16px;
+    background: var(--ru-blue-50);
+    border: 1px solid var(--ru-border);
+    border-radius: 12px;
+    padding: 18px;
+}
+
+    .ru-gambar-info .ru-detail-row {
+        margin-bottom: 14px;
+    }
+
+        .ru-gambar-info .ru-detail-row:last-child {
+            margin-bottom: 0;
+        }
+
+    .ru-gambar-info .ru-detail-label {
+        flex-basis: auto;
+    }
+
+.ru-btn-lihat-gambar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: #fff;
+    border: 1px solid var(--ru-blue-600);
+    color: var(--ru-blue-700);
+    font-weight: 600;
+    font-size: 13px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    text-decoration: none;
+}
+
+    .ru-btn-lihat-gambar:hover {
+        background: var(--ru-blue-50);
+    }
+
+/* ---------- Modal / carousel gambar penuh ---------- */
+.ru-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(10,20,35,.85);
+    z-index: 1000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+    .ru-modal-overlay.is-open {
+        display: flex;
+    }
+
+.ru-modal-content {
+    position: relative;
+    width: 100%;
+    max-width: 900px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ru-modal-slides {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ru-modal-slide {
+    display: none;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+}
+
+    .ru-modal-slide img {
+        max-width: 100%;
+        max-height: 80vh;
+        border-radius: 10px;
+        object-fit: contain;
+        display: block;
+    }
+
+.ru-modal-close {
+    position: absolute;
+    top: -44px;
+    right: 0;
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 30px;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.ru-modal-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255,255,255,.15);
+    border: none;
+    color: #fff;
+    font-size: 20px;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+    .ru-modal-arrow:hover {
+        background: rgba(255,255,255,.28);
+    }
+
+.ru-modal-arrow-left {
+    left: -8px;
+}
+
+.ru-modal-arrow-right {
+    right: -8px;
+}
+
+.ru-modal-counter {
+    position: absolute;
+    bottom: -38px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    background: rgba(255,255,255,.12);
+    padding: 4px 12px;
+    border-radius: 999px;
+}
+
 /* ---------- Responsive ---------- */
 @media (max-width:600px) {
     .ru-header {
@@ -647,5 +814,23 @@
 
     .ru-detail-colon {
         display: none;
+    }
+
+    .ru-modal-arrow-left {
+        left: 4px;
+    }
+
+    .ru-modal-arrow-right {
+        right: 4px;
+    }
+
+    .ru-modal-close {
+        top: 4px;
+        right: 4px;
+        z-index: 2;
+    }
+
+    .ru-modal-counter {
+        bottom: 8px;
     }
 }
