@@ -1363,7 +1363,7 @@
                     <asp:Repeater ID="RepeaterGambarSepanduk" runat="server" DataSourceID="SqlDataSourceGambarSepanduk">
                         <ItemTemplate>
                             <div class="ru-modal-slide">
-                                <img src='<%# Eval("PermohonanFail_FilePath") %>' alt="Gambar Sepanduk" />
+                                <img src='<%# ResolveUrl(Eval("PermohonanFail_FilePath").ToString()) %>' alt="Gambar Sepanduk" />
                             </div>
                         </ItemTemplate>
                     </asp:Repeater>
