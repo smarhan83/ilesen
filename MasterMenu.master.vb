@@ -1299,12 +1299,13 @@ Partial Class MasterMenu
         Dim rowIndex As Integer = CInt(btn.CommandArgument)
 
         Dim Permohonan_ID As String = GridViewReport.DataKeys(rowIndex)("Permohonan_ID").ToString()
-        Dim JenisLesenID As Integer = CInt(GridViewReport.DataKeys(rowIndex)("JenisLesen_ID"))
+
+        Dim res As Boolean = UpdateTotalViews(Permohonan_ID)
 
         If GetIsSuratFail(Permohonan_ID) Then
             ViewSuratKelulusanFail(Permohonan_ID)
         Else
-            ViewSuratKelulusanAuto(Permohonan_ID, JenisLesenID, True)
+            ViewSuratKelulusanAuto(Permohonan_ID, True)
         End If
     End Sub
 
@@ -1360,6 +1361,44 @@ Partial Class MasterMenu
 
     End Function
 
+    Private Function UpdateTotalViews(permohonanID As String) As Boolean
+
+        Try
+
+            Using myConnection As New SqlConnection(ConfigurationManager.ConnectionStrings("webcon_ConnectionStr").ConnectionString)
+
+                Dim SQL As String = "UPDATE LESEN_Permohonan SET totalViews = totalViews + 1 
+                WHERE Permohonan_ID = @Permohonan_ID"
+
+
+                Dim myCommand As New SqlCommand(SQL, myConnection)
+
+                myCommand.Parameters.AddWithValue("@Permohonan_ID", permohonanID)
+
+                myConnection.Open()
+
+                Dim recordset As Integer = myCommand.ExecuteNonQuery()
+
+                If recordset > 0 Then
+                    Return True
+
+                Else
+                    Return False
+
+                End If
+
+                myConnection.Close()
+
+            End Using
+
+        Catch ex As Exception
+            'Return False
+        End Try
+
+        Return False
+
+    End Function
+
     Private Sub ViewSuratKelulusanFail(permohonanID As String)
 
         Dim filepath As String = ""
@@ -1394,7 +1433,7 @@ Partial Class MasterMenu
 
     End Sub
 
-    Private Sub ViewSuratKelulusanAuto(permohonanID As String, jenislesenID As Integer, isPDF As Boolean)
+    Private Sub ViewSuratKelulusanAuto(permohonanID As String, isPDF As Boolean)
         'Dim cb As CheckBox = DirectCast(FormView1.FindControl("CB_IsDigitalSign"), CheckBox)
         Dim totalid As Integer = 0
 

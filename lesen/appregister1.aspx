@@ -697,6 +697,19 @@
 
                                     <div class="row">
 
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label>Jenis</label>
+                                                <asp:DropDownList ID="DDL_JenisBanting" Text='<%# Bind("JenisBanting") %>' runat="server" 
+                                                    CssClass="form-control select2">
+                                                    <asp:ListItem Value="">-- Sila Pilih --</asp:ListItem>
+                                                    <asp:ListItem Value="Banting">Banting</asp:ListItem>
+                                                    <asp:ListItem Value="Sepanduk">Sepanduk</asp:ListItem>
+                                                    <asp:ListItem Value="Sepanduk Besar">Sepanduk Besar</asp:ListItem>
+                                                </asp:DropDownList>
+                                            </div>
+                                        </div>
+
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label>Nama Syarikat Kontraktor Pemasang Iklan</label>
@@ -706,7 +719,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-md-6">
+                                        <div class="col-md-3">
                                             <div class="form-group">
                                                 <label>No Telefon Syarikat Kontraktor</label>
                                                 <asp:TextBox ID="TB_NoTelKontraktor" runat="server"
@@ -858,8 +871,21 @@
                                             </div>
                                         </div>
 
+                                    </div>
 
-
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label>Bilangan Pembaharuan</label>
+                                                <asp:DropDownList ID="DDL_RenewBanting" Text='<%# Bind("RenewBanting") %>' runat="server" 
+                                                    CssClass="form-control select2">
+                                                    <asp:ListItem Value="">-- Sila Pilih --</asp:ListItem>
+                                                    <asp:ListItem Value="1">Kali Pertama</asp:ListItem>
+                                                    <asp:ListItem Value="2">Kali Kedua</asp:ListItem>
+                                                    <asp:ListItem Value="3">Kali Ketiga</asp:ListItem>
+                                                </asp:DropDownList>
+                                            </div>
+                                        </div>
                                     </div>
 
                                 </asp:Panel>
@@ -1909,6 +1935,20 @@
                             <asp:Panel ID="pnlesen6" runat="server" Visible="False">
 
                                 <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Kategori</label>
+                                            <asp:DropDownList ID="DDL_JenisBanting" Text='<%# Bind("JenisBanting") %>' runat="server" 
+                                                CssClass="form-control select2">
+                                                <asp:ListItem Value="">-- Sila Pilih --</asp:ListItem>
+                                                <asp:ListItem Value="Banting">Banting</asp:ListItem>
+                                                <asp:ListItem Value="Sepanduk">Sepanduk</asp:ListItem>
+                                                <asp:ListItem Value="Sepanduk Besar">Sepanduk Besar</asp:ListItem>
+                                            </asp:DropDownList>
+                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator42" runat="server" CssClass="cssRequiredField"
+                                                ControlToValidate="DDL_JenisBanting" ErrorMessage="Sila Pilih" ForeColor="Red" ValidationGroup="insertForm" Display="Dynamic"></asp:RequiredFieldValidator>
+                                        </div>
+                                    </div>
 
                                     <div class="col-md-6">
                                         <div class="form-group">
@@ -1919,7 +1959,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-md-6">
+                                    <div class="col-md-3">
                                         <div class="form-group">
                                             <label>No Telefon Syarikat Kontraktor</label>
                                             <asp:TextBox ID="TB_NoTelKontraktor" runat="server"
@@ -2087,6 +2127,23 @@
                                         </div>
                                     </div>
 
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Bilangan Pembaharuan</label>
+                                            <asp:DropDownList ID="DDL_RenewBanting" Text='<%# Bind("RenewBanting") %>' runat="server" 
+                                                CssClass="form-control select2">
+                                                <asp:ListItem Value="">-- Sila Pilih --</asp:ListItem>
+                                                <asp:ListItem Value="1">Kali Pertama</asp:ListItem>
+                                                <asp:ListItem Value="2">Kali Kedua</asp:ListItem>
+                                                <asp:ListItem Value="3">Kali Ketiga</asp:ListItem>
+                                            </asp:DropDownList>
+                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator41" runat="server" CssClass="cssRequiredField"
+                                                ControlToValidate="DDL_RenewBanting" ErrorMessage="Sila Pilih" ForeColor="Red" ValidationGroup="insertForm" Display="Dynamic"></asp:RequiredFieldValidator>
+                                        </div>
+                                    </div>
                                 </div>
 
                             </asp:Panel>
@@ -2872,7 +2929,8 @@
                         JenisPerniagaanPasar, JumlahPetak, AnjingAlamat, AnjingJenisPremis, JenisPenjaja, StatusTanahPenjaja, AlamatPenjajaan, JenisPerniagaanPenjaja, MasaPenjaja1, MasaPenjaja2,
                         JenisKenderaanPenjaja, NoKenderaanPenjaja, TarikhBatal, PenganjurEkspo, AlamatPenganjurEkspo, PicEkspo, NoTelEkspo, NamaEkspo, LokasiEkspo, TarikhEkspo1, TarikhEkspo2, MasaEkspo1, MasaEkspo2, 
                         TentatifEkspo, JemputanEkspo, PembersihanEkspo, TarikhKhemahEkspo1, TarikhKhemahEkspo2, 
-                        KontraktorIklan, NoTelKontraktor, UkuranBanting, BilBanting, TarikhBanting1, TarikhBanting2, StatusBanting, NoPengesahanBanting, TarikhPengesahanBanting1, TarikhPengesahanBanting2, NoResitBanting, NoSiriStiker, TarikhBanting3, 
+                        KontraktorIklan, NoTelKontraktor, UkuranBanting, BilBanting, TarikhBanting1, TarikhBanting2, StatusBanting, NoPengesahanBanting, TarikhPengesahanBanting1, TarikhPengesahanBanting2, NoResitBanting, NoSiriStiker, 
+                        TarikhBanting3, RenewBanting, JenisBanting, 
                         Rujukan, NoAkaunCukai, DepositAmount, DepositDate, DepositResitNo, DepositPulangAmount, 
                         Is24jam, IsBatal, JenisBatal, SebabBatalPerm, SebabBatalTanpaPerm, RemarksBatal, TindakanBatal, IsPulang, IsSuratKelulusanFail, IsSuratPembatalanFail, IsSuratPemeriksaanFail, RemarksFail, CreatorID, CreatedDt, LastModID, LastModDt) 
                         VALUES (@JenisLesenDescList, @JenisLesenIdList, @SaizIklanList, @CahayaIklanList, @UnitIklanList, @LokasiList, 
@@ -2881,7 +2939,8 @@
                         @JumlahPetak, @AnjingAlamat, @AnjingJenisPremis, @JenisPenjaja, @StatusTanahPenjaja, @AlamatPenjajaan, @JenisPerniagaanPenjaja, @MasaPenjaja1, @MasaPenjaja2, @JenisKenderaanPenjaja, @NoKenderaanPenjaja,
                         @TarikhBatal, @PenganjurEkspo, @AlamatPenganjurEkspo, @NamaEkspo, @LokasiEkspo, @PicEkspo, @NoTelEkspo, @TarikhEkspo1, @TarikhEkspo2, @MasaEkspo1, @MasaEkspo2, 
                         @TentatifEkspo, @JemputanEkspo, @PembersihanEkspo, @TarikhKhemahEkspo1, @TarikhKhemahEkspo2, 
-                        @KontraktorIklan, @NoTelKontraktor, @UkuranBanting, @BilBanting, @TarikhBanting1, @TarikhBanting2, @StatusBanting, @NoPengesahanBanting, @TarikhPengesahanBanting1, @TarikhPengesahanBanting2, @NoResitBanting, @NoSiriStiker, @TarikhBanting3,
+                        @KontraktorIklan, @NoTelKontraktor, @UkuranBanting, @BilBanting, @TarikhBanting1, @TarikhBanting2, @StatusBanting, @NoPengesahanBanting, @TarikhPengesahanBanting1, @TarikhPengesahanBanting2, @NoResitBanting, @NoSiriStiker, 
+                        @TarikhBanting3, @RenewBanting, @JenisBanting,
                         @Rujukan, @NoAkaunCukai, @DepositAmount, @DepositDate, @DepositResitNo, @DepositPulangAmount, 
                         @Is24jam, @IsBatal, @JenisBatal, @SebabBatalPerm, @SebabBatalTanpaPerm, @RemarksBatal, @TindakanBatal, 0, 0, 0, 0, @RemarksFail, @CreatorId, GETDATE(), @CreatorId, GETDATE()); SELECT @Permohonan_ID = SCOPE_IDENTITY();"
                 SelectCommand="SELECT * FROM LESEN_Permohonan WHERE Permohonan_ID = @Permohonan_ID"
@@ -2895,7 +2954,8 @@
                         TarikhEkspo1 = @TarikhEkspo1, TarikhEkspo2 = @TarikhEkspo2, MasaEkspo1 = @MasaEkspo1, MasaEkspo2 = @MasaEkspo2, TentatifEkspo = @TentatifEkspo, JemputanEkspo = @JemputanEkspo, PembersihanEkspo = @PembersihanEkspo, 
                         TarikhKhemahEkspo1 = @TarikhKhemahEkspo1, TarikhKhemahEkspo2 = @TarikhKhemahEkspo2, 
                         KontraktorIklan = @KontraktorIklan, NoTelKontraktor = @NoTelKontraktor, UkuranBanting = @UkuranBanting, BilBanting = @BilBanting, TarikhBanting1 = @TarikhBanting1, TarikhBanting2 = @TarikhBanting2, StatusBanting = @StatusBanting, 
-                        NoPengesahanBanting = @NoPengesahanBanting, TarikhPengesahanBanting1 = @TarikhPengesahanBanting1, TarikhPengesahanBanting2 = TarikhPengesahanBanting2, NoResitBanting = @NoResitBanting, NoSiriStiker = @NoSiriStiker, TarikhBanting3 = @TarikhBanting3,
+                        NoPengesahanBanting = @NoPengesahanBanting, TarikhPengesahanBanting1 = @TarikhPengesahanBanting1, TarikhPengesahanBanting2 = @TarikhPengesahanBanting2, NoResitBanting = @NoResitBanting, NoSiriStiker = @NoSiriStiker, 
+                        TarikhBanting3 = @TarikhBanting3, RenewBanting = @RenewBanting, JenisBanting = @JenisBanting, 
                         Rujukan = @Rujukan, NoAkaunCukai = @NoAkaunCukai, DepositAmount = @DepositAmount, 
                         DepositDate = @DepositDate, DepositResitNo = @DepositResitNo, DepositPulangAmount = @DepositPulangAmount, Is24jam = @Is24jam, IsBatal = @IsBatal, JenisBatal = @JenisBatal, SebabBatalPerm = @SebabBatalPerm, 
                         SebabBatalTanpaPerm = @SebabBatalTanpaPerm, RemarksBatal = @RemarksBatal, TindakanBatal = @TindakanBatal, RemarksFail = @RemarksFail, LastModId = @LastModId, LastModDt = GETDATE() 
@@ -2964,6 +3024,8 @@
                     <asp:Parameter Name="NoResitBanting"></asp:Parameter>
                     <asp:Parameter Name="NoSiriStiker"></asp:Parameter>
                     <asp:Parameter Name="TarikhBanting3"></asp:Parameter>
+                    <asp:Parameter Name="RenewBanting"></asp:Parameter>
+                    <asp:Parameter Name="JenisBanting"></asp:Parameter>
                     <asp:Parameter Name="Rujukan"></asp:Parameter>
                     <asp:Parameter Name="NoAkaunCukai"></asp:Parameter>
                     <asp:Parameter Name="DepositAmount"></asp:Parameter>
@@ -3048,6 +3110,8 @@
                     <asp:Parameter Name="NoResitBanting"></asp:Parameter>
                     <asp:Parameter Name="NoSiriStiker"></asp:Parameter>
                     <asp:Parameter Name="TarikhBanting3"></asp:Parameter>
+                    <asp:Parameter Name="RenewBanting"></asp:Parameter>
+                    <asp:Parameter Name="JenisBanting"></asp:Parameter>
                     <asp:Parameter Name="Rujukan"></asp:Parameter>
                     <asp:Parameter Name="NoAkaunCukai"></asp:Parameter>
                     <asp:Parameter Name="DepositAmount"></asp:Parameter>

@@ -326,10 +326,17 @@
                                     </div>
                                 </div>
 
-                                <div class="col-md-6">
+                                <div class="col-md-3">
                                     <div class="form-group">
                                         <label>Status</label>
                                         <asp:Label ID="Label5" runat="server" Text='<%# Eval("Description") %>' CssClass="form-control"></asp:Label>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Jumlah Paparan</label>
+                                        <asp:Label ID="Label7" runat="server" Text='<%# Eval("TotalViews") %>' CssClass="form-control"></asp:Label>
                                     </div>
                                 </div>
 
@@ -1359,6 +1366,7 @@
             and g.StatusID > 0  
             and g.IsBatal = 0 
             and g.JenisLesenIdList is not null
+            and g.JenisLesenIdList <> '27'
             ) AS tbl WHERE RepNo = 1 order by TarikhMohon desc, Permohonan_ID desc"
         DeleteCommand="">
         <DeleteParameters>

@@ -148,6 +148,14 @@ Partial Class appregister1
             TabLogBatal.Visible = False
         End If
 
+        For Each item In jidList
+            If item = "27" Then
+                tabMaklumat.Visible = False
+                TabSurat.Visible = False
+                TabJabatanAgensi.Visible = False
+            End If
+        Next
+
         If tabMaklumat.Visible = True Then
             PanelAccessPembetulan(0, True)
 
@@ -771,15 +779,24 @@ Partial Class appregister1
         If myList.Any(Function(x) x.ItemValue = "3") Or
             myList.Any(Function(x) x.ItemValue = "5") Or
             myList.Any(Function(x) x.ItemValue = "25") Or
+            myList.Any(Function(x) x.ItemValue = "27") Or
             (myList.Count > 0 And
             (ddlItems.SelectedValue = "3" Or
             ddlItems.SelectedValue = "5" Or
-            ddlItems.SelectedValue = "25")) Then
+            ddlItems.SelectedValue = "25" Or
+            ddlItems.SelectedValue = "27")) Then
 
             ShowAlert("error", "", "Jenis lesen yang dipilih tidak boleh dicampur.")
             ddlItems.SelectedIndex = 0
 
             Return
+        End If
+
+        If ddlItems.SelectedValue = "27" Then
+
+            TabSurat.Visible = False
+            TabJabatanAgensi.Visible = False
+
         End If
 
         ' Check for duplicates using LINQ
