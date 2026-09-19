@@ -75,7 +75,7 @@ Partial Class laporanpermohonan
 
             ElseIf ddlReport.SelectedValue = "4" Then
                 sql = "SELECT a.Permohonan_ID, a.IsBatal, a.StatusID, a.Is24Jam, a.Rujukan, b.Pemohon_Name, b.Pemohon_MobileNo, ISNULL(a.NamaBaruSyarikat, a.NamaSyarikat) AS NamaSyarikat, 
-            a.KontraktorIklan, a.TarikhBanting1, a.TarikhBanting2, a.LokasiList, a.NoResitBanting, a.NoSiriStiker, a.UkuranBanting, a.BilBanting, 
+            a.KontraktorIklan, a.TarikhBanting1, a.TarikhBanting2, a.LokasiList, a.NoResitBanting, a.NoSiriStiker, a.UkuranBanting, a.BilBanting, a.JenisBanting, 
             a.JenisLesenDescList, a.TarikhMohon 
             
             FROM LESEN_Permohonan a 
