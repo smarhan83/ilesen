@@ -1604,8 +1604,9 @@
                         </div>
                         <div class="card-footer">
                             <asp:LinkButton runat="server" CssClass="btn btn-warning" ValidationGroup="updateForm" Text="Kemaskini" CommandName="Update" ID="UpdateFormButton" CausesValidation="True" />
-                            <asp:LinkButton runat="server" CssClass="btn btn-warning" Visible='<%# If(Eval("StatusID") = 0, True, False) %>' ValidationGroup="updateForm" Text="Hantar" ID="SubmitApproval" OnCommand="OnClickBtnSubmit" CausesValidation="True" OnClientClick="return confirm('Hantar ke jabatan agensi sekarang?');" />
-                            <asp:LinkButton runat="server" Text="Kembali" ID="BackButton" CausesValidation="False" CssClass-="btn btn-default" OnClick="BackButton_Click" />
+                            <asp:LinkButton runat="server" CssClass="btn btn-warning" Visible='<%# If(Eval("StatusID") = 0, True, False) %>' ValidationGroup="updateForm" Text="Hantar" ID="SubmitApproval" OnCommand="OnClickBtnSubmit" CausesValidation="False" OnClientClick="return confirm('Hantar ke jabatan agensi sekarang?');" />
+                            <asp:LinkButton runat="server" CssClass="btn btn-warning" Visible='<%# If(Eval("StatusID") = 10, True, False) %>' Text="Surat Kelulusan" ID="ViewSuratKelulusan" OnCommand="OnClickSuratKelulusan" CausesValidation="False" />
+                            <asp:LinkButton runat="server" Text="Kembali" ID="BackButton" CausesValidation="False" CssClass="btn btn-default" OnClick="BackButton_Click" />
                         </div>
                     </div>
                 </EditItemTemplate>

@@ -426,14 +426,15 @@ Partial Class appregister1
                 Dim is24h As Boolean = Convert.ToBoolean(e.Row.DataItem("Is24jam").ToString)
                 Dim isbatal As Boolean = Convert.ToBoolean(e.Row.DataItem("IsBatal").ToString)
 
+                'highlight row if delayed
                 If (((DateTime.Now - dtTmp).TotalHours > 24 And is24h) Or
                     ((DateTime.Now - dtTmp).TotalDays > 14 And is24h = False)) And
                     isbatal = False And e.Row.DataItem("Description").ToString.Contains("Permohonan Lulus") = False And
                     e.Row.DataItem("Description").ToString.Contains("Peraku Tidak Sokong") = False Then
 
-                    Dim clr As Color = Color.FromName("#ff7070")
+                    'Dim clr As Color = Color.FromName("#ff7070")
 
-                    e.Row.BackColor = clr
+                    'e.Row.BackColor = clr
 
                 End If
 
@@ -2835,6 +2836,140 @@ Partial Class appregister1
             TabContainer1.ActiveTabIndex = 5
         End If
 
+    End Sub
+
+    Protected Sub OnClickSuratKelulusan(ByVal sender As Object, ByVal e As CommandEventArgs)
+
+        Dim Permohonan_ID As HiddenField = DirectCast(FormView1.FindControl("HF_PermohonanID"), HiddenField)
+
+        If GetIsSuratFail(Permohonan_ID.Value) Then
+            ViewSuratKelulusanFail(Permohonan_ID.Value)
+        Else
+            ViewSuratKelulusanAuto(Permohonan_ID.Value, True)
+        End If
+
+    End Sub
+
+    Private Sub ViewSuratKelulusanFail(permohonanID As String)
+
+        Dim filepath As String = ""
+
+        Using myConnection As New SqlConnection(ConfigurationManager.ConnectionStrings("webcon_ConnectionStr").ConnectionString)
+
+            myConnection.Open()
+
+            Dim SQL As String = "SELECT PermohonanFail_FilePath FROM LESEN_PermohonanFail WHERE PermohonanFail_PermohonanID = @permohonanID AND PermohonanFail_JenisLampiran = 'SK'"
+
+            Dim myCommandSelect As New SqlCommand(SQL, myConnection)
+            myCommandSelect.Parameters.AddWithValue("@permohonanID", permohonanID)
+
+            Dim myReader As SqlDataReader = myCommandSelect.ExecuteReader
+
+            Try
+                If myReader.Read Then
+
+                    filepath = myReader.Item("PermohonanFail_FilePath")
+                    filepath = filepath.Remove(0, 1)
+                    ScriptManager.RegisterClientScriptBlock(Me.Page, Me.[GetType](), "", "window.open('.." + filepath + "', '_blank', '');", True)
+                End If
+
+            Catch ex As Exception
+                MessageBox(ex.Message, Me.Page)
+            End Try
+
+            myReader.Close()
+            myConnection.Close()
+
+        End Using
+
+    End Sub
+
+    Private Sub ViewSuratKelulusanAuto(permohonanID As String, isPDF As Boolean)
+        'Dim cb As CheckBox = DirectCast(FormView1.FindControl("CB_IsDigitalSign"), CheckBox)
+        Dim totalid As Integer = 0
+
+        'To check if lampiran larangan merokok is needed
+        Using myConnection As New SqlConnection(ConfigurationManager.ConnectionStrings("webcon_ConnectionStr").ConnectionString)
+
+            myConnection.Open()
+
+            Dim sql1 As String = "SELECT COUNT(PSID) AS TotalID FROM LESEN_PermohonanSurat WHERE Permohonan_ID = @permohonanID 
+            AND JenisReport LIKE 'SK%' AND IsiKandungan like '%merokok%' "
+
+            Dim myCommandSelect As New SqlCommand(sql1, myConnection)
+            myCommandSelect.Parameters.AddWithValue("@permohonanID", permohonanID)
+
+            Dim myReader As SqlDataReader = myCommandSelect.ExecuteReader
+
+            Try
+                If myReader.Read Then
+                    totalid = CInt(myReader.Item("TotalID"))
+                End If
+
+            Catch ex As Exception
+                'MessageBox(ex.Message, Me.Page)
+            End Try
+
+            myReader.Close()
+            myConnection.Close()
+
+        End Using
+
+        Dim sql As String = ""
+
+        Try
+
+            sql = "SELECT a.Permohonan_ID, a.TarikhSuratKelulusan, a.CreatedDt, CAST(a.NamaSyarikat AS varchar(200)) AS NamaSyarikat, 
+                a.NoPendaftaran, a.NoAkaun, a.AlamatPremis, a.JenisPerniagaan, a.PemilikBaru, a.AlamatBaru, 
+                a.JenisPerniagaanBaru, a.NamaBaruSyarikat, a.BillboardLokasi, a.LokasiPasar1, a.LokasiPasar2, 
+                a.LokasiPasar3, a.JenisPasar, a.JenisPerniagaanPasar, a.JumlahPetak, a.AnjingAlamat, a.AnjingJenisMohon, 
+                a.AnjingJenisPremis, a.AlamatPenjajaan, a.JenisPerniagaanPenjaja, a.TarikhBatal, a.PenganjurEkspo, 
+                a.NamaEkspo, a.LokasiEkspo, a.NoTelEkspo, a.TarikhEkspo1, a.TarikhEkspo2, a.MasaEkspo1, a.MasaEkspo2, 
+                a.Rujukan, a.NoAkaunCukai, a.IsBatal, a.JenisLesenDescList, a.JenisLesenIdList, a.SaizIklanList, 
+                a.CahayaIklanList, a.UnitIklanList, a.BakaAnjingList, a.AnjingJantanList, a.AnjingBetinaList, 
+                a.AnjingJantanMandulList, a.AnjingBetinaMandulList, 
+                b.Pemohon_Name, b.Pemohon_Address, b.Pemohon_ICNo, b.Pemohon_MobileNo, b.Pemohon_TelNo, 
+                c.Users_Fullname, c.Users_Signature, d.P1, d.P2, d.P3, d.IsiKandungan 
+                FROM LESEN_Permohonan a 
+                INNER JOIN LESEN_Pemohon b ON b.Pemohon_ID=a.Permohonan_PemohonID 
+                LEFT JOIN TBL_USERS c ON a.TandatanganKelulusanId=c.Users_Id 
+                LEFT JOIN LESEN_PermohonanSurat d ON d.Permohonan_ID=a.Permohonan_ID AND d.JenisReport LIKE 'SK%' 
+                WHERE a.Permohonan_ID=@permohonanID AND a.IsPublish=1 ORDER BY d.P1, d.P2, d.P3"
+
+            sql = sql.Replace("@permohonanID", permohonanID)
+
+            Dim ReportVar As String
+
+            ReportVar = "suratkelulusan_v2"
+
+            Dim pobjData(1, 1)
+            Dim lStrReportName = ReportVar + ".rpt"
+
+            pobjData(0, 0) = "paraSQL" : pobjData(0, 1) = sql
+            pobjData(1, 0) = "isDigitalSign" : pobjData(1, 1) = isPDF
+
+            Session.Item("ReportName" + ReportVar) = lStrReportName
+            Session.Item("pobjData" + ReportVar) = pobjData
+            Session.Item("pathUrl" + ReportVar) = "~/lesen/report/kelulusan"
+            'MessageBox(Session.Item("pathUrl" + ReportVar), Me)
+
+            If isPDF Then
+                Session.Item("reportPrintType") = "pdf"
+            End If
+
+            Dim reportUrl As String = ResolveUrl("~/ReportViewer.aspx?name=" & ReportVar)
+
+            If totalid > 0 Then
+                reportUrl = ResolveUrl("~/ReportViewer1.aspx?name=" & ReportVar)
+            End If
+
+            ScriptManager.RegisterClientScriptBlock(Me.Page, Me.[GetType](), ReportVar,
+                "window.open('" & reportUrl & "', '_blank', '');", True)
+
+            'ScriptManager.RegisterClientScriptBlock(Me.Page, Me.[GetType](), ReportVar, "window.open('~/ReportViewer.aspx?name=" + ReportVar + "', '_blank', '');", True)
+        Catch ex As Exception
+            MessageBox(ex.Message, Me.Page)
+        End Try
     End Sub
 
     Private Function reviewSurat(checked As Boolean) As Boolean
