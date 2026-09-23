@@ -361,6 +361,53 @@
             color: #6f7786;
         }
     </style>
+
+    <style>
+        .qr-box {
+            width: 225px;
+            height: 90px;
+            border: 1px solid #d5d5d5;
+            background-color: #fff;
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            text-decoration: none !important;
+            color: inherit !important;
+            border-radius: 2px;
+        }
+
+        .qr-box:hover {
+            background-color: #f8f8f8;
+        }
+
+        .qr-icon {
+            width: 75px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .qr-icon i {
+            font-size: 65px;
+            line-height: 1;
+        }
+
+        .qr-text {
+            padding-left: 8px;
+        }
+
+        .qr-title {
+            font-weight: 600;
+            font-size: 13px;
+            margin-bottom: 5px;
+        }
+
+        .qr-description {
+            font-size: 11px;
+            line-height: 1.4;
+            color: #555;
+        }
+    </style>
 </asp:Content>
 
 <asp:Content ID="Content3" ContentPlaceHolderID="MainContent" runat="Server">
@@ -447,13 +494,7 @@
 
                                     </div>
 
-                                    <div class="col-md-6">
-                                        <asp:LinkButton runat="server" ID="btnQrCode" CssClass="btn btn-default btn-sm rounded-circle" 
-                                            OnClick="btnQrCode_Click" ToolTip="Print QR Code" 
-                                            Style="width: 34px; height: 34px; display: inline-flex; align-items: center; justify-content: center; padding: 0;">
-                                            <i class="bi bi-qr-code"></i>
-                                        </asp:LinkButton>
-                                    </div>
+
                                 </div>
 
                                 
@@ -469,12 +510,35 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-md-6">
-                                        <asp:LinkButton runat="server" ID="LinkButton8" CssClass="btn btn-default btn-sm rounded-circle" 
-                                            OnClick="btnQrCode_Click" ToolTip="Print QR Code" 
-                                            Style="width: 34px; height: 34px; display: inline-flex; align-items: center; justify-content: center; padding: 0;">
-                                            <i class="bi bi-qr-code"></i>
-                                        </asp:LinkButton>
+                                <!-- QR Code -->
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label>&nbsp;</label>
+
+                                            <asp:LinkButton
+                                                runat="server"
+                                                ID="LinkButton7"
+                                                CssClass="qr-box"
+                                                OnClick="btnQrCode_Click"
+                                                ToolTip="Print QR Code">
+
+                                                <div class="qr-icon">
+                                                    <i class="bi bi-qr-code"></i>
+                                                </div>
+
+                                                <div class="qr-text">
+                                                    <div class="qr-title">
+                                                        Kod QR Permohonan
+                                                    </div>
+
+                                                    <div class="qr-description">
+                                                        Imbas untuk melihat<br />
+                                                        butiran permohonan
+                                                    </div>
+                                                </div>
+
+                                            </asp:LinkButton>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -1657,13 +1721,7 @@
 
                                 </div>
 
-                                <div class="col-md-6">
-                                    <asp:LinkButton runat="server" ID="btnQrCode" CssClass="btn btn-default btn-sm rounded-circle" 
-                                        OnClick="btnQrCode_Click" ToolTip="Print QR Code" 
-                                        Style="width: 34px; height: 34px; display: inline-flex; align-items: center; justify-content: center; padding: 0;">
-                                        <i class="bi bi-qr-code"></i>
-                                    </asp:LinkButton>
-                                </div>
+
                             </div>
 
                             <asp:Panel runat="server" ID="pnlpemohon" Visible="false">
@@ -1676,13 +1734,37 @@
                                         </div>
                                     </div>
 
-                                <div class="col-md-6">
-                                    <asp:LinkButton runat="server" ID="LinkButton7" CssClass="btn btn-default btn-sm rounded-circle" 
-                                        OnClick="btnQrCode_Click" ToolTip="Print QR Code" 
-                                        Style="width: 34px; height: 34px; display: inline-flex; align-items: center; justify-content: center; padding: 0;">
-                                        <i class="bi bi-qr-code"></i>
-                                    </asp:LinkButton>
-                                </div>
+                                <!-- QR Code -->
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label>&nbsp;</label>
+
+                                            <asp:LinkButton
+                                                runat="server"
+                                                ID="LinkButton7"
+                                                CssClass="qr-box"
+                                                OnClick="btnQrCode_Click"
+                                                ToolTip="Print QR Code">
+
+                                                <div class="qr-icon">
+                                                    <i class="bi bi-qr-code"></i>
+                                                </div>
+
+                                                <div class="qr-text">
+                                                    <div class="qr-title">
+                                                        Kod QR Permohonan
+                                                    </div>
+
+                                                    <div class="qr-description">
+                                                        Imbas untuk melihat<br />
+                                                        butiran permohonan
+                                                    </div>
+                                                </div>
+
+                                            </asp:LinkButton>
+                                        </div>
+                                    </div>
+
                                 </div>
 
                                 <div class="row">
