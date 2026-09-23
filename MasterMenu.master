@@ -1161,7 +1161,7 @@ h1{
                                             </a>
                                         </ItemTemplate>
                                     </asp:TemplateField>
-                                    <asp:BoundField HeaderText="Jenis Lesen" DataField="JenisLesen_Description" />
+                                    <asp:BoundField HeaderText="Jenis Lesen" DataField="JenisLesenDescList" />
                                     <asp:BoundField HeaderText="Tarikh Mohon"
                                         DataField="TarikhMohon"
                                         DataFormatString="{0:dd/MM/yyyy}"
@@ -1205,9 +1205,8 @@ h1{
                                             WHEN g.StatusID IN (6,9) THEN 'Ditolak'
                                             ELSE 'Dalam Semakan'
                                         END AS StatusDesc,
-                                    '' AS UserType, a.*, d.JenisLesen_Description, g.Rujukan, g.IsSuratKelulusanFail, g.StatusID, g.IsPublish, g.Is24jam, f.Pemohon_Name, h.CreatedDt FROM 
+                                    '' AS UserType, a.*, g.JenisLesenDescList, g.Rujukan, g.IsSuratKelulusanFail, g.StatusID, g.IsPublish, g.Is24jam, f.Pemohon_Name, h.CreatedDt FROM 
                                     v_LESEN_ApprovalList_Curr a
-                                    inner join LESEN_JenisLesen d on d.JenisLesen_ID = a.JenisLesen_ID
                                     left join LESEN_JabatanAgensi e on e.JabatanAgensi_ID = a.AgensiID
                                     inner join LESEN_Pemohon f on f.Pemohon_ID = a.Permohonan_PemohonID
                                     inner join LESEN_Permohonan g on g.Permohonan_ID = a.Permohonan_ID 
@@ -1225,7 +1224,7 @@ h1{
                                         '%'+REPLACE(REPLACE(REPLACE(@Pemohon_ICNo, '-', ''), ' ', ''), CHAR(9), '')+'%'
                                     )
 
-                                ) AS tbl WHERE RepNo = 1 order by TarikhMohon desc, Permohonan_ID desc"
+                                ) AS tbl WHERE RepNo = 1 AND JenisLesen_ID = 0 order by TarikhMohon desc, Permohonan_ID desc"
                                 >
 
                                 <SelectParameters>                                  
