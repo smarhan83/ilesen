@@ -153,6 +153,8 @@ Partial Class appregister1
                 tabMaklumat.Visible = False
                 TabSurat.Visible = False
                 TabJabatanAgensi.Visible = False
+                TabLog.Visible = False
+                TabLogBatal.Visible = False
             End If
         Next
 
@@ -2815,6 +2817,11 @@ Partial Class appregister1
 
                 ' 2. Execute UPDATE using ExecuteNonQuery only
                 Dim Sql = "UPDATE LESEN_Permohonan SET StatusID = 1 WHERE StatusID = 0 AND Permohonan_ID = @PermohonanID"
+
+                If ddl.Value = "27" Then
+                    Sql = "UPDATE LESEN_Permohonan SET StatusID = 10 WHERE StatusID = 0 AND Permohonan_ID = @PermohonanID"
+                End If
+
                 Dim result As Integer
                 Using myCommand As New SqlCommand(Sql, myConnection)
                     myCommand.Parameters.AddWithValue("@PermohonanID", hfid.Value)
