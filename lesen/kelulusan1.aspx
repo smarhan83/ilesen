@@ -3588,8 +3588,11 @@ ORDER BY
                                                     <div class="agensi-ulasan-header">
                                                         <span class="agensi-ulasan-name" id="lblAgensiDesc" runat="server"><%# Eval("JabatanAgensi_Description") %></span>
 
+                                                        <%--<asp:LinkButton ID="lbLihatSurat" runat="server" CausesValidation="False" Text="Lihat Surat" CssClass="btn-lihat-surat"
+                                                            Visible='<%# If(Eval("JabatanAgensi_Type") = "J", True, False) %>' OnClick="lbLihatSurat_Click"></asp:LinkButton>--%>
                                                         <asp:LinkButton ID="lbLihatSurat" runat="server" CausesValidation="False" Text="Lihat Surat" CssClass="btn-lihat-surat"
-                                                            Visible='<%# If(Eval("JabatanAgensi_Type") = "J", True, False) %>' OnClick="lbLihatSurat_Click"></asp:LinkButton>
+                                                        Visible='<%# If(Eval("JabatanAgensi_Type") = "J" AndAlso CInt(Eval("currStatusPengesah")) <> -1,
+                                                                    True, False) %>' OnClick="lbLihatSurat_Click"></asp:LinkButton>
                                                     </div>
 
                                                     <div class="agensi-pengesah-row">
