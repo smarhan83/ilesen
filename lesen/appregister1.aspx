@@ -2976,7 +2976,7 @@
                         </div>
                         <div class="card-footer">
                             <asp:LinkButton runat="server" CssClass="btn btn-primary" ValidationGroup="insertForm" Text="Simpan" CommandName="Insert" ID="LinkButton1" CausesValidation="True" />
-                            &nbsp;<asp:LinkButton runat="server" Text="Kembali" ID="BackButton" CausesValidation="False" CssClass-="btn btn-default" OnClick="BackButton_Click" />
+                            &nbsp;<asp:LinkButton runat="server" Text="Kembali" ID="BackButton" CausesValidation="False" CssClass="btn btn-default" OnClick="BackButton_Click" />
                         </div>
                     </div>
                 </InsertItemTemplate>
