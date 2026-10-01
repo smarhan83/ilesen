@@ -2833,8 +2833,9 @@ ORDER BY
 
     <asp:SqlDataSource ID="SqlDataSourceGrid" runat="server"
         ConnectionString="<%$ ConnectionStrings:webcon_ConnectionStr %>"
-        SelectCommand="SELECT g.NamaSyarikat,a.*,d.*,e.*,f.*, g.IsSuratPemeriksaanFail,g.IsSuratPemeriksaanFail,ISNULL(g.AlamatBaru,ISNULL(g.AlamatPremis,ISNULL(g.AlamatPenjajaan,ISNULL(g.AnjingAlamat,isnull(g.LokasiPasar1,ISNULL(g.LokasiPasar2,ISNULL(g.LokasiPasar3,''))))))) as AlamatPremis, isnull(h.IsPenilaian,0) as IsPenilaianStatus 
-            g.JenisLesenDescList, g.JenisLesenIdList FROM 
+        SelectCommand="SELECT g.NamaSyarikat,a.*,d.*,e.*,f.*,g.IsSuratPemeriksaanFail,
+            ISNULL(g.AlamatBaru,ISNULL(g.AlamatPremis,ISNULL(g.AlamatPenjajaan,ISNULL(g.AnjingAlamat,isnull(g.LokasiPasar1,ISNULL(g.LokasiPasar2,ISNULL(g.LokasiPasar3,''))))))) as AlamatPremis, 
+            ISNULL(h.IsPenilaian,0) as IsPenilaianStatus, g.JenisLesenDescList, g.JenisLesenIdList FROM 
             v_LESEN_ApprovalListBatal_Curr a
             inner join LESEN_JenisLesen d on d.JenisLesen_ID = a.JenisLesen_ID
             left join LESEN_JabatanAgensi e on e.JabatanAgensi_ID = a.AgensiID
@@ -2882,7 +2883,8 @@ ORDER BY
 			and case when @isReadOnly = 1 and @isPenyedia = 1 then case when a.ApprStatusID IN (1,2) then 999 else a.ApprStatusID end else a.ApprStatusID end = a.ApprStatusID
             and year(a.TarikhMohon) = case when @yearValue = 0 then year(a.TarikhMohon) else @yearValue end
             and month(a.TarikhMohon) = case when @monthValue = 0 then month(a.TarikhMohon) else @monthValue end		
-			and a.ApprStatusID = case when @statusFilter = -1 then a.ApprStatusID else @statusFilter end			
+			and a.ApprStatusID = case when @statusFilter = -1 then a.ApprStatusID else @statusFilter end 
+            and g.JenisLesenIdList is not null 
             order by a.TarikhMohon"
         DeleteCommand="Update LESEN_JenisLesen set JenisLesen_IsActive = 0 WHERE JenisLesen_ID = @JenisLesen_ID">
         <DeleteParameters>

@@ -384,7 +384,7 @@ Partial Class pembatalan
                     gvTabUlasan.Columns(3).Visible = "false"
                     gvTabUlasan.Columns(5).Visible = "false"
                     gvTabUlasan.Columns(4).Visible = "true"
-					tabSurat.Visible = False
+                    'tabSurat.Visible = False
                 Else
 
                     gvTabUlasan.Columns(4).Visible = "false"
