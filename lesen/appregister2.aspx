@@ -3298,10 +3298,10 @@
                                         d.Description AS Description, 
                                         CASE WHEN a.IsBatal = 0 then a.Is24Jam 
                                         WHEN a.IsBatal = 1 then 1 END 
-										AS IsNotRisk 
+										AS IsNotRisk  
                                         FROM LESEN_Permohonan a 
                                         INNER JOIN LESEN_Pemohon c ON a.Permohonan_PemohonID = c.Pemohon_ID 
-                                        LEFT JOIN ApprovalList e ON e.Permohonan_ID = a.Permohonan_ID
+                                        LEFT JOIN ApprovalStatus d ON a.StatusID = d.ApprStatusID
                                         WHERE 1=1 AND a.JenisLesenIdList is not null AND a.IsRekodLama = 1 
                                         AND a.Permohonan_ID = CASE WHEN @pid = 0 THEN a.Permohonan_ID ELSE @pid END 
                                         AND a.JenisLesenDescList LIKE CASE WHEN @lesenID = '0' THEN a.JenisLesenDescList ELSE '%'+@lesenID+'%' END 
