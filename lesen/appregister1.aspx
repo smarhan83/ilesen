@@ -1,4 +1,4 @@
-﻿<%@ Page MaintainScrollPositionOnPostback="true" Title="" Language="VB" MasterPageFile="~/MasterMenu.master" AutoEventWireup="false" CodeFile="appregister1.aspx.vb" Inherits="appregister1" %>
+<%@ Page MaintainScrollPositionOnPostback="true" Title="" Language="VB" MasterPageFile="~/MasterMenu.master" AutoEventWireup="false" CodeFile="appregister1.aspx.vb" Inherits="appregister1" %>
 
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="asp" %>
 
@@ -406,6 +406,151 @@
             font-size: 11px;
             line-height: 1.4;
             color: #555;
+        }
+
+        /* ===== Status Proses Timeline ===== */
+        .status-proses-card {
+            background: #fff;
+            border: 1px solid #e9ecef;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .status-proses-title {
+            font-size: 9pt;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            color: #2E3192;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+
+        .status-timeline {
+            position: relative;
+            padding-left: 8px;
+        }
+
+        .status-step {
+            position: relative;
+            padding-left: 34px;
+            padding-bottom: 24px;
+        }
+
+        .status-step:last-child {
+            padding-bottom: 0;
+        }
+
+        .status-step::before {
+            content: '';
+            position: absolute;
+            left: 11px;
+            top: 26px;
+            bottom: -2px;
+            width: 2px;
+            background: #e9ecef;
+        }
+
+        .status-step:last-child::before {
+            display: none;
+        }
+
+        .status-step.done::before {
+            background: #28a745;
+        }
+
+        .status-step-icon {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: #fff;
+            background: #dee2e6;
+            z-index: 1;
+        }
+
+        .status-step.done .status-step-icon {
+            background: #28a745;
+        }
+
+        .status-step.current .status-step-icon {
+            background: #2E3192;
+            box-shadow: 0 0 0 4px rgba(46, 49, 146, 0.15);
+        }
+
+        .status-step.pending .status-step-icon {
+            background: #fff;
+            border: 2px solid #dee2e6;
+        }
+
+        .status-step-title {
+            font-weight: 700;
+            font-size: 9.5pt;
+            color: #212529;
+            margin-bottom: 3px;
+        }
+
+        .status-step.pending .status-step-title {
+            color: #adb5bd;
+            font-weight: 600;
+        }
+
+        .status-step-date {
+            font-size: 8pt;
+            color: #6c757d;
+        }
+
+        .status-step.current .status-step-date {
+            color: #2E3192;
+            font-weight: 600;
+        }
+
+        .status-step.pending .status-step-date {
+            color: #adb5bd;
+        }
+
+        .status-step-agensi {
+            font-size: 8pt;
+            color: #6c757d;
+            margin-top: 3px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .status-step-agensi i {
+            font-size: 9pt;
+            color: #adb5bd;
+        }
+
+        .status-step-actionby {
+            font-size: 8pt;
+            font-weight: 600;
+            color: #495057;
+            margin-top: 4px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .status-step-actionby i {
+            font-size: 9pt;
+            color: #2E3192;
+        }
+
+        .status-step.current .status-step-actionby {
+            color: #2E3192;
+        }
+
+        .status-step.pending .status-step-agensi,
+        .status-step.pending .status-step-actionby {
+            color: #adb5bd;
         }
     </style>
 </asp:Content>
@@ -5204,44 +5349,124 @@
                     <ContentTemplate>
                         <div class="card">
                             <div class="card-body">
-                                <div class="row">
-                                    <div class="col-12">
-                                        <asp:GridView ID="GridViewLogKelulusan" HeaderStyle-ForeColor="Black" CssClass="table table-bordered" AllowPaging="True" ShowHeaderWhenEmpty="True" EmptyDataText="No records Found" AllowSorting="True" runat="server" AutoGenerateColumns="False" DataKeyNames="ApprovalID" DataSourceID="SqlDataSourceLogKelulusan">
-                                            <Columns>
-                                                <asp:BoundField DataField="ApprovalDate" HeaderText="Tarikh/Masa Tindakan" SortExpression="ApprovalDate"></asp:BoundField>
-                                                <asp:BoundField DataField="JabatanAgensi_Description" HeaderText="Jabatan Agensi" SortExpression="JabatanAgensi_Description"></asp:BoundField>
-                                                <asp:BoundField DataField="Description" HeaderText="Status" SortExpression="Description"></asp:BoundField>
-                                                <asp:BoundField DataField="ActionBy" HeaderText="Tindakan oleh" SortExpression="ActionBy"></asp:BoundField>
-                                            </Columns>
-                                        </asp:GridView>
-                                        <asp:SqlDataSource runat="server" ID="SqlDataSourceLogKelulusan" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
-                                            SelectCommand="SELECT a.ApprovalDate, a.ApprStatusID, c.JabatanAgensi_Description, b.Description, a.ApprovalID, d.Users_Fullname, 
-                                            (CASE WHEN a.ApprStatusID = 3 then (SELECT STRING_AGG(d1.Users_Fullname, ', ') FROM LESEN_PermohonanAgensiStaff a1 
-                                            INNER JOIN LESEN_PermohonanAgensi b1 ON b1.Permohonan_ID = @Permohonan_ID and b1.PermohonanAgensi_ID = a1.PermohonanAgensi_ID AND b1.JabatanAgensi_ID = a.AgensiID 
-                                            INNER JOIN TBL_USERS d1 ON d1.Users_Id = a1.PermohonanAgensiStaffID_UsersID) WHEN a.ApprStatusID = 1 then f.Users_Fullname ELSE d.Users_Fullname END) AS ActionBy
-                                            FROM LESEN_ApprovalList a 
-                                                inner join ApprovalStatus b on b.ApprStatusID = a.ApprStatusID 
-                                                left join LESEN_JabatanAgensi c on c.JabatanAgensi_ID = a.AgensiID
-                                                left join TBL_USERS d on d.Users_Id = a.ApproverID
-                                                inner join LESEN_Permohonan e on a.Permohonan_ID = e.Permohonan_ID
-												left join TBL_USERS f on f.Users_Name = e.CreatorID
-                                                WHERE a.Permohonan_ID = @Permohonan_ID and ApprovalDate is not null
-												UNION ALL
-												(SELECT TOP(1) a.ApprovalDate,  a.ApprStatusID, b.JabatanAgensi_Description, a.Description, a.ApprovalID, d.Users_Fullname,
-												(CASE WHEN a.ApprStatusID = 3 then (SELECT STRING_AGG(d1.Users_Fullname, ', ') FROM LESEN_PermohonanAgensiStaff a1 
-                                            INNER JOIN LESEN_PermohonanAgensi b1 ON b1.Permohonan_ID = @Permohonan_ID and b1.PermohonanAgensi_ID = a1.PermohonanAgensi_ID AND b1.JabatanAgensi_ID = a.AgensiID 
-                                            INNER JOIN TBL_USERS d1 ON d1.Users_Id = a1.PermohonanAgensiStaffID_UsersID) ELSE d.Users_Fullname END) AS ActionBy 
-                                            FROM v_LESEN_ApprovalList_Curr a 
-                                                left join LESEN_JabatanAgensi b on b.JabatanAgensi_ID = a.AgensiID 
-                                                left join TBL_USERS d on d.Users_Id = a.ApproverID 
-                                                WHERE a.Permohonan_ID = @Permohonan_ID and ApprovalDate is null)">
-                                            <SelectParameters>
-                                                <asp:ControlParameter ControlID="GridView1" PropertyName="SelectedValue" Name="Permohonan_ID"></asp:ControlParameter>
-                                            </SelectParameters>
-                                        </asp:SqlDataSource>
+                                <div class="status-proses-card" style="border: none; padding: 10px 15px; margin-bottom: 0;">
+                                    <div class="status-proses-title">Status Proses</div>
+                                    <div class="status-timeline">
+                                        <asp:Repeater ID="rptStatusProses" runat="server" DataSourceID="SqlDataSourceLogKelulusan">
+                                            <ItemTemplate>
+                                                <div class="status-step <%# Eval("StepStatus") %>">
+                                                    <div class="status-step-icon">
+                                                        <%# If(Eval("StepStatus").ToString() = "done", "<i class=""bi bi-check-lg""></i>",
+                                                             If(Eval("StepStatus").ToString() = "current", "<i class=""bi bi-circle-fill"" style=""font-size:8px;""></i>", "")) %>
+                                                    </div>
+                                                    <div class="status-step-title"><%# Eval("Description") %></div>
+
+                                                    <div class="status-step-agensi" runat="server" visible='<%# Not IsDBNull(Eval("JabatanAgensi_Description")) AndAlso Eval("JabatanAgensi_Description").ToString() <> "" %>'>
+                                                        <i class="bi bi-building"></i> <%# Eval("JabatanAgensi_Description") %>
+                                                    </div>
+
+                                                    <div class="status-step-date">
+                                                        <%# If(Eval("StepStatus").ToString() = "pending", "Belum selesai",
+                                                             If(Eval("StepStatus").ToString() = "current" AndAlso IsDBNull(Eval("ApprovalDate")), "Menunggu tindakan", Eval("ApprovalDate", "{0:dd MMM yyyy hh:mm tt}"))) %>
+                                                    </div>
+
+                                                    <div class="status-step-actionby" runat="server" visible='<%# (Eval("StepStatus").ToString() = "done" OrElse (Eval("StepStatus").ToString() = "current" AndAlso Not IsDBNull(Eval("ApprovalDate")))) AndAlso Not IsDBNull(Eval("ActionBy")) AndAlso Eval("ActionBy").ToString() <> "" %>'>
+                                                        <i class="bi bi-person"></i> <%# Eval("ActionBy") %>
+                                                    </div>
+                                                </div>
+                                            </ItemTemplate>
+                                        </asp:Repeater>
                                     </div>
                                 </div>
-                                <!-- /.tab-1 Gridview -->
+                                <asp:SqlDataSource runat="server" ID="SqlDataSourceLogKelulusan" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
+                                    SelectCommand="WITH PermohonanData AS (
+    SELECT e.Permohonan_ID, e.StatusID, e.IsBatal, e.CreatedDt, e.CreatorID, f.Users_Fullname AS CreatorName,
+           ISNULL('Draf' + 
+           (SELECT CASE WHEN MIN(ISNULL(reviewStatusID,0)) = 0 THEN ' (Belum Disemak)' 
+                        WHEN MIN(ISNULL(reviewStatusID,0)) = 1 THEN ' (Dalam Proses Semakan)'
+                        WHEN MIN(ISNULL(reviewStatusID,0)) = 2 THEN ' (Telah Disemak)'
+                        WHEN MIN(ISNULL(reviewStatusID,0)) = 3 THEN ' (Semakan Semula)' END
+            FROM LESEN_PermohonanAgensi WHERE Permohonan_ID = e.Permohonan_ID),'Draf') AS DrafDesc
+    FROM LESEN_Permohonan e
+    LEFT JOIN TBL_USERS f ON f.Users_Name = e.CreatorID
+    WHERE e.Permohonan_ID = @Permohonan_ID
+),
+StepDef AS (
+    SELECT StepGroup, ApprStatusID, SortOrder, PendingLabel FROM (VALUES
+        (0, 0, 0, 'Draf'),
+        (1, 1, 1, 'Permohonan Baru'),
+        (2, 2, 2, 'Pilih Pegawai Lawatan Tapak Jabatan/Agensi'),
+        (3, 3, 3, 'Lawatan Tapak Jabatan/Agensi'),
+        (4, 4, 4, 'Pengesah Jabatan/Agensi'),
+        (5, 5, 5, 'Pengesah Jabatan Lesen'),
+        (6, 6, 6, 'Menunggu Pengesahan'),
+        (6, 7, 6, 'Menunggu Pengesahan'),
+        (7, 8, 7, 'Peraku Jabatan Lesen'),
+        (8, 9, 8, 'Kelulusan Peraku'),
+        (8, 10, 8, 'Kelulusan Peraku')
+    ) AS x(StepGroup, ApprStatusID, SortOrder, PendingLabel)
+    WHERE (x.ApprStatusID > 0 OR EXISTS (SELECT 1 FROM PermohonanData p WHERE p.StatusID = 0))
+),
+Actual AS (
+    SELECT 
+        d.StepGroup, d.SortOrder, d.ApprStatusID, d.PendingLabel,
+        CASE WHEN d.ApprStatusID = 0 THEN p.CreatedDt ELSE a.ApprovalDate END AS ApprovalDate,
+        a.ApprovalID, 
+        c.JabatanAgensi_Description,
+        CASE WHEN d.ApprStatusID = 0 THEN p.DrafDesc ELSE b.Description END AS Description,
+        CASE 
+            WHEN d.ApprStatusID = 0 THEN ISNULL(p.CreatorName, p.CreatorID)
+            WHEN d.ApprStatusID = 3 THEN 
+                (SELECT STRING_AGG(d1.Users_Fullname, ', ') FROM LESEN_PermohonanAgensiStaff a1 
+                 INNER JOIN LESEN_PermohonanAgensi b1 ON b1.Permohonan_ID = @Permohonan_ID and b1.PermohonanAgensi_ID = a1.PermohonanAgensi_ID
+                 INNER JOIN TBL_USERS d1 ON d1.Users_Id = a1.PermohonanAgensiStaffID_UsersID)
+            WHEN d.ApprStatusID = 1 THEN p.CreatorName
+            ELSE dd.Users_Fullname 
+        END AS ActionBy,
+        p.StatusID AS PermohonanStatusID
+    FROM StepDef d
+    CROSS JOIN PermohonanData p
+    LEFT JOIN ApprovalStatus b ON b.ApprStatusID = d.ApprStatusID
+    LEFT JOIN LESEN_ApprovalList a 
+        ON a.ApprStatusID = d.ApprStatusID 
+        AND a.Permohonan_ID = @Permohonan_ID 
+        AND a.ApprovalDate IS NOT NULL
+    LEFT JOIN LESEN_JabatanAgensi c ON c.JabatanAgensi_ID = a.AgensiID
+    LEFT JOIN TBL_USERS dd ON dd.Users_Id = a.ApproverID
+),
+Picked AS (
+    SELECT *,
+        ROW_NUMBER() OVER (
+            PARTITION BY StepGroup 
+            ORDER BY CASE WHEN ApprovalDate IS NOT NULL AND ApprStatusID > 0 THEN 0 ELSE 1 END, ApprStatusID
+        ) AS rn
+    FROM Actual
+),
+Result AS (
+    SELECT StepGroup, SortOrder, 
+           CASE WHEN ApprovalDate IS NOT NULL THEN ApprStatusID ELSE NULL END AS ApprStatusID,
+           CASE WHEN ApprovalDate IS NOT NULL THEN Description ELSE PendingLabel END AS Description,
+           ApprovalDate, ApprovalID, 
+           JabatanAgensi_Description, ActionBy,
+        CASE 
+            WHEN PermohonanStatusID = 0 AND ApprStatusID = 0 THEN 'current'
+            WHEN PermohonanStatusID = 0 AND ApprStatusID > 0 THEN 'pending'
+            WHEN ApprovalDate IS NOT NULL THEN 'done'
+            WHEN SortOrder = (SELECT MIN(SortOrder) FROM Picked WHERE rn = 1 AND ApprovalDate IS NULL) THEN 'current'
+            ELSE 'pending'
+        END AS StepStatus
+    FROM Picked
+    WHERE rn = 1
+)
+SELECT * FROM Result
+WHERE NOT (StepGroup IN (6, 8) AND StepStatus <> 'done')
+ORDER BY 
+    CASE StepStatus WHEN 'done' THEN 1 WHEN 'current' THEN 2 ELSE 3 END,
+    SortOrder">
+                                    <SelectParameters>
+                                        <asp:ControlParameter ControlID="GridView1" PropertyName="SelectedValue" Name="Permohonan_ID"></asp:ControlParameter>
+                                    </SelectParameters>
+                                </asp:SqlDataSource>
                             </div>
                         </div>
                     </ContentTemplate>
@@ -5252,42 +5477,129 @@
                     <ContentTemplate>
                         <div class="card">
                             <div class="card-body">
-                                <div class="row">
-                                    <div class="col-12">
-                                        <asp:GridView ID="GridViewLogBatal" HeaderStyle-ForeColor="Black" CssClass="table table-bordered" AllowPaging="True" ShowHeaderWhenEmpty="True" EmptyDataText="No records Found" AllowSorting="True" runat="server" AutoGenerateColumns="False" DataKeyNames="ApprovalID" DataSourceID="SqlDataSourceLogBatal">
-                                            <Columns>
-                                                <asp:BoundField DataField="ApprovalDate" HeaderText="Tarikh/Masa Tindakan" SortExpression="ApprovalDate"></asp:BoundField>
-                                                <asp:BoundField DataField="JabatanAgensi_Description" HeaderText="Jabatan Agensi" SortExpression="JabatanAgensi_Description"></asp:BoundField>
-                                                <asp:BoundField DataField="Description" HeaderText="Status" SortExpression="Description"></asp:BoundField>
-                                                <asp:BoundField DataField="ActionBy" HeaderText="Tindakan oleh" SortExpression="ActionBy"></asp:BoundField>
-                                            </Columns>
-                                        </asp:GridView>
-                                        <asp:SqlDataSource runat="server" ID="SqlDataSourceLogBatal" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
-                                            SelectCommand="SELECT a.ApprovalDate, a.ApprStatusID, c.JabatanAgensi_Description, b.Description, a.ApprovalID, d.Users_Fullname, 
-                                            (CASE WHEN a.ApprStatusID = 3 then (SELECT STRING_AGG(d1.Users_Fullname, ', ') FROM LESEN_PermohonanAgensiStaffBatal a1 
-                                            INNER JOIN LESEN_PermohonanAgensiBatal b1 ON b1.Permohonan_ID = @Permohonan_ID and b1.PermohonanAgensi_ID = a1.PermohonanAgensi_ID AND b1.JabatanAgensi_ID = a.AgensiID 
-                                            INNER JOIN TBL_USERS d1 ON d1.Users_Id = a1.PermohonanAgensiStaffID_UsersID) ELSE d.Users_Fullname END) AS ActionBy
-                                            FROM LESEN_ApprovalListBatal a 
-                                                inner join ApprovalStatus b on b.ApprStatusID = a.ApprStatusID 
-                                                left join LESEN_JabatanAgensi c on c.JabatanAgensi_ID = a.AgensiID
-                                                left join TBL_USERS d on d.Users_Id = a.ApproverID
-                                                WHERE a.Permohonan_ID = @Permohonan_ID and ApprovalDate is not null
-												UNION ALL
-												(SELECT TOP(1) a.ApprovalDate,  a.ApprStatusID, b.JabatanAgensi_Description, a.Description, a.ApprovalID, d.Users_Fullname,
-												(CASE WHEN a.ApprStatusID = 3 then (SELECT STRING_AGG(d1.Users_Fullname, ', ') FROM LESEN_PermohonanAgensiStaffBatal a1 
-                                            INNER JOIN LESEN_PermohonanAgensiBatal b1 ON b1.Permohonan_ID = @Permohonan_ID and b1.PermohonanAgensi_ID = a1.PermohonanAgensi_ID AND b1.JabatanAgensi_ID = a.AgensiID 
-                                            INNER JOIN TBL_USERS d1 ON d1.Users_Id = a1.PermohonanAgensiStaffID_UsersID) ELSE d.Users_Fullname END) AS ActionBy 
-                                            FROM v_LESEN_ApprovalListBatal_Curr a 
-                                                left join LESEN_JabatanAgensi b on b.JabatanAgensi_ID = a.AgensiID 
-                                                left join TBL_USERS d on d.Users_Id = a.ApproverID 
-                                                WHERE a.Permohonan_ID = @Permohonan_ID and ApprovalDate is null)">
-                                            <SelectParameters>
-                                                <asp:ControlParameter ControlID="GridView1" PropertyName="SelectedValue" Name="Permohonan_ID"></asp:ControlParameter>
-                                            </SelectParameters>
-                                        </asp:SqlDataSource>
+                                <div class="status-proses-card" style="border: none; padding: 10px 15px; margin-bottom: 0;">
+                                    <div class="status-proses-title">Status Proses</div>
+                                    <div class="status-timeline">
+                                        <asp:Repeater ID="rptStatusProsesBatal" runat="server" DataSourceID="SqlDataSourceLogBatal">
+                                            <ItemTemplate>
+                                                <div class="status-step <%# Eval("StepStatus") %>">
+                                                    <div class="status-step-icon">
+                                                        <%# If(Eval("StepStatus").ToString() = "done", "<i class=""bi bi-check-lg""></i>",
+                                                             If(Eval("StepStatus").ToString() = "current", "<i class=""bi bi-circle-fill"" style=""font-size:8px;""></i>", "")) %>
+                                                    </div>
+                                                    <div class="status-step-title"><%# Eval("Description") %></div>
+
+                                                    <div class="status-step-agensi" runat="server" visible='<%# Not IsDBNull(Eval("JabatanAgensi_Description")) AndAlso Eval("JabatanAgensi_Description").ToString() <> "" %>'>
+                                                        <i class="bi bi-building"></i> <%# Eval("JabatanAgensi_Description") %>
+                                                    </div>
+
+                                                    <div class="status-step-date">
+                                                        <%# If(Eval("StepStatus").ToString() = "pending", "Belum selesai",
+                                                             If(Eval("StepStatus").ToString() = "current" AndAlso IsDBNull(Eval("ApprovalDate")), "Menunggu tindakan", Eval("ApprovalDate", "{0:dd MMM yyyy hh:mm tt}"))) %>
+                                                    </div>
+
+                                                    <div class="status-step-actionby" runat="server" visible='<%# (Eval("StepStatus").ToString() = "done" OrElse (Eval("StepStatus").ToString() = "current" AndAlso Not IsDBNull(Eval("ApprovalDate")))) AndAlso Not IsDBNull(Eval("ActionBy")) AndAlso Eval("ActionBy").ToString() <> "" %>'>
+                                                        <i class="bi bi-person"></i> <%# Eval("ActionBy") %>
+                                                    </div>
+                                                </div>
+                                            </ItemTemplate>
+                                        </asp:Repeater>
                                     </div>
                                 </div>
-                                <!-- /.tab-1 Gridview -->
+                                <asp:SqlDataSource runat="server" ID="SqlDataSourceLogBatal" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
+                                    SelectCommand="WITH PermohonanData AS (
+    SELECT e.Permohonan_ID, e.StatusID, e.IsBatal, e.CreatedDt, e.CreatorID, f.Users_Fullname AS CreatorName,
+           ISNULL('Draf' + 
+           (SELECT CASE WHEN MIN(ISNULL(reviewStatusID,0)) = 0 THEN ' (Belum Disemak)' 
+                        WHEN MIN(ISNULL(reviewStatusID,0)) = 1 THEN ' (Dalam Proses Semakan)'
+                        WHEN MIN(ISNULL(reviewStatusID,0)) = 2 THEN ' (Telah Disemak)'
+                        WHEN MIN(ISNULL(reviewStatusID,0)) = 3 THEN ' (Semakan Semula)' END
+            FROM LESEN_PermohonanAgensiBatal WHERE Permohonan_ID = e.Permohonan_ID),'Draf') AS DrafDesc
+    FROM LESEN_Permohonan e
+    LEFT JOIN TBL_USERS f ON f.Users_Name = e.CreatorID
+    WHERE e.Permohonan_ID = @Permohonan_ID
+),
+StepDef AS (
+    SELECT StepGroup, ApprStatusID, SortOrder, PendingLabel FROM (VALUES
+        (0, 0, 0, 'Draf'),
+        (1, 1, 1, 'Permohonan Baru'),
+        (2, 2, 2, 'Pilih Pegawai Lawatan Tapak Jabatan/Agensi'),
+        (3, 3, 3, 'Lawatan Tapak Jabatan/Agensi'),
+        (4, 4, 4, 'Pengesah Jabatan/Agensi'),
+        (5, 5, 5, 'Pengesah Jabatan Lesen'),
+        (6, 6, 6, 'Menunggu Pengesahan'),
+        (6, 7, 6, 'Menunggu Pengesahan'),
+        (7, 8, 7, 'Peraku Jabatan Lesen'),
+        (8, 9, 8, 'Kelulusan Peraku'),
+        (8, 10, 8, 'Kelulusan Peraku')
+    ) AS x(StepGroup, ApprStatusID, SortOrder, PendingLabel)
+    WHERE (x.ApprStatusID > 0 OR EXISTS (SELECT 1 FROM PermohonanData p WHERE p.StatusID = 0))
+),
+Actual AS (
+    SELECT 
+        d.StepGroup, d.SortOrder, d.ApprStatusID, d.PendingLabel,
+        CASE WHEN d.ApprStatusID = 0 THEN p.CreatedDt ELSE a.ApprovalDate END AS ApprovalDate,
+        a.ApprovalID, 
+        c.JabatanAgensi_Description,
+        CASE WHEN d.ApprStatusID = 0 THEN p.DrafDesc ELSE b.Description END AS Description,
+        CASE 
+            WHEN d.ApprStatusID = 0 THEN ISNULL(p.CreatorName, p.CreatorID)
+            WHEN d.ApprStatusID = 3 THEN 
+                ISNULL(
+                    (SELECT STRING_AGG(d1.Users_Fullname, ', ') FROM LESEN_PermohonanAgensiStaffBatal a1 
+                     INNER JOIN LESEN_PermohonanAgensiBatal b1 ON b1.Permohonan_ID = @Permohonan_ID and b1.PermohonanAgensi_ID = a1.PermohonanAgensi_ID
+                     INNER JOIN TBL_USERS d1 ON d1.Users_Id = a1.PermohonanAgensiStaffID_UsersID),
+                    (SELECT STRING_AGG(d1.Users_Fullname, ', ') FROM LESEN_PermohonanAgensiStaff a1 
+                     INNER JOIN LESEN_PermohonanAgensi b1 ON b1.Permohonan_ID = @Permohonan_ID and b1.PermohonanAgensi_ID = a1.PermohonanAgensi_ID
+                     INNER JOIN TBL_USERS d1 ON d1.Users_Id = a1.PermohonanAgensiStaffID_UsersID)
+                )
+            WHEN d.ApprStatusID = 1 THEN p.CreatorName
+            ELSE dd.Users_Fullname 
+        END AS ActionBy,
+        p.StatusID AS PermohonanStatusID
+    FROM StepDef d
+    CROSS JOIN PermohonanData p
+    LEFT JOIN ApprovalStatusBatal b ON b.ApprStatusID = d.ApprStatusID
+    LEFT JOIN LESEN_ApprovalListBatal a 
+        ON a.ApprStatusID = d.ApprStatusID 
+        AND a.Permohonan_ID = @Permohonan_ID 
+        AND a.ApprovalDate IS NOT NULL
+    LEFT JOIN LESEN_JabatanAgensi c ON c.JabatanAgensi_ID = a.AgensiID
+    LEFT JOIN TBL_USERS dd ON dd.Users_Id = a.ApproverID
+),
+Picked AS (
+    SELECT *,
+        ROW_NUMBER() OVER (
+            PARTITION BY StepGroup 
+            ORDER BY CASE WHEN ApprovalDate IS NOT NULL AND ApprStatusID > 0 THEN 0 ELSE 1 END, ApprStatusID
+        ) AS rn
+    FROM Actual
+),
+Result AS (
+    SELECT StepGroup, SortOrder, 
+           CASE WHEN ApprovalDate IS NOT NULL THEN ApprStatusID ELSE NULL END AS ApprStatusID,
+           CASE WHEN ApprovalDate IS NOT NULL THEN Description ELSE PendingLabel END AS Description,
+           ApprovalDate, ApprovalID, 
+           JabatanAgensi_Description, ActionBy,
+        CASE 
+            WHEN PermohonanStatusID = 0 AND ApprStatusID = 0 THEN 'current'
+            WHEN PermohonanStatusID = 0 AND ApprStatusID > 0 THEN 'pending'
+            WHEN ApprovalDate IS NOT NULL THEN 'done'
+            WHEN SortOrder = (SELECT MIN(SortOrder) FROM Picked WHERE rn = 1 AND ApprovalDate IS NULL) THEN 'current'
+            ELSE 'pending'
+        END AS StepStatus
+    FROM Picked
+    WHERE rn = 1
+)
+SELECT * FROM Result
+WHERE NOT (StepGroup IN (6, 8) AND StepStatus <> 'done')
+ORDER BY 
+    CASE StepStatus WHEN 'done' THEN 1 WHEN 'current' THEN 2 ELSE 3 END,
+    SortOrder">
+                                    <SelectParameters>
+                                        <asp:ControlParameter ControlID="GridView1" PropertyName="SelectedValue" Name="Permohonan_ID"></asp:ControlParameter>
+                                    </SelectParameters>
+                                </asp:SqlDataSource>
                             </div>
                         </div>
                     </ContentTemplate>

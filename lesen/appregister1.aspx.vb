@@ -1,4 +1,4 @@
-﻿Imports System
+Imports System
 Imports System.Data
 Imports System.Data.SqlClient
 Imports System.Drawing
@@ -2242,8 +2242,8 @@ Partial Class appregister1
 
         GridView1.DataBind()
         GridViewMaintenanceTemplate.DataBind()
-        GridViewLogKelulusan.DataBind()
-        GridViewLogBatal.DataBind()
+        rptStatusProses.DataBind()
+        rptStatusProsesBatal.DataBind()
         GridViewJabatanAgensiBatal.DataBind()
         ShowAlert("success", "", "Rekod permohonan " & Is24Jam & " 24 jam telah dikemaskini.")
     End Sub
