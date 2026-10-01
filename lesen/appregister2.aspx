@@ -3298,7 +3298,7 @@
                                         d.Description AS Description, 
                                         CASE WHEN a.IsBatal = 0 then a.Is24Jam 
                                         WHEN a.IsBatal = 1 then 1 END 
-										AS IsNotRisk 
+										AS IsNotRisk  
                                         FROM LESEN_Permohonan a 
                                         INNER JOIN LESEN_Pemohon c ON a.Permohonan_PemohonID = c.Pemohon_ID 
                                         LEFT JOIN ApprovalStatus d ON a.StatusID = d.ApprStatusID
