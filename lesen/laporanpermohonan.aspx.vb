@@ -42,14 +42,13 @@ Partial Class laporanpermohonan
             ElseIf ddlReport.SelectedValue = "2" Then
                 sql = "SELECT a.Permohonan_ID, a.StatusID, a.Is24Jam, a.Rujukan, b.Pemohon_Name, b.Pemohon_MobileNo, ISNULL(a.NamaBaruSyarikat, a.NamaSyarikat) AS NamaSyarikat, 
             ISNULL(a.JenisPerniagaanBaru, a.JenisPerniagaan) AS JenisPerniagaan, b.Pemohon_Address, ISNULL(a.AlamatBaru, a.AlamatPremis) AS AlamatPremis, 
-            c.name AS JenisBatal, ISNULL(e.name, d.name) AS SebabBatal, f.name AS TindakanBatal, a.JenisLesenDescList, a.TarikhMohon, 
+            IIF(ISNULL(JenisBatal, 0) = 1, 'Dengan Permohonan', IIF(ISNULL(JenisBatal, 0) = 2, 'Tanpa Permohonan', '-')) AS JenisBatal, ISNULL(e.name, d.name) AS SebabBatal, f.name AS TindakanBatal, a.JenisLesenDescList, a.TarikhMohon, 
 
             (SELECT TOP(1) a1.CreatedDt FROM LESEN_ApprovalList a1 WHERE a1.Permohonan_ID = a.Permohonan_ID AND (
             ApprStatusID = 10 OR ApprStatusID = 6 OR ApprStatusID = 9) ORDER BY a1.CreatedDt DESC) AS TarikhLulus 
 
             FROM LESEN_Permohonan a 
             INNER JOIN LESEN_Pemohon b ON a.Permohonan_PemohonID = b.Pemohon_ID 
-            LEFT JOIN TBL_LOOKUPS c ON a.JenisBatal = c.id 
             LEFT JOIN TBL_LOOKUPS d ON a.SebabBatalPerm = d.id 
             LEFT JOIN TBL_LOOKUPS e ON a.SebabBatalTanpaPerm = e.id 
             LEFT JOIN TBL_LOOKUPS f ON a.TindakanBatal = f.id 
