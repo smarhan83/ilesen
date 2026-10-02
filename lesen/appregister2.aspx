@@ -2965,7 +2965,7 @@
                         <div class="card-body">
 
                             <div class="row">
-                                <div class="col-4">
+                                <div class="col-4 offset-md-8">
                                     <asp:Button ID="ButtonAddAssignment" runat="server" Text="Rekod Permohonan Lama" CssClass="btn btn-block btn-primary" />
                                     <br />
                                 </div>
@@ -3130,7 +3130,6 @@
                                             <span runat="server" class="badge badge-secondary" visible='<%# If(Eval("IsBatal") = False, True, False) %>'>Tidak</span>
                                         </ItemTemplate>
                                     </asp:TemplateField>
-                                    <asp:BoundField DataField="Description" HeaderText="Status" SortExpression="Description"></asp:BoundField>
                                     <asp:BoundField DataField="RemarksFail" HeaderText="Catatan" SortExpression="RemarksFail"></asp:BoundField>
 
                                     <asp:TemplateField ShowHeader="False">
