@@ -5391,36 +5391,81 @@
     LEFT JOIN TBL_USERS f ON f.Users_Name = e.CreatorID
     WHERE e.Permohonan_ID = @Permohonan_ID
 ),
+AgensiList AS (
+    SELECT pa.JabatanAgensi_ID AS AgensiID, ja.JabatanAgensi_Description, ISNULL(pa.IsMandatory, 1) AS IsMandatory
+    FROM LESEN_PermohonanAgensi pa
+    JOIN LESEN_JabatanAgensi ja ON ja.JabatanAgensi_ID = pa.JabatanAgensi_ID
+    WHERE pa.Permohonan_ID = @Permohonan_ID
+    UNION
+    SELECT al.AgensiID, ja.JabatanAgensi_Description, 1 AS IsMandatory
+    FROM LESEN_ApprovalList al
+    JOIN LESEN_JabatanAgensi ja ON ja.JabatanAgensi_ID = al.AgensiID
+    WHERE al.Permohonan_ID = @Permohonan_ID AND al.AgensiID IS NOT NULL
+),
+AgensiNumbered AS (
+    SELECT AgensiID, JabatanAgensi_Description, IsMandatory,
+           ROW_NUMBER() OVER (ORDER BY AgensiID) AS AgensiNo
+    FROM AgensiList
+),
 StepDef AS (
-    SELECT StepGroup, ApprStatusID, SortOrder, PendingLabel FROM (VALUES
-        (0, 0, 0, 'Draf'),
-        (1, 1, 1, 'Permohonan Baru'),
-        (2, 2, 2, 'Pilih Pegawai Lawatan Tapak Jabatan/Agensi'),
-        (3, 3, 3, 'Lawatan Tapak Jabatan/Agensi'),
-        (4, 4, 4, 'Pengesah Jabatan/Agensi'),
-        (5, 5, 5, 'Pengesah Jabatan Lesen'),
-        (6, 6, 6, 'Menunggu Pengesahan'),
-        (6, 7, 6, 'Menunggu Pengesahan'),
-        (7, 8, 7, 'Peraku Jabatan Lesen'),
-        (8, 9, 8, 'Kelulusan Peraku'),
-        (8, 10, 8, 'Kelulusan Peraku')
-    ) AS x(StepGroup, ApprStatusID, SortOrder, PendingLabel)
-    WHERE (x.ApprStatusID > 0 OR EXISTS (SELECT 1 FROM PermohonanData p WHERE p.StatusID = 0))
+    SELECT 0 AS StepGroup, 0 AS ApprStatusID, 0 AS SortOrder, 'Draf' AS PendingLabel,
+           CAST(NULL AS INT) AS AgensiID, CAST(NULL AS NVARCHAR(255)) AS JabatanAgensi_Description, 1 AS IsMandatory
+    WHERE EXISTS (SELECT 1 FROM PermohonanData p WHERE p.StatusID = 0)
+    
+    UNION ALL
+    
+    SELECT 1 AS StepGroup, 1 AS ApprStatusID, 1 AS SortOrder, 'Permohonan Baru' AS PendingLabel,
+           CAST(NULL AS INT) AS AgensiID, CAST(NULL AS NVARCHAR(255)) AS JabatanAgensi_Description, 1 AS IsMandatory
+    
+    UNION ALL
+    
+    SELECT s.StepGroup, s.ApprStatusID, 
+           (s.StepGroup * 100) + a.AgensiNo AS SortOrder,
+           s.PendingLabel,
+           a.AgensiID, a.JabatanAgensi_Description, a.IsMandatory
+    FROM (VALUES
+        (2, 2, 'Pilih Pegawai Lawatan Tapak Jabatan/Agensi'),
+        (3, 3, 'Lawatan Tapak Jabatan/Agensi'),
+        (4, 4, 'Pengesah Jabatan/Agensi')
+    ) AS s(StepGroup, ApprStatusID, PendingLabel)
+    CROSS JOIN AgensiNumbered a
+    
+    UNION ALL
+    
+    SELECT s.StepGroup, s.ApprStatusID, s.SortOrder, s.PendingLabel,
+           CAST(NULL AS INT) AS AgensiID, CAST(NULL AS NVARCHAR(255)) AS JabatanAgensi_Description, 1 AS IsMandatory
+    FROM (VALUES
+        (5, 5, 800, 'Pengesah Jabatan Lesen'),
+        (6, 6, 810, 'Menunggu Pengesahan'),
+        (6, 7, 810, 'Menunggu Pengesahan'),
+        (7, 8, 820, 'Peraku Jabatan Lesen'),
+        (8, 9, 830, 'Kelulusan Peraku'),
+        (8, 10, 830, 'Kelulusan Peraku')
+    ) AS s(StepGroup, ApprStatusID, SortOrder, PendingLabel)
 ),
 Actual AS (
     SELECT 
         d.StepGroup, d.SortOrder, d.ApprStatusID, d.PendingLabel,
-        CASE WHEN d.ApprStatusID = 0 THEN p.CreatedDt ELSE a.ApprovalDate END AS ApprovalDate,
+        d.AgensiID, d.JabatanAgensi_Description, d.IsMandatory,
+        CASE 
+            WHEN d.ApprStatusID = 0 THEN p.CreatedDt 
+            WHEN d.ApprStatusID = 1 AND p.StatusID >= 1 THEN ISNULL(a.ApprovalDate, p.CreatedDt)
+            ELSE a.ApprovalDate 
+        END AS ApprovalDate,
         a.ApprovalID, 
-        c.JabatanAgensi_Description,
         CASE WHEN d.ApprStatusID = 0 THEN p.DrafDesc ELSE b.Description END AS Description,
         CASE 
             WHEN d.ApprStatusID = 0 THEN ISNULL(p.CreatorName, p.CreatorID)
+            WHEN d.ApprStatusID = 1 THEN ISNULL(dd.Users_Fullname, p.CreatorName)
             WHEN d.ApprStatusID = 3 THEN 
-                (SELECT STRING_AGG(d1.Users_Fullname, ', ') FROM LESEN_PermohonanAgensiStaff a1 
-                 INNER JOIN LESEN_PermohonanAgensi b1 ON b1.Permohonan_ID = @Permohonan_ID and b1.PermohonanAgensi_ID = a1.PermohonanAgensi_ID
-                 INNER JOIN TBL_USERS d1 ON d1.Users_Id = a1.PermohonanAgensiStaffID_UsersID)
-            WHEN d.ApprStatusID = 1 THEN p.CreatorName
+                ISNULL(
+                    (SELECT STRING_AGG(d1.Users_Fullname, ', ') FROM LESEN_PermohonanAgensiStaff a1 
+                     INNER JOIN LESEN_PermohonanAgensi b1 ON b1.Permohonan_ID = @Permohonan_ID 
+                         AND b1.PermohonanAgensi_ID = a1.PermohonanAgensi_ID 
+                         AND b1.JabatanAgensi_ID = d.AgensiID
+                     INNER JOIN TBL_USERS d1 ON d1.Users_Id = a1.PermohonanAgensiStaffID_UsersID),
+                    dd.Users_Fullname
+                )
             ELSE dd.Users_Fullname 
         END AS ActionBy,
         p.StatusID AS PermohonanStatusID
@@ -5430,20 +5475,20 @@ Actual AS (
     LEFT JOIN LESEN_ApprovalList a 
         ON a.ApprStatusID = d.ApprStatusID 
         AND a.Permohonan_ID = @Permohonan_ID 
+        AND ((d.AgensiID IS NOT NULL AND a.AgensiID = d.AgensiID) OR (d.AgensiID IS NULL AND a.AgensiID IS NULL))
         AND a.ApprovalDate IS NOT NULL
-    LEFT JOIN LESEN_JabatanAgensi c ON c.JabatanAgensi_ID = a.AgensiID
     LEFT JOIN TBL_USERS dd ON dd.Users_Id = a.ApproverID
 ),
 Picked AS (
     SELECT *,
         ROW_NUMBER() OVER (
-            PARTITION BY StepGroup 
+            PARTITION BY StepGroup, ISNULL(AgensiID, 0)
             ORDER BY CASE WHEN ApprovalDate IS NOT NULL AND ApprStatusID > 0 THEN 0 ELSE 1 END, ApprStatusID
         ) AS rn
     FROM Actual
 ),
 Result AS (
-    SELECT StepGroup, SortOrder, 
+    SELECT StepGroup, SortOrder, AgensiID, IsMandatory,
            CASE WHEN ApprovalDate IS NOT NULL THEN ApprStatusID ELSE NULL END AS ApprStatusID,
            CASE WHEN ApprovalDate IS NOT NULL THEN Description ELSE PendingLabel END AS Description,
            ApprovalDate, ApprovalID, 
@@ -5452,7 +5497,22 @@ Result AS (
             WHEN PermohonanStatusID = 0 AND ApprStatusID = 0 THEN 'current'
             WHEN PermohonanStatusID = 0 AND ApprStatusID > 0 THEN 'pending'
             WHEN ApprovalDate IS NOT NULL THEN 'done'
-            WHEN SortOrder = (SELECT MIN(SortOrder) FROM Picked WHERE rn = 1 AND ApprovalDate IS NULL) THEN 'current'
+            WHEN PermohonanStatusID IN (6, 9, 10) THEN 'pending'
+            WHEN AgensiID IS NOT NULL AND StepGroup = (
+                SELECT MIN(p2.StepGroup) FROM Picked p2 
+                WHERE p2.rn = 1 AND p2.AgensiID = Picked.AgensiID AND p2.ApprovalDate IS NULL
+            ) THEN 'current'
+            WHEN StepGroup = 5 AND (
+                PermohonanStatusID >= 5 OR NOT EXISTS (
+                    SELECT 1 FROM Picked p2 
+                    WHERE p2.rn = 1 AND p2.AgensiID IS NOT NULL AND p2.IsMandatory = 1 AND p2.ApprovalDate IS NULL
+                )
+            ) THEN 'current'
+            WHEN StepGroup = 7 AND (
+                PermohonanStatusID >= 8 OR EXISTS (
+                    SELECT 1 FROM Picked p2 WHERE p2.rn = 1 AND p2.StepGroup = 5 AND p2.ApprovalDate IS NOT NULL
+                )
+            ) THEN 'current'
             ELSE 'pending'
         END AS StepStatus
     FROM Picked
@@ -5519,41 +5579,88 @@ ORDER BY
     LEFT JOIN TBL_USERS f ON f.Users_Name = e.CreatorID
     WHERE e.Permohonan_ID = @Permohonan_ID
 ),
+AgensiList AS (
+    SELECT pa.JabatanAgensi_ID AS AgensiID, ja.JabatanAgensi_Description, ISNULL(pa.IsMandatory, 1) AS IsMandatory
+    FROM LESEN_PermohonanAgensiBatal pa
+    JOIN LESEN_JabatanAgensi ja ON ja.JabatanAgensi_ID = pa.JabatanAgensi_ID
+    WHERE pa.Permohonan_ID = @Permohonan_ID
+    UNION
+    SELECT al.AgensiID, ja.JabatanAgensi_Description, 1 AS IsMandatory
+    FROM LESEN_ApprovalListBatal al
+    JOIN LESEN_JabatanAgensi ja ON ja.JabatanAgensi_ID = al.AgensiID
+    WHERE al.Permohonan_ID = @Permohonan_ID AND al.AgensiID IS NOT NULL
+),
+AgensiNumbered AS (
+    SELECT AgensiID, JabatanAgensi_Description, IsMandatory,
+           ROW_NUMBER() OVER (ORDER BY AgensiID) AS AgensiNo
+    FROM AgensiList
+),
 StepDef AS (
-    SELECT StepGroup, ApprStatusID, SortOrder, PendingLabel FROM (VALUES
-        (0, 0, 0, 'Draf'),
-        (1, 1, 1, 'Permohonan Baru'),
-        (2, 2, 2, 'Pilih Pegawai Lawatan Tapak Jabatan/Agensi'),
-        (3, 3, 3, 'Lawatan Tapak Jabatan/Agensi'),
-        (4, 4, 4, 'Pengesah Jabatan/Agensi'),
-        (5, 5, 5, 'Pengesah Jabatan Lesen'),
-        (6, 6, 6, 'Menunggu Pengesahan'),
-        (6, 7, 6, 'Menunggu Pengesahan'),
-        (7, 8, 7, 'Peraku Jabatan Lesen'),
-        (8, 9, 8, 'Kelulusan Peraku'),
-        (8, 10, 8, 'Kelulusan Peraku')
-    ) AS x(StepGroup, ApprStatusID, SortOrder, PendingLabel)
-    WHERE (x.ApprStatusID > 0 OR EXISTS (SELECT 1 FROM PermohonanData p WHERE p.StatusID = 0))
+    SELECT 0 AS StepGroup, 0 AS ApprStatusID, 0 AS SortOrder, 'Draf' AS PendingLabel,
+           CAST(NULL AS INT) AS AgensiID, CAST(NULL AS NVARCHAR(255)) AS JabatanAgensi_Description, 1 AS IsMandatory
+    WHERE EXISTS (SELECT 1 FROM PermohonanData p WHERE p.StatusID = 0)
+    
+    UNION ALL
+    
+    SELECT 1 AS StepGroup, 1 AS ApprStatusID, 1 AS SortOrder, 'Permohonan Baru' AS PendingLabel,
+           CAST(NULL AS INT) AS AgensiID, CAST(NULL AS NVARCHAR(255)) AS JabatanAgensi_Description, 1 AS IsMandatory
+    
+    UNION ALL
+    
+    SELECT s.StepGroup, s.ApprStatusID, 
+           (s.StepGroup * 100) + a.AgensiNo AS SortOrder,
+           s.PendingLabel,
+           a.AgensiID, a.JabatanAgensi_Description, a.IsMandatory
+    FROM (VALUES
+        (2, 2, 'Pilih Pegawai Lawatan Tapak Jabatan/Agensi'),
+        (3, 3, 'Lawatan Tapak Jabatan/Agensi'),
+        (4, 4, 'Pengesah Jabatan/Agensi')
+    ) AS s(StepGroup, ApprStatusID, PendingLabel)
+    CROSS JOIN AgensiNumbered a
+    
+    UNION ALL
+    
+    SELECT s.StepGroup, s.ApprStatusID, s.SortOrder, s.PendingLabel,
+           CAST(NULL AS INT) AS AgensiID, CAST(NULL AS NVARCHAR(255)) AS JabatanAgensi_Description, 1 AS IsMandatory
+    FROM (VALUES
+        (5, 5, 800, 'Pengesah Jabatan Lesen'),
+        (6, 6, 810, 'Menunggu Pengesahan'),
+        (6, 7, 810, 'Menunggu Pengesahan'),
+        (7, 8, 820, 'Peraku Jabatan Lesen'),
+        (8, 9, 830, 'Kelulusan Peraku'),
+        (8, 10, 830, 'Kelulusan Peraku')
+    ) AS s(StepGroup, ApprStatusID, SortOrder, PendingLabel)
 ),
 Actual AS (
     SELECT 
         d.StepGroup, d.SortOrder, d.ApprStatusID, d.PendingLabel,
-        CASE WHEN d.ApprStatusID = 0 THEN p.CreatedDt ELSE a.ApprovalDate END AS ApprovalDate,
+        d.AgensiID, d.JabatanAgensi_Description, d.IsMandatory,
+        CASE 
+            WHEN d.ApprStatusID = 0 THEN p.CreatedDt 
+            WHEN d.ApprStatusID = 1 AND p.StatusID >= 1 THEN ISNULL(a.ApprovalDate, p.CreatedDt)
+            ELSE a.ApprovalDate 
+        END AS ApprovalDate,
         a.ApprovalID, 
-        c.JabatanAgensi_Description,
         CASE WHEN d.ApprStatusID = 0 THEN p.DrafDesc ELSE b.Description END AS Description,
         CASE 
             WHEN d.ApprStatusID = 0 THEN ISNULL(p.CreatorName, p.CreatorID)
+            WHEN d.ApprStatusID = 1 THEN ISNULL(dd.Users_Fullname, p.CreatorName)
             WHEN d.ApprStatusID = 3 THEN 
                 ISNULL(
                     (SELECT STRING_AGG(d1.Users_Fullname, ', ') FROM LESEN_PermohonanAgensiStaffBatal a1 
-                     INNER JOIN LESEN_PermohonanAgensiBatal b1 ON b1.Permohonan_ID = @Permohonan_ID and b1.PermohonanAgensi_ID = a1.PermohonanAgensi_ID
+                     INNER JOIN LESEN_PermohonanAgensiBatal b1 ON b1.Permohonan_ID = @Permohonan_ID 
+                         AND b1.PermohonanAgensi_ID = a1.PermohonanAgensi_ID 
+                         AND b1.JabatanAgensi_ID = d.AgensiID
                      INNER JOIN TBL_USERS d1 ON d1.Users_Id = a1.PermohonanAgensiStaffID_UsersID),
-                    (SELECT STRING_AGG(d1.Users_Fullname, ', ') FROM LESEN_PermohonanAgensiStaff a1 
-                     INNER JOIN LESEN_PermohonanAgensi b1 ON b1.Permohonan_ID = @Permohonan_ID and b1.PermohonanAgensi_ID = a1.PermohonanAgensi_ID
-                     INNER JOIN TBL_USERS d1 ON d1.Users_Id = a1.PermohonanAgensiStaffID_UsersID)
+                    ISNULL(
+                        (SELECT STRING_AGG(d1.Users_Fullname, ', ') FROM LESEN_PermohonanAgensiStaff a1 
+                         INNER JOIN LESEN_PermohonanAgensi b1 ON b1.Permohonan_ID = @Permohonan_ID 
+                             AND b1.PermohonanAgensi_ID = a1.PermohonanAgensi_ID 
+                             AND b1.JabatanAgensi_ID = d.AgensiID
+                         INNER JOIN TBL_USERS d1 ON d1.Users_Id = a1.PermohonanAgensiStaffID_UsersID),
+                        dd.Users_Fullname
+                    )
                 )
-            WHEN d.ApprStatusID = 1 THEN p.CreatorName
             ELSE dd.Users_Fullname 
         END AS ActionBy,
         p.StatusID AS PermohonanStatusID
@@ -5563,20 +5670,20 @@ Actual AS (
     LEFT JOIN LESEN_ApprovalListBatal a 
         ON a.ApprStatusID = d.ApprStatusID 
         AND a.Permohonan_ID = @Permohonan_ID 
+        AND ((d.AgensiID IS NOT NULL AND a.AgensiID = d.AgensiID) OR (d.AgensiID IS NULL AND a.AgensiID IS NULL))
         AND a.ApprovalDate IS NOT NULL
-    LEFT JOIN LESEN_JabatanAgensi c ON c.JabatanAgensi_ID = a.AgensiID
     LEFT JOIN TBL_USERS dd ON dd.Users_Id = a.ApproverID
 ),
 Picked AS (
     SELECT *,
         ROW_NUMBER() OVER (
-            PARTITION BY StepGroup 
+            PARTITION BY StepGroup, ISNULL(AgensiID, 0)
             ORDER BY CASE WHEN ApprovalDate IS NOT NULL AND ApprStatusID > 0 THEN 0 ELSE 1 END, ApprStatusID
         ) AS rn
     FROM Actual
 ),
 Result AS (
-    SELECT StepGroup, SortOrder, 
+    SELECT StepGroup, SortOrder, AgensiID, IsMandatory,
            CASE WHEN ApprovalDate IS NOT NULL THEN ApprStatusID ELSE NULL END AS ApprStatusID,
            CASE WHEN ApprovalDate IS NOT NULL THEN Description ELSE PendingLabel END AS Description,
            ApprovalDate, ApprovalID, 
@@ -5585,7 +5692,22 @@ Result AS (
             WHEN PermohonanStatusID = 0 AND ApprStatusID = 0 THEN 'current'
             WHEN PermohonanStatusID = 0 AND ApprStatusID > 0 THEN 'pending'
             WHEN ApprovalDate IS NOT NULL THEN 'done'
-            WHEN SortOrder = (SELECT MIN(SortOrder) FROM Picked WHERE rn = 1 AND ApprovalDate IS NULL) THEN 'current'
+            WHEN EXISTS (SELECT 1 FROM Picked p2 WHERE p2.rn = 1 AND p2.ApprStatusID IN (6, 9, 10) AND p2.ApprovalDate IS NOT NULL) THEN 'pending'
+            WHEN AgensiID IS NOT NULL AND StepGroup = (
+                SELECT MIN(p2.StepGroup) FROM Picked p2 
+                WHERE p2.rn = 1 AND p2.AgensiID = Picked.AgensiID AND p2.ApprovalDate IS NULL
+            ) THEN 'current'
+            WHEN StepGroup = 5 AND (
+                PermohonanStatusID >= 5 OR NOT EXISTS (
+                    SELECT 1 FROM Picked p2 
+                    WHERE p2.rn = 1 AND p2.AgensiID IS NOT NULL AND p2.IsMandatory = 1 AND p2.ApprovalDate IS NULL
+                )
+            ) THEN 'current'
+            WHEN StepGroup = 7 AND (
+                PermohonanStatusID >= 8 OR EXISTS (
+                    SELECT 1 FROM Picked p2 WHERE p2.rn = 1 AND p2.StepGroup = 5 AND p2.ApprovalDate IS NOT NULL
+                )
+            ) THEN 'current'
             ELSE 'pending'
         END AS StepStatus
     FROM Picked
