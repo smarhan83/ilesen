@@ -1,4 +1,4 @@
-﻿<%@ Page MaintainScrollPositionOnPostback="true" Title="" Language="VB" MasterPageFile="~/MasterMenu.master" AutoEventWireup="false" CodeFile="appregister2.aspx.vb" Inherits="appregister2" %>
+<%@ Page MaintainScrollPositionOnPostback="true" Title="" Language="VB" MasterPageFile="~/MasterMenu.master" AutoEventWireup="false" CodeFile="appregister2.aspx.vb" Inherits="appregister2" %>
 
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="asp" %>
 
@@ -8,300 +8,114 @@
             overflow: visible !important;
         }
 
+        /* Tooltip Styling */
         .wrapperTooltip {
-            /*text-transform: uppercase;
-	   background: #ececec;
-	   color: #555;*/
             cursor: help;
-            /*font-family: "Gill Sans", Impact, sans-serif;
-	   font-size: 20px;*/
-            /*   margin: 100px 75px 10px 75px;
-	   padding: 15px 20px;*/
             position: relative;
             text-align: center;
             width: 100%;
-            -webkit-transform: translateZ(0); /* webkit flicker fix */
-            -webkit-font-smoothing: antialiased; /* webkit text rendering fix */
+            -webkit-transform: translateZ(0);
+            -webkit-font-smoothing: antialiased;
             z-index: 9999999 !important;
         }
 
-            .wrapperTooltip .tooltip {
-                background: #1496bb;
-                bottom: 100%;
-                color: #fff;
-                display: block;
-                left: -20px;
-                margin-bottom: 15px;
-                opacity: 0;
-                padding: 20px;
-                pointer-events: none;
-                position: absolute;
-                width: 100%;
-                /*-webkit-transform: translateY(10px);
-	   -moz-transform: translateY(10px);
-	   -ms-transform: translateY(10px);
-	   -o-transform: translateY(10px);
-	   transform: translateY(10px);
-	   -webkit-transition: all .25s ease-out;
-	   -moz-transition: all .25s ease-out;
-	   -ms-transition: all .25s ease-out;
-	   -o-transition: all .25s ease-out;
-	   transition: all .25s ease-out;*/
-                -webkit-box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.28);
-                -moz-box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.28);
-                -ms-box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.28);
-                -o-box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.28);
-                box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.28);
-                z-index: 9999999 !important;
-            }
-
-                /* This bridges the gap so you can mouse into the tooltip without it disappearing */
-                .wrapperTooltip .tooltip:before {
-                    bottom: -20px;
-                    content: " ";
-                    display: block;
-                    /*height: 500px;*/
-                    left: 0;
-                    position: absolute;
-                    width: 100%;
-                    z-index: 9999999 !important;
-                }
-
-                /* CSS Triangles - see Trevor's post */
-                .wrapperTooltip .tooltip:after {
-                    border-left: solid transparent 10px;
-                    border-right: solid transparent 10px;
-                    border-top: solid #1496bb 10px;
-                    bottom: -10px;
-                    content: " ";
-                    height: 0;
-                    left: 50%;
-                    margin-left: -13px;
-                    position: absolute;
-                    width: 0;
-                    z-index: 9999999 !important;
-                }
-
-            .wrapperTooltip:hover .tooltip {
-                opacity: 1;
-                pointer-events: auto;
-                /*-webkit-transform: translateY(0px);
-	   -moz-transform: translateY(0px);
-	   -ms-transform: translateY(0px);
-	   -o-transform: translateY(0px);
-	   transform: translateY(0px);*/
-                z-index: 9999999 !important;
-            }
-
-        /* IE can just show/hide with no transition */
-        .lte8 .wrapperTooltip .tooltip {
-            display: none;
+        .wrapperTooltip .tooltip {
+            background: #1496bb;
+            bottom: 100%;
+            color: #fff;
+            display: block;
+            left: -20px;
+            margin-bottom: 15px;
+            opacity: 0;
+            padding: 20px;
+            pointer-events: none;
+            position: absolute;
+            width: 100%;
+            box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.28);
+            z-index: 9999999 !important;
+            transition: opacity 0.25s ease-out;
         }
 
-        .lte8 .wrapperTooltip:hover .tooltip {
+        .wrapperTooltip .tooltip:before {
+            bottom: -20px;
+            content: " ";
             display: block;
+            left: 0;
+            position: absolute;
+            width: 100%;
+            z-index: 9999999 !important;
+        }
+
+        .wrapperTooltip .tooltip:after {
+            border-left: solid transparent 10px;
+            border-right: solid transparent 10px;
+            border-top: solid #1496bb 10px;
+            bottom: -10px;
+            content: " ";
+            height: 0;
+            left: 50%;
+            margin-left: -13px;
+            position: absolute;
+            width: 0;
+            z-index: 9999999 !important;
+        }
+
+        .wrapperTooltip:hover .tooltip {
+            opacity: 1;
+            pointer-events: auto;
+            z-index: 9999999 !important;
         }
 
         .Disabled {
             pointer-events: none;
             cursor: not-allowed;
             opacity: 0.65;
-            filter: alpha(opacity=65);
-            -webkit-box-shadow: none;
             box-shadow: none;
         }
 
+        /* AjaxControlToolkit TabContainer Custom Styling */
+        .ajax__tab_xp .ajax__tab_header,
+        .ajax__tab_xp .ajax__tab_header .ajax__tab_outer,
+        .ajax__tab_xp .ajax__tab_header .ajax__tab_inner,
+        .ajax__tab_xp .ajax__tab_header .ajax__tab_tab,
+        .ajax__tab_xp .ajax__tab_header_verticalleft,
+        .ajax__tab_xp .ajax__tab_header_verticalright,
+        .ajax__tab_xp .ajax__tab_header_bottom {
+            background-image: none !important;
+        }
+
         .ajax__tab_xp .ajax__tab_header {
-            background-image: url('') !important;
             font-size: 11pt !important;
             height: 40px !important;
             color: #000 !important;
         }
 
-            .ajax__tab_xp .ajax__tab_header .ajax__tab_outer {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header .ajax__tab_inner {
-                /* background-image: url('WebResource.axd?d=zNSHuGr6hc7c16bSY9eWXPrNBVsZSwehGbscYki57kRbdTai8trIfAuzMrttb3pm0uA8ApvgRAgRqJhPO3fCauUTiyK3qOK21RmA7QURs6o63zcRczK2Ul9bZbli-JHArtBLoeaLoTT7L8haCKoAtg2&t=636970230480000000'); */
-            }
-
-            .ajax__tab_xp .ajax__tab_header .ajax__tab_tab {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header .ajax__tab_hover .ajax__tab_outer {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header .ajax__tab_hover .ajax__tab_inner {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header .ajax__tab_hover .ajax__tab_tab {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header .ajax__tab_active .ajax__tab_outer {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header .ajax__tab_active .ajax__tab_inner {
-                /* background-image: url('WebResource.axd?d=7d55T9B4j42nYTnSODbo405bsr8zp3hoGjir6Z58ZoKPdLgwtf6qu3MXJibmbhhdha0NpvsKmg-yAHSNyDR0n5oskACF5v0vuvb-ErTRvIZqPQgNHZyi6J2H6QcoTzSVIy4XafuCbAtMT3T8iHBky3A6CmqrVChVQYLFcawUCe01&t=636970230480000000'); */
-            }
-
-            .ajax__tab_xp .ajax__tab_header .ajax__tab_active .ajax__tab_tab {
-                background-image: url('') !important;
-            }
-
-        .ajax__tab_xp .ajax__tab_header_verticalleft {
-            background-image: url('') !important;
-        }
-
-            .ajax__tab_xp .ajax__tab_header_verticalleft .ajax__tab_outer {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header_verticalleft .ajax__tab_inner {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header_verticalleft .ajax__tab_tab {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header_verticalleft .ajax__tab_hover .ajax__tab_outer {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header_verticalleft .ajax__tab_hover .ajax__tab_inner {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header_verticalleft .ajax__tab_hover .ajax__tab_tab {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header_verticalleft .ajax__tab_active .ajax__tab_outer {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header_verticalleft .ajax__tab_active .ajax__tab_inner {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header_verticalleft .ajax__tab_active .ajax__tab_tab {
-                background-image: url('') !important;
-            }
-
-        .ajax__tab_xp .ajax__tab_header_verticalright {
-            background-image: url('') !important;
-        }
-
-            .ajax__tab_xp .ajax__tab_header_verticalright .ajax__tab_outer {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header_verticalright .ajax__tab_inner {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header_verticalright .ajax__tab_tab {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header_verticalright .ajax__tab_hover .ajax__tab_outer {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header_verticalright .ajax__tab_hover .ajax__tab_inner {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header_verticalright .ajax__tab_hover .ajax__tab_tab {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header_verticalright .ajax__tab_active .ajax__tab_outer {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header_verticalright .ajax__tab_active .ajax__tab_inner {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header_verticalright .ajax__tab_active .ajax__tab_tab {
-                background-image: url('') !important;
-            }
-
-        .ajax__tab_xp .ajax__tab_header_bottom {
-            background-image: url('') !important;
-        }
-
-            .ajax__tab_xp .ajax__tab_header_bottom .ajax__tab_outer {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header_bottom .ajax__tab_inner {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header_bottom .ajax__tab_tab {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header_bottom .ajax__tab_hover .ajax__tab_outer {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header_bottom .ajax__tab_hover .ajax__tab_inner {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header_bottom .ajax__tab_hover .ajax__tab_tab {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header_bottom .ajax__tab_active .ajax__tab_outer {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header_bottom .ajax__tab_active .ajax__tab_inner {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header_bottom .ajax__tab_active .ajax__tab_tab {
-                background-image: url('') !important;
-            }
-
-        .ajax__tab_xp .ajax__tab_header .ajax__tab_active .ajax__tab_inner {
-            background-image: url('') !important;
-            width: 150px !important;
-            text-align: center !important;
-            vertical-align: middle !important;
-            border-top-right-radius: 10px 10px !important;
-            border-top-left-radius: 10px 10px !important;
-        }
-
-            .ajax__tab_xp .ajax__tab_header .ajax__tab_active .ajax__tab_inner a {
-                color: #fff !important;
-                /*font-weight : bold !important;*/
-            }
-
         .ajax__tab_xp .ajax__tab_header .ajax__tab_inner {
-            background-image: url('') !important;
             background-color: #E9ECEF !important;
             width: 150px !important;
             text-align: center !important;
             vertical-align: middle !important;
-            border-top-right-radius: 10px 10px !important;
-            border-top-left-radius: 10px 10px !important;
+            border-top-right-radius: 10px !important;
+            border-top-left-radius: 10px !important;
         }
 
-            .ajax__tab_xp .ajax__tab_header .ajax__tab_inner a {
-                color: #413a3a !important;
-            }
+        .ajax__tab_xp .ajax__tab_header .ajax__tab_inner a {
+            color: #413a3a !important;
+        }
 
+        .ajax__tab_xp .ajax__tab_header .ajax__tab_active .ajax__tab_inner {
+            background-color: #ffc107 !important;
+            width: 150px !important;
+            text-align: center !important;
+            vertical-align: middle !important;
+            border-top-right-radius: 10px !important;
+            border-top-left-radius: 10px !important;
+        }
+
+        .ajax__tab_xp .ajax__tab_header .ajax__tab_active .ajax__tab_inner a {
+            color: #fff !important;
+            font-weight: 600 !important;
+        }
 
         .styleDisplayNone {
             display: none;
@@ -311,6 +125,7 @@
             text-align: center;
         }
 
+        /* Status Pills */
         .status-pill {
             display: inline-flex;
             align-items: flex-start;
@@ -365,46 +180,46 @@
 
 <asp:Content ID="Content3" ContentPlaceHolderID="MainContent" runat="Server">
 
+    <!-- ======================================================================= -->
+    <!-- PAGE HEADER & BREADCRUMB                                                -->
+    <!-- ======================================================================= -->
     <section class="content-header">
         <div class="container-fluid">
-
-
-
             <div class="row mb-2">
                 <div class="col-sm-6">
                     <h1 class="m-0 text-dark">
                         <div runat="server" id="idWindowTitle"></div>
                     </h1>
                 </div>
-                <!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
-                        <%--<li class="breadcrumb-item"><a href="#">Administration</a></li>
-                        <li class="breadcrumb-item active">Project Menu</li>--%>
                         <%= GlobalClass.writeBreadcrumb(Request.QueryString("p_Id"), Request.QueryString("m_Id"), Session.Item("sessionSystemId")) %>
                     </ol>
                 </div>
-                <!-- /.col -->
             </div>
-            <!-- /.row -->
         </div>
     </section>
 
-    <%--<asp:UpdatePanel ID="updatePanel1" runat="server">
-        <ContentTemplate>--%>
     <!-- Main content -->
     <section class="content">
         <div class="container-fluid">
 
+            <!-- ======================================================================= -->
+            <!-- FORMVIEW: KEMASKINI & KUNCI MASUK PERMOHONAN                           -->
+            <!-- ======================================================================= -->
             <asp:FormView ID="FormView1" runat="server" DataKeyNames="Permohonan_ID"
                 DataSourceID="SqlDataSourceForm" Width="100%" DefaultMode="Edit">
+
+                <%-- =================================================================== --%>
+                <%-- [SECTION 1] EDIT ITEM TEMPLATE (KEMASKINI PERMOHONAN)              --%>
+                <%-- =================================================================== --%>
                 <EditItemTemplate>
                     <div class="card card-warning">
                         <div class="card-header">
-                            <h3 class="card-title">Kemaskini Permohonan</h3>
+                            <h3 class="card-title"><i class="fas fa-edit mr-1"></i> Kemaskini Permohonan</h3>
                         </div>
-                        <!-- /.card-header -->
                         <div class="card-body">
+                            <!-- Hidden Fields for Multi-Value Lists -->
                             <asp:HiddenField ID="HF_Status" Value='<%# Bind("StatusID") %>' runat="server" />
                             <asp:HiddenField ID="HF_JenisLesenDescList" Value='<%# Bind("JenisLesenDescList") %>' runat="server" />
                             <asp:HiddenField ID="HF_JenisLesenIdList" Value='<%# Bind("JenisLesenIdList") %>' runat="server" />
@@ -418,12 +233,13 @@
                             <asp:HiddenField ID="HF_AnjingJantanMandulList" Value='<%# Bind("AnjingJantanMandulList") %>' runat="server" />
                             <asp:HiddenField ID="HF_AnjingBetinaMandulList" Value='<%# Bind("AnjingBetinaMandulList") %>' runat="server" />
 
+                            <!-- --------------------------------------------------------------- -->
+                            <!-- [EDIT] Panel Search Pemohon (Draf / Status = 0 Sahaja)         -->
+                            <!-- --------------------------------------------------------------- -->
                             <asp:Panel runat="server" ID="panelSearch" Visible='<%# If(Eval("StatusID") = 0 And IsDBNull(Eval("SuratKelulusan1")), True, False) %>'>
                                 <asp:HiddenField ID="HF_PermohonanID" runat="server" Value='<%# Bind("Permohonan_ID") %>' />
                                 <div class="row">
-
                                     <div class="col-md-6">
-
                                         <div class="form-group">
                                             <label>Pemohon:</label>
                                             <div class="row">
@@ -433,26 +249,19 @@
                                                     </asp:DropDownList>
                                                     <asp:SqlDataSource runat="server" ID="SqlDataSourcePemohon" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
                                                         SelectCommand="SELECT NULL AS Pemohon_ID, '-- Sila Pilih --' AS PemohonDesc UNION ALL SELECT Pemohon_ID,  Pemohon_ICNo + ' - ' + Pemohon_Name AS PemohonDesc FROM LESEN_Pemohon WHERE Pemohon_IsActive = 1"></asp:SqlDataSource>
-                                                    <%--<asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" CssClass="cssRequiredField"
-                                                        ControlToValidate="ddl_Pemohon" ErrorMessage="Sila Pilih" ValidationGroup="updateForm" Display="Dynamic"></asp:RequiredFieldValidator>--%>
                                                 </div>
                                                 <div class="col">
                                                     <asp:HyperLink runat="server" NavigateUrl="~/lesen/applicantregister.aspx?p_Id=3354&m_Id=3355" CssClass="btn btn-default">Daftar Pemohon</asp:HyperLink>
-
                                                 </div>
-
                                             </div>
-
                                         </div>
-
                                     </div>
-
-
                                 </div>
-
-                                
                             </asp:Panel>
 
+                            <!-- --------------------------------------------------------------- -->
+                            <!-- [EDIT] Maklumat Pemohon                                         -->
+                            <!-- --------------------------------------------------------------- -->
                             <asp:Panel runat="server" ID="pnlpemohon">
                                 <div class="row">
 
@@ -503,6 +312,9 @@
                                 </div>
                             </asp:Panel>
 
+                            <!-- --------------------------------------------------------------- -->
+                            <!-- [EDIT] Tarikh Mohon & Pilihan Pelbagai Jenis Lesen             -->
+                            <!-- --------------------------------------------------------------- -->
                             <hr style="border: 1px solid gray;" />
 
                             <asp:Panel runat="server" Enabled='<%# If(Eval("StatusID") = 0, True, True) %>'>
@@ -553,7 +365,9 @@
 
                                 </div>
 
-                                <%--# Perniagaan Berisiko dan tidak berisiko #--%>
+                                <!-- =============================================================== -->
+                                <!-- [EDIT] PANEL 1: LESEN PERNIAGAAN (Berisiko / Tidak Berisiko)   -->
+                                <!-- =============================================================== -->
                                 <asp:Panel ID="pnlesen1" runat="server" Visible="False">
 
                                     <div class="row">
@@ -609,7 +423,7 @@
 
                                     </div>
 
-                                    <%--# Tukar Pemilik #--%>
+                                    <!-- [EDIT] Sub-Panel 1b: Tukar Pemilik -->
                                     <asp:Panel ID="pnlesen1b" runat="server" Visible="False">
                                         <div class="row">
 
@@ -626,7 +440,7 @@
 
                                 </asp:Panel>
 
-                                <%--# Tukar Alamat #--%>
+                                <!-- [EDIT] Sub-Panel 1c: Tukar Alamat Premis -->
                                 <asp:Panel ID="pnlesen1c" runat="server" Visible="False">
 
                                     <div class="row">
@@ -643,7 +457,7 @@
                                     </div>
                                 </asp:Panel>
 
-                                <%--# Tambah Jenis Perniagaan #--%>
+                                <!-- [EDIT] Sub-Panel 1d: Tambah Jenis Perniagaan -->
                                 <asp:Panel ID="pnlesen1d" runat="server" Visible="False">
 
                                     <div class="row">
@@ -660,7 +474,7 @@
                                     </div>
                                 </asp:Panel>
 
-                                <%--# Tukar Nama Syarikat #--%>
+                                <!-- [EDIT] Sub-Panel 1e: Tukar Nama Syarikat -->
                                 <asp:Panel ID="pnlesen1e" runat="server" Visible="False">
 
                                     <div class="row">
@@ -678,7 +492,9 @@
 
                                 </asp:Panel>
 
-                                <%--# Banting #--%>
+                                <!-- =============================================================== -->
+                                <!-- [EDIT] PANEL 6: LESEN KAIN RENTANG / BANTING                  -->
+                                <!-- =============================================================== -->
                                 <asp:Panel ID="pnlesen6" runat="server" Visible="False">
 
                                     <div class="row">
@@ -876,7 +692,9 @@
 
                                 </asp:Panel>
 
-                                <%--# Papan iklan, Billboard #--%>
+                                <!-- =============================================================== -->
+                                <!-- [EDIT] PANEL 1A: LESEN PAPAN IKLAN PREMIS                     -->
+                                <!-- =============================================================== -->
                                 <asp:Panel ID="pnlesen1a" runat="server" Visible="False">
 
                                     <div class="row">
@@ -937,7 +755,9 @@
 
                                 </asp:Panel>
 
-                                <%--#  Billboard #--%>
+                                <!-- =============================================================== -->
+                                <!-- [EDIT] PANEL BILLBOARD: PAPAN IKLAN LUAR / BILLBOARD          -->
+                                <!-- =============================================================== -->
                                 <asp:Panel ID="pnlbillboard" runat="server" Visible="False">
 
                                     <div class="row">
@@ -955,7 +775,9 @@
 
                                 </asp:Panel>
 
-                                <%--# Pasar Lambak #--%>
+                                <!-- =============================================================== -->
+                                <!-- [EDIT] PANEL 2: LESEN PASAR (Pagi/Malam/Lambak/Sehari)        -->
+                                <!-- =============================================================== -->
                                 <asp:Panel ID="pnlesen2" runat="server" Visible="False">
 
                                     <div class="row">
@@ -1031,7 +853,9 @@
 
                                 </asp:Panel>
 
-                                <%--# Anjing #--%>
+                                <!-- =============================================================== -->
+                                <!-- [EDIT] PANEL 3: LESEN ANJING                                  -->
+                                <!-- =============================================================== -->
                                 <asp:Panel ID="pnlesen3" runat="server" Visible="False">
 
                                     <div class="row">
@@ -1137,7 +961,9 @@
 
                                 </asp:Panel>
 
-                                <%--# Penjaja #--%>
+                                <!-- =============================================================== -->
+                                <!-- [EDIT] PANEL 4: LESEN PENJAJA                                 -->
+                                <!-- =============================================================== -->
                                 <asp:Panel ID="pnlesen4" runat="server" Visible="False">
 
                                     <div class="row">
@@ -1234,7 +1060,9 @@
 
                                 </asp:Panel>
 
-                                <%--# Ekspo #--%>
+                                <!-- =============================================================== -->
+                                <!-- [EDIT] PANEL 5: PERMIT EKSPO                                  -->
+                                <!-- =============================================================== -->
                                 <asp:Panel ID="pnlesen5" runat="server" Visible="False">
 
                                     <div class="row">
@@ -1397,6 +1225,9 @@
 
                                 </asp:Panel>
 
+                                <!-- =============================================================== -->
+                                <!-- [EDIT] PANEL RUJUKAN: NO RUJUKAN & LOKASI FAIL                 -->
+                                <!-- =============================================================== -->
                                 <asp:Panel ID="pnlrujukan" runat="server">
                                     <hr style="border: 1px solid gray;" />
                                     <div class="row">
@@ -1441,6 +1272,9 @@
 
                             </asp:Panel>
 
+                            <!-- =================================================================== -->
+                            <!-- [EDIT] SECTION: DEPOSIT WANG AMANAH / CAGARAN                       -->
+                            <!-- =================================================================== -->
                             <div class="row">
 
                                 <div class="col-md-3">
@@ -1503,6 +1337,9 @@
 
                             </asp:Panel>
 
+                            <!-- =================================================================== -->
+                            <!-- [EDIT] SECTION: MAKLUMAT PEMBATALAN PERMIT / LESEN                  -->
+                            <!-- =================================================================== -->
                             <asp:Panel ID="pnlbatal1" runat="server" Visible='<%# If(Eval("IsBatal") = False And Eval("StatusID") = 10, True, False) %>'>
                                 <br />
                                 <div class="row">
@@ -1588,22 +1425,24 @@
                             </asp:Panel>
 
                         </div>
+                        <!-- Card Footer: Tindakan / Action Buttons -->
                         <div class="card-footer">
                             <asp:LinkButton runat="server" CssClass="btn btn-warning" ValidationGroup="updateForm" Text="Kemaskini" CommandName="Update" ID="UpdateFormButton" CausesValidation="True" />
-                            <%--<asp:LinkButton runat="server" CssClass="btn btn-warning" Visible='<%# If(Eval("StatusID") = 0, True, False) %>' ValidationGroup="updateForm" Text="Hantar" ID="SubmitApproval" OnCommand="OnClickBtnSubmit" CausesValidation="False" OnClientClick="return confirm('Hantar ke jabatan agensi sekarang?');" />--%>
-                            <%--<asp:LinkButton runat="server" CssClass="btn btn-warning" Visible='<%# If(Eval("StatusID") = 10, True, False) %>' Text="Surat Kelulusan" ID="ViewSuratKelulusan" OnCommand="OnClickSuratKelulusan" CausesValidation="False" />--%>
                             <asp:LinkButton runat="server" Text="Kembali" ID="BackButton" CausesValidation="False" CssClass="btn btn-default" OnClick="BackButton_Click" />
                         </div>
                     </div>
                 </EditItemTemplate>
 
+                <%-- =================================================================== --%>
+                <%-- [SECTION 2] INSERT ITEM TEMPLATE (KUNCI MASUK PERMOHONAN)          --%>
+                <%-- =================================================================== --%>
                 <InsertItemTemplate>
                     <div class="card card-primary">
                         <div class="card-header">
-                            <h3 class="card-title">Kunci Masuk Permohonan</h3>
+                            <h3 class="card-title"><i class="fas fa-plus-circle mr-1"></i> Kunci Masuk Permohonan</h3>
                         </div>
-                        <!-- /.card-header -->
                         <div class="card-body">
+                            <!-- Hidden Fields for Multi-Value Lists -->
                             <asp:HiddenField ID="HF_JenisLesenDescList" Value='<%# Bind("JenisLesenDescList") %>' runat="server" />
                             <asp:HiddenField ID="HF_JenisLesenIdList" Value='<%# Bind("JenisLesenIdList") %>' runat="server" />
                             <asp:HiddenField ID="HF_SaizIklanList" Value='<%# Bind("SaizIklanList") %>' runat="server" />
@@ -1616,10 +1455,11 @@
                             <asp:HiddenField ID="HF_AnjingJantanMandulList" Value='<%# Bind("AnjingJantanMandulList") %>' runat="server" />
                             <asp:HiddenField ID="HF_AnjingBetinaMandulList" Value='<%# Bind("AnjingBetinaMandulList") %>' runat="server" />
 
+                            <!-- --------------------------------------------------------------- -->
+                            <!-- [INSERT] Pemilihan Pemohon                                      -->
+                            <!-- --------------------------------------------------------------- -->
                             <div class="row">
-
                                 <div class="col-md-6">
-
                                     <div class="form-group">
                                         <label>Pemohon:</label>
                                         <div class="row">
@@ -1634,18 +1474,15 @@
                                             </div>
                                             <div class="col">
                                                 <asp:HyperLink runat="server" NavigateUrl="~/lesen/applicantregister.aspx?p_Id=3354&m_Id=3355" CssClass="btn btn-default">Daftar Pemohon</asp:HyperLink>
-
                                             </div>
-
                                         </div>
-
                                     </div>
-
                                 </div>
-
-
                             </div>
 
+                            <!-- --------------------------------------------------------------- -->
+                            <!-- [INSERT] Maklumat Pemohon                                       -->
+                            <!-- --------------------------------------------------------------- -->
                             <asp:Panel runat="server" ID="pnlpemohon" Visible="false">
                                 <div class="row">
 
@@ -1697,6 +1534,9 @@
                                 </div>
                             </asp:Panel>
 
+                            <!-- --------------------------------------------------------------- -->
+                            <!-- [INSERT] Tarikh Mohon & Pilihan Pelbagai Jenis Lesen           -->
+                            <!-- --------------------------------------------------------------- -->
                             <hr style="border: 1px solid gray;" />
 
                             <div class="row">
@@ -1749,7 +1589,9 @@
 
                             <br />
 
-                            <%--# Perniagaan Berisiko dan tidak berisiko #--%>
+                            <!-- =============================================================== -->
+                            <!-- [INSERT] PANEL 1: LESEN PERNIAGAAN (Berisiko / Tidak)          -->
+                            <!-- =============================================================== -->
                             <asp:Panel ID="pnlesen1" runat="server" Visible="False">
 
                                 <div class="row">
@@ -1813,7 +1655,7 @@
 
                                 </div>
 
-                                <%--# Tukar Pemilik #--%>
+                                <!-- [INSERT] Sub-Panel 1b: Tukar Pemilik -->
                                 <asp:Panel ID="pnlesen1b" runat="server" Visible="False">
 
                                     <div class="row">
@@ -1832,7 +1674,7 @@
                                     </div>
                                 </asp:Panel>
 
-                                <%--# Batal #--%>
+                                <!-- [INSERT] Sub-Panel: Tarikh Batal -->
                                 <asp:Panel ID="pnlbatal" runat="server" Visible="False">
                                     <div class="row">
 
@@ -1846,7 +1688,7 @@
                                     </div>
                                 </asp:Panel>
 
-                                <%--# Tukar Alamat #--%>
+                                <!-- [INSERT] Sub-Panel 1c: Tukar Alamat Premis -->
                                 <asp:Panel ID="pnlesen1c" runat="server" Visible="False">
 
                                     <div class="row">
@@ -1865,7 +1707,7 @@
                                     </div>
                                 </asp:Panel>
 
-                                <%--# Tambah Jenis Perniagaan #--%>
+                                <!-- [INSERT] Sub-Panel 1d: Tambah Jenis Perniagaan -->
                                 <asp:Panel ID="pnlesen1d" runat="server" Visible="False">
 
                                     <div class="row">
@@ -1884,7 +1726,7 @@
                                     </div>
                                 </asp:Panel>
 
-                                <%--# Tukar Nama Syarikat #--%>
+                                <!-- [INSERT] Sub-Panel 1e: Tukar Nama Syarikat -->
                                 <asp:Panel ID="pnlesen1e" runat="server" Visible="False">
 
                                     <div class="row">
@@ -1905,7 +1747,9 @@
 
                             </asp:Panel>
 
-                            <%--# Banting #--%>
+                            <!-- =============================================================== -->
+                            <!-- [INSERT] PANEL 6: LESEN KAIN RENTANG / BANTING                -->
+                            <!-- =============================================================== -->
                             <asp:Panel ID="pnlesen6" runat="server" Visible="False">
 
                                 <div class="row">
@@ -1986,7 +1830,7 @@
 
                                      <div class="col-md-6">
                                          <div class="form-group">
-                                             <label>Lokasi/Tempat Pemasagan</label>
+                                             <label>Lokasi/Tempat Pemasangan</label>
                                              <asp:TextBox ID="TB_LokasiBanting" runat="server" TextMode="MultiLine" Rows="3" CssClass="form-control" />
                                          </div>
                                      </div>
@@ -2122,7 +1966,9 @@
 
                             </asp:Panel>
 
-                            <%--# Papan iklan, Billboard #--%>
+                            <!-- =============================================================== -->
+                            <!-- [INSERT] PANEL 1A: LESEN PAPAN IKLAN PREMIS                   -->
+                            <!-- =============================================================== -->
                             <asp:Panel ID="pnlesen1a" runat="server" Visible="False">
 
                                 <div class="row">
@@ -2183,7 +2029,9 @@
 
                             </asp:Panel>
 
-                            <%--#  Billboard #--%>
+                            <!-- =============================================================== -->
+                            <!-- [INSERT] PANEL BILLBOARD: PAPAN IKLAN LUAR / BILLBOARD        -->
+                            <!-- =============================================================== -->
                             <asp:Panel ID="pnlbillboard" runat="server" Visible="False">
 
                                 <div class="row">
@@ -2203,7 +2051,9 @@
 
                             </asp:Panel>
 
-                            <%--# Pasar Lambak #--%>
+                            <!-- =============================================================== -->
+                            <!-- [INSERT] PANEL 2: LESEN PASAR (Pagi/Malam/Lambak/Sehari)      -->
+                            <!-- =============================================================== -->
                             <asp:Panel ID="pnlesen2" runat="server" Visible="False">
 
                                 <div class="row">
@@ -2286,7 +2136,9 @@
 
                             </asp:Panel>
 
-                            <%--# Anjing #--%>
+                            <!-- =============================================================== -->
+                            <!-- [INSERT] PANEL 3: LESEN ANJING                                -->
+                            <!-- =============================================================== -->
                             <asp:Panel ID="pnlesen3" runat="server" Visible="False">
 
                                 <div class="row">
@@ -2394,7 +2246,9 @@
 
                             </asp:Panel>
 
-                            <%--# Penjaja #--%>
+                            <!-- =============================================================== -->
+                            <!-- [INSERT] PANEL 4: LESEN PENJAJA                               -->
+                            <!-- =============================================================== -->
                             <asp:Panel ID="pnlesen4" runat="server" Visible="False">
 
                                 <div class="row">
@@ -2498,7 +2352,9 @@
 
                             </asp:Panel>
 
-                            <%--# Ekspo #--%>
+                            <!-- =============================================================== -->
+                            <!-- [INSERT] PANEL 5: PERMIT EKSPO                                  -->
+                            <!-- =============================================================== -->
                             <asp:Panel ID="pnlesen5" runat="server" Visible="False">
 
                                 <div class="row">
@@ -2673,6 +2529,9 @@
 
                             </asp:Panel>
 
+                            <!-- =============================================================== -->
+                            <!-- [INSERT] PANEL RUJUKAN: NO RUJUKAN & LOKASI FAIL                -->
+                            <!-- =============================================================== -->
                             <asp:Panel ID="pnlrujukan" runat="server" Visible="False">
                                 <hr style="border: 1px solid gray;" />
                                 <div class="row">
@@ -2701,7 +2560,7 @@
 
                                     <div class="col-md-2">
                                         <div class="form-group">
-                                            <asp:Label runat="server" ForeColor="DarkRed" Font-Bold="true">Kelulusan 24 jam?></asp:Label>
+                                            <asp:Label runat="server" ForeColor="DarkRed" Font-Bold="true">Kelulusan 24 jam?</asp:Label>
                                             <asp:CheckBox ID="CB_24h" Checked='<%# Bind("Is24jam") %>' runat="server" />
                                         </div>
                                     </div>
@@ -2729,6 +2588,9 @@
                                 </div>
                             </asp:Panel>
 
+                            <!-- =============================================================== -->
+                            <!-- [INSERT] SECTION: DEPOSIT WANG AMANAH / CAGARAN                 -->
+                            <!-- =============================================================== -->
                             <asp:Panel ID="pnldeposit" runat="server" Visible="False">
 
                                 <div class="row">
@@ -2780,6 +2642,9 @@
 
                             </asp:Panel>
 
+                            <!-- =============================================================== -->
+                            <!-- [INSERT] SECTION: MAKLUMAT PEMBATALAN PERMIT / LESEN            -->
+                            <!-- =============================================================== -->
                             <asp:Panel ID="pnlbatal1" runat="server" Visible="false">
                                 <br />
                                 <div class="row">
@@ -2824,7 +2689,7 @@
                                                     ControlToValidate="DDL_SebabBatal1" ErrorMessage="Sila Pilih" ForeColor="Red" ValidationGroup="insertForm" Display="Dynamic"></asp:RequiredFieldValidator>
                                             </asp:Panel>
 
-                                            <asp:Panel ID="pnlbatal4" runat="server" Visible="false">
+                                             <asp:Panel ID="pnlbatal4" runat="server" Visible="false">
                                                 <label>Sebab Pembatalan</label>
                                                 <asp:DropDownList ID="DDL_SebabBatal2" Text='<%# Bind("SebabBatalTanpaPerm") %>' CssClass="form-control select2" runat="server"
                                                     DataSourceID="SqlDataSourceSebab2" DataTextField="name" DataValueField="id">
@@ -2865,6 +2730,10 @@
                             </asp:Panel>
 
                         </div>
+
+                        <!-- =============================================================== -->
+                        <!-- [INSERT] FORM ACTIONS (SIMPAN / KEMBALI)                        -->
+                        <!-- =============================================================== -->
                         <div class="card-footer">
                             <asp:LinkButton runat="server" CssClass="btn btn-primary" ValidationGroup="insertForm" Text="Simpan" CommandName="Insert" ID="LinkButton1" CausesValidation="True" />
                             &nbsp;<asp:LinkButton runat="server" Text="Kembali" ID="BackButton" CausesValidation="False" CssClass="btn btn-default" OnClick="BackButton_Click" />
@@ -2874,6 +2743,9 @@
                 <ItemTemplate></ItemTemplate>
             </asp:FormView>
 
+            <!-- ======================================================================= -->
+            <!-- DATA SOURCE: SQLDATASOURCEFORM (INSERT / SELECT / UPDATE)               -->
+            <!-- ======================================================================= -->
             <asp:SqlDataSource runat="server" ID="SqlDataSourceForm" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
                 InsertCommand="INSERT INTO LESEN_Permohonan(JenisLesenDescList, JenisLesenIdList, SaizIklanList, CahayaIklanList, UnitIklanList, LokasiList, 
                         Permohonan_PemohonID, TarikhMohon, JenisLesen_ID, StatusID, NamaSyarikat, NoPendaftaran, NoAkaun, AlamatPremis, JenisPerniagaan,
@@ -2887,7 +2759,7 @@
                         Is24jam, IsBatal, JenisBatal, SebabBatalPerm, SebabBatalTanpaPerm, RemarksBatal, TindakanBatal, IsPulang, IsSuratKelulusanFail, IsSuratPembatalanFail, IsSuratPemeriksaanFail, IsRekodLama, RemarksFail, CreatorID, CreatedDt, LastModID, LastModDt) 
                         VALUES (@JenisLesenDescList, @JenisLesenIdList, @SaizIklanList, @CahayaIklanList, @UnitIklanList, @LokasiList, 
                         @Permohonan_PemohonID, @TarikhMohon, 0, 10, @NamaSyarikat, @NoPendaftaran, @NoAkaun, @AlamatPremis, @JenisPerniagaan, @PemilikBaru, @AlamatBaru,
-                        @JenisPerniagaanBaru, @NamaBaruSyarikat, @BillboardLokasi, @LokasiPasar1, @LokasiPasar3, @LokasiPasar3, @JenisPasar, @JenisPerniagaanPasar,
+                        @JenisPerniagaanBaru, @NamaBaruSyarikat, @BillboardLokasi, @LokasiPasar1, @LokasiPasar2, @LokasiPasar3, @JenisPasar, @JenisPerniagaanPasar,
                         @JumlahPetak, @AnjingAlamat, @AnjingJenisPremis, @JenisPenjaja, @StatusTanahPenjaja, @AlamatPenjajaan, @JenisPerniagaanPenjaja, @MasaPenjaja1, @MasaPenjaja2, @JenisKenderaanPenjaja, @NoKenderaanPenjaja,
                         @TarikhBatal, @PenganjurEkspo, @AlamatPenganjurEkspo, @PicEkspo, @NoTelEkspo, @NamaEkspo, @LokasiEkspo, @TarikhEkspo1, @TarikhEkspo2, @MasaEkspo1, @MasaEkspo2, 
                         @TentatifEkspo, @JemputanEkspo, @PembersihanEkspo, @TarikhKhemahEkspo1, @TarikhKhemahEkspo2, 
@@ -3084,6 +2956,9 @@
             </asp:SqlDataSource>
             <br />
 
+            <!-- ======================================================================= -->
+            <!-- SECTION: SENARAI PERMOHONAN & FILTER                                    -->
+            <!-- ======================================================================= -->
             <div class="row" id="whiteCard" runat="server">
                 <div class="col-12">
                     <div class="card">
@@ -3096,11 +2971,9 @@
                                 </div>
                             </div>
 
-                            <%--# START FILTER - set SortExpression at GridView as PRName & add WHERE 1=1 at SqlDataSource - SelectCommand #--%>
+                            <!-- Filter Controls -->
                             <div class="row" id="panelFilter" runat="server">
                                 <div class="col-md-10">
-                                    <%--<div id="pnlFilter" runat="server" class="row" hidden="hidden"></div>--%>
-
                                     <div class="row">
 
                                         <div class="col-md-3">
@@ -3187,18 +3060,6 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-md-3" runat="server" id="filterStatus">
-                                            <asp:DropDownList ID="DDL_Status" CssClass="form-control select2" runat="server" AutoPostBack="false"
-                                                DataSourceID="sdsStatus" DataTextField="Description" DataValueField="ApprStatusID">
-                                            </asp:DropDownList>
-                                            <asp:SqlDataSource runat="server" ID="sdsStatus" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
-                                                SelectCommand="select * from 
-                                                (select -1 as ApprStatusID, '-- Status --' as Description
-                                                union all
-                                                select ApprStatusID,  Description from ApprovalStatus
-                                                ) as tbl1 order by ApprStatusID "></asp:SqlDataSource>
-                                        </div>
-
                                         <div class="col-md-3" runat="server" id="filterCreatedBy">
                                             <div class="form-group">
                                                 <asp:DropDownList ID="DDL_CreatedBy" CssClass="form-control select2" runat="server" AutoPostBack="false"
@@ -3236,8 +3097,9 @@
                                     </div>
                                 </div>
                             </div>
-                            <%--# END FILTER #--%>
+                            <!-- End Filter Controls -->
 
+                            <!-- GridView: Senarai Permohonan -->
                             <asp:GridView ID="GridView1" HeaderStyle-ForeColor="Black" CssClass="table table-bordered" AllowPaging="True" PageSize="20"
                                 ShowHeaderWhenEmpty="True" EmptyDataText="Tiada Rekod Dijumpai" AllowSorting="True" runat="server" AutoGenerateColumns="False"
                                 DataKeyNames="Permohonan_ID, StatusID, IsBatal, JenisLesen_ID, IsPublish, Is24Jam, JenisLesenIdList" DataSourceID="SqlDataSourceGrid">
@@ -3254,7 +3116,6 @@
                                                 Font-Size="10pt"></asp:Label><br />
                                             <asp:Label ID="lblNamaAlamat" runat="server" Visible='<%# If(String.IsNullOrEmpty(Eval("NamaSyarikat")?.ToString()) And String.IsNullOrEmpty(Eval("NamaBaruSyarikat")?.ToString()), False, True) %>' 
                                                 Text='<%# Eval("DisplayAlamat") %>' Font-Size="10pt"></asp:Label>
-                               
                                         </ItemTemplate>
                                     </asp:TemplateField>
                                     <asp:TemplateField ShowHeader="True" HeaderText="Berisiko" SortExpression="IsNotRisk">
@@ -3274,21 +3135,14 @@
 
                                     <asp:TemplateField ShowHeader="False">
                                         <ItemTemplate>
-                                            <%--<asp:LinkButton runat="server" CssClass="btn btn-primary btn-sm" CommandName="Hantar" CausesValidation="False" ID="LinkButton6" data-toggle="tooltip" data-placement="top" title="Send" Text="Hantar" Visible='<%# If(Eval("Description") = "Draf (Telah Disemak)", True, False) %>' OnClientClick="return confirm('Hantar ke jabatan agensi sekarang?');" CommandArgument='<%# Container.DataItemIndex %>'/>--%> 
                                             <asp:LinkButton runat="server" CssClass="btn btn-primary btn-sm" CommandName="Select" CausesValidation="False" ID="LinkButton1" data-toggle="tooltip" data-placement="top" title="Edit" Text="Lihat" />
                                             <asp:LinkButton runat="server" CssClass="btn btn-default btn-sm" CommandName="Delete" CausesValidation="False" ID="LinkButton2" OnClientClick="return confirm('Anda pasti untuk memadam rekod ini?');" data-toggle="tooltip" data-placement="top" title="Delete">Padam</asp:LinkButton>
-                                            <%--<asp:LinkButton runat="server" CssClass="btn btn-danger btn-sm" CommandName="BatalProses" CausesValidation="False" ID="LinkButton5" OnClientClick="return confirm('Anda pasti untuk membatalkan proses ini?');" data-toggle="tooltip" data-placement="top" title="Cancel" Visible='<%# If(Eval("StatusID") < 9 And (Eval("StatusID") > 0 Or (Eval("StatusID") >= 0 And Eval("IsBatal") = True And (IsDBNull(Eval("SuratKelulusan1")) = False Or Eval("IsSuratKelulusanFail") = True))), True, False) %>' CommandArgument='<%# Container.DataItemIndex %>'>Batal Proses</asp:LinkButton>--%>
-                                        
                                         </ItemTemplate>
                                     </asp:TemplateField>
-
-                                    <%--<asp:TemplateField ShowHeader="False">
-                                        <ItemTemplate>
-                                            </ItemTemplate>
-                                    </asp:TemplateField>--%>
                                 </Columns>
                             </asp:GridView>
 
+                            <!-- Data Source: GridView Permohonan -->
                             <asp:SqlDataSource runat="server" ID="SqlDataSourceGrid" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
                                 DeleteCommand="DELETE FROM LESEN_Permohonan WHERE Permohonan_ID = @Permohonan_ID;
                                         DELETE FROM LESEN_KadarBayaran WHERE KadarBayaran_PermohonanID = @Permohonan_ID;
@@ -3309,7 +3163,6 @@
                                         AND CONVERT(varchar(max), ISNULL(a.NamaSyarikat,'')) = CASE WHEN @namaSyarikat = '-- Syarikat --' THEN CONVERT(varchar(max), ISNULL(a.NamaSyarikat,'')) ELSE @namaSyarikat END 
                                         AND a.IsBatal = CASE WHEN @batalID = 2 THEN a.IsBatal ELSE @batalID END 
                                         AND a.Is24Jam = CASE WHEN @risikoID = 2 THEN a.Is24Jam ELSE @risikoID END 
-                                        AND a.StatusID = CASE WHEN @statusID = -1 THEN a.StatusID ELSE @statusID END 
                                         AND a.CreatorID = CASE WHEN @creatorID = '0' THEN a.CreatorID ELSE @creatorID END 
                                         AND (ISNULL(a.AlamatPremis,'') LIKE CASE WHEN @Alamat='' THEN ISNULL(a.AlamatPremis,'') ELSE '%'+@Alamat+'%' END
                                         OR ISNULL(a.AlamatBaru,'') LIKE CASE WHEN @Alamat='' THEN ISNULL(a.AlamatBaru,'') ELSE '%'+@Alamat+'%' END
@@ -3334,7 +3187,6 @@
                                     <asp:ControlParameter ControlID="DDL_Syarikat" PropertyName="SelectedValue" Name="namaSyarikat"></asp:ControlParameter>
                                     <asp:ControlParameter ControlID="DDL_Pembatalan" PropertyName="SelectedValue" Name="batalID"></asp:ControlParameter>
                                     <asp:ControlParameter ControlID="DDL_Risiko" PropertyName="SelectedValue" Name="risikoID"></asp:ControlParameter>
-                                    <asp:ControlParameter ControlID="DDL_Status" PropertyName="SelectedValue" Name="statusID"></asp:ControlParameter>
                                     <asp:ControlParameter ControlID="DDL_CreatedBy" PropertyName="SelectedValue" Name="creatorID"></asp:ControlParameter>
                                     <asp:ControlParameter ControlID="TB_TarikhMohon" PropertyName="Text" DefaultValue="%%" Name="TarikhMohon"></asp:ControlParameter>
                                     <asp:ControlParameter ControlID="TB_Alamat" PropertyName="Text" DefaultValue="%%" Name="Alamat"></asp:ControlParameter>
@@ -3344,10 +3196,14 @@
                     </div>
                 </div>
             </div>
-            <!-- row whiteCard -->
-
+            <!-- ======================================================================= -->
+            <!-- SECTION: TAB CONTAINER (LAMPIRAN, MESYUARAT, KADAR BAYARAN)             -->
+            <!-- ======================================================================= -->
             <asp:TabContainer ID="TabContainer1" runat="server" ActiveTabIndex="0" Visible="false" CssClass="MyTabStyle">
 
+                <%-- ------------------------------------------------------------------- --%>
+                <%-- TAB 1: LAMPIRAN AWAM                                                --%>
+                <%-- ------------------------------------------------------------------- --%>
                 <asp:TabPanel runat="server" ID="tabPublicAttach" HeaderText="Lampiran Awam">
                     <HeaderTemplate>Lampiran Awam</HeaderTemplate>
                     <ContentTemplate>
@@ -3490,6 +3346,9 @@
                     </ContentTemplate>
                 </asp:TabPanel>
 
+                <%-- ------------------------------------------------------------------- --%>
+                <%-- TAB 2: LAMPIRAN MPK (ULASAN)                                        --%>
+                <%-- ------------------------------------------------------------------- --%>
                 <asp:TabPanel runat="server" ID="tabUlasan" HeaderText="Ulasan">
                     <HeaderTemplate>Lampiran MPK</HeaderTemplate>
                     <ContentTemplate>
@@ -3632,6 +3491,9 @@
                     </ContentTemplate>
                 </asp:TabPanel>
 
+                <%-- ------------------------------------------------------------------- --%>
+                <%-- TAB 3: MAKLUMAT MESYUARAT & KEWANGAN                                --%>
+                <%-- ------------------------------------------------------------------- --%>
                 <asp:TabPanel runat="server" ID="tabMesyuarat" HeaderText="Mesyuarat">
                     <HeaderTemplate>Mesyuarat</HeaderTemplate>
                     <ContentTemplate>
@@ -3694,6 +3556,9 @@
                     </ContentTemplate>
                 </asp:TabPanel>
 
+                <%-- ------------------------------------------------------------------- --%>
+                <%-- TAB 4: KADAR BAYARAN                                                --%>
+                <%-- ------------------------------------------------------------------- --%>
                 <asp:TabPanel runat="server" ID="tabKadarBayaran" HeaderText="Kadar Bayaran">
                     <HeaderTemplate>Kadar Bayaran</HeaderTemplate>
                     <ContentTemplate>
@@ -3846,113 +3711,34 @@
         </div>
     </section>
     <asp:Button ID="ui_btnPageBottom" runat="server" Text="-" Style="margin-left: -999px;" />
-    <%--</ContentTemplate>
-    </asp:UpdatePanel>--%>
 
+    <!-- ======================================================================= -->
+    <!-- CLIENT-SIDE SCRIPTS                                                     -->
+    <!-- ======================================================================= -->
     <script>
-
         function pageLoad() {
-
+            // Adjust tab container dimensions if rendered
             $("#ctl00_ContentPlaceHolder1_LabelAttributes1_TabContainer1").css({ 'width': 400, 'height': 400 });
 
             $(function () {
-
+                // Datepicker initialization
                 $('.datepicker').datepicker({
                     dateFormat: 'dd/mm/yy',
                     defaultDate: new Date()
-                })
+                });
 
-                //Initialize Select2 Elements
-                $('.select2').select2()
-
-                //Initialize Select2 Elements
+                // Select2 dropdown initialization
+                $('.select2').select2();
                 $('.select2bs4').select2({
                     theme: 'bootstrap4'
-                })
-
-                //Datemask dd/mm/yyyy
-                $('#datemask').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' })
-                //Datemask2 mm/dd/yyyy
-                $('#datemask2').inputmask('mm/dd/yyyy', { 'placeholder': 'mm/dd/yyyy' })
-                //Money Euro
-                $('[data-mask]').inputmask()
-
-                //Date range picker
-                $('#reservationdate').datetimepicker({
-                    format: 'L'
-                });
-                //Date range picker
-                $('#reservation').daterangepicker()
-                //Date range picker with time picker
-                $('#reservationtime').daterangepicker({
-                    timePicker: true,
-                    timePickerIncrement: 30,
-                    locale: {
-                        format: 'MM/DD/YYYY hh:mm A'
-                    }
-                })
-                //Date range as a button
-                $('#daterange-btn').daterangepicker(
-                    {
-                        ranges: {
-                            'Today': [moment(), moment()],
-                            'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-                            'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-                            'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-                            'This Month': [moment().startOf('month'), moment().endOf('month')],
-                            'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-                        },
-                        startDate: moment().subtract(29, 'days'),
-                        endDate: moment()
-                    },
-                    function (start, end) {
-                        $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'))
-                    }
-                )
-
-                //Timepicker
-                $('#timepicker').datetimepicker({
-                    format: 'LT'
-                })
-
-                //Bootstrap Duallistbox
-                $('.duallistbox').bootstrapDualListbox()
-
-                //Colorpicker
-                $('.my-colorpicker1').colorpicker()
-                //color picker with addon
-                $('.my-colorpicker2').colorpicker()
-
-                $('.my-colorpicker2').on('colorpickerChange', function (event) {
-                    $('.my-colorpicker2 .fa-square').css('color', event.color.toString());
                 });
 
-                $("input[data-bootstrap-switch]").each(function () {
-                    $(this).bootstrapSwitch('state', $(this).prop('checked'));
-                });
-
-                $("#example1").DataTable({
-                    "responsive": true,
-                    "autoWidth": false,
-                });
-                $('#example2').DataTable({
-                    "paging": true,
-                    "lengthChange": false,
-                    "searching": false,
-                    "ordering": true,
-                    "info": true,
-                    "autoWidth": false,
-                    "responsive": true,
-                });
-                $('.toastrDefaultSuccess').click(function () {
-                    toastr.success('Lorem ipsum dolor sit amet, consetetur sadipscing elitr.')
-                });
-
-
-            })
-
+                // Input mask initialization
+                $('#datemask').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' });
+                $('#datemask2').inputmask('mm/dd/yyyy', { 'placeholder': 'mm/dd/yyyy' });
+                $('[data-mask]').inputmask();
+            });
         }
-
     </script>
 
 </asp:Content>
