@@ -2965,7 +2965,7 @@
                         <div class="card-body">
 
                             <div class="row">
-                                <div class="col-4 offset-md-8">
+                                <div class="col-12 text-end">
                                     <asp:Button ID="ButtonAddAssignment" runat="server" Text="Rekod Permohonan Lama" CssClass="btn btn-block btn-primary" />
                                     <br />
                                 </div>
