@@ -3365,7 +3365,7 @@
                     <div class="card">
                         <div class="card-body">
 
-                            <div class="row mb-2">
+                            <div class="row mb-4">
                                 <div class="col-12 text-end">
                                     <asp:Button ID="ButtonAddAssignment" runat="server" Text="Permohonan Baru" CssClass="btn btn-block btn-primary" />
                                     <br />
