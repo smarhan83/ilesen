@@ -1,307 +1,121 @@
-<%@ Page MaintainScrollPositionOnPostback="true" Title="" Language="VB" MasterPageFile="~/MasterMenu.master" AutoEventWireup="false" CodeFile="appregister1.aspx.vb" Inherits="appregister1" %>
+﻿<%@ Page MaintainScrollPositionOnPostback="true" Title="" Language="VB" MasterPageFile="~/MasterMenu.master" AutoEventWireup="false" CodeFile="appregister1.aspx.vb" Inherits="appregister1" %>
 
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="asp" %>
 
 <asp:Content ID="HeaderContent" ContentPlaceHolderID="HeadContent" runat="Server">
-    <style>
+        <style>
         .ajax__scroll_none {
             overflow: visible !important;
         }
 
+        /* Tooltip Styling */
         .wrapperTooltip {
-            /*text-transform: uppercase;
-	   background: #ececec;
-	   color: #555;*/
             cursor: help;
-            /*font-family: "Gill Sans", Impact, sans-serif;
-	   font-size: 20px;*/
-            /*   margin: 100px 75px 10px 75px;
-	   padding: 15px 20px;*/
             position: relative;
             text-align: center;
             width: 100%;
-            -webkit-transform: translateZ(0); /* webkit flicker fix */
-            -webkit-font-smoothing: antialiased; /* webkit text rendering fix */
+            -webkit-transform: translateZ(0);
+            -webkit-font-smoothing: antialiased;
             z-index: 9999999 !important;
         }
 
-            .wrapperTooltip .tooltip {
-                background: #1496bb;
-                bottom: 100%;
-                color: #fff;
-                display: block;
-                left: -20px;
-                margin-bottom: 15px;
-                opacity: 0;
-                padding: 20px;
-                pointer-events: none;
-                position: absolute;
-                width: 100%;
-                /*-webkit-transform: translateY(10px);
-	   -moz-transform: translateY(10px);
-	   -ms-transform: translateY(10px);
-	   -o-transform: translateY(10px);
-	   transform: translateY(10px);
-	   -webkit-transition: all .25s ease-out;
-	   -moz-transition: all .25s ease-out;
-	   -ms-transition: all .25s ease-out;
-	   -o-transition: all .25s ease-out;
-	   transition: all .25s ease-out;*/
-                -webkit-box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.28);
-                -moz-box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.28);
-                -ms-box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.28);
-                -o-box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.28);
-                box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.28);
-                z-index: 9999999 !important;
-            }
-
-                /* This bridges the gap so you can mouse into the tooltip without it disappearing */
-                .wrapperTooltip .tooltip:before {
-                    bottom: -20px;
-                    content: " ";
-                    display: block;
-                    /*height: 500px;*/
-                    left: 0;
-                    position: absolute;
-                    width: 100%;
-                    z-index: 9999999 !important;
-                }
-
-                /* CSS Triangles - see Trevor's post */
-                .wrapperTooltip .tooltip:after {
-                    border-left: solid transparent 10px;
-                    border-right: solid transparent 10px;
-                    border-top: solid #1496bb 10px;
-                    bottom: -10px;
-                    content: " ";
-                    height: 0;
-                    left: 50%;
-                    margin-left: -13px;
-                    position: absolute;
-                    width: 0;
-                    z-index: 9999999 !important;
-                }
-
-            .wrapperTooltip:hover .tooltip {
-                opacity: 1;
-                pointer-events: auto;
-                /*-webkit-transform: translateY(0px);
-	   -moz-transform: translateY(0px);
-	   -ms-transform: translateY(0px);
-	   -o-transform: translateY(0px);
-	   transform: translateY(0px);*/
-                z-index: 9999999 !important;
-            }
-
-        /* IE can just show/hide with no transition */
-        .lte8 .wrapperTooltip .tooltip {
-            display: none;
+        .wrapperTooltip .tooltip {
+            background: #1496bb;
+            bottom: 100%;
+            color: #fff;
+            display: block;
+            left: -20px;
+            margin-bottom: 15px;
+            opacity: 0;
+            padding: 20px;
+            pointer-events: none;
+            position: absolute;
+            width: 100%;
+            box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.28);
+            z-index: 9999999 !important;
+            transition: opacity 0.25s ease-out;
         }
 
-        .lte8 .wrapperTooltip:hover .tooltip {
+        .wrapperTooltip .tooltip:before {
+            bottom: -20px;
+            content: " ";
             display: block;
+            left: 0;
+            position: absolute;
+            width: 100%;
+            z-index: 9999999 !important;
+        }
+
+        .wrapperTooltip .tooltip:after {
+            border-left: solid transparent 10px;
+            border-right: solid transparent 10px;
+            border-top: solid #1496bb 10px;
+            bottom: -10px;
+            content: " ";
+            height: 0;
+            left: 50%;
+            margin-left: -13px;
+            position: absolute;
+            width: 0;
+            z-index: 9999999 !important;
+        }
+
+        .wrapperTooltip:hover .tooltip {
+            opacity: 1;
+            pointer-events: auto;
+            z-index: 9999999 !important;
         }
 
         .Disabled {
             pointer-events: none;
             cursor: not-allowed;
             opacity: 0.65;
-            filter: alpha(opacity=65);
-            -webkit-box-shadow: none;
             box-shadow: none;
         }
 
+        /* AjaxControlToolkit TabContainer Custom Styling */
+        .ajax__tab_xp .ajax__tab_header,
+        .ajax__tab_xp .ajax__tab_header .ajax__tab_outer,
+        .ajax__tab_xp .ajax__tab_header .ajax__tab_inner,
+        .ajax__tab_xp .ajax__tab_header .ajax__tab_tab,
+        .ajax__tab_xp .ajax__tab_header_verticalleft,
+        .ajax__tab_xp .ajax__tab_header_verticalright,
+        .ajax__tab_xp .ajax__tab_header_bottom {
+            background-image: none !important;
+        }
+
         .ajax__tab_xp .ajax__tab_header {
-            background-image: url('') !important;
             font-size: 11pt !important;
             height: 40px !important;
             color: #000 !important;
         }
 
-            .ajax__tab_xp .ajax__tab_header .ajax__tab_outer {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header .ajax__tab_inner {
-                /* background-image: url('WebResource.axd?d=zNSHuGr6hc7c16bSY9eWXPrNBVsZSwehGbscYki57kRbdTai8trIfAuzMrttb3pm0uA8ApvgRAgRqJhPO3fCauUTiyK3qOK21RmA7QURs6o63zcRczK2Ul9bZbli-JHArtBLoeaLoTT7L8haCKoAtg2&t=636970230480000000'); */
-            }
-
-            .ajax__tab_xp .ajax__tab_header .ajax__tab_tab {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header .ajax__tab_hover .ajax__tab_outer {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header .ajax__tab_hover .ajax__tab_inner {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header .ajax__tab_hover .ajax__tab_tab {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header .ajax__tab_active .ajax__tab_outer {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header .ajax__tab_active .ajax__tab_inner {
-                /* background-image: url('WebResource.axd?d=7d55T9B4j42nYTnSODbo405bsr8zp3hoGjir6Z58ZoKPdLgwtf6qu3MXJibmbhhdha0NpvsKmg-yAHSNyDR0n5oskACF5v0vuvb-ErTRvIZqPQgNHZyi6J2H6QcoTzSVIy4XafuCbAtMT3T8iHBky3A6CmqrVChVQYLFcawUCe01&t=636970230480000000'); */
-            }
-
-            .ajax__tab_xp .ajax__tab_header .ajax__tab_active .ajax__tab_tab {
-                background-image: url('') !important;
-            }
-
-        .ajax__tab_xp .ajax__tab_header_verticalleft {
-            background-image: url('') !important;
-        }
-
-            .ajax__tab_xp .ajax__tab_header_verticalleft .ajax__tab_outer {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header_verticalleft .ajax__tab_inner {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header_verticalleft .ajax__tab_tab {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header_verticalleft .ajax__tab_hover .ajax__tab_outer {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header_verticalleft .ajax__tab_hover .ajax__tab_inner {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header_verticalleft .ajax__tab_hover .ajax__tab_tab {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header_verticalleft .ajax__tab_active .ajax__tab_outer {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header_verticalleft .ajax__tab_active .ajax__tab_inner {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header_verticalleft .ajax__tab_active .ajax__tab_tab {
-                background-image: url('') !important;
-            }
-
-        .ajax__tab_xp .ajax__tab_header_verticalright {
-            background-image: url('') !important;
-        }
-
-            .ajax__tab_xp .ajax__tab_header_verticalright .ajax__tab_outer {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header_verticalright .ajax__tab_inner {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header_verticalright .ajax__tab_tab {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header_verticalright .ajax__tab_hover .ajax__tab_outer {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header_verticalright .ajax__tab_hover .ajax__tab_inner {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header_verticalright .ajax__tab_hover .ajax__tab_tab {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header_verticalright .ajax__tab_active .ajax__tab_outer {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header_verticalright .ajax__tab_active .ajax__tab_inner {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header_verticalright .ajax__tab_active .ajax__tab_tab {
-                background-image: url('') !important;
-            }
-
-        .ajax__tab_xp .ajax__tab_header_bottom {
-            background-image: url('') !important;
-        }
-
-            .ajax__tab_xp .ajax__tab_header_bottom .ajax__tab_outer {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header_bottom .ajax__tab_inner {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header_bottom .ajax__tab_tab {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header_bottom .ajax__tab_hover .ajax__tab_outer {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header_bottom .ajax__tab_hover .ajax__tab_inner {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header_bottom .ajax__tab_hover .ajax__tab_tab {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header_bottom .ajax__tab_active .ajax__tab_outer {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header_bottom .ajax__tab_active .ajax__tab_inner {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header_bottom .ajax__tab_active .ajax__tab_tab {
-                background-image: url('') !important;
-            }
-
-        .ajax__tab_xp .ajax__tab_header .ajax__tab_active .ajax__tab_inner {
-            background-image: url('') !important;
-            width: 150px !important;
-            text-align: center !important;
-            vertical-align: middle !important;
-            border-top-right-radius: 10px 10px !important;
-            border-top-left-radius: 10px 10px !important;
-        }
-
-            .ajax__tab_xp .ajax__tab_header .ajax__tab_active .ajax__tab_inner a {
-                color: #fff !important;
-                /*font-weight : bold !important;*/
-            }
-
         .ajax__tab_xp .ajax__tab_header .ajax__tab_inner {
-            background-image: url('') !important;
             background-color: #E9ECEF !important;
             width: 150px !important;
             text-align: center !important;
             vertical-align: middle !important;
-            border-top-right-radius: 10px 10px !important;
-            border-top-left-radius: 10px 10px !important;
+            border-top-right-radius: 10px !important;
+            border-top-left-radius: 10px !important;
         }
 
-            .ajax__tab_xp .ajax__tab_header .ajax__tab_inner a {
-                color: #413a3a !important;
-            }
+        .ajax__tab_xp .ajax__tab_header .ajax__tab_inner a {
+            color: #413a3a !important;
+        }
 
+        .ajax__tab_xp .ajax__tab_header .ajax__tab_active .ajax__tab_inner {
+            background-color: #ffc107 !important;
+            width: 150px !important;
+            text-align: center !important;
+            vertical-align: middle !important;
+            border-top-right-radius: 10px !important;
+            border-top-left-radius: 10px !important;
+        }
+
+        .ajax__tab_xp .ajax__tab_header .ajax__tab_active .ajax__tab_inner a {
+            color: #fff !important;
+            font-weight: 600 !important;
+        }
 
         .styleDisplayNone {
             display: none;
@@ -311,6 +125,7 @@
             text-align: center;
         }
 
+        /* Status Pills */
         .status-pill {
             display: inline-flex;
             align-items: flex-start;
@@ -360,9 +175,8 @@
             background-color: #f0f1f4;
             color: #6f7786;
         }
-    </style>
 
-    <style>
+        /* QR Code Card */
         .qr-box {
             width: 225px;
             height: 90px;
@@ -408,7 +222,7 @@
             color: #555;
         }
 
-        /* ===== Status Proses Timeline ===== */
+        /* Status Proses Timeline */
         .status-proses-card {
             background: #fff;
             border: 1px solid #e9ecef;
@@ -588,6 +402,9 @@
     <section class="content">
         <div class="container-fluid">
 
+                        <%-- =========================================================================
+                 SECTION 1: FormView1 - Permohonan (Edit & Insert Templates)
+                 ========================================================================= --%>
             <asp:FormView ID="FormView1" runat="server" DataKeyNames="Permohonan_ID"
                 DataSourceID="SqlDataSourceForm" Width="100%" DefaultMode="Edit">
                 <EditItemTemplate>
@@ -3128,6 +2945,9 @@
                 <ItemTemplate></ItemTemplate>
             </asp:FormView>
 
+                        <%-- =========================================================================
+                 SECTION 2: Modal QR Code
+                 ========================================================================= --%>
             <!-- Modal QR Code -->
             <div class="modal fade" id="modalQrCode" tabindex="-1" role="dialog" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered" role="document">
@@ -3150,6 +2970,9 @@
                 </div>
             </div>
 
+                        <%-- =========================================================================
+                 SECTION 3: SqlDataSourceForm (Insert / Update / Select)
+                 ========================================================================= --%>
             <asp:SqlDataSource runat="server" ID="SqlDataSourceForm" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
                 InsertCommand="INSERT INTO LESEN_Permohonan(JenisLesenDescList, JenisLesenIdList, SaizIklanList, CahayaIklanList, UnitIklanList, LokasiList, 
                         Permohonan_PemohonID, TarikhMohon, JenisLesen_ID, StatusID, NamaSyarikat, NoPendaftaran, NoAkaun, AlamatPremis, JenisPerniagaan,
@@ -3173,7 +2996,7 @@
                         @Is24jam, @IsBatal, @JenisBatal, @SebabBatalPerm, @SebabBatalTanpaPerm, @RemarksBatal, @TindakanBatal, 0, 0, 0, 0, @RemarksFail, @CreatorId, GETDATE(), @CreatorId, GETDATE()); SELECT @Permohonan_ID = SCOPE_IDENTITY();"
                 SelectCommand="SELECT * FROM LESEN_Permohonan WHERE Permohonan_ID = @Permohonan_ID"
                 UpdateCommand="UPDATE LESEN_Permohonan SET JenisLesenDescList = @JenisLesenDescList, JenisLesenIdList = @JenisLesenIdList, SaizIklanList = @SaizIklanList, CahayaIklanList = @CahayaIklanList, UnitIklanList = @UnitIklanList, LokasiList = @LokasiList, 
-                        Permohonan_PemohonID = @Permohonan_PemohonID, TarikhMohon = @TarikhMohon, StatusID = @StatusID, NamaSyarikat = @NamaSyarikat, NoPendaftaran = @NoPendaftaran, NoAkaun = @NoAkaun, AlamatPremis = @AlamatPremis, 
+                        Permohonan_PemohonID = @Permohonan_PemohonID, TarikhMohon = @TarikhMohon, NamaSyarikat = @NamaSyarikat, NoPendaftaran = @NoPendaftaran, NoAkaun = @NoAkaun, AlamatPremis = @AlamatPremis, 
                         JenisPerniagaan = @JenisPerniagaan, PemilikBaru = @PemilikBaru, AlamatBaru = @AlamatBaru, JenisPerniagaanBaru = @JenisPerniagaanBaru, NamaBaruSyarikat = @NamaBaruSyarikat,  
                         BillboardLokasi = @BillboardLokasi, LokasiPasar1 = @LokasiPasar1, LokasiPasar2 = @LokasiPasar2, LokasiPasar3 = @LokasiPasar3,
                         JenisPasar = @JenisPasar, JenisPerniagaanPasar = @JenisPerniagaanPasar, JumlahPetak = @JumlahPetak, AnjingAlamat = @AnjingAlamat, AnjingJenisPremis = @AnjingJenisPremis, JenisPenjaja = @JenisPenjaja, StatusTanahPenjaja = @StatusTanahPenjaja,
@@ -3360,6 +3183,9 @@
             </asp:SqlDataSource>
             <br />
 
+                        <%-- =========================================================================
+                 SECTION 4: Search Filter & Main GridView (whiteCard)
+                 ========================================================================= --%>
             <div class="row" id="whiteCard" runat="server">
                 <div class="col-12">
                     <div class="card">
@@ -3723,8 +3549,12 @@
             </div>
             <!-- row whiteCard -->
 
+                        <%-- =========================================================================
+                 SECTION 5: TabContainer1 - Tabs (Lampiran, Maklumat, Mesyuarat, Agensi)
+                 ========================================================================= --%>
             <asp:TabContainer ID="TabContainer1" runat="server" ActiveTabIndex="0" Visible="false" CssClass="MyTabStyle">
 
+                <%-- --- Tab 1: Lampiran Awam --- --%>
                 <asp:TabPanel runat="server" ID="tabPublicAttach" HeaderText="Lampiran Awam">
                     <HeaderTemplate>Lampiran Awam</HeaderTemplate>
                     <ContentTemplate>
@@ -3867,6 +3697,7 @@
                     </ContentTemplate>
                 </asp:TabPanel>
 
+                <%-- --- Tab 2: Ulasan (Lampiran MPK) --- --%>
                 <asp:TabPanel runat="server" ID="tabUlasan" HeaderText="Ulasan">
                     <HeaderTemplate>Lampiran MPK</HeaderTemplate>
                     <ContentTemplate>
@@ -4009,6 +3840,7 @@
                     </ContentTemplate>
                 </asp:TabPanel>
 
+                <%-- --- Tab 3: Maklumat (Inspektorat / Pembetulan Maklumat) --- --%>
                 <asp:TabPanel runat="server" ID="tabMaklumat" HeaderText="Maklumat" Visible="false">
                     <HeaderTemplate>Inspektorat</HeaderTemplate>
                     <ContentTemplate>
@@ -4812,6 +4644,7 @@
                     </ContentTemplate>
                 </asp:TabPanel>
 
+                <%-- --- Tab 4: Mesyuarat --- --%>
                 <asp:TabPanel runat="server" ID="tabMesyuarat" HeaderText="Mesyuarat">
                     <HeaderTemplate>Mesyuarat</HeaderTemplate>
                     <ContentTemplate>
@@ -4874,6 +4707,7 @@
                     </ContentTemplate>
                 </asp:TabPanel>
 
+                <%-- --- Tab 5: Kadar Bayaran --- --%>
                 <asp:TabPanel runat="server" ID="tabKadarBayaran" HeaderText="Kadar Bayaran">
                     <HeaderTemplate>Kadar Bayaran</HeaderTemplate>
                     <ContentTemplate>
@@ -5021,6 +4855,7 @@
                     </ContentTemplate>
                 </asp:TabPanel>
 
+                <%-- --- Tab 6: Surat Mohon Ulasan --- --%>
                 <asp:TabPanel runat="server" ID="TabSurat" HeaderText="Surat Mohon Ulasan">
                     <HeaderTemplate>Surat</HeaderTemplate>
                     <ContentTemplate>
@@ -5110,6 +4945,7 @@
                     </ContentTemplate>
                 </asp:TabPanel>
 
+                <%-- --- Tab 7: Jabatan Agensi --- --%>
                 <asp:TabPanel runat="server" ID="TabJabatanAgensi" HeaderText="Jabatan Agensi">
                     <HeaderTemplate>Jabatan Agensi</HeaderTemplate>
                     <ContentTemplate>
@@ -5255,6 +5091,7 @@
                     </ContentTemplate>
                 </asp:TabPanel>
 
+                <%-- --- Tab 8: Jabatan Agensi Batal --- --%>
                 <asp:TabPanel runat="server" ID="TabJabatanAgensiBatal" HeaderText="Jabatan Agensi Batal">
                     <HeaderTemplate>Jabatan Agensi</HeaderTemplate>
                     <ContentTemplate>
@@ -5344,6 +5181,7 @@
                     </ContentTemplate>
                 </asp:TabPanel>
 
+                <%-- --- Tab 9: Log Kelulusan --- --%>
                 <asp:TabPanel runat="server" ID="TabLog" HeaderText="Log Kelulusan">
                     <HeaderTemplate>Log Kelulusan</HeaderTemplate>
                     <ContentTemplate>
@@ -5532,6 +5370,7 @@ ORDER BY
                     </ContentTemplate>
                 </asp:TabPanel>
 
+                <%-- --- Tab 10: Log Pembatalan --- --%>
                 <asp:TabPanel runat="server" ID="TabLogBatal" HeaderText="Log Pembatalan">
                     <HeaderTemplate>Log Pembatalan</HeaderTemplate>
                     <ContentTemplate>
@@ -5735,113 +5574,30 @@ ORDER BY
     <%--</ContentTemplate>
     </asp:UpdatePanel>--%>
 
-    <script>
-
+        <%-- =========================================================================
+         SECTION 6: Client Scripts (Initializers & QR Modal)
+         ========================================================================= --%>
+    <script type="text/javascript">
         function pageLoad() {
-
-            $("#ctl00_ContentPlaceHolder1_LabelAttributes1_TabContainer1").css({ 'width': 400, 'height': 400 });
-
             $(function () {
-
                 $('.datepicker').datepicker({
                     dateFormat: 'dd/mm/yy',
                     defaultDate: new Date()
-                })
+                });
 
-                //Initialize Select2 Elements
-                $('.select2').select2()
-
-                //Initialize Select2 Elements
+                // Initialize Select2 Elements
+                $('.select2').select2();
                 $('.select2bs4').select2({
                     theme: 'bootstrap4'
-                })
-
-                //Datemask dd/mm/yyyy
-                $('#datemask').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' })
-                //Datemask2 mm/dd/yyyy
-                $('#datemask2').inputmask('mm/dd/yyyy', { 'placeholder': 'mm/dd/yyyy' })
-                //Money Euro
-                $('[data-mask]').inputmask()
-
-                //Date range picker
-                $('#reservationdate').datetimepicker({
-                    format: 'L'
-                });
-                //Date range picker
-                $('#reservation').daterangepicker()
-                //Date range picker with time picker
-                $('#reservationtime').daterangepicker({
-                    timePicker: true,
-                    timePickerIncrement: 30,
-                    locale: {
-                        format: 'MM/DD/YYYY hh:mm A'
-                    }
-                })
-                //Date range as a button
-                $('#daterange-btn').daterangepicker(
-                    {
-                        ranges: {
-                            'Today': [moment(), moment()],
-                            'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-                            'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-                            'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-                            'This Month': [moment().startOf('month'), moment().endOf('month')],
-                            'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-                        },
-                        startDate: moment().subtract(29, 'days'),
-                        endDate: moment()
-                    },
-                    function (start, end) {
-                        $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'))
-                    }
-                )
-
-                //Timepicker
-                $('#timepicker').datetimepicker({
-                    format: 'LT'
-                })
-
-                //Bootstrap Duallistbox
-                $('.duallistbox').bootstrapDualListbox()
-
-                //Colorpicker
-                $('.my-colorpicker1').colorpicker()
-                //color picker with addon
-                $('.my-colorpicker2').colorpicker()
-
-                $('.my-colorpicker2').on('colorpickerChange', function (event) {
-                    $('.my-colorpicker2 .fa-square').css('color', event.color.toString());
                 });
 
-                $("input[data-bootstrap-switch]").each(function () {
-                    $(this).bootstrapSwitch('state', $(this).prop('checked'));
-                });
-
-                $("#example1").DataTable({
-                    "responsive": true,
-                    "autoWidth": false,
-                });
-                $('#example2').DataTable({
-                    "paging": true,
-                    "lengthChange": false,
-                    "searching": false,
-                    "ordering": true,
-                    "info": true,
-                    "autoWidth": false,
-                    "responsive": true,
-                });
-                $('.toastrDefaultSuccess').click(function () {
-                    toastr.success('Lorem ipsum dolor sit amet, consetetur sadipscing elitr.')
-                });
-
-
-            })
-
+                // Datemasks
+                $('#datemask').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' });
+                $('#datemask2').inputmask('mm/dd/yyyy', { 'placeholder': 'mm/dd/yyyy' });
+                $('[data-mask]').inputmask();
+            });
         }
 
-    </script>
-
-    <script>
         function printQrOnly() {
             var printContents = document.getElementById('qrPrintArea').innerHTML;
             var printWindow = window.open('', '_blank', 'width=400,height=500');
@@ -5853,17 +5609,13 @@ ORDER BY
         }
 
         function closeQrModal() {
-            // Bootstrap 4/5 jQuery method
             if (typeof $ !== 'undefined' && $.fn.modal) {
                 $('#modalQrCode').modal('hide');
-            }
-            // Bootstrap 5 native JS method (fallback)
-            else if (typeof bootstrap !== 'undefined') {
+            } else if (typeof bootstrap !== 'undefined') {
                 var modalEl = document.getElementById('modalQrCode');
                 var modalInstance = bootstrap.Modal.getInstance(modalEl);
                 if (modalInstance) modalInstance.hide();
             }
         }
     </script>
-
 </asp:Content>
