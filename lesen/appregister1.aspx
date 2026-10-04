@@ -1,4 +1,4 @@
-﻿<%@ Page MaintainScrollPositionOnPostback="true" Title="" Language="VB" MasterPageFile="~/MasterMenu.master" AutoEventWireup="false" CodeFile="appregister1.aspx.vb" Inherits="appregister1" %>
+<%@ Page MaintainScrollPositionOnPostback="true" Title="" Language="VB" MasterPageFile="~/MasterMenu.master" AutoEventWireup="false" CodeFile="appregister1.aspx.vb" Inherits="appregister1" %>
 
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="asp" %>
 
@@ -1631,7 +1631,7 @@
                         <div class="card-footer">
                             <asp:LinkButton runat="server" CssClass="btn btn-warning" ValidationGroup="updateForm" Text="Kemaskini" CommandName="Update" ID="UpdateFormButton" CausesValidation="True" />
                             <asp:LinkButton runat="server" CssClass="btn btn-warning" Visible='<%# If(Eval("StatusID") = 0, True, False) %>' ValidationGroup="updateForm" Text="Hantar" ID="SubmitApproval" OnCommand="OnClickBtnSubmit" CausesValidation="False" OnClientClick="return confirm('Hantar ke jabatan agensi sekarang?');" />
-                            <asp:LinkButton runat="server" CssClass="btn btn-warning" Visible='<%# If(Eval("StatusID") = 10, True, False) %>' Text="Surat Kelulusan" ID="ViewSuratKelulusan" OnCommand="OnClickSuratKelulusan" CausesValidation="False" />
+                            <asp:LinkButton runat="server" CssClass="btn btn-warning" Visible='<%# If(Eval("StatusID") = 10, True, False) %>' Text='<%# If(Eval("IsBatal") = False, "Surat Kelulusan", "Surat Pembatalan") %>' ID="ViewSuratKelulusanPembatalan" OnCommand="OnClickSuratKelulusanPembatalan" CausesValidation="False" />
                             <asp:LinkButton runat="server" Text="Kembali" ID="BackButton" CausesValidation="False" CssClass="btn btn-default" OnClick="BackButton_Click" />
                         </div>
                     </div>
@@ -3419,6 +3419,7 @@
                                         <ItemTemplate>
                                             <asp:LinkButton runat="server" CssClass="btn btn-primary btn-sm" CommandName="Hantar" CausesValidation="False" ID="LinkButton6" data-toggle="tooltip" data-placement="top" title="Send" Text="Hantar" Visible='<%# If(Eval("Description") = "Draf (Telah Disemak)", True, False) %>' OnClientClick="return confirm('Hantar ke jabatan agensi sekarang?');" CommandArgument='<%# Container.DataItemIndex %>'/> 
                                             <asp:LinkButton runat="server" CssClass="btn btn-primary btn-sm" CommandName="Select" CausesValidation="False" ID="LinkButton1" data-toggle="tooltip" data-placement="top" title="Edit" Text="Lihat" />
+                                            <asp:LinkButton runat="server" CssClass="btn btn-warning btn-sm" CommandName="SuratKelulusan" CausesValidation="False" ID="lbSuratKelulusan" data-toggle="tooltip" data-placement="top" title='<%# If(Eval("IsBatal") = False, "Surat Kelulusan", "Surat Pembatalan") %>' Text='<%# If(Eval("IsBatal") = False, "Surat Kelulusan", "Surat Pembatalan") %>' Visible='<%# If(Eval("StatusID") = 10, True, False) %>' CommandArgument='<%# Container.DataItemIndex %>' />
                                             <asp:LinkButton runat="server" CssClass="btn btn-default btn-sm" CommandName="Delete" CausesValidation="False" ID="LinkButton2" OnClientClick="return confirm('Anda pasti untuk memadam rekod ini?');" data-toggle="tooltip" data-placement="top" title="Delete" Visible='<%# If(Eval("StatusID") < 1 And IsDBNull(Eval("SuratKelulusan1")) And Eval("IsSuratKelulusanFail") = False, True, False) %>'>Padam</asp:LinkButton>
                                             <asp:LinkButton runat="server" CssClass="btn btn-danger btn-sm" CommandName="BatalProses" CausesValidation="False" ID="LinkButton5" OnClientClick="return confirm('Anda pasti untuk membatalkan proses ini?');" data-toggle="tooltip" data-placement="top" title="Cancel" Visible='<%# If(Eval("StatusID") < 9 And (Eval("StatusID") > 0 Or (Eval("StatusID") >= 0 And Eval("IsBatal") = True And (IsDBNull(Eval("SuratKelulusan1")) = False Or Eval("IsSuratKelulusanFail") = True))), True, False) %>' CommandArgument='<%# Container.DataItemIndex %>'>Batal Proses</asp:LinkButton>
                                         
