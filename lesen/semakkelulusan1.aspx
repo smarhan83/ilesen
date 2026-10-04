@@ -1,9 +1,8 @@
-﻿<%@ Page MaintainScrollPositionOnPostback="true" Title="" Language="VB" MasterPageFile="~/MasterMenu.master" AutoEventWireup="false" CodeFile="semakkelulusan1.aspx.vb" Inherits="semakkelulusan1" %>
+<%@ Page MaintainScrollPositionOnPostback="true" Title="" Language="VB" MasterPageFile="~/MasterMenu.master" AutoEventWireup="false" CodeFile="semakkelulusan1.aspx.vb" Inherits="semakkelulusan1" %>
 
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="asp" %>
 
 <asp:Content ID="HeaderContent" ContentPlaceHolderID="HeadContent" runat="Server">
-
     <style>
         .paraGraphtext {
             overflow: hidden;
@@ -13,11 +12,10 @@
         }
 
         .csslblUlasan {
-            /*background-color : #ffffff !important;*/
             font-weight: normal !important;
         }
 
-
+        /* AjaxControlToolkit TabContainer Styling */
         .ajax__tab_xp .ajax__tab_header {
             background-image: url('') !important;
             font-size: 11pt !important;
@@ -25,164 +23,13 @@
             color: #000 !important;
         }
 
-            .ajax__tab_xp .ajax__tab_header .ajax__tab_outer {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header .ajax__tab_inner {
-                /* background-image: url('WebResource.axd?d=zNSHuGr6hc7c16bSY9eWXPrNBVsZSwehGbscYki57kRbdTai8trIfAuzMrttb3pm0uA8ApvgRAgRqJhPO3fCauUTiyK3qOK21RmA7QURs6o63zcRczK2Ul9bZbli-JHArtBLoeaLoTT7L8haCKoAtg2&t=636970230480000000'); */
-            }
-
-            .ajax__tab_xp .ajax__tab_header .ajax__tab_tab {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header .ajax__tab_hover .ajax__tab_outer {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header .ajax__tab_hover .ajax__tab_inner {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header .ajax__tab_hover .ajax__tab_tab {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header .ajax__tab_active .ajax__tab_outer {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header .ajax__tab_active .ajax__tab_inner {
-                /* background-image: url('WebResource.axd?d=7d55T9B4j42nYTnSODbo405bsr8zp3hoGjir6Z58ZoKPdLgwtf6qu3MXJibmbhhdha0NpvsKmg-yAHSNyDR0n5oskACF5v0vuvb-ErTRvIZqPQgNHZyi6J2H6QcoTzSVIy4XafuCbAtMT3T8iHBky3A6CmqrVChVQYLFcawUCe01&t=636970230480000000'); */
-            }
-
-            .ajax__tab_xp .ajax__tab_header .ajax__tab_active .ajax__tab_tab {
-                background-image: url('') !important;
-            }
-
-        .ajax__tab_xp .ajax__tab_header_verticalleft {
+        .ajax__tab_xp .ajax__tab_outer,
+        .ajax__tab_xp .ajax__tab_inner,
+        .ajax__tab_xp .ajax__tab_tab {
             background-image: url('') !important;
         }
-
-            .ajax__tab_xp .ajax__tab_header_verticalleft .ajax__tab_outer {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header_verticalleft .ajax__tab_inner {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header_verticalleft .ajax__tab_tab {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header_verticalleft .ajax__tab_hover .ajax__tab_outer {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header_verticalleft .ajax__tab_hover .ajax__tab_inner {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header_verticalleft .ajax__tab_hover .ajax__tab_tab {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header_verticalleft .ajax__tab_active .ajax__tab_outer {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header_verticalleft .ajax__tab_active .ajax__tab_inner {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header_verticalleft .ajax__tab_active .ajax__tab_tab {
-                background-image: url('') !important;
-            }
-
-        .ajax__tab_xp .ajax__tab_header_verticalright {
-            background-image: url('') !important;
-        }
-
-            .ajax__tab_xp .ajax__tab_header_verticalright .ajax__tab_outer {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header_verticalright .ajax__tab_inner {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header_verticalright .ajax__tab_tab {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header_verticalright .ajax__tab_hover .ajax__tab_outer {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header_verticalright .ajax__tab_hover .ajax__tab_inner {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header_verticalright .ajax__tab_hover .ajax__tab_tab {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header_verticalright .ajax__tab_active .ajax__tab_outer {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header_verticalright .ajax__tab_active .ajax__tab_inner {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header_verticalright .ajax__tab_active .ajax__tab_tab {
-                background-image: url('') !important;
-            }
-
-        .ajax__tab_xp .ajax__tab_header_bottom {
-            background-image: url('') !important;
-        }
-
-            .ajax__tab_xp .ajax__tab_header_bottom .ajax__tab_outer {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header_bottom .ajax__tab_inner {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header_bottom .ajax__tab_tab {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header_bottom .ajax__tab_hover .ajax__tab_outer {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header_bottom .ajax__tab_hover .ajax__tab_inner {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header_bottom .ajax__tab_hover .ajax__tab_tab {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header_bottom .ajax__tab_active .ajax__tab_outer {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header_bottom .ajax__tab_active .ajax__tab_inner {
-                background-image: url('') !important;
-            }
-
-            .ajax__tab_xp .ajax__tab_header_bottom .ajax__tab_active .ajax__tab_tab {
-                background-image: url('') !important;
-            }
 
         .ajax__tab_xp .ajax__tab_header .ajax__tab_active .ajax__tab_inner {
-            background-image: url('') !important;
             background-color: #5046E5 !important;
             width: 150px !important;
             text-align: center !important;
@@ -192,13 +39,11 @@
             border: #5046E5 10px;
         }
 
-            .ajax__tab_xp .ajax__tab_header .ajax__tab_active .ajax__tab_inner a {
-                color: #fff !important;
-                /*font-weight : bold !important;*/
-            }
+        .ajax__tab_xp .ajax__tab_header .ajax__tab_active .ajax__tab_inner a {
+            color: #fff !important;
+        }
 
         .ajax__tab_xp .ajax__tab_header .ajax__tab_inner {
-            background-image: url('') !important;
             background-color: #E9ECEF !important;
             width: 150px !important;
             text-align: center !important;
@@ -207,10 +52,9 @@
             border-top-left-radius: 10px 10px !important;
         }
 
-            .ajax__tab_xp .ajax__tab_header .ajax__tab_inner a {
-                color: #413a3a !important;
-            }
-
+        .ajax__tab_xp .ajax__tab_header .ajax__tab_inner a {
+            color: #413a3a !important;
+        }
 
         .styleDisplayNone {
             display: none;
@@ -220,33 +64,28 @@
             text-align: center;
         }
     </style>
-
 </asp:Content>
 
 <asp:Content ID="Content3" ContentPlaceHolderID="MainContent" runat="Server">
 
+    <%-- ========================================================================= --%>
+    <%-- SECTION 1: PAGE HEADER & BREADCRUMB                                       --%>
+    <%-- ========================================================================= --%>
     <section class="content-header">
         <div class="container-fluid">
-
             <asp:Label ID="lblDummy" runat="server" Text=""></asp:Label>
-
             <div class="row mb-2">
                 <div class="col-sm-6">
                     <h1 class="m-0 text-dark">
                         <div runat="server" id="idWindowTitle"></div>
                     </h1>
                 </div>
-                <!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
-                        <%--<li class="breadcrumb-item"><a href="#">Administration</a></li>
-                        <li class="breadcrumb-item active">Project Menu</li>--%>
                         <%= GlobalClass.writeBreadcrumb(Request.QueryString("p_Id"), Request.QueryString("m_Id"), Session.Item("sessionSystemId")) %>
                     </ol>
                 </div>
-                <!-- /.col -->
             </div>
-            <!-- /.row -->
         </div>
     </section>
 
@@ -254,24 +93,23 @@
     <section class="content">
         <div class="container-fluid">
 
+            <%-- ========================================================================= --%>
+            <%-- SECTION 2: DETAILS VIEW (FormView1 - Maklumat Permohonan)                  --%>
+            <%-- ========================================================================= --%>
             <asp:FormView ID="FormView1" runat="server" DataKeyNames="JenisLesenIdList, JenisLesenDescList, Permohonan_ID, ApprStatusID"
                 DataSourceID="SqlDataSourceForm" DefaultMode="Edit" Width="100%" CssClass="CustomTab">
                 <EditItemTemplate>
-
                     <div class="card card-warning">
                         <div class="card-header">
                             <h3 class="card-title">
                                 <div runat="server" id="idWindowTitle2">Maklumat</div>
-                                <h3></h3>
-                                <div class="card-tools">
-                                    <button class="btn btn-tool" data-card-widget="collapse" type="button">
-                                        <i class="fas fa-minus"></i>
-                                    </button>
-                                </div>
                             </h3>
-
+                            <div class="card-tools">
+                                <button class="btn btn-tool" data-card-widget="collapse" type="button">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                            </div>
                         </div>
-                        <!-- /.card-header -->
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-md-6">
@@ -280,83 +118,61 @@
                                         <asp:Label ID="Label1" runat="server" Text='<%# Eval("Pemohon_Name") %>' CssClass="form-control"></asp:Label>
                                     </div>
                                 </div>
-
                                 <div class="col-md-6">
-
                                     <div class="form-group">
                                         <label>Tarikh mohon</label>
                                         <asp:Label ID="Label2" runat="server" Text='<%# Eval("TarikhMohon", "{0:yyyy-MM-dd}") %>' CssClass="form-control"></asp:Label>
                                     </div>
-
                                 </div>
-
                             </div>
 
-
                             <div class="row">
-
                                 <div class="col-md-6">
-
                                     <div class="form-group">
                                         <label>Jenis Lesen</label>
                                         <asp:Label ID="Label3" runat="server" Text='<%# Bind("JenisLesenDescList") %>' CssClass="form-control"></asp:Label>
                                     </div>
                                 </div>
-
                                 <div class="col-md-3" runat="server">
-
                                     <div class="form-group">
-                                        <label>&nbsp; </label>
+                                        <label>&nbsp;</label>
                                         <asp:HyperLink ID="HyperLink1" runat="server"
                                             CssClass="btn btn-primary form-control" NavigateUrl='<%# "~/lesen/appregister1.aspx?p_Id=3348&m_Id=3349&pid=" + Eval("Permohonan_ID").ToString() %>' Target="_blank">Lihat Maklumat Permohonan</asp:HyperLink>
                                     </div>
                                 </div>
-
-                                <!-- /.col -->
                             </div>
-                            <!-- /.row -->
                             <hr />
                             <div class="row">
-
                                 <div class="col-md-6">
-
                                     <div class="form-group">
                                         <label>Nota (Kelulusan)</label>
                                         <asp:Label ID="Label6" runat="server" Text='<%# Bind("NotaKelulusan") %>' Height="114" CssClass="form-control"></asp:Label>
                                     </div>
                                 </div>
-
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label>Status</label>
                                         <asp:Label ID="Label5" runat="server" Text='<%# Eval("Description") %>' CssClass="form-control"></asp:Label>
                                     </div>
                                 </div>
-
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label>Jumlah Paparan</label>
                                         <asp:Label ID="Label7" runat="server" Text='<%# Eval("TotalViews") %>' CssClass="form-control"></asp:Label>
                                     </div>
                                 </div>
-
                             </div>
-
                         </div>
-                        <!-- /.card-body -->
                         <div class="card-footer">
                             <asp:LinkButton ID="btnBack" runat="server" CausesValidation="False" Text="Kembali ke senarai" CssClass="btn btn-default" OnClick="btnBack_Click" />
                             <asp:LinkButton runat="server" CssClass="btn btn-warning" CausesValidation="False" Text="Lihat Surat Mohon Ulasan" ID="BT_SuratMohonUlasan" Visible='<%# If(CInt(Session.Item("sessionEstateId")) = 1, False, True) %>' OnCommand="BT_SuratMohonUlasan_Command" />
-                            <%--<asp:LinkButton runat="server" CssClass="btn btn-warning" ValidationGroup="updateForm" Text="Jana Surat" ID="BT_Generate" Visible='<%# If(Eval("IsPublish") = True Or Eval("ApprStatusID") < 9, False, True) %>' OnCommand="BT_Generate_Command" CausesValidation="True" OnClientClick="return confirm('Jana surat sekarang?');"/>--%>
                             <asp:LinkButton runat="server" CssClass="btn btn-warning" ValidationGroup="updateForm" Text="Lihat Surat Kelulusan" ID="BT_ViewMail" Visible='<%# If(Eval("ApprStatusID") < 9, False, True) %>' OnCommand="BT_ViewMail_Command" CausesValidation="False" />
                             <label style="margin-left: 50px;">Janaan Komputer?</label>
                             <asp:CheckBox ID="CB_IsDigitalSign" runat="server" Checked="true" AutoPostBack="true" Enabled='<%# If(Eval("ApprStatusID") < 9, False, True) %>'/>
 
                             <label style="margin-left: 50px;">Terbit Kelulusan?</label>
                             <asp:CheckBox ID="CB_IsPublish" runat="server" Checked='<%# Eval("IsPublish") %>' OnCheckedChanged="CB_IsPublish_CheckedChanged" AutoPostBack="true" Enabled='<%# If(Eval("ApprStatusID") < 9, False, True) %>'/>
-
                         </div>
-
                     </div>
                 </EditItemTemplate>
                 <InsertItemTemplate>
@@ -365,14 +181,12 @@
                             <h3 class="card-title">
                                 <div runat="server" id="idWindowTitle3">Maklumat</div>
                             </h3>
-
                             <div class="card-tools">
                                 <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
                             </div>
                             <div class="row" runat="server" id="idNotaKelulusan">
                             </div>
                         </div>
-
                     </div>
                 </InsertItemTemplate>
             </asp:FormView>
@@ -386,18 +200,17 @@
                 inner join LESEN_Permohonan g on g.Permohonan_ID = a.Permohonan_ID 
                 where a.Permohonan_ID = @Permohonan_ID ORDER BY ApprovalID Desc " 
                 UpdateCommand="">
-                <InsertParameters>
-                </InsertParameters>
                 <SelectParameters>
                     <asp:ControlParameter ControlID="GridView1" PropertyName="SelectedDataKey.Values[0]" Name="Permohonan_ID"></asp:ControlParameter>
                 </SelectParameters>
-                <UpdateParameters>
-                </UpdateParameters>
             </asp:SqlDataSource>
 
-
+            <%-- ========================================================================= --%>
+            <%-- SECTION 3: DETAIL TABS (TabContainer1)                                    --%>
+            <%-- ========================================================================= --%>
             <asp:TabContainer ID="TabContainer1" runat="server" ActiveTabIndex="0" Visible="false" CssClass="MyTabStyle">
                 
+                <%-- TAB 1: SURAT KELULUSAN (tabSurat) --%>
                 <asp:TabPanel runat="server" ID="tabSurat" HeaderText="Surat">
                     <HeaderTemplate>Surat</HeaderTemplate>
                     <ContentTemplate>
@@ -423,10 +236,9 @@
                                         ) AND JenisReport=IIF(@ApprStatusID=9, 'SKB', 'SKL') AND NamaTemplat is not null) AS tbl1 ORDER BY NamaTemplatDesc ">
                                         <SelectParameters>
                                             <asp:ControlParameter ControlID="GridView1" PropertyName="SelectedDataKey.Values[1]" Name="ApprStatusID"></asp:ControlParameter>
-                                             <asp:ControlParameter ControlID="GridView1" PropertyName="SelectedDataKey.Values[2]" Name="JenisLesenIdList"></asp:ControlParameter>
+                                            <asp:ControlParameter ControlID="GridView1" PropertyName="SelectedDataKey.Values[2]" Name="JenisLesenIdList"></asp:ControlParameter>
                                         </SelectParameters>
                                     </asp:SqlDataSource>
-                                    
                                 </div>
                             </div>
                             <div class="col-md-4">
@@ -441,6 +253,7 @@
                                 </div>
                             </div>
                         </div>
+
                         <asp:Panel ID="pnlSuratFail" runat="server" Visible="false">
                             <div class="row">
                                 <div class="col-md-6">
@@ -465,7 +278,6 @@
                         <asp:Panel ID="pnlSuratAuto" runat="server">
                             <div class="card mb-2">
                                 <div class="card-body">
-
                                     <div class="row">
                                         <div class="col-md-2">
                                             <div class="form-group">
@@ -474,7 +286,6 @@
                                             </div>
                                         </div>
                                     </div>
-
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="form-group">
@@ -498,11 +309,8 @@
                                                         and a.Users_Register=1
                                                         and (a.Users_IsPeraku = 1 or a.Users_IsPenilaian = 1) 
                                                         and b.JabatanAgensi_IsLesen = 1">
-                                                    <DeleteParameters>
-                                                    </DeleteParameters>
                                                     <SelectParameters>
                                                         <asp:ControlParameter ControlID="GridView1" PropertyName="SelectedDataKey.Values[0]" Name="Permohonan_ID"></asp:ControlParameter>
-                                                        <%--<asp:SessionParameter SessionField="sessionEstateID" DefaultValue="0" Name="AgensiID"></asp:SessionParameter>--%>
                                                     </SelectParameters>
                                                 </asp:SqlDataSource>
                                             </div>
@@ -517,142 +325,118 @@
                                     </div>
                                 </div>
                             </div>
+
                             <div class="card">
                                 <div class="card-body">
-
                                     <div class="row mb-2">
                                         <div class="col-12">
-
                                             <asp:FormView ID="FormViewReport" Width="100%" DefaultMode="Insert" runat="server" DataKeyNames="PSID" DataSourceID="SqlDataSourceReport">
                                                 <EditItemTemplate>
-                                                    <asp:Panel runat ="server">
+                                                    <asp:Panel runat="server">
                                                         <div class="card card-default">
-                                                       <div class="card-header">
-                                                            <h3 class="card-title" style="color: black">Kemaskini Isi Surat</h3>
-                                                        </div>
-                                                        <!-- /.card-header -->
-                                                        <div class="card-body">
-                                                            <div class="row">
-
-                                                                <div class="col-md-2">
-                                                                    <div class="form-group">
-                                                                        <label>No Perenggan Utama</label>
-                                                                        <asp:TextBox ID="TB_P1" runat="server"  TextMode="Number"
-                                                                            Text='<%# Bind("P1") %>' CssClass="form-control" />
-                                                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator5" runat="server" CssClass="cssRequiredField"
-                                                                            ControlToValidate="TB_P1" ErrorMessage="Sila Isi" ValidationGroup="frmEdit" Display="Dynamic"></asp:RequiredFieldValidator>
-                                                                    </div>
-                                                                </div>
-
-                                                                <div class="col-md-2">
-                                                                    <div class="form-group">
-                                                                        <label>No Perenggan Sekunder</label>
-                                                                        <asp:TextBox ID="TB_P2" runat="server"  TextMode="Number"
-                                                                            Text='<%# Bind("P2") %>' CssClass="form-control" />
-                                                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" CssClass="cssRequiredField"
-                                                                            ControlToValidate="TB_P2" ErrorMessage="Sila Isi" ValidationGroup="frmEdit" Display="Dynamic"></asp:RequiredFieldValidator>
-                                                                    </div>
-                                                                </div>
-
-                                                                <div class="col-md-2">
-                                                                    <div class="form-group">
-                                                                        <label>No Perenggan Tertier</label>
-                                                                        <asp:TextBox ID="TB_P3" runat="server"  TextMode="Number"
-                                                                            Text='<%# Bind("P3") %>' CssClass="form-control" />
-                                                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" CssClass="cssRequiredField"
-                                                                            ControlToValidate="TB_P3" ErrorMessage="Sila Isi" ValidationGroup="frmEdit" Display="Dynamic"></asp:RequiredFieldValidator>
-                                                                    </div>
-                                                                </div>
-
+                                                            <div class="card-header">
+                                                                <h3 class="card-title" style="color: black">Kemaskini Isi Surat</h3>
                                                             </div>
-
-                                                            <div class="row">
-
-                                                                <div class="col-md-8">
-                                                                    <div class="form-group">
-                                                                        <label>Isi Kandungan</label>
-                                                                        <asp:TextBox ID="TB_IsiKandungan" runat="server"  TextMode="Multiline"
-                                                                            Text='<%# Bind("IsiKandungan") %>' CssClass="form-control" />
-                                                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" CssClass="cssRequiredField"
-                                                                            ControlToValidate="TB_IsiKandungan" ErrorMessage="Sila Isi" ValidationGroup="frmEdit" Display="Dynamic"></asp:RequiredFieldValidator>
+                                                            <div class="card-body">
+                                                                <div class="row">
+                                                                    <div class="col-md-2">
+                                                                        <div class="form-group">
+                                                                            <label>No Perenggan Utama</label>
+                                                                            <asp:TextBox ID="TB_P1" runat="server" TextMode="Number" Text='<%# Bind("P1") %>' CssClass="form-control" />
+                                                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator5" runat="server" CssClass="cssRequiredField"
+                                                                                ControlToValidate="TB_P1" ErrorMessage="Sila Isi" ValidationGroup="frmEdit" Display="Dynamic"></asp:RequiredFieldValidator>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-2">
+                                                                        <div class="form-group">
+                                                                            <label>No Perenggan Sekunder</label>
+                                                                            <asp:TextBox ID="TB_P2" runat="server" TextMode="Number" Text='<%# Bind("P2") %>' CssClass="form-control" />
+                                                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" CssClass="cssRequiredField"
+                                                                                ControlToValidate="TB_P2" ErrorMessage="Sila Isi" ValidationGroup="frmEdit" Display="Dynamic"></asp:RequiredFieldValidator>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-2">
+                                                                        <div class="form-group">
+                                                                            <label>No Perenggan Tertier</label>
+                                                                            <asp:TextBox ID="TB_P3" runat="server" TextMode="Number" Text='<%# Bind("P3") %>' CssClass="form-control" />
+                                                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" CssClass="cssRequiredField"
+                                                                                ControlToValidate="TB_P3" ErrorMessage="Sila Isi" ValidationGroup="frmEdit" Display="Dynamic"></asp:RequiredFieldValidator>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
-
+                                                                <div class="row">
+                                                                    <div class="col-md-8">
+                                                                        <div class="form-group">
+                                                                            <label>Isi Kandungan</label>
+                                                                            <asp:TextBox ID="TB_IsiKandungan" runat="server" TextMode="Multiline" Text='<%# Bind("IsiKandungan") %>' CssClass="form-control" />
+                                                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" CssClass="cssRequiredField"
+                                                                                ControlToValidate="TB_IsiKandungan" ErrorMessage="Sila Isi" ValidationGroup="frmEdit" Display="Dynamic"></asp:RequiredFieldValidator>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="card-footer">
+                                                                <asp:LinkButton ID="UpdateButton" runat="server" CausesValidation="True" CommandName="Update" Text="Simpan" ValidationGroup="frmEdit" CssClass="btn btn-primary" />
+                                                                &nbsp;
+                                                                <asp:LinkButton ID="UpdateCancelButton" runat="server" CausesValidation="False" CommandName="Cancel" Text="Set Semula" CssClass="btn btn-default" />
                                                             </div>
                                                         </div>
-                                                        <div class="card-footer">
-                                                            <asp:LinkButton ID="UpdateButton" runat="server" CausesValidation="True" CommandName="Update" Text="Simpan" ValidationGroup="frmEdit" CssClass="btn btn-primary" />
-                                                            &nbsp;
-                                                            <asp:LinkButton ID="UpdateCancelButton" runat="server" CausesValidation="False" CommandName="Cancel" Text="Set Semula" CssClass="btn btn-default" />
-                                                        </div>
-                                                    </div>
                                                     </asp:Panel>
                                                 </EditItemTemplate>
                                                 <InsertItemTemplate>
-                                                    <asp:Panel runat ="server">
+                                                    <asp:Panel runat="server">
                                                         <div class="card card-default">
-                                                       <div class="card-header">
-                                                            <h3 class="card-title" style="color: black">Tambah Isi Surat</h3>
-                                                        </div>
-                                                        <!-- /.card-header -->
-                                                        <div class="card-body">
-                                                            <div class="row">
-
-                                                                <div class="col-md-2">
-                                                                    <div class="form-group">
-                                                                        <label>No Perenggan Utama</label>
-                                                                        <asp:TextBox ID="TB_P1" runat="server"  TextMode="Number"
-                                                                            Text='<%# Bind("P1") %>' CssClass="form-control" />
-                                                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator5" runat="server" CssClass="cssRequiredField"
-                                                                            ControlToValidate="TB_P1" ErrorMessage="Sila Isi" ValidationGroup="frmInsert" Display="Dynamic"></asp:RequiredFieldValidator>
-                                                                    </div>
-                                                                </div>
-
-                                                                <div class="col-md-2">
-                                                                    <div class="form-group">
-                                                                        <label>No Perenggan Sekunder</label>
-                                                                        <asp:TextBox ID="TB_P2" runat="server"  TextMode="Number"
-                                                                            Text='<%# Bind("P2") %>' CssClass="form-control" />
-                                                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" CssClass="cssRequiredField"
-                                                                            ControlToValidate="TB_P2" ErrorMessage="Sila Isi" ValidationGroup="frmInsert" Display="Dynamic"></asp:RequiredFieldValidator>
-                                                                    </div>
-                                                                </div>
-
-                                                                <div class="col-md-2">
-                                                                    <div class="form-group">
-                                                                        <label>No Perenggan Tertier</label>
-                                                                        <asp:TextBox ID="TB_P3" runat="server"  TextMode="Number"
-                                                                            Text='<%# Bind("P3") %>' CssClass="form-control" />
-                                                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" CssClass="cssRequiredField"
-                                                                            ControlToValidate="TB_P3" ErrorMessage="Sila Isi" ValidationGroup="frmInsert" Display="Dynamic"></asp:RequiredFieldValidator>
-                                                                    </div>
-                                                                </div>
-
+                                                            <div class="card-header">
+                                                                <h3 class="card-title" style="color: black">Tambah Isi Surat</h3>
                                                             </div>
-
-                                                            <div class="row">
-
-                                                                <div class="col-md-8">
-                                                                    <div class="form-group">
-                                                                        <label>Isi Kandungan</label>
-                                                                        <asp:TextBox ID="TB_IsiKandungan" runat="server"  TextMode="Multiline"
-                                                                            Text='<%# Bind("IsiKandungan") %>' CssClass="form-control" />
-                                                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" CssClass="cssRequiredField"
-                                                                            ControlToValidate="TB_IsiKandungan" ErrorMessage="Sila Isi" ValidationGroup="frmInsert" Display="Dynamic"></asp:RequiredFieldValidator>
+                                                            <div class="card-body">
+                                                                <div class="row">
+                                                                    <div class="col-md-2">
+                                                                        <div class="form-group">
+                                                                            <label>No Perenggan Utama</label>
+                                                                            <asp:TextBox ID="TB_P1" runat="server" TextMode="Number" Text='<%# Bind("P1") %>' CssClass="form-control" />
+                                                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator5" runat="server" CssClass="cssRequiredField"
+                                                                                ControlToValidate="TB_P1" ErrorMessage="Sila Isi" ValidationGroup="frmInsert" Display="Dynamic"></asp:RequiredFieldValidator>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-2">
+                                                                        <div class="form-group">
+                                                                            <label>No Perenggan Sekunder</label>
+                                                                            <asp:TextBox ID="TB_P2" runat="server" TextMode="Number" Text='<%# Bind("P2") %>' CssClass="form-control" />
+                                                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" CssClass="cssRequiredField"
+                                                                                ControlToValidate="TB_P2" ErrorMessage="Sila Isi" ValidationGroup="frmInsert" Display="Dynamic"></asp:RequiredFieldValidator>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-2">
+                                                                        <div class="form-group">
+                                                                            <label>No Perenggan Tertier</label>
+                                                                            <asp:TextBox ID="TB_P3" runat="server" TextMode="Number" Text='<%# Bind("P3") %>' CssClass="form-control" />
+                                                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" CssClass="cssRequiredField"
+                                                                                ControlToValidate="TB_P3" ErrorMessage="Sila Isi" ValidationGroup="frmInsert" Display="Dynamic"></asp:RequiredFieldValidator>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
-
+                                                                <div class="row">
+                                                                    <div class="col-md-8">
+                                                                        <div class="form-group">
+                                                                            <label>Isi Kandungan</label>
+                                                                            <asp:TextBox ID="TB_IsiKandungan" runat="server" TextMode="Multiline" Text='<%# Bind("IsiKandungan") %>' CssClass="form-control" />
+                                                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" CssClass="cssRequiredField"
+                                                                                ControlToValidate="TB_IsiKandungan" ErrorMessage="Sila Isi" ValidationGroup="frmInsert" Display="Dynamic"></asp:RequiredFieldValidator>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="card-footer">
+                                                                <asp:LinkButton ID="InsertButton" runat="server" CausesValidation="True" CommandName="Insert" Text="Kunci Masuk" ValidationGroup="frmInsert" CssClass="btn btn-primary" />
+                                                                &nbsp;
+                                                                <asp:LinkButton ID="InsertCancelButton" runat="server" CausesValidation="False" CommandName="Cancel" Text="Set Semula" CssClass="btn btn-default" />
                                                             </div>
                                                         </div>
-                                                        <div class="card-footer">
-                                                            <asp:LinkButton ID="InsertButton" runat="server" CausesValidation="True" CommandName="Insert" Text="Kunci Masuk" ValidationGroup="frmInsert" CssClass="btn btn-primary" />
-                                                            &nbsp;
-                                                            <asp:LinkButton ID="InsertCancelButton" runat="server" CausesValidation="False" CommandName="Cancel" Text="Set Semula" CssClass="btn btn-default" />
-                                                        </div>
-                                                    </div>
                                                     </asp:Panel>
                                                 </InsertItemTemplate>
                                             </asp:FormView>
+
                                             <asp:SqlDataSource runat="server" ID="SqlDataSourceReport" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
                                                 InsertCommand="INSERT INTO LESEN_PermohonanSurat (Permohonan_ID, JenisReport, P1, P2, P3, IsiKandungan, CreatedDt, ModDt) VALUES (@Permohonan_ID, IIF(@StatusID=9,'SKB','SKL'), @P1, @P2, @P3, @IsiKandungan, GETDATE(), GETDATE()); "
                                                 UpdateCommand="UPDATE LESEN_PermohonanSurat SET P1=@P1, P2=@P2, P3=@P3, IsiKandungan=@IsiKandungan WHERE PSID=@PSID"
@@ -678,7 +462,7 @@
                                             </asp:SqlDataSource>
                                         </div>
                                     </div>
-                                    <!-- /.tab-1 Formview -->
+
                                     <div class="row">
                                         <div class="col-12">
                                             <asp:GridView ID="GridViewReport" HeaderStyle-ForeColor="Black" CssClass="table table-bordered" AllowPaging="True" ShowHeaderWhenEmpty="True" EmptyDataText="No records Found" AllowSorting="True" runat="server" AutoGenerateColumns="False" DataKeyNames="PSID" DataSourceID="SqlDataSourceGridReport">
@@ -710,82 +494,78 @@
                                             </asp:SqlDataSource>
                                         </div>
                                     </div>
-                                    <!-- /.tab-1 Gridview -->
                                 </div>
                             </div>
-
                         </asp:Panel>
                     </ContentTemplate>
                 </asp:TabPanel>
 
+                <%-- TAB 2: LAMPIRAN SYARAT & BIL (tabLampiran) --%>
                 <asp:TabPanel runat="server" ID="tabLampiran" HeaderText="Lampiran">
                     <HeaderTemplate>Lampiran</HeaderTemplate>
                     <ContentTemplate>
                         <asp:UpdatePanel ID="UpdatePanel1" runat="server" UpdateMode="conditional">
-                                <Triggers>
-                                    <asp:PostBackTrigger ControlID="BT_Lampiran1" />
-                                    <asp:PostBackTrigger ControlID="BT_Lampiran2" />
-                                </Triggers>
-                                <ContentTemplate>
-                                    <br />
-                                    <div class="row">
-
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label>Lampiran 1 - Syarat-syarat Lesen</label>
-                                                <div class="row">
-                                                    <div class ="col">
-                                                        <asp:FileUpload ID="FU_Lampiran1" runat="server" CssClass="form-control"/>
-                                                        <asp:HyperLink ID="HL_Lampiran1" NavigateUrl="#" Text="null" runat="server" />
-                                                    </div>
-                                                    <div class ="col">
-                                                        <asp:LinkButton ID="BT_Lampiran1" runat="server" Text="Muat Naik" CssClass="btn btn-default" OnClick="BT_Lampiran1_Click" />
-                                                        <asp:LinkButton ID="BT_Update1" runat="server" Text="Ubah" CssClass="btn btn-warning" OnClick="BT_Update1_Click"/>
-                                                        <asp:LinkButton ID="BT_Cancel1" runat="server" Text="Batal" CssClass="btn btn-default" OnClick="BT_Cancel1_Click"/>
-                                                        <asp:LinkButton ID="BT_Delete1" runat="server" Text="Padam" CssClass="btn btn-default" OnClick="BT_Delete1_Click" />
-                                                    </div>
+                            <Triggers>
+                                <asp:PostBackTrigger ControlID="BT_Lampiran1" />
+                                <asp:PostBackTrigger ControlID="BT_Lampiran2" />
+                            </Triggers>
+                            <ContentTemplate>
+                                <br />
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Lampiran 1 - Syarat-syarat Lesen</label>
+                                            <div class="row">
+                                                <div class="col">
+                                                    <asp:FileUpload ID="FU_Lampiran1" runat="server" CssClass="form-control"/>
+                                                    <asp:HyperLink ID="HL_Lampiran1" NavigateUrl="#" Text="null" runat="server" />
+                                                </div>
+                                                <div class="col">
+                                                    <asp:LinkButton ID="BT_Lampiran1" runat="server" Text="Muat Naik" CssClass="btn btn-default" OnClick="BT_Lampiran1_Click" />
+                                                    <asp:LinkButton ID="BT_Update1" runat="server" Text="Ubah" CssClass="btn btn-warning" OnClick="BT_Update1_Click"/>
+                                                    <asp:LinkButton ID="BT_Cancel1" runat="server" Text="Batal" CssClass="btn btn-default" OnClick="BT_Cancel1_Click"/>
+                                                    <asp:LinkButton ID="BT_Delete1" runat="server" Text="Padam" CssClass="btn btn-default" OnClick="BT_Delete1_Click" />
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <br />
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label>Lampiran 2 - Bil</label>
-                                                <div class="row">
-                                                    <div class ="col">
-                                                        <asp:FileUpload ID="FU_Lampiran2" runat="server" CssClass="form-control"/>
-                                                        <asp:HyperLink ID="HL_Lampiran2" NavigateUrl="#" Text="null" runat="server" />
-                                                    </div>
-                                                    <div class ="col">
-                                                        <asp:LinkButton ID="BT_Lampiran2" runat="server" Text="Muat Naik" CssClass="btn btn-default" OnClick="BT_Lampiran2_Click" />
-                                                        <asp:LinkButton ID="BT_Update2" runat="server" Text="Ubah" CssClass="btn btn-warning" OnClick="BT_Update2_Click" />
-                                                        <asp:LinkButton ID="BT_Cancel2" runat="server" Text="Batal" CssClass="btn btn-default" OnClick="BT_Cancel2_Click" />
-                                                        <asp:LinkButton ID="BT_Delete2" runat="server" Text="Padam" CssClass="btn btn-default" OnClick="BT_Delete2_Click"/>
-                                                    </div>
+                                </div>
+                                <br />
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Lampiran 2 - Bil</label>
+                                            <div class="row">
+                                                <div class="col">
+                                                    <asp:FileUpload ID="FU_Lampiran2" runat="server" CssClass="form-control"/>
+                                                    <asp:HyperLink ID="HL_Lampiran2" NavigateUrl="#" Text="null" runat="server" />
+                                                </div>
+                                                <div class="col">
+                                                    <asp:LinkButton ID="BT_Lampiran2" runat="server" Text="Muat Naik" CssClass="btn btn-default" OnClick="BT_Lampiran2_Click" />
+                                                    <asp:LinkButton ID="BT_Update2" runat="server" Text="Ubah" CssClass="btn btn-warning" OnClick="BT_Update2_Click" />
+                                                    <asp:LinkButton ID="BT_Cancel2" runat="server" Text="Batal" CssClass="btn btn-default" OnClick="BT_Cancel2_Click" />
+                                                    <asp:LinkButton ID="BT_Delete2" runat="server" Text="Padam" CssClass="btn btn-default" OnClick="BT_Delete2_Click"/>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <br />
-                                </ContentTemplate>
-                            </asp:UpdatePanel>
-
+                                </div>
+                                <br />
+                            </ContentTemplate>
+                        </asp:UpdatePanel>
                     </ContentTemplate>
                 </asp:TabPanel>
 
+                <%-- TAB 3: ULASAN IK (tabUlasan) --%>
                 <asp:TabPanel runat="server" ID="tabUlasan" HeaderText="Ulasan">
                     <HeaderTemplate>Ulasan IK</HeaderTemplate>
                     <ContentTemplate>
-
                         <asp:GridView ID="gvTabUlasan" runat="server" ShowHeaderWhenEmpty="True"
                             AllowSorting="True" AutoGenerateColumns="False" DataKeyNames="UlasanFail_ID"
                             DataSourceID="SqlDataSourceTabUlasanIK"
                             CssClass="table table-bordered" Width="100%">
                             <AlternatingRowStyle CssClass="alt" />
                             <Columns>
-
                                 <asp:TemplateField HeaderText="ID" SortExpression="UlasanFail_ID">
                                     <EditItemTemplate>
                                         <asp:Label ID="Label1" runat="server" Text='<%# Eval("UlasanFail_ID") %>'></asp:Label>
@@ -796,7 +576,6 @@
                                     <HeaderStyle CssClass="styleDisplayNone" />
                                     <ItemStyle CssClass="styleDisplayNone" />
                                 </asp:TemplateField>
-
 
                                 <asp:TemplateField HeaderText="No.">
                                     <ItemTemplate>
@@ -810,7 +589,6 @@
 
                                 <asp:TemplateField HeaderText="Ulasan">
                                     <ItemTemplate>
-                                        <%--<asp:Label ID="lblUlasanFail_Remarks" runat="server" Text='<%# Eval("UlasanFail_Remarks") %>'></asp:Label>--%>
                                         <asp:TextBox ID="txtUlasanFail_Remarks" runat="server" Text='<%# Bind("UlasanFail_Remarks") %>' CssClass="form-control" TextMode="MultiLine" Rows="4" ReadOnly="True" BorderStyle="None"></asp:TextBox><br />
                                         Jabatan/Agensi :
                                         <asp:Label ID="lblJabatanAgensi_Description" runat="server" Text='<%# Eval("JabatanAgensi_Description") %>'></asp:Label>
@@ -826,49 +604,32 @@
 
                                 <asp:TemplateField>
                                     <ItemTemplate>
-                                        <%--<asp:Label ID="UlasanFail_FileName" runat="server" Text='<%# Eval("UlasanFail_FileName") %>'></asp:Label>--%>
-                                    Fail :
+                                        Fail :
                                         <asp:HyperLink ID="hpFile" runat="server" NavigateUrl='<%# Eval("UlasanFail_FilePath") %>' Target="_blank"><%#Eval("UlasanFail_FileName") %></asp:HyperLink>
-
                                         <asp:HiddenField ID="hdnFldUlasanFail_FileName" Value='<%# Bind("UlasanFail_FileName") %>' runat="server" />
                                         <asp:HiddenField ID="hdnFldUlasanFail_ContentType" Value='<%# Bind("UlasanFail_ContentType") %>' runat="server" />
                                         <asp:HiddenField ID="hdnFldUlasanFail_FilePath" Value='<%# Bind("UlasanFail_FilePath") %>' runat="server" />
                                     </ItemTemplate>
                                     <EditItemTemplate>
-                                        <%--<asp:UpdatePanel runat="server" ID="updatePanelUlasan">
-                                        <ContentTemplate>--%>
                                         <asp:FileUpload ID="txtUlasanFail_FilePath" runat="server" CssClass="form-control"></asp:FileUpload>
                                         <asp:Button ID="btnUpload" runat="server" Text="Muat Naik" OnClick="btnUpload_Click" Visible="false"
                                             OnClientClick="return confirm('Fail sedia ada akan ditukar ke fail yang baru.');" />
-
                                         <asp:HiddenField ID="hdnFldUlasanFail_FileName" Value='<%# Bind("UlasanFail_FileName") %>' runat="server" />
                                         <asp:HiddenField ID="hdnFldUlasanFail_ContentType" Value='<%# Bind("UlasanFail_ContentType") %>' runat="server" />
                                         <asp:HiddenField ID="hdnFldUlasanFail_FilePath" Value='<%# Bind("UlasanFail_FilePath") %>' runat="server" />
-                                        <%--    </ContentTemplate>
-                                        <Triggers>
-                                            <asp:PostBackTrigger ControlID="btnUpload" />
-                                        </Triggers>
-                                    </asp:UpdatePanel>--%>
-
-
-                                        <%--<asp:RequiredFieldValidator ID="rvUlasanFail_FilePath" runat="server" CssClass="cssRequiredField"
-                                    ControlToValidate="txtUlasanFail_FilePath" ErrorMessage="Sila Isi" ValidationGroup="frmEdit" Display="Dynamic"></asp:RequiredFieldValidator>--%>
                                     </EditItemTemplate>
                                     <HeaderStyle Width="25%" />
                                 </asp:TemplateField>
 
-                                <asp:TemplateField HeaderText="Maklumat Ulasan"
-                                    HeaderStyle-Font-Size="10pt" HeaderStyle-Width="90%" ItemStyle-Width="90%">
+                                <asp:TemplateField HeaderText="Maklumat Ulasan" HeaderStyle-Font-Size="10pt" HeaderStyle-Width="90%" ItemStyle-Width="90%">
                                     <ItemTemplate>
                                         <asp:Label ID="Label15" runat="server" Text="Ulasan :" Font-Bold="True" Font-Size="10pt"></asp:Label><br />
                                         <asp:Label ID="Label16" runat="server" Text='<%# If(Len(Eval("UlasanFail_Remarks").ToString()) > 0, (Eval("UlasanFail_Remarks")).Replace(vbCr, "").Replace(vbLf, vbCrLf).Replace(Environment.NewLine, "<br />"), Eval("UlasanFail_Remarks")) %>' Font-Size="10pt"></asp:Label><br />
                                         <asp:Label ID="Label9" runat="server" Text="Fail :" Font-Bold="True" Font-Size="10pt"></asp:Label><br />
-                                        <asp:HyperLink ID="hpFileMobile" CssClass="paraGraphtext" runat="server" NavigateUrl='<%# Eval("UlasanFail_FilePath") %>' Target="_blank" Font-Bold="True" Font-Size="10pt"><%#If(Len(Eval("UlasanFail_FileName").ToString()) > 0, Eval("UlasanFail_FileName").ToString.Substring(If(Len(Eval("UlasanFail_FileName").ToString()) > 25, Len(Eval("UlasanFail_FileName").ToString()) - 25, 0)), Eval("UlasanFail_FileName")) %></asp:HyperLink><br />
+                                        <asp:HyperLink ID="hpFileMobile" CssClass="paraGraphtext" runat="server" NavigateUrl='<%# Eval("UlasanFail_FilePath") %>' Target="_blank" Font-Bold="True" Font-Size="10pt"><%#If(Len(Eval("UlasanFail_FileName").ToString()) > 25, Eval("UlasanFail_FileName").ToString.Substring(Len(Eval("UlasanFail_FileName").ToString()) - 25), Eval("UlasanFail_FileName")) %></asp:HyperLink><br />
                                         <asp:Label ID="Label13" runat="server" Text="Jabatan/Agensi :" Font-Bold="True" Font-Size="10pt"></asp:Label><br />
                                         <asp:Label ID="Label19" runat="server" Text='<%# Eval("JabatanAgensi_Description") %>' Font-Size="10pt"></asp:Label><br />
-                                        <%--<br />
-                                        <asp:LinkButton ID="lbEditMobile" runat="server" CausesValidation="False" CommandName="Edit" Text="Kemaskini" CssClass="btn btn-warning btn-sm"></asp:LinkButton>
-                                    --%></ItemTemplate>
+                                    </ItemTemplate>
                                     <EditItemTemplate>
                                         <asp:Label ID="Label15" runat="server" Text="Ulasan :" Font-Bold="True" Font-Size="10pt"></asp:Label><br />
                                         <asp:TextBox ID="txtUlasanFail_RemarksMobile" runat="server" Text='<%# Bind("UlasanFail_Remarks") %>' CssClass="form-control" TextMode="MultiLine" Rows="4"></asp:TextBox>
@@ -880,14 +641,10 @@
                                             OnClientClick="return confirm('Fail sedia ada akan ditukar ke fail yang baru.');" /><br />
                                         <asp:Label ID="Label13" runat="server" Text="Jabatan/Agensi :" Font-Bold="True" Font-Size="10pt"></asp:Label><br />
                                         <asp:Label ID="Label19" runat="server" Text='<%# Eval("JabatanAgensi_Description") %>' Font-Size="10pt"></asp:Label><br />
-                                        <br />
-
                                     </EditItemTemplate>
                                     <ItemStyle HorizontalAlign="Left" />
                                 </asp:TemplateField>
-
                             </Columns>
-
                             <PagerStyle CssClass="pgr" />
                         </asp:GridView>
 
@@ -897,28 +654,23 @@
                                 left join LESEN_JabatanAgensi b on b.JabatanAgensi_ID = a.UlasanFail_PermohonanAgensiID
                                 where UlasanFail_PermohonanID = @PermohonanID AND UlasanFail_PermohonanAgensiID = 3 
                                 order by CreatedDt asc, UlasanFail_ID asc">
-
                             <SelectParameters>
                                 <asp:ControlParameter ControlID="GridView1" PropertyName="SelectedDataKey.Values[0]" Name="PermohonanID"></asp:ControlParameter>
-                                <%--<asp:ControlParameter ControlID="GridView1" PropertyName="SelectedDataKey.Values[1]" Name="AgensiID"></asp:ControlParameter>--%>
-								<%--<asp:SessionParameter SessionField="sessionEstateID" DefaultValue="0" Name="AgensiID"></asp:SessionParameter>--%>
                             </SelectParameters>
                         </asp:SqlDataSource>
-
                     </ContentTemplate>
                 </asp:TabPanel>
 
+                <%-- TAB 4: ULASAN AGENSI LUAR (tabUlasanLuar) --%>
                 <asp:TabPanel runat="server" ID="tabUlasanLuar" HeaderText="Ulasan Agensi Luar">
                     <HeaderTemplate>Ulasan Agensi Luar</HeaderTemplate>
                     <ContentTemplate>
-
                         <asp:GridView ID="gvTabUlasanLuar" runat="server" ShowHeaderWhenEmpty="True"
                             AllowSorting="True" AutoGenerateColumns="False" DataKeyNames="UlasanFail_ID"
                             DataSourceID="SqlDataSourceTabUlasanLuar"
                             CssClass="table table-bordered" Width="100%">
                             <AlternatingRowStyle CssClass="alt" />
                             <Columns>
-
                                 <asp:TemplateField HeaderText="ID" SortExpression="UlasanFail_ID">
                                     <EditItemTemplate>
                                         <asp:Label ID="Label1" runat="server" Text='<%# Eval("UlasanFail_ID") %>'></asp:Label>
@@ -929,7 +681,6 @@
                                     <HeaderStyle CssClass="styleDisplayNone" />
                                     <ItemStyle CssClass="styleDisplayNone" />
                                 </asp:TemplateField>
-
 
                                 <asp:TemplateField HeaderText="No.">
                                     <ItemTemplate>
@@ -943,7 +694,6 @@
 
                                 <asp:TemplateField HeaderText="Ulasan">
                                     <ItemTemplate>
-                                        <%--<asp:Label ID="lblUlasanFail_Remarks" runat="server" Text='<%# Eval("UlasanFail_Remarks") %>'></asp:Label>--%>
                                         <asp:TextBox ID="txtUlasanFail_Remarks" runat="server" Text='<%# Bind("UlasanFail_Remarks") %>' CssClass="form-control" TextMode="MultiLine" Rows="4" ReadOnly="True" BorderStyle="None"></asp:TextBox><br />
                                         Jabatan/Agensi :
                                         <asp:Label ID="lblJabatanAgensi_Description" runat="server" Text='<%# Eval("JabatanAgensi_Description") %>'></asp:Label>
@@ -959,49 +709,32 @@
 
                                 <asp:TemplateField>
                                     <ItemTemplate>
-                                        <%--<asp:Label ID="UlasanFail_FileName" runat="server" Text='<%# Eval("UlasanFail_FileName") %>'></asp:Label>--%>
-                                    Fail :
+                                        Fail :
                                         <asp:HyperLink ID="hpFile" runat="server" NavigateUrl='<%# Eval("UlasanFail_FilePath") %>' Target="_blank"><%#Eval("UlasanFail_FileName") %></asp:HyperLink>
-
                                         <asp:HiddenField ID="hdnFldUlasanFail_FileName" Value='<%# Bind("UlasanFail_FileName") %>' runat="server" />
                                         <asp:HiddenField ID="hdnFldUlasanFail_ContentType" Value='<%# Bind("UlasanFail_ContentType") %>' runat="server" />
                                         <asp:HiddenField ID="hdnFldUlasanFail_FilePath" Value='<%# Bind("UlasanFail_FilePath") %>' runat="server" />
                                     </ItemTemplate>
                                     <EditItemTemplate>
-                                        <%--<asp:UpdatePanel runat="server" ID="updatePanelUlasan">
-                                        <ContentTemplate>--%>
                                         <asp:FileUpload ID="txtUlasanFail_FilePath" runat="server" CssClass="form-control"></asp:FileUpload>
                                         <asp:Button ID="btnUpload" runat="server" Text="Muat Naik" OnClick="btnUpload_Click" Visible="false"
                                             OnClientClick="return confirm('Fail sedia ada akan ditukar ke fail yang baru.');" />
-
                                         <asp:HiddenField ID="hdnFldUlasanFail_FileName" Value='<%# Bind("UlasanFail_FileName") %>' runat="server" />
                                         <asp:HiddenField ID="hdnFldUlasanFail_ContentType" Value='<%# Bind("UlasanFail_ContentType") %>' runat="server" />
                                         <asp:HiddenField ID="hdnFldUlasanFail_FilePath" Value='<%# Bind("UlasanFail_FilePath") %>' runat="server" />
-                                        <%--    </ContentTemplate>
-                                        <Triggers>
-                                            <asp:PostBackTrigger ControlID="btnUpload" />
-                                        </Triggers>
-                                    </asp:UpdatePanel>--%>
-
-
-                                        <%--<asp:RequiredFieldValidator ID="rvUlasanFail_FilePath" runat="server" CssClass="cssRequiredField"
-                                    ControlToValidate="txtUlasanFail_FilePath" ErrorMessage="Sila Isi" ValidationGroup="frmEdit" Display="Dynamic"></asp:RequiredFieldValidator>--%>
                                     </EditItemTemplate>
                                     <HeaderStyle Width="25%" />
                                 </asp:TemplateField>
 
-                                <asp:TemplateField HeaderText="Maklumat Ulasan"
-                                    HeaderStyle-Font-Size="10pt" HeaderStyle-Width="90%" ItemStyle-Width="90%">
+                                <asp:TemplateField HeaderText="Maklumat Ulasan" HeaderStyle-Font-Size="10pt" HeaderStyle-Width="90%" ItemStyle-Width="90%">
                                     <ItemTemplate>
                                         <asp:Label ID="Label15" runat="server" Text="Ulasan :" Font-Bold="True" Font-Size="10pt"></asp:Label><br />
                                         <asp:Label ID="Label16" runat="server" Text='<%# If(Len(Eval("UlasanFail_Remarks").ToString()) > 0, (Eval("UlasanFail_Remarks")).Replace(vbCr, "").Replace(vbLf, vbCrLf).Replace(Environment.NewLine, "<br />"), Eval("UlasanFail_Remarks")) %>' Font-Size="10pt"></asp:Label><br />
                                         <asp:Label ID="Label9" runat="server" Text="Fail :" Font-Bold="True" Font-Size="10pt"></asp:Label><br />
-                                        <asp:HyperLink ID="hpFileMobile" CssClass="paraGraphtext" runat="server" NavigateUrl='<%# Eval("UlasanFail_FilePath") %>' Target="_blank" Font-Bold="True" Font-Size="10pt"><%#If(Len(Eval("UlasanFail_FileName").ToString()) > 0, Eval("UlasanFail_FileName").ToString.Substring(If(Len(Eval("UlasanFail_FileName").ToString()) > 25, Len(Eval("UlasanFail_FileName").ToString()) - 25, 0)), Eval("UlasanFail_FileName")) %></asp:HyperLink><br />
+                                        <asp:HyperLink ID="hpFileMobile" CssClass="paraGraphtext" runat="server" NavigateUrl='<%# Eval("UlasanFail_FilePath") %>' Target="_blank" Font-Bold="True" Font-Size="10pt"><%#If(Len(Eval("UlasanFail_FileName").ToString()) > 25, Eval("UlasanFail_FileName").ToString.Substring(Len(Eval("UlasanFail_FileName").ToString()) - 25), Eval("UlasanFail_FileName")) %></asp:HyperLink><br />
                                         <asp:Label ID="Label13" runat="server" Text="Jabatan/Agensi :" Font-Bold="True" Font-Size="10pt"></asp:Label><br />
                                         <asp:Label ID="Label19" runat="server" Text='<%# Eval("JabatanAgensi_Description") %>' Font-Size="10pt"></asp:Label><br />
-                                        <%--<br />
-                                        <asp:LinkButton ID="lbEditMobile" runat="server" CausesValidation="False" CommandName="Edit" Text="Kemaskini" CssClass="btn btn-warning btn-sm"></asp:LinkButton>
-                                    --%></ItemTemplate>
+                                    </ItemTemplate>
                                     <EditItemTemplate>
                                         <asp:Label ID="Label15" runat="server" Text="Ulasan :" Font-Bold="True" Font-Size="10pt"></asp:Label><br />
                                         <asp:TextBox ID="txtUlasanFail_RemarksMobile" runat="server" Text='<%# Bind("UlasanFail_Remarks") %>' CssClass="form-control" TextMode="MultiLine" Rows="4"></asp:TextBox>
@@ -1013,14 +746,10 @@
                                             OnClientClick="return confirm('Fail sedia ada akan ditukar ke fail yang baru.');" /><br />
                                         <asp:Label ID="Label13" runat="server" Text="Jabatan/Agensi :" Font-Bold="True" Font-Size="10pt"></asp:Label><br />
                                         <asp:Label ID="Label19" runat="server" Text='<%# Eval("JabatanAgensi_Description") %>' Font-Size="10pt"></asp:Label><br />
-                                        <br />
-
                                     </EditItemTemplate>
                                     <ItemStyle HorizontalAlign="Left" />
                                 </asp:TemplateField>
-
                             </Columns>
-
                             <PagerStyle CssClass="pgr" />
                         </asp:GridView>
 
@@ -1030,17 +759,14 @@
                                 left join LESEN_JabatanAgensi b on b.JabatanAgensi_ID = a.UlasanFail_PermohonanAgensiID
                                 where UlasanFail_PermohonanID = @PermohonanID AND UlasanFail_PermohonanAgensiID <> 3 
                                 order by CreatedDt asc, UlasanFail_ID asc">
-
                             <SelectParameters>
                                 <asp:ControlParameter ControlID="GridView1" PropertyName="SelectedDataKey.Values[0]" Name="PermohonanID"></asp:ControlParameter>
-                                <%--<asp:ControlParameter ControlID="GridView1" PropertyName="SelectedDataKey.Values[1]" Name="AgensiID"></asp:ControlParameter>--%>
-							                <%--<asp:SessionParameter SessionField="sessionEstateID" DefaultValue="0" Name="AgensiID"></asp:SessionParameter>--%>
                             </SelectParameters>
                         </asp:SqlDataSource>
-
                     </ContentTemplate>
                 </asp:TabPanel>
 
+                <%-- TAB 5: KADAR BAYARAN (tabKadarBayaran) --%>
                 <asp:TabPanel runat="server" ID="tabKadarBayaran" HeaderText="Kadar Bayaran">
                     <HeaderTemplate>Kadar Bayaran</HeaderTemplate>
                     <ContentTemplate>
@@ -1050,7 +776,6 @@
                             CssClass="table table-bordered" Width="100%">
                             <AlternatingRowStyle CssClass="alt" />
                             <Columns>
-
                                 <asp:TemplateField HeaderText="ID" SortExpression="KadarBayaran_ID">
                                     <EditItemTemplate>
                                         <asp:Label ID="Label1" runat="server" Text='<%# Eval("KadarBayaran_ID") %>'></asp:Label>
@@ -1062,10 +787,7 @@
                                     <ItemStyle CssClass="styleDisplayNone" />
                                 </asp:TemplateField>
 
-
                                 <asp:TemplateField HeaderText="No.">
-                                    <EditItemTemplate>
-                                    </EditItemTemplate>
                                     <ItemTemplate>
                                         <asp:TextBox ID="txtSeqNo" runat="server" TextMode="Number" Enabled='<%# If(Eval("IsPublish") = False And Eval("AgensiId") = 1, True, False) %>' Text='<%# Eval("SeqNo") %>' CssClass="form-control" OnTextChanged="txtSeqNo_TextChanged" AutoPostBack="true" />
                                     </ItemTemplate>
@@ -1105,9 +827,7 @@
                                         <asp:Label ID="Label16" runat="server" Text='<%# Eval("KadarBayaran_Desc") %>' Font-Size="10pt"></asp:Label><br />
                                         <asp:Label ID="Label9" runat="server" Text="Jumlah (RM) :" Font-Bold="True" Font-Size="10pt"></asp:Label><br />
                                         <asp:Label ID="Label19" runat="server" Text='<%# Eval("KadarBayaran_Amount", "{0:N2}") %>' Font-Size="10pt"></asp:Label><br />
-                                        <%--<br />
-                                        <asp:LinkButton ID="lbEditMobile" runat="server" CausesValidation="False" CommandName="Edit" Text="Kemaskini" CssClass="btn btn-warning btn-sm"></asp:LinkButton>
-                                    --%></ItemTemplate>
+                                    </ItemTemplate>
                                     <EditItemTemplate>
                                         <asp:Label ID="Label15" runat="server" Text="Bayaran :" Font-Bold="True" Font-Size="10pt"></asp:Label><br />
                                         <asp:TextBox ID="txtKadarBayaran_DescMobile" runat="server" Text='<%# Bind("KadarBayaran_Desc") %>' CssClass="form-control"></asp:TextBox>
@@ -1117,23 +837,17 @@
                                         <asp:TextBox ID="txtKadarBayaran_AmountMobile" runat="server" Text='<%# Bind("KadarBayaran_Amount") %>' CssClass="form-control" type="number"></asp:TextBox>
                                         <asp:RequiredFieldValidator ID="rvKadarBayaran_AmountMobile" runat="server" CssClass="cssRequiredField"
                                             ControlToValidate="txtKadarBayaran_AmountMobile" ErrorMessage="Sila Isi" ValidationGroup="frmEdit" Display="Dynamic"></asp:RequiredFieldValidator><br />
-                                        <br />
-
                                     </EditItemTemplate>
                                     <ItemStyle HorizontalAlign="Left" />
                                 </asp:TemplateField>
 
                                 <asp:TemplateField ShowHeader="True" HeaderText="Pilih?">
-                                    <EditItemTemplate>
-                                    </EditItemTemplate>
                                     <ItemTemplate>
                                         <asp:CheckBox ID="cbsel" runat="server" Enabled='<%# If(Eval("IsPublish") = False And Eval("AgensiId") = 1, True, False) %>' Checked='<%# Eval("IsSelect") %>' OnCheckedChanged="cbsel_CheckedChanged" AutoPostBack="true" />
                                     </ItemTemplate>
                                     <HeaderStyle Width="10%" />
                                 </asp:TemplateField>
-
                             </Columns>
-
                             <PagerStyle CssClass="pgr" />
                         </asp:GridView>
 
@@ -1148,14 +862,10 @@
                             UpdateCommand="UPDATE LESEN_KadarBayaran SET KadarBayaran_Desc = @KadarBayaran_Desc, LastModID = @LastModID, LastModDt = GETDATE(), KadarBayaran_Amount = @KadarBayaran_Amount WHERE (KadarBayaran_ID = @KadarBayaran_ID)">
                             <DeleteParameters>
                                 <asp:ControlParameter ControlID="gvTabBayaran" DefaultValue="" Name="KadarBayaran_ID" PropertyName="SelectedValue" />
-
                             </DeleteParameters>
-
                             <SelectParameters>
                                 <asp:ControlParameter ControlID="GridView1" PropertyName="SelectedDataKey.Values[0]" Name="PermohonanID"></asp:ControlParameter>
                                 <asp:SessionParameter SessionField="sessionEstateID" DefaultValue="0" Name="AgensiID"></asp:SessionParameter>
-                                <%--<asp:ControlParameter ControlID="GridView1" PropertyName="SelectedDataKey.Values[1]" Name="AgensiID"></asp:ControlParameter>--%>
-
                             </SelectParameters>
                             <UpdateParameters>
                                 <asp:Parameter Name="KadarBayaran_Desc" />
@@ -1164,31 +874,26 @@
                                 <asp:Parameter Name="KadarBayaran_ID" />
                             </UpdateParameters>
                         </asp:SqlDataSource>
-
                     </ContentTemplate>
                 </asp:TabPanel>
 
             </asp:TabContainer>
 
+            <%-- ========================================================================= --%>
+            <%-- SECTION 4: MAIN LISTING & SEARCH FILTER (idListing & GridView1)           --%>
+            <%-- ========================================================================= --%>
             <div class="card" runat="server" id="idListing">
                 <div class="card-body" style="overflow-x: auto;">
-                    <%--# START FILTER - set SortExpression at GridView as fieldname & add WHERE 1=1 at SqlDataSource - SelectCommand #--%>
                     <div class="row">
                         <div class="col-md-10">
-                            <%--<div id="pnlFilter" runat="server" class="row"></div>--%>
-
                             <div class="row">
-
                                 <div class="col-md-3">
-
                                     <div class="form-group">
                                         <asp:TextBox ID="txtNoRujukan" placeholder="No Rujukan" runat="server" CssClass="form-control"></asp:TextBox>
                                     </div>
-
                                 </div>
 
                                 <div class="col-md-3" runat="server" id="filterJenisLesen">
-
                                     <div class="form-group">
                                         <asp:DropDownList ID="DDL_JenisLesen" CssClass="form-control select2" runat="server" AutoPostBack="false"
                                             DataSourceID="SqlDataSourceLesen" DataTextField="JenisLesen_Description" DataValueField="JenisLesen_ID">
@@ -1200,13 +905,11 @@
                                         select JenisLesen_Description AS JenisLesen_ID, JenisLesen_Description from LESEN_JenisLesen where JenisLesen_IsActive=1
                                         ) as tbl1 order by JenisLesen_Description "></asp:SqlDataSource>
                                     </div>
-
                                 </div>
 
                                 <div class="col-md-3">
                                     <div class="form-group">
-                                        <asp:TextBox ID="TB_TarikhLulus" runat="server"
-                                            TextMode="Date" CssClass="form-control" />
+                                        <asp:TextBox ID="TB_TarikhLulus" runat="server" TextMode="Date" CssClass="form-control" />
                                     </div>
                                 </div>
 
@@ -1221,9 +924,7 @@
                                         select ApprStatusID,  Description from ApprovalStatus
                                         WHERE ApprStatusID > 8) as tbl1 order by ApprStatusID "></asp:SqlDataSource>
                                 </div>
-
                             </div>
-
                         </div>
                         <div class="col-md-2">
                             <div class="form-group">
@@ -1232,7 +933,6 @@
                             </div>
                         </div>
                     </div>
-                    <%--# END FILTER #--%>
 
                     <asp:GridView ID="GridView1" runat="server" Visible="true" AllowPaging="true"
                         AllowSorting="True" AutoGenerateColumns="False" 
@@ -1243,16 +943,11 @@
                         <AlternatingRowStyle CssClass="alt" />
                         <Columns>
                             <asp:BoundField DataField="RowNo" HeaderText="No" SortExpression="RowNo"></asp:BoundField>
-                            <asp:BoundField DataField="Rujukan" HeaderText="No Rujukan"
-                                SortExpression="Rujukan" />
-                            <asp:BoundField DataField="JenisLesenDescList" HeaderText="Jenis Lesen"
-                                SortExpression="JenisLesenDescList" />
-                            <asp:BoundField DataField="Pemohon_Name" HeaderText="Nama Pemohon"
-                                SortExpression="Pemohon_Name" />
-                            <asp:BoundField DataField="CreatedDt" HeaderText="Tarikh Lulus" DataFormatString="{0:dd/MM/yyyy}"
-                                SortExpression="CreatedDt" />
-                            <asp:BoundField DataField="StatusDesc" HeaderText="Status"
-                                SortExpression="StatusDesc" />
+                            <asp:BoundField DataField="Rujukan" HeaderText="No Rujukan" SortExpression="Rujukan" />
+                            <asp:BoundField DataField="JenisLesenDescList" HeaderText="Jenis Lesen" SortExpression="JenisLesenDescList" />
+                            <asp:BoundField DataField="Pemohon_Name" HeaderText="Nama Pemohon" SortExpression="Pemohon_Name" />
+                            <asp:BoundField DataField="CreatedDt" HeaderText="Tarikh Lulus" DataFormatString="{0:dd/MM/yyyy}" SortExpression="CreatedDt" />
+                            <asp:BoundField DataField="StatusDesc" HeaderText="Status" SortExpression="StatusDesc" />
 
                             <asp:TemplateField HeaderText="Maklumat Permohonan" HeaderStyle-Font-Size="10pt" HeaderStyle-Width="90%" ItemStyle-Width="90%">
                                 <ItemTemplate>
@@ -1270,14 +965,8 @@
                                 <ItemStyle HorizontalAlign="Left" />
                             </asp:TemplateField>
 
-                            <%--<asp:CheckBoxField DataField="JenisLesen_IsActive" HeaderText="Aktif?" SortExpression="JenisLesen_IsActive" />--%>
                             <asp:TemplateField ShowHeader="False">
                                 <ItemTemplate>
-
-
-                                    <%--  <asp:LinkButton ID="LinkButton1" runat="server" CausesValidation="False"
-                                        CommandName="Delete" Text="Nyah Aktif" OnClientClick="return confirm('Anda Pasti Untuk Nyah Aktif rekod ini?');" CssClass="btn btn-danger btn-sm"></asp:LinkButton>--%>
-
                                     <asp:LinkButton runat="server" Text="Lihat" CommandName="Select" CausesValidation="False"
                                         ID="LinkButton5" Visible='<%# If(Eval("UserType") > 0 And Eval("StatusID") > 0, True, False) %>' CssClass="btn btn-warning btn-sm"></asp:LinkButton>
 
@@ -1292,21 +981,6 @@
                                     <asp:LinkButton runat="server" Text="Lampiran 2" CommandName="Lampiran2" CausesValidation="False" ID="LinkButton3"
                                         Visible='<%# If(Eval("UserType") > 0 And Eval("IsPublish") = True, True, False) %>'
                                         CssClass="btn btn-warning btn-sm" CommandArgument='<%# Container.DataItemIndex %>'></asp:LinkButton>
-
-                                    <%--<div>
-                                        <div class="row">
-                                            <div class="col-md-6">
-
-                                                <div class="form-group">
-                                                    <asp:LinkButton runat="server" Text="Lihat" CommandName="Select" CausesValidation="False"
-                                                        ID="lbLihat" CssClass="btn btn-warning btn-sm"></asp:LinkButton>
-                                                </div>
-
-                                            </div>
-
-                                        </div>
-
-                                    </div>--%>
                                 </ItemTemplate>
                             </asp:TemplateField>
                             <asp:BoundField DataField="TarikhMohon" HeaderText="TarikhMohon" DataFormatString="{0:dd/MM/yyyy}" SortExpression="TarikhMohon" Visible="false"></asp:BoundField>
@@ -1315,31 +989,33 @@
                         <PagerStyle CssClass="pgr" />
                     </asp:GridView>
 					
-					<div class="row">
-						<div class="col-md-12">
-							<div class="form-group" style="text-align: right;float: right;">
-								<table>
-									<tr>
-										<td>
-											<div style="background-color: #ff7070; width:20px">&nbsp;</div>
-										</td>
-										<td>
-											&nbsp;&nbsp;<asp:Label ID="legendTitle" runat="server" Text="Sedang dalam pemerhatian/proses oleh bahagian agensi" Font-Size="10pt"></asp:Label>
-										</td>
-									</tr>
-								</table>
-							</div>
-						</div>
-					</div
-					
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group" style="text-align: right; float: right;">
+                                <table>
+                                    <tr>
+                                        <td>
+                                            <div style="background-color: #ff7070; width: 20px">&nbsp;</div>
+                                        </td>
+                                        <td>
+                                            &nbsp;&nbsp;<asp:Label ID="legendTitle" runat="server" Text="Sedang dalam pemerhatian/proses oleh bahagian agensi" Font-Size="10pt"></asp:Label>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
         </div>
     </section>
+
     <asp:Button ID="ui_btnPageBottom" runat="server" Text="-" Style="margin-left: -999px;" />
 
-
+    <%-- ========================================================================= --%>
+    <%-- SECTION 5: MAIN GRID DATA SOURCES (SqlDataSourceGrid)                    --%>
+    <%-- ========================================================================= --%>
     <asp:SqlDataSource ID="SqlDataSourceGrid" runat="server"
         ConnectionString="<%$ ConnectionStrings:webcon_ConnectionStr %>"
         SelectCommand="SELECT ROW_NUMBER() OVER(ORDER BY TarikhMohon desc, Permohonan_ID desc) as RowNo, * FROM (
@@ -1367,17 +1043,9 @@
             and g.IsBatal = 0 
             and g.JenisLesenIdList is not null
             and g.JenisLesenIdList <> '27'
-            ) AS tbl WHERE RepNo = 1 order by TarikhMohon desc, Permohonan_ID desc"
-        DeleteCommand="">
-        <DeleteParameters>
-        </DeleteParameters>
-
+            ) AS tbl WHERE RepNo = 1 order by TarikhMohon desc, Permohonan_ID desc">
         <SelectParameters>
             <asp:SessionParameter SessionField="sessionEstateID" DefaultValue="0" Name="AgensiID"></asp:SessionParameter>
-            <%--<asp:SessionParameter SessionField="sessionIsPenyedia" DefaultValue="0" Name="isPenyedia"></asp:SessionParameter>
-            <asp:SessionParameter SessionField="sessionIsPenilai" DefaultValue="0" Name="isPenilai"></asp:SessionParameter>
-            <asp:SessionParameter SessionField="sessionIsPeraku" DefaultValue="0" Name="isPeraku"></asp:SessionParameter>--%>
-
             <asp:ControlParameter ControlID="txtNoRujukan" PropertyName="Text" DefaultValue="%%" Name="Rujukan"></asp:ControlParameter>
             <asp:ControlParameter ControlID="DDL_JenisLesen" PropertyName="SelectedValue" Name="LesenDesc"></asp:ControlParameter>
             <asp:ControlParameter ControlID="TB_TarikhLulus" PropertyName="Text" DefaultValue="%%" Name="TarikhLulus"></asp:ControlParameter>
@@ -1385,110 +1053,30 @@
         </SelectParameters>
     </asp:SqlDataSource>
 
+    <%-- ========================================================================= --%>
+    <%-- SECTION 6: CLIENT SCRIPTS                                                 --%>
+    <%-- ========================================================================= --%>
     <script>
-
         function pageLoad() {
-
-            $("#ctl00_ContentPlaceHolder1_LabelAttributes1_TabContainer1").css({ 'width': 400, 'height': 400 });
-
             $(function () {
+                // Initialize Select2 Elements
+                $('.select2').select2();
+                $('.select2bs4').select2({
+                    theme: 'bootstrap4'
+                });
 
+                // Initialize Datepicker
                 $('.datepicker').datepicker({
                     dateFormat: 'dd/mm/yy',
                     defaultDate: new Date()
-                })
-
-                //Initialize Select2 Elements
-                $('.select2').select2()
-
-                //Initialize Select2 Elements
-                $('.select2bs4').select2({
-                    theme: 'bootstrap4'
-                })
-
-                //Datemask dd/mm/yyyy
-                $('#datemask').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' })
-                //Datemask2 mm/dd/yyyy
-                $('#datemask2').inputmask('mm/dd/yyyy', { 'placeholder': 'mm/dd/yyyy' })
-                //Money Euro
-                $('[data-mask]').inputmask()
-
-                //Date range picker
-                $('#reservationdate').datetimepicker({
-                    format: 'L'
-                });
-                //Date range picker
-                $('#reservation').daterangepicker()
-                //Date range picker with time picker
-                $('#reservationtime').daterangepicker({
-                    timePicker: true,
-                    timePickerIncrement: 30,
-                    locale: {
-                        format: 'MM/DD/YYYY hh:mm A'
-                    }
-                })
-                //Date range as a button
-                $('#daterange-btn').daterangepicker(
-                    {
-                        ranges: {
-                            'Today': [moment(), moment()],
-                            'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-                            'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-                            'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-                            'This Month': [moment().startOf('month'), moment().endOf('month')],
-                            'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-                        },
-                        startDate: moment().subtract(29, 'days'),
-                        endDate: moment()
-                    },
-                    function (start, end) {
-                        $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'))
-                    }
-                )
-
-                //Timepicker
-                $('#timepicker').datetimepicker({
-                    format: 'LT'
-                })
-
-                //Bootstrap Duallistbox
-                $('.duallistbox').bootstrapDualListbox()
-
-                //Colorpicker
-                $('.my-colorpicker1').colorpicker()
-                //color picker with addon
-                $('.my-colorpicker2').colorpicker()
-
-                $('.my-colorpicker2').on('colorpickerChange', function (event) {
-                    $('.my-colorpicker2 .fa-square').css('color', event.color.toString());
                 });
 
-                $("input[data-bootstrap-switch]").each(function () {
-                    $(this).bootstrapSwitch('state', $(this).prop('checked'));
-                });
-
-                $("#example1").DataTable({
-                    "responsive": true,
-                    "autoWidth": false,
-                });
-                $('#example2').DataTable({
-                    "paging": true,
-                    "lengthChange": false,
-                    "searching": false,
-                    "ordering": true,
-                    "info": true,
-                    "autoWidth": false,
-                    "responsive": true,
-                });
-                $('.toastrDefaultSuccess').click(function () {
-                    toastr.success('Lorem ipsum dolor sit amet, consetetur sadipscing elitr.')
-                });
-
-
-            })
-
+                // Input Masks
+                $('#datemask').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' });
+                $('#datemask2').inputmask('mm/dd/yyyy', { 'placeholder': 'mm/dd/yyyy' });
+                $('[data-mask]').inputmask();
+            });
         }
     </script>
 
 </asp:Content>
-
