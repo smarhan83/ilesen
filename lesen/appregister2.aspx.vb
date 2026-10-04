@@ -145,6 +145,7 @@ Partial Class appregister2
         Session.Item("isInserted") = False
         FormView1.Visible = True
         FormView1.ChangeMode(FormViewMode.Insert)
+        ClearFormViewInsertData()
         whiteCard.Visible = False
     End Sub
 
@@ -183,7 +184,116 @@ Partial Class appregister2
     End Sub
 
     Protected Sub BackButton_Click(sender As Object, e As EventArgs)
+        If FormView1.CurrentMode = FormViewMode.Insert Then
+            ClearFormViewInsertData()
+        End If
         backToList()
+    End Sub
+
+    ''' <summary>
+    ''' Clears all form fields, uploaded/added lists, and panels in FormView1 when in InsertMode.
+    ''' </summary>
+    Private Sub ClearFormViewInsertData()
+        Try
+            ' Recursively clear standard inputs (TextBox, DropDownList, CheckBox, HiddenField, GridView, Repeater, BaseValidator)
+            ClearControlValues(FormView1)
+
+            ' Restore default text for read-only applicant preview fields
+            Dim tbName As TextBox = TryCast(FormView1.FindControl("TB_Name"), TextBox)
+            If tbName IsNot Nothing Then tbName.Text = "NULL"
+
+            Dim tbNat As TextBox = TryCast(FormView1.FindControl("TB_Nat"), TextBox)
+            If tbNat IsNot Nothing Then tbNat.Text = "NULL"
+
+            Dim tbAddress As TextBox = TryCast(FormView1.FindControl("TB_Address"), TextBox)
+            If tbAddress IsNot Nothing Then tbAddress.Text = "NULL"
+
+            Dim tbRemarks As TextBox = TryCast(FormView1.FindControl("TB_Remarks"), TextBox)
+            If tbRemarks IsNot Nothing Then tbRemarks.Text = "NULL"
+
+            ' Reset visibility of all dynamic panels inside InsertItemTemplate
+            Dim panelNames() As String = {
+                "pnlpemohon", "pnlesen1", "pnlesen1a", "pnlesen1b", "pnlesen1c", "pnlesen1d", "pnlesen1e",
+                "pnlesen2", "pnlesen3", "pnlesen4", "pnlesen5", "pnlbillboard", "pnlrujukan",
+                "pnldeposit", "pnldeposit1", "pnlbatal", "pnlbatal1", "pnlbatal2", "pnlbatal3", "pnlbatal4", "pnlbatal5"
+            }
+            For Each pnlName As String In panelNames
+                Dim pnl As Panel = TryCast(FormView1.FindControl(pnlName), Panel)
+                If pnl IsNot Nothing Then pnl.Visible = False
+            Next
+
+            ' Reset bound child controls
+            Dim rptSelectedItems As Repeater = TryCast(FormView1.FindControl("rptSelectedItems"), Repeater)
+            If rptSelectedItems IsNot Nothing Then
+                rptSelectedItems.DataSource = Nothing
+                rptSelectedItems.DataBind()
+            End If
+
+            Dim gvIklanList As GridView = TryCast(FormView1.FindControl("gvIklanList"), GridView)
+            If gvIklanList IsNot Nothing Then
+                gvIklanList.DataSource = Nothing
+                gvIklanList.DataBind()
+            End If
+
+            Dim gvAnjingList As GridView = TryCast(FormView1.FindControl("gvAnjingList"), GridView)
+            If gvAnjingList IsNot Nothing Then
+                gvAnjingList.DataSource = Nothing
+                gvAnjingList.DataBind()
+            End If
+
+            Dim gvLokasiList As GridView = TryCast(FormView1.FindControl("gvLokasiList"), GridView)
+            If gvLokasiList IsNot Nothing Then
+                gvLokasiList.DataSource = Nothing
+                gvLokasiList.DataBind()
+            End If
+
+            ' Reset ViewState and Session collections
+            ViewState("SelectedList") = New List(Of SelectedItem)()
+            ViewState("IklanTable") = Nothing
+            ViewState("AnjingTable") = Nothing
+            ViewState("LokasiTable") = Nothing
+            Session.Item("isInserted") = False
+
+        Catch ex As Exception
+            ' Safe fallback
+        End Try
+    End Sub
+
+    ''' <summary>
+    ''' Recursively traverses controls to reset input values and validation states.
+    ''' </summary>
+    Private Sub ClearControlValues(parent As Control)
+        If parent Is Nothing Then Exit Sub
+
+        For Each c As Control In parent.Controls
+            If TypeOf c Is TextBox Then
+                DirectCast(c, TextBox).Text = String.Empty
+            ElseIf TypeOf c Is DropDownList Then
+                Dim ddl As DropDownList = DirectCast(c, DropDownList)
+                ddl.ClearSelection()
+                If ddl.Items.Count > 0 Then
+                    ddl.SelectedIndex = 0
+                End If
+            ElseIf TypeOf c Is CheckBox Then
+                DirectCast(c, CheckBox).Checked = False
+            ElseIf TypeOf c Is HiddenField Then
+                DirectCast(c, HiddenField).Value = String.Empty
+            ElseIf TypeOf c Is GridView Then
+                Dim gv As GridView = DirectCast(c, GridView)
+                gv.DataSource = Nothing
+                gv.DataBind()
+            ElseIf TypeOf c Is Repeater Then
+                Dim rpt As Repeater = DirectCast(c, Repeater)
+                rpt.DataSource = Nothing
+                rpt.DataBind()
+            ElseIf TypeOf c Is BaseValidator Then
+                DirectCast(c, BaseValidator).IsValid = True
+            End If
+
+            If c.HasControls() Then
+                ClearControlValues(c)
+            End If
+        Next
     End Sub
 
     Private Sub backToList()
@@ -299,7 +409,6 @@ Partial Class appregister2
             ' 3. Populate Child Data Grids from Hidden Fields
             PopulateIklanGridFromHiddenFields()
             PopulateAnjingGridFromHiddenFields()
-            PopulateLokasiGridFromHiddenFields()
 
             ' 4. Fetch & Populate Applicant Details
             Dim tbApplicantId As TextBox = DirectCast(FormView1.FindControl("TB_PemohonID"), TextBox)
@@ -332,7 +441,6 @@ Partial Class appregister2
         Dim pnlc As Panel = DirectCast(FormView1.FindControl("pnlesen3"), Panel)       ' Anjing
         Dim pnld As Panel = DirectCast(FormView1.FindControl("pnlesen4"), Panel)       ' Penjaja
         Dim pnle As Panel = DirectCast(FormView1.FindControl("pnlesen5"), Panel)       ' Ekspo
-        Dim pnl6 As Panel = DirectCast(FormView1.FindControl("pnlesen6"), Panel)       ' Banting
         Dim pnlf As Panel = DirectCast(FormView1.FindControl("pnlrujukan"), Panel)     ' No Rujukan
         Dim pnlbatal1 As Panel = DirectCast(FormView1.FindControl("pnlbatal1"), Panel) ' Pembatalan
         Dim pnlbillboard As Panel = DirectCast(FormView1.FindControl("pnlbillboard"), Panel)
@@ -353,7 +461,6 @@ Partial Class appregister2
             If pnlc IsNot Nothing Then pnlc.Visible = False
             If pnld IsNot Nothing Then pnld.Visible = False
             If pnle IsNot Nothing Then pnle.Visible = False
-            If pnl6 IsNot Nothing Then pnl6.Visible = False
             If pnlf IsNot Nothing Then pnlf.Visible = False
             If pnlbatal1 IsNot Nothing Then pnlbatal1.Visible = False
             Exit Sub
@@ -458,10 +565,6 @@ Partial Class appregister2
                 If pnla2 IsNot Nothing Then pnla2.Visible = True
                 If pnla3 IsNot Nothing Then pnla3.Visible = True
 
-            Case 27 ' Banting
-                If pnla IsNot Nothing Then pnla.Visible = True
-                If pnl6 IsNot Nothing Then pnl6.Visible = True
-
         End Select
     End Sub
 
@@ -479,7 +582,7 @@ Partial Class appregister2
         End If
 
         ' Prevent mixing standalone license categories with other licenses
-        Dim restrictedIds As String() = {"3", "5", "25", "27"}
+        Dim restrictedIds As String() = {"3", "5", "25"}
         Dim hasRestrictedSelected As Boolean = myList.Any(Function(x) restrictedIds.Contains(x.ItemValue))
         Dim isCurrentRestricted As Boolean = restrictedIds.Contains(ddlItems.SelectedValue)
 
@@ -765,77 +868,6 @@ Partial Class appregister2
         For Each row As DataRow In dt.Rows
             updateAnjingList(row("Baka").ToString(), row("Jantan").ToString(), row("Betina").ToString(), row("JantanMandul").ToString(), row("BetinaMandul").ToString())
         Next
-    End Sub
-
-    ' -------------------------------------------------------------
-    ' 3. LOKASI LIST (BANTING)
-    ' -------------------------------------------------------------
-    Protected Sub btnAddLokasi_Click(sender As Object, e As EventArgs)
-        Dim tbLokasi As TextBox = DirectCast(FormView1.FindControl("TB_LokasiBanting"), TextBox)
-        Dim gvLokasiList As GridView = DirectCast(FormView1.FindControl("gvLokasiList"), GridView)
-
-        If tbLokasi IsNot Nothing AndAlso Not String.IsNullOrWhiteSpace(tbLokasi.Text) Then
-            Dim dt As DataTable = GetOrCreateLokasiTable()
-            Dim newRow As DataRow = dt.NewRow()
-            newRow("No") = (dt.Rows.Count + 1).ToString()
-            newRow("Lokasi") = tbLokasi.Text.Trim()
-            dt.Rows.Add(newRow)
-
-            ViewState("LokasiTable") = dt
-            If gvLokasiList IsNot Nothing Then
-                gvLokasiList.DataSource = dt
-                gvLokasiList.DataBind()
-            End If
-
-            updateLokasiList(newRow("Lokasi").ToString())
-            tbLokasi.Text = ""
-        End If
-    End Sub
-
-    Protected Sub gvLokasiList_RowDeleting(sender As Object, e As GridViewDeleteEventArgs)
-        If ViewState("LokasiTable") IsNot Nothing Then
-            Dim dt As DataTable = DirectCast(ViewState("LokasiTable"), DataTable)
-            dt.Rows.RemoveAt(e.RowIndex)
-
-            ' Re-index row numbers
-            For i As Integer = 0 To dt.Rows.Count - 1
-                dt.Rows(i)("No") = (i + 1).ToString()
-            Next
-
-            ViewState("LokasiTable") = dt
-
-            Dim gvLokasi As GridView = DirectCast(FormView1.FindControl("gvLokasiList"), GridView)
-            If gvLokasi IsNot Nothing Then
-                gvLokasi.DataSource = dt
-                gvLokasi.DataBind()
-            End If
-
-            Dim hfLokasi As HiddenField = DirectCast(FormView1.FindControl("HF_LokasiList"), HiddenField)
-            If hfLokasi IsNot Nothing Then
-                hfLokasi.Value = ""
-                For Each row As DataRow In dt.Rows
-                    updateLokasiList(row("Lokasi").ToString())
-                Next
-            End If
-        End If
-    End Sub
-
-    Private Function GetOrCreateLokasiTable() As DataTable
-        If ViewState("LokasiTable") IsNot Nothing Then
-            Return DirectCast(ViewState("LokasiTable"), DataTable)
-        End If
-
-        Dim dt As New DataTable()
-        dt.Columns.Add("No", GetType(String))
-        dt.Columns.Add("Lokasi", GetType(String))
-        Return dt
-    End Function
-
-    Private Sub updateLokasiList(ByVal lokasiVal As String)
-        Dim hfLokasi As HiddenField = DirectCast(FormView1.FindControl("HF_LokasiList"), HiddenField)
-        If hfLokasi IsNot Nothing Then
-            hfLokasi.Value = If(String.IsNullOrEmpty(hfLokasi.Value), lokasiVal, hfLokasi.Value & "||" & lokasiVal)
-        End If
     End Sub
 
 #End Region
@@ -1395,37 +1427,6 @@ Partial Class appregister2
         Next
 
         ViewState("AnjingTable") = dt
-        If gv IsNot Nothing Then
-            gv.DataSource = dt
-            gv.DataBind()
-        End If
-    End Sub
-
-    ''' <summary>
-    ''' Populates the Lokasi (Banting) GridView from the stored hidden fields.
-    ''' </summary>
-    Private Sub PopulateLokasiGridFromHiddenFields()
-        Dim hfLokasi As HiddenField = DirectCast(FormView1.FindControl("HF_LokasiList"), HiddenField)
-        Dim gv As GridView = DirectCast(FormView1.FindControl("gvLokasiList"), GridView)
-
-        If hfLokasi Is Nothing OrElse String.IsNullOrWhiteSpace(hfLokasi.Value) Then Return
-
-        Dim lokasiArr As String() = hfLokasi.Value.Split(New String() {"||"}, StringSplitOptions.RemoveEmptyEntries)
-        Dim dt As New DataTable()
-        dt.Columns.Add("No", GetType(String))
-        dt.Columns.Add("Lokasi", GetType(String))
-
-        For i As Integer = 0 To lokasiArr.Length - 1
-            Dim lokasiText As String = lokasiArr(i).Trim()
-            If Not String.IsNullOrWhiteSpace(lokasiText) Then
-                Dim newRow As DataRow = dt.NewRow()
-                newRow("No") = (i + 1).ToString()
-                newRow("Lokasi") = lokasiText
-                dt.Rows.Add(newRow)
-            End If
-        Next
-
-        ViewState("LokasiTable") = dt
         If gv IsNot Nothing Then
             gv.DataSource = dt
             gv.DataBind()
