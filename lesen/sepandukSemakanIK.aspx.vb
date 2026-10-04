@@ -1,4 +1,4 @@
-﻿Imports System.Data.SqlClient
+Imports System.Data.SqlClient
 Imports System.Configuration
 Imports System.IO
 Imports System.Data
@@ -220,7 +220,7 @@ Partial Class sepandukSemakanIK
         Session.Item(SESS_QRCODE) = kod
 
         '// TODO: sesuaikan cara decode QR sebenar - andaian: QR menyimpan NoPendaftaran terus
-        CariRekodPermohonan("Rujukan = @kw", kod)
+        CariRekodPermohonan("(Rujukan = @kw OR Permohonan_ID IN (SELECT Permohonan_ID FROM LESEN_BantingImej WHERE UniqueID = @kw))", kod)
     End Sub
 
     '===================== PEGAWAI IK: CARIAN MANUAL =====================
@@ -230,7 +230,7 @@ Partial Class sepandukSemakanIK
 
         Session.Item(SESS_KAEDAH) = "Carian"
 
-        CariRekodPermohonan("(NoPendaftaran LIKE @kwLike OR NamaSyarikat LIKE @kwLike OR AlamatPremis LIKE @kwLike OR Rujukan LIKE @kwLike)", kw)
+        CariRekodPermohonan("(NoPendaftaran LIKE @kwLike OR NamaSyarikat LIKE @kwLike OR AlamatPremis LIKE @kwLike OR Rujukan LIKE @kwLike OR Permohonan_ID IN (SELECT Permohonan_ID FROM LESEN_BantingImej WHERE UniqueID LIKE @kwLike))", kw)
     End Sub
 
     Private Sub CariRekodPermohonan(whereClause As String, keyword As String)

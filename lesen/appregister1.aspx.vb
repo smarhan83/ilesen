@@ -12,20 +12,20 @@ Imports System.Web.UI.HtmlControls
 Imports System.Web.UI.WebControls
 Imports QRCoder
 
-#Region "Model Classes"
-''' <summary>
-''' Represents a selected licence or permit item chosen from the dropdown list.
-''' Stored in ViewState("SelectedList") for multi-licence selection tag display.
-''' </summary>
-<Serializable()>
-Public Class SelectedItem
-    Public Property ItemText As String
-    Public Property ItemValue As String
-End Class
-#End Region
-
 Partial Class appregister1
     Inherits System.Web.UI.Page
+
+#Region "Model Classes"
+    ''' <summary>
+    ''' Represents a selected licence or permit item chosen from the dropdown list.
+    ''' Stored in ViewState("SelectedList") for multi-licence selection tag display.
+    ''' </summary>
+    <Serializable()>
+    Public Class SelectedItem
+        Public Property ItemText As String
+        Public Property ItemValue As String
+    End Class
+#End Region
 
 #Region "Fields & Constants"
     Public Shared CS As String = ConfigurationManager.ConnectionStrings("webcon_ConnectionStr").ConnectionString
@@ -117,6 +117,10 @@ Partial Class appregister1
 
     Private Sub appregister_LoadComplete(sender As Object, e As EventArgs) Handles Me.LoadComplete
         ' Reserved for lifecycle completion logic if needed
+    End Sub
+
+    Private Sub Page_PreRender(sender As Object, e As EventArgs) Handles Me.PreRender
+        RegisterBantingPostBackControls()
     End Sub
 
 #End Region
@@ -465,6 +469,7 @@ Partial Class appregister1
     Private Sub ButtonAddAssignment_Click(sender As Object, e As EventArgs) Handles ButtonAddAssignment.Click
         DDL_Status.SelectedValue = 0
         Session.Item("isInserted") = False
+        Session.Remove("BantingDraftKey")
         FormView1.Visible = True
         FormView1.ChangeMode(FormViewMode.Insert)
         whiteCard.Visible = False
@@ -669,32 +674,7 @@ Partial Class appregister1
                 End If
 
                 ' Load Senarai Lokasi
-                Dim LokasiList() As String = Split(HF_LokasiList.Value, "||")
-
-                If LokasiList.Length > 0 AndAlso Not String.IsNullOrWhiteSpace(LokasiList(0)) Then
-                    Dim dt As DataTable
-                    If ViewState("LokasiTable") IsNot Nothing Then
-                        dt = DirectCast(ViewState("LokasiTable"), DataTable)
-                        dt.Clear()
-                    Else
-                        dt = New DataTable()
-                        dt.Columns.Add("No", GetType(String))
-                        dt.Columns.Add("Lokasi", GetType(String))
-                    End If
-
-                    For i As Integer = 0 To LokasiList.Length - 1
-                        If Not String.IsNullOrWhiteSpace(LokasiList(i)) Then
-                            Dim newRow As DataRow = dt.NewRow()
-                            newRow("No") = (i + 1).ToString()
-                            newRow("Lokasi") = LokasiList(i).Trim()
-                            dt.Rows.Add(newRow)
-                        End If
-                    Next
-
-                    ViewState("LokasiTable") = dt
-                    gvLokasiList.DataSource = dt
-                    gvLokasiList.DataBind()
-                End If
+                BindLokasiList()
 
                 Using myConnection As New SqlConnection(CS)
                     myConnection.Open()
@@ -718,6 +698,8 @@ Partial Class appregister1
                         End Using
                     End Using
                 End Using
+            ElseIf FormView1.CurrentMode = FormViewMode.Insert Then
+                ' Lokasi dan gambar banting hanya boleh diurus dalam FormViewMode.Edit
             End If
         Catch ex As Exception
             ' Safe fallback
@@ -750,6 +732,10 @@ Partial Class appregister1
                 If JenisBatal = 1 Then
                     insertJabatanAgensiBatal(PermohonanID)
                 End If
+            End If
+
+            If Session("BantingDraftKey") IsNot Nothing Then
+                Session.Remove("BantingDraftKey")
             End If
 
             ShowAlert("success", "", "Rekod permohonan " & strAlert & " 24 jam telah disimpan.")
@@ -905,6 +891,9 @@ Partial Class appregister1
             Case 27 ' Banting
                 pnla.Visible = True
                 pnl6.Visible = True
+                If FormView1.CurrentMode = FormViewMode.Edit Then
+                    BindLokasiList()
+                End If
         End Select
     End Sub
 
@@ -1519,61 +1508,422 @@ Partial Class appregister1
         End If
     End Sub
 
-    ' --- Lokasi (Regular) ---
-    Protected Sub btnAddLokasi_Click(sender As Object, e As EventArgs)
-        Dim TB_LokasiBanting As TextBox = DirectCast(FormView1.FindControl("TB_LokasiBanting"), TextBox)
-        Dim gvLokasiList As GridView = DirectCast(FormView1.FindControl("gvLokasiList"), GridView)
+    ' --- Lokasi & Gambar Banting (Regular) ---
+    Private Function GetCurrentPermohonanID() As Integer
+        If FormView1.CurrentMode = FormViewMode.Edit Then
+            If GridView1.SelectedDataKey IsNot Nothing AndAlso GridView1.SelectedDataKey.Values("Permohonan_ID") IsNot Nothing Then
+                Return CInt(GridView1.SelectedDataKey.Values("Permohonan_ID"))
+            End If
+        End If
+        Return 0
+    End Function
 
-        If Not String.IsNullOrWhiteSpace(TB_LokasiBanting.Text) Then
-            Dim dt As DataTable
-            If ViewState("LokasiTable") IsNot Nothing Then
-                dt = DirectCast(ViewState("LokasiTable"), DataTable)
-            Else
-                dt = New DataTable()
-                dt.Columns.Add("No", GetType(String))
-                dt.Columns.Add("Lokasi", GetType(String))
+    Private Function GetBantingDraftKey() As String
+        If Session("BantingDraftKey") Is Nothing Then
+            Session("BantingDraftKey") = Guid.NewGuid().ToString()
+        End If
+        Return Session("BantingDraftKey").ToString()
+    End Function
+
+    Private Sub BindLokasiList()
+        If FormView1.CurrentMode <> FormViewMode.Edit Then Exit Sub
+
+        Dim gvLokasiList As GridView = DirectCast(FormView1.FindControl("gvLokasiList"), GridView)
+        If gvLokasiList Is Nothing Then Exit Sub
+
+        Dim permohonanId As Integer = GetCurrentPermohonanID()
+        If permohonanId <= 0 Then Exit Sub
+
+        ' If in Edit mode, migrate any existing LokasiList into LESEN_BantingLokasi if table is currently empty
+        EnsureLokasiMigrated(permohonanId)
+
+        Dim dt As New DataTable()
+        Using conn As New SqlConnection(CS)
+            conn.Open()
+            Dim sql As String = "SELECT Lokasi_ID, Lokasi, Permohonan_ID FROM LESEN_BantingLokasi WHERE Permohonan_ID = @Permohonan_ID ORDER BY Lokasi_ID ASC"
+
+            Using cmd As New SqlCommand(sql, conn)
+                cmd.Parameters.AddWithValue("@Permohonan_ID", permohonanId)
+                Using da As New SqlDataAdapter(cmd)
+                    da.Fill(dt)
+                End Using
+            End Using
+        End Using
+
+        gvLokasiList.DataSource = dt
+        gvLokasiList.DataBind()
+
+        RegisterBantingPostBackControls()
+        UpdateHF_LokasiList()
+    End Sub
+
+    Private Sub RegisterBantingPostBackControls()
+        Dim gvLokasiList As GridView = DirectCast(FormView1.FindControl("gvLokasiList"), GridView)
+        If gvLokasiList IsNot Nothing Then
+            Dim sm As ScriptManager = ScriptManager.GetCurrent(Page)
+            If sm IsNot Nothing Then
+                For Each row As GridViewRow In gvLokasiList.Rows
+                    Dim btnUpload As Control = row.FindControl("btnUploadBantingImg")
+                    If btnUpload IsNot Nothing Then
+                        sm.RegisterPostBackControl(btnUpload)
+                    End If
+                Next
+            End If
+        End If
+    End Sub
+
+    Private Sub EnsureLokasiMigrated(permohonanId As Integer)
+        Using conn As New SqlConnection(CS)
+            conn.Open()
+            Dim checkSql As String = "SELECT COUNT(*) FROM LESEN_BantingLokasi WHERE Permohonan_ID = @Permohonan_ID"
+            Using checkCmd As New SqlCommand(checkSql, conn)
+                checkCmd.Parameters.AddWithValue("@Permohonan_ID", permohonanId)
+                Dim count As Integer = CInt(checkCmd.ExecuteScalar())
+                If count = 0 Then
+                    Dim getSql As String = "SELECT LokasiList FROM LESEN_Permohonan WHERE Permohonan_ID = @Permohonan_ID"
+                    Using getCmd As New SqlCommand(getSql, conn)
+                        getCmd.Parameters.AddWithValue("@Permohonan_ID", permohonanId)
+                        Dim objLokasi As Object = getCmd.ExecuteScalar()
+                        If objLokasi IsNot Nothing AndAlso Not IsDBNull(objLokasi) Then
+                            Dim strLokasi As String = objLokasi.ToString().Trim()
+                            If strLokasi.Length > 0 Then
+                                Dim parts() As String = Split(strLokasi, "||")
+                                For Each p As String In parts
+                                    Dim locText As String = p.Trim()
+                                    If locText.Length > 0 Then
+                                        Dim insSql As String = "INSERT INTO LESEN_BantingLokasi (Permohonan_ID, Lokasi, CreatedDt) VALUES (@Permohonan_ID, @Lokasi, GETDATE())"
+                                        Using insCmd As New SqlCommand(insSql, conn)
+                                            insCmd.Parameters.AddWithValue("@Permohonan_ID", permohonanId)
+                                            insCmd.Parameters.AddWithValue("@Lokasi", locText)
+                                            insCmd.ExecuteNonQuery()
+                                        End Using
+                                    End If
+                                Next
+                            End If
+                        End If
+                    End Using
+                End If
+            End Using
+        End Using
+    End Sub
+
+    Protected Sub gvLokasiList_RowDataBound(sender As Object, e As GridViewRowEventArgs)
+        If e.Row.RowType = DataControlRowType.DataRow Then
+            Dim btnUpload As Control = e.Row.FindControl("btnUploadBantingImg")
+            If btnUpload IsNot Nothing Then
+                Dim sm As ScriptManager = ScriptManager.GetCurrent(Page)
+                If sm IsNot Nothing Then
+                    sm.RegisterPostBackControl(btnUpload)
+                End If
             End If
 
-            Dim newRow As DataRow = dt.NewRow()
-            newRow("No") = (dt.Rows.Count + 1).ToString()
-            newRow("Lokasi") = TB_LokasiBanting.Text
-            dt.Rows.Add(newRow)
+            Dim gvImages As GridView = DirectCast(e.Row.FindControl("gvBantingImages"), GridView)
+            If gvImages IsNot Nothing Then
+                Dim rowView As DataRowView = DirectCast(e.Row.DataItem, DataRowView)
+                Dim lokasiId As Integer = CInt(rowView("Lokasi_ID"))
 
-            ViewState("LokasiTable") = dt
-            gvLokasiList.DataSource = dt
-            gvLokasiList.DataBind()
+                Dim dtImages As New DataTable()
+                Using conn As New SqlConnection(CS)
+                    conn.Open()
+                    Dim sql As String = "SELECT Imej_ID, Lokasi_ID, Permohonan_ID, UniqueID, FileName, FilePath, Remarks, CreatedDt FROM LESEN_BantingImej WHERE Lokasi_ID = @Lokasi_ID ORDER BY Imej_ID ASC"
+                    Using cmd As New SqlCommand(sql, conn)
+                        cmd.Parameters.AddWithValue("@Lokasi_ID", lokasiId)
+                        Using da As New SqlDataAdapter(cmd)
+                            da.Fill(dtImages)
+                        End Using
+                    End Using
+                End Using
 
-            updateLokasiList(newRow("Lokasi").ToString())
-            TB_LokasiBanting.Text = ""
+                gvImages.DataSource = dtImages
+                gvImages.DataBind()
+            End If
         End If
+    End Sub
+
+    Protected Sub btnAddLokasi_Click(sender As Object, e As EventArgs)
+        If FormView1.CurrentMode <> FormViewMode.Edit Then Exit Sub
+
+        Dim TB_LokasiBanting As TextBox = DirectCast(FormView1.FindControl("TB_LokasiBanting"), TextBox)
+        If TB_LokasiBanting IsNot Nothing AndAlso Not String.IsNullOrWhiteSpace(TB_LokasiBanting.Text) Then
+            Dim permohonanId As Integer = GetCurrentPermohonanID()
+            If permohonanId <= 0 Then Exit Sub
+
+            Dim creatorId As String = If(Session.Item("sessionUserName") IsNot Nothing, Session.Item("sessionUserName").ToString(), "")
+
+            Using conn As New SqlConnection(CS)
+                conn.Open()
+                Dim sql As String = "INSERT INTO LESEN_BantingLokasi (Permohonan_ID, Lokasi, CreatedDt, CreatorID) " &
+                                    "VALUES (@Permohonan_ID, @Lokasi, GETDATE(), @CreatorID)"
+                Using cmd As New SqlCommand(sql, conn)
+                    cmd.Parameters.AddWithValue("@Permohonan_ID", permohonanId)
+                    cmd.Parameters.AddWithValue("@Lokasi", TB_LokasiBanting.Text.Trim())
+                    cmd.Parameters.AddWithValue("@CreatorID", creatorId)
+                    cmd.ExecuteNonQuery()
+                End Using
+            End Using
+
+            TB_LokasiBanting.Text = ""
+            BindLokasiList()
+        End If
+    End Sub
+
+    Protected Sub btnRemoveLokasi_Click(sender As Object, e As EventArgs)
+        If FormView1.CurrentMode <> FormViewMode.Edit Then Exit Sub
+
+        Dim btn As LinkButton = DirectCast(sender, LinkButton)
+        Dim lokasiId As Integer = CInt(btn.CommandArgument)
+        DeleteLokasiFiles(lokasiId)
+
+        Using conn As New SqlConnection(CS)
+            conn.Open()
+            Using cmd As New SqlCommand("DELETE FROM LESEN_BantingLokasi WHERE Lokasi_ID = @Lokasi_ID", conn)
+                cmd.Parameters.AddWithValue("@Lokasi_ID", lokasiId)
+                cmd.ExecuteNonQuery()
+            End Using
+        End Using
+
+        BindLokasiList()
+        ShowAlert("success", "", "Lokasi dan gambar banting berjaya dipadam.")
     End Sub
 
     Protected Sub gvLokasiList_RowDeleting(sender As Object, e As GridViewDeleteEventArgs)
-        Dim HF_LokasiList As HiddenField = DirectCast(FormView1.FindControl("HF_LokasiList"), HiddenField)
+        ' Stub maintained for backward compatibility
+    End Sub
 
-        If ViewState("LokasiTable") IsNot Nothing Then
-            Dim dt As DataTable = DirectCast(ViewState("LokasiTable"), DataTable)
-            dt.Rows.RemoveAt(e.RowIndex)
-            ViewState("LokasiTable") = dt
+    Protected Sub btnUploadBantingImg_Click(sender As Object, e As EventArgs)
+        If FormView1.CurrentMode <> FormViewMode.Edit Then Exit Sub
 
-            Dim gvLokasi As GridView = DirectCast(FormView1.FindControl("gvLokasiList"), GridView)
-            gvLokasi.DataSource = dt
-            gvLokasi.DataBind()
+        Dim btn As LinkButton = DirectCast(sender, LinkButton)
+        Dim lokasiId As Integer = CInt(btn.CommandArgument)
+        
+        Dim row As GridViewRow = TryCast(btn.NamingContainer, GridViewRow)
+        If row Is Nothing Then
+            Dim c As Control = btn.Parent
+            While c IsNot Nothing AndAlso Not (TypeOf c Is GridViewRow)
+                c = c.Parent
+            End While
+            row = TryCast(c, GridViewRow)
+        End If
 
-            HF_LokasiList.Value = ""
-            For Each row As DataRow In dt.Rows
-                updateLokasiList(row("Lokasi").ToString())
+        Dim fu As FileUpload = If(row IsNot Nothing, DirectCast(row.FindControl("fuBantingImg"), FileUpload), Nothing)
+        Dim txtRemarks As TextBox = If(row IsNot Nothing, DirectCast(row.FindControl("txtBantingRemarks"), TextBox), Nothing)
+
+        ' Retrieve uploaded file either from fu or Request.Files fallback
+        Dim postedFile As HttpPostedFile = Nothing
+
+        If fu IsNot Nothing AndAlso fu.HasFile Then
+            postedFile = fu.PostedFile
+        ElseIf fu IsNot Nothing AndAlso Request.Files(fu.UniqueID) IsNot Nothing AndAlso Request.Files(fu.UniqueID).ContentLength > 0 Then
+            postedFile = Request.Files(fu.UniqueID)
+        Else
+            ' Fallback search through Request.Files
+            For i As Integer = 0 To Request.Files.Count - 1
+                Dim key As String = Request.Files.GetKey(i)
+                If key IsNot Nothing AndAlso (key.EndsWith("fuBantingImg") OrElse (fu IsNot Nothing AndAlso key = fu.UniqueID)) Then
+                    If Request.Files(i).ContentLength > 0 Then
+                        postedFile = Request.Files(i)
+                        Exit For
+                    End If
+                End If
             Next
+        End If
+
+        If postedFile Is Nothing OrElse postedFile.ContentLength = 0 Then
+            ShowAlert("error", "", "Sila pilih fail imej banting terlebih dahulu.")
+            Exit Sub
+        End If
+
+        Dim ext As String = Path.GetExtension(postedFile.FileName).ToLower()
+        Dim allowedExts As String() = {".jpg", ".jpeg", ".png", ".gif", ".webp", ".bmp"}
+        If Not allowedExts.Contains(ext) Then
+            ShowAlert("error", "", "Hanya format imej dibenarkan (JPG, PNG, GIF, WEBP, BMP).")
+            Exit Sub
+        End If
+
+        Dim permohonanId As Integer = GetCurrentPermohonanID()
+        If permohonanId <= 0 Then
+            ShowAlert("error", "", "ID Permohonan tidak sah.")
+            Exit Sub
+        End If
+
+        Dim uniqueId As String = GenerateBantingUniqueID()
+        Dim uploadFolder As String = Server.MapPath("~/Uploads/Banting/")
+        If Not Directory.Exists(uploadFolder) Then
+            Directory.CreateDirectory(uploadFolder)
+        End If
+
+        Dim fileName As String = uniqueId & ext
+        Dim savePath As String = Path.Combine(uploadFolder, fileName)
+        postedFile.SaveAs(savePath)
+
+        Dim virtualPath As String = "~/Uploads/Banting/" & fileName
+        Dim remarks As String = If(txtRemarks IsNot Nothing, txtRemarks.Text.Trim(), "")
+        Dim creatorId As String = If(Session.Item("sessionUserName") IsNot Nothing, Session.Item("sessionUserName").ToString(), "")
+
+        Using conn As New SqlConnection(CS)
+            conn.Open()
+            Dim sql As String = "INSERT INTO LESEN_BantingImej (Lokasi_ID, Permohonan_ID, UniqueID, FileName, FilePath, ContentType, FileSize, Remarks, CreatedDt, CreatorID) " &
+                                "VALUES (@Lokasi_ID, @Permohonan_ID, @UniqueID, @FileName, @FilePath, @ContentType, @FileSize, @Remarks, GETDATE(), @CreatorID)"
+            Using cmd As New SqlCommand(sql, conn)
+                cmd.Parameters.AddWithValue("@Lokasi_ID", lokasiId)
+                cmd.Parameters.AddWithValue("@Permohonan_ID", permohonanId)
+                cmd.Parameters.AddWithValue("@UniqueID", uniqueId)
+                cmd.Parameters.AddWithValue("@FileName", Path.GetFileName(postedFile.FileName))
+                cmd.Parameters.AddWithValue("@FilePath", virtualPath)
+                cmd.Parameters.AddWithValue("@ContentType", postedFile.ContentType)
+                cmd.Parameters.AddWithValue("@FileSize", postedFile.ContentLength)
+                cmd.Parameters.AddWithValue("@Remarks", remarks)
+                cmd.Parameters.AddWithValue("@CreatorID", creatorId)
+                cmd.ExecuteNonQuery()
+            End Using
+        End Using
+
+        BindLokasiList()
+        ShowAlert("success", "", "Imej banting berjaya dimuat naik dengan ID Unik: " & uniqueId)
+    End Sub
+
+    Protected Sub btnDeleteBantingImg_Click(sender As Object, e As EventArgs)
+        If FormView1.CurrentMode <> FormViewMode.Edit Then Exit Sub
+
+        Dim btn As LinkButton = DirectCast(sender, LinkButton)
+        Dim imejId As Integer = CInt(btn.CommandArgument)
+        DeleteBantingImage(imejId)
+        BindLokasiList()
+        ShowAlert("success", "", "Imej banting berjaya dipadam.")
+    End Sub
+
+    Protected Sub btnQrCodeBanting_Click(sender As Object, e As EventArgs)
+        If FormView1.CurrentMode <> FormViewMode.Edit Then Exit Sub
+
+        Dim btn As LinkButton = DirectCast(sender, LinkButton)
+        Dim uniqueId As String = btn.CommandArgument
+        If Not String.IsNullOrWhiteSpace(uniqueId) Then
+            DisplayBantingQRModal(uniqueId)
         End If
     End Sub
 
-    Private Sub updateLokasiList(ByVal lokasiVal As String)
-        Dim HF_LokasiList As HiddenField = DirectCast(FormView1.FindControl("HF_LokasiList"), HiddenField)
-        If HF_LokasiList.Value.ToString().Length = 0 Then
-            HF_LokasiList.Value = lokasiVal
-        Else
-            HF_LokasiList.Value += "||" + lokasiVal
+    Private Sub DisplayBantingQRModal(uniqueId As String)
+        Dim baseUrl As String = Request.Url.Scheme & "://" & Request.Url.Authority & Request.ApplicationPath.TrimEnd("/"c)
+        Dim fullUrl As String = baseUrl & "/lesen/sepandukSemakanIK.aspx?scancode=" & Server.UrlEncode(uniqueId)
+
+        Using qrGenerator As New QRCodeGenerator()
+            Dim qrCodeData As QRCodeData = qrGenerator.CreateQrCode(fullUrl, QRCodeGenerator.ECCLevel.Q)
+            Using qrCode As New PngByteQRCode(qrCodeData)
+                Dim qrBytes As Byte() = qrCode.GetGraphic(20)
+                imgBantingModalQr.ImageUrl = "data:image/png;base64," & Convert.ToBase64String(qrBytes)
+                imgBantingModalQr.Visible = True
+            End Using
+        End Using
+
+        ScriptManager.RegisterStartupScript(Me, Me.GetType(), "showBantingQrModal", "$('#modalBantingQrCode').modal('show');", True)
+    End Sub
+
+    Private Function GenerateBantingUniqueID() As String
+        Dim uid As String = ""
+        Dim isUnique As Boolean = False
+        Dim attempts As Integer = 0
+
+        While Not isUnique AndAlso attempts < 10
+            attempts += 1
+            Dim randomCode As String = Guid.NewGuid().ToString("N").Substring(0, 6).ToUpper()
+            uid = "BTG-" & DateTime.Now.ToString("yyyyMMdd") & "-" & randomCode
+
+            Using conn As New SqlConnection(CS)
+                conn.Open()
+                Using cmd As New SqlCommand("SELECT COUNT(*) FROM LESEN_BantingImej WHERE UniqueID = @UniqueID", conn)
+                    cmd.Parameters.AddWithValue("@UniqueID", uid)
+                    Dim cnt As Integer = CInt(cmd.ExecuteScalar())
+                    If cnt = 0 Then
+                        isUnique = True
+                    End If
+                End Using
+            End Using
+        End While
+
+        Return uid
+    End Function
+
+    Private Sub DeleteBantingImage(imejId As Integer)
+        Dim filePath As String = ""
+        Using conn As New SqlConnection(CS)
+            conn.Open()
+            Using cmd As New SqlCommand("SELECT FilePath FROM LESEN_BantingImej WHERE Imej_ID = @Imej_ID", conn)
+                cmd.Parameters.AddWithValue("@Imej_ID", imejId)
+                Dim objPath As Object = cmd.ExecuteScalar()
+                If objPath IsNot Nothing AndAlso Not IsDBNull(objPath) Then
+                    filePath = objPath.ToString()
+                End If
+            End Using
+
+            Using cmd As New SqlCommand("DELETE FROM LESEN_BantingImej WHERE Imej_ID = @Imej_ID", conn)
+                cmd.Parameters.AddWithValue("@Imej_ID", imejId)
+                cmd.ExecuteNonQuery()
+            End Using
+        End Using
+
+        If Not String.IsNullOrWhiteSpace(filePath) Then
+            Try
+                Dim fullPath As String = Server.MapPath(filePath)
+                If File.Exists(fullPath) Then
+                    File.Delete(fullPath)
+                End If
+            Catch ex As Exception
+            End Try
         End If
+    End Sub
+
+    Private Sub DeleteLokasiFiles(lokasiId As Integer)
+        Dim filePaths As New List(Of String)()
+        Using conn As New SqlConnection(CS)
+            conn.Open()
+            Using cmd As New SqlCommand("SELECT FilePath FROM LESEN_BantingImej WHERE Lokasi_ID = @Lokasi_ID", conn)
+                cmd.Parameters.AddWithValue("@Lokasi_ID", lokasiId)
+                Using reader As SqlDataReader = cmd.ExecuteReader()
+                    While reader.Read()
+                        If Not IsDBNull(reader("FilePath")) Then
+                            filePaths.Add(reader("FilePath").ToString())
+                        End If
+                    End While
+                End Using
+            End Using
+        End Using
+
+        For Each fp As String In filePaths
+            Try
+                Dim fullPath As String = Server.MapPath(fp)
+                If File.Exists(fullPath) Then
+                    File.Delete(fullPath)
+                End If
+            Catch ex As Exception
+            End Try
+        Next
+    End Sub
+
+    Private Sub UpdateHF_LokasiList()
+        Dim HF_LokasiList As HiddenField = DirectCast(FormView1.FindControl("HF_LokasiList"), HiddenField)
+        If HF_LokasiList Is Nothing Then Exit Sub
+
+        Dim permohonanId As Integer = GetCurrentPermohonanID()
+        If permohonanId <= 0 Then Exit Sub
+
+        Dim lokasiList As New List(Of String)()
+        Using conn As New SqlConnection(CS)
+            conn.Open()
+            Dim sql As String = "SELECT Lokasi FROM LESEN_BantingLokasi WHERE Permohonan_ID = @Permohonan_ID ORDER BY Lokasi_ID ASC"
+
+            Using cmd As New SqlCommand(sql, conn)
+                cmd.Parameters.AddWithValue("@Permohonan_ID", permohonanId)
+                Using reader As SqlDataReader = cmd.ExecuteReader()
+                    While reader.Read()
+                        If Not IsDBNull(reader("Lokasi")) Then
+                            lokasiList.Add(reader("Lokasi").ToString().Trim())
+                        End If
+                    End While
+                End Using
+            End Using
+        End Using
+
+        HF_LokasiList.Value = String.Join("||", lokasiList)
     End Sub
 
     ' --- Iklan (_ins Pembetulan) ---
