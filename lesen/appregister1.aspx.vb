@@ -382,6 +382,44 @@ Partial Class appregister1
                     End If
                 End If
             End If
+
+        ElseIf e.CommandName = "SuratKelulusan" OrElse e.CommandName = "Surat" Then
+            Try
+                Dim intRow As Integer = -1
+
+                If TypeOf e.CommandSource Is Control Then
+                    Dim row As GridViewRow = TryCast(DirectCast(e.CommandSource, Control).NamingContainer, GridViewRow)
+                    If row IsNot Nothing Then
+                        intRow = row.RowIndex
+                    End If
+                End If
+
+                If intRow = -1 Then
+                    intRow = CInt(e.CommandArgument)
+                    If intRow >= GridView1.PageSize Then
+                        intRow = intRow Mod GridView1.PageSize
+                    End If
+                End If
+
+                Dim Permohonan_ID As String = CStr(Me.GridView1.DataKeys(intRow)("Permohonan_ID"))
+                Dim IsBatal As Boolean = CBool(Me.GridView1.DataKeys(intRow)("IsBatal"))
+
+                If IsBatal Then
+                    If GetIsSuratFailPembatalan(CInt(Permohonan_ID)) Then
+                        ViewSuratPembatalanFail(Permohonan_ID)
+                    Else
+                        ViewSuratPembatalanAuto(Permohonan_ID, True)
+                    End If
+                Else
+                    If GetIsSuratFailKelulusan(CInt(Permohonan_ID)) Then
+                        ViewSuratKelulusanFail(Permohonan_ID)
+                    Else
+                        ViewSuratKelulusanAuto(Permohonan_ID, True)
+                    End If
+                End If
+            Catch ex As Exception
+                MessageBox(ex.Message, Me.Page)
+            End Try
         End If
     End Sub
 
@@ -1998,15 +2036,46 @@ Partial Class appregister1
         End If
     End Sub
 
-    Protected Sub OnClickSuratKelulusan(ByVal sender As Object, ByVal e As CommandEventArgs)
+    Protected Sub OnClickSuratKelulusanPembatalan(ByVal sender As Object, ByVal e As CommandEventArgs)
         Dim Permohonan_ID As HiddenField = DirectCast(FormView1.FindControl("HF_PermohonanID"), HiddenField)
+        Dim cb As CheckBox = DirectCast(FormView1.FindControl("CB_IsBatal"), CheckBox)
 
-        If GetIsSuratFail(CInt(Permohonan_ID.Value)) Then
-            ViewSuratKelulusanFail(Permohonan_ID.Value)
+        Dim isChecked As Boolean = (cb IsNot Nothing AndAlso cb.Checked)
+
+        If isChecked Then
+            If GetIsSuratFailPembatalan(CInt(Permohonan_ID.Value)) Then
+                ViewSuratPembatalanFail(Permohonan_ID.Value)
+            Else
+                ViewSuratPembatalanAuto(Permohonan_ID.Value, True)
+            End If
         Else
-            ViewSuratKelulusanAuto(Permohonan_ID.Value, True)
+            If GetIsSuratFailKelulusan(CInt(Permohonan_ID.Value)) Then
+                ViewSuratKelulusanFail(Permohonan_ID.Value)
+            Else
+                ViewSuratKelulusanAuto(Permohonan_ID.Value, True)
+            End If
         End If
     End Sub
+
+    Private Function GetIsSuratFailKelulusan(pid As Integer) As Boolean
+        Dim isFail As Boolean = False
+
+        Using myConnection As New SqlConnection(CS)
+            myConnection.Open()
+            Dim SQL As String = "SELECT CASE WHEN EXISTS (SELECT 1 FROM LESEN_PermohonanFail WHERE " &
+            "PermohonanFail_PermohonanID = @Permohonan_ID AND PermohonanFail_JenisLampiran = 'SK') THEN CAST(1 AS BIT) ELSE CAST(0 AS BIT) END AS DataExists"
+            Using myCommandSelect As New SqlCommand(SQL, myConnection)
+                myCommandSelect.Parameters.AddWithValue("@Permohonan_ID", pid)
+                Using myReader As SqlDataReader = myCommandSelect.ExecuteReader()
+                    If myReader.Read() Then
+                        isFail = CBool(myReader.Item(0))
+                    End If
+                End Using
+            End Using
+        End Using
+
+        Return isFail
+    End Function
 
     Private Sub ViewSuratKelulusanFail(permohonanID As String)
         Dim filepath As String = ""
@@ -2084,6 +2153,89 @@ Partial Class appregister1
             If totalid > 0 Then
                 reportUrl = ResolveUrl("~/ReportViewer1.aspx?name=" & ReportVar)
             End If
+
+            ScriptManager.RegisterClientScriptBlock(Me.Page, Me.GetType(), ReportVar, "window.open('" & reportUrl & "', '_blank', '');", True)
+        Catch ex As Exception
+            MessageBox(ex.Message, Me.Page)
+        End Try
+    End Sub
+
+    Private Function GetIsSuratFailPembatalan(pid As Integer) As Boolean
+        Dim isFail As Boolean = False
+
+        Using myConnection As New SqlConnection(CS)
+            myConnection.Open()
+            Dim SQL As String = "SELECT CASE WHEN EXISTS (SELECT 1 FROM LESEN_PermohonanFail WHERE " &
+            "PermohonanFail_PermohonanID = @Permohonan_ID AND PermohonanFail_JenisLampiran = 'SB') THEN CAST(1 AS BIT) ELSE CAST(0 AS BIT) END AS DataExists"
+            Using myCommandSelect As New SqlCommand(SQL, myConnection)
+                myCommandSelect.Parameters.AddWithValue("@Permohonan_ID", pid)
+                Using myReader As SqlDataReader = myCommandSelect.ExecuteReader()
+                    If myReader.Read() Then
+                        isFail = CBool(myReader.Item(0))
+                    End If
+                End Using
+            End Using
+        End Using
+
+        Return isFail
+    End Function
+
+    Private Sub ViewSuratPembatalanFail(permohonanID As String)
+        Dim filepath As String = ""
+
+        Using myConnection As New SqlConnection(CS)
+            myConnection.Open()
+            Dim SQL As String = "SELECT PermohonanFail_FilePath FROM LESEN_PermohonanFail WHERE PermohonanFail_PermohonanID = @permohonanID AND PermohonanFail_JenisLampiran = 'SB'"
+            Using myCommandSelect As New SqlCommand(SQL, myConnection)
+                myCommandSelect.Parameters.AddWithValue("@permohonanID", permohonanID)
+                Using myReader As SqlDataReader = myCommandSelect.ExecuteReader()
+                    If myReader.Read() Then
+                        filepath = myReader.Item("PermohonanFail_FilePath").ToString()
+                        filepath = filepath.Remove(0, 1)
+                        ScriptManager.RegisterClientScriptBlock(Me.Page, Me.GetType(), "", "window.open('.." & filepath & "', '_blank', '');", True)
+                    End If
+                End Using
+            End Using
+        End Using
+    End Sub
+
+    Private Sub ViewSuratPembatalanAuto(permohonanID As String, isPDF As Boolean)
+        Try
+            Dim sql As String = "SELECT a.Permohonan_ID, a.TarikhSuratKelulusan, a.CreatedDt, CAST(a.NamaSyarikat AS varchar(200)) AS NamaSyarikat, " &
+                "a.NoPendaftaran, a.NoAkaun, a.AlamatPremis, a.JenisPerniagaan, a.PemilikBaru, a.AlamatBaru, " &
+                "a.JenisPerniagaanBaru, a.NamaBaruSyarikat, a.BillboardLokasi, a.LokasiPasar1, a.LokasiPasar2, " &
+                "a.LokasiPasar3, a.JenisPasar, a.JenisPerniagaanPasar, a.JumlahPetak, a.AnjingAlamat, a.AnjingJenisMohon, " &
+                "a.AnjingJenisPremis, a.AlamatPenjajaan, a.JenisPerniagaanPenjaja, a.TarikhBatal, a.PenganjurEkspo, " &
+                "a.NamaEkspo, a.LokasiEkspo, a.NoTelEkspo, a.TarikhEkspo1, a.TarikhEkspo2, a.MasaEkspo1, a.MasaEkspo2, " &
+                "a.Rujukan, a.NoAkaunCukai, a.IsBatal, a.JenisLesenDescList, a.JenisLesenIdList, a.SaizIklanList, " &
+                "a.CahayaIklanList, a.UnitIklanList, a.BakaAnjingList, a.AnjingJantanList, a.AnjingBetinaList, " &
+                "a.AnjingJantanMandulList, a.AnjingBetinaMandulList, " &
+                "b.Pemohon_Name, b.Pemohon_Address, b.Pemohon_ICNo, b.Pemohon_MobileNo, b.Pemohon_TelNo, " &
+                "c.Users_Fullname, c.Users_Signature, d.P1, d.P2, d.P3, d.IsiKandungan " &
+                "FROM LESEN_Permohonan a " &
+                "INNER JOIN LESEN_Pemohon b ON b.Pemohon_ID=a.Permohonan_PemohonID " &
+                "LEFT JOIN TBL_USERS c ON a.TandatanganKelulusanId=c.Users_Id " &
+                "LEFT JOIN LESEN_PermohonanSurat d ON d.Permohonan_ID=a.Permohonan_ID AND d.JenisReport LIKE 'SB%' " &
+                "WHERE a.Permohonan_ID=@permohonanID AND a.IsPublish=1 ORDER BY d.P1, d.P2, d.P3"
+
+            sql = sql.Replace("@permohonanID", permohonanID)
+
+            Dim ReportVar As String = "suratkelulusan_v2"
+            Dim pobjData(1, 1) As Object
+            Dim lStrReportName As String = ReportVar & ".rpt"
+
+            pobjData(0, 0) = "paraSQL" : pobjData(0, 1) = sql
+            pobjData(1, 0) = "isDigitalSign" : pobjData(1, 1) = isPDF
+
+            Session.Item("ReportName" & ReportVar) = lStrReportName
+            Session.Item("pobjData" & ReportVar) = pobjData
+            Session.Item("pathUrl" & ReportVar) = "~/lesen/report/kelulusan"
+
+            If isPDF Then
+                Session.Item("reportPrintType") = "pdf"
+            End If
+
+            Dim reportUrl As String = ResolveUrl("~/ReportViewer.aspx?name=" & ReportVar)
 
             ScriptManager.RegisterClientScriptBlock(Me.Page, Me.GetType(), ReportVar, "window.open('" & reportUrl & "', '_blank', '');", True)
         Catch ex As Exception
