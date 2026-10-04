@@ -1,4 +1,4 @@
-﻿<%@ Page MaintainScrollPositionOnPostback="true" Title="" Language="VB" MasterPageFile="~/MasterMenu.master" AutoEventWireup="false" CodeFile="pembatalan1.aspx.vb" Inherits="pembatalan1" %>
+<%@ Page MaintainScrollPositionOnPostback="true" Title="" Language="VB" MasterPageFile="~/MasterMenu.master" AutoEventWireup="false" CodeFile="pembatalan1.aspx.vb" Inherits="pembatalan1" %>
 
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="asp" %>
 
@@ -865,12 +865,7 @@
             display: none;
         }
 
-        .table-bordered {
-            text-align: center;
-        }
-    </style>
-
-<style>
+    /* ===== Kembali Ke IK Notice Banner ===== */
     .info-notice {
         display: flex;
         align-items: flex-start;
@@ -949,12 +944,146 @@
         font-size: 11px;
         color: #999;
     }
-</style>
+
+    /* ===== Kembali Ke IK Modal Dialog ===== */
+    .kik-modal-overlay {
+        display: none;
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(0,0,0,0.5);
+        z-index: 9999;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .kik-modal-overlay.show {
+        display: flex;
+    }
+
+    .kik-modal-box {
+        background: #fff;
+        width: 620px;
+        max-width: 92%;
+        max-height: 85vh;
+        border-radius: 8px;
+        box-shadow: 0 6px 24px rgba(0,0,0,0.25);
+        overflow-y: auto;
+        font-family: Arial, sans-serif;
+    }
+
+    .kik-modal-header {
+        background: #f0ad4e;
+        color: #fff;
+        padding: 14px 18px;
+        font-size: 16px;
+        font-weight: bold;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: sticky;
+        top: 0;
+        z-index: 1;
+    }
+
+    .kik-modal-close {
+        cursor: pointer;
+        font-size: 20px;
+        line-height: 1;
+    }
+
+    .kik-modal-body {
+        padding: 18px;
+    }
+
+    .kik-label {
+        display: block;
+        margin-bottom: 6px;
+        font-size: 13px;
+        color: #333;
+        font-weight: 600;
+    }
+
+    .kik-textarea {
+        width: 100%;
+        box-sizing: border-box;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        padding: 8px;
+        font-size: 14px;
+        resize: vertical;
+    }
+
+    .kik-modal-footer {
+        padding: 12px 18px;
+        display: flex;
+        justify-content: flex-end;
+        gap: 8px;
+        background: #f9f9f9;
+        border-top: 1px solid #eee;
+        border-bottom: 1px solid #eee;
+    }
+
+    .kik-btn {
+        padding: 8px 16px;
+        border-radius: 4px;
+        border: none;
+        font-size: 14px;
+        cursor: pointer;
+    }
+
+    .kik-btn-cancel { background: #e0e0e0; color: #333; }
+    .kik-btn-cancel:hover { background: #d0d0d0; }
+    .kik-btn-primary { background: #f0ad4e; color: #fff; text-decoration: none; }
+    .kik-btn-primary:hover { background: #ec971f; color: #fff; }
+
+    /* Senarai rujukan */
+    .kik-list-section {
+        padding: 16px 18px 20px;
+    }
+
+    .kik-list-title {
+        font-size: 13px;
+        font-weight: 700;
+        color: #555;
+        margin-bottom: 8px;
+        text-transform: uppercase;
+    }
+
+    .kik-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 13px;
+    }
+
+    .kik-table th {
+        background: #f5f5f5;
+        text-align: left;
+        padding: 6px 8px;
+        border-bottom: 2px solid #ddd;
+        font-size: 12px;
+        color: #666;
+    }
+
+    .kik-table td {
+        padding: 6px 8px;
+        border-bottom: 1px solid #eee;
+        vertical-align: top;
+    }
+
+    .kik-no-record {
+        font-size: 13px;
+        color: #999;
+        font-style: italic;
+    }
+    </style>
 
 </asp:Content>
 
 <asp:Content ID="Content3" ContentPlaceHolderID="MainContent" runat="Server">
 
+    <%-- ========================================================================= --%>
+    <%-- SECTION 1: PAGE HEADER & BREADCRUMB                                       --%>
+    <%-- ========================================================================= --%>
     <section class="content-header">
         <div class="container-fluid">
 
@@ -984,6 +1113,9 @@
     <section class="content">
         <div class="container-fluid">
 
+            <%-- ========================================================================= --%>
+            <%-- SECTION 2: KEMBALI KE IK INFO NOTICE                                      --%>
+            <%-- ========================================================================= --%>
             <asp:Panel ID="pnlInfoNoticeKembaliIK" runat="server" CssClass="info-notice">
 
                 <div class="info-notice-icon">
@@ -1039,6 +1171,9 @@
             </SelectParameters>
         </asp:SqlDataSource>
 
+            <%-- ========================================================================= --%>
+            <%-- SECTION 3: APPLICATION DETAILS (FormView1)                                 --%>
+            <%-- ========================================================================= --%>
             <asp:FormView ID="FormView1" runat="server" DataKeyNames="JenisLesen_ID"
                 DataSourceID="SqlDataSourceForm" DefaultMode="Edit" Width="100%" CssClass="CustomTab">
                 <EditItemTemplate>
@@ -1491,6 +1626,9 @@ ORDER BY
             </asp:SqlDataSource>
 
 
+            <%-- ========================================================================= --%>
+            <%-- SECTION 4: DETAIL TABS (Ulasan, Surat, Tetapan IK, Lampiran, Nota)         --%>
+            <%-- ========================================================================= --%>
             <asp:TabContainer ID="TabContainer1" runat="server" ActiveTabIndex="0" Visible="false" CssClass="MyTabStyle">
 
 
@@ -2464,6 +2602,9 @@ ORDER BY
                     </div>
                 </div>
 
+                <%-- ========================================================================= --%>
+                <%-- SECTION 5: WORKFLOW ACTIONS & SOKONGAN                                    --%>
+                <%-- ========================================================================= --%>
                 <asp:FormView Width="100%" ID="fvSokongUlasan" runat="server" DataSourceID="sdsSokongUlasan" DefaultMode="Edit" DataKeyNames="PermohonanAgensi_ID">
                     <EditItemTemplate>
                         <%--StatusID:
@@ -2579,6 +2720,9 @@ ORDER BY
                 </div>
             </div>			
 
+            <%-- ========================================================================= --%>
+            <%-- SECTION 6: SEARCH & FILTER PANEL (idListing)                              --%>
+            <%-- ========================================================================= --%>
             <div class="card" runat="server" id="idListing">
                 <div class="card-body" style="overflow-x: auto;">
                     <%--# START FILTER - set SortExpression at GridView as fieldname & add WHERE 1=1 at SqlDataSource - SelectCommand #--%>
@@ -2736,6 +2880,9 @@ ORDER BY
                     </div>					
                     <%--# END FILTER #--%>
 
+                    <%-- ========================================================================= --%>
+                    <%-- SECTION 7: MAIN DATA GRID (GridView1) & SQL DATA SOURCES                   --%>
+                    <%-- ========================================================================= --%>
                     <asp:GridView ID="GridView1" runat="server"
                         AllowSorting="True" AutoGenerateColumns="False" DataKeyNames="Permohonan_ID,AgensiID,ApprStatusID,JabatanAgensi_Type,JenisLesen_ID,IsSuratPemeriksaanFail,IsPenilaianStatus,JenisLesenIdList"
                         DataSourceID="SqlDataSourceGrid"
@@ -2913,8 +3060,9 @@ ORDER BY
         </SelectParameters>
     </asp:SqlDataSource>
 
-    <%-- Modal Popup --%>
-    <%-- Modal Overlay --%>
+    <%-- ========================================================================= --%>
+    <%-- SECTION 8: MODAL DIALOGS (Kembali Ke IK Modal)                            --%>
+    <%-- ========================================================================= --%>
     <div id="modalKembaliIK" class="kik-modal-overlay">
         <div class="kik-modal-box">
             <div class="kik-modal-header">
@@ -2961,255 +3109,47 @@ ORDER BY
         </div>
     </div>
 
-    <style>
-        .kik-modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.5);
-            z-index: 9999;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .kik-modal-overlay.show {
-            display: flex;
-        }
-
-        .kik-modal-box {
-            background: #fff;
-            width: 620px;             /* was 420px */
-            max-width: 92%;
-            max-height: 85vh;
-            border-radius: 8px;
-            box-shadow: 0 6px 24px rgba(0,0,0,0.25);
-            overflow-y: auto;         /* scroll kalau list panjang */
-            font-family: Arial, sans-serif;
-        }
-
-        .kik-modal-header {
-            background: #f0ad4e;
-            color: #fff;
-            padding: 14px 18px;
-            font-size: 16px;
-            font-weight: bold;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 1;
-        }
-
-        .kik-modal-close {
-            cursor: pointer;
-            font-size: 20px;
-            line-height: 1;
-        }
-
-        .kik-modal-body {
-            padding: 18px;
-        }
-
-        .kik-label {
-            display: block;
-            margin-bottom: 6px;
-            font-size: 13px;
-            color: #333;
-            font-weight: 600;
-        }
-
-        .kik-textarea {
-            width: 100%;
-            box-sizing: border-box;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            padding: 8px;
-            font-size: 14px;
-            resize: vertical;
-        }
-
-        .kik-modal-footer {
-            padding: 12px 18px;
-            display: flex;
-            justify-content: flex-end;
-            gap: 8px;
-            background: #f9f9f9;
-            border-top: 1px solid #eee;
-            border-bottom: 1px solid #eee;
-        }
-
-        .kik-btn {
-            padding: 8px 16px;
-            border-radius: 4px;
-            border: none;
-            font-size: 14px;
-            cursor: pointer;
-        }
-
-        .kik-btn-cancel { background: #e0e0e0; color: #333; }
-        .kik-btn-cancel:hover { background: #d0d0d0; }
-        .kik-btn-primary { background: #f0ad4e; color: #fff; text-decoration: none; }
-        .kik-btn-primary:hover { background: #ec971f; color: #fff; }
-
-        /* Senarai rujukan */
-        .kik-list-section {
-            padding: 16px 18px 20px;
-        }
-
-        .kik-list-title {
-            font-size: 13px;
-            font-weight: 700;
-            color: #555;
-            margin-bottom: 8px;
-            text-transform: uppercase;
-        }
-
-        .kik-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 13px;
-        }
-
-        .kik-table th {
-            background: #f5f5f5;
-            text-align: left;
-            padding: 6px 8px;
-            border-bottom: 2px solid #ddd;
-            font-size: 12px;
-            color: #666;
-        }
-
-        .kik-table td {
-            padding: 6px 8px;
-            border-bottom: 1px solid #eee;
-            vertical-align: top;
-        }
-
-        .kik-no-record {
-            font-size: 13px;
-            color: #999;
-            font-style: italic;
-        }
-    </style>
-
-<script>
-    function closeModalKembaliIK() {
-        document.getElementById('modalKembaliIK').classList.remove('show');
-    }
-
-    function validateKembaliIK() {
-        var txt = document.getElementById('<%= txtCatatanKembaliIK.ClientID %>').value.trim();
-        if (txt === "") {
-            alert('Sila isi catatan sebelum teruskan.');
-            return false;
-        }
-        return confirm('Anda pasti untuk kembalikan rekod ini ke pegawai IK?');
-    }
-</script>
-
+    <%-- ========================================================================= --%>
+    <%-- SECTION 9: CLIENT SCRIPTS                                                 --%>
+    <%-- ========================================================================= --%>
     <script>
+        function closeModalKembaliIK() {
+            var modal = document.getElementById('modalKembaliIK');
+            if (modal) {
+                modal.classList.remove('show');
+            }
+        }
+
+        function validateKembaliIK() {
+            var txt = document.getElementById('<%= txtCatatanKembaliIK.ClientID %>').value.trim();
+            if (txt === "") {
+                alert('Sila isi catatan sebelum teruskan.');
+                return false;
+            }
+            return confirm('Anda pasti untuk kembalikan rekod ini ke pegawai IK?');
+        }
 
         function pageLoad() {
-
             $("#ctl00_ContentPlaceHolder1_LabelAttributes1_TabContainer1").css({ 'width': 400, 'height': 400 });
 
             $(function () {
+                // Initialize Select2 Elements
+                $('.select2').select2();
+                $('.select2bs4').select2({
+                    theme: 'bootstrap4'
+                });
 
+                // Initialize Datepicker
                 $('.datepicker').datepicker({
                     dateFormat: 'dd/mm/yy',
                     defaultDate: new Date()
-                })
-
-                //Initialize Select2 Elements
-                $('.select2').select2()
-
-                //Initialize Select2 Elements
-                $('.select2bs4').select2({
-                    theme: 'bootstrap4'
-                })
-
-                //Datemask dd/mm/yyyy
-                $('#datemask').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' })
-                //Datemask2 mm/dd/yyyy
-                $('#datemask2').inputmask('mm/dd/yyyy', { 'placeholder': 'mm/dd/yyyy' })
-                //Money Euro
-                $('[data-mask]').inputmask()
-
-                //Date range picker
-                $('#reservationdate').datetimepicker({
-                    format: 'L'
-                });
-                //Date range picker
-                $('#reservation').daterangepicker()
-                //Date range picker with time picker
-                $('#reservationtime').daterangepicker({
-                    timePicker: true,
-                    timePickerIncrement: 30,
-                    locale: {
-                        format: 'MM/DD/YYYY hh:mm A'
-                    }
-                })
-                //Date range as a button
-                $('#daterange-btn').daterangepicker(
-                    {
-                        ranges: {
-                            'Today': [moment(), moment()],
-                            'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-                            'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-                            'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-                            'This Month': [moment().startOf('month'), moment().endOf('month')],
-                            'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-                        },
-                        startDate: moment().subtract(29, 'days'),
-                        endDate: moment()
-                    },
-                    function (start, end) {
-                        $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'))
-                    }
-                )
-
-                //Timepicker
-                $('#timepicker').datetimepicker({
-                    format: 'LT'
-                })
-
-                //Bootstrap Duallistbox
-                $('.duallistbox').bootstrapDualListbox()
-
-                //Colorpicker
-                $('.my-colorpicker1').colorpicker()
-                //color picker with addon
-                $('.my-colorpicker2').colorpicker()
-
-                $('.my-colorpicker2').on('colorpickerChange', function (event) {
-                    $('.my-colorpicker2 .fa-square').css('color', event.color.toString());
                 });
 
-                $("input[data-bootstrap-switch]").each(function () {
-                    $(this).bootstrapSwitch('state', $(this).prop('checked'));
-                });
-
-                $("#example1").DataTable({
-                    "responsive": true,
-                    "autoWidth": false,
-                });
-                $('#example2').DataTable({
-                    "paging": true,
-                    "lengthChange": false,
-                    "searching": false,
-                    "ordering": true,
-                    "info": true,
-                    "autoWidth": false,
-                    "responsive": true,
-                });
-                $('.toastrDefaultSuccess').click(function () {
-                    toastr.success('Lorem ipsum dolor sit amet, consetetur sadipscing elitr.')
-                });
-
-
-            })
-
+                // Input Masks
+                $('#datemask').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' });
+                $('#datemask2').inputmask('mm/dd/yyyy', { 'placeholder': 'mm/dd/yyyy' });
+                $('[data-mask]').inputmask();
+            });
         }
     </script>
 
