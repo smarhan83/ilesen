@@ -472,11 +472,121 @@ Partial Class appregister1
         Session.Remove("BantingDraftKey")
         FormView1.Visible = True
         FormView1.ChangeMode(FormViewMode.Insert)
+        ClearFormViewInsertData()
         whiteCard.Visible = False
     End Sub
 
     Protected Sub BackButton_Click(sender As Object, e As EventArgs)
+        If FormView1.CurrentMode = FormViewMode.Insert Then
+            ClearFormViewInsertData()
+        End If
         backToList()
+    End Sub
+
+    ''' <summary>
+    ''' Clears all form fields, uploaded/added lists, draft keys, and panels in FormView1 when in InsertMode.
+    ''' </summary>
+    Private Sub ClearFormViewInsertData()
+        Try
+            ' Recursively clear standard inputs (TextBox, DropDownList, CheckBox, HiddenField, GridView, Repeater, BaseValidator)
+            ClearControlValues(FormView1)
+
+            ' Restore default text for read-only applicant preview fields
+            Dim tbName As TextBox = TryCast(FormView1.FindControl("TB_Name"), TextBox)
+            If tbName IsNot Nothing Then tbName.Text = "NULL"
+
+            Dim tbNat As TextBox = TryCast(FormView1.FindControl("TB_Nat"), TextBox)
+            If tbNat IsNot Nothing Then tbNat.Text = "NULL"
+
+            Dim tbAddress As TextBox = TryCast(FormView1.FindControl("TB_Address"), TextBox)
+            If tbAddress IsNot Nothing Then tbAddress.Text = "NULL"
+
+            Dim tbRemarks As TextBox = TryCast(FormView1.FindControl("TB_Remarks"), TextBox)
+            If tbRemarks IsNot Nothing Then tbRemarks.Text = "NULL"
+
+            ' Reset visibility of all dynamic panels inside InsertItemTemplate
+            Dim panelNames() As String = {
+                "pnlpemohon", "pnlesen1", "pnlesen1a", "pnlesen1b", "pnlesen1c", "pnlesen1d", "pnlesen1e",
+                "pnlesen2", "pnlesen3", "pnlesen4", "pnlesen5", "pnlesen6", "pnlbillboard", "pnlrujukan",
+                "pnldeposit", "pnldeposit1", "pnlbatal", "pnlbatal1", "pnlbatal2", "pnlbatal3", "pnlbatal4", "pnlbatal5"
+            }
+            For Each pnlName As String In panelNames
+                Dim pnl As Panel = TryCast(FormView1.FindControl(pnlName), Panel)
+                If pnl IsNot Nothing Then pnl.Visible = False
+            Next
+
+            ' Reset bound child controls
+            Dim rptSelectedItems As Repeater = TryCast(FormView1.FindControl("rptSelectedItems"), Repeater)
+            If rptSelectedItems IsNot Nothing Then
+                rptSelectedItems.DataSource = Nothing
+                rptSelectedItems.DataBind()
+            End If
+
+            Dim gvIklanList As GridView = TryCast(FormView1.FindControl("gvIklanList"), GridView)
+            If gvIklanList IsNot Nothing Then
+                gvIklanList.DataSource = Nothing
+                gvIklanList.DataBind()
+            End If
+
+            Dim gvAnjingList As GridView = TryCast(FormView1.FindControl("gvAnjingList"), GridView)
+            If gvAnjingList IsNot Nothing Then
+                gvAnjingList.DataSource = Nothing
+                gvAnjingList.DataBind()
+            End If
+
+            ' Reset ViewState and Session collections
+            ViewState("SelectedList") = New List(Of SelectedItem)()
+            ViewState("IklanTable") = Nothing
+            ViewState("AnjingTable") = Nothing
+            Session.Remove("BantingDraftKey")
+            Session.Item("isInserted") = False
+
+            ' Hide QR code if opened
+            If imgQrCode IsNot Nothing Then
+                imgQrCode.Visible = False
+                imgQrCode.ImageUrl = String.Empty
+            End If
+
+        Catch ex As Exception
+            ' Safe fallback
+        End Try
+    End Sub
+
+    ''' <summary>
+    ''' Recursively traverses controls to reset input values and validation states.
+    ''' </summary>
+    Private Sub ClearControlValues(parent As Control)
+        If parent Is Nothing Then Exit Sub
+
+        For Each c As Control In parent.Controls
+            If TypeOf c Is TextBox Then
+                DirectCast(c, TextBox).Text = String.Empty
+            ElseIf TypeOf c Is DropDownList Then
+                Dim ddl As DropDownList = DirectCast(c, DropDownList)
+                ddl.ClearSelection()
+                If ddl.Items.Count > 0 Then
+                    ddl.SelectedIndex = 0
+                End If
+            ElseIf TypeOf c Is CheckBox Then
+                DirectCast(c, CheckBox).Checked = False
+            ElseIf TypeOf c Is HiddenField Then
+                DirectCast(c, HiddenField).Value = String.Empty
+            ElseIf TypeOf c Is GridView Then
+                Dim gv As GridView = DirectCast(c, GridView)
+                gv.DataSource = Nothing
+                gv.DataBind()
+            ElseIf TypeOf c Is Repeater Then
+                Dim rpt As Repeater = DirectCast(c, Repeater)
+                rpt.DataSource = Nothing
+                rpt.DataBind()
+            ElseIf TypeOf c Is BaseValidator Then
+                DirectCast(c, BaseValidator).IsValid = True
+            End If
+
+            If c.HasControls() Then
+                ClearControlValues(c)
+            End If
+        Next
     End Sub
 
     Private Sub FormView1_ItemInserting(sender As Object, e As FormViewInsertEventArgs) Handles FormView1.ItemInserting

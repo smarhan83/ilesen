@@ -377,6 +377,258 @@
         .status-step.pending .status-step-actionby {
             color: #adb5bd;
         }
+
+        /* =========================================================================
+           Data Entry Form Styling Enhancements
+           ========================================================================= */
+        .form-section-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #1e3a8a;
+            background: linear-gradient(90deg, #f0f4f9 0%, #f8fafc 100%);
+            padding: 9px 15px;
+            border-radius: 8px;
+            border-left: 4px solid #2D6CDF;
+            margin-top: 1.5rem;
+            margin-bottom: 1.15rem;
+        }
+        .form-section-header i {
+            font-size: 1.1rem;
+            color: #2D6CDF;
+        }
+        .form-section-header.danger-section {
+            background: linear-gradient(90deg, #fef2f2 0%, #fff 100%);
+            border-left-color: #ef4444;
+            color: #991b1b;
+        }
+        .form-section-header.danger-section i {
+            color: #ef4444;
+        }
+        
+        .form-group {
+            margin-bottom: 1.1rem;
+        }
+        .form-group label, .form-label-custom {
+            display: block;
+            font-size: 0.83rem;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 0.35rem;
+            line-height: 1.3;
+        }
+
+        .form-control, .form-select, select.form-control {
+            height: 38px;
+            padding: 6px 12px;
+            font-size: 0.875rem;
+            border-radius: 6px;
+            border: 1px solid #d1d5db;
+            background-color: #fff;
+            transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+        }
+        textarea.form-control {
+            height: auto !important;
+            min-height: 76px;
+            resize: vertical;
+        }
+        .form-control:focus, .form-select:focus {
+            border-color: #2D6CDF;
+            box-shadow: 0 0 0 3px rgba(45, 108, 223, 0.15);
+            outline: 0;
+        }
+        .form-control:disabled, .form-control[readonly] {
+            background-color: #f8fafc !important;
+            border-color: #e2e8f0 !important;
+            color: #4b5563 !important;
+            cursor: not-allowed;
+        }
+
+        /* Select2 Sizing Harmonization */
+        .select2.select2-container,
+        .form-group .select2-container:not(.select2-container--open),
+        .select2-container:not(.select2-container--open) {
+            width: 100% !important;
+            display: block !important;
+        }
+        .select2-container .select2-selection--single {
+            height: 38px !important;
+            border: 1px solid #d1d5db !important;
+            border-radius: 6px !important;
+            padding: 4px 8px !important;
+            display: flex !important;
+            align-items: center !important;
+            width: 100% !important;
+            box-sizing: border-box !important;
+        }
+        .select2-container--default .select2-selection--single .select2-selection__rendered {
+            line-height: 28px !important;
+            font-size: 0.875rem !important;
+            color: #374151 !important;
+            padding-left: 4px !important;
+            padding-right: 24px !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
+            white-space: nowrap !important;
+            display: block !important;
+            width: 100% !important;
+        }
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            height: 36px !important;
+            right: 6px !important;
+        }
+        .select2-container--default.select2-container--focus .select2-selection--single {
+            border-color: #2D6CDF !important;
+            box-shadow: 0 0 0 3px rgba(45, 108, 223, 0.15) !important;
+        }
+
+        /* Select2 Open Dropdown Sizing & Styling - strictly follows the dropdownlist width */
+        .select2-container--open {
+            width: auto !important;
+        }
+        .select2-container--open .select2-dropdown {
+            box-sizing: border-box !important;
+            border: 1px solid #2D6CDF !important;
+            border-radius: 6px !important;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12) !important;
+            overflow: hidden !important;
+        }
+        .select2-container--open .select2-dropdown--below {
+            border-top: none !important;
+            border-top-left-radius: 0 !important;
+            border-top-right-radius: 0 !important;
+        }
+        .select2-container--open .select2-dropdown--above {
+            border-bottom: none !important;
+            border-bottom-left-radius: 0 !important;
+            border-bottom-right-radius: 0 !important;
+        }
+        .select2-container--open .select2-results__option {
+            font-size: 0.875rem !important;
+            padding: 8px 12px !important;
+            line-height: 1.35 !important;
+            word-break: break-word !important;
+            white-space: normal !important;
+        }
+        .select2-container--open .select2-results__option--highlighted[aria-selected] {
+            background-color: #2D6CDF !important;
+            color: #ffffff !important;
+        }
+
+        /* Tag pill styling */
+        .tag-container {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 8px;
+        }
+        .tag-pill {
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            color: #1e40af;
+            padding: 4px 12px;
+            border-radius: 20px;
+            display: inline-flex;
+            align-items: center;
+            font-size: 0.83rem;
+            font-weight: 600;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+        }
+        .tag-pill .btn-remove-tag {
+            color: #ef4444;
+            margin-left: 8px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.1rem;
+            line-height: 1;
+            transition: transform 0.15s;
+        }
+        .tag-pill .btn-remove-tag:hover {
+            color: #b91c1c;
+            transform: scale(1.15);
+        }
+
+        /* Checkbox Box Card */
+        .checkbox-box {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 8px 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-height: 38px;
+            transition: background 0.15s, border-color 0.15s;
+        }
+        .checkbox-box:hover {
+            background: #f1f5f9;
+            border-color: #cbd5e1;
+        }
+        .checkbox-box input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: #2D6CDF;
+            margin: 0;
+        }
+        .checkbox-box label, .checkbox-box span {
+            margin: 0;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+            user-select: none;
+        }
+
+        /* Validator Message */
+        .cssRequiredField {
+            font-size: 0.76rem !important;
+            font-weight: 500 !important;
+            color: #dc2626 !important;
+            margin-top: 4px !important;
+        }
+        span.cssRequiredField[style*="display: inline"] {
+            display: block !important;
+        }
+        span.cssRequiredField[style*="display: none"],
+        span.cssRequiredField[style*="display:none"],
+        span.cssRequiredField[style*="visibility: hidden"],
+        span.cssRequiredField[style*="visibility:hidden"] {
+            display: none !important;
+        }
+
+        /* Card Form Enhancements */
+        .card.card-warning {
+            border: 1px solid rgba(245, 158, 11, 0.25);
+            border-radius: 12px;
+            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
+        .card.card-warning > .card-header {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: #fff;
+            padding: 12px 20px;
+        }
+        .card.card-primary {
+            border: 1px solid rgba(45, 108, 223, 0.25);
+            border-radius: 12px;
+            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
+        .card.card-primary > .card-header {
+            background: linear-gradient(135deg, #2D6CDF, #1d4ed8);
+            color: #fff;
+            padding: 12px 20px;
+        }
+        .card-body {
+            padding: 22px 24px;
+        }
+        .card-footer {
+            background-color: #f8fafc;
+            border-top: 1px solid #e2e8f0;
+            padding: 14px 24px;
+        }
     </style>
 </asp:Content>
 
@@ -420,8 +672,8 @@
                 DataSourceID="SqlDataSourceForm" Width="100%" DefaultMode="Edit">
                 <EditItemTemplate>
                     <div class="card card-warning">
-                        <div class="card-header">
-                            <h3 class="card-title">Kemaskini Permohonan</h3>
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h3 class="card-title mb-0 font-weight-bold"><i class="bi bi-pencil-square me-2"></i>Kemaskini Permohonan</h3>
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body">
@@ -438,143 +690,129 @@
                             <asp:HiddenField ID="HF_AnjingJantanMandulList" Value='<%# Bind("AnjingJantanMandulList") %>' runat="server" />
                             <asp:HiddenField ID="HF_AnjingBetinaMandulList" Value='<%# Bind("AnjingBetinaMandulList") %>' runat="server" />
 
-                            <asp:Panel runat="server" ID="panelSearch" Visible='<%# If(Eval("StatusID") = 0 And IsDBNull(Eval("SuratKelulusan1")), True, False) %>'>
-                                <asp:HiddenField ID="HF_PermohonanID" runat="server" Value='<%# Bind("Permohonan_ID") %>' />
-                                <div class="row">
-
-                                    <div class="col-md-6">
-
-                                        <div class="form-group">
-                                            <label>Pemohon:</label>
-                                            <div class="row">
-                                                <div class="col">
-                                                    <asp:DropDownList ID="ddl_Pemohon" CssClass="form-control select2" runat="server" OnSelectedIndexChanged="ddl_Pemohon_SelectedIndexChanged"
-                                                        DataSourceID="SqlDataSourcePemohon" DataTextField="PemohonDesc" DataValueField="Pemohon_ID" AutoPostBack="true">
-                                                    </asp:DropDownList>
-                                                    <asp:SqlDataSource runat="server" ID="SqlDataSourcePemohon" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
-                                                        SelectCommand="SELECT NULL AS Pemohon_ID, '-- Sila Pilih --' AS PemohonDesc UNION ALL SELECT Pemohon_ID,  Pemohon_ICNo + ' - ' + Pemohon_Name AS PemohonDesc FROM LESEN_Pemohon WHERE Pemohon_IsActive = 1"></asp:SqlDataSource>
-                                                    <%--<asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" CssClass="cssRequiredField"
-                                                        ControlToValidate="ddl_Pemohon" ErrorMessage="Sila Pilih" ValidationGroup="updateForm" Display="Dynamic"></asp:RequiredFieldValidator>--%>
-                                                </div>
-                                                <div class="col">
-                                                    <asp:HyperLink runat="server" NavigateUrl="~/lesen/applicantregister.aspx?p_Id=3354&m_Id=3355" CssClass="btn btn-default">Daftar Pemohon</asp:HyperLink>
-
-                                                </div>
-
-                                            </div>
-
-                                        </div>
-
-                                    </div>
-
-
+                            <asp:Panel runat="server" ID="pnlpemohon">
+                                <div class="form-section-header">
+                                    <i class="bi bi-person-vcard"></i>
+                                    <span>Maklumat Pemohon</span>
                                 </div>
 
-                                
-                            </asp:Panel>
+                                <asp:Panel runat="server" ID="panelSearch" Visible='<%# If(Eval("StatusID") = 0 And IsDBNull(Eval("SuratKelulusan1")), True, False) %>'>
+                                    <asp:HiddenField ID="HF_PermohonanID" runat="server" Value='<%# Bind("Permohonan_ID") %>' />
+                                    <div class="row mb-3">
+                                        <div class="col-lg-8 col-md-10">
+                                            <div class="form-group mb-0">
+                                                <label class="form-label-custom"><i class="bi bi-search me-1 text-primary"></i>Pilih Pemohon:</label>
+                                                <div class="d-flex flex-wrap align-items-center gap-2">
+                                                    <div class="flex-grow-1" style="min-width: 280px;">
+                                                        <asp:DropDownList ID="ddl_Pemohon" CssClass="form-control select2" runat="server" OnSelectedIndexChanged="ddl_Pemohon_SelectedIndexChanged"
+                                                            DataSourceID="SqlDataSourcePemohon" DataTextField="PemohonDesc" DataValueField="Pemohon_ID" AutoPostBack="true" CausesValidation="false">
+                                                        </asp:DropDownList>
+                                                        <asp:SqlDataSource runat="server" ID="SqlDataSourcePemohon" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
+                                                            SelectCommand="SELECT NULL AS Pemohon_ID, '-- Sila Pilih --' AS PemohonDesc UNION ALL SELECT Pemohon_ID,  Pemohon_ICNo + ' - ' + Pemohon_Name AS PemohonDesc FROM LESEN_Pemohon WHERE Pemohon_IsActive = 1"></asp:SqlDataSource>
+                                                    </div>
+                                                    <asp:HyperLink runat="server" NavigateUrl="~/lesen/applicantregister.aspx?p_Id=3354&m_Id=3355" CssClass="btn btn-outline-primary d-inline-flex align-items-center">
+                                                        <i class="bi bi-person-plus me-1"></i>Daftar Pemohon Baru
+                                                    </asp:HyperLink>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </asp:Panel>
 
-                            <asp:Panel runat="server" ID="pnlpemohon">
                                 <div class="row">
-
-                                    <div class="col-md-3">
+                                    <div class="col-md-3 col-lg-2">
                                         <div class="form-group">
-                                            <label>Pemohon ID</label>
+                                            <label class="form-label-custom">Pemohon ID</label>
                                             <asp:TextBox ID="TB_PemohonID" runat="server" Enabled="false" Text='<%# Bind("Permohonan_PemohonID") %>' CssClass="form-control" />
                                         </div>
                                     </div>
 
-                                <!-- QR Code -->
-                                    <div class="col-md-4">
+                                    <div class="col-md-5 col-lg-6">
                                         <div class="form-group">
-                                            <label>&nbsp;</label>
-
-                                            <asp:LinkButton
-                                                runat="server"
-                                                ID="LinkButton7"
-                                                CssClass="qr-box"
-                                                OnClick="btnQrCode_Click"
-                                                ToolTip="Print QR Code">
-
-                                                <div class="qr-icon">
-                                                    <i class="bi bi-qr-code"></i>
-                                                </div>
-
-                                                <div class="qr-text">
-                                                    <div class="qr-title">
-                                                        Kod QR Permohonan
-                                                    </div>
-
-                                                    <div class="qr-description">
-                                                        Imbas untuk melihat<br />
-                                                        butiran permohonan
-                                                    </div>
-                                                </div>
-
-                                            </asp:LinkButton>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="row">
-
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label>Nama Pemohon</label>
+                                            <label class="form-label-custom">Nama Pemohon</label>
                                             <asp:TextBox ID="TB_Name" runat="server" Enabled="false" Text="NULL" CssClass="form-control" />
                                         </div>
                                     </div>
 
-                                    <div class="col-md-3">
+                                    <div class="col-md-4 col-lg-4">
                                         <div class="form-group">
-                                            <label>Warganegara</label>
+                                            <label class="form-label-custom">Warganegara</label>
                                             <asp:TextBox ID="TB_Nat" runat="server" Enabled="false" Text="NULL" CssClass="form-control" />
                                         </div>
                                     </div>
-
                                 </div>
 
                                 <div class="row">
-
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label>Alamat</label>
+                                            <label class="form-label-custom">Alamat</label>
                                             <asp:TextBox ID="TB_Address" Enabled="false" runat="server"
                                                 Text="NULL" CssClass="form-control" TextMode="MultiLine" Rows="3" />
                                         </div>
                                     </div>
 
-                                    <div class="col-md-3">
+                                    <div class="col-md-6">
                                         <div class="form-group">
-                                            <label>Catatan</label>
+                                            <label class="form-label-custom">Catatan</label>
                                             <asp:TextBox ID="TB_Remarks" Enabled="false" runat="server"
                                                 Text="NULL" CssClass="form-control" TextMode="MultiLine" Rows="3" />
                                         </div>
                                     </div>
+                                </div>
 
+                                <div class="row mb-3">
+                                    <div class="col-md-4">
+                                        <asp:LinkButton
+                                            runat="server"
+                                            ID="LinkButton7"
+                                            CssClass="qr-box"
+                                            OnClick="btnQrCode_Click"
+                                            ToolTip="Print QR Code"
+                                            CausesValidation="false">
+
+                                            <div class="qr-icon">
+                                                <i class="bi bi-qr-code"></i>
+                                            </div>
+
+                                            <div class="qr-text">
+                                                <div class="qr-title">
+                                                    Kod QR Permohonan
+                                                </div>
+
+                                                <div class="qr-description">
+                                                    Imbas untuk melihat<br />
+                                                    butiran permohonan
+                                                </div>
+                                            </div>
+
+                                        </asp:LinkButton>
+                                    </div>
                                 </div>
                             </asp:Panel>
 
-                            <hr style="border: 1px solid gray;" />
-
                             <asp:Panel runat="server" Enabled='<%# If(Eval("StatusID") = 0, True, True) %>'>
-                                <div class="row">
+                                <div class="form-section-header">
+                                    <i class="bi bi-file-earmark-text"></i>
+                                    <span>Maklumat Permohonan</span>
+                                </div>
 
-                                    <div class="col-md-3">
+                                <div class="row">
+                                    <div class="col-md-4 col-lg-3">
                                         <div class="form-group">
-                                            <label>Tarikh Mohon</label>
+                                            <label class="form-label-custom">Tarikh Mohon <span class="text-danger">*</span></label>
                                             <asp:TextBox ID="TB_TarikhMohon" runat="server"
                                                 Text='<%# Bind("TarikhMohon", "{0:yyyy-MM-dd}") %>' TextMode="Date" CssClass="form-control" />
                                             <asp:RequiredFieldValidator ID="RequiredFieldValidator5" runat="server" CssClass="cssRequiredField"
-                                                ControlToValidate="TB_TarikhMohon" ErrorMessage="Sila Pilih" ValidationGroup="updateForm" Display="Dynamic"></asp:RequiredFieldValidator>
+                                                ControlToValidate="TB_TarikhMohon" ErrorMessage="Sila Pilih Tarikh Mohon" ValidationGroup="updateForm" Display="Dynamic"></asp:RequiredFieldValidator>
                                         </div>
                                     </div>
 
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label>Jenis Lesen/Permit</label>
+                                    <div class="col-md-8 col-lg-9">
+                                        <div class="form-group mb-2">
+                                            <label class="form-label-custom">Jenis Lesen / Permit</label>
                                             <asp:DropDownList ID="ddlItems" runat="server" DataSourceID="SqlDataSource1" CssClass="form-control select2"
                                                 DataTextField="JenisLesen_Description" DataValueField="JenisLesen_ID" AutoPostBack="true"
-                                                OnSelectedIndexChanged="ddlItems_SelectedIndexChanged" AppendDataBoundItems="true">
+                                                OnSelectedIndexChanged="ddlItems_SelectedIndexChanged" AppendDataBoundItems="true" CausesValidation="false">
                                             </asp:DropDownList>
                                             <asp:SqlDataSource runat="server" ID="SqlDataSource1" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
                                             SelectCommand="select * from 
@@ -586,157 +824,138 @@
                                             </asp:SqlDataSource>
                                         </div>
 
-                                        <div class="tag-container" style="display: flex; gap: 10px; flex-wrap: wrap;">
+                                        <div class="tag-container">
                                             <asp:Repeater ID="rptSelectedItems" runat="server" OnItemCommand="rptSelectedItems_ItemCommand">
                                                 <ItemTemplate>
-                                                    <div style="background: #e1e1e1; padding: 5px 10px; border-radius: 15px; display: flex; align-items: center; border: 1px solid #ccc;">
-                                                        <span style="margin-right: 8px;"><%# Eval("ItemText") %></span>
+                                                    <div class="tag-pill">
+                                                        <span><%# Eval("ItemText") %></span>
                                                         <asp:LinkButton ID="btnRemove" runat="server" 
                                                             CommandName="Remove" 
                                                             CommandArgument='<%# Eval("ItemValue") %>' 
-                                                            Style="color: red; text-decoration: none; font-weight: bold;">&times;</asp:LinkButton>
+                                                            CssClass="btn-remove-tag"
+                                                            CausesValidation="false">&times;</asp:LinkButton>
                                                     </div>
                                                 </ItemTemplate>
                                             </asp:Repeater>
                                         </div>
-
                                     </div>
-
                                 </div>
 
                                 <%--# Perniagaan Berisiko dan tidak berisiko #--%>
                                 <asp:Panel ID="pnlesen1" runat="server" Visible="False">
-
-                                    <div class="row">
-
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label>Nama Syarikat/Sediada</label>
-                                                <asp:TextBox ID="TB_NamaSyarikat" runat="server"
-                                                    Text='<%# Bind("NamaSyarikat") %>' CssClass="form-control" />
-
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label>No Pendaftaran</label>
-                                                <asp:TextBox ID="TB_NoPendaftaran" runat="server"
-                                                    Text='<%# Bind("NoPendaftaran") %>' CssClass="form-control" />
-
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label>No Akaun Lesen</label>
-                                                <asp:TextBox ID="TB_NoAkaun" runat="server"
-                                                    Text='<%# Bind("NoAkaun") %>' CssClass="form-control" />
-
-                                            </div>
-                                        </div>
-
+                                    <div class="form-section-header">
+                                        <i class="bi bi-shop"></i>
+                                        <span>Maklumat Perniagaan / Premis</span>
                                     </div>
 
                                     <div class="row">
-
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label>Alamat Premis/Sediada</label>
+                                                <label class="form-label-custom">Nama Syarikat / Sediada</label>
+                                                <asp:TextBox ID="TB_NamaSyarikat" runat="server"
+                                                    Text='<%# Bind("NamaSyarikat") %>' CssClass="form-control" />
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label class="form-label-custom">No Pendaftaran</label>
+                                                <asp:TextBox ID="TB_NoPendaftaran" runat="server"
+                                                    Text='<%# Bind("NoPendaftaran") %>' CssClass="form-control" />
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label class="form-label-custom">No Akaun Lesen</label>
+                                                <asp:TextBox ID="TB_NoAkaun" runat="server"
+                                                    Text='<%# Bind("NoAkaun") %>' CssClass="form-control" />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="form-label-custom">Alamat Premis / Sediada</label>
                                                 <asp:TextBox ID="TB_AlamatPremis" runat="server"
                                                     Text='<%# Bind("AlamatPremis") %>' TextMode="MultiLine" Rows="3" CssClass="form-control" />
-
                                             </div>
                                         </div>
 
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label>Jenis Perniagaan/Sediada</label>
+                                                <label class="form-label-custom">Jenis Perniagaan / Sediada</label>
                                                 <asp:TextBox ID="TB_JenisPerniagaan" runat="server"
-                                                    Text='<%# Bind("JenisPerniagaan") %>' CssClass="form-control" />
-
+                                                    Text='<%# Bind("JenisPerniagaan") %>' TextMode="MultiLine" Rows="3" CssClass="form-control" />
                                             </div>
                                         </div>
-
                                     </div>
 
                                     <%--# Tukar Pemilik #--%>
                                     <asp:Panel ID="pnlesen1b" runat="server" Visible="False">
                                         <div class="row">
-
                                             <div class="col-md-6">
                                                 <div class="form-group">
-                                                    <label>Nama Pemilik Baru</label>
+                                                    <label class="form-label-custom">Nama Pemilik Baru</label>
                                                     <asp:TextBox ID="TB_PemilikBaru" runat="server"
                                                         Text='<%# Bind("PemilikBaru") %>' CssClass="form-control" />
-
                                                 </div>
                                             </div>
                                         </div>
                                     </asp:Panel>
 
-                                </asp:Panel>
-
-                                <%--# Tukar Alamat #--%>
-                                <asp:Panel ID="pnlesen1c" runat="server" Visible="False">
-
-                                    <div class="row">
-
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <asp:Label ID="Lbl_AlamatBaru" runat="server" Text="Alamat Baru" style="font-weight:600;"/>
-                                                <asp:TextBox ID="TB_AlamatBaru" runat="server"
-                                                    Text='<%# Bind("AlamatBaru") %>' TextMode="MultiLine" Rows="3" CssClass="form-control" />
-
+                                    <%--# Tukar Alamat #--%>
+                                    <asp:Panel ID="pnlesen1c" runat="server" Visible="False">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <asp:Label ID="Lbl_AlamatBaru" runat="server" Text="Alamat Baru" CssClass="form-label-custom" />
+                                                    <asp:TextBox ID="TB_AlamatBaru" runat="server"
+                                                        Text='<%# Bind("AlamatBaru") %>' TextMode="MultiLine" Rows="3" CssClass="form-control" />
+                                                </div>
                                             </div>
                                         </div>
+                                    </asp:Panel>
 
-                                    </div>
-                                </asp:Panel>
-
-                                <%--# Tambah Jenis Perniagaan #--%>
-                                <asp:Panel ID="pnlesen1d" runat="server" Visible="False">
-
-                                    <div class="row">
-
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <asp:Label ID="Lbl_JenisPerniagaanBaru" runat="server" Text="Jenis Perniagaan Tambahan" style="font-weight:600;"/>
-                                                <asp:TextBox ID="TB_JenisPerniagaanBaru" runat="server"
-                                                    Text='<%# Bind("JenisPerniagaanBaru") %>' CssClass="form-control" />
-
+                                    <%--# Tambah Jenis Perniagaan #--%>
+                                    <asp:Panel ID="pnlesen1d" runat="server" Visible="False">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <asp:Label ID="Lbl_JenisPerniagaanBaru" runat="server" Text="Jenis Perniagaan Tambahan" CssClass="form-label-custom" />
+                                                    <asp:TextBox ID="TB_JenisPerniagaanBaru" runat="server"
+                                                        Text='<%# Bind("JenisPerniagaanBaru") %>' CssClass="form-control" />
+                                                </div>
                                             </div>
                                         </div>
+                                    </asp:Panel>
 
-                                    </div>
-                                </asp:Panel>
-
-                                <%--# Tukar Nama Syarikat #--%>
-                                <asp:Panel ID="pnlesen1e" runat="server" Visible="False">
-
-                                    <div class="row">
-
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label>Nama Baru Syarikat</label>
-                                                <asp:TextBox ID="TB_NamaBaruSyarikat" runat="server"
-                                                    Text='<%# Bind("NamaBaruSyarikat") %>' CssClass="form-control" />
-
+                                    <%--# Tukar Nama Syarikat #--%>
+                                    <asp:Panel ID="pnlesen1e" runat="server" Visible="False">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="form-label-custom">Nama Baru Syarikat</label>
+                                                    <asp:TextBox ID="TB_NamaBaruSyarikat" runat="server"
+                                                        Text='<%# Bind("NamaBaruSyarikat") %>' CssClass="form-control" />
+                                                </div>
                                             </div>
                                         </div>
-
-                                    </div>
-
+                                    </asp:Panel>
                                 </asp:Panel>
 
                                 <%--# Banting #--%>
                                 <asp:Panel ID="pnlesen6" runat="server" Visible="False">
+                                    <div class="form-section-header">
+                                        <i class="bi bi-flag"></i>
+                                        <span>Maklumat Banting / Sepanduk</span>
+                                    </div>
 
                                     <div class="row">
-
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <label>Jenis</label>
+                                                <label class="form-label-custom">Jenis</label>
                                                 <asp:DropDownList ID="DDL_JenisBanting" Text='<%# Bind("JenisBanting") %>' runat="server" 
                                                     CssClass="form-control select2">
                                                     <asp:ListItem Value="">-- Sila Pilih --</asp:ListItem>
@@ -749,47 +968,41 @@
 
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label>Nama Syarikat Kontraktor Pemasang Iklan</label>
+                                                <label class="form-label-custom">Nama Syarikat Kontraktor Pemasang Iklan</label>
                                                 <asp:TextBox ID="TB_KontraktorIklan" runat="server"
                                                     Text='<%# Bind("KontraktorIklan") %>' CssClass="form-control" />
-
                                             </div>
                                         </div>
 
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <label>No Telefon Syarikat Kontraktor</label>
+                                                <label class="form-label-custom">No Telefon Syarikat Kontraktor</label>
                                                 <asp:TextBox ID="TB_NoTelKontraktor" runat="server"
                                                     Text='<%# Bind("NoTelKontraktor") %>' CssClass="form-control" />
-
                                             </div>
                                         </div>
-
                                     </div>
 
                                     <div class="row">
-
-                                        <div class="col-md-6">
+                                        <div class="col-md-3">
                                             <div class="form-group">
-                                                <label>Ukuran (Kaki)</label>
+                                                <label class="form-label-custom">Ukuran (Kaki)</label>
                                                 <asp:TextBox ID="TB_UkuranBanting" runat="server"
                                                     Text='<%# Bind("UkuranBanting") %>' placeholder="Contoh: 5x10" CssClass="form-control" />
-
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label>Bilangan Banting/Sepanduk</label>
-                                                <asp:TextBox ID="TB_BilBanting" runat="server"
-                                                    Text='<%# Bind("BilBanting") %>' CssClass="form-control" />
-
                                             </div>
                                         </div>
 
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <label>Tarikh Mula Pemasangan</label>
+                                                <label class="form-label-custom">Bilangan Banting/Sepanduk</label>
+                                                <asp:TextBox ID="TB_BilBanting" runat="server"
+                                                    Text='<%# Bind("BilBanting") %>' CssClass="form-control" />
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label class="form-label-custom">Tarikh Mula Pemasangan</label>
                                                 <asp:TextBox ID="TB_TarikhBanting1" runat="server"
                                                     Text='<%# Bind("TarikhBanting1", "{0:yyyy-MM-dd}") %>' TextMode="Date" CssClass="form-control" />
                                             </div>
@@ -797,33 +1010,28 @@
 
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <label>Tarikh Akhir Pemasangan</label>
+                                                <label class="form-label-custom">Tarikh Akhir Pemasangan</label>
                                                 <asp:TextBox ID="TB_TarikhBanting2" runat="server"
                                                     Text='<%# Bind("TarikhBanting2", "{0:yyyy-MM-dd}") %>' TextMode="Date" CssClass="form-control" />
                                             </div>
                                         </div>
-
                                     </div>
 
-                                     <div class="row">
-
-                                         <div class="col-md-6">
-                                             <div class="form-group">
-                                                 <label>Lokasi/Tempat Pemasangan</label>
-                                                 <asp:TextBox ID="TB_LokasiBanting" runat="server" TextMode="MultiLine" Rows="3" CssClass="form-control" />
-                                             </div>
-                                         </div>
-
-                                         <div class="col-md-2">
-                                            <div class="form-group">
-                                                <label> </label>
-                                                <asp:LinkButton ID="btnAddLokasi" runat="server" CssClass="btn btn-primary" Text="Tambah" OnClick="btnAddLokasi_Click" CausesValidation="false" />
+                                    <div class="row align-items-end mb-3">
+                                        <div class="col-md-8 col-lg-9">
+                                            <div class="form-group mb-0">
+                                                <label class="form-label-custom">Lokasi / Tempat Pemasangan</label>
+                                                <asp:TextBox ID="TB_LokasiBanting" runat="server" TextMode="MultiLine" Rows="2" CssClass="form-control" placeholder="Masukkan lokasi pemasangan banting..." />
                                             </div>
                                         </div>
+                                        <div class="col-md-4 col-lg-3 mt-2 mt-md-0">
+                                            <asp:LinkButton ID="btnAddLokasi" runat="server" CssClass="btn btn-primary w-100" OnClick="btnAddLokasi_Click" CausesValidation="false">
+                                                <i class="bi bi-plus-circle me-1"></i> Tambah Lokasi
+                                            </asp:LinkButton>
+                                        </div>
+                                    </div>
 
-                                     </div>
-
-                                     <div class="row">
+                                    <div class="row">
                                         <div class="col-md-12">
                                             <asp:GridView ID="gvLokasiList" runat="server" GridLines="None" ShowHeader="false" 
                                                 CssClass="banting-lokasi-list no-action-dropdown" AutoGenerateColumns="False" 
@@ -833,7 +1041,7 @@
                                                     <asp:TemplateField ItemStyle-Width="100%" ItemStyle-CssClass="p-0 border-0">
                                                         <ItemTemplate>
                                                             <div class="card mb-3" style="border: 1px solid #ced4da;">
-                                                                <div class="card-header bg-light d-flex justify-content-between align-items-center py-2 px-3">
+                                                                <div class="bg-light d-flex justify-content-between align-items-center py-2 px-3">
                                                                     <div>
                                                                         <strong>Lokasi #<%# Container.DataItemIndex + 1 %>:</strong>
                                                                         <span class="text-dark ml-1"><%# Eval("Lokasi") %></span>
@@ -912,7 +1120,7 @@
                                     <div class="row">
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <label>Status Kelulusan DBP</label>
+                                                <label class="form-label-custom">Status Kelulusan DBP</label>
                                                 <asp:DropDownList ID="DDL_StatusDBP" Text='<%# Bind("StatusBanting") %>' runat="server" 
                                                     CssClass="form-control select2">
                                                     <asp:ListItem Value="">-- Sila Pilih --</asp:ListItem>
@@ -924,7 +1132,7 @@
 
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <label>No Pengesahan</label>
+                                                <label class="form-label-custom">No Pengesahan</label>
                                                 <asp:TextBox ID="TB_NoPengesahan" runat="server"
                                                     Text='<%# Bind("NoPengesahanBanting") %>' CssClass="form-control" />
                                             </div>
@@ -932,7 +1140,7 @@
 
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <label>Tarikh Mula Pengesahan</label>
+                                                <label class="form-label-custom">Tarikh Mula Pengesahan</label>
                                                 <asp:TextBox ID="TB_TarikhPengesahanBanting1" runat="server"
                                                     Text='<%# Bind("TarikhPengesahanBanting1", "{0:yyyy-MM-dd}") %>' TextMode="Date" CssClass="form-control" />
                                             </div>
@@ -940,48 +1148,41 @@
 
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <label>Tarikh Akhir Pengesahan</label>
+                                                <label class="form-label-custom">Tarikh Akhir Pengesahan</label>
                                                 <asp:TextBox ID="TB_TarikhPengesahanBanting2" runat="server"
                                                     Text='<%# Bind("TarikhPengesahanBanting2", "{0:yyyy-MM-dd}") %>' TextMode="Date" CssClass="form-control" />
                                             </div>
                                         </div>
-
                                     </div>
 
                                     <div class="row">
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <label>No Resit</label>
+                                                <label class="form-label-custom">No Resit</label>
                                                 <asp:TextBox ID="TB_NoResit1" runat="server"
                                                     Text='<%# Bind("NoResitBanting") %>' CssClass="form-control" />
-
                                             </div>
                                         </div>
 
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <label>No Siri Stiker</label>
+                                                <label class="form-label-custom">No Siri Stiker</label>
                                                 <asp:TextBox ID="TB_NoSiriStiker" runat="server"
                                                     Text='<%# Bind("NoSiriStiker") %>' CssClass="form-control" />
-
                                             </div>
                                         </div>
 
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <label>Tarikh</label>
+                                                <label class="form-label-custom">Tarikh</label>
                                                 <asp:TextBox ID="TB_TarikhBanting3" runat="server"
                                                     Text='<%# Bind("TarikhBanting3", "{0:yyyy-MM-dd}") %>' TextMode="Date" CssClass="form-control" />
-
                                             </div>
                                         </div>
 
-                                    </div>
-
-                                    <div class="row">
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <label>Bilangan Pembaharuan</label>
+                                                <label class="form-label-custom">Bilangan Pembaharuan</label>
                                                 <asp:DropDownList ID="DDL_RenewBanting" Text='<%# Bind("RenewBanting") %>' runat="server" 
                                                     CssClass="form-control select2">
                                                     <asp:ListItem Value="">-- Sila Pilih --</asp:ListItem>
@@ -992,52 +1193,53 @@
                                             </div>
                                         </div>
                                     </div>
-
                                 </asp:Panel>
 
                                 <%--# Papan iklan, Billboard #--%>
                                 <asp:Panel ID="pnlesen1a" runat="server" Visible="False">
-
-                                    <div class="row">
-
-                                        <div class="col-md-2">
-                                            <div class="form-group">
-                                                <label>Saiz Iklan (cm)</label>
-                                                <asp:TextBox ID="TB_SaizIklan1" placeholder="Contoh:10x5" runat="server" CssClass="form-control" />
-                                            </div>
-                                        </div>
-                                         <div class="col-md-2">
-                                             <div class="form-group">
-                                                 <label>Iklan Bercahaya</label>
-                                                 <asp:DropDownList ID="DDL_Iklan1" runat="server"
-                                                     CssClass="form-control select2">
-                                                     <asp:ListItem Value="">-- Sila Pilih --</asp:ListItem>
-                                                     <asp:ListItem Value="Bercahaya">Ya</asp:ListItem>
-                                                     <asp:ListItem Value="Tidak Bercahaya">Tidak</asp:ListItem>
-                                                 </asp:DropDownList>
-                                             </div>
-                                         </div>
-                                        <div class="col-md-2">
-                                            <div class="form-group">
-                                                <label>Bil. Unit</label>
-                                                <div class="row">
-                                                    <div class="col">
-                                                        <asp:TextBox ID="TB_UnitIklan1" TextMode="Number" runat="server" CssClass="form-control" />
-                                                    </div>
-                                                    <div class="col">
-                                                        <asp:LinkButton ID="btnAddIklan" runat="server" CssClass="btn btn-primary" Text="Tambah" OnClick="btnAddIklan_Click" />
-                                                    </div>
-
-                                                </div>
-                                                
-                                            </div>
-                                        </div>
-                                        
+                                    <div class="form-section-header">
+                                        <i class="bi bi-badge-ad"></i>
+                                        <span>Maklumat Papan Iklan</span>
                                     </div>
 
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <asp:GridView ID="gvIklanList" runat="server" HeaderStyle-ForeColor="Black" CssClass="table table-bordered" AutoGenerateColumns="False" 
+                                    <div class="row align-items-end">
+                                        <div class="col-md-3">
+                                            <div class="form-group mb-md-0">
+                                                <label class="form-label-custom">Saiz Iklan (cm)</label>
+                                                <asp:TextBox ID="TB_SaizIklan1" placeholder="Contoh: 10x5" runat="server" CssClass="form-control" />
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <div class="form-group mb-md-0">
+                                                <label class="form-label-custom">Iklan Bercahaya</label>
+                                                <asp:DropDownList ID="DDL_Iklan1" runat="server" CssClass="form-control select2">
+                                                    <asp:ListItem Value="">-- Sila Pilih --</asp:ListItem>
+                                                    <asp:ListItem Value="Bercahaya">Ya</asp:ListItem>
+                                                    <asp:ListItem Value="Tidak Bercahaya">Tidak</asp:ListItem>
+                                                </asp:DropDownList>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <div class="form-group mb-md-0">
+                                                <label class="form-label-custom">Bil. Unit</label>
+                                                <asp:TextBox ID="TB_UnitIklan1" TextMode="Number" runat="server" CssClass="form-control" />
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <div class="form-group mb-0">
+                                                <asp:LinkButton ID="btnAddIklan" runat="server" CssClass="btn btn-primary w-100" Text="Tambah" OnClick="btnAddIklan_Click" CausesValidation="false">
+                                                    <i class="bi bi-plus-circle me-1"></i> Tambah Iklan
+                                                </asp:LinkButton>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mt-3">
+                                        <div class="col-md-12 col-lg-8">
+                                            <asp:GridView ID="gvIklanList" runat="server" HeaderStyle-ForeColor="Black" CssClass="table table-bordered table-sm" AutoGenerateColumns="False" 
                                                 ShowHeaderWhenEmpty="true" EmptyDataText="Senarai kosong." OnRowDeleting="gvIklanList_RowDeleting">
                                                 <Columns>
                                                     <asp:BoundField DataField="SaizIklan" HeaderText="Saiz Iklan (cm)" />
@@ -1046,94 +1248,70 @@
                                                     <asp:TemplateField>
                                                         <ItemTemplate>
                                                             <asp:LinkButton ID="btnRemove" runat="server" Text="Remove" 
-                                                                CommandName="Delete" CssClass="btn btn-danger btn-sm">&times;</asp:LinkButton>
+                                                                CommandName="Delete" CssClass="btn btn-danger btn-sm" CausesValidation="false">&times;</asp:LinkButton>
                                                         </ItemTemplate>
                                                     </asp:TemplateField>
                                                 </Columns>
                                             </asp:GridView>
                                         </div>
                                     </div>
-
                                 </asp:Panel>
 
-                                <%--#  Billboard #--%>
+                                <%--# Billboard #--%>
                                 <asp:Panel ID="pnlbillboard" runat="server" Visible="False">
-
-                                    <div class="row">
-
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label>Lokasi Billboard</label>
-                                                <asp:TextBox ID="TB_BillboardLokasi" runat="server"
-                                                    Text='<%# Bind("BillboardLokasi") %>' TextMode="MultiLine" Rows="3" CssClass="form-control" />
-
-                                            </div>
-                                        </div>
-
+                                    <div class="form-section-header">
+                                        <i class="bi bi-display"></i>
+                                        <span>Maklumat Billboard</span>
                                     </div>
 
+                                    <div class="row">
+                                        <div class="col-md-8 col-lg-6">
+                                            <div class="form-group">
+                                                <label class="form-label-custom">Lokasi Billboard</label>
+                                                <asp:TextBox ID="TB_BillboardLokasi" runat="server"
+                                                    Text='<%# Bind("BillboardLokasi") %>' TextMode="MultiLine" Rows="3" CssClass="form-control" />
+                                            </div>
+                                        </div>
+                                    </div>
                                 </asp:Panel>
 
                                 <%--# Pasar Lambak #--%>
                                 <asp:Panel ID="pnlesen2" runat="server" Visible="False">
+                                    <div class="form-section-header">
+                                        <i class="bi bi-basket"></i>
+                                        <span>Maklumat Pasar</span>
+                                    </div>
 
                                     <div class="row">
-
-                                        <div class="col-md-6">
+                                        <div class="col-md-4">
                                             <div class="form-group">
-                                                <label>Lokasi Pasar #1</label>
+                                                <label class="form-label-custom">Lokasi Pasar #1</label>
                                                 <asp:TextBox ID="TB_LokasiPasar1" runat="server"
-                                                    Text='<%# Bind("LokasiPasar1") %>' TextMode="MultiLine" Rows="3" CssClass="form-control" />
-
+                                                    Text='<%# Bind("LokasiPasar1") %>' TextMode="MultiLine" Rows="2" CssClass="form-control" />
                                             </div>
                                         </div>
 
-                                        <div class="col-md-6">
+                                        <div class="col-md-4">
                                             <div class="form-group">
-                                                <label>Lokasi Pasar #2</label>
+                                                <label class="form-label-custom">Lokasi Pasar #2</label>
                                                 <asp:TextBox ID="TB_LokasiPasar2" runat="server"
-                                                    Text='<%# Bind("LokasiPasar2") %>' TextMode="MultiLine" Rows="3" CssClass="form-control" />
-
+                                                    Text='<%# Bind("LokasiPasar2") %>' TextMode="MultiLine" Rows="2" CssClass="form-control" />
                                             </div>
                                         </div>
 
-                                    </div>
-
-                                    <div class="row">
-
-                                        <div class="col-md-6">
+                                        <div class="col-md-4">
                                             <div class="form-group">
-                                                <label>Lokasi Pasar #3</label>
+                                                <label class="form-label-custom">Lokasi Pasar #3</label>
                                                 <asp:TextBox ID="TB_LokasiPasar3" runat="server"
-                                                    Text='<%# Bind("LokasiPasar3") %>' TextMode="MultiLine" Rows="3" CssClass="form-control" />
-
+                                                    Text='<%# Bind("LokasiPasar3") %>' TextMode="MultiLine" Rows="2" CssClass="form-control" />
                                             </div>
                                         </div>
-
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label>Jenis Perniagaan</label>
-                                                <asp:TextBox ID="TB_JenisPerniagaanPasar" runat="server"
-                                                    Text='<%# Bind("JenisPerniagaanPasar") %>' CssClass="form-control" />
-
-                                            </div>
-                                        </div>
-
                                     </div>
 
                                     <div class="row">
-
-                                        <div class="col-md-6">
+                                        <div class="col-md-4">
                                             <div class="form-group">
-                                                <label>Jumlah Petak/Tapak/Lot</label>
-                                                <asp:TextBox ID="TB_JumlahPetak" runat="server"
-                                                    Text='<%# Bind("JumlahPetak") %>' CssClass="form-control" />
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label>Jenis Pasar</label>
+                                                <label class="form-label-custom">Jenis Pasar</label>
                                                 <asp:DropDownList ID="DDL_JenisPasar" Text='<%# Bind("JenisPasar") %>' runat="server" 
                                                     CssClass="form-control select2">
                                                     <asp:ListItem Value="">-- Sila Pilih --</asp:ListItem>
@@ -1142,32 +1320,48 @@
                                                     <asp:ListItem>Pasar Lambak</asp:ListItem>
                                                     <asp:ListItem>Pasar Sehari</asp:ListItem>
                                                 </asp:DropDownList>
-
                                             </div>
                                         </div>
 
-                                    </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label class="form-label-custom">Jumlah Petak/Tapak/Lot</label>
+                                                <asp:TextBox ID="TB_JumlahPetak" runat="server"
+                                                    Text='<%# Bind("JumlahPetak") %>' CssClass="form-control" />
+                                            </div>
+                                        </div>
 
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label class="form-label-custom">Jenis Perniagaan</label>
+                                                <asp:TextBox ID="TB_JenisPerniagaanPasar" runat="server"
+                                                    Text='<%# Bind("JenisPerniagaanPasar") %>' CssClass="form-control" />
+                                            </div>
+                                        </div>
+                                    </div>
                                 </asp:Panel>
 
                                 <%--# Anjing #--%>
                                 <asp:Panel ID="pnlesen3" runat="server" Visible="False">
+                                    <div class="form-section-header">
+                                        <i class="bi bi-heart-pulse"></i>
+                                        <span>Maklumat Lesen Anjing</span>
+                                    </div>
 
                                     <div class="row">
-
-                                        <div class="col-md-6">
+                                        <div class="col-md-8">
                                             <div class="form-group">
-                                                <label>Alamat lokasi</label>
+                                                <label class="form-label-custom">Alamat Lokasi</label>
                                                 <asp:TextBox ID="TB_AnjingAlamat" runat="server"
-                                                    Text='<%# Bind("AnjingAlamat") %>' TextMode="MultiLine" Rows="3" CssClass="form-control" />
+                                                    Text='<%# Bind("AnjingAlamat") %>' TextMode="MultiLine" Rows="2" CssClass="form-control" />
                                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" CssClass="cssRequiredField"
-                                                    ControlToValidate="TB_AnjingAlamat" ErrorMessage="Sila Isi" ValidationGroup="frmEdit" Display="Dynamic"></asp:RequiredFieldValidator>
+                                                    ControlToValidate="TB_AnjingAlamat" ErrorMessage="Sila Isi Alamat" ValidationGroup="updateForm" Display="Dynamic"></asp:RequiredFieldValidator>
                                             </div>
                                         </div>
 
-                                        <div class="col-md-6">
+                                        <div class="col-md-4">
                                             <div class="form-group">
-                                                <label>Jenis Premis</label>
+                                                <label class="form-label-custom">Jenis Premis</label>
                                                 <asp:DropDownList ID="DDL_AnjingJenisPremis" Text='<%# Bind("AnjingJenisPremis") %>' CssClass="form-control select2" runat="server"
                                                     DataSourceID="SqlDataSourceAnjingJenisPremis" DataTextField="name" DataValueField="id">
                                                 </asp:DropDownList>
@@ -1176,14 +1370,12 @@
                                                         FROM TBL_LOOKUPS WHERE lookupgrp_id = 10001 AND status = 1"></asp:SqlDataSource>
                                             </div>
                                         </div>
-
                                     </div>
 
-                                    <div class="row">
-
-                                        <div class="col-md-2">
-                                            <div class="form-group">
-                                                <label>Jenis Baka</label>
+                                    <div class="row align-items-end">
+                                        <div class="col-md-3">
+                                            <div class="form-group mb-md-0">
+                                                <label class="form-label-custom">Jenis Baka</label>
                                                 <asp:DropDownList ID="DDL_BakaAnjing1" CssClass="form-control select2" runat="server"
                                                     DataSourceID="SqlDataSourceAnjingBaka1" DataTextField="name" DataValueField="id">
                                                 </asp:DropDownList>
@@ -1193,77 +1385,73 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-md-2">
-                                            <div class="form-group">
-                                                <label>Bilangan anjing jantan</label>
+                                        <div class="col-6 col-md-2">
+                                            <div class="form-group mb-md-0">
+                                                <label class="form-label-custom">Bil. Jantan</label>
                                                 <asp:TextBox ID="TB_Jantan1" runat="server" TextMode="Number" CssClass="form-control" />
                                             </div>
                                         </div>
 
-                                        <div class="col-md-2">
-                                            <div class="form-group">
-                                                <label>Bilangan anjing betina</label>
+                                        <div class="col-6 col-md-2">
+                                            <div class="form-group mb-md-0">
+                                                <label class="form-label-custom">Bil. Betina</label>
                                                 <asp:TextBox ID="TB_Betina1" runat="server" TextMode="Number" CssClass="form-control" />
                                             </div>
                                         </div>
 
-                                        <div class="col-md-2">
-                                            <div class="form-group">
-                                                <label>Bilangan anjing jantan mandul</label>
+                                        <div class="col-6 col-md-2">
+                                            <div class="form-group mb-md-0">
+                                                <label class="form-label-custom">Jantan Mandul</label>
                                                 <asp:TextBox ID="TB_JantanMandul1" runat="server" TextMode="Number" CssClass="form-control" />
                                             </div>
                                         </div>
 
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label>Bilangan anjing betina mandul</label>
-                                                <div class="row">
-                                                    <div class="col">
-                                                        <asp:TextBox ID="TB_BetinaMandul1" runat="server" TextMode="Number" CssClass="form-control" />
-                                                    </div>
-                                                    <div class="col">
-                                                        <asp:LinkButton ID="btnAddAnjing" runat="server" CssClass="btn btn-primary" Text="Tambah" OnClick="btnAddAnjing_Click" />
-    
-                                                    </div>
-
+                                        <div class="col-6 col-md-3">
+                                            <div class="form-group mb-0">
+                                                <label class="form-label-custom">Betina Mandul</label>
+                                                <div class="d-flex gap-2">
+                                                    <asp:TextBox ID="TB_BetinaMandul1" runat="server" TextMode="Number" CssClass="form-control" />
+                                                    <asp:LinkButton ID="btnAddAnjing" runat="server" CssClass="btn btn-primary text-nowrap" Text="Tambah" OnClick="btnAddAnjing_Click" CausesValidation="false">
+                                                        <i class="bi bi-plus-circle me-1"></i> Tambah
+                                                    </asp:LinkButton>
                                                 </div>
-            
                                             </div>
                                         </div>
-
                                     </div>
 
-                                    <div class="row">
+                                    <div class="row mt-3">
                                         <div class="col-md-12">
-                                            <asp:GridView ID="gvAnjingList" runat="server" HeaderStyle-ForeColor="Black" CssClass="table table-bordered" AutoGenerateColumns="False" 
+                                            <asp:GridView ID="gvAnjingList" runat="server" HeaderStyle-ForeColor="Black" CssClass="table table-bordered table-sm" AutoGenerateColumns="False" 
                                                 ShowHeaderWhenEmpty="true" EmptyDataText="Senarai kosong." OnRowDeleting="gvAnjingList_RowDeleting">
                                                 <Columns>
                                                     <asp:BoundField DataField="Baka" HeaderText="Baka Anjing" />
-                                                    <asp:BoundField DataField="Jantan" HeaderText=" Bil. Jantan" />
+                                                    <asp:BoundField DataField="Jantan" HeaderText="Bil. Jantan" />
                                                     <asp:BoundField DataField="Betina" HeaderText="Bil. Betina" />
                                                     <asp:BoundField DataField="JantanMandul" HeaderText="Bil. Jantan Mandul" />
                                                     <asp:BoundField DataField="BetinaMandul" HeaderText="Bil. Betina Mandul" />
                                                     <asp:TemplateField>
                                                         <ItemTemplate>
                                                             <asp:LinkButton ID="btnRemove" runat="server"  
-                                                                CommandName="Delete" CssClass="btn btn-danger btn-sm">&times;</asp:LinkButton>
+                                                                CommandName="Delete" CssClass="btn btn-danger btn-sm" CausesValidation="false">&times;</asp:LinkButton>
                                                         </ItemTemplate>
                                                     </asp:TemplateField>
                                                 </Columns>
                                             </asp:GridView>
                                         </div>
                                     </div>
-
                                 </asp:Panel>
 
                                 <%--# Penjaja #--%>
                                 <asp:Panel ID="pnlesen4" runat="server" Visible="False">
+                                    <div class="form-section-header">
+                                        <i class="bi bi-truck"></i>
+                                        <span>Maklumat Penjaja</span>
+                                    </div>
 
                                     <div class="row">
-
-                                        <div class="col-md-3">
+                                        <div class="col-md-4">
                                             <div class="form-group">
-                                                <label>Jenis Penjaja</label>
+                                                <label class="form-label-custom">Jenis Penjaja</label>
                                                 <asp:DropDownList ID="DDL_JenisPenjaja" CssClass="form-control select2" runat="server"
                                                     DataSourceID="SqlDataSourceJenisPenjaja" DataTextField="name" DataValueField="id">
                                                 </asp:DropDownList>
@@ -1273,9 +1461,9 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-md-3">
+                                        <div class="col-md-4">
                                             <div class="form-group">
-                                                <label>Status Tanah</label>
+                                                <label class="form-label-custom">Status Tanah</label>
                                                 <asp:DropDownList ID="DDL_StatusTanahPenjaja" CssClass="form-control select2" runat="server"
                                                     DataSourceID="SqlDataSourceStatusTanahPenjaja" DataTextField="name" DataValueField="id">
                                                 </asp:DropDownList>
@@ -1285,53 +1473,45 @@
                                             </div>
                                         </div>
 
-                                    </div>
-
-                                    <div class="row">
-
-                                        <div class="col-md-6">
+                                        <div class="col-md-4">
                                             <div class="form-group">
-                                                <label>Alamat aktiviti penjajaan</label>
-                                                <asp:TextBox ID="TB_AlamatPenjajaan" runat="server"
-                                                    Text='<%# Bind("AlamatPenjajaan") %>' TextMode="MultiLine" Rows="3" CssClass="form-control" />
-
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label>Jenis Jualan
-                                                </label>
+                                                <label class="form-label-custom">Jenis Jualan</label>
                                                 <asp:TextBox ID="TB_JenisPerniagaanPenjaja" runat="server"
                                                     Text='<%# Bind("JenisPerniagaanPenjaja") %>' CssClass="form-control" />
-
                                             </div>
                                         </div>
+                                    </div>
 
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label class="form-label-custom">Alamat Aktiviti Penjajaan</label>
+                                                <asp:TextBox ID="TB_AlamatPenjajaan" runat="server"
+                                                    Text='<%# Bind("AlamatPenjajaan") %>' TextMode="MultiLine" Rows="2" CssClass="form-control" />
+                                            </div>
+                                        </div>
                                     </div>
 
                                     <div class="row">
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <label>Masa Mula Jualan</label>
+                                                <label class="form-label-custom">Masa Mula Jualan</label>
                                                 <asp:TextBox ID="TB_MasaPenjaja1" runat="server" TextMode="Time"
                                                     Text='<%# Bind("MasaPenjaja1") %>' CssClass="form-control" />
-
                                             </div>
                                         </div>
 
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <label>Masa Tamat Jualan</label>
+                                                <label class="form-label-custom">Masa Tamat Jualan</label>
                                                 <asp:TextBox ID="TB_MasaPenjaja2" runat="server" TextMode="Time"
                                                     Text='<%# Bind("MasaPenjaja2") %>' CssClass="form-control" />
-
                                             </div>
                                         </div>
 
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <label>Jenis Kenderaan (Penjaja Berkenderaan)</label>
+                                                <label class="form-label-custom">Jenis Kenderaan (Penjaja Berkenderaan)</label>
                                                 <asp:DropDownList ID="DDL_JenisKenderaanPenjaja" CssClass="form-control select2" runat="server"
                                                     DataSourceID="SqlDataSourceJenisKenderaanPenjaja" DataTextField="name" DataValueField="id">
                                                 </asp:DropDownList>
@@ -1343,90 +1523,79 @@
 
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <label>No Pendaftaran Kenderaan</label>
+                                                <label class="form-label-custom">No Pendaftaran Kenderaan</label>
                                                 <asp:TextBox ID="TB_NoKenderaanPenjaja" runat="server" 
                                                     Text='<%# Bind("NoKenderaanPenjaja") %>' CssClass="form-control" />
-
                                             </div>
                                         </div>
                                     </div>
-
                                 </asp:Panel>
 
                                 <%--# Ekspo #--%>
                                 <asp:Panel ID="pnlesen5" runat="server" Visible="False">
+                                    <div class="form-section-header">
+                                        <i class="bi bi-calendar-event"></i>
+                                        <span>Maklumat Ekspo / Program</span>
+                                    </div>
 
                                     <div class="row">
-
-                                        <div class="col-md-6">
+                                        <div class="col-md-5">
                                             <div class="form-group">
-                                                <label>Nama Penganjur</label>
+                                                <label class="form-label-custom">Nama Penganjur</label>
                                                 <asp:TextBox ID="TB_PenganjurEkspo" runat="server"
                                                     Text='<%# Bind("PenganjurEkspo") %>' CssClass="form-control" />
-
                                             </div>
                                         </div>
 
-                                        <div class="col-md-6">
+                                        <div class="col-md-4">
                                             <div class="form-group">
-                                                <label>Alamat Penganjur</label>
-                                                <asp:TextBox ID="TB_AlamatPenganjurEkspo" runat="server"
-                                                    Text='<%# Bind("AlamatPenganjurEkspo") %>' TextMode="MultiLine" Rows="3" CssClass="form-control" />
-
-                                            </div>
-                                        </div>
-
-                                    </div>
-
-                                    <div class="row">
-
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label>PIC Penganjur</label>
+                                                <label class="form-label-custom">PIC Penganjur</label>
                                                 <asp:TextBox ID="TB_PicEkspo" runat="server"
                                                     Text='<%# Bind("PicEkspo") %>' CssClass="form-control" />
-
                                             </div>
                                         </div>
 
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <label>No. Tel.</label>
+                                                <label class="form-label-custom">No. Tel. PIC</label>
                                                 <asp:TextBox ID="TB_NoTel" runat="server"
                                                     Text='<%# Bind("NoTelEkspo") %>' CssClass="form-control" />
-
                                             </div>
                                         </div>
-
                                     </div>
 
                                     <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label class="form-label-custom">Alamat Penganjur</label>
+                                                <asp:TextBox ID="TB_AlamatPenganjurEkspo" runat="server"
+                                                    Text='<%# Bind("AlamatPenganjurEkspo") %>' TextMode="MultiLine" Rows="2" CssClass="form-control" />
+                                            </div>
+                                        </div>
+                                    </div>
 
+                                    <div class="row">
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label>Nama Aktiviti/Program</label>
+                                                <label class="form-label-custom">Nama Aktiviti / Program</label>
                                                 <asp:TextBox ID="TB_NamaEkspo" runat="server"
                                                     Text='<%# Bind("NamaEkspo") %>' CssClass="form-control" />
-
                                             </div>
                                         </div>
 
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label>Lokasi Program</label>
+                                                <label class="form-label-custom">Lokasi Program</label>
                                                 <asp:TextBox ID="TB_LokasiEkspo" runat="server"
-                                                    Text='<%# Bind("LokasiEkspo") %>' TextMode="MultiLine" Rows="3" CssClass="form-control" />
-
+                                                    Text='<%# Bind("LokasiEkspo") %>' TextMode="MultiLine" Rows="2" CssClass="form-control" />
                                             </div>
                                         </div>
-
                                     </div>
 
                                     <div class="row">
-
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <label>Tarikh Mula</label>
+                                                <label class="form-label-custom">Tarikh Mula</label>
                                                 <asp:TextBox ID="TB_TarikhEkspo1" runat="server"
                                                     Text='<%# Bind("TarikhEkspo1", "{0:yyyy-MM-dd}") %>' TextMode="Date" CssClass="form-control" />
                                             </div>
@@ -1434,7 +1603,7 @@
 
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <label>Tarikh Tamat</label>
+                                                <label class="form-label-custom">Tarikh Tamat</label>
                                                 <asp:TextBox ID="TB_TarikhEkspo2" runat="server"
                                                     Text='<%# Bind("TarikhEkspo2", "{0:yyyy-MM-dd}") %>' TextMode="Date" CssClass="form-control" />
                                             </div>
@@ -1442,7 +1611,7 @@
 
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <label>Masa Mula</label>
+                                                <label class="form-label-custom">Masa Mula</label>
                                                 <asp:TextBox ID="TB_MasaEkspo1" runat="server"
                                                     Text='<%# Bind("MasaEkspo1") %>' TextMode="Time" CssClass="form-control" />
                                             </div>
@@ -1450,212 +1619,187 @@
 
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <label>Masa Tamat</label>
+                                                <label class="form-label-custom">Masa Tamat</label>
                                                 <asp:TextBox ID="TB_MasaEkspo2" runat="server"
                                                     Text='<%# Bind("MasaEkspo2") %>' TextMode="Time" CssClass="form-control" />
-
                                             </div>
                                         </div>
-
                                     </div>
 
                                     <div class="row">
-
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label>Tentatif Program</label>
+                                                <label class="form-label-custom">Tentatif Program</label>
                                                 <asp:TextBox ID="TB_TentatifEkspo" runat="server"
                                                     Text='<%# Bind("TentatifEkspo") %>' TextMode="MultiLine" Rows="3" CssClass="form-control" />
-
                                             </div>
                                         </div>
 
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label>Selebriti/Penceramah/Artis Yang Dijangka Terlibat</label>
+                                                <label class="form-label-custom">Selebriti / Penceramah / Artis Terlibat</label>
                                                 <asp:TextBox ID="TB_JemputanEkspo" runat="server"
                                                     Text='<%# Bind("JemputanEkspo") %>' TextMode="MultiLine" Rows="3" CssClass="form-control" />
-
                                             </div>
                                         </div>
-
                                     </div>
 
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label>Kontraktor Pembersihan</label>
+                                                <label class="form-label-custom">Kontraktor Pembersihan</label>
                                                 <asp:TextBox ID="TB_PembersihanEkspo" runat="server"
                                                     Text='<%# Bind("PembersihanEkspo") %>' CssClass="form-control" />
-
                                             </div>
                                         </div>
 
-                                    </div>
-
-                                    <div class="row">
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <label>Cadangan Tarikh Mula Pasang Khemah</label>
+                                                <label class="form-label-custom">Tarikh Pasang Khemah</label>
                                                 <asp:TextBox ID="TB_TarikhKhemahEkspo1" runat="server" TextMode="Date"
                                                     Text='<%# Bind("TarikhKhemahEkspo1", "{0:yyyy-MM-dd}") %>' CssClass="form-control" />
-
                                             </div>
                                         </div>
 
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <label>Cadangan Tarikh Buka Khemah</label>
+                                                <label class="form-label-custom">Tarikh Buka Khemah</label>
                                                 <asp:TextBox ID="TB_TarikhKhemahEkspo2" runat="server" TextMode="Date"
                                                     Text='<%# Bind("TarikhKhemahEkspo2", "{0:yyyy-MM-dd}") %>' CssClass="form-control" />
-
                                             </div>
                                         </div>
-
                                     </div>
-
                                 </asp:Panel>
 
                                 <asp:Panel ID="pnlrujukan" runat="server">
-                                    <hr style="border: 1px solid gray;" />
-                                    <div class="row">
+                                    <div class="form-section-header">
+                                        <i class="bi bi-info-circle"></i>
+                                        <span>Maklumat Rujukan &amp; Pentadbiran</span>
+                                    </div>
 
+                                    <div class="row">
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <label>No Rujukan</label>
+                                                <label class="form-label-custom">No Rujukan</label>
                                                 <asp:TextBox ID="TB_Rujukan" runat="server"
                                                     Text='<%# Bind("Rujukan") %>' CssClass="form-control" />
-
                                             </div>
                                         </div>
 
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <label>No Akaun Cukai</label>
+                                                <label class="form-label-custom">No Akaun Cukai</label>
                                                 <asp:TextBox ID="TB_NoAkaunCukai" runat="server"
                                                     Text='<%# Bind("NoAkaunCukai") %>' CssClass="form-control" />
-
                                             </div>
                                         </div>
 
-                                        <div class="col-md-2">
-                                            <div class="form-group align-middle">
-                                                <asp:Label runat="server" ForeColor="DarkRed" Font-Bold="true">Kelulusan 24 jam?</asp:Label>
-                                                <asp:CheckBox ID="CB_24h" Checked='<%# Bind("Is24jam") %>' runat="server" />
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
                                             <div class="form-group">
-                                                <label>Lokasi Fail</label>
-                                                <asp:TextBox ID="TB_Remarks1" runat="server" TextMode="MultiLine" Rows="2"
+                                                <label class="form-label-custom">Lokasi Fail</label>
+                                                <asp:TextBox ID="TB_Remarks1" runat="server"
                                                     Text='<%# Bind("RemarksFail") %>' CssClass="form-control" />
-
                                             </div>
                                         </div>
 
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label class="form-label-custom">&nbsp;</label>
+                                                <div class="checkbox-box">
+                                                    <asp:CheckBox ID="CB_24h" Checked='<%# Bind("Is24jam") %>' runat="server" />
+                                                    <span class="text-danger fw-bold">Kelulusan 24 jam?</span>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-
                                 </asp:Panel>
-
                             </asp:Panel>
 
-                            <div class="row">
-
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>Ada Deposit?</label>
-                                        <asp:CheckBox ID="CB_Deposit" runat="server" Checked='<%# If(Eval("DepositAmount") Is DBNull.Value, False, True) %>' OnCheckedChanged="CB_Deposit_CheckedChanged" AutoPostBack="true" />
+                            <div class="row my-2">
+                                <div class="col-md-4 col-lg-3">
+                                    <div class="checkbox-box">
+                                        <asp:CheckBox ID="CB_Deposit" runat="server" Checked='<%# If(Eval("DepositAmount") Is DBNull.Value, False, True) %>' OnCheckedChanged="CB_Deposit_CheckedChanged" AutoPostBack="true" CausesValidation="false" />
+                                        <span class="fw-bold text-dark">Ada Deposit?</span>
                                     </div>
                                 </div>
-
                             </div>
 
                             <asp:Panel ID="pnldeposit" runat="server" Visible='<%# If(Eval("DepositAmount") Is DBNull.Value, False, True) %>'>
-
                                 <div class="row">
-
-                                    <div class="col-md-3">
+                                    <div class="col-md-4">
                                         <div class="form-group">
-                                            <label>Amaun deposit (RM)</label>
+                                            <label class="form-label-custom">Amaun Deposit (RM)</label>
                                             <asp:TextBox ID="TB_Depo" runat="server"
                                                 Text='<%# Bind("DepositAmount") %>' TextMode="Number" placeholder="00.00" CssClass="form-control" />
-
                                         </div>
                                     </div>
 
-                                    <div class="col-md-3">
+                                    <div class="col-md-4">
                                         <div class="form-group">
-                                            <label>Tarikh bayar deposit</label>
+                                            <label class="form-label-custom">Tarikh Bayar Deposit</label>
                                             <asp:TextBox ID="TB_TarikhDepo" runat="server"
                                                 Text='<%# Bind("DepositDate", "{0:yyyy-MM-dd}") %>' TextMode="Date" CssClass="form-control" />
-
                                         </div>
                                     </div>
 
-                                    <div class="col-md-3">
+                                    <div class="col-md-4">
                                         <div class="form-group">
-                                            <label>No Resit</label>
+                                            <label class="form-label-custom">No Resit</label>
                                             <asp:TextBox ID="TB_NoResit" runat="server"
                                                 Text='<%# Bind("DepositResitNo") %>' CssClass="form-control" />
-
                                         </div>
                                     </div>
-
                                 </div>
-
                             </asp:Panel>
 
                             <asp:Panel ID="pnldeposit1" runat="server" Visible='<%# If(Eval("IsBatal") = True And Eval("DepositAmount") IsNot DBNull.Value, True, False) %>'>
-
                                 <div class="row">
-
-                                    <div class="col-md-3">
+                                    <div class="col-md-4">
                                         <div class="form-group">
-                                            <label>Amaun Pemulangan Wang Amanah (RM)</label>
+                                            <label class="form-label-custom">Amaun Pemulangan Wang Amanah (RM)</label>
                                             <asp:TextBox ID="TB_DepoPulang" runat="server"
                                                 Text='<%# Bind("DepositPulangAmount") %>' TextMode="Number" placeholder="00.00" CssClass="form-control" />
                                         </div>
                                     </div>
-
                                 </div>
-
                             </asp:Panel>
 
                             <asp:Panel ID="pnlbatal1" runat="server" Visible='<%# If(Eval("IsBatal") = False And Eval("StatusID") = 10, True, False) %>'>
-                                <br />
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <asp:Label runat="server" ForeColor="DarkRed" Font-Bold="true">Pembatalan Permit/Lesen?</asp:Label>
-                                            <asp:CheckBox ID="CB_IsBatal" Checked='<%# Bind("IsBatal") %>' runat="server" OnCheckedChanged="CB_IsBatal_CheckedChanged" AutoPostBack="true" />
+                                <div class="row my-2">
+                                    <div class="col-md-4 col-lg-3">
+                                        <div class="checkbox-box border-danger-subtle bg-danger-subtle">
+                                            <asp:CheckBox ID="CB_IsBatal" Checked='<%# Bind("IsBatal") %>' runat="server" OnCheckedChanged="CB_IsBatal_CheckedChanged" AutoPostBack="true" CausesValidation="false" />
+                                            <span class="fw-bold text-danger">Pembatalan Permit / Lesen?</span>
                                         </div>
                                     </div>
                                 </div>
                             </asp:Panel>
 
                             <asp:Panel ID="pnlbatal2" runat="server" Visible='<%# If(Eval("IsBatal") = True, True, False) %>' Enabled='<%# If(Eval("StatusID") = 10, True, False) %>'>
+                                <div class="form-section-header danger-section">
+                                    <i class="bi bi-x-circle"></i>
+                                    <span>Maklumat Pembatalan</span>
+                                </div>
 
                                 <div class="row">
-
-                                    <div class="col-md-6">
+                                    <div class="col-md-4">
                                         <div class="form-group">
-                                            <label>Jenis Pembatalan</label>
+                                            <label class="form-label-custom">Jenis Pembatalan <span class="text-danger">*</span></label>
                                             <asp:DropDownList ID="DDL_JenisBatal" Text='<%# Bind("JenisBatal") %>' runat="server" OnSelectedIndexChanged="DDL_JenisBatal_SelectedIndexChanged"
-                                                CssClass="form-control select2" AutoPostBack="true">
+                                                CssClass="form-control select2" AutoPostBack="true" CausesValidation="false">
                                                 <asp:ListItem Value="">-- Sila Pilih --</asp:ListItem>
                                                 <asp:ListItem Value="1">Dengan Permohonan</asp:ListItem>
                                                 <asp:ListItem Value="2">Tanpa Permohonan</asp:ListItem>
                                             </asp:DropDownList>
                                             <asp:RequiredFieldValidator ID="RequiredFieldValidator36" runat="server" CssClass="cssRequiredField"
-                                                ControlToValidate="DDL_JenisBatal" ErrorMessage="Sila Pilih" ForeColor="Red" ValidationGroup="updateForm" Display="Dynamic"></asp:RequiredFieldValidator>
+                                                ControlToValidate="DDL_JenisBatal" ErrorMessage="Sila Pilih Jenis Pembatalan" ForeColor="Red" ValidationGroup="updateForm" Display="Dynamic"></asp:RequiredFieldValidator>
                                         </div>
                                     </div>
 
-                                    <div class="col-md-6">
+                                    <div class="col-md-4">
                                         <div class="form-group">
                                             <asp:Panel ID="pnlbatal3" runat="server" Visible="false">
-                                                <label>Sebab Pembatalan</label>
+                                                <label class="form-label-custom">Sebab Pembatalan <span class="text-danger">*</span></label>
                                                 <asp:DropDownList ID="DDL_SebabBatal1" Text='<%# Bind("SebabBatalPerm") %>' CssClass="form-control select2" runat="server"
                                                     DataSourceID="SqlDataSourceSebab1" DataTextField="name" DataValueField="id">
                                                 </asp:DropDownList>
@@ -1663,11 +1807,11 @@
                                                     SelectCommand="SELECT NULL AS id, '-- Sila Pilih --' AS name UNION ALL SELECT id, name 
                                                         FROM TBL_LOOKUPS WHERE lookupgrp_id = 10002 AND status = 1"></asp:SqlDataSource>
                                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator32" runat="server" CssClass="cssRequiredField"
-                                                    ControlToValidate="DDL_SebabBatal1" ErrorMessage="Sila Pilih" ForeColor="Red" ValidationGroup="updateForm" Display="Dynamic"></asp:RequiredFieldValidator>
+                                                    ControlToValidate="DDL_SebabBatal1" ErrorMessage="Sila Pilih Sebab" ForeColor="Red" ValidationGroup="updateForm" Display="Dynamic"></asp:RequiredFieldValidator>
                                             </asp:Panel>
 
                                             <asp:Panel ID="pnlbatal4" runat="server" Visible="false">
-                                                <label>Sebab Pembatalan</label>
+                                                <label class="form-label-custom">Sebab Pembatalan <span class="text-danger">*</span></label>
                                                 <asp:DropDownList ID="DDL_SebabBatal2" Text='<%# Bind("SebabBatalTanpaPerm") %>' CssClass="form-control select2" runat="server"
                                                     DataSourceID="SqlDataSourceSebab2" DataTextField="name" DataValueField="id">
                                                 </asp:DropDownList>
@@ -1675,24 +1819,14 @@
                                                     SelectCommand="SELECT NULL AS id, '-- Sila Pilih --' AS name UNION ALL SELECT id, name 
                                                         FROM TBL_LOOKUPS WHERE lookupgrp_id = 10003 AND status = 1"></asp:SqlDataSource>
                                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator37" runat="server" CssClass="cssRequiredField"
-                                                    ControlToValidate="DDL_SebabBatal2" ErrorMessage="Sila Pilih" ForeColor="Red" ValidationGroup="updateForm" Display="Dynamic"></asp:RequiredFieldValidator>
+                                                    ControlToValidate="DDL_SebabBatal2" ErrorMessage="Sila Pilih Sebab" ForeColor="Red" ValidationGroup="updateForm" Display="Dynamic"></asp:RequiredFieldValidator>
                                             </asp:Panel>
-
-                                            <asp:Panel ID="pnlbatal5" runat="server" Visible="false">
-                                                <label>Catatan</label>
-                                                <asp:TextBox ID="TB_Remarks2" runat="server" TextMode="MultiLine" Rows="2"
-                                                    Text='<%# Bind("RemarksBatal") %>' CssClass="form-control" />
-                                            </asp:Panel>
-
                                         </div>
                                     </div>
 
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-md-6">
+                                    <div class="col-md-4">
                                         <div class="form-group">
-                                            <label>Tindakan Pembatalan</label>
+                                            <label class="form-label-custom">Tindakan Pembatalan <span class="text-danger">*</span></label>
                                             <asp:DropDownList ID="DDL_TindakanBatal" Text='<%# Bind("TindakanBatal") %>' CssClass="form-control select2" runat="server"
                                                 DataSourceID="SqlDataSourceTindakan" DataTextField="name" DataValueField="id">
                                             </asp:DropDownList>
@@ -1700,29 +1834,51 @@
                                                 SelectCommand="SELECT NULL AS id, '-- Sila Pilih --' AS name UNION ALL SELECT id, name 
                                                     FROM TBL_LOOKUPS WHERE lookupgrp_id = 10005 AND status = 1"></asp:SqlDataSource>
                                             <asp:RequiredFieldValidator ID="RequiredFieldValidator35" runat="server" CssClass="cssRequiredField"
-                                                ControlToValidate="DDL_TindakanBatal" ErrorMessage="Sila Pilih" ForeColor="Red" ValidationGroup="updateForm" Display="Dynamic"></asp:RequiredFieldValidator>
+                                                ControlToValidate="DDL_TindakanBatal" ErrorMessage="Sila Pilih Tindakan" ForeColor="Red" ValidationGroup="updateForm" Display="Dynamic"></asp:RequiredFieldValidator>
                                         </div>
                                     </div>
                                 </div>
+
+                                <asp:Panel ID="pnlbatal5" runat="server" Visible="false">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label class="form-label-custom">Catatan Pembatalan</label>
+                                                <asp:TextBox ID="TB_Remarks2" runat="server" TextMode="MultiLine" Rows="2"
+                                                    Text='<%# Bind("RemarksBatal") %>' CssClass="form-control" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </asp:Panel>
                             </asp:Panel>
 
                         </div>
-                        <div class="card-footer">
-                            <asp:LinkButton runat="server" CssClass="btn btn-warning" ValidationGroup="updateForm" Text="Kemaskini" CommandName="Update" ID="UpdateFormButton" CausesValidation="True" />
-                            <asp:LinkButton runat="server" CssClass="btn btn-warning" Visible='<%# If(Eval("StatusID") = 0, True, False) %>' ValidationGroup="updateForm" Text="Hantar" ID="SubmitApproval" OnCommand="OnClickBtnSubmit" CausesValidation="False" OnClientClick="return confirm('Hantar ke jabatan agensi sekarang?');" />
-                            <asp:LinkButton runat="server" CssClass="btn btn-warning" Visible='<%# If(Eval("StatusID") = 10, True, False) %>' Text='<%# If(Eval("IsBatal") = False, "Surat Kelulusan", "Surat Pembatalan") %>' ID="ViewSuratKelulusanPembatalan" OnCommand="OnClickSuratKelulusanPembatalan" CausesValidation="False" />
-                            <asp:LinkButton runat="server" Text="Kembali" ID="BackButton" CausesValidation="False" CssClass="btn btn-default" OnClick="BackButton_Click" />
+                        <div class="card-footer d-flex flex-wrap gap-2 align-items-center">
+                            <asp:LinkButton runat="server" CssClass="btn btn-warning" ValidationGroup="updateForm" Text="Kemaskini" CommandName="Update" ID="UpdateFormButton" CausesValidation="True">
+                                <i class="bi bi-check-lg me-1"></i> Kemaskini
+                            </asp:LinkButton>
+                            <asp:LinkButton runat="server" CssClass="btn btn-success text-white" Visible='<%# If(Eval("StatusID") = 0, True, False) %>' ValidationGroup="updateForm" Text="Hantar" ID="SubmitApproval" OnCommand="OnClickBtnSubmit" CausesValidation="False" OnClientClick="return confirm('Hantar ke jabatan agensi sekarang?');">
+                                <i class="bi bi-send me-1"></i> Hantar
+                            </asp:LinkButton>
+                            <asp:LinkButton runat="server" CssClass="btn btn-info text-white" Visible='<%# If(Eval("StatusID") = 10, True, False) %>' Text='<%# If(Eval("IsBatal") = False, "Surat Kelulusan", "Surat Pembatalan") %>' ID="ViewSuratKelulusanPembatalan" OnCommand="OnClickSuratKelulusanPembatalan" CausesValidation="False">
+                                <i class="bi bi-file-earmark-pdf me-1"></i> <%# If(Eval("IsBatal") = False, "Surat Kelulusan", "Surat Pembatalan") %>
+                            </asp:LinkButton>
+                            <asp:LinkButton runat="server" Text="Kembali" ID="BackButton" CausesValidation="False" CssClass="btn btn-outline-secondary" OnClick="BackButton_Click">
+                                <i class="bi bi-arrow-left me-1"></i> Kembali
+                            </asp:LinkButton>
                         </div>
                     </div>
                 </EditItemTemplate>
 
                 <InsertItemTemplate>
                     <div class="card card-primary">
-                        <div class="card-header">
-                            <h3 class="card-title">Kunci Masuk Permohonan</h3>
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h3 class="card-title mb-0 font-weight-bold text-white">
+                                <i class="bi bi-file-earmark-plus me-2"></i>Kunci Masuk Permohonan
+                            </h3>
                         </div>
                         <!-- /.card-header -->
-                        <div class="card-body">
+                        <div class="card-body p-4">
                             <asp:HiddenField ID="HF_JenisLesenDescList" Value='<%# Bind("JenisLesenDescList") %>' runat="server" />
                             <asp:HiddenField ID="HF_JenisLesenIdList" Value='<%# Bind("JenisLesenIdList") %>' runat="server" />
                             <asp:HiddenField ID="HF_SaizIklanList" Value='<%# Bind("SaizIklanList") %>' runat="server" />
@@ -1735,139 +1891,120 @@
                             <asp:HiddenField ID="HF_AnjingJantanMandulList" Value='<%# Bind("AnjingJantanMandulList") %>' runat="server" />
                             <asp:HiddenField ID="HF_AnjingBetinaMandulList" Value='<%# Bind("AnjingBetinaMandulList") %>' runat="server" />
 
-                            <div class="row">
+                            <!-- Section: Carian / Pemilihan Pemohon -->
+                            <div class="form-section-header">
+                                <i class="bi bi-person-badge"></i>
+                                <span>Maklumat Pemohon</span>
+                            </div>
 
-                                <div class="col-md-6">
-
-                                    <div class="form-group">
-                                        <label>Pemohon:</label>
-                                        <div class="row">
-                                            <div class="col">
+                            <div class="row mb-3">
+                                <div class="col-lg-8 col-md-10">
+                                    <div class="form-group mb-0">
+                                        <label class="form-label-custom">Pilih Pemohon <span class="text-danger">*</span></label>
+                                        <div class="d-flex flex-wrap align-items-center gap-2">
+                                            <div class="flex-grow-1" style="min-width: 280px;">
                                                 <asp:DropDownList ID="ddl_Pemohon" CssClass="form-control select2" runat="server" OnSelectedIndexChanged="ddl_Pemohon_SelectedIndexChanged"
-                                                    DataSourceID="SqlDataSourcePemohon" DataTextField="PemohonDesc" DataValueField="Pemohon_ID" AutoPostBack="true">
+                                                    DataSourceID="SqlDataSourcePemohon" DataTextField="PemohonDesc" DataValueField="Pemohon_ID" AutoPostBack="true" CausesValidation="false">
                                                 </asp:DropDownList>
                                                 <asp:SqlDataSource runat="server" ID="SqlDataSourcePemohon" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
                                                     SelectCommand="SELECT NULL AS Pemohon_ID, '-- Sila Pilih --' AS PemohonDesc UNION ALL SELECT Pemohon_ID,  Pemohon_ICNo + ' - ' + Pemohon_Name AS PemohonDesc FROM LESEN_Pemohon WHERE Pemohon_IsActive = 1"></asp:SqlDataSource>
                                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" CssClass="cssRequiredField"
-                                                    ControlToValidate="ddl_Pemohon" ErrorMessage="Sila Pilih" ForeColor="Red" ValidationGroup="insertForm" Display="Dynamic"></asp:RequiredFieldValidator>
+                                                    ControlToValidate="ddl_Pemohon" ErrorMessage="Sila Pilih Pemohon" ForeColor="Red" ValidationGroup="insertForm" Display="Dynamic"></asp:RequiredFieldValidator>
                                             </div>
-                                            <div class="col">
-                                                <asp:HyperLink runat="server" NavigateUrl="~/lesen/applicantregister.aspx?p_Id=3354&m_Id=3355" CssClass="btn btn-default">Daftar Pemohon</asp:HyperLink>
-
-                                            </div>
-
+                                            <asp:HyperLink runat="server" NavigateUrl="~/lesen/applicantregister.aspx?p_Id=3354&m_Id=3355" CssClass="btn btn-outline-primary d-inline-flex align-items-center">
+                                                <i class="bi bi-person-plus me-1"></i> Daftar Pemohon Baru
+                                            </asp:HyperLink>
                                         </div>
-
                                     </div>
-
                                 </div>
-
-
                             </div>
 
                             <asp:Panel runat="server" ID="pnlpemohon" Visible="false">
                                 <div class="row">
-
                                     <div class="col-md-3">
                                         <div class="form-group">
-                                            <label>Pemohon ID</label>
+                                            <label class="form-label-custom">Pemohon ID</label>
                                             <asp:TextBox ID="TB_PemohonID" runat="server" Enabled="false" Text='<%# Bind("Permohonan_PemohonID") %>' CssClass="form-control" />
                                         </div>
                                     </div>
 
-                                <!-- QR Code -->
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label>&nbsp;</label>
-
-                                            <asp:LinkButton
-                                                runat="server"
-                                                ID="LinkButton7"
-                                                CssClass="qr-box"
-                                                OnClick="btnQrCode_Click"
-                                                ToolTip="Print QR Code">
-
-                                                <div class="qr-icon">
-                                                    <i class="bi bi-qr-code"></i>
-                                                </div>
-
-                                                <div class="qr-text">
-                                                    <div class="qr-title">
-                                                        Kod QR Permohonan
-                                                    </div>
-
-                                                    <div class="qr-description">
-                                                        Imbas untuk melihat<br />
-                                                        butiran permohonan
-                                                    </div>
-                                                </div>
-
-                                            </asp:LinkButton>
-                                        </div>
-                                    </div>
-
-                                </div>
-
-                                <div class="row">
-
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label>Nama Pemohon</label>
+                                            <label class="form-label-custom">Nama Pemohon</label>
                                             <asp:TextBox ID="TB_Name" runat="server" Enabled="false" Text="NULL" CssClass="form-control" />
                                         </div>
                                     </div>
 
                                     <div class="col-md-3">
                                         <div class="form-group">
-                                            <label>Warganegara</label>
+                                            <label class="form-label-custom">Warganegara</label>
                                             <asp:TextBox ID="TB_Nat" runat="server" Enabled="false" Text="NULL" CssClass="form-control" />
                                         </div>
                                     </div>
-
                                 </div>
 
                                 <div class="row">
-
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label>Alamat</label>
+                                            <label class="form-label-custom">Alamat</label>
                                             <asp:TextBox ID="TB_Address" Enabled="false" runat="server"
                                                 Text="NULL" CssClass="form-control" TextMode="MultiLine" Rows="3" />
                                         </div>
                                     </div>
 
-                                    <div class="col-md-3">
+                                    <div class="col-md-6">
                                         <div class="form-group">
-                                            <label>Catatan</label>
+                                            <label class="form-label-custom">Catatan</label>
                                             <asp:TextBox ID="TB_Remarks" Enabled="false" runat="server"
                                                 Text="NULL" CssClass="form-control" TextMode="MultiLine" Rows="3" />
                                         </div>
                                     </div>
+                                </div>
 
+                                <div class="row mb-3">
+                                    <div class="col-md-6 col-lg-5">
+                                        <asp:LinkButton
+                                            runat="server"
+                                            ID="LinkButton7"
+                                            CssClass="qr-box mt-1"
+                                            OnClick="btnQrCode_Click"
+                                            ToolTip="Print QR Code"
+                                            CausesValidation="false">
+                                            <div class="qr-icon">
+                                                <i class="bi bi-qr-code"></i>
+                                            </div>
+                                            <div class="qr-text">
+                                                <div class="qr-title">Kod QR Permohonan</div>
+                                                <div class="qr-description">Imbas untuk melihat butiran permohonan</div>
+                                            </div>
+                                        </asp:LinkButton>
+                                    </div>
                                 </div>
                             </asp:Panel>
 
-                            <hr style="border: 1px solid gray;" />
+                            <!-- Section: Butiran Permohonan -->
+                            <div class="form-section-header">
+                                <i class="bi bi-card-checklist"></i>
+                                <span>Maklumat Permohonan</span>
+                            </div>
 
                             <div class="row">
-
                                 <div class="col-md-3">
                                     <div class="form-group">
-                                        <label>Tarikh Mohon</label>
+                                        <label class="form-label-custom">Tarikh Mohon <span class="text-danger">*</span></label>
                                         <asp:TextBox ID="TB_TarikhMohon" runat="server"
                                             Text='<%# Bind("TarikhMohon", "{0:yyyy-MM-dd}") %>' TextMode="Date" CssClass="form-control" />
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator5" runat="server" CssClass="cssRequiredField"
-                                            ControlToValidate="TB_TarikhMohon" ErrorMessage="Sila Pilih" ForeColor="Red" ValidationGroup="insertForm" Display="Dynamic"></asp:RequiredFieldValidator>
-
+                                            ControlToValidate="TB_TarikhMohon" ErrorMessage="Sila Pilih Tarikh" ForeColor="Red" ValidationGroup="insertForm" Display="Dynamic"></asp:RequiredFieldValidator>
                                     </div>
                                 </div>
 
-                                <div class="col-md-8">
+                                <div class="col-md-9">
                                     <div class="form-group">
-                                        <label>Jenis Lesen/Permit</label>
+                                        <label class="form-label-custom">Jenis Lesen / Permit <span class="text-danger">*</span></label>
                                         <asp:DropDownList ID="ddlItems" runat="server" DataSourceID="SqlDataSource1" CssClass="form-control select2"
                                             DataTextField="JenisLesen_Description" DataValueField="JenisLesen_ID" AutoPostBack="true"
-                                            OnSelectedIndexChanged="ddlItems_SelectedIndexChanged" AppendDataBoundItems="true">
+                                            OnSelectedIndexChanged="ddlItems_SelectedIndexChanged" AppendDataBoundItems="true" CausesValidation="false">
                                         </asp:DropDownList>
                                         <asp:SqlDataSource runat="server" ID="SqlDataSource1" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
                                         SelectCommand="select * from 
@@ -1879,116 +2016,112 @@
                                         </asp:SqlDataSource>
                                     </div>
 
-                                    <div class="tag-container" style="display: flex; gap: 10px; flex-wrap: wrap;">
+                                    <div class="tag-container d-flex flex-wrap gap-2 mt-2">
                                         <asp:Repeater ID="rptSelectedItems" runat="server" OnItemCommand="rptSelectedItems_ItemCommand">
                                             <ItemTemplate>
-                                                <div style="background: #e1e1e1; padding: 5px 10px; border-radius: 15px; display: flex; align-items: center; border: 1px solid #ccc;">
-                                                    <span style="margin-right: 8px;"><%# Eval("ItemText") %></span>
+                                                <div class="tag-pill">
+                                                    <span><%# Eval("ItemText") %></span>
                                                     <asp:LinkButton ID="btnRemove" runat="server" 
                                                         CommandName="Remove" 
                                                         CommandArgument='<%# Eval("ItemValue") %>' 
-                                                        Style="color: red; text-decoration: none; font-weight: bold;">&times;</asp:LinkButton>
+                                                        CssClass="btn-remove-tag"
+                                                        ToolTip="Buang jenis lesen"
+                                                        CausesValidation="false">&times;</asp:LinkButton>
                                                 </div>
                                             </ItemTemplate>
                                         </asp:Repeater>
                                     </div>
-
                                 </div>
-
                             </div>
-
-                            <br />
 
                             <%--# Perniagaan Berisiko dan tidak berisiko #--%>
                             <asp:Panel ID="pnlesen1" runat="server" Visible="False">
-
-                                <div class="row">
-
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label>Nama Syarikat/Sediada</label>
-                                            <asp:TextBox ID="TB_NamaSyarikat" runat="server"
-                                                Text='<%# Bind("NamaSyarikat") %>' CssClass="form-control" />
-                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator8" runat="server" CssClass="cssRequiredField"
-                                                ControlToValidate="TB_NamaSyarikat" ErrorMessage="Sila Isi" ForeColor="Red" ValidationGroup="insertForm" Display="Dynamic"></asp:RequiredFieldValidator>
-
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label>No Pendaftaran</label>
-                                            <asp:TextBox ID="TB_NoPendaftaran" runat="server"
-                                                Text='<%# Bind("NoPendaftaran") %>' CssClass="form-control" />
-                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator9" runat="server" CssClass="cssRequiredField"
-                                                ControlToValidate="TB_NoPendaftaran" ErrorMessage="Sila Isi" ForeColor="Red" ValidationGroup="insertForm" Display="Dynamic"></asp:RequiredFieldValidator>
-
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label>No Akaun Lesen</label>
-                                            <asp:TextBox ID="TB_NoAkaun" runat="server"
-                                                Text='<%# Bind("NoAkaun") %>' CssClass="form-control" />
-
-                                        </div>
-                                    </div>
-
+                                <div class="form-section-header">
+                                    <i class="bi bi-shop"></i>
+                                    <span>Maklumat Premis & Perniagaan</span>
                                 </div>
 
                                 <div class="row">
-
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label>Alamat Premis/Sediada</label>
+                                            <label class="form-label-custom">Nama Syarikat / Sediada <span class="text-danger">*</span></label>
+                                            <asp:TextBox ID="TB_NamaSyarikat" runat="server"
+                                                Text='<%# Bind("NamaSyarikat") %>' CssClass="form-control" />
+                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator8" runat="server" CssClass="cssRequiredField"
+                                                ControlToValidate="TB_NamaSyarikat" ErrorMessage="Sila Isi Nama Syarikat" ForeColor="Red" ValidationGroup="insertForm" Display="Dynamic"></asp:RequiredFieldValidator>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label class="form-label-custom">No. Pendaftaran <span class="text-danger">*</span></label>
+                                            <asp:TextBox ID="TB_NoPendaftaran" runat="server"
+                                                Text='<%# Bind("NoPendaftaran") %>' CssClass="form-control" />
+                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator9" runat="server" CssClass="cssRequiredField"
+                                                ControlToValidate="TB_NoPendaftaran" ErrorMessage="Sila Isi No. Pendaftaran" ForeColor="Red" ValidationGroup="insertForm" Display="Dynamic"></asp:RequiredFieldValidator>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label class="form-label-custom">No. Akaun Lesen</label>
+                                            <asp:TextBox ID="TB_NoAkaun" runat="server"
+                                                Text='<%# Bind("NoAkaun") %>' CssClass="form-control" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="form-label-custom">Alamat Premis / Sediada <span class="text-danger">*</span></label>
                                             <asp:TextBox ID="TB_AlamatPremis" runat="server"
                                                 Text='<%# Bind("AlamatPremis") %>' TextMode="MultiLine" Rows="3" CssClass="form-control" />
                                             <asp:RequiredFieldValidator ID="RequiredFieldValidator10" runat="server" CssClass="cssRequiredField"
-                                                ControlToValidate="TB_AlamatPremis" ErrorMessage="Sila Isi" ForeColor="Red" ValidationGroup="insertForm" Display="Dynamic"></asp:RequiredFieldValidator>
-
+                                                ControlToValidate="TB_AlamatPremis" ErrorMessage="Sila Isi Alamat Premis" ForeColor="Red" ValidationGroup="insertForm" Display="Dynamic"></asp:RequiredFieldValidator>
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label>Jenis Perniagaan/Sediada</label>
+                                            <label class="form-label-custom">Jenis Perniagaan / Sediada <span class="text-danger">*</span></label>
                                             <asp:TextBox ID="TB_JenisPerniagaan" runat="server"
                                                 Text='<%# Bind("JenisPerniagaan") %>' CssClass="form-control" />
                                             <asp:RequiredFieldValidator ID="RequiredFieldValidator11" runat="server" CssClass="cssRequiredField"
-                                                ControlToValidate="TB_JenisPerniagaan" ErrorMessage="Sila Isi" ForeColor="Red" ValidationGroup="insertForm" Display="Dynamic"></asp:RequiredFieldValidator>
-
+                                                ControlToValidate="TB_JenisPerniagaan" ErrorMessage="Sila Isi Jenis Perniagaan" ForeColor="Red" ValidationGroup="insertForm" Display="Dynamic"></asp:RequiredFieldValidator>
                                         </div>
                                     </div>
-
                                 </div>
 
                                 <%--# Tukar Pemilik #--%>
                                 <asp:Panel ID="pnlesen1b" runat="server" Visible="False">
-
+                                    <div class="form-section-header">
+                                        <i class="bi bi-person-gear"></i>
+                                        <span>Maklumat Pertukaran Pemilik</span>
+                                    </div>
                                     <div class="row">
-
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label>Nama Pemilik Baru</label>
+                                                <label class="form-label-custom">Nama Pemilik Baru <span class="text-danger">*</span></label>
                                                 <asp:TextBox ID="TB_PemilikBaru" runat="server"
                                                     Text='<%# Bind("PemilikBaru") %>' CssClass="form-control" />
                                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator12" runat="server" CssClass="cssRequiredField"
-                                                    ControlToValidate="TB_PemilikBaru" ErrorMessage="Sila Isi" ForeColor="Red" ValidationGroup="insertForm" Display="Dynamic"></asp:RequiredFieldValidator>
-
+                                                    ControlToValidate="TB_PemilikBaru" ErrorMessage="Sila Isi Nama Pemilik Baru" ForeColor="Red" ValidationGroup="insertForm" Display="Dynamic"></asp:RequiredFieldValidator>
                                             </div>
                                         </div>
-
                                     </div>
                                 </asp:Panel>
 
                                 <%--# Batal #--%>
                                 <asp:Panel ID="pnlbatal" runat="server" Visible="False">
+                                    <div class="form-section-header danger-section">
+                                        <i class="bi bi-calendar-x"></i>
+                                        <span>Tarikh Pembatalan</span>
+                                    </div>
                                     <div class="row">
-
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <label>Tarikh Batal</label>
+                                                <label class="form-label-custom">Tarikh Batal</label>
                                                 <asp:TextBox ID="TB_TarikhBatal" runat="server"
                                                     Text='<%# Bind("TarikhBatal", "{0:yyyy-MM-dd}") %>' TextMode="Date" CssClass="form-control" />
                                             </div>
@@ -1998,70 +2131,73 @@
 
                                 <%--# Tukar Alamat #--%>
                                 <asp:Panel ID="pnlesen1c" runat="server" Visible="False">
-
+                                    <div class="form-section-header">
+                                        <i class="bi bi-geo-alt"></i>
+                                        <span>Maklumat Pertukaran Alamat</span>
+                                    </div>
                                     <div class="row">
-
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <asp:Label ID="Lbl_AlamatBaru" runat="server" Text="Alamat Baru" style="font-weight:600;"/>
+                                                <asp:Label ID="Lbl_AlamatBaru" runat="server" Text="Alamat Baru" CssClass="form-label-custom" />
                                                 <asp:TextBox ID="TB_AlamatBaru" runat="server"
                                                     Text='<%# Bind("AlamatBaru") %>' TextMode="MultiLine" Rows="3" CssClass="form-control" />
                                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator13" runat="server" CssClass="cssRequiredField"
-                                                    ControlToValidate="TB_AlamatBaru" ErrorMessage="Sila Isi" ForeColor="Red" ValidationGroup="insertForm" Display="Dynamic"></asp:RequiredFieldValidator>
-
+                                                    ControlToValidate="TB_AlamatBaru" ErrorMessage="Sila Isi Alamat Baru" ForeColor="Red" ValidationGroup="insertForm" Display="Dynamic"></asp:RequiredFieldValidator>
                                             </div>
                                         </div>
-
                                     </div>
                                 </asp:Panel>
 
                                 <%--# Tambah Jenis Perniagaan #--%>
                                 <asp:Panel ID="pnlesen1d" runat="server" Visible="False">
-
+                                    <div class="form-section-header">
+                                        <i class="bi bi-plus-square"></i>
+                                        <span>Tambah Jenis Perniagaan</span>
+                                    </div>
                                     <div class="row">
-
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <asp:Label ID="Lbl_JenisPerniagaanBaru" runat="server" Text="Jenis Perniagaan Tambahan" style="font-weight:600;" />
+                                                <asp:Label ID="Lbl_JenisPerniagaanBaru" runat="server" Text="Jenis Perniagaan Tambahan" CssClass="form-label-custom" />
                                                 <asp:TextBox ID="TB_JenisPerniagaanBaru" runat="server"
                                                     Text='<%# Bind("JenisPerniagaanBaru") %>' CssClass="form-control" />
                                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator14" runat="server" CssClass="cssRequiredField"
-                                                    ControlToValidate="TB_JenisPerniagaanBaru" ErrorMessage="Sila Isi" ForeColor="Red" ValidationGroup="insertForm" Display="Dynamic"></asp:RequiredFieldValidator>
-
+                                                    ControlToValidate="TB_JenisPerniagaanBaru" ErrorMessage="Sila Isi Jenis Perniagaan Tambahan" ForeColor="Red" ValidationGroup="insertForm" Display="Dynamic"></asp:RequiredFieldValidator>
                                             </div>
                                         </div>
-
                                     </div>
                                 </asp:Panel>
 
                                 <%--# Tukar Nama Syarikat #--%>
                                 <asp:Panel ID="pnlesen1e" runat="server" Visible="False">
-
+                                    <div class="form-section-header">
+                                        <i class="bi bi-pencil"></i>
+                                        <span>Tukar Nama Syarikat</span>
+                                    </div>
                                     <div class="row">
-
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label>Nama Baru Syarikat</label>
+                                                <label class="form-label-custom">Nama Baru Syarikat <span class="text-danger">*</span></label>
                                                 <asp:TextBox ID="TB_NamaBaruSyarikat" runat="server"
                                                     Text='<%# Bind("NamaBaruSyarikat") %>' CssClass="form-control" />
                                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator15" runat="server" CssClass="cssRequiredField"
-                                                    ControlToValidate="TB_NamaBaruSyarikat" ErrorMessage="Sila Isi" ForeColor="Red" ValidationGroup="insertForm" Display="Dynamic"></asp:RequiredFieldValidator>
-
+                                                    ControlToValidate="TB_NamaBaruSyarikat" ErrorMessage="Sila Isi Nama Baru Syarikat" ForeColor="Red" ValidationGroup="insertForm" Display="Dynamic"></asp:RequiredFieldValidator>
                                             </div>
                                         </div>
-
                                     </div>
                                 </asp:Panel>
-
                             </asp:Panel>
 
                             <%--# Banting #--%>
                             <asp:Panel ID="pnlesen6" runat="server" Visible="False">
+                                <div class="form-section-header">
+                                    <i class="bi bi-flag"></i>
+                                    <span>Maklumat Banting / Sepanduk</span>
+                                </div>
 
                                 <div class="row">
                                     <div class="col-md-3">
                                         <div class="form-group">
-                                            <label>Kategori</label>
+                                            <label class="form-label-custom">Kategori <span class="text-danger">*</span></label>
                                             <asp:DropDownList ID="DDL_JenisBanting" Text='<%# Bind("JenisBanting") %>' runat="server" 
                                                 CssClass="form-control select2">
                                                 <asp:ListItem Value="">-- Sila Pilih --</asp:ListItem>
@@ -2070,53 +2206,47 @@
                                                 <asp:ListItem Value="Sepanduk Besar">Sepanduk Besar</asp:ListItem>
                                             </asp:DropDownList>
                                             <asp:RequiredFieldValidator ID="RequiredFieldValidator42" runat="server" CssClass="cssRequiredField"
-                                                ControlToValidate="DDL_JenisBanting" ErrorMessage="Sila Pilih" ForeColor="Red" ValidationGroup="insertForm" Display="Dynamic"></asp:RequiredFieldValidator>
+                                                ControlToValidate="DDL_JenisBanting" ErrorMessage="Sila Pilih Kategori" ForeColor="Red" ValidationGroup="insertForm" Display="Dynamic"></asp:RequiredFieldValidator>
                                         </div>
                                     </div>
 
-                                    <div class="col-md-6">
+                                    <div class="col-md-5">
                                         <div class="form-group">
-                                            <label>Nama Syarikat Kontraktor Pemasang Iklan</label>
+                                            <label class="form-label-custom">Nama Syarikat Kontraktor Pemasang Iklan</label>
                                             <asp:TextBox ID="TB_KontraktorIklan" runat="server"
                                                 Text='<%# Bind("KontraktorIklan") %>' CssClass="form-control" />
-
                                         </div>
                                     </div>
 
-                                    <div class="col-md-3">
+                                    <div class="col-md-4">
                                         <div class="form-group">
-                                            <label>No Telefon Syarikat Kontraktor</label>
+                                            <label class="form-label-custom">No. Telefon Syarikat Kontraktor</label>
                                             <asp:TextBox ID="TB_NoTelKontraktor" runat="server"
                                                 Text='<%# Bind("NoTelKontraktor") %>' CssClass="form-control" />
-
                                         </div>
                                     </div>
-
                                 </div>
 
                                 <div class="row">
-
-                                    <div class="col-md-6">
+                                    <div class="col-md-3">
                                         <div class="form-group">
-                                            <label>Ukuran (Kaki)</label>
+                                            <label class="form-label-custom">Ukuran (Kaki)</label>
                                             <asp:TextBox ID="TB_UkuranBanting" runat="server"
                                                 Text='<%# Bind("UkuranBanting") %>' placeholder="Contoh: 5x10" CssClass="form-control" />
-
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label>Bilangan Banting/Sepanduk</label>
-                                            <asp:TextBox ID="TB_BilBanting" runat="server"
-                                                Text='<%# Bind("BilBanting") %>' CssClass="form-control" />
-
                                         </div>
                                     </div>
 
                                     <div class="col-md-3">
                                         <div class="form-group">
-                                            <label>Tarikh Mula Pemasangan</label>
+                                            <label class="form-label-custom">Bilangan Banting / Sepanduk</label>
+                                            <asp:TextBox ID="TB_BilBanting" runat="server"
+                                                Text='<%# Bind("BilBanting") %>' CssClass="form-control" />
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label class="form-label-custom">Tarikh Mula Pemasangan</label>
                                             <asp:TextBox ID="TB_TarikhBanting1" runat="server"
                                                 Text='<%# Bind("TarikhBanting1", "{0:yyyy-MM-dd}") %>' TextMode="Date" CssClass="form-control" />
                                         </div>
@@ -2124,26 +2254,26 @@
 
                                     <div class="col-md-3">
                                         <div class="form-group">
-                                            <label>Tarikh Akhir Pemasangan</label>
+                                            <label class="form-label-custom">Tarikh Akhir Pemasangan</label>
                                             <asp:TextBox ID="TB_TarikhBanting2" runat="server"
                                                 Text='<%# Bind("TarikhBanting2", "{0:yyyy-MM-dd}") %>' TextMode="Date" CssClass="form-control" />
                                         </div>
                                     </div>
-
                                 </div>
 
-                                 <div class="row">
-                                     <div class="col-md-12">
-                                         <div class="alert alert-info py-2 px-3 mb-3 small">
-                                             <i class="fa fa-info-circle mr-1"></i> <strong>Peringatan:</strong> Penambahan senarai lokasi dan muat naik gambar banting hanya boleh dilakukan selepas maklumat permohonan disimpan.
-                                         </div>
-                                     </div>
-                                 </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="alert alert-info d-flex align-items-center py-2 px-3 mb-3 small">
+                                            <i class="bi bi-info-circle-fill me-2 fs-6"></i>
+                                            <div><strong>Peringatan:</strong> Penambahan senarai lokasi dan muat naik gambar banting hanya boleh dilakukan selepas maklumat permohonan disimpan.</div>
+                                        </div>
+                                    </div>
+                                </div>
 
                                 <div class="row">
                                     <div class="col-md-3">
                                         <div class="form-group">
-                                            <label>Status Kelulusan DBP</label>
+                                            <label class="form-label-custom">Status Kelulusan DBP <span class="text-danger">*</span></label>
                                             <asp:DropDownList ID="DDL_StatusDBP" Text='<%# Bind("StatusBanting") %>' runat="server" 
                                                 CssClass="form-control select2">
                                                 <asp:ListItem Value="">-- Sila Pilih --</asp:ListItem>
@@ -2151,84 +2281,73 @@
                                                 <asp:ListItem Value="2">Tidak Diluluskan</asp:ListItem>
                                             </asp:DropDownList>
                                             <asp:RequiredFieldValidator ID="RequiredFieldValidator7" runat="server" CssClass="cssRequiredField"
-                                                ControlToValidate="DDL_StatusDBP" ErrorMessage="Sila Pilih" ForeColor="Red" ValidationGroup="insertForm" Display="Dynamic"></asp:RequiredFieldValidator>
-
+                                                ControlToValidate="DDL_StatusDBP" ErrorMessage="Sila Pilih Status DBP" ForeColor="Red" ValidationGroup="insertForm" Display="Dynamic"></asp:RequiredFieldValidator>
                                         </div>
                                     </div>
 
                                     <div class="col-md-3">
                                         <div class="form-group">
-                                            <label>No Pengesahan</label>
+                                            <label class="form-label-custom">No. Pengesahan DBP <span class="text-danger">*</span></label>
                                             <asp:TextBox ID="TB_NoPengesahan" runat="server"
                                                 Text='<%# Bind("NoPengesahanBanting") %>' CssClass="form-control" />
                                             <asp:RequiredFieldValidator ID="RequiredFieldValidator26" runat="server" CssClass="cssRequiredField"
-                                                ControlToValidate="TB_NoPengesahan" ErrorMessage="Sila Isi" ForeColor="Red" ValidationGroup="insertForm" Display="Dynamic"></asp:RequiredFieldValidator>
-
+                                                ControlToValidate="TB_NoPengesahan" ErrorMessage="Sila Isi No. Pengesahan" ForeColor="Red" ValidationGroup="insertForm" Display="Dynamic"></asp:RequiredFieldValidator>
                                         </div>
                                     </div>
 
                                     <div class="col-md-3">
                                         <div class="form-group">
-                                            <label>Tarikh Mula Pengesahan</label>
+                                            <label class="form-label-custom">Tarikh Mula Pengesahan <span class="text-danger">*</span></label>
                                             <asp:TextBox ID="TB_TarikhPengesahanBanting1" runat="server"
                                                 Text='<%# Bind("TarikhPengesahanBanting1", "{0:yyyy-MM-dd}") %>' TextMode="Date" CssClass="form-control" />
                                             <asp:RequiredFieldValidator ID="RequiredFieldValidator30" runat="server" CssClass="cssRequiredField"
-                                                ControlToValidate="TB_TarikhPengesahanBanting1" ErrorMessage="Sila Pilih" ForeColor="Red" ValidationGroup="insertForm" Display="Dynamic"></asp:RequiredFieldValidator>
-
+                                                ControlToValidate="TB_TarikhPengesahanBanting1" ErrorMessage="Sila Pilih Tarikh Mula" ForeColor="Red" ValidationGroup="insertForm" Display="Dynamic"></asp:RequiredFieldValidator>
                                         </div>
                                     </div>
 
                                     <div class="col-md-3">
                                         <div class="form-group">
-                                            <label>Tarikh Akhir Pengesahan</label>
+                                            <label class="form-label-custom">Tarikh Akhir Pengesahan <span class="text-danger">*</span></label>
                                             <asp:TextBox ID="TB_TarikhPengesahanBanting2" runat="server"
                                                 Text='<%# Bind("TarikhPengesahanBanting2", "{0:yyyy-MM-dd}") %>' TextMode="Date" CssClass="form-control" />
                                             <asp:RequiredFieldValidator ID="RequiredFieldValidator31" runat="server" CssClass="cssRequiredField"
-                                                ControlToValidate="TB_TarikhPengesahanBanting2" ErrorMessage="Sila Pilih" ForeColor="Red" ValidationGroup="insertForm" Display="Dynamic"></asp:RequiredFieldValidator>
-
+                                                ControlToValidate="TB_TarikhPengesahanBanting2" ErrorMessage="Sila Pilih Tarikh Akhir" ForeColor="Red" ValidationGroup="insertForm" Display="Dynamic"></asp:RequiredFieldValidator>
                                         </div>
                                     </div>
-
                                 </div>
 
                                 <div class="row">
                                     <div class="col-md-3">
                                         <div class="form-group">
-                                            <label>No Resit</label>
+                                            <label class="form-label-custom">No. Resit <span class="text-danger">*</span></label>
                                             <asp:TextBox ID="TB_NoResit1" runat="server"
                                                 Text='<%# Bind("NoResitBanting") %>' CssClass="form-control" />
                                             <asp:RequiredFieldValidator ID="RequiredFieldValidator39" runat="server" CssClass="cssRequiredField"
-                                                ControlToValidate="TB_NoResit1" ErrorMessage="Sila Isi" ForeColor="Red" ValidationGroup="insertForm" Display="Dynamic"></asp:RequiredFieldValidator>
-
+                                                ControlToValidate="TB_NoResit1" ErrorMessage="Sila Isi No. Resit" ForeColor="Red" ValidationGroup="insertForm" Display="Dynamic"></asp:RequiredFieldValidator>
                                         </div>
                                     </div>
 
                                     <div class="col-md-3">
                                         <div class="form-group">
-                                            <label>No Siri Stiker</label>
+                                            <label class="form-label-custom">No. Siri Stiker <span class="text-danger">*</span></label>
                                             <asp:TextBox ID="TB_NoSiriStiker" runat="server"
                                                 Text='<%# Bind("NoSiriStiker") %>' CssClass="form-control" />
                                             <asp:RequiredFieldValidator ID="RequiredFieldValidator40" runat="server" CssClass="cssRequiredField"
-                                                ControlToValidate="TB_NoSiriStiker" ErrorMessage="Sila Isi" ForeColor="Red" ValidationGroup="insertForm" Display="Dynamic"></asp:RequiredFieldValidator>
-
+                                                ControlToValidate="TB_NoSiriStiker" ErrorMessage="Sila Isi No. Siri Stiker" ForeColor="Red" ValidationGroup="insertForm" Display="Dynamic"></asp:RequiredFieldValidator>
                                         </div>
                                     </div>
 
                                     <div class="col-md-3">
                                         <div class="form-group">
-                                            <label>Tarikh</label>
+                                            <label class="form-label-custom">Tarikh Resit</label>
                                             <asp:TextBox ID="TB_TarikhBanting3" runat="server"
                                                 Text='<%# Bind("TarikhBanting3", "{0:yyyy-MM-dd}") %>' TextMode="Date" CssClass="form-control" />
-
                                         </div>
                                     </div>
 
-                                </div>
-
-                                <div class="row">
                                     <div class="col-md-3">
                                         <div class="form-group">
-                                            <label>Bilangan Pembaharuan</label>
+                                            <label class="form-label-custom">Bilangan Pembaharuan <span class="text-danger">*</span></label>
                                             <asp:DropDownList ID="DDL_RenewBanting" Text='<%# Bind("RenewBanting") %>' runat="server" 
                                                 CssClass="form-control select2">
                                                 <asp:ListItem Value="">-- Sila Pilih --</asp:ListItem>
@@ -2237,137 +2356,134 @@
                                                 <asp:ListItem Value="3">Kali Ketiga</asp:ListItem>
                                             </asp:DropDownList>
                                             <asp:RequiredFieldValidator ID="RequiredFieldValidator41" runat="server" CssClass="cssRequiredField"
-                                                ControlToValidate="DDL_RenewBanting" ErrorMessage="Sila Pilih" ForeColor="Red" ValidationGroup="insertForm" Display="Dynamic"></asp:RequiredFieldValidator>
+                                                ControlToValidate="DDL_RenewBanting" ErrorMessage="Sila Pilih Pembaharuan" ForeColor="Red" ValidationGroup="insertForm" Display="Dynamic"></asp:RequiredFieldValidator>
                                         </div>
                                     </div>
                                 </div>
-
                             </asp:Panel>
 
                             <%--# Papan iklan, Billboard #--%>
                             <asp:Panel ID="pnlesen1a" runat="server" Visible="False">
-
-                                <div class="row">
-
-                                    <div class="col-md-2">
-                                        <div class="form-group">
-                                            <label>Saiz Iklan (cm)</label>
-                                            <asp:TextBox ID="TB_SaizIklan1" placeholder="Contoh:10x5" runat="server" CssClass="form-control" />
-                                        </div>
-                                    </div>
-                                     <div class="col-md-2">
-                                         <div class="form-group">
-                                             <label>Iklan Bercahaya</label>
-                                             <asp:DropDownList ID="DDL_Iklan1" runat="server"
-                                                 CssClass="form-control select2">
-                                                 <asp:ListItem Value="">-- Sila Pilih --</asp:ListItem>
-                                                 <asp:ListItem Value="Bercahaya">Ya</asp:ListItem>
-                                                 <asp:ListItem Value="Tidak Bercahaya">Tidak</asp:ListItem>
-                                             </asp:DropDownList>
-                                         </div>
-                                     </div>
-                                    <div class="col-md-2">
-                                        <div class="form-group">
-                                            <label>Bil. Unit</label>
-                                            <div class="row">
-                                                <div class="col">
-                                                    <asp:TextBox ID="TB_UnitIklan1" runat="server" CssClass="form-control" />
-                                                </div>
-                                                <div class="col">
-                                                    <asp:LinkButton ID="btnAddIklan" runat="server" CssClass="btn btn-primary" Text="Tambah" OnClick="btnAddIklan_Click" />
-                                    
-                                                </div>
-                                            </div>
-                                            
-                                        </div>
-                                    </div>
-
+                                <div class="form-section-header">
+                                    <i class="bi bi-badge-ad"></i>
+                                    <span>Maklumat Papan Iklan</span>
                                 </div>
 
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <asp:GridView ID="gvIklanList" runat="server" HeaderStyle-ForeColor="Black" CssClass="table table-bordered" AutoGenerateColumns="False" 
+                                <div class="row align-items-end">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label class="form-label-custom">Saiz Iklan (cm)</label>
+                                            <asp:TextBox ID="TB_SaizIklan1" placeholder="Contoh: 10x5" runat="server" CssClass="form-control" />
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label class="form-label-custom">Iklan Bercahaya</label>
+                                            <asp:DropDownList ID="DDL_Iklan1" runat="server" CssClass="form-control select2">
+                                                <asp:ListItem Value="">-- Sila Pilih --</asp:ListItem>
+                                                <asp:ListItem Value="Bercahaya">Ya</asp:ListItem>
+                                                <asp:ListItem Value="Tidak Bercahaya">Tidak</asp:ListItem>
+                                            </asp:DropDownList>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label class="form-label-custom">Bil. Unit</label>
+                                            <div class="d-flex gap-2">
+                                                <asp:TextBox ID="TB_UnitIklan1" runat="server" CssClass="form-control" />
+                                                <asp:LinkButton ID="btnAddIklan" runat="server" CssClass="btn btn-primary d-inline-flex align-items-center text-nowrap" Text="Tambah" OnClick="btnAddIklan_Click" CausesValidation="false">
+                                                    <i class="bi bi-plus-lg me-1"></i> Tambah
+                                                </asp:LinkButton>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row mt-2">
+                                    <div class="col-md-12 col-lg-8">
+                                        <asp:GridView ID="gvIklanList" runat="server" HeaderStyle-ForeColor="Black" CssClass="table table-bordered table-hover align-middle shadow-none" AutoGenerateColumns="False" 
                                             ShowHeaderWhenEmpty="true" EmptyDataText="Senarai kosong." OnRowDeleting="gvIklanList_RowDeleting">
                                             <Columns>
                                                 <asp:BoundField DataField="SaizIklan" HeaderText="Saiz Iklan (cm)" />
-                                                <asp:BoundField DataField="Bercahaya" HeaderText="Bercahaya/Tidak Bercahaya" />
+                                                <asp:BoundField DataField="Bercahaya" HeaderText="Bercahaya / Tidak" />
                                                 <asp:BoundField DataField="Unit" HeaderText="Bil. Unit" />
-                                                <asp:TemplateField>
+                                                <asp:TemplateField ItemStyle-Width="60px" ItemStyle-CssClass="text-center">
                                                     <ItemTemplate>
                                                         <asp:LinkButton ID="btnRemove" runat="server"  
-                                                            CommandName="Delete" CssClass="btn btn-danger btn-sm">&times;</asp:LinkButton>
+                                                            CommandName="Delete" CssClass="btn btn-outline-danger btn-sm" ToolTip="Padam" CausesValidation="false">
+                                                            <i class="bi bi-trash"></i>
+                                                        </asp:LinkButton>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
                                             </Columns>
                                         </asp:GridView>
                                     </div>
                                 </div>
-
                             </asp:Panel>
 
                             <%--#  Billboard #--%>
                             <asp:Panel ID="pnlbillboard" runat="server" Visible="False">
+                                <div class="form-section-header">
+                                    <i class="bi bi-display"></i>
+                                    <span>Maklumat Billboard</span>
+                                </div>
 
                                 <div class="row">
-
-                                    <div class="col-md-6">
+                                    <div class="col-md-8">
                                         <div class="form-group">
-                                            <label>Lokasi Billboard</label>
+                                            <label class="form-label-custom">Lokasi Billboard <span class="text-danger">*</span></label>
                                             <asp:TextBox ID="TB_BillboardLokasi" runat="server"
                                                 Text='<%# Bind("BillboardLokasi") %>' TextMode="MultiLine" Rows="3" CssClass="form-control" />
                                             <asp:RequiredFieldValidator ID="RequiredFieldValidator20" runat="server" CssClass="cssRequiredField"
-                                                ControlToValidate="TB_BillboardLokasi" ErrorMessage="Sila Isi" ForeColor="Red" ValidationGroup="insertForm" Display="Dynamic"></asp:RequiredFieldValidator>
-
+                                                ControlToValidate="TB_BillboardLokasi" ErrorMessage="Sila Isi Lokasi Billboard" ForeColor="Red" ValidationGroup="insertForm" Display="Dynamic"></asp:RequiredFieldValidator>
                                         </div>
                                     </div>
-
                                 </div>
-
                             </asp:Panel>
 
                             <%--# Pasar Lambak #--%>
                             <asp:Panel ID="pnlesen2" runat="server" Visible="False">
-
-                                <div class="row">
-
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label>Lokasi Pasar #1</label>
-                                            <asp:TextBox ID="TB_LokasiPasar1" runat="server"
-                                                Text='<%# Bind("LokasiPasar1") %>' TextMode="MultiLine" Rows="3" CssClass="form-control" />
-                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator16" runat="server" CssClass="cssRequiredField"
-                                                ControlToValidate="TB_LokasiPasar1" ErrorMessage="Sila Isi" ForeColor="Red" ValidationGroup="insertForm" Display="Dynamic"></asp:RequiredFieldValidator>
-
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label>Lokasi Pasar #2</label>
-                                            <asp:TextBox ID="TB_LokasiPasar2" runat="server"
-                                                Text='<%# Bind("LokasiPasar2") %>' TextMode="MultiLine" Rows="3" CssClass="form-control" />
-
-                                        </div>
-                                    </div>
-
+                                <div class="form-section-header">
+                                    <i class="bi bi-basket"></i>
+                                    <span>Maklumat Pasar Lambak / Pagi / Malam</span>
                                 </div>
 
                                 <div class="row">
-
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label>Lokasi Pasar #3</label>
-                                            <asp:TextBox ID="TB_LokasiPasar3" runat="server"
-                                                Text='<%# Bind("LokasiPasar3") %>' TextMode="MultiLine" Rows="3" CssClass="form-control" />
-
+                                            <label class="form-label-custom">Lokasi Pasar #1 <span class="text-danger">*</span></label>
+                                            <asp:TextBox ID="TB_LokasiPasar1" runat="server"
+                                                Text='<%# Bind("LokasiPasar1") %>' TextMode="MultiLine" Rows="2" CssClass="form-control" />
+                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator16" runat="server" CssClass="cssRequiredField"
+                                                ControlToValidate="TB_LokasiPasar1" ErrorMessage="Sila Isi Lokasi Pasar #1" ForeColor="Red" ValidationGroup="insertForm" Display="Dynamic"></asp:RequiredFieldValidator>
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label>Jenis Pasar</label>
+                                            <label class="form-label-custom">Lokasi Pasar #2</label>
+                                            <asp:TextBox ID="TB_LokasiPasar2" runat="server"
+                                                Text='<%# Bind("LokasiPasar2") %>' TextMode="MultiLine" Rows="2" CssClass="form-control" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="form-label-custom">Lokasi Pasar #3</label>
+                                            <asp:TextBox ID="TB_LokasiPasar3" runat="server"
+                                                Text='<%# Bind("LokasiPasar3") %>' TextMode="MultiLine" Rows="2" CssClass="form-control" />
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="form-label-custom">Jenis Pasar <span class="text-danger">*</span></label>
                                             <asp:DropDownList ID="DDL_JenisPasar" Text='<%# Bind("JenisPasar") %>' runat="server" OnSelectedIndexChanged="DDL_JenisPasar_SelectedIndexChanged"
-                                                CssClass="form-control select2" AutoPostBack="true">
+                                                CssClass="form-control select2" AutoPostBack="true" CausesValidation="false">
                                                 <asp:ListItem Value="">-- Sila Pilih --</asp:ListItem>
                                                 <asp:ListItem>Pasar Pagi</asp:ListItem>
                                                 <asp:ListItem>Pasar Malam</asp:ListItem>
@@ -2375,57 +2491,55 @@
                                                 <asp:ListItem>Pasar Sehari</asp:ListItem>
                                             </asp:DropDownList>
                                             <asp:RequiredFieldValidator ID="RequiredFieldValidator17" runat="server" CssClass="cssRequiredField"
-                                                ControlToValidate="DDL_JenisPasar" ErrorMessage="Sila Pilih" ForeColor="Red" ValidationGroup="insertForm" Display="Dynamic"></asp:RequiredFieldValidator>
-
+                                                ControlToValidate="DDL_JenisPasar" ErrorMessage="Sila Pilih Jenis Pasar" ForeColor="Red" ValidationGroup="insertForm" Display="Dynamic"></asp:RequiredFieldValidator>
                                         </div>
                                     </div>
-
                                 </div>
 
                                 <div class="row">
-
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label>Jenis Jualan</label>
+                                            <label class="form-label-custom">Jenis Jualan <span class="text-danger">*</span></label>
                                             <asp:TextBox ID="TB_JenisPerniagaanPasar" runat="server"
                                                 Text='<%# Bind("JenisPerniagaanPasar") %>' CssClass="form-control" />
                                             <asp:RequiredFieldValidator ID="RequiredFieldValidator18" runat="server" CssClass="cssRequiredField"
-                                                ControlToValidate="TB_JenisPerniagaanPasar" ErrorMessage="Sila Isi" ForeColor="Red" ValidationGroup="insertForm" Display="Dynamic"></asp:RequiredFieldValidator>
+                                                ControlToValidate="TB_JenisPerniagaanPasar" ErrorMessage="Sila Isi Jenis Jualan" ForeColor="Red" ValidationGroup="insertForm" Display="Dynamic"></asp:RequiredFieldValidator>
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label>Jumlah Petak/Tapak/Lot</label>
+                                            <label class="form-label-custom">Jumlah Petak / Tapak / Lot <span class="text-danger">*</span></label>
                                             <asp:TextBox ID="TB_JumlahPetak" runat="server"
                                                 Text='<%# Bind("JumlahPetak") %>' CssClass="form-control" />
                                             <asp:RequiredFieldValidator ID="RequiredFieldValidator19" runat="server" CssClass="cssRequiredField"
-                                                ControlToValidate="TB_JumlahPetak" ErrorMessage="Sila Isi" ForeColor="Red" ValidationGroup="insertForm" Display="Dynamic"></asp:RequiredFieldValidator>
+                                                ControlToValidate="TB_JumlahPetak" ErrorMessage="Sila Isi Jumlah Petak" ForeColor="Red" ValidationGroup="insertForm" Display="Dynamic"></asp:RequiredFieldValidator>
                                         </div>
                                     </div>
-
                                 </div>
-
                             </asp:Panel>
 
                             <%--# Anjing #--%>
                             <asp:Panel ID="pnlesen3" runat="server" Visible="False">
+                                <div class="form-section-header">
+                                    <i class="bi bi-shield-check"></i>
+                                    <span>Maklumat Lesen Anjing</span>
+                                </div>
 
                                 <div class="row">
-
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label>Alamat lokasi</label>
+                                            <label class="form-label-custom">Alamat Lokasi <span class="text-danger">*</span></label>
                                             <asp:TextBox ID="TB_AnjingAlamat" runat="server"
-                                                Text='<%# Bind("AnjingAlamat") %>' TextMode="MultiLine" Rows="3" CssClass="form-control" />
+                                                Text='<%# Bind("AnjingAlamat") %>' TextMode="MultiLine" Rows="2" CssClass="form-control" />
                                             <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" CssClass="cssRequiredField"
-                                                ControlToValidate="TB_AnjingAlamat" ErrorMessage="Sila Isi" ForeColor="Red" ValidationGroup="insertForm" Display="Dynamic"></asp:RequiredFieldValidator>
+                                                ControlToValidate="TB_AnjingAlamat" ErrorMessage="Sila Isi Alamat Lokasi" ForeColor="Red" ValidationGroup="insertForm" Display="Dynamic"></asp:RequiredFieldValidator>
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label>Jenis Premis</label>
+                                            <label class="form-label-custom">Jenis Premis <span class="text-danger">*</span></label>
                                             <asp:DropDownList ID="DDL_AnjingJenisPremis" Text='<%# Bind("AnjingJenisPremis") %>' CssClass="form-control select2" runat="server"
                                                 DataSourceID="SqlDataSourceAnjingJenisPremis" DataTextField="name" DataValueField="id">
                                             </asp:DropDownList>
@@ -2433,17 +2547,15 @@
                                                 SelectCommand="SELECT NULL AS id, '-- Sila Pilih --' AS name UNION ALL SELECT id, name 
                                                         FROM TBL_LOOKUPS WHERE lookupgrp_id = 10001 AND status = 1"></asp:SqlDataSource>
                                             <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" CssClass="cssRequiredField"
-                                                ControlToValidate="DDL_AnjingJenisPremis" ErrorMessage="Sila Pilih" ForeColor="Red" ValidationGroup="insertForm" Display="Dynamic"></asp:RequiredFieldValidator>
+                                                ControlToValidate="DDL_AnjingJenisPremis" ErrorMessage="Sila Pilih Jenis Premis" ForeColor="Red" ValidationGroup="insertForm" Display="Dynamic"></asp:RequiredFieldValidator>
                                         </div>
                                     </div>
-
                                 </div>
 
-                                <div class="row">
-
-                                    <div class="col-md-2">
+                                <div class="row align-items-end">
+                                    <div class="col-md-4 col-lg-3">
                                         <div class="form-group">
-                                            <label>Jenis Baka</label>
+                                            <label class="form-label-custom">Jenis Baka</label>
                                             <asp:DropDownList ID="DDL_BakaAnjing1" CssClass="form-control select2" runat="server"
                                                 DataSourceID="SqlDataSourceAnjingBaka1" DataTextField="name" DataValueField="id">
                                             </asp:DropDownList>
@@ -2453,77 +2565,75 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-md-2">
+                                    <div class="col-md-4 col-lg-2">
                                         <div class="form-group">
-                                            <label>Bilangan anjing jantan</label>
+                                            <label class="form-label-custom">Bil. Jantan</label>
                                             <asp:TextBox ID="TB_Jantan1" runat="server" TextMode="Number" CssClass="form-control" />
                                         </div>
                                     </div>
 
-                                    <div class="col-md-2">
+                                    <div class="col-md-4 col-lg-2">
                                         <div class="form-group">
-                                            <label>Bilangan anjing betina</label>
+                                            <label class="form-label-custom">Bil. Betina</label>
                                             <asp:TextBox ID="TB_Betina1" runat="server" TextMode="Number" CssClass="form-control" />
                                         </div>
                                     </div>
 
-                                    <div class="col-md-2">
+                                    <div class="col-md-6 col-lg-2">
                                         <div class="form-group">
-                                            <label>Bilangan anjing jantan mandul</label>
+                                            <label class="form-label-custom">Bil. Jantan Mandul</label>
                                             <asp:TextBox ID="TB_JantanMandul1" runat="server" TextMode="Number" CssClass="form-control" />
                                         </div>
                                     </div>
 
-                                    <div class="col-md-4">
+                                    <div class="col-md-6 col-lg-3">
                                         <div class="form-group">
-                                            <label>Bilangan anjing betina mandul</label>
-                                            <div class="row">
-                                                <div class="col">
-                                                    <asp:TextBox ID="TB_BetinaMandul1" runat="server" TextMode="Number" CssClass="form-control" />
-                                                </div>
-                                                <div class="col">
-                                                    <asp:LinkButton ID="btnAddAnjing" runat="server" CssClass="btn btn-primary" Text="Tambah" OnClick="btnAddAnjing_Click" />
-                                    
-                                                </div>
-
+                                            <label class="form-label-custom">Bil. Betina Mandul</label>
+                                            <div class="d-flex gap-2">
+                                                <asp:TextBox ID="TB_BetinaMandul1" runat="server" TextMode="Number" CssClass="form-control" />
+                                                <asp:LinkButton ID="btnAddAnjing" runat="server" CssClass="btn btn-primary d-inline-flex align-items-center text-nowrap" Text="Tambah" OnClick="btnAddAnjing_Click" CausesValidation="false">
+                                                    <i class="bi bi-plus-lg me-1"></i> Tambah
+                                                </asp:LinkButton>
                                             </div>
-                                            
                                         </div>
                                     </div>
-
                                 </div>
 
-                                <div class="row">
+                                <div class="row mt-2">
                                     <div class="col-md-12">
-                                        <asp:GridView ID="gvAnjingList" runat="server" HeaderStyle-ForeColor="Black" CssClass="table table-bordered" AutoGenerateColumns="False" 
+                                        <asp:GridView ID="gvAnjingList" runat="server" HeaderStyle-ForeColor="Black" CssClass="table table-bordered table-hover align-middle shadow-none" AutoGenerateColumns="False" 
                                             ShowHeaderWhenEmpty="true" EmptyDataText="Senarai kosong." OnRowDeleting="gvAnjingList_RowDeleting">
                                             <Columns>
                                                 <asp:BoundField DataField="Baka" HeaderText="Baka Anjing" />
-                                                <asp:BoundField DataField="Jantan" HeaderText=" Bil. Jantan" />
+                                                <asp:BoundField DataField="Jantan" HeaderText="Bil. Jantan" />
                                                 <asp:BoundField DataField="Betina" HeaderText="Bil. Betina" />
                                                 <asp:BoundField DataField="JantanMandul" HeaderText="Bil. Jantan Mandul" />
                                                 <asp:BoundField DataField="BetinaMandul" HeaderText="Bil. Betina Mandul" />
-                                                <asp:TemplateField>
+                                                <asp:TemplateField ItemStyle-Width="60px" ItemStyle-CssClass="text-center">
                                                     <ItemTemplate>
                                                         <asp:LinkButton ID="btnRemove" runat="server"  
-                                                            CommandName="Delete" CssClass="btn btn-danger btn-sm">&times;</asp:LinkButton>
+                                                            CommandName="Delete" CssClass="btn btn-outline-danger btn-sm" ToolTip="Padam" CausesValidation="false">
+                                                            <i class="bi bi-trash"></i>
+                                                        </asp:LinkButton>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
                                             </Columns>
                                         </asp:GridView>
                                     </div>
                                 </div>
-
                             </asp:Panel>
 
                             <%--# Penjaja #--%>
                             <asp:Panel ID="pnlesen4" runat="server" Visible="False">
+                                <div class="form-section-header">
+                                    <i class="bi bi-truck"></i>
+                                    <span>Maklumat Penjaja</span>
+                                </div>
 
                                 <div class="row">
-
-                                    <div class="col-md-3">
+                                    <div class="col-md-6">
                                         <div class="form-group">
-                                            <label>Jenis Penjaja</label>
+                                            <label class="form-label-custom">Jenis Penjaja</label>
                                             <asp:DropDownList ID="DDL_JenisPenjaja" CssClass="form-control select2" runat="server"
                                                 DataSourceID="SqlDataSourceJenisPenjaja" DataTextField="name" DataValueField="id">
                                             </asp:DropDownList>
@@ -2533,9 +2643,9 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-md-3">
+                                    <div class="col-md-6">
                                         <div class="form-group">
-                                            <label>Status Tanah</label>
+                                            <label class="form-label-custom">Status Tanah</label>
                                             <asp:DropDownList ID="DDL_StatusTanahPenjaja" CssClass="form-control select2" runat="server"
                                                 DataSourceID="SqlDataSourceStatusTanahPenjaja" DataTextField="name" DataValueField="id">
                                             </asp:DropDownList>
@@ -2544,61 +2654,54 @@
                                                         FROM TBL_LOOKUPS WHERE lookupgrp_id = 10007 AND status = 1"></asp:SqlDataSource>
                                         </div>
                                     </div>
-
                                 </div>
 
                                 <div class="row">
-
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label>Alamat aktiviti penjajaan</label>
+                                            <label class="form-label-custom">Alamat Aktiviti Penjajaan <span class="text-danger">*</span></label>
                                             <asp:TextBox ID="TB_AlamatPenjajaan" runat="server"
-                                                Text='<%# Bind("AlamatPenjajaan") %>' TextMode="MultiLine" Rows="3" CssClass="form-control" />
+                                                Text='<%# Bind("AlamatPenjajaan") %>' TextMode="MultiLine" Rows="2" CssClass="form-control" />
                                             <asp:RequiredFieldValidator ID="RequiredFieldValidator21" runat="server" CssClass="cssRequiredField"
-                                                ControlToValidate="TB_AlamatPenjajaan" ErrorMessage="Sila Isi" ForeColor="Red" ValidationGroup="insertForm" Display="Dynamic"></asp:RequiredFieldValidator>
-
+                                                ControlToValidate="TB_AlamatPenjajaan" ErrorMessage="Sila Isi Alamat Aktiviti" ForeColor="Red" ValidationGroup="insertForm" Display="Dynamic"></asp:RequiredFieldValidator>
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label>Jenis Jualan</label>
+                                            <label class="form-label-custom">Jenis Jualan <span class="text-danger">*</span></label>
                                             <asp:TextBox ID="TB_JenisPerniagaanPenjaja" runat="server"
                                                 Text='<%# Bind("JenisPerniagaanPenjaja") %>' CssClass="form-control" />
                                             <asp:RequiredFieldValidator ID="RequiredFieldValidator22" runat="server" CssClass="cssRequiredField"
-                                                ControlToValidate="TB_JenisPerniagaanPenjaja" ErrorMessage="Sila Isi" ForeColor="Red" ValidationGroup="insertForm" Display="Dynamic"></asp:RequiredFieldValidator>
-
+                                                ControlToValidate="TB_JenisPerniagaanPenjaja" ErrorMessage="Sila Isi Jenis Jualan" ForeColor="Red" ValidationGroup="insertForm" Display="Dynamic"></asp:RequiredFieldValidator>
                                         </div>
                                     </div>
-
                                 </div>
 
                                 <div class="row">
                                     <div class="col-md-3">
                                         <div class="form-group">
-                                            <label>Masa Mula Jualan</label>
+                                            <label class="form-label-custom">Masa Mula Jualan <span class="text-danger">*</span></label>
                                             <asp:TextBox ID="TB_MasaPenjaja1" runat="server" TextMode="Time"
                                                 Text='<%# Bind("MasaPenjaja1") %>' CssClass="form-control" />
                                             <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" CssClass="cssRequiredField"
-                                                ControlToValidate="TB_MasaPenjaja1" ErrorMessage="Sila Isi" ForeColor="Red" ValidationGroup="insertForm" Display="Dynamic"></asp:RequiredFieldValidator>
-
+                                                ControlToValidate="TB_MasaPenjaja1" ErrorMessage="Sila Isi Masa Mula" ForeColor="Red" ValidationGroup="insertForm" Display="Dynamic"></asp:RequiredFieldValidator>
                                         </div>
                                     </div>
 
                                     <div class="col-md-3">
                                         <div class="form-group">
-                                            <label>Masa Tamat Jualan</label>
+                                            <label class="form-label-custom">Masa Tamat Jualan <span class="text-danger">*</span></label>
                                             <asp:TextBox ID="TB_MasaPenjaja2" runat="server" TextMode="Time"
                                                 Text='<%# Bind("MasaPenjaja2") %>' CssClass="form-control" />
                                             <asp:RequiredFieldValidator ID="RequiredFieldValidator6" runat="server" CssClass="cssRequiredField"
-                                                ControlToValidate="TB_MasaPenjaja2" ErrorMessage="Sila Isi" ForeColor="Red" ValidationGroup="insertForm" Display="Dynamic"></asp:RequiredFieldValidator>
-
+                                                ControlToValidate="TB_MasaPenjaja2" ErrorMessage="Sila Isi Masa Tamat" ForeColor="Red" ValidationGroup="insertForm" Display="Dynamic"></asp:RequiredFieldValidator>
                                         </div>
                                     </div>
 
                                     <div class="col-md-3">
                                         <div class="form-group">
-                                            <label>Jenis Kenderaan (Penjaja Berkenderaan)</label>
+                                            <label class="form-label-custom">Jenis Kenderaan</label>
                                             <asp:DropDownList ID="DDL_JenisKenderaanPenjaja" CssClass="form-control select2" runat="server"
                                                 DataSourceID="SqlDataSourceJenisKenderaanPenjaja" DataTextField="name" DataValueField="id">
                                             </asp:DropDownList>
@@ -2610,118 +2713,105 @@
 
                                     <div class="col-md-3">
                                         <div class="form-group">
-                                            <label>No Pendaftaran Kenderaan</label>
+                                            <label class="form-label-custom">No. Pendaftaran Kenderaan</label>
                                             <asp:TextBox ID="TB_NoKenderaanPenjaja" runat="server" 
                                                 Text='<%# Bind("NoKenderaanPenjaja") %>' CssClass="form-control" />
-
                                         </div>
                                     </div>
                                 </div>
-
                             </asp:Panel>
 
                             <%--# Ekspo #--%>
                             <asp:Panel ID="pnlesen5" runat="server" Visible="False">
+                                <div class="form-section-header">
+                                    <i class="bi bi-calendar-event"></i>
+                                    <span>Maklumat Ekspo / Program</span>
+                                </div>
 
                                 <div class="row">
-
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label>Nama Penganjur</label>
+                                            <label class="form-label-custom">Nama Penganjur <span class="text-danger">*</span></label>
                                             <asp:TextBox ID="TB_PenganjurEkspo" runat="server"
                                                 Text='<%# Bind("PenganjurEkspo") %>' CssClass="form-control" />
                                             <asp:RequiredFieldValidator ID="RequiredFieldValidator23" runat="server" CssClass="cssRequiredField"
-                                                ControlToValidate="TB_PenganjurEkspo" ErrorMessage="Sila Isi" ForeColor="Red" ValidationGroup="insertForm" Display="Dynamic"></asp:RequiredFieldValidator>
-
+                                                ControlToValidate="TB_PenganjurEkspo" ErrorMessage="Sila Isi Nama Penganjur" ForeColor="Red" ValidationGroup="insertForm" Display="Dynamic"></asp:RequiredFieldValidator>
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label>Alamat Penganjur</label>
+                                            <label class="form-label-custom">Alamat Penganjur</label>
                                             <asp:TextBox ID="TB_AlamatPenganjurEkspo" runat="server"
-                                                Text='<%# Bind("AlamatPenganjurEkspo") %>' TextMode="MultiLine" Rows="3" CssClass="form-control" />
-
+                                                Text='<%# Bind("AlamatPenganjurEkspo") %>' TextMode="MultiLine" Rows="2" CssClass="form-control" />
                                         </div>
                                     </div>
-
                                 </div>
 
                                 <div class="row">
-
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label>PIC Penganjur</label>
+                                            <label class="form-label-custom">PIC Penganjur</label>
                                             <asp:TextBox ID="TB_PicEkspo" runat="server"
                                                 Text='<%# Bind("PicEkspo") %>' CssClass="form-control" />
-
                                         </div>
                                     </div>
-
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label>No. Tel.</label>
-                                            <asp:TextBox ID="TB_NoTel" runat="server"
-                                                Text='<%# Bind("NoTelEkspo") %>' CssClass="form-control" />
-
-                                        </div>
-                                    </div>
-
-                                </div>
-
-                                <div class="row">
 
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label>Nama Aktiviti/Program</label>
+                                            <label class="form-label-custom">No. Telefon</label>
+                                            <asp:TextBox ID="TB_NoTel" runat="server"
+                                                Text='<%# Bind("NoTelEkspo") %>' CssClass="form-control" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="form-label-custom">Nama Aktiviti / Program <span class="text-danger">*</span></label>
                                             <asp:TextBox ID="TB_NamaEkspo" runat="server"
                                                 Text='<%# Bind("NamaEkspo") %>' CssClass="form-control" />
                                             <asp:RequiredFieldValidator ID="RequiredFieldValidator24" runat="server" CssClass="cssRequiredField"
-                                                ControlToValidate="TB_NamaEkspo" ErrorMessage="Sila Isi" ForeColor="Red" ValidationGroup="insertForm" Display="Dynamic"></asp:RequiredFieldValidator>
-
+                                                ControlToValidate="TB_NamaEkspo" ErrorMessage="Sila Isi Nama Program" ForeColor="Red" ValidationGroup="insertForm" Display="Dynamic"></asp:RequiredFieldValidator>
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label>Lokasi</label>
+                                            <label class="form-label-custom">Lokasi Program <span class="text-danger">*</span></label>
                                             <asp:TextBox ID="TB_LokasiEkspo" runat="server"
-                                                Text='<%# Bind("LokasiEkspo") %>' TextMode="MultiLine" Rows="3" CssClass="form-control" />
+                                                Text='<%# Bind("LokasiEkspo") %>' TextMode="MultiLine" Rows="2" CssClass="form-control" />
                                             <asp:RequiredFieldValidator ID="RequiredFieldValidator25" runat="server" CssClass="cssRequiredField"
-                                                ControlToValidate="TB_LokasiEkspo" ErrorMessage="Sila Isi" ForeColor="Red" ValidationGroup="insertForm" Display="Dynamic"></asp:RequiredFieldValidator>
-
+                                                ControlToValidate="TB_LokasiEkspo" ErrorMessage="Sila Isi Lokasi Program" ForeColor="Red" ValidationGroup="insertForm" Display="Dynamic"></asp:RequiredFieldValidator>
                                         </div>
                                     </div>
-
                                 </div>
 
                                 <div class="row">
-
                                     <div class="col-md-3">
                                         <div class="form-group">
-                                            <label>Tarikh Mula</label>
+                                            <label class="form-label-custom">Tarikh Mula <span class="text-danger">*</span></label>
                                             <asp:TextBox ID="TB_TarikhEkspo1" runat="server"
                                                 Text='<%# Bind("TarikhEkspo1", "{0:yyyy-MM-dd}") %>' TextMode="Date" CssClass="form-control" />
                                             <asp:RequiredFieldValidator ID="RequiredFieldValidator27" runat="server" CssClass="cssRequiredField"
-                                                ControlToValidate="TB_TarikhEkspo1" ErrorMessage="Sila Pilih" ForeColor="Red" ValidationGroup="insertForm" Display="Dynamic"></asp:RequiredFieldValidator>
-
+                                                ControlToValidate="TB_TarikhEkspo1" ErrorMessage="Sila Pilih Tarikh Mula" ForeColor="Red" ValidationGroup="insertForm" Display="Dynamic"></asp:RequiredFieldValidator>
                                         </div>
                                     </div>
 
                                     <div class="col-md-3">
                                         <div class="form-group">
-                                            <label>Tarikh Tamat</label>
+                                            <label class="form-label-custom">Tarikh Tamat <span class="text-danger">*</span></label>
                                             <asp:TextBox ID="TB_TarikhEkspo2" runat="server"
                                                 Text='<%# Bind("TarikhEkspo2", "{0:yyyy-MM-dd}") %>' TextMode="Date" CssClass="form-control" />
                                             <asp:RequiredFieldValidator ID="RequiredFieldValidator28" runat="server" CssClass="cssRequiredField"
-                                                ControlToValidate="TB_TarikhEkspo2" ErrorMessage="Sila Pilih" ForeColor="Red" ValidationGroup="insertForm" Display="Dynamic"></asp:RequiredFieldValidator>
-
+                                                ControlToValidate="TB_TarikhEkspo2" ErrorMessage="Sila Pilih Tarikh Tamat" ForeColor="Red" ValidationGroup="insertForm" Display="Dynamic"></asp:RequiredFieldValidator>
                                         </div>
                                     </div>
 
                                     <div class="col-md-3">
                                         <div class="form-group">
-                                            <label>Masa Mula</label>
+                                            <label class="form-label-custom">Masa Mula</label>
                                             <asp:TextBox ID="TB_MasaEkspo1" runat="server"
                                                 Text='<%# Bind("MasaEkspo1") %>' TextMode="Time" CssClass="form-control" />
                                         </div>
@@ -2729,213 +2819,197 @@
 
                                     <div class="col-md-3">
                                         <div class="form-group">
-                                            <label>Masa Tamat</label>
+                                            <label class="form-label-custom">Masa Tamat</label>
                                             <asp:TextBox ID="TB_MasaEkspo2" runat="server"
                                                 Text='<%# Bind("MasaEkspo2") %>' TextMode="Time" CssClass="form-control" />
-
                                         </div>
                                     </div>
-
                                 </div>
 
                                 <div class="row">
-
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label>Tentatif Program</label>
+                                            <label class="form-label-custom">Tentatif Program</label>
                                             <asp:TextBox ID="TB_TentatifEkspo" runat="server"
-                                                Text='<%# Bind("TentatifEkspo") %>' TextMode="MultiLine" Rows="3" CssClass="form-control" />
-
+                                                Text='<%# Bind("TentatifEkspo") %>' TextMode="MultiLine" Rows="2" CssClass="form-control" />
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label>Selebriti/Penceramah/Artis Yang Dijangka Terlibat</label>
+                                            <label class="form-label-custom">Selebriti / Artis Terlibat</label>
                                             <asp:TextBox ID="TB_JemputanEkspo" runat="server"
-                                                Text='<%# Bind("JemputanEkspo") %>' TextMode="MultiLine" Rows="3" CssClass="form-control" />
-
+                                                Text='<%# Bind("JemputanEkspo") %>' TextMode="MultiLine" Rows="2" CssClass="form-control" />
                                         </div>
                                     </div>
-
                                 </div>
 
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label>Kontraktor Pembersihan</label>
+                                            <label class="form-label-custom">Kontraktor Pembersihan</label>
                                             <asp:TextBox ID="TB_PembersihanEkspo" runat="server"
                                                 Text='<%# Bind("PembersihanEkspo") %>' CssClass="form-control" />
-
                                         </div>
                                     </div>
 
-                                </div>
-
-                                <div class="row">
                                     <div class="col-md-3">
                                         <div class="form-group">
-                                            <label>Cadangan Tarikh Mula Pasang Khemah</label>
+                                            <label class="form-label-custom">Tarikh Pasang Khemah</label>
                                             <asp:TextBox ID="TB_TarikhKhemahEkspo1" runat="server" TextMode="Date"
                                                 Text='<%# Bind("TarikhKhemahEkspo1", "{0:yyyy-MM-dd}") %>' CssClass="form-control" />
-
                                         </div>
                                     </div>
 
                                     <div class="col-md-3">
                                         <div class="form-group">
-                                            <label>Cadangan Tarikh Buka Khemah</label>
+                                            <label class="form-label-custom">Tarikh Buka Khemah</label>
                                             <asp:TextBox ID="TB_TarikhKhemahEkspo2" runat="server" TextMode="Date"
                                                 Text='<%# Bind("TarikhKhemahEkspo2", "{0:yyyy-MM-dd}") %>' CssClass="form-control" />
-
                                         </div>
                                     </div>
-
                                 </div>
-
                             </asp:Panel>
 
+                            <%--# Pentadbiran & Rujukan #--%>
                             <asp:Panel ID="pnlrujukan" runat="server" Visible="False">
-                                <hr style="border: 1px solid gray;" />
-                                <div class="row">
+                                <div class="form-section-header">
+                                    <i class="bi bi-file-earmark-text"></i>
+                                    <span>Maklumat Pentadbiran & Rujukan</span>
+                                </div>
 
-                                    <div class="col-md-3">
+                                <div class="row">
+                                    <div class="col-md-4">
                                         <div class="form-group">
-                                            <label>No Rujukan</label>
+                                            <label class="form-label-custom">No. Rujukan <span class="text-danger">*</span></label>
                                             <asp:TextBox ID="TB_Rujukan" runat="server"
                                                 Text='<%# Bind("Rujukan") %>' CssClass="form-control" />
                                             <asp:RequiredFieldValidator ID="RequiredFieldValidator29" runat="server" CssClass="cssRequiredField"
-                                                ControlToValidate="TB_Rujukan" ErrorMessage="Sila Isi" ForeColor="Red" ValidationGroup="insertForm" Display="Dynamic"></asp:RequiredFieldValidator>
-
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label>No Akaun Cukai</label>
-                                            <asp:TextBox ID="TB_NoAkaunCukai" runat="server"
-                                                Text='<%# Bind("NoAkaunCukai") %>' CssClass="form-control" />
-                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator33" runat="server" CssClass="cssRequiredField"
-                                                ControlToValidate="TB_NoAkaunCukai" ErrorMessage="Sila Isi" ForeColor="Red" ValidationGroup="insertForm" Display="Dynamic"></asp:RequiredFieldValidator>
-
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-2">
-                                        <div class="form-group">
-                                            <asp:Label runat="server" ForeColor="DarkRed" Font-Bold="true">Kelulusan 24 jam?</asp:Label>
-                                            <asp:CheckBox ID="CB_24h" Checked='<%# Bind("Is24jam") %>' runat="server" />
+                                                ControlToValidate="TB_Rujukan" ErrorMessage="Sila Isi No. Rujukan" ForeColor="Red" ValidationGroup="insertForm" Display="Dynamic"></asp:RequiredFieldValidator>
                                         </div>
                                     </div>
 
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <label>Lokasi Fail</label>
+                                            <label class="form-label-custom">No. Akaun Cukai <span class="text-danger">*</span></label>
+                                            <asp:TextBox ID="TB_NoAkaunCukai" runat="server"
+                                                Text='<%# Bind("NoAkaunCukai") %>' CssClass="form-control" />
+                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator33" runat="server" CssClass="cssRequiredField"
+                                                ControlToValidate="TB_NoAkaunCukai" ErrorMessage="Sila Isi No. Akaun Cukai" ForeColor="Red" ValidationGroup="insertForm" Display="Dynamic"></asp:RequiredFieldValidator>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label class="form-label-custom">Lokasi Fail</label>
                                             <asp:TextBox ID="TB_Remarks1" runat="server" TextMode="MultiLine" Rows="2"
                                                 Text='<%# Bind("RemarksFail") %>' CssClass="form-control" />
-
                                         </div>
                                     </div>
-
                                 </div>
 
-                                <div class="row">
-
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label>Ada Deposit?</label>
-                                            <asp:CheckBox ID="CB_Deposit" runat="server" OnCheckedChanged="CB_Deposit_CheckedChanged" AutoPostBack="true" />
+                                <div class="row my-2 g-3">
+                                    <div class="col-md-6 col-lg-3">
+                                        <div class="checkbox-box">
+                                            <asp:CheckBox ID="CB_24h" Checked='<%# Bind("Is24jam") %>' runat="server" />
+                                            <span class="text-danger fw-bold">Kelulusan 24 Jam?</span>
                                         </div>
                                     </div>
 
+                                    <div class="col-md-6 col-lg-3">
+                                        <div class="checkbox-box">
+                                            <asp:CheckBox ID="CB_Deposit" runat="server" OnCheckedChanged="CB_Deposit_CheckedChanged" AutoPostBack="true" CausesValidation="false" />
+                                            <span class="fw-bold text-dark">Ada Deposit?</span>
+                                        </div>
+                                    </div>
                                 </div>
                             </asp:Panel>
 
+                            <%--# Deposit #--%>
                             <asp:Panel ID="pnldeposit" runat="server" Visible="False">
+                                <div class="form-section-header">
+                                    <i class="bi bi-cash-stack"></i>
+                                    <span>Maklumat Deposit</span>
+                                </div>
 
                                 <div class="row">
-
-                                    <div class="col-md-3">
+                                    <div class="col-md-4">
                                         <div class="form-group">
-                                            <label>Amaun deposit (RM)</label>
+                                            <label class="form-label-custom">Amaun Deposit (RM) <span class="text-danger">*</span></label>
                                             <asp:TextBox ID="TB_Depo" runat="server"
                                                 Text='<%# Bind("DepositAmount") %>' TextMode="Number" placeholder="00.00" CssClass="form-control" />
                                             <asp:RequiredFieldValidator ID="RequiredFieldValidator34" runat="server" CssClass="cssRequiredField"
-                                                ControlToValidate="TB_Depo" ErrorMessage="Sila Isi" ForeColor="Red" ValidationGroup="insertForm" Display="Dynamic"></asp:RequiredFieldValidator>
+                                                ControlToValidate="TB_Depo" ErrorMessage="Sila Isi Amaun Deposit" ForeColor="Red" ValidationGroup="insertForm" Display="Dynamic"></asp:RequiredFieldValidator>
                                         </div>
                                     </div>
 
-                                    <div class="col-md-3">
+                                    <div class="col-md-4">
                                         <div class="form-group">
-                                            <label>Tarikh bayar deposit</label>
+                                            <label class="form-label-custom">Tarikh Bayar Deposit</label>
                                             <asp:TextBox ID="TB_TarikhDepo" runat="server"
                                                 Text='<%# Bind("DepositDate", "{0:yyyy-MM-dd}") %>' TextMode="Date" CssClass="form-control" />
                                         </div>
                                     </div>
 
-                                    <div class="col-md-3">
+                                    <div class="col-md-4">
                                         <div class="form-group">
-                                            <label>No Resit</label>
+                                            <label class="form-label-custom">No. Resit</label>
                                             <asp:TextBox ID="TB_NoResit" runat="server"
                                                 Text='<%# Bind("DepositResitNo") %>' CssClass="form-control" />
-
                                         </div>
                                     </div>
-
                                 </div>
-
                             </asp:Panel>
 
                             <asp:Panel ID="pnldeposit1" runat="server" Visible="False">
-
                                 <div class="row">
-
-                                    <div class="col-md-3">
+                                    <div class="col-md-4">
                                         <div class="form-group">
-                                            <label>Amaun Pemulangan Wang Amanah (RM)</label>
+                                            <label class="form-label-custom">Amaun Pemulangan Wang Amanah (RM)</label>
                                             <asp:TextBox ID="TB_DepoPulang" runat="server"
                                                 Text='<%# Bind("DepositPulangAmount") %>' TextMode="Number" placeholder="00.00" CssClass="form-control" />
                                         </div>
                                     </div>
-
                                 </div>
-
                             </asp:Panel>
 
+                            <%--# Pembatalan #--%>
                             <asp:Panel ID="pnlbatal1" runat="server" Visible="false">
-                                <br />
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <asp:Label runat="server" ForeColor="DarkRed" Font-Bold="true">Pembatalan Permit/Lesen?</asp:Label>
-                                            <asp:CheckBox ID="CB_IsBatal" Checked='<%# Bind("IsBatal") %>' runat="server" OnCheckedChanged="CB_IsBatal_CheckedChanged" AutoPostBack="true" />
+                                <div class="row my-2">
+                                    <div class="col-md-6 col-lg-4">
+                                        <div class="checkbox-box border-danger-subtle bg-danger-subtle">
+                                            <asp:CheckBox ID="CB_IsBatal" Checked='<%# Bind("IsBatal") %>' runat="server" OnCheckedChanged="CB_IsBatal_CheckedChanged" AutoPostBack="true" CausesValidation="false" />
+                                            <span class="fw-bold text-danger">Pembatalan Permit / Lesen?</span>
                                         </div>
                                     </div>
                                 </div>
                             </asp:Panel>
 
                             <asp:Panel ID="pnlbatal2" runat="server" Visible="false">
+                                <div class="form-section-header danger-section">
+                                    <i class="bi bi-x-circle"></i>
+                                    <span>Maklumat Pembatalan</span>
+                                </div>
 
                                 <div class="row">
-
-                                    <div class="col-md-6">
+                                    <div class="col-md-4">
                                         <div class="form-group">
-                                            <label>Jenis Pembatalan</label>
-                                            <asp:DropDownList ID="DDL_JenisBatal" runat="server" Text='<%# Bind("JenisBatal") %>' OnSelectedIndexChanged="DDL_JenisBatal_SelectedIndexChanged" AutoPostBack="true"
+                                            <label class="form-label-custom">Jenis Pembatalan <span class="text-danger">*</span></label>
+                                            <asp:DropDownList ID="DDL_JenisBatal" runat="server" Text='<%# Bind("JenisBatal") %>' OnSelectedIndexChanged="DDL_JenisBatal_SelectedIndexChanged" AutoPostBack="true" CausesValidation="false"
                                                 CssClass="form-control select2">
                                                 <asp:ListItem Value="">-- Sila Pilih --</asp:ListItem>
                                                 <asp:ListItem Value="1">Dengan Permohonan</asp:ListItem>
                                                 <asp:ListItem Value="2">Tanpa Permohonan</asp:ListItem>
                                             </asp:DropDownList>
                                             <asp:RequiredFieldValidator ID="RequiredFieldValidator36" runat="server" CssClass="cssRequiredField"
-                                                ControlToValidate="DDL_JenisBatal" ErrorMessage="Sila Pilih" ForeColor="Red" ValidationGroup="insertForm" Display="Dynamic"></asp:RequiredFieldValidator>
+                                                ControlToValidate="DDL_JenisBatal" ErrorMessage="Sila Pilih Jenis Pembatalan" ForeColor="Red" ValidationGroup="insertForm" Display="Dynamic"></asp:RequiredFieldValidator>
                                         </div>
                                     </div>
 
-                                    <div class="col-md-6">
+                                    <div class="col-md-4">
                                         <div class="form-group">
                                             <asp:Panel ID="pnlbatal3" runat="server" Visible="false">
-                                                <label>Sebab Pembatalan</label>
+                                                <label class="form-label-custom">Sebab Pembatalan <span class="text-danger">*</span></label>
                                                 <asp:DropDownList ID="DDL_SebabBatal1" Text='<%# Bind("SebabBatalPerm") %>' CssClass="form-control select2" runat="server"
                                                     DataSourceID="SqlDataSourceSebab1" DataTextField="name" DataValueField="id">
                                                 </asp:DropDownList>
@@ -2943,11 +3017,11 @@
                                                     SelectCommand="SELECT NULL AS id, '-- Sila Pilih --' AS name UNION ALL SELECT id, name 
                                                         FROM TBL_LOOKUPS WHERE lookupgrp_id = 10002 AND status = 1"></asp:SqlDataSource>
                                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator38" runat="server" CssClass="cssRequiredField"
-                                                    ControlToValidate="DDL_SebabBatal1" ErrorMessage="Sila Pilih" ForeColor="Red" ValidationGroup="insertForm" Display="Dynamic"></asp:RequiredFieldValidator>
+                                                    ControlToValidate="DDL_SebabBatal1" ErrorMessage="Sila Pilih Sebab Pembatalan" ForeColor="Red" ValidationGroup="insertForm" Display="Dynamic"></asp:RequiredFieldValidator>
                                             </asp:Panel>
 
                                             <asp:Panel ID="pnlbatal4" runat="server" Visible="false">
-                                                <label>Sebab Pembatalan</label>
+                                                <label class="form-label-custom">Sebab Pembatalan <span class="text-danger">*</span></label>
                                                 <asp:DropDownList ID="DDL_SebabBatal2" Text='<%# Bind("SebabBatalTanpaPerm") %>' CssClass="form-control select2" runat="server"
                                                     DataSourceID="SqlDataSourceSebab2" DataTextField="name" DataValueField="id">
                                                 </asp:DropDownList>
@@ -2955,24 +3029,14 @@
                                                     SelectCommand="SELECT NULL AS id, '-- Sila Pilih --' AS name UNION ALL SELECT id, name 
                                                         FROM TBL_LOOKUPS WHERE lookupgrp_id = 10003 AND status = 1"></asp:SqlDataSource>
                                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator37" runat="server" CssClass="cssRequiredField"
-                                                    ControlToValidate="DDL_SebabBatal2" ErrorMessage="Sila Pilih" ForeColor="Red" ValidationGroup="insertForm" Display="Dynamic"></asp:RequiredFieldValidator>
+                                                    ControlToValidate="DDL_SebabBatal2" ErrorMessage="Sila Pilih Sebab Pembatalan" ForeColor="Red" ValidationGroup="insertForm" Display="Dynamic"></asp:RequiredFieldValidator>
                                             </asp:Panel>
-
-                                            <asp:Panel ID="pnlbatal5" runat="server" Visible="false">
-                                                <label>Catatan</label>
-                                                <asp:TextBox ID="TB_Remarks2" runat="server" TextMode="MultiLine" Rows="2"
-                                                    Text='<%# Bind("RemarksBatal") %>' CssClass="form-control" />
-                                            </asp:Panel>
-
                                         </div>
                                     </div>
 
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-md-6">
+                                    <div class="col-md-4">
                                         <div class="form-group">
-                                            <label>Tindakan Pembatalan</label>
+                                            <label class="form-label-custom">Tindakan Pembatalan <span class="text-danger">*</span></label>
                                             <asp:DropDownList ID="DDL_TindakanBatal" Text='<%# Bind("TindakanBatal") %>' CssClass="form-control select2" runat="server"
                                                 DataSourceID="SqlDataSourceTindakan" DataTextField="name" DataValueField="id">
                                             </asp:DropDownList>
@@ -2980,16 +3044,32 @@
                                                 SelectCommand="SELECT NULL AS id, '-- Sila Pilih --' AS name UNION ALL SELECT id, name 
                                                     FROM TBL_LOOKUPS WHERE lookupgrp_id = 10005 AND status = 1"></asp:SqlDataSource>
                                             <asp:RequiredFieldValidator ID="RequiredFieldValidator35" runat="server" CssClass="cssRequiredField"
-                                                ControlToValidate="DDL_TindakanBatal" ErrorMessage="Sila Pilih" ForeColor="Red" ValidationGroup="insertForm" Display="Dynamic"></asp:RequiredFieldValidator>
+                                                ControlToValidate="DDL_TindakanBatal" ErrorMessage="Sila Pilih Tindakan Pembatalan" ForeColor="Red" ValidationGroup="insertForm" Display="Dynamic"></asp:RequiredFieldValidator>
                                         </div>
-                                     </div>
+                                    </div>
                                 </div>
+
+                                <asp:Panel ID="pnlbatal5" runat="server" Visible="false">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label class="form-label-custom">Catatan Pembatalan</label>
+                                                <asp:TextBox ID="TB_Remarks2" runat="server" TextMode="MultiLine" Rows="2"
+                                                    Text='<%# Bind("RemarksBatal") %>' CssClass="form-control" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </asp:Panel>
                             </asp:Panel>
 
                         </div>
-                        <div class="card-footer">
-                            <asp:LinkButton runat="server" CssClass="btn btn-primary" ValidationGroup="insertForm" Text="Simpan" CommandName="Insert" ID="LinkButton1" CausesValidation="True" />
-                            &nbsp;<asp:LinkButton runat="server" Text="Kembali" ID="BackButton" CausesValidation="False" CssClass="btn btn-default" OnClick="BackButton_Click" />
+                        <div class="card-footer d-flex flex-wrap gap-2 align-items-center">
+                            <asp:LinkButton runat="server" CssClass="btn btn-primary" ValidationGroup="insertForm" Text="Simpan" CommandName="Insert" ID="LinkButton1" CausesValidation="True">
+                                <i class="bi bi-save me-1"></i> Simpan
+                            </asp:LinkButton>
+                            <asp:LinkButton runat="server" Text="Kembali" ID="BackButton" CausesValidation="False" CssClass="btn btn-outline-secondary" OnClick="BackButton_Click">
+                                <i class="bi bi-arrow-left me-1"></i> Kembali
+                            </asp:LinkButton>
                         </div>
                     </div>
                 </InsertItemTemplate>
@@ -3265,7 +3345,7 @@
 
                             <div class="row mb-4">
                                 <div class="col-12 text-end">
-                                    <asp:Button ID="ButtonAddAssignment" runat="server" Text="Permohonan Baru" CssClass="btn btn-block btn-primary" />
+                                    <asp:Button ID="ButtonAddAssignment" runat="server" Text="Permohonan Baru" CssClass="btn btn-block btn-primary" CausesValidation="false" />
                                     <br />
                                 </div>
                             </div>
@@ -3405,8 +3485,8 @@
                                 </div>
                                 <div class="col-md-2">
                                     <div class="form-group">
-                                        <asp:Button ID="btnSearch" runat="server" CssClass="btn btn-default" Text="Cari" />
-                                        <asp:Button ID="btnReset" CssClass="btn btn-default" runat="server" Text="Reset" />
+                                        <asp:Button ID="btnSearch" runat="server" CssClass="btn btn-default" Text="Cari" CausesValidation="false" />
+                                        <asp:Button ID="btnReset" CssClass="btn btn-default" runat="server" Text="Reset" CausesValidation="false" />
                                     </div>
                                 </div>
                             </div>
@@ -5651,7 +5731,84 @@ ORDER BY
          SECTION 6: Client Scripts (Initializers & QR Modal)
          ========================================================================= --%>
     <script type="text/javascript">
+        // =========================================================================
+        // FormView1 Validation Guards:
+        // Ensure RequiredFieldValidators for insertForm and updateForm only trigger
+        // AFTER the user clicks "Simpan" or "Kemaskini".
+        // =========================================================================
+        var formValidationTriggered = {
+            insertForm: false,
+            updateForm: false
+        };
+
+        function setupValidationGuards() {
+            if (typeof window.Page_ClientValidate === 'function' && !window.Page_ClientValidate._isGuarded) {
+                var _origPageClientValidate = window.Page_ClientValidate;
+                window.Page_ClientValidate = function (validationGroup) {
+                    if (validationGroup === 'insertForm' || validationGroup === 'updateForm') {
+                        formValidationTriggered[validationGroup] = true;
+                    }
+                    return _origPageClientValidate.apply(this, arguments);
+                };
+                window.Page_ClientValidate._isGuarded = true;
+            }
+
+            if (typeof window.ValidatorValidate === 'function' && !window.ValidatorValidate._isGuarded) {
+                var _origValidatorValidate = window.ValidatorValidate;
+                window.ValidatorValidate = function (val, validationGroup, event) {
+                    if (!val) return;
+                    var grp = val.validationGroup;
+                    if (grp === 'insertForm' || grp === 'updateForm') {
+                        if (!formValidationTriggered[grp]) {
+                            // User has not clicked Simpan / Kemaskini yet; keep valid & hidden
+                            val.isvalid = true;
+                            if (typeof ValidatorUpdateDisplay === 'function') {
+                                ValidatorUpdateDisplay(val);
+                            } else {
+                                val.style.display = 'none';
+                                val.style.visibility = 'hidden';
+                            }
+                            return;
+                        }
+                    }
+                    return _origValidatorValidate.apply(this, arguments);
+                };
+                window.ValidatorValidate._isGuarded = true;
+            }
+        }
+
+        function resetAndHideUnsubmittedValidators() {
+            formValidationTriggered.insertForm = false;
+            formValidationTriggered.updateForm = false;
+
+            if (typeof Page_Validators !== 'undefined' && Page_Validators && Page_Validators.length) {
+                for (var i = 0; i < Page_Validators.length; i++) {
+                    var v = Page_Validators[i];
+                    if (v && (v.validationGroup === 'insertForm' || v.validationGroup === 'updateForm')) {
+                        v.isvalid = true;
+                        if (typeof ValidatorUpdateDisplay === 'function') {
+                            ValidatorUpdateDisplay(v);
+                        } else {
+                            v.style.display = 'none';
+                            v.style.visibility = 'hidden';
+                        }
+                    }
+                }
+                if (typeof ValidatorUpdateIsValid === 'function') {
+                    ValidatorUpdateIsValid();
+                }
+            }
+        }
+
+        $(document).ready(function () {
+            setupValidationGuards();
+            resetAndHideUnsubmittedValidators();
+        });
+
         function pageLoad() {
+            setupValidationGuards();
+            resetAndHideUnsubmittedValidators();
+
             $(function () {
                 $('.datepicker').datepicker({
                     dateFormat: 'dd/mm/yy',
@@ -5659,9 +5816,18 @@ ORDER BY
                 });
 
                 // Initialize Select2 Elements
-                $('.select2').select2();
-                $('.select2bs4').select2({
-                    theme: 'bootstrap4'
+                $('.select2').each(function () {
+                    $(this).select2({
+                        width: '100%',
+                        dropdownAutoWidth: false
+                    });
+                });
+                $('.select2bs4').each(function () {
+                    $(this).select2({
+                        theme: 'bootstrap4',
+                        width: '100%',
+                        dropdownAutoWidth: false
+                    });
                 });
 
                 // Datemasks
@@ -5670,6 +5836,37 @@ ORDER BY
                 $('[data-mask]').inputmask();
             });
         }
+
+        // Dynamically lock opened dropdown width to match the dropdownlist size exactly
+        $(document).on('select2:open', function (e) {
+            var $target = $(e.target);
+            var $container = null;
+            if ($target.data('select2') && $target.data('select2').$container) {
+                $container = $target.data('select2').$container;
+            } else {
+                $container = $target.next('.select2-container');
+                if (!$container.length) {
+                    $container = $target.siblings('.select2-container');
+                }
+            }
+
+            if ($container && $container.length) {
+                var width = $container.outerWidth();
+                if (width > 0) {
+                    var $open = $('.select2-container--open');
+                    $open.css({
+                        'width': width + 'px',
+                        'min-width': width + 'px',
+                        'max-width': width + 'px'
+                    });
+                    $open.find('.select2-dropdown').css({
+                        'width': width + 'px',
+                        'min-width': width + 'px',
+                        'max-width': width + 'px'
+                    });
+                }
+            }
+        });
 
         function printQrOnly() {
             var printContents = document.getElementById('qrPrintArea').innerHTML;
