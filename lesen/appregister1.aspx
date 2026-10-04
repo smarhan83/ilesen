@@ -222,6 +222,17 @@
             color: #555;
         }
 
+        /* Banting Location List */
+        .banting-lokasi-list {
+            width: 100% !important;
+            border: none !important;
+        }
+        .banting-lokasi-list > tbody > tr > td {
+            border: none !important;
+            padding: 0 !important;
+            background: transparent !important;
+        }
+
         /* Status Proses Timeline */
         .status-proses-card {
             background: #fff;
@@ -806,23 +817,91 @@
                                          <div class="col-md-2">
                                             <div class="form-group">
                                                 <label> </label>
-                                                <asp:LinkButton ID="btnAddLokasi" runat="server" CssClass="btn btn-primary" Text="Tambah" OnClick="btnAddLokasi_Click" />
+                                                <asp:LinkButton ID="btnAddLokasi" runat="server" CssClass="btn btn-primary" Text="Tambah" OnClick="btnAddLokasi_Click" CausesValidation="false" />
                                             </div>
                                         </div>
 
                                      </div>
 
                                      <div class="row">
-                                        <div class="col-md-8">
-                                            <asp:GridView ID="gvLokasiList" runat="server" HeaderStyle-ForeColor="Black" CssClass="table table-bordered" AutoGenerateColumns="False" 
-                                                ShowHeaderWhenEmpty="true" EmptyDataText="Senarai kosong." OnRowDeleting="gvLokasiList_RowDeleting">
+                                        <div class="col-md-12">
+                                            <asp:GridView ID="gvLokasiList" runat="server" GridLines="None" ShowHeader="false" 
+                                                CssClass="banting-lokasi-list no-action-dropdown" AutoGenerateColumns="False" 
+                                                ShowHeaderWhenEmpty="true" EmptyDataText="<div class='text-muted small py-2'>Senarai lokasi kosong. Sila masukkan lokasi di atas dan klik 'Tambah'.</div>"
+                                                DataKeyNames="Lokasi_ID" OnRowDataBound="gvLokasiList_RowDataBound">
                                                 <Columns>
-                                                    <asp:BoundField DataField="No" HeaderText="No." />
-                                                    <asp:BoundField DataField="Lokasi" HeaderText="Lokasi/Tempat Pemasangan" />
-                                                    <asp:TemplateField>
+                                                    <asp:TemplateField ItemStyle-Width="100%" ItemStyle-CssClass="p-0 border-0">
                                                         <ItemTemplate>
-                                                            <asp:LinkButton ID="btnRemove" runat="server"  
-                                                                CommandName="Delete" CssClass="btn btn-danger btn-sm">&times;</asp:LinkButton>
+                                                            <div class="card mb-3" style="border: 1px solid #ced4da;">
+                                                                <div class="card-header bg-light d-flex justify-content-between align-items-center py-2 px-3">
+                                                                    <div>
+                                                                        <strong>Lokasi #<%# Container.DataItemIndex + 1 %>:</strong>
+                                                                        <span class="text-dark ml-1"><%# Eval("Lokasi") %></span>
+                                                                    </div>
+                                                                    <asp:LinkButton ID="btnRemoveLokasi" runat="server" OnClick="btnRemoveLokasi_Click" CommandArgument='<%# Eval("Lokasi_ID") %>' 
+                                                                        CssClass="btn btn-danger btn-sm py-0 px-2" CausesValidation="false" OnClientClick="return confirm('Padam lokasi ini dan semua gambar banting yang telah dimuat naik?');" ToolTip="Padam Lokasi">
+                                                                        Padam Lokasi
+                                                                    </asp:LinkButton>
+                                                                </div>
+                                                                <div class="card-body p-3">
+                                                                    <div class="row align-items-end mb-3">
+                                                                        <div class="col-md-5">
+                                                                            <label>Fail Gambar Banting:</label>
+                                                                            <asp:FileUpload ID="fuBantingImg" runat="server" CssClass="form-control form-control-sm" accept="image/*" />
+                                                                        </div>
+                                                                        <div class="col-md-5">
+                                                                            <label>Catatan:</label>
+                                                                            <asp:TextBox ID="txtBantingRemarks" runat="server" CssClass="form-control form-control-sm" placeholder="Catatan / Remarks (pilihan)" />
+                                                                        </div>
+                                                                        <div class="col-md-2 mt-2 mt-md-0">
+                                                                            <asp:LinkButton ID="btnUploadBantingImg" runat="server" OnClick="btnUploadBantingImg_Click" CommandArgument='<%# Eval("Lokasi_ID") %>' 
+                                                                                CssClass="btn btn-primary btn-sm btn-block" CausesValidation="false">
+                                                                                Muat Naik
+                                                                            </asp:LinkButton>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="table-responsive">
+                                                                        <asp:GridView ID="gvBantingImages" runat="server" AutoGenerateColumns="False" 
+                                                                            CssClass="table table-sm table-bordered mb-0 no-action-dropdown"
+                                                                            ShowHeaderWhenEmpty="true" EmptyDataText="Tiada gambar banting dimuat naik untuk lokasi ini lagi.">
+                                                                            <HeaderStyle ForeColor="Black" BackColor="#f8f9fa" CssClass="small" />
+                                                                            <Columns>
+                                                                                <asp:TemplateField HeaderText="Bil." ItemStyle-Width="5%" ItemStyle-HorizontalAlign="Center" ItemStyle-VerticalAlign="Middle">
+                                                                                    <ItemTemplate>
+                                                                                        <span class="small"><%# Container.DataItemIndex + 1 %></span>
+                                                                                    </ItemTemplate>
+                                                                                </asp:TemplateField>
+                                                                                <asp:TemplateField HeaderText="Imej" ItemStyle-Width="12%" ItemStyle-HorizontalAlign="Center" ItemStyle-VerticalAlign="Middle">
+                                                                                    <ItemTemplate>
+                                                                                        <a href='<%# If(Eval("FilePath") IsNot Nothing AndAlso Not IsDBNull(Eval("FilePath")), ResolveUrl(Eval("FilePath").ToString()), "") %>' target="_blank">
+                                                                                            <img src='<%# If(Eval("FilePath") IsNot Nothing AndAlso Not IsDBNull(Eval("FilePath")), ResolveUrl(Eval("FilePath").ToString()), "") %>' style="height: 40px; width: 55px; object-fit: cover; border: 1px solid #ced4da;" />
+                                                                                        </a>
+                                                                                    </ItemTemplate>
+                                                                                </asp:TemplateField>
+                                                                                <asp:BoundField DataField="UniqueID" HeaderText="ID Unik" ItemStyle-Width="25%" ItemStyle-VerticalAlign="Middle" ItemStyle-CssClass="small font-weight-bold" />
+                                                                                <asp:BoundField DataField="Remarks" HeaderText="Catatan" NullDisplayText="-" ItemStyle-Width="35%" ItemStyle-VerticalAlign="Middle" ItemStyle-CssClass="small" />
+                                                                                <asp:TemplateField HeaderText="Kod QR" ItemStyle-Width="13%" ItemStyle-HorizontalAlign="Center" ItemStyle-VerticalAlign="Middle">
+                                                                                    <ItemTemplate>
+                                                                                        <asp:LinkButton ID="btnQrCodeBanting" runat="server" CssClass="btn btn-outline-primary btn-sm py-0 px-2" OnClick="btnQrCodeBanting_Click" 
+                                                                                            CommandArgument='<%# Eval("UniqueID") %>' CausesValidation="false" ToolTip="Lihat &amp; Cetak Kod QR">
+                                                                                            Kod QR
+                                                                                        </asp:LinkButton>
+                                                                                    </ItemTemplate>
+                                                                                </asp:TemplateField>
+                                                                                <asp:TemplateField HeaderText="Tindakan" ItemStyle-Width="10%" ItemStyle-HorizontalAlign="Center" ItemStyle-VerticalAlign="Middle">
+                                                                                    <ItemTemplate>
+                                                                                        <asp:LinkButton ID="btnDeleteBantingImg" runat="server" CssClass="btn btn-danger btn-sm py-0 px-2" OnClick="btnDeleteBantingImg_Click" 
+                                                                                            CommandArgument='<%# Eval("Imej_ID") %>' CausesValidation="false" OnClientClick="return confirm('Adakah anda pasti untuk padam gambar ini?');" ToolTip="Padam Gambar">
+                                                                                            Padam
+                                                                                        </asp:LinkButton>
+                                                                                    </ItemTemplate>
+                                                                                </asp:TemplateField>
+                                                                            </Columns>
+                                                                        </asp:GridView>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
                                                         </ItemTemplate>
                                                     </asp:TemplateField>
                                                 </Columns>
@@ -2054,40 +2133,12 @@
                                 </div>
 
                                  <div class="row">
-
-                                     <div class="col-md-6">
-                                         <div class="form-group">
-                                             <label>Lokasi/Tempat Pemasagan</label>
-                                             <asp:TextBox ID="TB_LokasiBanting" runat="server" TextMode="MultiLine" Rows="3" CssClass="form-control" />
+                                     <div class="col-md-12">
+                                         <div class="alert alert-info py-2 px-3 mb-3 small">
+                                             <i class="fa fa-info-circle mr-1"></i> <strong>Peringatan:</strong> Penambahan senarai lokasi dan muat naik gambar banting hanya boleh dilakukan selepas maklumat permohonan disimpan.
                                          </div>
                                      </div>
-
-                                     <div class="col-md-2">
-                                        <div class="form-group">
-                                            <label> </label>
-                                            <asp:LinkButton ID="btnAddLokasi" runat="server" CssClass="btn btn-primary" Text="Tambah" OnClick="btnAddLokasi_Click" />
-                                        </div>
-                                    </div>
-
                                  </div>
-
-                                 <div class="row">
-                                    <div class="col-md-8">
-                                        <asp:GridView ID="gvLokasiList" runat="server" HeaderStyle-ForeColor="Black" CssClass="table table-bordered" AutoGenerateColumns="False" 
-                                            ShowHeaderWhenEmpty="true" EmptyDataText="Senarai kosong." OnRowDeleting="gvLokasiList_RowDeleting">
-                                            <Columns>
-                                                <asp:BoundField DataField="No" HeaderText="No." />
-                                                <asp:BoundField DataField="Lokasi" HeaderText="Lokasi/Tempat Pemasangan" />
-                                                <asp:TemplateField>
-                                                    <ItemTemplate>
-                                                        <asp:LinkButton ID="btnRemove" runat="server"  
-                                                            CommandName="Delete" CssClass="btn btn-danger btn-sm">&times;</asp:LinkButton>
-                                                    </ItemTemplate>
-                                                </asp:TemplateField>
-                                            </Columns>
-                                        </asp:GridView>
-                                    </div>
-                                </div>
 
                                 <div class="row">
                                     <div class="col-md-3">
@@ -2772,7 +2823,7 @@
 
                                     <div class="col-md-2">
                                         <div class="form-group">
-                                            <asp:Label runat="server" ForeColor="DarkRed" Font-Bold="true">Kelulusan 24 jam?></asp:Label>
+                                            <asp:Label runat="server" ForeColor="DarkRed" Font-Bold="true">Kelulusan 24 jam?</asp:Label>
                                             <asp:CheckBox ID="CB_24h" Checked='<%# Bind("Is24jam") %>' runat="server" />
                                         </div>
                                     </div>
@@ -2965,6 +3016,27 @@
                                 <i class="fas fa-print"></i> Cetak
                             </button>
                             <button type="button" class="btn btn-secondary" onclick="closeQrModal()">Tutup</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal QR Code Banting -->
+            <div class="modal fade" id="modalBantingQrCode" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title font-weight-bold">
+                                Kod QR Banting / Sepanduk
+                            </h5>
+                        </div>
+                        <div class="modal-body text-center" id="bantingQrPrintArea">
+                            <asp:Image runat="server" ID="imgBantingModalQr" Visible="false" CssClass="img-fluid" Style="max-width: 250px;" AlternateText="Kod QR Banting" />
+                        </div>
+                        <div class="modal-footer justify-content-center">
+                            <button type="button" class="btn btn-primary" onclick="printBantingQrOnly()">
+                                <i class="fas fa-print"></i>Cetak</button>
+                            <button type="button" class="btn btn-secondary" onclick="closeBantingQrModal()">Tutup</button>
                         </div>
                     </div>
                 </div>
@@ -5614,6 +5686,42 @@ ORDER BY
                 $('#modalQrCode').modal('hide');
             } else if (typeof bootstrap !== 'undefined') {
                 var modalEl = document.getElementById('modalQrCode');
+                var modalInstance = bootstrap.Modal.getInstance(modalEl);
+                if (modalInstance) modalInstance.hide();
+            }
+        }
+
+        function printBantingQrOnly() {
+            var printContents = document.getElementById('bantingQrPrintArea').innerHTML;
+            var printWindow = window.open('', '_blank', 'width=520,height=620');
+            printWindow.document.write('<html><head><title>Cetak Kod QR Banting</title>');
+            printWindow.document.write('<style>');
+            printWindow.document.write('body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; text-align: center; padding: 25px; margin: 0; }');
+            printWindow.document.write('.badge { display: inline-block; padding: 4px 8px; font-size: 13px; font-weight: bold; background: #007bff; color: #fff; border-radius: 4px; }');
+            printWindow.document.write('.row { display: flex; margin-bottom: 6px; text-align: left; }');
+            printWindow.document.write('.col-4 { width: 35%; font-size: 12px; font-weight: bold; color: #555; }');
+            printWindow.document.write('.col-8 { width: 65%; font-size: 12px; color: #222; }');
+            printWindow.document.write('img { max-width: 220px; height: auto; }');
+            printWindow.document.write('@media print { body { padding: 10px; } }');
+            printWindow.document.write('</style></head><body>');
+            printWindow.document.write('<div style="border: 2px dashed #007bff; border-radius: 8px; padding: 20px; max-width: 360px; margin: 0 auto;">');
+            printWindow.document.write('<h4 style="margin: 0 0 10px 0; color: #007bff;">KOD QR BANTING / SEPANDUK</h4>');
+            printWindow.document.write(printContents);
+            printWindow.document.write('</div>');
+            printWindow.document.write('</body></html>');
+            printWindow.document.close();
+            printWindow.focus();
+            setTimeout(function () {
+                printWindow.print();
+                printWindow.close();
+            }, 300);
+        }
+
+        function closeBantingQrModal() {
+            if (typeof $ !== 'undefined' && $.fn.modal) {
+                $('#modalBantingQrCode').modal('hide');
+            } else if (typeof bootstrap !== 'undefined') {
+                var modalEl = document.getElementById('modalBantingQrCode');
                 var modalInstance = bootstrap.Modal.getInstance(modalEl);
                 if (modalInstance) modalInstance.hide();
             }

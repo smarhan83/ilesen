@@ -1,4 +1,4 @@
-﻿<%@ Master Language="VB" CodeFile="MasterMenu.master.vb" Inherits="MasterMenu" %>
+<%@ Master Language="VB" CodeFile="MasterMenu.master.vb" Inherits="MasterMenu" %>
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="asp" %>
 <!DOCTYPE html>
 
@@ -2112,6 +2112,10 @@ h1{
                     return;
                 }
 
+                if ($btn.closest('.no-action-dropdown').length || $btn.closest('.banting-lokasi-list').length) {
+                    return;
+                }
+
                 var text = $btn.text().trim();
 
                 if (iconMap.hasOwnProperty(text)) {
@@ -2146,6 +2150,10 @@ h1{
 
             document.querySelectorAll('.table-bordered td').forEach(function (td) {
                 if (td.dataset.dropdownConverted === "1") return;
+
+                if (td.classList.contains('no-action-dropdown') || td.closest('.no-action-dropdown') || td.closest('.banting-lokasi-list') || td.querySelector('input, select, textarea, .card, .location-card')) {
+                    return;
+                }
 
                 var actionButtons = td.querySelectorAll(
                     'a.btn-warning.btn-sm, a.btn-primary.btn-sm, a.btn-danger.btn-sm, a.btn-info.btn-sm, a.btn-success.btn-sm'
