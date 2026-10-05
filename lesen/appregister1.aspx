@@ -226,11 +226,16 @@
         .banting-lokasi-list {
             width: 100% !important;
             border: none !important;
+            box-shadow: none !important;
         }
         .banting-lokasi-list > tbody > tr > td {
             border: none !important;
             padding: 0 !important;
             background: transparent !important;
+            box-shadow: none !important;
+        }
+        .banting-lokasi-list .card {
+            box-shadow: none !important;
         }
 
         /* Status Proses Timeline */
@@ -1040,31 +1045,64 @@
                                                 <Columns>
                                                     <asp:TemplateField ItemStyle-Width="100%" ItemStyle-CssClass="p-0 border-0">
                                                         <ItemTemplate>
-                                                            <div class="card mb-3" style="border: 1px solid #ced4da;">
-                                                                <div class="bg-light d-flex justify-content-between align-items-center py-2 px-3">
-                                                                    <div>
-                                                                        <strong>Lokasi #<%# Container.DataItemIndex + 1 %>:</strong>
-                                                                        <span class="text-dark ml-1"><%# Eval("Lokasi") %></span>
+                                                            <div class="card mb-3 shadow-none" style="border: 1px solid #ced4da; box-shadow: none;">
+                                                                <div class="bg-light d-flex justify-content-between align-items-center py-2 px-3 lokasi-card-header">
+                                                                    <!-- View Mode Panel -->
+                                                                    <div class="lokasi-view-panel d-flex align-items-center flex-grow-1 me-2 overflow-hidden">
+                                                                        <strong class="text-nowrap me-2">Lokasi #<%# Container.DataItemIndex + 1 %>:</strong>
+                                                                        <span class="text-dark lokasi-text text-break"><%# Eval("Lokasi") %></span>
                                                                     </div>
-                                                                    <asp:LinkButton ID="btnRemoveLokasi" runat="server" OnClick="btnRemoveLokasi_Click" CommandArgument='<%# Eval("Lokasi_ID") %>' 
-                                                                        CssClass="btn btn-danger btn-sm py-0 px-2" CausesValidation="false" OnClientClick="return confirm('Padam lokasi ini dan semua gambar banting yang telah dimuat naik?');" ToolTip="Padam Lokasi">
-                                                                        Padam Lokasi
-                                                                    </asp:LinkButton>
+
+                                                                    <!-- Edit Mode Panel -->
+                                                                    <div class="lokasi-edit-panel d-none align-items-center flex-grow-1 me-2">
+                                                                        <strong class="text-nowrap me-2">Lokasi #<%# Container.DataItemIndex + 1 %>:</strong>
+                                                                        <asp:TextBox ID="txtEditLokasi" runat="server" Text='<%# Eval("Lokasi") %>' 
+                                                                            CssClass="form-control form-control-sm lokasi-edit-input" placeholder="Masukkan lokasi..." 
+                                                                            onkeydown="onLokasiEditKey(event, this);" />
+                                                                    </div>
+
+                                                                    <!-- Actions -->
+                                                                    <div class="d-flex align-items-center text-nowrap">
+                                                                        <!-- View Mode Actions (Edit & Delete) -->
+                                                                        <div class="lokasi-actions-view d-inline-flex">
+                                                                            <button type="button" class="btn btn-primary btn-sm me-1" 
+                                                                                onclick="toggleLokasiEdit(this, true);" title="Kemaskini Lokasi">
+                                                                                <i class="bi bi-pencil-square"></i>
+                                                                            </button>
+                                                                            <asp:LinkButton ID="btnRemoveLokasi" runat="server" OnClick="btnRemoveLokasi_Click" CommandArgument='<%# Eval("Lokasi_ID") %>' 
+                                                                                CssClass="btn btn-danger btn-sm" CausesValidation="false" 
+                                                                                OnClientClick="return confirm('Padam lokasi ini dan semua gambar banting yang telah dimuat naik?');" ToolTip="Padam Lokasi">
+                                                                                <i class="bi bi-trash"></i>
+                                                                            </asp:LinkButton>
+                                                                        </div>
+
+                                                                        <!-- Edit Mode Actions (Save & Cancel) -->
+                                                                        <div class="lokasi-actions-edit d-none">
+                                                                            <asp:LinkButton ID="btnSaveLokasi" runat="server" OnClick="btnSaveLokasi_Click" CommandArgument='<%# Eval("Lokasi_ID") %>' 
+                                                                                CssClass="btn btn-success btn-sm p-4 me-1 btn-save-lokasi" CausesValidation="false" ToolTip="Simpan Lokasi">
+                                                                                <i class="bi bi-check-lg"></i>
+                                                                            </asp:LinkButton>
+                                                                            <button type="button" class="btn btn-danger btn-sm" 
+                                                                                onclick="toggleLokasiEdit(this, false);" title="Batal">
+                                                                                <i class="bi bi-x-lg"></i>
+                                                                            </button>
+                                                                        </div>
+                                                                    </div>
                                                                 </div>
                                                                 <div class="card-body p-3">
                                                                     <div class="row align-items-end mb-3">
                                                                         <div class="col-md-5">
-                                                                            <label>Fail Gambar Banting:</label>
+                                                                            <label class="form-label small mb-1">Fail Gambar Banting:</label>
                                                                             <asp:FileUpload ID="fuBantingImg" runat="server" CssClass="form-control form-control-sm" accept="image/*" />
                                                                         </div>
                                                                         <div class="col-md-5">
-                                                                            <label>Catatan:</label>
+                                                                            <label class="form-label small mb-1">Catatan:</label>
                                                                             <asp:TextBox ID="txtBantingRemarks" runat="server" CssClass="form-control form-control-sm" placeholder="Catatan / Remarks (pilihan)" />
                                                                         </div>
-                                                                        <div class="col-md-2 mt-2 mt-md-0">
+                                                                        <div class="col-md-2 mt-2 mt-md-0 d-flex align-items-end">
                                                                             <asp:LinkButton ID="btnUploadBantingImg" runat="server" OnClick="btnUploadBantingImg_Click" CommandArgument='<%# Eval("Lokasi_ID") %>' 
-                                                                                CssClass="btn btn-primary btn-sm btn-block" CausesValidation="false">
-                                                                                Muat Naik
+                                                                                CssClass="btn btn-primary btn-sm" CausesValidation="false" ToolTip="Muat Naik Fail Gambar">
+                                                                                <i class="bi bi-upload"></i>
                                                                             </asp:LinkButton>
                                                                         </div>
                                                                     </div>
@@ -1091,17 +1129,17 @@
                                                                                 <asp:BoundField DataField="Remarks" HeaderText="Catatan" NullDisplayText="-" ItemStyle-Width="35%" ItemStyle-VerticalAlign="Middle" ItemStyle-CssClass="small" />
                                                                                 <asp:TemplateField HeaderText="Kod QR" ItemStyle-Width="13%" ItemStyle-HorizontalAlign="Center" ItemStyle-VerticalAlign="Middle">
                                                                                     <ItemTemplate>
-                                                                                        <asp:LinkButton ID="btnQrCodeBanting" runat="server" CssClass="btn btn-outline-primary btn-sm py-0 px-2" OnClick="btnQrCodeBanting_Click" 
+                                                                                        <asp:LinkButton ID="btnQrCodeBanting" runat="server" CssClass="btn btn-outline-primary btn-sm p-2" OnClick="btnQrCodeBanting_Click" 
                                                                                             CommandArgument='<%# Eval("UniqueID") %>' CausesValidation="false" ToolTip="Lihat &amp; Cetak Kod QR">
-                                                                                            Kod QR
+                                                                                            <i class="bi bi-qr-code"></i>
                                                                                         </asp:LinkButton>
                                                                                     </ItemTemplate>
                                                                                 </asp:TemplateField>
                                                                                 <asp:TemplateField HeaderText="Tindakan" ItemStyle-Width="10%" ItemStyle-HorizontalAlign="Center" ItemStyle-VerticalAlign="Middle">
                                                                                     <ItemTemplate>
-                                                                                        <asp:LinkButton ID="btnDeleteBantingImg" runat="server" CssClass="btn btn-danger btn-sm py-0 px-2" OnClick="btnDeleteBantingImg_Click" 
+                                                                                        <asp:LinkButton ID="btnDeleteBantingImg" runat="server" CssClass="btn btn-danger btn-sm" OnClick="btnDeleteBantingImg_Click" 
                                                                                             CommandArgument='<%# Eval("Imej_ID") %>' CausesValidation="false" OnClientClick="return confirm('Adakah anda pasti untuk padam gambar ini?');" ToolTip="Padam Gambar">
-                                                                                            Padam
+                                                                                            <i class="bi bi-trash"></i>
                                                                                         </asp:LinkButton>
                                                                                     </ItemTemplate>
                                                                                 </asp:TemplateField>
@@ -1248,7 +1286,9 @@
                                                     <asp:TemplateField>
                                                         <ItemTemplate>
                                                             <asp:LinkButton ID="btnRemove" runat="server" Text="Remove" 
-                                                                CommandName="Delete" CssClass="btn btn-danger btn-sm" CausesValidation="false">&times;</asp:LinkButton>
+                                                                CommandName="Delete" CssClass="btn btn-danger btn-sm" CausesValidation="false">
+                                                                <i class="bi bi-trash"></i>
+                                                            </asp:LinkButton>
                                                         </ItemTemplate>
                                                     </asp:TemplateField>
                                                 </Columns>
@@ -1432,7 +1472,9 @@
                                                     <asp:TemplateField>
                                                         <ItemTemplate>
                                                             <asp:LinkButton ID="btnRemove" runat="server"  
-                                                                CommandName="Delete" CssClass="btn btn-danger btn-sm" CausesValidation="false">&times;</asp:LinkButton>
+                                                                CommandName="Delete" CssClass="btn btn-danger btn-sm" CausesValidation="false">
+                                                                <i class="bi bi-trash"></i>
+                                                            </asp:LinkButton>
                                                         </ItemTemplate>
                                                     </asp:TemplateField>
                                                 </Columns>
@@ -1854,7 +1896,7 @@
 
                         </div>
                         <div class="card-footer d-flex flex-wrap gap-2 align-items-center">
-                            <asp:LinkButton runat="server" CssClass="btn btn-warning" ValidationGroup="updateForm" Text="Kemaskini" CommandName="Update" ID="UpdateFormButton" CausesValidation="True">
+                            <asp:LinkButton runat="server" CssClass="btn btn-primary" ValidationGroup="updateForm" Text="Kemaskini" CommandName="Update" ID="UpdateFormButton" CausesValidation="True">
                                 <i class="bi bi-check-lg me-1"></i> Kemaskini
                             </asp:LinkButton>
                             <asp:LinkButton runat="server" CssClass="btn btn-success text-white" Visible='<%# If(Eval("StatusID") = 0, True, False) %>' ValidationGroup="updateForm" Text="Hantar" ID="SubmitApproval" OnCommand="OnClickBtnSubmit" CausesValidation="False" OnClientClick="return confirm('Hantar ke jabatan agensi sekarang?');">
@@ -4348,7 +4390,9 @@
                                           <asp:TemplateField>
                                               <ItemTemplate>
                                                   <asp:LinkButton ID="btnRemove_ins" runat="server"  
-                                                      CommandName="Delete" CssClass="btn btn-danger btn-sm">&times;</asp:LinkButton>
+                                                      CommandName="Delete" CssClass="btn btn-danger btn-sm">
+                                                      <i class="bi bi-trash"></i>
+                                                  </asp:LinkButton>
                                               </ItemTemplate>
                                           </asp:TemplateField>
                                       </Columns>
@@ -4540,7 +4584,9 @@
                                              <asp:TemplateField>
                                                  <ItemTemplate>
                                                      <asp:LinkButton ID="btnRemove_ins" runat="server"  
-                                                         CommandName="Delete" CssClass="btn btn-danger btn-sm">&times;</asp:LinkButton>
+                                                         CommandName="Delete" CssClass="btn btn-danger btn-sm">
+                                                         <i class="bi bi-trash"></i>
+                                                     </asp:LinkButton>
                                                  </ItemTemplate>
                                              </asp:TemplateField>
                                          </Columns>
@@ -5921,6 +5967,79 @@ ORDER BY
                 var modalEl = document.getElementById('modalBantingQrCode');
                 var modalInstance = bootstrap.Modal.getInstance(modalEl);
                 if (modalInstance) modalInstance.hide();
+            }
+        }
+
+        function toggleLokasiEdit(el, isEdit) {
+            var header = el.closest('.lokasi-card-header');
+            if (!header) return false;
+
+            var viewPanel = header.querySelector('.lokasi-view-panel');
+            var editPanel = header.querySelector('.lokasi-edit-panel');
+            var actionsView = header.querySelector('.lokasi-actions-view');
+            var actionsEdit = header.querySelector('.lokasi-actions-edit');
+            var input = editPanel ? editPanel.querySelector('.lokasi-edit-input') : null;
+            var displayText = viewPanel ? viewPanel.querySelector('.lokasi-text') : null;
+
+            if (isEdit) {
+                if (viewPanel) {
+                    viewPanel.classList.add('d-none');
+                    viewPanel.classList.remove('d-flex');
+                }
+                if (actionsView) {
+                    actionsView.classList.add('d-none');
+                    actionsView.classList.remove('d-inline-flex');
+                }
+                if (editPanel) {
+                    editPanel.classList.remove('d-none');
+                    editPanel.classList.add('d-flex');
+                }
+                if (actionsEdit) {
+                    actionsEdit.classList.remove('d-none');
+                    actionsEdit.classList.add('d-inline-flex');
+                }
+                if (input && displayText) {
+                    input.value = displayText.textContent.trim();
+                    input.focus();
+                    input.select();
+                }
+            } else {
+                if (editPanel) {
+                    editPanel.classList.add('d-none');
+                    editPanel.classList.remove('d-flex');
+                }
+                if (actionsEdit) {
+                    actionsEdit.classList.add('d-none');
+                    actionsEdit.classList.remove('d-inline-flex');
+                }
+                if (viewPanel) {
+                    viewPanel.classList.remove('d-none');
+                    viewPanel.classList.add('d-flex');
+                }
+                if (actionsView) {
+                    actionsView.classList.remove('d-none');
+                    actionsView.classList.add('d-inline-flex');
+                }
+                if (input && displayText) {
+                    input.value = displayText.textContent.trim();
+                }
+            }
+            return false;
+        }
+
+        function onLokasiEditKey(event, input) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                var header = input.closest('.lokasi-card-header');
+                if (header) {
+                    var saveBtn = header.querySelector('.btn-save-lokasi');
+                    if (saveBtn) {
+                        saveBtn.click();
+                    }
+                }
+            } else if (event.key === 'Escape') {
+                event.preventDefault();
+                toggleLokasiEdit(input, false);
             }
         }
     </script>
