@@ -1796,6 +1796,62 @@ Partial Class appregister1
         ShowAlert("success", "", "Lokasi dan gambar banting berjaya dipadam.")
     End Sub
 
+    Protected Sub btnSaveLokasi_Click(sender As Object, e As EventArgs)
+        If FormView1.CurrentMode <> FormViewMode.Edit Then Exit Sub
+
+        Dim btn As LinkButton = DirectCast(sender, LinkButton)
+        Dim lokasiId As Integer = CInt(btn.CommandArgument)
+
+        Dim row As GridViewRow = TryCast(btn.NamingContainer, GridViewRow)
+        If row Is Nothing Then
+            Dim c As Control = btn.Parent
+            While c IsNot Nothing AndAlso Not (TypeOf c Is GridViewRow)
+                c = c.Parent
+            End While
+            row = TryCast(c, GridViewRow)
+        End If
+
+        Dim newLokasi As String = ""
+        Dim txtEditLokasi As TextBox = If(row IsNot Nothing, DirectCast(row.FindControl("txtEditLokasi"), TextBox), Nothing)
+
+        If txtEditLokasi IsNot Nothing AndAlso Not String.IsNullOrWhiteSpace(txtEditLokasi.Text) Then
+            newLokasi = txtEditLokasi.Text.Trim()
+        End If
+
+        If String.IsNullOrWhiteSpace(newLokasi) AndAlso txtEditLokasi IsNot Nothing AndAlso Request.Form(txtEditLokasi.UniqueID) IsNot Nothing Then
+            newLokasi = Request.Form(txtEditLokasi.UniqueID).Trim()
+        End If
+
+        If String.IsNullOrWhiteSpace(newLokasi) AndAlso row IsNot Nothing Then
+            For Each key As String In Request.Form.AllKeys
+                If key IsNot Nothing AndAlso key.EndsWith("txtEditLokasi") AndAlso key.Contains("ctl" & (row.RowIndex + 2).ToString("D2")) Then
+                    If Not String.IsNullOrWhiteSpace(Request.Form(key)) Then
+                        newLokasi = Request.Form(key).Trim()
+                        Exit For
+                    End If
+                End If
+            Next
+        End If
+
+        If String.IsNullOrWhiteSpace(newLokasi) Then
+            ShowAlert("warning", "", "Sila masukkan lokasi pemasangan.")
+            Exit Sub
+        End If
+
+        Using conn As New SqlConnection(CS)
+            conn.Open()
+            Dim sql As String = "UPDATE LESEN_BantingLokasi SET Lokasi = @Lokasi WHERE Lokasi_ID = @Lokasi_ID"
+            Using cmd As New SqlCommand(sql, conn)
+                cmd.Parameters.AddWithValue("@Lokasi", newLokasi)
+                cmd.Parameters.AddWithValue("@Lokasi_ID", lokasiId)
+                cmd.ExecuteNonQuery()
+            End Using
+        End Using
+
+        BindLokasiList()
+        ShowAlert("success", "", "Lokasi berjaya dikemaskini.")
+    End Sub
+
     Protected Sub gvLokasiList_RowDeleting(sender As Object, e As GridViewDeleteEventArgs)
         ' Stub maintained for backward compatibility
     End Sub
@@ -2034,6 +2090,16 @@ Partial Class appregister1
         End Using
 
         HF_LokasiList.Value = String.Join("||", lokasiList)
+
+        Using conn As New SqlConnection(CS)
+            conn.Open()
+            Dim updSql As String = "UPDATE LESEN_Permohonan SET LokasiList = @LokasiList WHERE Permohonan_ID = @Permohonan_ID"
+            Using updCmd As New SqlCommand(updSql, conn)
+                updCmd.Parameters.AddWithValue("@LokasiList", HF_LokasiList.Value)
+                updCmd.Parameters.AddWithValue("@Permohonan_ID", permohonanId)
+                updCmd.ExecuteNonQuery()
+            End Using
+        End Using
     End Sub
 
     ' --- Iklan (_ins Pembetulan) ---
