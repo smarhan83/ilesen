@@ -1902,7 +1902,7 @@
                             <asp:LinkButton runat="server" CssClass="btn btn-success text-white" Visible='<%# If(Eval("StatusID") = 0, True, False) %>' ValidationGroup="updateForm" Text="Hantar" ID="SubmitApproval" OnCommand="OnClickBtnSubmit" CausesValidation="False" OnClientClick="return confirm('Hantar ke jabatan agensi sekarang?');">
                                 <i class="bi bi-send me-1"></i> Hantar
                             </asp:LinkButton>
-                            <asp:LinkButton runat="server" CssClass="btn btn-info text-white" Visible='<%# If(Eval("StatusID") = 10, True, False) %>' Text='<%# If(Eval("IsBatal") = False, "Surat Kelulusan", "Surat Pembatalan") %>' ID="ViewSuratKelulusanPembatalan" OnCommand="OnClickSuratKelulusanPembatalan" CausesValidation="False">
+                            <asp:LinkButton runat="server" CssClass="btn btn-info text-white" Visible='<%# If(Eval("StatusID") = 10 And Eval("JenisLesenIdList") <> "27", True, False) %>' Text='<%# If(Eval("IsBatal") = False, "Surat Kelulusan", "Surat Pembatalan") %>' ID="ViewSuratKelulusanPembatalan" OnCommand="OnClickSuratKelulusanPembatalan" CausesValidation="False">
                                 <i class="bi bi-file-earmark-pdf me-1"></i> <%# If(Eval("IsBatal") = False, "Surat Kelulusan", "Surat Pembatalan") %>
                             </asp:LinkButton>
                             <asp:LinkButton runat="server" Text="Kembali" ID="BackButton" CausesValidation="False" CssClass="btn btn-outline-secondary" OnClick="BackButton_Click">
