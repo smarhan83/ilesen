@@ -27,6 +27,12 @@ Partial Class _Default
             LoadKategoriDropdown()
             LoadAgensiDropdown()
 
+            Try
+                LoadCountStatus()
+            Catch ex As Exception
+                ' Log error
+            End Try
+
         End If
 
         Dim pageName As String = System.IO.Path.GetFileName(Request.Url.AbsolutePath)
@@ -72,6 +78,50 @@ Partial Class _Default
         End Try
 
 
+
+    End Sub
+
+    ' Kad statistik atas (4 kad). Dulu 4 FormView berkongsi satu SqlDataSource,
+    ' menyebabkan query yang sama dijalankan 4 kali - kini sekali sahaja.
+    Private Sub LoadCountStatus()
+
+        Using con As New SqlConnection(ConfigurationManager.ConnectionStrings("webcon_ConnectionStr").ConnectionString)
+            Using cmd As New SqlCommand("
+            SELECT
+                COUNT(DISTINCT a.Permohonan_ID) AS TotalPermohonan,
+                SUM(CASE WHEN a.ApprStatusID IN (1,2,3,4,5,7,8) THEN 1 ELSE 0 END) AS TotalDalamProses,
+                SUM(CASE WHEN a.ApprStatusID = 10 THEN 1 ELSE 0 END) AS Diluluskan,
+                SUM(CASE WHEN a.ApprStatusID IN (6,9) THEN 1 ELSE 0 END) AS Ditolak
+            FROM
+            (
+                SELECT Permohonan_ID, ApprStatusID, AgensiID
+                FROM v_LESEN_ApprovalList_Curr
+
+                UNION ALL
+
+                SELECT Permohonan_ID, ApprStatusID, AgensiID
+                FROM v_LESEN_ApprovalListBatal_Curr
+            ) a
+            WHERE IIF(@AgensiID = 0 OR @AgensiID = 1,0,@AgensiID) =
+                    IIF(@AgensiID = 0 OR @AgensiID = 1,0,a.AgensiID)
+            AND a.ApprStatusID <> 0
+            ", con)
+
+                cmd.Parameters.AddWithValue("@AgensiID", If(Session.Item("sessionEstateID"), DBNull.Value))
+
+                con.Open()
+
+                Using reader As SqlDataReader = cmd.ExecuteReader()
+                    If reader.Read() Then
+                        litTotalPermohonan.Text = reader("TotalPermohonan").ToString()
+                        litTotalDalamProses.Text = reader("TotalDalamProses").ToString()
+                        litDiluluskan.Text = reader("Diluluskan").ToString()
+                        litDitolak.Text = reader("Ditolak").ToString()
+                    End If
+                End Using
+
+            End Using
+        End Using
 
     End Sub
 
@@ -986,6 +1036,13 @@ ORDER BY a.JenisLesen_ID, BulanKey;"
         End Set
     End Property
 
+    ' Jumlah rekod diambil daripada select yang sama digunakan oleh GridView
+    Protected Sub sdsListStaffIK_Selected(sender As Object, e As SqlDataSourceStatusEventArgs)
+        If e.Exception Is Nothing Then
+            TotalRecordsIK = e.AffectedRows
+        End If
+    End Sub
+
     Protected Sub gvListStaffIK_PageIndexChanging(sender As Object, e As GridViewPageEventArgs)
         gvListStaffIK.PageIndex = e.NewPageIndex
         gvListStaffIK.DataBind() ' SqlDataSource akan auto refetch data
@@ -997,8 +1054,7 @@ ORDER BY a.JenisLesen_ID, BulanKey;"
 
         Dim gv As GridView = CType(sender, GridView)
 
-        ' Kira TotalRecords sekali di sini (SqlDataSource select tanpa paging)
-        TotalRecordsIK = sdsListStaffIK.Select(DataSourceSelectArguments.Empty).Cast(Of DataRowView).Count()
+        ' TotalRecordsIK sudah diisi dalam sdsListStaffIK_Selected - tak perlu query semula
 
         Dim totalPages As Integer = gv.PageCount
         Dim currentPage As Integer = gv.PageIndex + 1

@@ -134,31 +134,7 @@
             </section>
 
             <!-- Dashboard Cards -->
-            <asp:SqlDataSource ID="sdsCountStatus" runat="server" ConnectionString="<%$ ConnectionStrings:webcon_ConnectionStr %>"
-            SelectCommand="
-            SELECT
-                COUNT(DISTINCT a.Permohonan_ID) AS TotalPermohonan,
-                SUM(CASE WHEN a.ApprStatusID IN (1,2,3,4,5,7,8) THEN 1 ELSE 0 END) AS TotalDalamProses,
-                SUM(CASE WHEN a.ApprStatusID = 10 THEN 1 ELSE 0 END) AS Diluluskan,
-                SUM(CASE WHEN a.ApprStatusID IN (6,9) THEN 1 ELSE 0 END) AS Ditolak
-            FROM
-            (
-                SELECT Permohonan_ID, ApprStatusID, AgensiID
-                FROM v_LESEN_ApprovalList_Curr
-
-                UNION ALL
-
-                SELECT Permohonan_ID, ApprStatusID, AgensiID
-                FROM v_LESEN_ApprovalListBatal_Curr
-            ) a
-            WHERE IIF(@AgensiID = 0 OR @AgensiID = 1,0,@AgensiID) =
-                    IIF(@AgensiID = 0 OR @AgensiID = 1,0,a.AgensiID)
-            AND a.ApprStatusID &lt;&gt; 0
-            ">
-            <SelectParameters>
-            <asp:SessionParameter SessionField="sessionEstateID" Name="AgensiID"></asp:SessionParameter>
-            </SelectParameters>
-            </asp:SqlDataSource>
+            <%-- Kiraan 4 kad di bawah dimuatkan sekali sahaja dalam code-behind (LoadCountStatus) --%>
 
             <div class="row g-4 mb-4">
             <div class="col-md-6 col-xl-3">
@@ -169,11 +145,7 @@
                 </div>
                 
                 <h3>
-                    <asp:FormView ID="FormView5" runat="server" DataSourceID="sdsCountStatus">
-                        <ItemTemplate>
-                            <%# Eval("TotalPermohonan") %>
-                        </ItemTemplate>
-                    </asp:FormView>
+                    <asp:Literal ID="litTotalPermohonan" runat="server" Text="0" />
                 </h3>
                 <p>Jumlah permohonan / pembatalan</p>
                 </div>
@@ -186,11 +158,7 @@
                     <i class="bi bi-three-dots text-muted"></i>
                 </div>
                 <h3>
-                    <asp:FormView ID="FormView6" runat="server" DataSourceID="sdsCountStatus">
-                        <ItemTemplate>
-                            <%# Eval("TotalDalamProses") %>
-                        </ItemTemplate>
-                    </asp:FormView>
+                    <asp:Literal ID="litTotalDalamProses" runat="server" Text="0" />
                 </h3>
                 <p>Menunggu semakan / tindakan</p>
                 </div>
@@ -203,11 +171,7 @@
                     <i class="bi bi-three-dots text-muted"></i>
                 </div>
                 <h3>
-                    <asp:FormView ID="FormView7" runat="server" DataSourceID="sdsCountStatus">
-                        <ItemTemplate>
-                            <%# Eval("Diluluskan") %>
-                        </ItemTemplate>
-                    </asp:FormView>
+                    <asp:Literal ID="litDiluluskan" runat="server" Text="0" />
                 </h3>
                 <p>Permohonan/pembatalan diluluskan</p>
                 </div>
@@ -220,11 +184,7 @@
                     <i class="bi bi-three-dots text-muted"></i>
                 </div>
                 <h3>
-                    <asp:FormView ID="FormView8" runat="server" DataSourceID="sdsCountStatus">
-                        <ItemTemplate>
-                            <%# Eval("Ditolak") %>
-                        </ItemTemplate>
-                    </asp:FormView>
+                    <asp:Literal ID="litDitolak" runat="server" Text="0" />
                 </h3>
                 <p>Perlu pembetulan / semakan</p>
                 </div>
@@ -1017,6 +977,7 @@
             </div>
 
               <asp:SqlDataSource runat="server" ID="sdsListStaffIK" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
+                  OnSelected="sdsListStaffIK_Selected"
                   SelectCommand="SELECT F.Rujukan, G.JenisLesen_Description, D.PermohonanAgensiStaffID_UsersID, E.Users_Fullname AS StaffName, 
                   convert(varchar, A.TarikhMohon, 103) AS TarikhMohon, 
                   ApprovalID, A.Permohonan_ID, ApprStatusID, Description, ApprLevel, AgensiID, B.JabatanAgensi_Description, 
