@@ -4045,8 +4045,10 @@ ORDER BY
             and case when isnull((select top 1 x.JabatanAgensi_IsLesen from LESEN_JabatanAgensi x where x.JabatanAgensi_ID = @AgensiID),0) = 1 
 			then isnull(a.AgensiID,@AgensiID) 
 			when @cbUlasan = 1 and isnull((select top 1 x.JabatanAgensi_Type from LESEN_JabatanAgensi x where x.JabatanAgensi_ID = @AgensiID),'L') = 'J' 
-			then IIF(a.AgensiID = @AgensiID or a.AgensiID is null,@AgensiID,0) 
-			else isnull(a.AgensiID,0) end 
+			then IIF(a.AgensiID = @AgensiID or a.AgensiID is null,@AgensiID,0)
+			when @cbUlasan = 1 and exists (select 1 from LESEN_PermohonanAgensi x3 where x3.Permohonan_ID = g.Permohonan_ID and x3.JabatanAgensi_ID = @AgensiID)
+			then IIF(a.AgensiID = @AgensiID or a.AgensiID is null,@AgensiID,0)
+			else isnull(a.AgensiID,0) end
             = @AgensiID
 			
             and isnull(g.Rujukan,'') like '%'+@Rujukan+'%'

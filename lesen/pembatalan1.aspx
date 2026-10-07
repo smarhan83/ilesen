@@ -1591,11 +1591,11 @@ ORDER BY
             <asp:SqlDataSource ID="SqlDataSourceForm" runat="server"
                 ConnectionString="<%$ ConnectionStrings:webcon_ConnectionStr %>"
                 InsertCommand=""
-                SelectCommand="SELECT g.NamaSyarikat,a.*,d.*,e.*,f.*,g.JenisPerniagaan,g.Rujukan,
-                ISNULL(g.AlamatBaru,ISNULL(g.AlamatPremis,ISNULL(g.AlamatPenjajaan,ISNULL(g.AnjingAlamat,isnull(g.LokasiPasar1,ISNULL(g.LokasiPasar2,ISNULL(g.LokasiPasar3,''))))))) as AlamatPremis 
-				FROM 
+                SelectCommand="SELECT g.NamaSyarikat,a.*,d.*,e.*,f.*,g.JenisPerniagaan,g.Rujukan,g.JenisLesenIdList,g.JenisLesenDescList,
+                ISNULL(g.AlamatBaru,ISNULL(g.AlamatPremis,ISNULL(g.AlamatPenjajaan,ISNULL(g.AnjingAlamat,isnull(g.LokasiPasar1,ISNULL(g.LokasiPasar2,ISNULL(g.LokasiPasar3,''))))))) as AlamatPremis
+				FROM
                 v_LESEN_ApprovalListBatal_Curr a
-                inner join LESEN_JenisLesen d on d.JenisLesen_ID = a.JenisLesen_ID
+                left join LESEN_JenisLesen d on d.JenisLesen_ID = a.JenisLesen_ID
                 left join LESEN_JabatanAgensi e on e.JabatanAgensi_ID = a.AgensiID
                 inner join LESEN_Pemohon f on f.Pemohon_ID = a.Permohonan_PemohonID
                 inner join LESEN_Permohonan g on g.Permohonan_ID = a.Permohonan_ID				
@@ -2984,7 +2984,7 @@ ORDER BY
             ISNULL(g.AlamatBaru,ISNULL(g.AlamatPremis,ISNULL(g.AlamatPenjajaan,ISNULL(g.AnjingAlamat,isnull(g.LokasiPasar1,ISNULL(g.LokasiPasar2,ISNULL(g.LokasiPasar3,''))))))) as AlamatPremis, 
             ISNULL(h.IsPenilaian,0) as IsPenilaianStatus, g.JenisLesenDescList, g.JenisLesenIdList FROM 
             v_LESEN_ApprovalListBatal_Curr a
-            inner join LESEN_JenisLesen d on d.JenisLesen_ID = a.JenisLesen_ID
+            left join LESEN_JenisLesen d on d.JenisLesen_ID = a.JenisLesen_ID
             left join LESEN_JabatanAgensi e on e.JabatanAgensi_ID = a.AgensiID
             inner join LESEN_Pemohon f on f.Pemohon_ID = a.Permohonan_PemohonID
             inner join LESEN_Permohonan g on g.Permohonan_ID = a.Permohonan_ID
@@ -3012,8 +3012,10 @@ ORDER BY
             and case when isnull((select top 1 x.JabatanAgensi_IsLesen from LESEN_JabatanAgensi x where x.JabatanAgensi_ID = @AgensiID),0) = 1 
 			then isnull(a.AgensiID,@AgensiID) 
 			when @cbUlasan = 1 and isnull((select top 1 x.JabatanAgensi_Type from LESEN_JabatanAgensi x where x.JabatanAgensi_ID = @AgensiID),'L') = 'J' 
-			then IIF(a.AgensiID = @AgensiID or a.AgensiID is null,@AgensiID,0) 
-			else isnull(a.AgensiID,0) end 
+			then IIF(a.AgensiID = @AgensiID or a.AgensiID is null,@AgensiID,0)
+			when @cbUlasan = 1 and exists (select 1 from LESEN_PermohonanAgensiBatal x3 where x3.Permohonan_ID = g.Permohonan_ID and x3.JabatanAgensi_ID = @AgensiID)
+			then IIF(a.AgensiID = @AgensiID or a.AgensiID is null,@AgensiID,0)
+			else isnull(a.AgensiID,0) end
             = @AgensiID
 			
             and isnull(g.Rujukan,'') like '%'+@Rujukan+'%'
