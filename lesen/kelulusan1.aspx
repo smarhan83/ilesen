@@ -1967,14 +1967,16 @@ ORDER BY
 						select c.PermohonanAgensiStaffID_UsersID as Users_ID,Users_Fullname,'true' as isSelect from LESEN_Permohonan a
 						inner join LESEN_PermohonanAgensi b on b.Permohonan_ID = a.Permohonan_ID
 						inner join LESEN_PermohonanAgensiStaff c on c.PermohonanAgensi_ID = b.PermohonanAgensi_ID
-						inner join TBL_USERS d on d.Users_Id =  c.PermohonanAgensiStaffID_UsersID /*and d.estate_id = @AgensiID*/						
-						where a.Permohonan_ID=@Permohonan_ID /*and isnull(b.IsLawatanTapakUlasan,0) = 1*/">
+						inner join TBL_USERS d on d.Users_Id =  c.PermohonanAgensiStaffID_UsersID /*and d.estate_id = @AgensiID*/
+						where a.Permohonan_ID=@Permohonan_ID /*and isnull(b.IsLawatanTapakUlasan,0) = 1*/
+						and (isnull(@ApprStatusID,0) &lt;&gt; 2 or b.JabatanAgensi_ID = @AgensiID)">
                             <DeleteParameters>
                                 <asp:Parameter Name="JenisLesenAgensi_ID"></asp:Parameter>
                             </DeleteParameters>
                             <SelectParameters>
                                 <asp:ControlParameter ControlID="GridView1" PropertyName="SelectedDataKey.Values[0]" Name="Permohonan_ID"></asp:ControlParameter>
                                 <asp:ControlParameter ControlID="GridView1" PropertyName="SelectedDataKey.Values[1]" Name="AgensiID"></asp:ControlParameter>
+                                <asp:ControlParameter ControlID="GridView1" PropertyName="SelectedDataKey.Values[2]" Name="ApprStatusID"></asp:ControlParameter>
                             </SelectParameters>
                         </asp:SqlDataSource>
 
@@ -4062,7 +4064,10 @@ ORDER BY
             (select x.PermohonanAgensiStaffID_UsersID 
             from LESEN_PermohonanAgensiStaff x 
             inner join LESEN_PermohonanAgensi x2 on x2.PermohonanAgensi_ID = x.PermohonanAgensi_ID
-            where x2.Permohonan_ID = g.Permohonan_ID and x2.JabatanAgensi_ID = @AgensiID union all select 0  )       
+            where x2.Permohonan_ID = g.Permohonan_ID and x2.JabatanAgensi_ID = @AgensiID union all select 0
+            union all
+            select m.ApproverID from LESEN_ApprovalList m
+            where @cbUlasan = 1 and m.Permohonan_ID = g.Permohonan_ID and m.AgensiID = @AgensiID and m.IsComplete = 1 )
 			and case when @isReadOnly = 1 and @isPenyedia = 1 then case when a.ApprStatusID IN (1,2) then 999 else a.ApprStatusID end else a.ApprStatusID end = a.ApprStatusID
             and year(a.TarikhMohon) = case when @yearValue = 0 then year(a.TarikhMohon) else @yearValue end
             and month(a.TarikhMohon) = case when @monthValue = 0 then month(a.TarikhMohon) else @monthValue end	
