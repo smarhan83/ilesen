@@ -879,8 +879,22 @@ Partial Class pembatalan1
         End Using
     End Sub
 
+    ' Jenis lesen utama bagi rekod dipilih: ID pertama dalam JenisLesenIdList (format baru),
+    ' atau JenisLesen_ID bagi rekod format lama.
+    Private Function GetPrimaryJenisLesenID() As Integer
+        Dim idList As Object = GridView1.SelectedDataKey.Values("JenisLesenIdList")
+        If idList IsNot Nothing AndAlso Not IsDBNull(idList) Then
+            Dim first As String = CStr(idList).Split(","c)(0).Trim()
+            If IsNumeric(first) Then Return CInt(first)
+        End If
+
+        Dim jid As Object = GridView1.SelectedDataKey.Values("JenisLesen_ID")
+        If jid IsNot Nothing AndAlso Not IsDBNull(jid) Then Return CInt(jid)
+        Return 0
+    End Function
+
     Protected Sub BT_Generate1_Command(sender As Object, e As CommandEventArgs)
-        Dim jid As Integer = CInt(Me.FormView1.DataKey("JenisLesen_ID"))
+        Dim jid As Integer = GetPrimaryJenisLesenID()
         Dim pid As Integer = CInt(GridView1.SelectedDataKey.Values(0))
 
         Dim isi1 As String = ""
@@ -1328,7 +1342,7 @@ Partial Class pembatalan1
     Protected Sub BT_ViewMU_Command(sender As Object, e As CommandEventArgs)
         Dim pid As Integer = CInt(GridView1.SelectedDataKey.Values(0))
         Dim AgensiID As String = "3"
-        Dim JenisLesenID As String = CStr(GridView1.SelectedDataKey.Values(4))
+        Dim JenisLesenID As String = GetPrimaryJenisLesenID().ToString()
 
         Dim res As Boolean = UpdateTotalViews(pid.ToString(), AgensiID)
         If Not res Then
