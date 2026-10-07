@@ -63,6 +63,15 @@ Partial Class kelulusan1
         btnReject.Visible = False
         idNotaKelulusan.Visible = False
 
+        '##### START NEW KEMBALI KE IK #########
+
+        GridView3.DataBind()
+
+        btnKembaliIK.Visible =
+        (Session("sessionEstateId")?.ToString() = "3" AndAlso
+        Session("sessionIsPenilai")?.ToString() = "True" AndAlso
+        ApprStatusID = 4)
+        '##### END NEW KEMBALI KE IK #########
 
         If ApprStatusID = 2 Or ApprStatusID = 3 Or ApprStatusID = 4 Then
             btnSubmit.Visible = True
