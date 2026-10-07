@@ -71,6 +71,11 @@ Partial Class kelulusan1
         (Session("sessionEstateId")?.ToString() = "3" AndAlso
         Session("sessionIsPenilai")?.ToString() = "True" AndAlso
         ApprStatusID = 4)
+
+        BT_GenerateUlasan.Visible =
+        (Session("sessionEstateId")?.ToString() = "3" AndAlso
+        Session("sessionIsPenilai")?.ToString() = "True" AndAlso
+        ApprStatusID = 4)
         '##### END NEW KEMBALI KE IK #########
 
         If ApprStatusID = 2 Or ApprStatusID = 3 Or ApprStatusID = 4 Then
