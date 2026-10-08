@@ -1969,7 +1969,7 @@ ORDER BY
 						inner join LESEN_PermohonanAgensiStaff c on c.PermohonanAgensi_ID = b.PermohonanAgensi_ID
 						inner join TBL_USERS d on d.Users_Id =  c.PermohonanAgensiStaffID_UsersID /*and d.estate_id = @AgensiID*/
 						where a.Permohonan_ID=@Permohonan_ID /*and isnull(b.IsLawatanTapakUlasan,0) = 1*/
-						and (isnull(@ApprStatusID,0) &lt;&gt; 2 or b.JabatanAgensi_ID = @AgensiID)">
+						and b.JabatanAgensi_ID = case when isnull(@ApprStatusID,0) = 2 then @AgensiID else @SessionAgensiID end">
                             <DeleteParameters>
                                 <asp:Parameter Name="JenisLesenAgensi_ID"></asp:Parameter>
                             </DeleteParameters>
@@ -1977,6 +1977,7 @@ ORDER BY
                                 <asp:ControlParameter ControlID="GridView1" PropertyName="SelectedDataKey.Values[0]" Name="Permohonan_ID"></asp:ControlParameter>
                                 <asp:ControlParameter ControlID="GridView1" PropertyName="SelectedDataKey.Values[1]" Name="AgensiID"></asp:ControlParameter>
                                 <asp:ControlParameter ControlID="GridView1" PropertyName="SelectedDataKey.Values[2]" Name="ApprStatusID"></asp:ControlParameter>
+                                <asp:SessionParameter SessionField="sessionEstateID" DefaultValue="0" Name="SessionAgensiID"></asp:SessionParameter>
                             </SelectParameters>
                         </asp:SqlDataSource>
 
