@@ -72,10 +72,12 @@ Partial Class kelulusan1
         Session("sessionIsPenilai")?.ToString() = "True" AndAlso
         ApprStatusID = 4)
 
+        ' Jana Ulasan hanya untuk IK Inspektorat (penyedia, bukan read-only) semasa Lawatan Tapak
         BT_GenerateUlasan.Visible =
         (Session("sessionEstateId")?.ToString() = "3" AndAlso
-        Session("sessionIsPenilai")?.ToString() = "True" AndAlso
-        ApprStatusID = 4)
+        Session("sessionIsPenyedia")?.ToString() = "True" AndAlso
+        Session("sessionIsReadOnly")?.ToString() <> "True" AndAlso
+        ApprStatusID = 3)
         '##### END NEW KEMBALI KE IK #########
 
         If ApprStatusID = 2 Or ApprStatusID = 3 Or ApprStatusID = 4 Then
@@ -251,6 +253,11 @@ Partial Class kelulusan1
         Catch ex As Exception
 
         End Try
+
+        ' Dropdown templat ulasan hanya relevan bersama butang Jana Ulasan
+        If Not BT_GenerateUlasan.Visible Then
+            divulasanik.Visible = False
+        End If
 
         '//hide tab tetapan ik
         If ApprStatusID = 2 Then
