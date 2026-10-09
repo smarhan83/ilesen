@@ -3565,48 +3565,36 @@
                                             <span runat="server" class="badge badge-secondary" visible='<%# If(Eval("IsBatal") = False, True, False) %>'>Tidak</span>
                                         </ItemTemplate>
                                     </asp:TemplateField>
-                                    <asp:TemplateField ShowHeader="True" HeaderText="Surat Balasan" SortExpression="Surat">
+                                    <asp:TemplateField ShowHeader="True" HeaderText="Surat Balasan" SortExpression="InvolvedAgensiInfo">
                                         <ItemTemplate>
-                                            <span runat="server" class="badge badge-secondary" visible='<%# If(Eval("Surat") = 0 And Eval("SuratBNM") = 0 And
-                                                Eval("SuratBombaJohor") = 0 And Eval("SuratBombaPenggaram") = 0 And Eval("SuratFarmasi") = 0 And Eval("SuratJurutera") = 0 And
-                                                Eval("SuratBangunan") = 0 And Eval("SuratPerancang") = 0 And Eval("SuratPenguatkuasa") = 0 And Eval("SuratHarta") = 0 And
-                                                Eval("SuratKluang") = 0 And Eval("SuratPolis") = 0 And Eval("SuratKesihatan") = 0 And Eval("SuratSWCorp") = 0 And 
-                                                Eval("SuratKebajikan") = 0 And Eval("SuratPendidikan") = 0, True, False) %>'>Tiada</span>
-
-                                            <asp:LinkButton runat="server" CssClass="badge badge-info" Visible='<%# If(Eval("Surat") > 0, True, False) %>' CommandName="SuratAgensi" CommandArgument='<%# Container.DataItemIndex & ",3" %>'>Inspektorat</asp:LinkButton>
-                                            <%--<asp:LinkButton runat="server" CssClass="badge badge-info" Visible='<%# If(Eval("SuratBNM") > 0, True, False) %>' CommandName="SuratAgensi" CommandArgument='<%# Container.DataItemIndex %>,2'>Bank Negara</asp:LinkButton>
-                                            <asp:LinkButton runat="server" CssClass="badge badge-info" Visible='<%# If(Eval("SuratBombaJohor") > 0, True, False) %>' CommandName="SuratAgensi" CommandArgument='<%# Container.DataItemIndex %>,5'>Bomba</asp:LinkButton>
-                                            <asp:LinkButton runat="server" CssClass="badge badge-info" Visible='<%# If(Eval("SuratFarmasi") > 0, True, False) %>' CommandName="SuratAgensi" CommandArgument='<%# Container.DataItemIndex %>,6'>Farmasi</asp:LinkButton>
-                                            <asp:LinkButton runat="server" CssClass="badge badge-info" Visible='<%# If(Eval("SuratJurutera") > 0, True, False) %>' CommandName="SuratAgensi" CommandArgument='<%# Container.DataItemIndex %>,8'>Kejuruteraan</asp:LinkButton>
-                                            <asp:LinkButton runat="server" CssClass="badge badge-info" Visible='<%# If(Eval("SuratBangunan") > 0, True, False) %>' CommandName="SuratAgensi" CommandArgument='<%# Container.DataItemIndex %>,9'>Kawalan Bangunan</asp:LinkButton>
-                                            <asp:LinkButton runat="server" CssClass="badge badge-info" Visible='<%# If(Eval("SuratPerancang") > 0, True, False) %>' CommandName="SuratAgensi" CommandArgument='<%# Container.DataItemIndex %>,10'>Perancang Bandar & Landskap</asp:LinkButton>
-                                            <asp:LinkButton runat="server" CssClass="badge badge-info" Visible='<%# If(Eval("SuratPenguatkuasa") > 0, True, False) %>' CommandName="SuratAgensi" CommandArgument='<%# Container.DataItemIndex %>,11'>Penguatkuasaan</asp:LinkButton>
-                                            <asp:LinkButton runat="server" CssClass="badge badge-info" Visible='<%# If(Eval("SuratHarta") > 0, True, False) %>' CommandName="SuratAgensi" CommandArgument='<%# Container.DataItemIndex %>,11'>Pengurusan Harta</asp:LinkButton>
-                                            <asp:LinkButton runat="server" CssClass="badge badge-info" Visible='<%# If(Eval("SuratKluang") > 0, True, False) %>' CommandName="SuratAgensi" CommandArgument='<%# Container.DataItemIndex %>,13'>PD Kluang</asp:LinkButton>
-                                            <asp:LinkButton runat="server" CssClass="badge badge-info" Visible='<%# If(Eval("SuratPolis") > 0, True, False) %>' CommandName="SuratAgensi" CommandArgument='<%# Container.DataItemIndex %>,14'>Polis</asp:LinkButton>
-                                            <asp:LinkButton runat="server" CssClass="badge badge-info" Visible='<%# If(Eval("SuratKesihatan") > 0, True, False) %>' CommandName="SuratAgensi" CommandArgument='<%# Container.DataItemIndex %>,15'>Kesihatan</asp:LinkButton>
-                                            <asp:LinkButton runat="server" CssClass="badge badge-info" Visible='<%# If(Eval("SuratSWCorp") > 0, True, False) %>' CommandName="SuratAgensi" CommandArgument='<%# Container.DataItemIndex %>,17'>SWCorp</asp:LinkButton>
-                                            <asp:LinkButton runat="server" CssClass="badge badge-info" Visible='<%# If(Eval("SuratKebajikan") > 0, True, False) %>' CommandName="SuratAgensi" CommandArgument='<%# Container.DataItemIndex %>,18'>Kebajikan Masyarakat</asp:LinkButton>
-                                            <asp:LinkButton runat="server" CssClass="badge badge-info" Visible='<%# If(Eval("SuratPendidikan") > 0, True, False) %>' CommandName="SuratAgensi" CommandArgument='<%# Container.DataItemIndex %>,19'>Pendidikan</asp:LinkButton>--%>
-
-                                            <%--<span runat="server" class="badge badge-info" visible='<%# If(Eval("Surat") > 0, True, False) %>'>Inspektorat</span>--%>
-                                            <span runat="server" class="badge badge-info" visible='<%# If(Eval("SuratBNM") > 0, True, False) %>'>Bank Negara</span>
-                                            <span runat="server" class="badge badge-info" visible='<%# If(Eval("SuratBombaJohor") > 0 Or Eval("SuratBombaPenggaram") > 0, True, False) %>'>Bomba</span>
-                                            <span runat="server" class="badge badge-info" visible='<%# If(Eval("SuratFarmasi") > 0, True, False) %>'>Farmasi</span>
-                                            <span runat="server" class="badge badge-info" visible='<%# If(Eval("SuratJurutera") > 0, True, False) %>'>Kejuruteraan</span>
-                                            <span runat="server" class="badge badge-info" visible='<%# If(Eval("SuratBangunan") > 0, True, False) %>'>Kawalan Bangunan</span>
-                                            <span runat="server" class="badge badge-info" visible='<%# If(Eval("SuratPerancang") > 0, True, False) %>'>Perancang Bandar & Landskap</span>
-                                            <span runat="server" class="badge badge-info" visible='<%# If(Eval("SuratPenguatkuasa") > 0, True, False) %>'>Penguatkuasaan</span>
-                                            <span runat="server" class="badge badge-info" visible='<%# If(Eval("SuratHarta") > 0, True, False) %>'>Pengurusan Harta</span>
-                                            <span runat="server" class="badge badge-info" visible='<%# If(Eval("SuratKluang") > 0, True, False) %>'>PD Kluang</span>
-                                            <span runat="server" class="badge badge-info" visible='<%# If(Eval("SuratPolis") > 0, True, False) %>'>Polis</span>
-                                            <span runat="server" class="badge badge-info" visible='<%# If(Eval("SuratKesihatan") > 0, True, False) %>'>Kesihatan</span>
-                                            <span runat="server" class="badge badge-info" visible='<%# If(Eval("SuratSWCorp") > 0, True, False) %>'>SWCorp</span>
-                                            <span runat="server" class="badge badge-info" visible='<%# If(Eval("SuratKebajikan") > 0, True, False) %>'>Kebajikan Masyarakat</span>
-                                            <span runat="server" class="badge badge-info" visible='<%# If(Eval("SuratPendidikan") > 0, True, False) %>'>Pendidikan</span>
+                                            <asp:Repeater ID="rptAgensi" runat="server" DataSource='<%# GetAgensiList(Eval("InvolvedAgensiInfo"), Eval("Permohonan_ID")) %>' OnItemCommand="rptAgensi_ItemCommand">
+                                                <ItemTemplate>
+                                                    <asp:LinkButton runat="server" 
+                                                        ID="btnSuratAgensi"
+                                                        Visible='<%# If(Eval("Status").ToString() = "completed", True, False) %>'
+                                                        CssClass="badge badge-success"
+                                                        CommandName="SuratAgensi" 
+                                                        CommandArgument='<%# Eval("CommandArg") %>'
+                                                        Text='<%# Eval("Name") %>'
+                                                        ToolTip='<%# Eval("TooltipText") %>'
+                                                        style="margin-right: 3px; margin-bottom: 2px; display: inline-block; text-decoration: none;" />
+                                                    <span runat="server" 
+                                                        visible='<%# If(Eval("Status").ToString() = "in-progress", True, False) %>'
+                                                        class="badge badge-warning"
+                                                        title='<%# Eval("TooltipText") %>'
+                                                        style="margin-right: 3px; margin-bottom: 2px; display: inline-block;"><%# Eval("Name") %></span>
+                                                    <span runat="server" 
+                                                        visible='<%# If(Eval("Status").ToString() = "pending", True, False) %>'
+                                                        class="badge badge-secondary"
+                                                        title='<%# Eval("TooltipText") %>'
+                                                        style="margin-right: 3px; margin-bottom: 2px; display: inline-block;"><%# Eval("Name") %></span>
+                                                </ItemTemplate>
+                                            </asp:Repeater>
+                                            <span runat="server" class="badge badge-secondary" visible='<%# If(String.IsNullOrEmpty(Eval("InvolvedAgensiInfo")?.ToString()), True, False) %>'>Tiada</span>
                                         </ItemTemplate>
                                     </asp:TemplateField>
                                     <asp:BoundField DataField="Description" HeaderText="Status" SortExpression="Description"></asp:BoundField>
+                                    <asp:BoundField DataField="LastModDt" HeaderText="Tarikh Dikemaskini" DataFormatString="{0:dd/MM/yyyy}" SortExpression="LastModDt" NullDisplayText="-"></asp:BoundField>
                                     <asp:BoundField DataField="RemarksFail" HeaderText="Catatan" SortExpression="RemarksFail"></asp:BoundField>
 
                                     <asp:TemplateField ShowHeader="False">
@@ -3619,11 +3607,6 @@
                                         
                                         </ItemTemplate>
                                     </asp:TemplateField>
-
-                                    <%--<asp:TemplateField ShowHeader="False">
-                                        <ItemTemplate>
-                                            </ItemTemplate>
-                                    </asp:TemplateField>--%>
                                 </Columns>
                             </asp:GridView>
 
@@ -3649,54 +3632,48 @@
                                         CASE WHEN a.IsBatal = 0 then a.Is24Jam 
                                         WHEN a.IsBatal = 1 then 1 END 
 										AS IsNotRisk,
-                                        CASE WHEN a.IsBatal = 0 THEN (SELECT COUNT(Permohonan_ID) AS totalSah FROM LESEN_PermohonanAgensi WHERE JabatanAgensi_ID = 3 AND PengesahID IS NOT NULL AND Permohonan_ID = a.Permohonan_ID) 
-                                        ELSE (SELECT COUNT(Permohonan_ID) AS totalSah FROM LESEN_PermohonanAgensiBatal WHERE JabatanAgensi_ID = 3 AND PengesahID IS NOT NULL AND Permohonan_ID = a.Permohonan_ID) 
-                                        END AS Surat,
-                                        CASE WHEN a.IsBatal = 0 THEN (SELECT COUNT(Permohonan_ID) AS totalSah FROM LESEN_PermohonanAgensi WHERE JabatanAgensi_ID = 2 AND PengesahID IS NOT NULL AND Permohonan_ID = a.Permohonan_ID) 
-                                        ELSE (SELECT COUNT(Permohonan_ID) AS totalSah FROM LESEN_PermohonanAgensiBatal WHERE JabatanAgensi_ID = 2 AND PengesahID IS NOT NULL AND Permohonan_ID = a.Permohonan_ID) 
-                                        END AS SuratBNM, 
-                                        CASE WHEN a.IsBatal = 0 THEN (SELECT COUNT(Permohonan_ID) AS totalSah FROM LESEN_PermohonanAgensi WHERE JabatanAgensi_ID = 5 AND PengesahID IS NOT NULL AND Permohonan_ID = a.Permohonan_ID) 
-                                        ELSE (SELECT COUNT(Permohonan_ID) AS totalSah FROM LESEN_PermohonanAgensiBatal WHERE JabatanAgensi_ID = 5 AND PengesahID IS NOT NULL AND Permohonan_ID = a.Permohonan_ID) 
-                                        END AS SuratBombaJohor, 
-                                        CASE WHEN a.IsBatal = 0 THEN (SELECT COUNT(Permohonan_ID) AS totalSah FROM LESEN_PermohonanAgensi WHERE JabatanAgensi_ID = 6 AND PengesahID IS NOT NULL AND Permohonan_ID = a.Permohonan_ID) 
-                                        ELSE (SELECT COUNT(Permohonan_ID) AS totalSah FROM LESEN_PermohonanAgensiBatal WHERE JabatanAgensi_ID = 6 AND PengesahID IS NOT NULL AND Permohonan_ID = a.Permohonan_ID) 
-                                        END AS SuratFarmasi, 
-                                        CASE WHEN a.IsBatal = 0 THEN (SELECT COUNT(Permohonan_ID) AS totalSah FROM LESEN_PermohonanAgensi WHERE JabatanAgensi_ID = 8 AND PengesahID IS NOT NULL AND Permohonan_ID = a.Permohonan_ID) 
-                                        ELSE (SELECT COUNT(Permohonan_ID) AS totalSah FROM LESEN_PermohonanAgensiBatal WHERE JabatanAgensi_ID = 8 AND PengesahID IS NOT NULL AND Permohonan_ID = a.Permohonan_ID) 
-                                        END AS SuratJurutera, 
-                                        CASE WHEN a.IsBatal = 0 THEN (SELECT COUNT(Permohonan_ID) AS totalSah FROM LESEN_PermohonanAgensi WHERE JabatanAgensi_ID = 9 AND PengesahID IS NOT NULL AND Permohonan_ID = a.Permohonan_ID) 
-                                        ELSE (SELECT COUNT(Permohonan_ID) AS totalSah FROM LESEN_PermohonanAgensiBatal WHERE JabatanAgensi_ID = 9 AND PengesahID IS NOT NULL AND Permohonan_ID = a.Permohonan_ID) 
-                                        END AS SuratBangunan, 
-                                        CASE WHEN a.IsBatal = 0 THEN (SELECT COUNT(Permohonan_ID) AS totalSah FROM LESEN_PermohonanAgensi WHERE JabatanAgensi_ID = 10 AND PengesahID IS NOT NULL AND Permohonan_ID = a.Permohonan_ID) 
-                                        ELSE (SELECT COUNT(Permohonan_ID) AS totalSah FROM LESEN_PermohonanAgensiBatal WHERE JabatanAgensi_ID = 10 AND PengesahID IS NOT NULL AND Permohonan_ID = a.Permohonan_ID) 
-                                        END AS SuratPerancang,
-                                        CASE WHEN a.IsBatal = 0 THEN (SELECT COUNT(Permohonan_ID) AS totalSah FROM LESEN_PermohonanAgensi WHERE JabatanAgensi_ID = 11 AND PengesahID IS NOT NULL AND Permohonan_ID = a.Permohonan_ID) 
-                                        ELSE (SELECT COUNT(Permohonan_ID) AS totalSah FROM LESEN_PermohonanAgensiBatal WHERE JabatanAgensi_ID = 11 AND PengesahID IS NOT NULL AND Permohonan_ID = a.Permohonan_ID) 
-                                        END AS SuratPenguatkuasa,
-                                        CASE WHEN a.IsBatal = 0 THEN (SELECT COUNT(Permohonan_ID) AS totalSah FROM LESEN_PermohonanAgensi WHERE JabatanAgensi_ID = 12 AND PengesahID IS NOT NULL AND Permohonan_ID = a.Permohonan_ID) 
-                                        ELSE (SELECT COUNT(Permohonan_ID) AS totalSah FROM LESEN_PermohonanAgensiBatal WHERE JabatanAgensi_ID = 12 AND PengesahID IS NOT NULL AND Permohonan_ID = a.Permohonan_ID) 
-                                        END AS SuratHarta,
-                                        CASE WHEN a.IsBatal = 0 THEN (SELECT COUNT(Permohonan_ID) AS totalSah FROM LESEN_PermohonanAgensi WHERE JabatanAgensi_ID = 13 AND PengesahID IS NOT NULL AND Permohonan_ID = a.Permohonan_ID) 
-                                        ELSE (SELECT COUNT(Permohonan_ID) AS totalSah FROM LESEN_PermohonanAgensiBatal WHERE JabatanAgensi_ID = 13 AND PengesahID IS NOT NULL AND Permohonan_ID = a.Permohonan_ID) 
-                                        END AS SuratKluang,
-                                        CASE WHEN a.IsBatal = 0 THEN (SELECT COUNT(Permohonan_ID) AS totalSah FROM LESEN_PermohonanAgensi WHERE JabatanAgensi_ID = 14 AND PengesahID IS NOT NULL AND Permohonan_ID = a.Permohonan_ID) 
-                                        ELSE (SELECT COUNT(Permohonan_ID) AS totalSah FROM LESEN_PermohonanAgensiBatal WHERE JabatanAgensi_ID = 14 AND PengesahID IS NOT NULL AND Permohonan_ID = a.Permohonan_ID) 
-                                        END AS SuratPolis,
-                                        CASE WHEN a.IsBatal = 0 THEN (SELECT COUNT(Permohonan_ID) AS totalSah FROM LESEN_PermohonanAgensi WHERE JabatanAgensi_ID = 15 AND PengesahID IS NOT NULL AND Permohonan_ID = a.Permohonan_ID) 
-                                        ELSE (SELECT COUNT(Permohonan_ID) AS totalSah FROM LESEN_PermohonanAgensiBatal WHERE JabatanAgensi_ID = 15 AND PengesahID IS NOT NULL AND Permohonan_ID = a.Permohonan_ID) 
-                                        END AS SuratKesihatan,
-                                        CASE WHEN a.IsBatal = 0 THEN (SELECT COUNT(Permohonan_ID) AS totalSah FROM LESEN_PermohonanAgensi WHERE JabatanAgensi_ID = 16 AND PengesahID IS NOT NULL AND Permohonan_ID = a.Permohonan_ID) 
-                                        ELSE (SELECT COUNT(Permohonan_ID) AS totalSah FROM LESEN_PermohonanAgensiBatal WHERE JabatanAgensi_ID = 16 AND PengesahID IS NOT NULL AND Permohonan_ID = a.Permohonan_ID) 
-                                        END AS SuratBombaPenggaram,
-                                        CASE WHEN a.IsBatal = 0 THEN (SELECT COUNT(Permohonan_ID) AS totalSah FROM LESEN_PermohonanAgensi WHERE JabatanAgensi_ID = 17 AND PengesahID IS NOT NULL AND Permohonan_ID = a.Permohonan_ID) 
-                                        ELSE (SELECT COUNT(Permohonan_ID) AS totalSah FROM LESEN_PermohonanAgensiBatal WHERE JabatanAgensi_ID = 17 AND PengesahID IS NOT NULL AND Permohonan_ID = a.Permohonan_ID) 
-                                        END AS SuratSWCorp,
-                                        CASE WHEN a.IsBatal = 0 THEN (SELECT COUNT(Permohonan_ID) AS totalSah FROM LESEN_PermohonanAgensi WHERE JabatanAgensi_ID = 18 AND PengesahID IS NOT NULL AND Permohonan_ID = a.Permohonan_ID) 
-                                        ELSE (SELECT COUNT(Permohonan_ID) AS totalSah FROM LESEN_PermohonanAgensiBatal WHERE JabatanAgensi_ID = 18 AND PengesahID IS NOT NULL AND Permohonan_ID = a.Permohonan_ID) 
-                                        END AS SuratKebajikan, 
-                                        CASE WHEN a.IsBatal = 0 THEN (SELECT COUNT(Permohonan_ID) AS totalSah FROM LESEN_PermohonanAgensi WHERE JabatanAgensi_ID = 19 AND PengesahID IS NOT NULL AND Permohonan_ID = a.Permohonan_ID) 
-                                        ELSE (SELECT COUNT(Permohonan_ID) AS totalSah FROM LESEN_PermohonanAgensiBatal WHERE JabatanAgensi_ID = 19 AND PengesahID IS NOT NULL AND Permohonan_ID = a.Permohonan_ID) 
-                                        END AS SuratPendidikan 
+                                        (SELECT STRING_AGG(
+                                            CONCAT(
+                                                pa.JabatanAgensi_ID, ':', 
+                                                CASE pa.JabatanAgensi_ID
+                                                    WHEN 1 THEN 'Perlesenan'
+                                                    WHEN 2 THEN 'Bank Negara'
+                                                    WHEN 3 THEN 'Inspektorat'
+                                                    WHEN 4 THEN 'Kesihatan'
+                                                    WHEN 5 THEN 'Bomba'
+                                                    WHEN 6 THEN 'Farmasi'
+                                                    WHEN 7 THEN 'IT'
+                                                    WHEN 8 THEN 'Kejuruteraan'
+                                                    WHEN 9 THEN 'Kawalan Bangunan'
+                                                    WHEN 10 THEN 'Perancang Bandar & Landskap'
+                                                    WHEN 11 THEN 'Penguatkuasaan'
+                                                    WHEN 12 THEN 'Pengurusan Harta'
+                                                    WHEN 13 THEN 'PD Kluang'
+                                                    WHEN 14 THEN 'Polis'
+                                                    WHEN 15 THEN 'Kesihatan'
+                                                    WHEN 16 THEN 'Bomba'
+                                                    WHEN 17 THEN 'SWCorp'
+                                                    WHEN 18 THEN 'Kebajikan Masyarakat'
+                                                    WHEN 19 THEN 'Pendidikan'
+                                                    WHEN 20 THEN 'Pelancongan'
+                                                    ELSE ISNULL(ja.JabatanAgensi_Description, 'Agensi')
+                                                END, ':',
+                                                CASE 
+                                                    WHEN pa.PengesahID IS NOT NULL THEN 'completed'
+                                                    WHEN pa.ikAssign IS NOT NULL OR ISNULL(pa.IsLawatanTapakUlasan,0) = 1 OR ISNULL(pa.totalViews,0) > 0 THEN 'in-progress'
+                                                    ELSE 'pending'
+                                                END
+                                            ), ';'
+                                        ) WITHIN GROUP (ORDER BY pa.JabatanAgensi_ID)
+                                        FROM (
+                                            SELECT JabatanAgensi_ID, PengesahID, ikAssign, IsLawatanTapakUlasan, totalViews
+                                            FROM LESEN_PermohonanAgensi WHERE Permohonan_ID = a.Permohonan_ID AND a.IsBatal = 0
+                                            UNION ALL
+                                            SELECT JabatanAgensi_ID, PengesahID, ikAssign, IsLawatanTapakUlasan, totalViews
+                                            FROM LESEN_PermohonanAgensiBatal WHERE Permohonan_ID = a.Permohonan_ID AND a.IsBatal = 1
+                                        ) pa
+                                        LEFT JOIN LESEN_JabatanAgensi ja ON ja.JabatanAgensi_ID = pa.JabatanAgensi_ID
+                                        ) AS InvolvedAgensiInfo
                                         FROM LESEN_Permohonan a 
                                         INNER JOIN LESEN_Pemohon c ON a.Permohonan_PemohonID = c.Pemohon_ID 
                                         INNER JOIN ApprovalStatus d ON a.StatusID = d.ApprStatusID 
@@ -3715,7 +3692,7 @@
                                         OR ISNULL(a.AlamatPenjajaan,'') LIKE CASE WHEN @Alamat='' THEN ISNULL(a.AlamatPenjajaan,'') ELSE '%'+@Alamat+'%' END
                                         OR ISNULL(a.LokasiPasar1,'') LIKE CASE WHEN @Alamat='' THEN ISNULL(a.LokasiPasar1,'') ELSE '%'+@Alamat+'%' END
                                         OR ISNULL(a.LokasiPasar2,'') LIKE CASE WHEN @Alamat='' THEN ISNULL(a.LokasiPasar2,'') ELSE '%'+@Alamat+'%' END
-                                        OR ISNULL(a.LokasiPasar2,'') LIKE CASE WHEN @Alamat='' THEN ISNULL(a.LokasiPasar3,'') ELSE '%'+@Alamat+'%' END) 
+                                        OR ISNULL(a.LokasiPasar3,'') LIKE CASE WHEN @Alamat='' THEN ISNULL(a.LokasiPasar3,'') ELSE '%'+@Alamat+'%' END) 
                                         /*AND a.AlamatBaru LIKE CASE WHEN @Alamat='' THEN a.AlamatBaru ELSE '%'+@Alamat+'%' END */
                                         /*AND a.AnjingAlamat LIKE CASE WHEN @Alamat='%%' THEN a.AnjingAlamat ELSE '%'+@Alamat+'%' END*/ 
                                         AND a.TarikhMohon LIKE '%'+@TarikhMohon+'%' 
@@ -4352,7 +4329,7 @@
                               </div>
                                <div class="col-md-2">
                                    <div class="form-group">
-                                       <label>Iklan Bercahaya</label><br />
+                                       <label>Iklan Bercahaya</label>
                                        <asp:DropDownList ID="DDL_Iklan1_ins" runat="server"
                                            CssClass="form-control select2" style="width: 100%;">
                                            <asp:ListItem Value="">-- Sila Pilih --</asp:ListItem>
@@ -5064,7 +5041,7 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label>Tandatangan Agensi/Jabatan Dalaman</label><br />
+                                        <label>Tandatangan Agensi/Jabatan Dalaman</label>
                                         <asp:DropDownList ID="ddlTandatangan" CssClass="form-control select2" style="width: 100%;" runat="server" AutoPostBack="false"
                                             DataSourceID="sdsSignature" DataTextField="Users_Fullname" DataValueField="Users_Id">
                                         </asp:DropDownList>
@@ -5102,7 +5079,7 @@
                                 <div class="col-md-6">
 
                                     <div class="form-group">
-                                        <label>Tandatangan Agensi/Jabatan Luar</label><br />
+                                        <label>Tandatangan Agensi/Jabatan Luar</label>
                                         <asp:DropDownList ID="ddlTandatanganLuar" CssClass="form-control select2" style="width: 100%;" runat="server" AutoPostBack="false"
                                             DataSourceID="sdsSignatureLuar" DataTextField="Users_Fullname" DataValueField="Users_Id">
                                         </asp:DropDownList>
@@ -5156,38 +5133,38 @@
                                         <asp:FormView ID="FormViewMaintenanceTemplate" Width="100%" DefaultMode="Insert" runat="server" DataKeyNames="PermohonanAgensi_ID" DataSourceID="SqlDataSourceFormviewMaintenanceTemplate">
                                             <InsertItemTemplate>
                                                 <asp:Panel runat="server">
-                                                    <div class="card card-default">
+                                                    <div class="card card-default shadow-none">
                                                         <div class="card-header">
-                                                            <h3 class="card-title" style="color: black">Tambah Jabatan Agensi</h3>
+                                                            <h3 class="card-title" style="color: white">Tambah Jabatan Agensi</h3>
                                                         </div>
                                                         <!-- /.card-header -->
                                                         <div class="card-body">
                                                             <div class="row">
-
                                                                 <div class="col-md-6">
                                                                     <div class="form-group">
-                                                                        <label>Jabatan Agensi</label><br />
+                                                                        <label>Jabatan Agensi</label>
                                                                         <asp:DropDownList ID="DDL_JabatanAgensi" Text='<%# Bind("JabatanAgensi_ID") %>' CssClass="form-control select2" style="width: 100%;" runat="server"
                                                                             DataSourceID="SqlDataSourceJabatanAgensi" DataTextField="JabatanAgensi_Description" DataValueField="JabatanAgensi_ID">
                                                                         </asp:DropDownList>
                                                                         <asp:SqlDataSource runat="server" ID="SqlDataSourceJabatanAgensi" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
                                                                             SelectCommand="select * from 
-                                                                    (select NULL as JabatanAgensi_ID, '-- Sila Pilih --' as JabatanAgensi_Description
-                                                                    union all
-                                                                    select JabatanAgensi_ID,  JabatanAgensi_Description from LESEN_JabatanAgensi where JabatanAgensi_IsActive=1
-                                                                    ) as tbl1 order by JabatanAgensi_Description "></asp:SqlDataSource>
+                                                                            (select NULL as JabatanAgensi_ID, '-- Sila Pilih --' as JabatanAgensi_Description
+                                                                            union all
+                                                                            select JabatanAgensi_ID,  JabatanAgensi_Description from LESEN_JabatanAgensi where JabatanAgensi_IsActive=1
+                                                                            ) as tbl1 order by JabatanAgensi_Description "></asp:SqlDataSource>
                                                                     </div>
                                                                 </div>
-
+                                                                <div class="col-md-2">
+                                                                    <br />
+                                                                    <asp:LinkButton runat="server" Text="Tambah" CssClass="btn btn-primary" ValidationGroup="insertMaintenanceTemplateForm" CommandName="Insert" ID="LinkButton3" CausesValidation="True" />
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                        <div class="card-footer">
-                                                            <asp:LinkButton runat="server" Text="+" CssClass="btn btn-primary" ValidationGroup="insertMaintenanceTemplateForm" CommandName="Insert" ID="LinkButton3" CausesValidation="True" />
                                                         </div>
                                                     </div>
                                                 </asp:Panel>
                                             </InsertItemTemplate>
                                         </asp:FormView>
+                                        <br />
                                         <asp:SqlDataSource runat="server" ID="SqlDataSourceFormviewMaintenanceTemplate" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
                                             InsertCommand="INSERT INTO LESEN_PermohonanAgensi(Permohonan_ID, JabatanAgensi_ID, IsMandatory) VALUES (@Permohonan_ID, @JabatanAgensi_ID, 1 ^ @Is24Jam); SELECT @PermohonanAgensi_ID = SCOPE_IDENTITY();"
                                             SelectCommand="SELECT a.PermohonanAgensi_ID, a.Permohonan_ID, a.JabatanAgensi_ID, b.StatusID FROM LESEN_PermohonanAgensi a

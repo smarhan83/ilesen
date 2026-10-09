@@ -25,6 +25,23 @@ Partial Class appregister1
         Public Property ItemText As String
         Public Property ItemValue As String
     End Class
+
+    ''' <summary>
+    ''' Represents an agency involved in the application with review status for badge display in GridView1.
+    ''' </summary>
+    Public Class AgensiItem
+        Public Property PermohonanID As String
+        Public Property AgensiID As Integer
+        Public Property Name As String
+        Public Property Status As String ' "pending", "in-progress", "completed"
+        Public Property TooltipText As String
+
+        Public ReadOnly Property CommandArg As String
+            Get
+                Return PermohonanID & "," & AgensiID.ToString()
+            End Get
+        End Property
+    End Class
 #End Region
 
 #Region "Fields & Constants"
@@ -98,7 +115,7 @@ Partial Class appregister1
 
                 If Not frmwrite Then
                     ' Hide action/delete columns if user does not have write access
-                    GridView1.Columns.Item(12).Visible = False
+                    ' GridView1.Columns.Item(12).Visible = False ' Unified action column in appregister1 contains View/Lihat button
                     gvTabPublicAttach.Columns.Item(4).Visible = False
                     gvTabPublicAttach.Columns.Item(5).Visible = False
                     gvTabUlasan.Columns.Item(4).Visible = False
@@ -346,44 +363,23 @@ Partial Class appregister1
             End Using
 
         ElseIf e.CommandName = "SuratAgensi" Then
-            Dim rawArgument As String = e.CommandArgument.ToString()
+            Dim rawArgument As String = If(e.CommandArgument IsNot Nothing, e.CommandArgument.ToString(), "")
             Dim args As String() = rawArgument.Split(","c)
 
             If args.Length >= 2 Then
-                Dim intRow As Integer = CInt(args(0))
-                Dim agensiId As Integer = CInt(args(1))
+                Dim pid As String = ""
+                Dim agensiId As Integer = 0
+                Integer.TryParse(args(1).Trim(), agensiId)
 
-                If intRow > 9 Then
-                    intRow -= GridView1.PageIndex * 10
+                Dim maybeRowIndex As Integer = -1
+                If Integer.TryParse(args(0).Trim(), maybeRowIndex) AndAlso maybeRowIndex >= 0 AndAlso maybeRowIndex < GridView1.Rows.Count AndAlso GridView1.DataKeys.Count > maybeRowIndex Then
+                    pid = CStr(Me.GridView1.DataKeys(maybeRowIndex)("Permohonan_ID"))
+                Else
+                    pid = args(0).Trim()
                 End If
 
-                Dim pid As String = CStr(Me.GridView1.DataKeys(intRow)("Permohonan_ID"))
-
-                If agensiId = 3 Then
-                    If GetIsSuratFail(CInt(pid)) Then
-                        ViewSuratPemeriksaanFail(pid)
-                    Else
-                        ViewSuratPemeriksaanAuto(pid, agensiId, True)
-                    End If
-                Else
-                    Dim filepath As String = ""
-                    Using myConnection As New SqlConnection(CS)
-                        myConnection.Open()
-                        Dim SQL As String = "SELECT TOP(1) UlasanFail_FilePath FROM LESEN_UlasanFail WHERE UlasanFail_ContentType='application/pdf' AND UlsanFail_PermohonanID = @Permohonan_ID AND UlasanFail_PermohonanAgensiID = @Agensi_ID"
-                        Using myCommandSelect As New SqlCommand(SQL, myConnection)
-                            myCommandSelect.Parameters.AddWithValue("@Permohonan_ID", pid)
-                            myCommandSelect.Parameters.AddWithValue("@Agensi_ID", agensiId)
-                            Using myReader As SqlDataReader = myCommandSelect.ExecuteReader()
-                                If myReader.Read() Then
-                                    filepath = myReader.Item(0).ToString()
-                                End If
-                            End Using
-                        End Using
-                    End Using
-
-                    If Not String.IsNullOrEmpty(filepath) Then
-                        Response.Redirect(filepath)
-                    End If
+                If Not String.IsNullOrEmpty(pid) AndAlso agensiId > 0 Then
+                    OpenSuratAgensi(pid, agensiId)
                 End If
             End If
 
@@ -426,6 +422,122 @@ Partial Class appregister1
             End Try
         End If
     End Sub
+
+    Protected Sub rptAgensi_ItemCommand(ByVal source As Object, ByVal e As RepeaterCommandEventArgs)
+        If e.CommandName = "SuratAgensi" Then
+            Dim rawArgument As String = If(e.CommandArgument IsNot Nothing, e.CommandArgument.ToString(), "")
+            Dim args As String() = rawArgument.Split(","c)
+
+            If args.Length >= 2 Then
+                Dim pid As String = args(0).Trim()
+                Dim agensiId As Integer = 0
+                Integer.TryParse(args(1).Trim(), agensiId)
+
+                If Not String.IsNullOrEmpty(pid) AndAlso agensiId > 0 Then
+                    OpenSuratAgensi(pid, agensiId)
+                End If
+            End If
+        End If
+    End Sub
+
+    Public Sub OpenSuratAgensi(ByVal pid As String, ByVal agensiId As Integer)
+        Try
+            If agensiId = 3 Then
+                ' Agensi 3 = Inspektorat
+                If GetIsSuratFail(CInt(pid)) Then
+                    ViewSuratPemeriksaanFail(pid)
+                Else
+                    ViewSuratPemeriksaanAuto(pid, agensiId, True)
+                End If
+            Else
+                ' Semak sama ada permohonan telah dibatalkan
+                Dim isBatal As Boolean = False
+                Using myConnection As New SqlConnection(CS)
+                    myConnection.Open()
+                    Dim checkBatalSql As String = "SELECT ISNULL(IsBatal, 0) FROM LESEN_Permohonan WHERE Permohonan_ID = @pid"
+                    Using cmdCheck As New SqlCommand(checkBatalSql, myConnection)
+                        cmdCheck.Parameters.AddWithValue("@pid", pid)
+                        Dim obj = cmdCheck.ExecuteScalar()
+                        If obj IsNot Nothing AndAlso Not IsDBNull(obj) Then
+                            isBatal = Convert.ToBoolean(obj)
+                        End If
+                    End Using
+
+                    Dim tableName As String = If(isBatal, "LESEN_UlasanFailBatal", "LESEN_UlasanFail")
+                    Dim filepath As String = ""
+
+                    Dim SQL As String = "SELECT TOP(1) UlasanFail_FilePath FROM " & tableName & " WHERE UlasanFail_PermohonanID = @Permohonan_ID AND UlasanFail_PermohonanAgensiID = @Agensi_ID AND ISNULL(UlasanFail_FilePath, '') <> '' ORDER BY UlasanFail_ID DESC"
+                    Using myCommandSelect As New SqlCommand(SQL, myConnection)
+                        myCommandSelect.Parameters.AddWithValue("@Permohonan_ID", pid)
+                        myCommandSelect.Parameters.AddWithValue("@Agensi_ID", agensiId)
+                        Using myReader As SqlDataReader = myCommandSelect.ExecuteReader()
+                            If myReader.Read() Then
+                                filepath = myReader.Item(0).ToString()
+                            End If
+                        End Using
+                    End Using
+
+                    If Not String.IsNullOrEmpty(filepath) Then
+                        If filepath.StartsWith("~") Then
+                            filepath = ResolveUrl(filepath)
+                        End If
+                        ScriptManager.RegisterClientScriptBlock(Me.Page, Me.GetType(), "OpenDoc", "window.open('" & filepath.Replace("'", "\'") & "', '_blank');", True)
+                    Else
+                        ShowAlert("warning", "", "Tiada fail surat ulasan dimuat naik untuk agensi ini.")
+                    End If
+                End Using
+            End If
+        Catch ex As Exception
+            ShowAlert("error", "Ralat", ex.Message)
+        End Try
+    End Sub
+
+    Public Function GetAgensiList(ByVal infoObj As Object, ByVal pidObj As Object) As List(Of AgensiItem)
+        Dim list As New List(Of AgensiItem)()
+        If infoObj Is Nothing OrElse IsDBNull(infoObj) Then
+            Return list
+        End If
+
+        Dim raw As String = infoObj.ToString().Trim()
+        If String.IsNullOrEmpty(raw) Then
+            Return list
+        End If
+
+        Dim pid As String = If(pidObj IsNot Nothing AndAlso Not IsDBNull(pidObj), pidObj.ToString(), "")
+        Dim items As String() = raw.Split(";"c)
+
+        For Each item In items
+            If Not String.IsNullOrWhiteSpace(item) Then
+                Dim parts As String() = item.Split(":"c)
+                If parts.Length >= 3 Then
+                    Dim agId As Integer = 0
+                    Integer.TryParse(parts(0), agId)
+                    Dim name As String = parts(1).Trim()
+                    Dim st As String = parts(2).Trim().ToLower()
+                    Dim tt As String = ""
+
+                    Select Case st
+                        Case "completed"
+                            tt = name & " - Selesai (Klik untuk lihat ulasan)"
+                        Case "in-progress"
+                            tt = name & " - Sedang Diproses"
+                        Case Else
+                            tt = name & " - Belum Bermula"
+                    End Select
+
+                    list.Add(New AgensiItem With {
+                        .PermohonanID = pid,
+                        .AgensiID = agId,
+                        .Name = name,
+                        .Status = st,
+                        .TooltipText = tt
+                    })
+                End If
+            End If
+        Next
+
+        Return list
+    End Function
 
     Private Sub GridView1_DataBound(sender As Object, e As EventArgs) Handles GridView1.DataBound
     End Sub
