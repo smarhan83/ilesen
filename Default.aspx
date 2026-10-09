@@ -134,7 +134,7 @@
             </section>
 
             <!-- Dashboard Cards -->
-            <%-- Kiraan 4 kad di bawah dimuatkan sekali sahaja dalam code-behind (LoadCountStatus) --%>
+            <%-- Kiraan 4 kad di bawah dimuatkan sekali sahaja dalam code-behind (LoadDashboardStats) --%>
 
             <div class="row g-4 mb-4">
             <div class="col-md-6 col-xl-3">
@@ -1635,11 +1635,8 @@ where x2.Permohonan_ID = g.Permohonan_ID and x2.JabatanAgensi_ID = @AgensiID uni
                                     <i class="bi bi-clipboard2-check-fill"></i>
                                 </div>
                                 <div>
-                                    <asp:FormView ID="FormViewTugasan" runat="server" DataSourceID="sdsTugasanSaya">
-                                        <ItemTemplate>
-                                            <div class="tugasan-count"><%# Eval("jumlahBelumSelesai") %></div>
-                                        </ItemTemplate>
-                                    </asp:FormView>
+                                    <%-- Jumlah = Pendaftaran + Pembatalan (dikira dalam FormViewTugasan_DataBound) --%>
+                                    <div class="tugasan-count"><asp:Literal ID="litTugasan" runat="server" Text="0" /></div>
                                     <div class="tugasan-label">Belum Selesai</div>
                                     <div class="tugasan-sub">Semua Agensi</div>
                                 </div>
@@ -1647,7 +1644,7 @@ where x2.Permohonan_ID = g.Permohonan_ID and x2.JabatanAgensi_ID = @AgensiID uni
 
                             <div class="tugasan-stats">
                                 <a href="<%= ResolveUrl("~/lesen/kelulusan.aspx?p_Id=3351&m_Id=3352") %>" class="stat-box stat-blue">
-                                    <asp:FormView ID="FormView11" runat="server" DataSourceID="sdsPemohonBaru">
+                                    <asp:FormView ID="FormView11" runat="server" DataSourceID="sdsPemohonBaru" OnDataBound="FormViewTugasan_DataBound">
                                         <ItemTemplate>
                                             <div class="stat-num"><%# Eval("cnt") %></div>
                                         </ItemTemplate>
@@ -1656,7 +1653,7 @@ where x2.Permohonan_ID = g.Permohonan_ID and x2.JabatanAgensi_ID = @AgensiID uni
                                 </a>
 
                                 <a href="<%= ResolveUrl("~/lesen/pembatalan.aspx?p_Id=3351&m_Id=4351") %>" class="stat-box stat-red">
-                                    <asp:FormView ID="FormView12" runat="server" DataSourceID="sdsPembatalanBaru">
+                                    <asp:FormView ID="FormView12" runat="server" DataSourceID="sdsPembatalanBaru" OnDataBound="FormViewTugasan_DataBound">
                                         <ItemTemplate>
                                             <div class="stat-num"><%# Eval("cnt") %></div>
                                         </ItemTemplate>
@@ -1669,59 +1666,6 @@ where x2.Permohonan_ID = g.Permohonan_ID and x2.JabatanAgensi_ID = @AgensiID uni
                                 Lihat Semua Tugasan <i class="bi bi-chevron-right"></i>
                             </a>
                         </div>
-
-                        <asp:SqlDataSource ID="sdsTugasanSaya" runat="server" ConnectionString="<%$ ConnectionStrings:webcon_ConnectionStr %>"
-                            SelectCommand="
-                            SELECT COUNT(*) as jumlahBelumSelesai
-                            FROM (
-                                SELECT a.Permohonan_ID FROM v_LESEN_ApprovalList_Curr a
-                                inner join LESEN_JenisLesen d on d.JenisLesen_ID = a.JenisLesen_ID
-                                left join LESEN_JabatanAgensi e on e.JabatanAgensi_ID = a.AgensiID
-                                inner join LESEN_Pemohon f on f.Pemohon_ID = a.Permohonan_PemohonID
-                                inner join LESEN_Permohonan g on g.Permohonan_ID = a.Permohonan_ID
-                                where 1=1 and (
-                                    a.ApprStatusID = case when @isPenyedia = 1 then 3 else 99 end 
-                                    or a.ApprStatusID = case when @isPenilai = 1 then 2 else 99 end
-                                    or a.ApprStatusID = case when @isPenilai = 1 then 5 else 99 end
-                                    or a.ApprStatusID = case when @isPenilai = 1 then 4 else 99 end
-                                    or a.ApprStatusID = case when @isPeraku = 1 then 8 else 99 end
-                                )
-                                and case when isnull((select top 1 x.JabatanAgensi_IsLesen from LESEN_JabatanAgensi x where x.JabatanAgensi_ID = @AgensiID),0) = 1 then isnull(a.AgensiID,@AgensiID) else a.AgensiID end 
-                                    = case when isnull((select top 1 x.JabatanAgensi_IsLesen from LESEN_JabatanAgensi x where x.JabatanAgensi_ID = @AgensiID),0) = 1 then @AgensiID else @AgensiID end
-                                and case when a.ApprStatusID = 3 then @sessionUsersId else 0 end IN 
-                                    (select x.PermohonanAgensiStaffID_UsersID from LESEN_PermohonanAgensiStaff x 
-                                    inner join LESEN_PermohonanAgensi x2 on x2.PermohonanAgensi_ID = x.PermohonanAgensi_ID
-                                    where x2.Permohonan_ID = g.Permohonan_ID and x2.JabatanAgensi_ID = @AgensiID union all select 0)
-
-                                UNION ALL
-
-                                SELECT a.Permohonan_ID FROM v_LESEN_ApprovalListBatal_Curr a
-                                inner join LESEN_JenisLesen d on d.JenisLesen_ID = a.JenisLesen_ID
-                                left join LESEN_JabatanAgensi e on e.JabatanAgensi_ID = a.AgensiID
-                                inner join LESEN_Pemohon f on f.Pemohon_ID = a.Permohonan_PemohonID
-                                inner join LESEN_Permohonan g on g.Permohonan_ID = a.Permohonan_ID
-                                where 1=1 and (
-                                    a.ApprStatusID = case when @isPenyedia = 1 then 3 else 99 end 
-                                    or a.ApprStatusID = case when @isPenilai = 1 then 2 else 99 end
-                                    or a.ApprStatusID = case when @isPenilai = 1 then 5 else 99 end
-                                    or a.ApprStatusID = case when @isPenilai = 1 then 4 else 99 end
-                                    or a.ApprStatusID = case when @isPeraku = 1 then 8 else 99 end
-                                )
-                                and case when isnull((select top 1 x.JabatanAgensi_IsLesen from LESEN_JabatanAgensi x where x.JabatanAgensi_ID = @AgensiID),0) = 1 then isnull(a.AgensiID,@AgensiID) else a.AgensiID end 
-                                    = case when isnull((select top 1 x.JabatanAgensi_IsLesen from LESEN_JabatanAgensi x where x.JabatanAgensi_ID = @AgensiID),0) = 1 then @AgensiID else @AgensiID end
-                                and case when a.ApprStatusID = 3 then @sessionUsersId else 0 end IN 
-                                    (select x.PermohonanAgensiStaffID_UsersID from LESEN_PermohonanAgensiStaffBatal x 
-                                    inner join LESEN_PermohonanAgensiBatal x2 on x2.PermohonanAgensi_ID = x.PermohonanAgensi_ID
-                                    where x2.Permohonan_ID = g.Permohonan_ID and x2.JabatanAgensi_ID = @AgensiID union all select 0)
-                            ) tbl">
-                            <SelectParameters>
-                                <asp:SessionParameter SessionField="sessionEstateID" Name="AgensiID"></asp:SessionParameter>
-                                <asp:SessionParameter SessionField="sessionIsPenyedia" Name="isPenyedia"></asp:SessionParameter>
-                                <asp:SessionParameter SessionField="sessionIsPenilai" Name="isPenilai"></asp:SessionParameter>
-                                <asp:SessionParameter SessionField="sessionIsPeraku" Name="isPeraku"></asp:SessionParameter>
-                                <asp:SessionParameter SessionField="sessionUsersId" Name="sessionUsersId"></asp:SessionParameter>
-                            </SelectParameters>
-                        </asp:SqlDataSource>
 
                         <asp:SqlDataSource ID="sdsPemohonBaru" runat="server" ConnectionString="<%$ ConnectionStrings:webcon_ConnectionStr %>"
                             SelectCommand="SELECT count(*) as cnt FROM 
@@ -1966,41 +1910,38 @@ where x2.Permohonan_ID = g.Permohonan_ID and x2.JabatanAgensi_ID = @AgensiID uni
                             </div>
 
                             <asp:SqlDataSource runat="server" ID="sdsPermohonanStatus" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>' 
-                                SelectCommand="SELECT Description as statusName, sum(cnt1) as cntMohon, IIF(max(cnt1Ttl)=0,1,max(cnt1Ttl)) as cntMohonTtl, sum(cnt2) as cntBatal, IIF(max(cnt2Ttl)=0,1,max(cnt2Ttl)) as cntBatalTtl FROM
+                                SelectCommand="SET NOCOUNT ON;
+                                /* Setiap view dibaca sekali sahaja ke @src; ok = lulus penapis agensi */
+                                DECLARE @src TABLE (src tinyint, ApprStatusID int, Description nvarchar(100), ok bit);
+
+                                INSERT INTO @src (src, ApprStatusID, Description, ok)
+                                SELECT 1, a.ApprStatusID, a.Description,
+                                    CASE WHEN iif(@AgensiID = 0 or @AgensiID = 1,0,@AgensiID) = iif(@AgensiID = 0 or @AgensiID = 1,0,(select top 1 x2.AgensiID from LESEN_ApprovalList x2 where x2.agensiID = @AgensiID and x2.Permohonan_ID = a.Permohonan_ID)) THEN 1 ELSE 0 END
+                                FROM v_LESEN_ApprovalList_Curr a
+                                inner join LESEN_JenisLesen d on d.JenisLesen_ID = a.JenisLesen_ID
+                                inner join LESEN_Pemohon f on f.Pemohon_ID = a.Permohonan_PemohonID;
+
+                                INSERT INTO @src (src, ApprStatusID, Description, ok)
+                                SELECT 2, a.ApprStatusID, a.Description,
+                                    CASE WHEN iif(@AgensiID = 0 or @AgensiID = 1,0,@AgensiID) = iif(@AgensiID = 0 or @AgensiID = 1,0,(select top 1 x2.AgensiID from LESEN_ApprovalList x2 where x2.agensiID = @AgensiID and x2.Permohonan_ID = a.Permohonan_ID)) THEN 1 ELSE 0 END
+                                FROM v_LESEN_ApprovalListBatal_Curr a
+                                inner join LESEN_JenisLesen d on d.JenisLesen_ID = a.JenisLesen_ID
+                                inner join LESEN_Pemohon f on f.Pemohon_ID = a.Permohonan_PemohonID;
+
+                                /* jumlah pembatalan memang tanpa penapis agensi (kekal seperti query asal) */
+                                DECLARE @ttl1 int = (SELECT COUNT(*) FROM @src WHERE src = 1 AND ok = 1);
+                                DECLARE @ttl2 int = (SELECT COUNT(*) FROM @src WHERE src = 2);
+
+                                SELECT Description as statusName, sum(cnt1) as cntMohon, IIF(max(cnt1Ttl)=0,1,max(cnt1Ttl)) as cntMohonTtl, sum(cnt2) as cntBatal, IIF(max(cnt2Ttl)=0,1,max(cnt2Ttl)) as cntBatalTtl FROM
                                 (
-                                    SELECT ApprStatusID, Description, count(*) as cnt1,0 as cnt2,
-                                    (
-                                        SELECT count(*) as cnt1Ttl FROM 
-                                        v_LESEN_ApprovalList_Curr a
-                                        inner join LESEN_JenisLesen d on d.JenisLesen_ID = a.JenisLesen_ID
-                                        left join LESEN_JabatanAgensi e on e.JabatanAgensi_ID = a.AgensiID
-                                        inner join LESEN_Pemohon f on f.Pemohon_ID = a.Permohonan_PemohonID
-                                        where iif(@AgensiID = 0 or @AgensiID = 1,0,@AgensiID) = iif(@AgensiID = 0 or @AgensiID = 1,0,(select top 1 x2.AgensiID from LESEN_ApprovalList x2 where x2.agensiID = @AgensiID and x2.Permohonan_ID = a.Permohonan_ID)) 
-                                    ) cnt1Ttl, 0 as cnt2Ttl
-                                    FROM 
-                                    v_LESEN_ApprovalList_Curr a
-                                    inner join LESEN_JenisLesen d on d.JenisLesen_ID = a.JenisLesen_ID
-                                    left join LESEN_JabatanAgensi e on e.JabatanAgensi_ID = a.AgensiID
-                                    inner join LESEN_Pemohon f on f.Pemohon_ID = a.Permohonan_PemohonID
-                                    where iif(@AgensiID = 0 or @AgensiID = 1,0,@AgensiID) = iif(@AgensiID = 0 or @AgensiID = 1,0,(select top 1 x2.AgensiID from LESEN_ApprovalList x2 where x2.agensiID = @AgensiID and x2.Permohonan_ID = a.Permohonan_ID)) 
+                                    SELECT ApprStatusID, Description, count(*) as cnt1, 0 as cnt2, @ttl1 as cnt1Ttl, 0 as cnt2Ttl
+                                    FROM @src WHERE src = 1 AND ok = 1
                                     group by ApprStatusID, Description
                                     union all
-                                    SELECT ApprStatusID, Description, 0 as cnt1, count(*) as cnt2, 0 as cnt1Ttl,
-                                    (
-                                        SELECT count(*) as cnt2Ttl FROM
-                                        v_LESEN_ApprovalListBatal_Curr a
-                                        inner join LESEN_JenisLesen d on d.JenisLesen_ID = a.JenisLesen_ID
-                                        left join LESEN_JabatanAgensi e on e.JabatanAgensi_ID = a.AgensiID
-                                        inner join LESEN_Pemohon f on f.Pemohon_ID = a.Permohonan_PemohonID
-                                    ) cnt2Ttl
-                                    FROM 
-                                    v_LESEN_ApprovalListBatal_Curr a
-                                    inner join LESEN_JenisLesen d on d.JenisLesen_ID = a.JenisLesen_ID
-                                    left join LESEN_JabatanAgensi e on e.JabatanAgensi_ID = a.AgensiID
-                                    inner join LESEN_Pemohon f on f.Pemohon_ID = a.Permohonan_PemohonID
-                                    where iif(@AgensiID = 0 or @AgensiID = 1,0,@AgensiID) = iif(@AgensiID = 0 or @AgensiID = 1,0,(select top 1 x2.AgensiID from LESEN_ApprovalList x2 where x2.agensiID = @AgensiID and x2.Permohonan_ID = a.Permohonan_ID)) 
+                                    SELECT ApprStatusID, Description, 0 as cnt1, count(*) as cnt2, 0 as cnt1Ttl, @ttl2 as cnt2Ttl
+                                    FROM @src WHERE src = 2 AND ok = 1
                                     group by ApprStatusID, Description
-                                ) tbl 
+                                ) tbl
                                 group by ApprStatusID, Description
                                 order by ApprStatusID">
                                 <SelectParameters>

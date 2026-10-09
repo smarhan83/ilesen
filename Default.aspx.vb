@@ -27,12 +27,21 @@ Partial Class _Default
             LoadKategoriDropdown()
             LoadAgensiDropdown()
 
+        End If
+
+        '//kad statistik (load pertama) + carta bulanan & status (bila login) - satu query
+        Dim isLoggedIn As Boolean = False
+        Try
+            isLoggedIn = CInt(Session.Item("sessionUsersId")) > 0
+        Catch ex As Exception
+        End Try
+
+        If Not IsPostBack OrElse isLoggedIn Then
             Try
-                LoadCountStatus()
+                LoadDashboardStats(Not IsPostBack, isLoggedIn)
             Catch ex As Exception
                 ' Log error
             End Try
-
         End If
 
         Dim pageName As String = System.IO.Path.GetFileName(Request.Url.AbsolutePath)
@@ -52,8 +61,6 @@ Partial Class _Default
         Try
             If CInt(Session.Item("sessionUsersId")) > 0 Then
 
-                generateMonthlyData()
-                generateStatusData()
                 generateDailyApprovalData()
                 'generateGraphBayaran()
                 'generateGraphPermohonanYearly()
@@ -81,44 +88,92 @@ Partial Class _Default
 
     End Sub
 
-    ' Kad statistik atas (4 kad). Dulu 4 FormView berkongsi satu SqlDataSource,
-    ' menyebabkan query yang sama dijalankan 4 kali - kini sekali sahaja.
-    Private Sub LoadCountStatus()
+    ' Kad statistik atas + pie chart status + bar chart bulanan.
+    ' Dua view (kelulusan & pembatalan) dibaca sekali ke @a, kemudian
+    ' 3 result set dikira daripadanya (dulu 3 query berasingan).
+    Private Sub LoadDashboardStats(loadCards As Boolean, loadCharts As Boolean)
 
         Using con As New SqlConnection(ConfigurationManager.ConnectionStrings("webcon_ConnectionStr").ConnectionString)
             Using cmd As New SqlCommand("
-            SELECT
-                COUNT(DISTINCT a.Permohonan_ID) AS TotalPermohonan,
-                SUM(CASE WHEN a.ApprStatusID IN (1,2,3,4,5,7,8) THEN 1 ELSE 0 END) AS TotalDalamProses,
-                SUM(CASE WHEN a.ApprStatusID = 10 THEN 1 ELSE 0 END) AS Diluluskan,
-                SUM(CASE WHEN a.ApprStatusID IN (6,9) THEN 1 ELSE 0 END) AS Ditolak
+            SET NOCOUNT ON;
+            DECLARE @a TABLE (Permohonan_ID int, ApprStatusID int, TarikhMohon date);
+
+            INSERT INTO @a (Permohonan_ID, ApprStatusID, TarikhMohon)
+            SELECT x.Permohonan_ID, x.ApprStatusID, x.TarikhMohon
             FROM
             (
-                SELECT Permohonan_ID, ApprStatusID, AgensiID
-                FROM v_LESEN_ApprovalList_Curr
-
+                SELECT Permohonan_ID, ApprStatusID, AgensiID, TarikhMohon FROM v_LESEN_ApprovalList_Curr
                 UNION ALL
-
-                SELECT Permohonan_ID, ApprStatusID, AgensiID
-                FROM v_LESEN_ApprovalListBatal_Curr
-            ) a
+                SELECT Permohonan_ID, ApprStatusID, AgensiID, TarikhMohon FROM v_LESEN_ApprovalListBatal_Curr
+            ) x
             WHERE IIF(@AgensiID = 0 OR @AgensiID = 1,0,@AgensiID) =
-                    IIF(@AgensiID = 0 OR @AgensiID = 1,0,a.AgensiID)
-            AND a.ApprStatusID <> 0
+                  IIF(@AgensiID = 0 OR @AgensiID = 1,0,x.AgensiID);
+
+            -- 1) Kad statistik (semua tahun)
+            SELECT
+                COUNT(DISTINCT Permohonan_ID) AS TotalPermohonan,
+                SUM(CASE WHEN ApprStatusID IN (1,2,3,4,5,7,8) THEN 1 ELSE 0 END) AS TotalDalamProses,
+                SUM(CASE WHEN ApprStatusID = 10 THEN 1 ELSE 0 END) AS Diluluskan,
+                SUM(CASE WHEN ApprStatusID IN (6,9) THEN 1 ELSE 0 END) AS Ditolak
+            FROM @a
+            WHERE ApprStatusID <> 0;
+
+            -- 2) Pie chart status (tahun semasa)
+            SELECT
+                SUM(CASE WHEN ApprStatusID IN (1) THEN 1 ELSE 0 END) AS TotalPermohonan,
+                SUM(CASE WHEN ApprStatusID IN (2,3,4,5,7,8) THEN 1 ELSE 0 END) AS TotalDalamProses,
+                SUM(CASE WHEN ApprStatusID = 10 THEN 1 ELSE 0 END) AS Diluluskan,
+                SUM(CASE WHEN ApprStatusID IN (6,9) THEN 1 ELSE 0 END) AS Ditolak
+            FROM @a
+            WHERE YEAR(TarikhMohon) = YEAR(GETDATE())
+            AND ApprStatusID <> 0;
+
+            -- 3) Bar chart bulanan (tahun semasa)
+            SELECT b.Bulan, ISNULL(m.TotalPermohonan, 0) AS TotalPermohonan
+            FROM (VALUES (1),(2),(3),(4),(5),(6),(7),(8),(9),(10),(11),(12)) b(Bulan)
+            LEFT JOIN
+            (
+                SELECT MONTH(TarikhMohon) AS Bulan, COUNT(DISTINCT Permohonan_ID) AS TotalPermohonan
+                FROM @a
+                WHERE ApprStatusID > 0
+                AND YEAR(TarikhMohon) = YEAR(GETDATE())
+                GROUP BY MONTH(TarikhMohon)
+            ) m ON m.Bulan = b.Bulan
+            ORDER BY b.Bulan;
             ", con)
 
                 cmd.Parameters.AddWithValue("@AgensiID", If(Session.Item("sessionEstateID"), DBNull.Value))
 
-                con.Open()
-
-                Using reader As SqlDataReader = cmd.ExecuteReader()
-                    If reader.Read() Then
-                        litTotalPermohonan.Text = reader("TotalPermohonan").ToString()
-                        litTotalDalamProses.Text = reader("TotalDalamProses").ToString()
-                        litDiluluskan.Text = reader("Diluluskan").ToString()
-                        litDitolak.Text = reader("Ditolak").ToString()
-                    End If
+                Dim ds As New DataSet()
+                Using da As New SqlDataAdapter(cmd)
+                    da.Fill(ds)
                 End Using
+
+                If loadCards AndAlso ds.Tables(0).Rows.Count > 0 Then
+                    Dim row As DataRow = ds.Tables(0).Rows(0)
+                    litTotalPermohonan.Text = row("TotalPermohonan").ToString()
+                    litTotalDalamProses.Text = row("TotalDalamProses").ToString()
+                    litDiluluskan.Text = row("Diluluskan").ToString()
+                    litDitolak.Text = row("Ditolak").ToString()
+                End If
+
+                If loadCharts Then
+                    Dim statusValues As New List(Of String)
+                    If ds.Tables(1).Rows.Count > 0 Then
+                        Dim row As DataRow = ds.Tables(1).Rows(0)
+                        statusValues.Add(row("TotalPermohonan").ToString())
+                        statusValues.Add(row("TotalDalamProses").ToString())
+                        statusValues.Add(row("Diluluskan").ToString())
+                        statusValues.Add(row("Ditolak").ToString())
+                    End If
+                    StatusData = "[" & String.Join(",", statusValues) & "]"
+
+                    Dim monthlyValues As New List(Of String)
+                    For Each row As DataRow In ds.Tables(2).Rows
+                        monthlyValues.Add(row("TotalPermohonan").ToString())
+                    Next
+                    MonthlyData = "[" & String.Join(",", monthlyValues) & "]"
+                End If
 
             End Using
         End Using
@@ -198,147 +253,16 @@ Partial Class _Default
         DailyData = "[" & String.Join(",", values) & "]"
     End Sub
 
-    Private Sub generateStatusData()
+    ' Tugasan Saya = Pendaftaran + Pembatalan (nilai FormView11 & FormView12),
+    ' tanpa query ketiga yang mengira semula jumlah yang sama.
+    Private jumlahTugasan As Integer = 0
 
-        Dim dt As New DataTable()
-
-        Using con As New SqlConnection(ConfigurationManager.ConnectionStrings("webcon_ConnectionStr").ConnectionString)
-            Using cmd As New SqlCommand("
-            SELECT
-                SUM(CASE WHEN a.ApprStatusID IN (1) THEN 1 ELSE 0 END) AS TotalPermohonan,
-                SUM(CASE WHEN a.ApprStatusID IN (2,3,4,5,7,8) THEN 1 ELSE 0 END) AS TotalDalamProses,
-                SUM(CASE WHEN a.ApprStatusID = 10 THEN 1 ELSE 0 END) AS Diluluskan,
-                SUM(CASE WHEN a.ApprStatusID IN (6,9) THEN 1 ELSE 0 END) AS Ditolak
-            FROM
-            (
-                SELECT 
-                    Permohonan_ID,
-                    ApprStatusID,
-                    AgensiID
-                FROM v_LESEN_ApprovalList_Curr
-                WHERE YEAR(TarikhMohon) = YEAR(GETDATE())
-
-                UNION ALL
-
-                SELECT 
-                    Permohonan_ID,
-                    ApprStatusID,
-                    AgensiID
-                FROM v_LESEN_ApprovalListBatal_Curr
-                WHERE YEAR(TarikhMohon) = YEAR(GETDATE())
-
-            ) a
-            WHERE IIF(@AgensiID = 0 OR @AgensiID = 1,0,@AgensiID) =
-            IIF(@AgensiID = 0 OR @AgensiID = 1,0,a.AgensiID)
-            AND a.ApprStatusID <> 0
-            ", con)
-
-
-
-                cmd.Parameters.AddWithValue("@AgensiID", Session.Item("sessionEstateID"))
-
-                con.Open()
-
-                Dim da As New SqlDataAdapter(cmd)
-                da.Fill(dt)
-
-            End Using
-        End Using
-
-
-        Dim values As New List(Of String)
-
-        If dt.Rows.Count > 0 Then
-
-            Dim row As DataRow = dt.Rows(0)
-            values.Add(row("TotalPermohonan").ToString())
-            values.Add(row("TotalDalamProses").ToString())
-            values.Add(row("Diluluskan").ToString())
-            values.Add(row("Ditolak").ToString())
-
+    Protected Sub FormViewTugasan_DataBound(sender As Object, e As EventArgs)
+        Dim row As DataRowView = TryCast(CType(sender, FormView).DataItem, DataRowView)
+        If row IsNot Nothing AndAlso Not IsDBNull(row("cnt")) Then
+            jumlahTugasan += CInt(row("cnt"))
         End If
-
-        StatusData = "[" & String.Join(",", values) & "]"
-
-    End Sub
-
-    Private Sub generateMonthlyData()
-
-        Dim dt As New DataTable()
-
-        Using con As New SqlConnection(ConfigurationManager.ConnectionStrings("webcon_ConnectionStr").ConnectionString)
-            Using cmd As New SqlCommand("
-                SELECT
-                b.Bulan,
-                ISNULL(x.TotalPermohonan, 0) AS TotalPermohonan
-            FROM
-            (
-                SELECT 1 AS Bulan UNION ALL
-                SELECT 2 UNION ALL
-                SELECT 3 UNION ALL
-                SELECT 4 UNION ALL
-                SELECT 5 UNION ALL
-                SELECT 6 UNION ALL
-                SELECT 7 UNION ALL
-                SELECT 8 UNION ALL
-                SELECT 9 UNION ALL
-                SELECT 10 UNION ALL
-                SELECT 11 UNION ALL
-                SELECT 12
-            ) b
-            LEFT JOIN
-            (
-                SELECT
-                    MONTH(a.TarikhMohon) AS Bulan,
-                    COUNT(DISTINCT a.Permohonan_ID) AS TotalPermohonan
-                FROM
-                (
-                    SELECT 
-                        Permohonan_ID,
-                        AgensiID,
-                        TarikhMohon
-                    FROM v_LESEN_ApprovalList_Curr
-                    WHERE ApprStatusID > 0
-
-                    UNION ALL
-
-                    SELECT 
-                        Permohonan_ID,
-                        AgensiID,
-                        TarikhMohon
-                    FROM v_LESEN_ApprovalListBatal_Curr
-                    WHERE ApprStatusID > 0
-                ) a
-                WHERE YEAR(a.TarikhMohon) = YEAR(GETDATE())
-                AND IIF(@AgensiID = 0 OR @AgensiID = 1,0,@AgensiID) =
-                    IIF(@AgensiID = 0 OR @AgensiID = 1,0,a.AgensiID)
-                GROUP BY MONTH(a.TarikhMohon)
-            ) x
-            ON b.Bulan = x.Bulan
-            ORDER BY b.Bulan
-            ", con)
-
-
-
-                cmd.Parameters.AddWithValue("@AgensiID", Session.Item("sessionEstateID"))
-
-                con.Open()
-
-                Dim da As New SqlDataAdapter(cmd)
-                da.Fill(dt)
-
-            End Using
-        End Using
-
-
-        Dim values As New List(Of String)
-
-        For Each row As DataRow In dt.Rows
-            values.Add(row("TotalPermohonan").ToString())
-        Next
-
-        MonthlyData = "[" & String.Join(",", values) & "]"
-
+        litTugasan.Text = jumlahTugasan.ToString()
     End Sub
 
     Private Sub generatePieChart()
