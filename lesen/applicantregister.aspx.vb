@@ -1,15 +1,41 @@
-﻿
+
 Partial Class applicantregister
     Inherits System.Web.UI.Page
+
+    ' Page buka dengan senarai sahaja; borang dipaparkan bila Tambah / Kemaskini
+    Private Sub ShowForm(show As Boolean)
+        pnlForm.Visible = show
+        pnlList.Visible = Not show
+    End Sub
+
+    Private Sub BackToList()
+        GridView1.SelectedIndex = -1
+        FormView1.ChangeMode(FormViewMode.Insert)
+        ShowForm(False)
+        GridView1.DataBind()
+    End Sub
+
+    Protected Sub btnTambah_Click(sender As Object, e As EventArgs) Handles btnTambah.Click
+        GridView1.SelectedIndex = -1
+        FormView1.ChangeMode(FormViewMode.Insert)
+        ShowForm(True)
+    End Sub
+
+    Protected Sub FormView1_ItemCommand(sender As Object, e As FormViewCommandEventArgs) Handles FormView1.ItemCommand
+        If e.CommandName = "Cancel" Then
+            BackToList()
+        End If
+    End Sub
 
     Protected Sub FormView1_ItemInserted(ByVal sender As Object, ByVal e As System.Web.UI.WebControls.FormViewInsertedEventArgs) Handles FormView1.ItemInserted
 
         ShowAlert("success", "", "Rekod berjaya disimpan")
-        GridView1.DataBind()
+        BackToList()
     End Sub
 
     Protected Sub GridView1_RowDeleting(ByVal sender As Object, ByVal e As System.Web.UI.WebControls.GridViewDeleteEventArgs) Handles GridView1.RowDeleting
-        Dim title As String = GridView1.Rows(e.RowIndex).Cells(1).Text
+        Dim lblNama As Label = DirectCast(GridView1.Rows(e.RowIndex).FindControl("lblNama"), Label)
+        Dim title As String = If(lblNama IsNot Nothing, lblNama.Text, "")
 
         '//run audit trail : Insert : Update : Delete : Login : Logout
         GlobalClass.auditTrail(idWindowTitle.InnerText, title, "Nyah Aktif")
@@ -17,6 +43,7 @@ Partial Class applicantregister
 
     Protected Sub GridView1_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles GridView1.SelectedIndexChanged
         FormView1.ChangeMode(DetailsViewMode.Edit)
+        ShowForm(True)
 
         Dim titleTxt As TextBox = DirectCast(FormView1.FindControl("txtPemohon_Name"), TextBox)
 
@@ -25,34 +52,25 @@ Partial Class applicantregister
     End Sub
 
     '+++++++++ START FILTER +++++++++
-    Protected Sub Page_Load(sender As Object, e As EventArgs) Handles Me.Load
-        Dim gv As GridView = GridView1
-        Dim ds As SqlDataSource = SqlDataSourceGrid
-        GlobalClass.GenerateFilter(gv, ds, pnlFilter)
-
-        ''+++++ Selected column +++++
-        'Dim lstColumn As New List(Of String)({"description"})
-        'GlobalClass.GenerateFilter(gv, ds, pnlFilter, lstColumn)
+    ' Parameter carian terikat pada txtCarian / ddlStatus; grid bind semula secara automatik
+    Private Sub btnSearch_Click(sender As Object, e As EventArgs) Handles btnSearch.Click
+        GridView1.PageIndex = 0
     End Sub
 
-    Private Sub btnSearch_Click(sender As Object, e As EventArgs) Handles btnSearch.Click
-        Dim ds As SqlDataSource = SqlDataSourceGrid
-        GlobalClass.procSearch(ds, pnlFilter)
-        CallFilter()
-        FormView1.ChangeMode(DetailsViewMode.Insert)
+    Private Sub ddlStatus_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ddlStatus.SelectedIndexChanged
+        GridView1.PageIndex = 0
     End Sub
 
     Private Sub btnReset_Click(sender As Object, e As EventArgs) Handles btnReset.Click
         Response.Redirect(Request.RawUrl)
     End Sub
-    Protected Sub GridView1_PageIndexChanged(sender As Object, e As EventArgs) Handles GridView1.PageIndexChanged
-        CallFilter()
-    End Sub
 
-    Private Sub CallFilter()
-        Dim ds As SqlDataSource = SqlDataSourceGrid
-        GlobalClass.procSearch(ds, pnlFilter)
+    Private Sub SqlDataSourceGrid_Selected(sender As Object, e As SqlDataSourceStatusEventArgs) Handles SqlDataSourceGrid.Selected
+        If e.Exception Is Nothing Then
+            litJumlah.Text = String.Format("{0:N0} rekod", e.AffectedRows)
+        End If
     End Sub
+    '+++++++++ END FILTER +++++++++
 
     Protected Sub FormView1_ItemInserting(ByVal sender As Object, ByVal e As System.Web.UI.WebControls.FormViewInsertEventArgs) Handles FormView1.ItemInserting
         Dim titleTxt As TextBox = DirectCast(FormView1.FindControl("txtPemohon_Name"), TextBox)
@@ -64,7 +82,8 @@ Partial Class applicantregister
 
     Protected Sub FormView1_ItemUpdated(ByVal sender As Object, ByVal e As System.Web.UI.WebControls.FormViewUpdatedEventArgs) Handles FormView1.ItemUpdated
         ShowAlert("success", "", "Rekod berjaya dikemaskini")
-        GridView1.DataBind()
+        e.KeepInEditMode = False
+        BackToList()
     End Sub
 
     Protected Sub FormView1_ItemUpdating(ByVal sender As Object, ByVal e As System.Web.UI.WebControls.FormViewUpdateEventArgs) Handles FormView1.ItemUpdating
@@ -81,33 +100,32 @@ Partial Class applicantregister
         Dim lbutton() As Object = {} '//allow control
         Dim ctlDeny() As Object = {} '//deny control
 
-
-        'If FormView1.CurrentMode = FormViewMode.Insert Then
-        '    lnkSMAF.Add(DirectCast(FormView1.FindControl("InsertCancelButton"), LinkButton)) '//insert cancel
-        'ElseIf FormView1.CurrentMode = FormViewMode.Edit Then
-        '    lnkSMAF.Add(DirectCast(FormView1.FindControl("UpdatePrintButton"), LinkButton)) '//print
-        'End If
-
         '//check Write
         Dim frmwrite As Boolean = GlobalClass.CheckPageWrite("Write", frmview, lbutton, ctlDeny)
+
+        '// butang Tambah hanya pada paparan senarai & jika ada akses tulis
+        btnTambah.Visible = pnlList.Visible AndAlso frmwrite
+
         '// check gridview permission
         If frmwrite = False Then
-            '//gridview select view
-            GridView1.Columns.Item(5).Visible = False '//grid delete
-
+            GridView1.Columns.Item(GridView1.Columns.Count - 1).Visible = False '//grid kemaskini / nyah aktif
         End If
     End Sub
 
-    Private Sub initPageName()
+    Private Function GetMenuName() As String
         '// get page name
         Dim menuName As String = GlobalClass.writeTitlePage(Request.QueryString("m_Id"), "")
-
-        Dim idWindowTitle2 As HtmlGenericControl = DirectCast(FormView1.FindControl("idWindowTitle2"), HtmlGenericControl)
-        Dim idWindowTitle3 As HtmlGenericControl = DirectCast(FormView1.FindControl("idWindowTitle3"), HtmlGenericControl)
-
         If menuName = "" Then
             menuName = "Pemohon"
         End If
+        Return menuName
+    End Function
+
+    Private Sub initPageName()
+        Dim menuName As String = GetMenuName()
+
+        Dim idWindowTitle2 As HtmlGenericControl = DirectCast(FormView1.FindControl("idWindowTitle2"), HtmlGenericControl)
+        Dim idWindowTitle3 As HtmlGenericControl = DirectCast(FormView1.FindControl("idWindowTitle3"), HtmlGenericControl)
 
         idWindowTitle.InnerText = menuName
         Try
@@ -127,7 +145,31 @@ Partial Class applicantregister
         '// page name initial
         initPageName()
 
+        '// rekod baru aktif secara default
+        If FormView1.CurrentMode = FormViewMode.Insert Then
+            Dim cbAktif As CheckBox = TryCast(FormView1.FindControl("CheckBox2"), CheckBox)
+            If cbAktif IsNot Nothing Then cbAktif.Checked = True
+        End If
+
     End Sub
+
+    Protected Sub Page_Load(sender As Object, e As EventArgs) Handles Me.Load
+        '// tajuk page diperlukan walaupun borang belum dipaparkan
+        If Not IsPostBack Then
+            idWindowTitle.InnerText = GetMenuName()
+        End If
+    End Sub
+
+    Protected Function GetInitial(name As Object) As String
+        Dim s As String = Convert.ToString(name).Trim()
+        If s = "" Then Return "?"
+        Return s.Substring(0, 1).ToUpper()
+    End Function
+
+    Protected Function IsAktif(value As Object) As Boolean
+        If value Is Nothing OrElse IsDBNull(value) Then Return False
+        Return CBool(value)
+    End Function
 
     Private Sub ShowAlert(statusMsg As String, titleMsg As String, strMsg As String)
 
