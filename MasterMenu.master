@@ -1178,10 +1178,9 @@ h1{
                                             <asp:LinkButton ID="lnkCetak"
                                                 runat="server"
                                                 CssClass='<%# GetButtonClass(Eval("StatusDesc")) %>'
-                                                Text="🖨 Cetak Surat"
                                                 CommandArgument='<%# CType(Container, GridViewRow).RowIndex %>'
                                                 Visible='<%# Eval("StatusDesc").ToString() = "Diluluskan" Or Eval("StatusDesc").ToString() = "Ditolak" %>'
-                                                OnClick="lnkCetak_Click" />
+                                                OnClick="lnkCetak_Click"><i class="bi bi-printer me-1"></i>Cetak Surat</asp:LinkButton>
                                         </ItemTemplate>
                                     </asp:TemplateField>
 <%--                                    <asp:TemplateField HeaderText="Tindakan">
@@ -1196,23 +1195,21 @@ h1{
                                 ConnectionString="<%$ ConnectionStrings:webcon_ConnectionStr %>"
                                 SelectCommand="SELECT 
 
-                                ROW_NUMBER() OVER(ORDER BY TarikhMohon desc, Permohonan_ID desc) as RowNo, * 
-                                FROM (
-
-                                    SELECT ROW_NUMBER() OVER (PARTITION BY a.Permohonan_ID ORDER BY a.ApprovalID DESC) AS RepNo,
-                                        CASE
-                                            WHEN g.StatusID = 10 THEN 'Diluluskan'
-                                            WHEN g.StatusID IN (6,9) THEN 'Ditolak'
-                                            ELSE 'Dalam Semakan'
-                                        END AS StatusDesc,
-                                    '' AS UserType, a.*, g.JenisLesenDescList, g.Rujukan, g.IsSuratKelulusanFail, g.StatusID, g.IsPublish, g.Is24jam, f.Pemohon_Name, h.CreatedDt FROM 
-                                    v_LESEN_ApprovalList_Curr a
-                                    left join LESEN_JabatanAgensi e on e.JabatanAgensi_ID = a.AgensiID
-                                    inner join LESEN_Pemohon f on f.Pemohon_ID = a.Permohonan_PemohonID
-                                    inner join LESEN_Permohonan g on g.Permohonan_ID = a.Permohonan_ID 
-                                    inner join LESEN_ApprovalList h on h.Permohonan_ID = a.Permohonan_ID and h.ApprStatusID = a.ApprStatusID 
-                                    WHERE g.StatusID &gt; 0  
-                                    and g.IsBatal = 0 
+                                ROW_NUMBER() OVER(ORDER BY g.TarikhMohon desc, g.Permohonan_ID desc) as RowNo,
+                                    CASE
+                                        WHEN g.StatusID = 10 THEN 'Diluluskan'
+                                        WHEN g.StatusID IN (6,9) THEN 'Ditolak'
+                                        ELSE 'Dalam Semakan'
+                                    END AS StatusDesc,
+                                '' AS UserType, g.Permohonan_ID, g.JenisLesen_ID, g.TarikhMohon, g.JenisLesenDescList, g.Rujukan,
+                                g.IsSuratKelulusanFail, g.StatusID, g.IsPublish, g.Is24jam, f.Pemohon_Name
+                                /* Ambil terus dari LESEN_Permohonan: Permit Sepanduk/Bunting (27) terus lulus (StatusID=10)
+                                   tanpa rekod LESEN_ApprovalList, jadi tiada dalam v_LESEN_ApprovalList_Curr */
+                                FROM LESEN_Permohonan g
+                                    inner join LESEN_Pemohon f on f.Pemohon_ID = g.Permohonan_PemohonID
+                                    WHERE g.StatusID &gt; 0
+                                    and g.IsBatal = 0
+                                    and g.JenisLesen_ID = 0
                                     and (
                                         REPLACE(REPLACE(REPLACE(f.Pemohon_ICNo, '-', ''), ' ', ''), CHAR(9), '') =
                                         REPLACE(REPLACE(REPLACE(@Pemohon_ICNo, '-', ''), ' ', ''), CHAR(9), '')
@@ -1223,8 +1220,7 @@ h1{
                                         REPLACE(REPLACE(REPLACE(g.NoPendaftaran, '-', ''), ' ', ''), CHAR(9), '') like
                                         '%'+REPLACE(REPLACE(REPLACE(@Pemohon_ICNo, '-', ''), ' ', ''), CHAR(9), '')+'%'
                                     )
-
-                                ) AS tbl WHERE RepNo = 1 AND JenisLesen_ID = 0 order by TarikhMohon desc, Permohonan_ID desc"
+                                order by g.TarikhMohon desc, g.Permohonan_ID desc"
                                 >
 
                                 <SelectParameters>                                  
