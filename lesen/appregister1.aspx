@@ -765,7 +765,7 @@
                                     </div>
                                 </div>
 
-                                <div class="row mb-3">
+                                <div class="row mb-3" hidden="hidden">
                                     <div class="col-md-4">
                                         <asp:LinkButton
                                             runat="server"
@@ -2003,7 +2003,7 @@
                                     </div>
                                 </div>
 
-                                <div class="row mb-3">
+                                <div class="row mb-3" hidden="hidden">
                                     <div class="col-md-6 col-lg-5">
                                         <asp:LinkButton
                                             runat="server"
@@ -3542,15 +3542,14 @@
                                     <asp:BoundField DataField="RowNo" HeaderText="No" SortExpression="RowNo"></asp:BoundField>
                                     <asp:BoundField DataField="TarikhMohon" HeaderText="Tarikh" DataFormatString="{0:dd/MM/yyyy}" SortExpression="TarikhMohon"></asp:BoundField>
                                     <asp:BoundField DataField="JenisLesenDescList" HeaderText="Jenis Lesen/Permit" SortExpression="JenisLesenDescList"></asp:BoundField>
-                                    <asp:BoundField DataField="Rujukan" HeaderText="No Rujukan" SortExpression="Rujukan"></asp:BoundField>
                                     <asp:TemplateField HeaderText="Pemohon">
                                         <ItemTemplate>
                                             <asp:Label ID="lblNamaPemohon" runat="server" Text='<%# Eval("Pemohon_Name") %>'></asp:Label><br />
+                                            <asp:Label ID="lblRujukan" runat="server" Text='<%# Eval("Rujukan") %>' Font-Size="10pt"></asp:Label><br />
                                             <asp:Label ID="lblNamaSyarikatOrAlamat" runat="server" Text='<%# If(Not String.IsNullOrEmpty(Eval("NamaBaruSyarikat")?.ToString()), Eval("NamaBaruSyarikat"), If(Not String.IsNullOrEmpty(Eval("NamaSyarikat")?.ToString()), Eval("NamaSyarikat"), Eval("DisplayAlamat"))) %>' 
                                                 Font-Size="10pt"></asp:Label><br />
                                             <asp:Label ID="lblNamaAlamat" runat="server" Visible='<%# If(String.IsNullOrEmpty(Eval("NamaSyarikat")?.ToString()) And String.IsNullOrEmpty(Eval("NamaBaruSyarikat")?.ToString()), False, True) %>' 
                                                 Text='<%# Eval("DisplayAlamat") %>' Font-Size="10pt"></asp:Label>
-                               
                                         </ItemTemplate>
                                     </asp:TemplateField>
                                     <asp:TemplateField ShowHeader="True" HeaderText="Berisiko" SortExpression="IsNotRisk">
@@ -3569,8 +3568,65 @@
                                         <ItemTemplate>
                                             <asp:Repeater ID="rptAgensi" runat="server" DataSource='<%# GetAgensiList(Eval("InvolvedAgensiInfo"), Eval("Permohonan_ID")) %>' OnItemCommand="rptAgensi_ItemCommand">
                                                 <ItemTemplate>
+                                                    <div style="margin-bottom: 2px;">
+                                                        <asp:LinkButton runat="server" 
+                                                            ID="btnSuratAgensi"
+                                                            Visible='<%# If(Eval("Status").ToString() = "completed", True, False) %>'
+                                                            CssClass="badge badge-success"
+                                                            CommandName="SuratAgensi" 
+                                                            CommandArgument='<%# Eval("CommandArg") %>'
+                                                            Text='<%# Eval("Name") %>'
+                                                            ToolTip='<%# Eval("TooltipText") %>'
+                                                            style="display: inline-block; text-decoration: none;" />
+                                                        <span runat="server" 
+                                                            visible='<%# If(Eval("Status").ToString() = "in-progress", True, False) %>'
+                                                            class="badge badge-warning"
+                                                            title='<%# Eval("TooltipText") %>'
+                                                            style="display: inline-block;"><%# Eval("Name") %></span>
+                                                        <span runat="server" 
+                                                            visible='<%# If(Eval("Status").ToString() = "pending", True, False) %>'
+                                                            class="badge badge-secondary"
+                                                            title='<%# Eval("TooltipText") %>'
+                                                            style="display: inline-block;"><%# Eval("Name") %></span>
+                                                    </div>
+                                                </ItemTemplate>
+                                            </asp:Repeater>
+                                            <span runat="server" class="badge badge-secondary" visible='<%# If(String.IsNullOrEmpty(Eval("InvolvedAgensiInfo")?.ToString()), True, False) %>'>Tiada</span>
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
+                                    <asp:BoundField DataField="Description" HeaderText="Status" SortExpression="Description"></asp:BoundField>
+                                    <asp:BoundField DataField="LastModDt" HeaderText="Tarikh Dikemaskini" DataFormatString="{0:dd/MM/yyyy}" SortExpression="LastModDt" NullDisplayText="-"></asp:BoundField>
+                                    <asp:BoundField DataField="RemarksFail" HeaderText="Catatan" SortExpression="RemarksFail"></asp:BoundField>
+
+                                    <asp:TemplateField HeaderText="Maklumat Permohonan" HeaderStyle-Font-Size="10pt" HeaderStyle-Width="90%" ItemStyle-Width="90%">
+                                        <ItemTemplate>
+                                            <asp:Label ID="lblMobHdrTarikh" runat="server" Text="Tarikh Mohon :" Font-Bold="True" Font-Size="10pt"></asp:Label><br />
+                                            <asp:Label ID="lblMobTarikh" runat="server" Text='<%# Eval("TarikhMohon", "{0:dd/MM/yyyy}") %>' Font-Size="10pt"></asp:Label><br />
+
+                                            <asp:Label ID="lblMobHdrJenis" runat="server" Text="Jenis Lesen/Permit :" Font-Bold="True" Font-Size="10pt"></asp:Label><br />
+                                            <asp:Label ID="lblMobJenis" runat="server" Text='<%# Eval("JenisLesenDescList") %>' Font-Size="10pt"></asp:Label><br />
+
+                                            <asp:Label ID="lblMobHdrRujukan" runat="server" Text="No Rujukan :" Font-Bold="True" Font-Size="10pt"></asp:Label><br />
+                                            <asp:Label ID="lblMobRujukan" runat="server" Text='<%# Eval("Rujukan") %>' Font-Size="10pt"></asp:Label><br />
+
+                                            <asp:Label ID="lblMobHdrPemohon" runat="server" Text="Nama Pemohon :" Font-Bold="True" Font-Size="10pt"></asp:Label><br />
+                                            <asp:Label ID="lblMobNamaPemohon" runat="server" Text='<%# Eval("Pemohon_Name") %>' Font-Size="10pt"></asp:Label><br />
+                                            <asp:Label ID="lblMobNamaSyarikatOrAlamat" runat="server" Text='<%# If(Not String.IsNullOrEmpty(Eval("NamaBaruSyarikat")?.ToString()), Eval("NamaBaruSyarikat"), If(Not String.IsNullOrEmpty(Eval("NamaSyarikat")?.ToString()), Eval("NamaSyarikat"), Eval("DisplayAlamat"))) %>' Font-Size="10pt"></asp:Label><br />
+                                            <asp:Label ID="lblMobNamaAlamat" runat="server" Visible='<%# If(String.IsNullOrEmpty(Eval("NamaSyarikat")?.ToString()) And String.IsNullOrEmpty(Eval("NamaBaruSyarikat")?.ToString()), False, True) %>' Text='<%# Eval("DisplayAlamat") + "<br />" %>' Font-Size="10pt"></asp:Label>
+
+                                            <asp:Label ID="lblMobHdrRisiko" runat="server" Text="Berisiko :" Font-Bold="True" Font-Size="10pt"></asp:Label><br />
+                                            <span runat="server" class="badge badge-success" visible='<%# If(Eval("IsNotRisk") = False, True, False) %>'>Ya</span>
+                                            <span runat="server" class="badge badge-secondary" visible='<%# If(Eval("IsNotRisk"), True, False) %>'>Tidak</span><br />
+
+                                            <asp:Label ID="lblMobHdrBatal" runat="server" Text="Pembatalan :" Font-Bold="True" Font-Size="10pt"></asp:Label><br />
+                                            <span runat="server" class="badge badge-success" visible='<%# If(Eval("IsBatal"), True, False) %>'>Ya</span>
+                                            <span runat="server" class="badge badge-secondary" visible='<%# If(Eval("IsBatal") = False, True, False) %>'>Tidak</span><br />
+
+                                            <asp:Label ID="lblMobHdrSurat" runat="server" Text="Surat Balasan :" Font-Bold="True" Font-Size="10pt"></asp:Label><br />
+                                            <asp:Repeater ID="rptAgensiMob" runat="server" DataSource='<%# GetAgensiList(Eval("InvolvedAgensiInfo"), Eval("Permohonan_ID")) %>' OnItemCommand="rptAgensi_ItemCommand">
+                                                <ItemTemplate>
                                                     <asp:LinkButton runat="server" 
-                                                        ID="btnSuratAgensi"
+                                                        ID="btnSuratAgensiMob"
                                                         Visible='<%# If(Eval("Status").ToString() = "completed", True, False) %>'
                                                         CssClass="badge badge-success"
                                                         CommandName="SuratAgensi" 
@@ -3590,12 +3646,19 @@
                                                         style="margin-right: 3px; margin-bottom: 2px; display: inline-block;"><%# Eval("Name") %></span>
                                                 </ItemTemplate>
                                             </asp:Repeater>
-                                            <span runat="server" class="badge badge-secondary" visible='<%# If(String.IsNullOrEmpty(Eval("InvolvedAgensiInfo")?.ToString()), True, False) %>'>Tiada</span>
+                                            <span runat="server" class="badge badge-secondary" visible='<%# If(String.IsNullOrEmpty(Eval("InvolvedAgensiInfo")?.ToString()), True, False) %>'>Tiada</span><br />
+
+                                            <asp:Label ID="lblMobHdrStatus" runat="server" Text="Status :" Font-Bold="True" Font-Size="10pt"></asp:Label><br />
+                                            <asp:Label ID="lblMobStatus" runat="server" Text='<%# Eval("Description") %>' Font-Size="10pt"></asp:Label><br />
+
+                                            <asp:Label ID="lblMobHdrLastMod" runat="server" Text="Tarikh Dikemaskini :" Font-Bold="True" Font-Size="10pt"></asp:Label><br />
+                                            <asp:Label ID="lblMobLastMod" runat="server" Text='<%# If(IsDBNull(Eval("LastModDt")), "-", Eval("LastModDt", "{0:dd/MM/yyyy}")) %>' Font-Size="10pt"></asp:Label><br />
+
+                                            <asp:Label ID="lblMobHdrCatatan" runat="server" Text="Catatan :" Font-Bold="True" Font-Size="10pt"></asp:Label><br />
+                                            <asp:Label ID="lblMobCatatan" runat="server" Text='<%# If(IsDBNull(Eval("RemarksFail")) OrElse String.IsNullOrEmpty(Eval("RemarksFail").ToString()), "-", Eval("RemarksFail")) %>' Font-Size="10pt"></asp:Label>
                                         </ItemTemplate>
+                                        <ItemStyle HorizontalAlign="Left" />
                                     </asp:TemplateField>
-                                    <asp:BoundField DataField="Description" HeaderText="Status" SortExpression="Description"></asp:BoundField>
-                                    <asp:BoundField DataField="LastModDt" HeaderText="Tarikh Dikemaskini" DataFormatString="{0:dd/MM/yyyy}" SortExpression="LastModDt" NullDisplayText="-"></asp:BoundField>
-                                    <asp:BoundField DataField="RemarksFail" HeaderText="Catatan" SortExpression="RemarksFail"></asp:BoundField>
 
                                     <asp:TemplateField ShowHeader="False">
                                         <ItemTemplate>

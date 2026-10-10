@@ -96,6 +96,29 @@ Partial Class appregister1
 
         Page.Form.Attributes.Add("enctype", "multipart/form-data")
 
+        If Not Page.IsPostBack Then
+            Try
+                If Request.Browser.IsMobileDevice Then
+                    GridView1.Columns(0).Visible = False
+                    GridView1.Columns(1).Visible = False
+                    GridView1.Columns(2).Visible = False
+                    GridView1.Columns(3).Visible = False
+                    GridView1.Columns(4).Visible = False
+                    GridView1.Columns(5).Visible = False
+                    GridView1.Columns(6).Visible = False
+                    GridView1.Columns(7).Visible = False
+                    GridView1.Columns(8).Visible = False
+                    GridView1.Columns(9).Visible = False
+                    GridView1.Columns(10).Visible = False
+                    GridView1.Columns(11).Visible = True
+                Else
+                    GridView1.Columns(11).Visible = False
+                End If
+            Catch ex As Exception
+                ' Safe fallback
+            End Try
+        End If
+
         Dim currPageScriptManager As ScriptManager = TryCast(ScriptManager.GetCurrent(Page), ScriptManager)
         If currPageScriptManager IsNot Nothing Then
             currPageScriptManager.RegisterPostBackControl(btnSaveLetter)
