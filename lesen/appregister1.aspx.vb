@@ -74,8 +74,6 @@ Partial Class appregister1
             Session.Item("isInserted") = False
         End If
 
-        TB_PermohonanID.Attributes.Add("style", "display:none")
-
         If Not IsPostBack Then
             Try
                 If CInt(Request.QueryString("pid")) > 0 Then
@@ -275,6 +273,7 @@ Partial Class appregister1
             Next
 
             GetPermohonanPembetulan(pid, isbatal)
+            SetPembetulanReadOnly(Not BT_Maklumat.Visible)
         End If
 
         If ispublish And tabKadarBayaran.Visible = True Then
@@ -1155,7 +1154,6 @@ Partial Class appregister1
             pnlesen3_ins.Visible = False
             pnlesen4_ins.Visible = False
             pnlesen5_ins.Visible = False
-            pnlesen6_ins.Visible = False
             Exit Sub
         End If
 
@@ -1240,10 +1238,32 @@ Partial Class appregister1
                 pnlesen1b_ins.Visible = True
                 pnlesen1c_ins.Visible = True
 
-            Case 27 ' Pemilik + Alamat + Visual Iklan
-                pnlesen1_ins.Visible = True
-                pnlesen6_ins.Visible = True
         End Select
+    End Sub
+
+    Private Sub SetPembetulanReadOnly(ByVal isReadOnly As Boolean)
+        SetControlReadOnly(tabMaklumat, isReadOnly)
+        btnAddIklan_ins.Visible = Not isReadOnly
+        btnAddAnjing_ins.Visible = Not isReadOnly
+        If gvIklanList_ins.Columns.Count >= 4 Then
+            gvIklanList_ins.Columns(3).Visible = Not isReadOnly
+        End If
+        If gvAnjingList_ins.Columns.Count >= 6 Then
+            gvAnjingList_ins.Columns(5).Visible = Not isReadOnly
+        End If
+    End Sub
+
+    Private Sub SetControlReadOnly(ByVal parent As Control, ByVal isReadOnly As Boolean)
+        For Each c As Control In parent.Controls
+            If TypeOf c Is TextBox Then
+                DirectCast(c, TextBox).ReadOnly = isReadOnly
+            ElseIf TypeOf c Is DropDownList Then
+                DirectCast(c, DropDownList).Enabled = Not isReadOnly
+            End If
+            If c.HasControls() Then
+                SetControlReadOnly(c, isReadOnly)
+            End If
+        Next
     End Sub
 
     Private Sub initPageName()
@@ -2400,56 +2420,6 @@ Partial Class appregister1
         End If
     End Sub
 
-    ' --- Lokasi (_ins Pembetulan) ---
-    Protected Sub btnAddLokasi_ins_Click(sender As Object, e As EventArgs)
-        If Not String.IsNullOrWhiteSpace(TB_LokasiBanting_ins.Text) Then
-            Dim dt As DataTable
-            If ViewState("LokasiTable_ins") IsNot Nothing Then
-                dt = DirectCast(ViewState("LokasiTable_ins"), DataTable)
-            Else
-                dt = New DataTable()
-                dt.Columns.Add("No", GetType(String))
-                dt.Columns.Add("Lokasi", GetType(String))
-            End If
-
-            Dim newRow As DataRow = dt.NewRow()
-            newRow("No") = (dt.Rows.Count + 1).ToString()
-            newRow("Lokasi") = TB_LokasiBanting_ins.Text
-            dt.Rows.Add(newRow)
-
-            ViewState("LokasiTable_ins") = dt
-            gvLokasiList_ins.DataSource = dt
-            gvLokasiList_ins.DataBind()
-
-            updateLokasiList_ins(newRow("Lokasi").ToString())
-            TB_LokasiBanting_ins.Text = ""
-        End If
-    End Sub
-
-    Protected Sub gvLokasiList_ins_RowDeleting(sender As Object, e As GridViewDeleteEventArgs)
-        If ViewState("LokasiTable_ins") IsNot Nothing Then
-            Dim dt As DataTable = DirectCast(ViewState("LokasiTable_ins"), DataTable)
-            dt.Rows.RemoveAt(e.RowIndex)
-            ViewState("LokasiTable_ins") = dt
-
-            gvLokasiList_ins.DataSource = dt
-            gvLokasiList_ins.DataBind()
-
-            HF_LokasiList_ins.Value = ""
-            For Each row As DataRow In dt.Rows
-                updateLokasiList_ins(row("Lokasi").ToString())
-            Next
-        End If
-    End Sub
-
-    Private Sub updateLokasiList_ins(ByVal lokasiVal As String)
-        If HF_LokasiList_ins.Value.ToString().Length = 0 Then
-            HF_LokasiList_ins.Value = lokasiVal
-        Else
-            HF_LokasiList_ins.Value += "||" + lokasiVal
-        End If
-    End Sub
-
 #End Region
 
 #Region "Agency Workflow & Batch Actions"
@@ -3482,7 +3452,6 @@ Partial Class appregister1
                         If myReader.Item("SaizIklanList").ToString().Length > 0 Then HF_SaizIklanList_ins.Value = myReader.Item("SaizIklanList").ToString()
                         If myReader.Item("CahayaIklanList").ToString().Length > 0 Then HF_CahayaIklanList_ins.Value = myReader.Item("CahayaIklanList").ToString()
                         If myReader.Item("UnitIklanList").ToString().Length > 0 Then HF_UnitIklanList_ins.Value = myReader.Item("UnitIklanList").ToString()
-                        If myReader.Item("LokasiList").ToString().Length > 0 Then HF_LokasiList_ins.Value = myReader.Item("LokasiList").ToString()
                         If myReader.Item("BakaAnjingList").ToString().Length > 0 Then HF_BakaAnjingList_ins.Value = myReader.Item("BakaAnjingList").ToString()
                         If myReader.Item("AnjingJantanList").ToString().Length > 0 Then HF_AnjingJantanList_ins.Value = myReader.Item("AnjingJantanList").ToString()
                         If myReader.Item("AnjingBetinaList").ToString().Length > 0 Then HF_AnjingBetinaList_ins.Value = myReader.Item("AnjingBetinaList").ToString()
@@ -3534,24 +3503,6 @@ Partial Class appregister1
 
                         If Not IsDBNull(myReader.Item("TarikhKhemahEkspo1")) Then TB_TarikhKhemahEkspo1_ins.Text = CDate(myReader.Item("TarikhKhemahEkspo1")).ToString("yyyy-MM-dd")
                         If Not IsDBNull(myReader.Item("TarikhKhemahEkspo2")) Then TB_TarikhKhemahEkspo2_ins.Text = CDate(myReader.Item("TarikhKhemahEkspo2")).ToString("yyyy-MM-dd")
-
-                        If myReader.Item("KontraktorIklan").ToString().Length > 0 Then TB_KontraktorIklan_ins.Text = myReader.Item("KontraktorIklan").ToString()
-                        If myReader.Item("NoTelKontraktor").ToString().Length > 0 Then TB_NoTelKontraktor_ins.Text = myReader.Item("NoTelKontraktor").ToString()
-                        If myReader.Item("UkuranBanting").ToString().Length > 0 Then TB_UkuranBanting_ins.Text = myReader.Item("UkuranBanting").ToString()
-                        If myReader.Item("BilBanting").ToString().Length > 0 Then TB_BilBanting_ins.Text = myReader.Item("BilBanting").ToString()
-
-                        If Not IsDBNull(myReader.Item("TarikhBanting1")) Then TB_TarikhBanting1_ins.Text = CDate(myReader.Item("TarikhBanting1")).ToString("yyyy-MM-dd")
-                        If Not IsDBNull(myReader.Item("TarikhBanting2")) Then TB_TarikhBanting2_ins.Text = CDate(myReader.Item("TarikhBanting2")).ToString("yyyy-MM-dd")
-
-                        If myReader.Item("StatusBanting").ToString().Length > 0 Then DDL_StatusDBP_ins.SelectedValue = myReader.Item("StatusBanting").ToString()
-                        If myReader.Item("NoPengesahanBanting").ToString().Length > 0 Then TB_NoPengesahan_ins.Text = myReader.Item("NoPengesahanBanting").ToString()
-
-                        If Not IsDBNull(myReader.Item("TarikhPengesahanBanting1")) Then TB_TarikhPengesahanBanting1_ins.Text = CDate(myReader.Item("TarikhPengesahanBanting1")).ToString("yyyy-MM-dd")
-                        If Not IsDBNull(myReader.Item("TarikhPengesahanBanting2")) Then TB_TarikhPengesahanBanting2_ins.Text = CDate(myReader.Item("TarikhPengesahanBanting2")).ToString("yyyy-MM-dd")
-
-                        If myReader.Item("NoResitBanting").ToString().Length > 0 Then TB_NoResitBanting_ins.Text = myReader.Item("NoResitBanting").ToString()
-                        If myReader.Item("NoSiriStiker").ToString().Length > 0 Then TB_NoSiriStiker_ins.Text = myReader.Item("NoSiriStiker").ToString()
-                        If Not IsDBNull(myReader.Item("TarikhBanting3")) Then TB_TarikhBanting3_ins.Text = CDate(myReader.Item("TarikhBanting3")).ToString("yyyy-MM-dd")
                     End If
                 End Using
             End Using
@@ -3638,34 +3589,6 @@ Partial Class appregister1
             gvAnjingList_ins.DataSource = dt
             gvAnjingList_ins.DataBind()
         End If
-
-        ' Load Senarai Lokasi (_ins)
-        Dim LokasiList() As String = Split(HF_LokasiList_ins.Value, "||")
-
-        If LokasiList.Length > 0 AndAlso Not String.IsNullOrWhiteSpace(LokasiList(0)) Then
-            Dim dt As DataTable
-            If ViewState("LokasiTable_ins") IsNot Nothing Then
-                dt = DirectCast(ViewState("LokasiTable_ins"), DataTable)
-                dt.Clear()
-            Else
-                dt = New DataTable()
-                dt.Columns.Add("No", GetType(String))
-                dt.Columns.Add("Lokasi", GetType(String))
-            End If
-
-            For i As Integer = 0 To LokasiList.Length - 1
-                If Not String.IsNullOrWhiteSpace(LokasiList(i)) Then
-                    Dim newRow As DataRow = dt.NewRow()
-                    newRow("No") = (i + 1).ToString()
-                    newRow("Lokasi") = LokasiList(i).Trim()
-                    dt.Rows.Add(newRow)
-                End If
-            Next
-
-            ViewState("LokasiTable_ins") = dt
-            gvLokasiList_ins.DataSource = dt
-            gvLokasiList_ins.DataBind()
-        End If
     End Sub
 
     Protected Sub btnSaveInfo_Click(sender As Object, e As EventArgs)
@@ -3673,7 +3596,7 @@ Partial Class appregister1
 
         Using myConnection As New SqlConnection(CS)
             myConnection.Open()
-            Dim SQL As String = "UPDATE LESEN_PermohonanPembetulan SET SaizIklanList=@SaizIklanList, CahayaIklanList=@CahayaIklanList, UnitIklanList=@UnitIklanList, LokasiList = @LokasiList, " &
+            Dim SQL As String = "UPDATE LESEN_PermohonanPembetulan SET SaizIklanList=@SaizIklanList, CahayaIklanList=@CahayaIklanList, UnitIklanList=@UnitIklanList, " &
                         "BakaAnjingList=@BakaAnjingList, AnjingJantanList=@AnjingJantanList, AnjingBetinaList=@AnjingBetinaList, AnjingJantanMandulList=@AnjingJantanMandulList, AnjingBetinaMandulList=@AnjingBetinaMandulList, " &
                         "NamaSyarikat = @NamaSyarikat, NoPendaftaran = @NoPendaftaran, NoAkaun = @NoAkaun, AlamatPremis = @AlamatPremis, JenisPerniagaan = @JenisPerniagaan, PemilikBaru = @PemilikBaru, " &
                         "AlamatBaru = @AlamatBaru, JenisPerniagaanBaru = @JenisPerniagaanBaru, NamaBaruSyarikat = @NamaBaruSyarikat, " &
@@ -3684,8 +3607,7 @@ Partial Class appregister1
                         "PenganjurEkspo = @PenganjurEkspo, AlamatPenganjurEkspo = @AlamatPenganjurEkspo, PicEkspo = @PicEkspo, NoTelEkspo = @NoTelEkspo,  NamaEkspo = @NamaEkspo, LokasiEkspo = @LokasiEkspo, " &
                         "TarikhEkspo1 = @TarikhEkspo1, TarikhEkspo2 = @TarikhEkspo2, MasaEkspo1 = @MasaEkspo1, MasaEkspo2 = @MasaEkspo2, TentatifEkspo = @TentatifEkspo, JemputanEkspo = @JemputanEkspo, " &
                         "PembersihanEkspo = @PembersihanEkspo, TarikhKhemahEkspo1 = @TarikhKhemahEkspo1, TarikhKhemahEkspo2 = @TarikhKhemahEkspo2, " &
-                        "KontraktorIklan = @KontraktorIklan, NoTelKontraktor = @NoTelKontraktor, UkuranBanting = @UkuranBanting, BilBanting = @BilBanting, TarikhBanting1 = @TarikhBanting1, TarikhBanting2 = @TarikhBanting2, " &
-                        "NoResitBanting = @NoResitBanting, NoSiriStiker=@NoSiriStiker, TarikhBanting3=@TarikhBanting3, LastModDt = GETDATE() " &
+                        "LastModDt = GETDATE() " &
                         "WHERE Permohonan_ID = @Permohonan_ID"
 
             Using myCommandSelect As New SqlCommand(SQL, myConnection)
@@ -3694,7 +3616,6 @@ Partial Class appregister1
                 myCommandSelect.Parameters.AddWithValue("@SaizIklanList", HF_SaizIklanList_ins.Value)
                 myCommandSelect.Parameters.AddWithValue("@CahayaIklanList", HF_CahayaIklanList_ins.Value)
                 myCommandSelect.Parameters.AddWithValue("@UnitIklanList", HF_UnitIklanList_ins.Value)
-                myCommandSelect.Parameters.AddWithValue("@LokasiList", HF_LokasiList_ins.Value)
                 myCommandSelect.Parameters.AddWithValue("@BakaAnjingList", HF_BakaAnjingList_ins.Value)
                 myCommandSelect.Parameters.AddWithValue("@AnjingJantanList", HF_AnjingJantanList_ins.Value)
                 myCommandSelect.Parameters.AddWithValue("@AnjingBetinaList", HF_AnjingBetinaList_ins.Value)
@@ -3740,15 +3661,6 @@ Partial Class appregister1
                 myCommandSelect.Parameters.AddWithValue("@PembersihanEkspo", TB_PembersihanEkspo_ins.Text)
                 myCommandSelect.Parameters.AddWithValue("@TarikhKhemahEkspo1", TB_TarikhKhemahEkspo1_ins.Text)
                 myCommandSelect.Parameters.AddWithValue("@TarikhKhemahEkspo2", TB_TarikhKhemahEkspo2_ins.Text)
-                myCommandSelect.Parameters.AddWithValue("@KontraktorIklan", TB_KontraktorIklan_ins.Text)
-                myCommandSelect.Parameters.AddWithValue("@NoTelKontraktor", TB_NoTelKontraktor_ins.Text)
-                myCommandSelect.Parameters.AddWithValue("@UkuranBanting", TB_UkuranBanting_ins.Text)
-                myCommandSelect.Parameters.AddWithValue("@BilBanting", TB_BilBanting_ins.Text)
-                myCommandSelect.Parameters.AddWithValue("@TarikhBanting1", TB_TarikhBanting1_ins.Text)
-                myCommandSelect.Parameters.AddWithValue("@TarikhBanting2", TB_TarikhBanting2_ins.Text)
-                myCommandSelect.Parameters.AddWithValue("@NoResitBanting", TB_NoResitBanting_ins.Text)
-                myCommandSelect.Parameters.AddWithValue("@NoSiriStiker", TB_NoSiriStiker_ins.Text)
-                myCommandSelect.Parameters.AddWithValue("@TarikhBanting3", TB_TarikhBanting3_ins.Text)
 
                 Try
                     myCommandSelect.ExecuteNonQuery()
