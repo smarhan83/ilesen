@@ -52,8 +52,6 @@ Partial Class appregister2
             Session.Item("isInserted") = False
         End If
 
-        TB_PermohonanID.Attributes.Add("style", "display:none")
-
         If Not IsPostBack Then
             Try
                 ' If page requested with specific Application ID (pid), auto-trigger search

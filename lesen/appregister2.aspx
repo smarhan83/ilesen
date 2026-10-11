@@ -427,6 +427,115 @@
             border-top: 1px solid #e2e8f0;
             padding: 14px 24px;
         }
+
+        /* =========================================================================
+           GridView1 & Table Modern Styling (FormView1 Compatibility)
+           ========================================================================= */
+        .custom-gridview {
+            border-collapse: separate !important;
+            border-spacing: 0 !important;
+            width: 100% !important;
+            margin-bottom: 0 !important;
+            background-color: #fff;
+            border: 1px solid #e2e8f0 !important;
+            border-radius: 8px !important;
+            overflow: hidden;
+        }
+        .custom-gridview th {
+            background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%) !important;
+            color: #1e3a8a !important;
+            font-size: 0.81rem !important;
+            font-weight: 700 !important;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            padding: 11px 12px !important;
+            vertical-align: middle !important;
+            border-bottom: 2px solid #cbd5e1 !important;
+            border-top: none !important;
+            white-space: nowrap;
+        }
+        .custom-gridview th a {
+            color: #1e3a8a !important;
+            text-decoration: none !important;
+            font-weight: 700 !important;
+        }
+        .custom-gridview th a:hover {
+            color: #2D6CDF !important;
+            text-decoration: underline !important;
+        }
+        .custom-gridview td {
+            padding: 10px 12px !important;
+            vertical-align: middle !important;
+            font-size: 0.84rem !important;
+            border-color: #e9ecef !important;
+            color: #334155;
+        }
+        .custom-gridview tr:hover td {
+            background-color: #f8fafc !important;
+        }
+        .custom-gridview .badge {
+            font-size: 0.76rem !important;
+            font-weight: 600 !important;
+            padding: 4px 8px !important;
+            border-radius: 6px !important;
+        }
+        .custom-gridview .badge-success {
+            background-color: #10b981 !important;
+            color: #fff !important;
+        }
+        .custom-gridview .badge-warning {
+            background-color: #f59e0b !important;
+            color: #fff !important;
+        }
+        .custom-gridview .badge-secondary {
+            background-color: #64748b !important;
+            color: #fff !important;
+        }
+        .custom-gridview tr:last-child td table {
+            margin: 0 !important;
+        }
+        .custom-gridview tr:last-child td {
+            background-color: #f8fafc !important;
+            border-top: 1px solid #e2e8f0 !important;
+            padding: 10px 16px !important;
+        }
+        .custom-gridview tr:last-child td table td {
+            padding: 2px 4px !important;
+            border: none !important;
+            background: transparent !important;
+        }
+        .custom-gridview tr:last-child td table td a,
+        .custom-gridview tr:last-child td table td span {
+            display: inline-block;
+            min-width: 32px;
+            height: 32px;
+            line-height: 30px;
+            text-align: center;
+            border-radius: 6px;
+            font-size: 0.84rem;
+            font-weight: 600;
+            text-decoration: none !important;
+            border: 1px solid #d1d5db;
+            margin: 0 2px;
+            transition: all 0.15s ease-in-out;
+        }
+        .custom-gridview tr:last-child td table td a {
+            background-color: #fff;
+            color: #2D6CDF;
+        }
+        .custom-gridview tr:last-child td table td a:hover {
+            background-color: #eff6ff;
+            border-color: #2D6CDF;
+            color: #1d4ed8;
+        }
+        .custom-gridview tr:last-child td table td span {
+            background-color: #2D6CDF;
+            border-color: #2D6CDF;
+            color: #fff;
+        }
+        .font-weight-bold {
+            font-weight: 700 !important;
+        }
     </style>
 </asp:Content>
 
@@ -2577,118 +2686,70 @@
             <!-- ======================================================================= -->
             <div class="row" id="whiteCard" runat="server">
                 <div class="col-12">
-                    <div class="card">
+                    <div class="card card-primary">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h3 class="card-title mb-0 font-weight-bold"><i class="bi bi-card-checklist me-2"></i>Senarai Permohonan</h3>
+                            <div>
+                                <asp:Button ID="ButtonAddAssignment" runat="server" Text="Rekod Permohonan Lama" CssClass="btn btn-light btn-sm fw-semibold shadow-sm" CausesValidation="false" />
+                            </div>
+                        </div>
                         <div class="card-body">
 
-                            <div class="row mb-4">
-                                <div class="col-12 text-end">
-                                    <asp:Button ID="ButtonAddAssignment" runat="server" Text="Rekod Permohonan Lama" CssClass="btn btn-block btn-primary" CausesValidation="false" />
-                                    <br />
-                                </div>
-                            </div>
-
-                            <!-- Filter Controls -->
+                            <%--# START FILTER - set SortExpression at GridView as PRName & add WHERE 1=1 at SqlDataSource - SelectCommand #--%>
                             <div class="row" id="panelFilter" runat="server">
-                                <div class="col-md-10">
+                                <asp:HiddenField ID="hfFilterExpanded" runat="server" Value="0" />
+                                <div class="col-12">
+                                    <div class="form-section-header mt-0 mb-3 d-flex flex-wrap justify-content-between align-items-center gap-2">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <i class="bi bi-funnel"></i>
+                                            <span>Carian &amp; Penapis Rekod</span>
+                                        </div>
+                                        <%--<div>
+                                            <button type="button" class="btn btn-outline-primary btn-sm d-inline-flex align-items-center gap-2 shadow-sm" 
+                                                data-bs-toggle="collapse" data-bs-target="#collapseFilterExtra" aria-expanded="false" aria-controls="collapseFilterExtra" id="btnToggleFilterExtra">
+                                                <i class="bi bi-sliders2"></i>
+                                                <span id="btnToggleFilterExtraText">Penapis Tambahan</span>
+                                                <span class="badge bg-primary text-white rounded-pill d-none" id="badgeActiveExtraCount">0</span>
+                                                <i class="bi bi-chevron-down" id="iconFilterCollapse" style="transition: transform 0.25s ease;"></i>
+                                            </button>
+                                        </div>--%>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <!-- ================= MAIN FILTERS (Not affected by collapse) ================= -->
                                     <div class="row">
-
-                                        <div class="col-md-3">
+                                        <!-- 1. Tarikh Mohon -->
+                                        <div class="col-lg-4 col-md-6 col-12">
                                             <div class="form-group">
+                                                <label class="form-label-custom">Tarikh Mohon</label>
                                                 <asp:TextBox ID="TB_TarikhMohon" runat="server"
                                                     TextMode="Date" CssClass="form-control" />
                                             </div>
                                         </div>
 
-                                        <div class="col-md-3">
+                                        <!-- 2. No Rujukan -->
+                                        <div class="col-lg-4 col-md-6 col-12">
                                             <div class="form-group">
+                                                <label class="form-label-custom">No Rujukan</label>
                                                 <asp:TextBox ID="txtNoRujukan" placeholder="No Rujukan" runat="server" CssClass="form-control"></asp:TextBox>
                                             </div>
                                         </div>
 
-                                        <div class="col-md-3" runat="server" id="filterPemohon">
+                                        <!-- 3. Dicipta Oleh -->
+                                        <div class="col-lg-4 col-md-6 col-12" runat="server" id="filterCreatedBy">
                                             <div class="form-group">
-                                                <asp:DropDownList ID="DDL_Pemohon" CssClass="form-control select2" runat="server"
-                                                    DataSourceID="sdsPemohon" DataTextField="Pemohon_Name" DataValueField="Pemohon_ID">
-                                                </asp:DropDownList>
-                                                <asp:SqlDataSource runat="server" ID="sdsPemohon" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
-                                                    SelectCommand="select * from 
-                                                (select 0 as Pemohon_ID, '-- Pemohon --' as Pemohon_Name
-                                                union all
-                                                select DISTINCT Pemohon_ID, Pemohon_Name from LESEN_Permohonan a INNER JOIN LESEN_Pemohon b ON b.Pemohon_ID = a.Permohonan_PemohonID where Pemohon_IsActive=1
-                                                ) as tbl1 order by Pemohon_Name"></asp:SqlDataSource>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-3" runat="server" id="filterSyarikat">
-                                            <div class="form-group">
-                                                <asp:DropDownList ID="DDL_Syarikat" CssClass="form-control select2" runat="server"
-                                                    DataSourceID="sdsSyarikat" DataTextField="NamaSyarikat" DataValueField="NamaSyarikat">
-                                                </asp:DropDownList>
-                                                <asp:SqlDataSource runat="server" ID="sdsSyarikat" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
-                                                    SelectCommand="select * from 
-                                                (select '-- Syarikat --' as NamaSyarikat
-                                                union all
-                                                select DISTINCT CONVERT(varchar(max), NamaSyarikat) AS NamaSyarikat from LESEN_Permohonan 
-                                                WHERE NamaSyarikat IS NOT NULL AND CONVERT(varchar(max), NamaSyarikat) <> '-' 
-                                                union all
-                                                select DISTINCT CONVERT(varchar(max), NamaBaruSyarikat) AS NamaSyarikat from LESEN_Permohonan 
-                                                WHERE NamaBaruSyarikat IS NOT NULL AND CONVERT(varchar(max), NamaBaruSyarikat) <> '-' ) as tbl1"></asp:SqlDataSource>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <asp:TextBox ID="TB_Alamat" placeholder="Alamat" runat="server" CssClass="form-control"></asp:TextBox>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-3" runat="server" id="filterJenisLesen">
-                                            <div class="form-group">
-                                                <asp:DropDownList ID="DDL_JenisLesen" CssClass="form-control select2" runat="server" AutoPostBack="false"
-                                                    DataSourceID="SqlDataSourceLesen" DataTextField="JenisLesen_Description" DataValueField="JenisLesen_ID">
-                                                </asp:DropDownList>
-                                                <asp:SqlDataSource runat="server" ID="SqlDataSourceLesen" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
-                                                    SelectCommand="select * from 
-                                                (select '0' as JenisLesen_ID, '-- Lesen/Permit --' as JenisLesen_Description
-                                                union all
-                                                select JenisLesen_Description AS JenisLesen_ID,  JenisLesen_Description from LESEN_JenisLesen where JenisLesen_IsActive=1
-                                                ) as tbl1 order by JenisLesen_Description "></asp:SqlDataSource>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-3" runat="server" id="filterRisiko">
-                                            <div class="form-group">
-                                                <asp:DropDownList ID="DDL_Risiko" runat="server" AutoPostBack="false" CssClass="form-control select2">
-                                                    <asp:ListItem Value="2">-- Risiko --</asp:ListItem>
-                                                    <asp:ListItem Value="0">Berisiko</asp:ListItem>
-                                                    <asp:ListItem Value="1">Tidak Berisiko</asp:ListItem>
-                                                </asp:DropDownList>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-3" runat="server" id="filterPembatalan">
-                                            <div class="form-group">
-                                                <asp:DropDownList ID="DDL_Pembatalan" runat="server" AutoPostBack="false" CssClass="form-control select2">
-                                                    <asp:ListItem Value="2">-- Pembatalan --</asp:ListItem>
-                                                    <asp:ListItem Value="1">Ya</asp:ListItem>
-                                                    <asp:ListItem Value="0">Tidak</asp:ListItem>
-                                                </asp:DropDownList>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-3" runat="server" id="filterCreatedBy">
-                                            <div class="form-group">
+                                                <label class="form-label-custom">Dicipta Oleh</label>
                                                 <asp:DropDownList ID="DDL_CreatedBy" CssClass="form-control select2" runat="server" AutoPostBack="false"
                                                     DataSourceID="sdsCreatedBy" DataTextField="Users_Fullname" DataValueField="Users_Name">
                                                 </asp:DropDownList>
                                                 <asp:SqlDataSource runat="server" ID="sdsCreatedBy" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
                                                     SelectCommand="select Users_Name, Users_Fullname from 
-                                                (select '0' as Users_Name, '-- Semua Pengguna --' as Users_Fullname
-                                                union all
-                                                select Users_Name,  Users_Fullname from TBL_USERS where Users_Enabled=1 AND Users_Name NOT LIKE '%[^0-9]%'
-								                                        union all
-								                                        select @username AS Users_Name, @fullname AS Users_Fullname 
-                                                ) as tbl1 group by Users_Name, Users_Fullname order by Users_Fullname ">
+                                                    (select '0' as Users_Name, '-- Semua Pengguna --' as Users_Fullname
+                                                    union all
+                                                    select Users_Name,  Users_Fullname from TBL_USERS where Users_Enabled=1 AND Users_Name NOT LIKE '%[^0-9]%'
+                                                    union all
+                                                    select @username AS Users_Name, @fullname AS Users_Fullname 
+                                                    ) as tbl1 group by Users_Name, Users_Fullname order by Users_Fullname ">
                                                     <SelectParameters>
                                                         <asp:SessionParameter Name="username" SessionField="sessionUserName" />
                                                         <asp:SessionParameter Name="fullname" SessionField="sessionFullname" />
@@ -2696,66 +2757,180 @@
                                                 </asp:SqlDataSource>
                                             </div>
                                         </div>
+                                    </div>
+                                    <!-- ================= END MAIN FILTERS ================= -->
 
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <asp:TextBox ID="TB_PermohonanID" placeholder="ID Permohonan" runat="server" CssClass="form-control"></asp:TextBox>
+                                    <!-- ================= COLLAPSIBLE FILTERS ================= -->
+                                    <div class="collapse" id="collapseFilterExtra">
+                                        <div class="p-3 mb-3 rounded-3 border" style="background-color: #f8fafc; border-color: #e2e8f0 !important;">
+                                            <div class="d-flex align-items-center justify-content-between mb-3 pb-2 border-bottom">
+                                                <span class="text-secondary small fw-bold text-uppercase d-inline-flex align-items-center gap-1">
+                                                    <i class="bi bi-sliders text-primary"></i>Penapis Tambahan
+                                                </span>
+                                                <button type="button" class="btn btn-link btn-sm text-decoration-none p-0 text-muted small" id="btnResetExtraOnly" title="Kosongkan penapis tambahan sahaja">
+                                                    <i class="bi bi-arrow-counterclockwise me-1"></i>Kosongkan Pilihan Ini
+                                                </button>
+                                            </div>
+                                            <div class="row">
+                                                <!-- 1. Pemohon -->
+                                                <div class="col-lg-4 col-md-6 col-12" runat="server" id="filterPemohon">
+                                                    <div class="form-group">
+                                                        <label class="form-label-custom">Pemohon</label>
+                                                        <asp:DropDownList ID="DDL_Pemohon" CssClass="form-control select2" runat="server"
+                                                            DataSourceID="sdsPemohon" DataTextField="Pemohon_Name" DataValueField="Pemohon_ID">
+                                                        </asp:DropDownList>
+                                                        <asp:SqlDataSource runat="server" ID="sdsPemohon" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
+                                                            SelectCommand="select * from 
+                                                        (select 0 as Pemohon_ID, '-- Pemohon --' as Pemohon_Name
+                                                        union all
+                                                        select DISTINCT Pemohon_ID, Pemohon_Name from LESEN_Permohonan a INNER JOIN LESEN_Pemohon b ON b.Pemohon_ID = a.Permohonan_PemohonID where Pemohon_IsActive=1
+                                                        ) as tbl1 order by Pemohon_Name"></asp:SqlDataSource>
+                                                    </div>
+                                                </div>
+
+                                                <!-- 2. Syarikat -->
+                                                <div class="col-lg-4 col-md-6 col-12" runat="server" id="filterSyarikat">
+                                                    <div class="form-group">
+                                                        <label class="form-label-custom">Syarikat</label>
+                                                        <asp:DropDownList ID="DDL_Syarikat" CssClass="form-control select2" runat="server"
+                                                            DataSourceID="sdsSyarikat" DataTextField="NamaSyarikat" DataValueField="NamaSyarikat">
+                                                        </asp:DropDownList>
+                                                        <asp:SqlDataSource runat="server" ID="sdsSyarikat" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
+                                                            SelectCommand="select * from 
+                                                        (select '-- Syarikat --' as NamaSyarikat
+                                                        union all
+                                                        select DISTINCT CONVERT(varchar(max), NamaSyarikat) AS NamaSyarikat from LESEN_Permohonan 
+                                                        WHERE NamaSyarikat IS NOT NULL AND CONVERT(varchar(max), NamaSyarikat) <> '-' 
+                                                        union all
+                                                        select DISTINCT CONVERT(varchar(max), NamaBaruSyarikat) AS NamaSyarikat from LESEN_Permohonan 
+                                                        WHERE NamaBaruSyarikat IS NOT NULL AND CONVERT(varchar(max), NamaBaruSyarikat) <> '-' ) as tbl1"></asp:SqlDataSource>
+                                                    </div>
+                                                </div>
+
+                                                <!-- 3. Alamat Premis -->
+                                                <div class="col-lg-4 col-md-6 col-12">
+                                                    <div class="form-group">
+                                                        <label class="form-label-custom">Alamat Premis</label>
+                                                        <asp:TextBox ID="TB_Alamat" placeholder="Alamat" runat="server" CssClass="form-control"></asp:TextBox>
+                                                    </div>
+                                                </div>
+
+                                                <!-- 4. Jenis Lesen / Permit -->
+                                                <div class="col-lg-4 col-md-6 col-12" runat="server" id="filterJenisLesen">
+                                                    <div class="form-group">
+                                                        <label class="form-label-custom">Jenis Lesen / Permit</label>
+                                                        <asp:DropDownList ID="DDL_JenisLesen" CssClass="form-control select2" runat="server" AutoPostBack="false"
+                                                            DataSourceID="SqlDataSourceLesen" DataTextField="JenisLesen_Description" DataValueField="JenisLesen_ID">
+                                                        </asp:DropDownList>
+                                                        <asp:SqlDataSource runat="server" ID="SqlDataSourceLesen" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
+                                                            SelectCommand="select * from 
+                                                        (select '0' as JenisLesen_ID, '-- Lesen/Permit --' as JenisLesen_Description
+                                                        union all
+                                                        select JenisLesen_Description AS JenisLesen_ID,  JenisLesen_Description from LESEN_JenisLesen where JenisLesen_IsActive=1
+                                                        ) as tbl1 order by JenisLesen_Description "></asp:SqlDataSource>
+                                                    </div>
+                                                </div>
+
+                                                <!-- 5. Status Risiko -->
+                                                <div class="col-lg-4 col-md-6 col-12" runat="server" id="filterRisiko">
+                                                    <div class="form-group">
+                                                        <label class="form-label-custom">Status Risiko</label>
+                                                        <asp:DropDownList ID="DDL_Risiko" runat="server" AutoPostBack="false" CssClass="form-control select2">
+                                                            <asp:ListItem Value="2">-- Risiko --</asp:ListItem>
+                                                            <asp:ListItem Value="0">Berisiko</asp:ListItem>
+                                                            <asp:ListItem Value="1">Tidak Berisiko</asp:ListItem>
+                                                        </asp:DropDownList>
+                                                    </div>
+                                                </div>
+
+                                                <!-- 6. Status Pembatalan -->
+                                                <div class="col-lg-4 col-md-6 col-12" runat="server" id="filterPembatalan">
+                                                    <div class="form-group">
+                                                        <label class="form-label-custom">Status Pembatalan</label>
+                                                        <asp:DropDownList ID="DDL_Pembatalan" runat="server" AutoPostBack="false" CssClass="form-control select2">
+                                                            <asp:ListItem Value="2">-- Pembatalan --</asp:ListItem>
+                                                            <asp:ListItem Value="1">Ya</asp:ListItem>
+                                                            <asp:ListItem Value="0">Tidak</asp:ListItem>
+                                                        </asp:DropDownList>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
-
                                     </div>
+                                    <!-- ================= END COLLAPSIBLE FILTERS ================= -->
 
-                                </div>
-                                <div class="col-md-2">
-                                    <div class="form-group">
-                                        <asp:Button ID="btnSearch" runat="server" CssClass="btn btn-default" Text="Cari" CausesValidation="false" />
-                                        <asp:Button ID="btnReset" CssClass="btn btn-default" runat="server" Text="Reset" CausesValidation="false" />
+                                    <!-- ================= ACTION BUTTONS ROW ================= -->
+                                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 pt-2 border-top">
+                                        <div>
+                                            <button type="button" class="btn btn-outline-secondary btn-sm d-inline-flex align-items-center gap-2 shadow-sm" 
+                                                data-bs-toggle="collapse" data-bs-target="#collapseFilterExtra" aria-expanded="false" aria-controls="collapseFilterExtra" id="btnToggleFilterBottom">
+                                                <i class="bi bi-sliders2"></i>
+                                                <span id="btnToggleFilterBottomText">Penapis Tambahan</span>
+                                                <i class="bi bi-chevron-down" id="iconFilterCollapseBottom" style="transition: transform 0.25s ease;"></i>
+                                            </button>
+                                        </div>
+                                        <div class="d-flex gap-2">
+                                            <asp:Button ID="btnSearch" runat="server" CssClass="btn btn-primary px-4 fw-semibold shadow-sm" Text="Cari" CausesValidation="false" />
+                                            <asp:Button ID="btnReset" CssClass="btn btn-outline-secondary px-3 fw-semibold shadow-sm" runat="server" Text="Reset" CausesValidation="false" />
+                                        </div>
                                     </div>
+                                    <!-- ================= END ACTION BUTTONS ROW ================= -->
                                 </div>
                             </div>
-                            <!-- End Filter Controls -->
+                            <%--# END FILTER #--%>
 
                             <!-- GridView: Senarai Permohonan -->
-                            <asp:GridView ID="GridView1" HeaderStyle-ForeColor="Black" CssClass="table table-bordered" AllowPaging="True" PageSize="20"
-                                ShowHeaderWhenEmpty="True" EmptyDataText="Tiada Rekod Dijumpai" AllowSorting="True" runat="server" AutoGenerateColumns="False"
-                                DataKeyNames="Permohonan_ID, StatusID, IsBatal, JenisLesen_ID, IsPublish, Is24Jam, JenisLesenIdList" DataSourceID="SqlDataSourceGrid">
-                                <Columns>
-                                    <asp:BoundField DataField="Permohonan_ID" HeaderText="ID" SortExpression="Permohonan_ID" Visible="false"></asp:BoundField>
-                                    <asp:BoundField DataField="RowNo" HeaderText="No" SortExpression="RowNo"></asp:BoundField>
-                                    <asp:BoundField DataField="TarikhMohon" HeaderText="Tarikh" DataFormatString="{0:dd/MM/yyyy}" SortExpression="TarikhMohon"></asp:BoundField>
-                                    <asp:BoundField DataField="JenisLesenDescList" HeaderText="Jenis Lesen/Permit" SortExpression="JenisLesenDescList"></asp:BoundField>
-                                    <asp:BoundField DataField="Rujukan" HeaderText="No Rujukan" SortExpression="Rujukan"></asp:BoundField>
-                                    <asp:TemplateField HeaderText="Pemohon">
-                                        <ItemTemplate>
-                                            <asp:Label ID="lblNamaPemohon" runat="server" Text='<%# Eval("Pemohon_Name") %>'></asp:Label><br />
-                                            <asp:Label ID="lblNamaSyarikatOrAlamat" runat="server" Text='<%# If(Not String.IsNullOrEmpty(Eval("NamaBaruSyarikat")?.ToString()), Eval("NamaBaruSyarikat"), If(Not String.IsNullOrEmpty(Eval("NamaSyarikat")?.ToString()), Eval("NamaSyarikat"), Eval("DisplayAlamat"))) %>' 
-                                                Font-Size="10pt"></asp:Label><br />
-                                            <asp:Label ID="lblNamaAlamat" runat="server" Visible='<%# If(String.IsNullOrEmpty(Eval("NamaSyarikat")?.ToString()) And String.IsNullOrEmpty(Eval("NamaBaruSyarikat")?.ToString()), False, True) %>' 
-                                                Text='<%# Eval("DisplayAlamat") %>' Font-Size="10pt"></asp:Label>
-                                        </ItemTemplate>
-                                    </asp:TemplateField>
-                                    <asp:TemplateField ShowHeader="True" HeaderText="Berisiko" SortExpression="IsNotRisk">
-                                        <ItemTemplate>
-                                            <span runat="server" class="badge badge-success" visible='<%# If(Eval("IsNotRisk") = False, True, False) %>'>Ya</span>
-                                            <span runat="server" class="badge badge-secondary" visible='<%# If(Eval("IsNotRisk"), True, False) %>'>Tidak</span>
-                                        </ItemTemplate>
-                                    </asp:TemplateField>
-                                    <asp:TemplateField ShowHeader="True" HeaderText="Pembatalan" SortExpression="IsBatal">
-                                        <ItemTemplate>
-                                            <span runat="server" class="badge badge-success" visible='<%# If(Eval("IsBatal"), True, False) %>'>Ya</span>
-                                            <span runat="server" class="badge badge-secondary" visible='<%# If(Eval("IsBatal") = False, True, False) %>'>Tidak</span>
-                                        </ItemTemplate>
-                                    </asp:TemplateField>
-                                    <asp:BoundField DataField="RemarksFail" HeaderText="Catatan" SortExpression="RemarksFail"></asp:BoundField>
+                            <div class="table-responsive mt-3">
+                                <asp:GridView ID="GridView1" CssClass="table table-hover table-bordered custom-gridview align-middle" AllowPaging="True" PageSize="20"
+                                    ShowHeaderWhenEmpty="True" EmptyDataText="Tiada Rekod Dijumpai" AllowSorting="True" runat="server" AutoGenerateColumns="False"
+                                    DataKeyNames="Permohonan_ID, StatusID, IsBatal, JenisLesen_ID, IsPublish, Is24Jam, JenisLesenIdList" DataSourceID="SqlDataSourceGrid">
+                                    <PagerStyle CssClass="pagination-custom" HorizontalAlign="Right" />
+                                    <Columns>
+                                        <asp:BoundField DataField="Permohonan_ID" HeaderText="ID" SortExpression="Permohonan_ID" Visible="false"></asp:BoundField>
+                                        <asp:BoundField DataField="RowNo" HeaderText="No" SortExpression="RowNo"></asp:BoundField>
+                                        <asp:BoundField DataField="TarikhMohon" HeaderText="Tarikh" DataFormatString="{0:dd/MM/yyyy}" SortExpression="TarikhMohon"></asp:BoundField>
+                                        <asp:BoundField DataField="JenisLesenDescList" HeaderText="Jenis Lesen/Permit" SortExpression="JenisLesenDescList"></asp:BoundField>
+                                        <asp:TemplateField>
+                                            <HeaderTemplate>
+                                                <span class="fw-bold">Pemohon</span>
+                                            </HeaderTemplate>
+                                            <ItemTemplate>
+                                                <div class="fw-semibold text-dark"><asp:Label ID="lblNamaPemohon" runat="server" Text='<%# Eval("Pemohon_Name") %>'></asp:Label></div>
+                                                <div class="text-primary small"><i class="bi bi-upc-scan me-1"></i><asp:Label ID="lblRujukan" runat="server" Text='<%# Eval("Rujukan") %>'></asp:Label></div>
+                                                <div class="text-muted small"><i class="bi bi-building me-1"></i><asp:Label ID="lblNamaSyarikatOrAlamat" runat="server" Text='<%# If(Not String.IsNullOrEmpty(Eval("NamaBaruSyarikat")?.ToString()), Eval("NamaBaruSyarikat"), If(Not String.IsNullOrEmpty(Eval("NamaSyarikat")?.ToString()), Eval("NamaSyarikat"), Eval("DisplayAlamat"))) %>'></asp:Label></div>
+                                                <div class="text-secondary small"><asp:Label ID="lblNamaAlamat" runat="server" Visible='<%# If(String.IsNullOrEmpty(Eval("NamaSyarikat")?.ToString()) And String.IsNullOrEmpty(Eval("NamaBaruSyarikat")?.ToString()), False, True) %>' 
+                                                    Text='<%# Eval("DisplayAlamat") %>'></asp:Label></div>
+                                            </ItemTemplate>
+                                        </asp:TemplateField>
+                                        <asp:TemplateField ShowHeader="True" HeaderText="Berisiko" SortExpression="IsNotRisk">
+                                            <ItemTemplate>
+                                                <span runat="server" class="badge badge-success" visible='<%# If(Eval("IsNotRisk") = False, True, False) %>'>Ya</span>
+                                                <span runat="server" class="badge badge-secondary" visible='<%# If(Eval("IsNotRisk"), True, False) %>'>Tidak</span>
+                                            </ItemTemplate>
+                                        </asp:TemplateField>
+                                        <asp:TemplateField ShowHeader="True" HeaderText="Pembatalan" SortExpression="IsBatal">
+                                            <ItemTemplate>
+                                                <span runat="server" class="badge badge-success" visible='<%# If(Eval("IsBatal"), True, False) %>'>Ya</span>
+                                                <span runat="server" class="badge badge-secondary" visible='<%# If(Eval("IsBatal") = False, True, False) %>'>Tidak</span>
+                                            </ItemTemplate>
+                                        </asp:TemplateField>
+                                        <asp:BoundField DataField="RemarksFail" HeaderText="Catatan" SortExpression="RemarksFail"></asp:BoundField>
 
-                                    <asp:TemplateField ShowHeader="False">
-                                        <ItemTemplate>
-                                            <asp:LinkButton runat="server" CssClass="btn btn-primary btn-sm" CommandName="Select" CausesValidation="False" ID="LinkButton1" data-toggle="tooltip" data-placement="top" title="Edit" Text="Lihat" />
-                                            <asp:LinkButton runat="server" CssClass="btn btn-default btn-sm" CommandName="Delete" CausesValidation="False" ID="LinkButton2" OnClientClick="return confirm('Anda pasti untuk memadam rekod ini?');" data-toggle="tooltip" data-placement="top" title="Delete">Padam</asp:LinkButton>
-                                        </ItemTemplate>
-                                    </asp:TemplateField>
-                                </Columns>
-                            </asp:GridView>
+                                        <asp:TemplateField ShowHeader="False">
+                                            <ItemTemplate>
+                                                <div class="d-flex flex-wrap gap-1 align-items-center justify-content-center">
+                                                    <asp:LinkButton runat="server" CssClass="btn btn-primary btn-sm text-nowrap" CommandName="Select" CausesValidation="False" ID="LinkButton1" data-toggle="tooltip" data-placement="top" title="Lihat">
+                                                        <i class="bi bi-eye me-1"></i>Lihat
+                                                    </asp:LinkButton>
+                                                    <asp:LinkButton runat="server" CssClass="btn btn-outline-danger btn-sm text-nowrap" CommandName="Delete" CausesValidation="False" ID="LinkButton2" OnClientClick="return confirm('Anda pasti untuk memadam rekod ini?');" data-toggle="tooltip" data-placement="top" title="Padam">
+                                                        <i class="bi bi-trash me-1"></i>Padam
+                                                    </asp:LinkButton>
+                                                </div>
+                                            </ItemTemplate>
+                                        </asp:TemplateField>
+                                    </Columns>
+                                </asp:GridView>
+                            </div>
 
                             <!-- Data Source: GridView Permohonan -->
                             <asp:SqlDataSource runat="server" ID="SqlDataSourceGrid" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
@@ -2771,8 +2946,7 @@
                                         FROM LESEN_Permohonan a 
                                         INNER JOIN LESEN_Pemohon c ON a.Permohonan_PemohonID = c.Pemohon_ID 
                                         LEFT JOIN ApprovalStatus d ON a.StatusID = d.ApprStatusID
-                                        WHERE 1=1 AND a.JenisLesenIdList is not null AND a.IsRekodLama = 1 
-                                        AND a.Permohonan_ID = CASE WHEN @pid = 0 THEN a.Permohonan_ID ELSE @pid END 
+                                        WHERE 1=1 AND a.JenisLesenIdList is not null AND a.IsRekodLama = 1  
                                         AND a.JenisLesenDescList LIKE CASE WHEN @lesenID = '0' THEN a.JenisLesenDescList ELSE '%'+@lesenID+'%' END 
                                         AND a.Permohonan_PemohonID = CASE WHEN @pemohonID = 0 THEN a.Permohonan_PemohonID ELSE @pemohonID END 
                                         AND CONVERT(varchar(max), ISNULL(a.NamaSyarikat,'')) = CASE WHEN @namaSyarikat = '-- Syarikat --' THEN CONVERT(varchar(max), ISNULL(a.NamaSyarikat,'')) ELSE @namaSyarikat END 
@@ -2795,7 +2969,6 @@
                                     <asp:Parameter Name="Permohonan_ID"></asp:Parameter>
                                 </DeleteParameters>
                                 <SelectParameters>
-                                    <asp:ControlParameter ControlID="TB_PermohonanID" PropertyName="Text" DefaultValue="0" Name="pid"></asp:ControlParameter>
                                     <asp:ControlParameter ControlID="txtNoRujukan" PropertyName="Text" DefaultValue="%%" Name="Rujukan"></asp:ControlParameter>
                                     <asp:ControlParameter ControlID="DDL_JenisLesen" PropertyName="SelectedValue" Name="lesenID"></asp:ControlParameter>
                                     <asp:ControlParameter ControlID="DDL_Pemohon" PropertyName="SelectedValue" Name="pemohonID"></asp:ControlParameter>
@@ -2822,114 +2995,110 @@
                 <asp:TabPanel runat="server" ID="tabPublicAttach" HeaderText="Lampiran Awam">
                     <HeaderTemplate>Lampiran Awam</HeaderTemplate>
                     <ContentTemplate>
+                        <div class="table-responsive">
+                            <asp:GridView ID="gvTabPublicAttach" runat="server" ShowHeaderWhenEmpty="True"
+                                AllowSorting="True" AutoGenerateColumns="False" DataKeyNames="PermohonanFail_ID"
+                                DataSourceID="SqlDataSourceTabPublicAttach"
+                                CssClass="table table-hover table-bordered custom-gridview align-middle" Width="100%">
+                                <AlternatingRowStyle CssClass="alt" />
+                                <Columns>
 
-                        <asp:GridView ID="gvTabPublicAttach" runat="server" ShowHeaderWhenEmpty="True"
-                            AllowSorting="True" AutoGenerateColumns="False" DataKeyNames="PermohonanFail_ID"
-                            DataSourceID="SqlDataSourceTabPublicAttach"
-                            CssClass="table table-bordered" Width="100%">
-                            <AlternatingRowStyle CssClass="alt" />
-                            <Columns>
+                                    <asp:TemplateField HeaderText="ID" SortExpression="PermohonanFail_ID">
+                                        <EditItemTemplate>
+                                            <asp:Label ID="Label1" runat="server" Text='<%# Eval("PermohonanFail_ID") %>'></asp:Label>
+                                        </EditItemTemplate>
+                                        <ItemTemplate>
+                                            <asp:Label ID="Label1" runat="server" Text='<%# Bind("PermohonanFail_ID") %>'></asp:Label>
+                                        </ItemTemplate>
+                                        <HeaderStyle CssClass="styleDisplayNone" />
+                                        <ItemStyle CssClass="styleDisplayNone" />
+                                    </asp:TemplateField>
 
-                                <asp:TemplateField HeaderText="ID" SortExpression="PermohonanFail_ID">
-                                    <EditItemTemplate>
-                                        <asp:Label ID="Label1" runat="server" Text='<%# Eval("PermohonanFail_ID") %>'></asp:Label>
-                                    </EditItemTemplate>
-                                    <ItemTemplate>
-                                        <asp:Label ID="Label1" runat="server" Text='<%# Bind("PermohonanFail_ID") %>'></asp:Label>
-                                    </ItemTemplate>
-                                    <HeaderStyle CssClass="styleDisplayNone" />
-                                    <ItemStyle CssClass="styleDisplayNone" />
-                                </asp:TemplateField>
+                                    <asp:TemplateField HeaderText="No.">
+                                        <ItemTemplate>
+                                            <%# Container.DataItemIndex + 1 %>
+                                        </ItemTemplate>
+                                        <EditItemTemplate>
+                                            <%# Container.DataItemIndex + 1 %>
+                                        </EditItemTemplate>
+                                        <HeaderStyle Width="5%" />
+                                    </asp:TemplateField>
 
-                                <asp:TemplateField HeaderText="No.">
-                                    <ItemTemplate>
-                                        <%# Container.DataItemIndex + 1 %>
-                                    </ItemTemplate>
-                                    <EditItemTemplate>
-                                        <%# Container.DataItemIndex + 1 %>
-                                    </EditItemTemplate>
-                                    <HeaderStyle Width="5%" />
-                                </asp:TemplateField>
+                                    <asp:TemplateField HeaderText="Lampiran">
+                                        <ItemTemplate>
+                                            <asp:TextBox ID="txtPermohonanFail_Remarks" runat="server" Text='<%# Bind("PermohonanFail_Remarks") %>' CssClass="form-control" TextMode="MultiLine" Rows="4" ReadOnly="True" BorderStyle="None"></asp:TextBox>
+                                        </ItemTemplate>
+                                        <EditItemTemplate>
+                                            <asp:TextBox ID="txtPermohonanFail_Remarks" runat="server" Text='<%# Bind("PermohonanFail_Remarks") %>' CssClass="form-control" TextMode="MultiLine" Rows="4"></asp:TextBox>
+                                            <asp:RequiredFieldValidator ID="rvUlasanFail_Remarks" runat="server" CssClass="cssRequiredField"
+                                                ControlToValidate="txtPermohonanFail_Remarks" ErrorMessage="Sila Isi" ValidationGroup="frmEdit" Display="Dynamic"></asp:RequiredFieldValidator>
+                                        </EditItemTemplate>
+                                        <HeaderStyle Width="55%" HorizontalAlign="Left" />
+                                        <ItemStyle HorizontalAlign="Left" />
+                                    </asp:TemplateField>
 
-                                <asp:TemplateField HeaderText="Lampiran">
-                                    <ItemTemplate>
-                                        <asp:TextBox ID="txtPermohonanFail_Remarks" runat="server" Text='<%# Bind("PermohonanFail_Remarks") %>' CssClass="form-control" TextMode="MultiLine" Rows="4" ReadOnly="True" BorderStyle="None"></asp:TextBox>
-                                    </ItemTemplate>
-                                    <EditItemTemplate>
-                                        <asp:TextBox ID="txtPermohonanFail_Remarks" runat="server" Text='<%# Bind("PermohonanFail_Remarks") %>' CssClass="form-control" TextMode="MultiLine" Rows="4"></asp:TextBox>
-                                        <asp:RequiredFieldValidator ID="rvUlasanFail_Remarks" runat="server" CssClass="cssRequiredField"
-                                            ControlToValidate="txtPermohonanFail_Remarks" ErrorMessage="Sila Isi" ValidationGroup="frmEdit" Display="Dynamic"></asp:RequiredFieldValidator>
-                                    </EditItemTemplate>
-                                    <HeaderStyle Width="55%" HorizontalAlign="Left" />
-                                    <ItemStyle HorizontalAlign="Left" />
-                                </asp:TemplateField>
+                                    <asp:TemplateField>
+                                        <ItemTemplate>
+                                            Fail :
+                                            <asp:HyperLink ID="hpFile" runat="server" NavigateUrl='<%# Eval("PermohonanFail_FilePath") %>' Target="_blank"><%# Eval("PermohonanFail_FileName")  %></asp:HyperLink>
 
-                                <asp:TemplateField>
-                                    <ItemTemplate>
-                                        Fail :
-                                        <asp:HyperLink ID="hpFile" runat="server" NavigateUrl='<%# Eval("PermohonanFail_FilePath") %>' Target="_blank"><%# Eval("PermohonanFail_FileName")  %></asp:HyperLink>
+                                            <asp:HiddenField ID="hdnFldPermohonanFail_FileName" Value='<%# Bind("PermohonanFail_FileName") %>' runat="server" />
+                                            <asp:HiddenField ID="hdnFldPermohonanFail_ContentType" Value='<%# Bind("PermohonanFail_ContentType") %>' runat="server" />
+                                            <asp:HiddenField ID="hdnFldPermohonanFail_FilePath" Value='<%# Bind("PermohonanFail_FilePath") %>' runat="server" />
+                                        </ItemTemplate>
+                                        <EditItemTemplate>
+                                            <asp:FileUpload ID="FU_PermohonanFail" runat="server" CssClass="form-control"></asp:FileUpload>
+                                            <asp:Button ID="btnUpload" runat="server" Text="Muat Naik" OnClick="btnUpload_Click" Visible="false"
+                                                OnClientClick="return confirm('Fail sedia ada akan ditukar ke fail yang baru.');" />
 
-                                        <asp:HiddenField ID="hdnFldPermohonanFail_FileName" Value='<%# Bind("PermohonanFail_FileName") %>' runat="server" />
-                                        <asp:HiddenField ID="hdnFldPermohonanFail_ContentType" Value='<%# Bind("PermohonanFail_ContentType") %>' runat="server" />
-                                        <asp:HiddenField ID="hdnFldPermohonanFail_FilePath" Value='<%# Bind("PermohonanFail_FilePath") %>' runat="server" />
-                                    </ItemTemplate>
-                                    <EditItemTemplate>
-                                        <asp:FileUpload ID="FU_PermohonanFail" runat="server" CssClass="form-control"></asp:FileUpload>
-                                        <asp:Button ID="btnUpload" runat="server" Text="Muat Naik" OnClick="btnUpload_Click" Visible="false"
-                                            OnClientClick="return confirm('Fail sedia ada akan ditukar ke fail yang baru.');" />
+                                            <asp:HiddenField ID="hdnFldPermohonanFail_FileName" Value='<%# Bind("PermohonanFail_FileName") %>' runat="server" />
+                                            <asp:HiddenField ID="hdnFldPermohonanFail_ContentType" Value='<%# Bind("PermohonanFail_ContentType") %>' runat="server" />
+                                            <asp:HiddenField ID="hdnFldPermohonanFail_FilePath" Value='<%# Bind("PermohonanFail_FilePath") %>' runat="server" />
+                                        </EditItemTemplate>
+                                        <HeaderStyle Width="25%" />
+                                    </asp:TemplateField>
 
-                                        <asp:HiddenField ID="hdnFldPermohonanFail_FileName" Value='<%# Bind("PermohonanFail_FileName") %>' runat="server" />
-                                        <asp:HiddenField ID="hdnFldPermohonanFail_ContentType" Value='<%# Bind("PermohonanFail_ContentType") %>' runat="server" />
-                                        <asp:HiddenField ID="hdnFldPermohonanFail_FilePath" Value='<%# Bind("PermohonanFail_FilePath") %>' runat="server" />
-                                    </EditItemTemplate>
-                                    <HeaderStyle Width="25%" />
-                                </asp:TemplateField>
-
-                                <asp:TemplateField ShowHeader="False">
-                                    <EditItemTemplate>
-                                        <div class="row">
-
-                                            <div class="col-md-6">
-
-                                                <div class="form-group">
-                                                    <asp:LinkButton ID="LinkButton1" runat="server" CausesValidation="True" CommandName="Update" Text="Simpan"></asp:LinkButton>
-                                                </div>
+                                    <asp:TemplateField ShowHeader="False">
+                                        <EditItemTemplate>
+                                            <div class="d-flex flex-wrap gap-1 align-items-center justify-content-center">
+                                                <asp:LinkButton ID="LinkButton1" runat="server" CausesValidation="True" CommandName="Update" Text="Simpan" CssClass="btn btn-warning btn-sm">
+                                                    <i class="bi bi-save me-1"></i>Simpan
+                                                </asp:LinkButton>
+                                                <asp:LinkButton ID="LinkButton2" runat="server" CausesValidation="False" CommandName="Cancel" Text="Batal" CssClass="btn btn-secondary btn-sm">
+                                                    <i class="bi bi-x-circle me-1"></i>Batal
+                                                </asp:LinkButton>
                                             </div>
+                                        </EditItemTemplate>
+                                        <ItemTemplate>
+                                            <asp:LinkButton ID="lbEdit" runat="server" CausesValidation="False" CommandName="Edit" Text="Kemaskini" Visible='<%# If(CInt(Session.Item("sessionEstateID")) = 1, True, False) %>' CssClass="btn btn-warning btn-sm">
+                                                <i class="bi bi-pencil-square me-1"></i>Kemaskini
+                                            </asp:LinkButton>
+                                        </ItemTemplate>
+                                        <HeaderStyle Width="10%" />
+                                        <ItemStyle HorizontalAlign="Center" />
+                                    </asp:TemplateField>
 
-                                            <div class="col-md-6">
+                                    <asp:TemplateField>
+                                        <HeaderTemplate>
+                                            <asp:LinkButton ID="btnAddNew" runat="server" CssClass="btn btn-warning btn-sm" ToolTip="Tambah" Visible='<%# If(CInt(Session.Item("sessionEstateID")) = 1, True, False) %>' OnClick="btnAddNewUpload1_Click">
+                                                <i class="bi bi-plus-lg me-1"></i>Tambah
+                                            </asp:LinkButton>
+                                        </HeaderTemplate>
+                                        <ItemTemplate>
+                                            <asp:LinkButton ID="lbDelete" runat="server" CausesValidation="False" CommandName="Delete" Text="Padam" OnClientClick="return confirm('Anda pasti untuk padam rekod ini?');" Visible='<%# If(CInt(Session.Item("sessionEstateID")) = 1, True, False) %>' CssClass="btn btn-danger btn-sm">
+                                                <i class="bi bi-trash me-1"></i>Padam
+                                            </asp:LinkButton>
+                                        </ItemTemplate>
+                                        <FooterStyle HorizontalAlign="Center" />
+                                        <HeaderStyle Width="5%" HorizontalAlign="Center" />
+                                        <ItemStyle HorizontalAlign="Center" />
+                                    </asp:TemplateField>
 
-                                                <div class="form-group">
-                                                    <asp:LinkButton ID="LinkButton2" runat="server" CausesValidation="False" CommandName="Cancel" Text="Batal"></asp:LinkButton>
-                                                </div>
+                                </Columns>
 
-                                            </div>
-
-                                        </div>
-
-                                    </EditItemTemplate>
-                                    <ItemTemplate>
-								                <asp:LinkButton ID="lbEdit" runat="server" CausesValidation="False" CommandName="Edit" Text="Kemaskini" Visible='<%# If(CInt(Session.Item("sessionEstateID")) = 1, True, False) %>'></asp:LinkButton><%--If(Eval("StatusID") < 2, True, False)--%>
-                                    </ItemTemplate>
-                                    <HeaderStyle Width="10%" />
-                                    <ItemStyle HorizontalAlign="Center" />
-                                </asp:TemplateField>
-
-                                <asp:TemplateField>
-                                    <HeaderTemplate>
-                                        <asp:LinkButton ID="btnAddNew" runat="server" Text="+" CssClass="btn btn-warning btn-sm" ToolTip="Tambah" Visible='<%# If(CInt(Session.Item("sessionEstateID")) = 1, True, False) %>' OnClick="btnAddNewUpload1_Click" />
-                                    </HeaderTemplate>
-                                    <ItemTemplate>
-                                        <asp:LinkButton ID="lbDelete" runat="server" CausesValidation="False" CommandName="Delete" Text="Padam" OnClientClick="return confirm('Anda pasti untuk padam rekod ini?');" Visible='<%# If(CInt(Session.Item("sessionEstateID")) = 1, True, False) %>'></asp:LinkButton>
-                                    </ItemTemplate>
-                                    <FooterStyle HorizontalAlign="Center" />
-                                    <HeaderStyle Width="5%" HorizontalAlign="Center" />
-                                    <ItemStyle HorizontalAlign="Center" />
-                                </asp:TemplateField>
-
-                            </Columns>
-
-                            <PagerStyle CssClass="pgr" />
-                        </asp:GridView>
+                                <PagerStyle CssClass="pgr" />
+                            </asp:GridView>
+                        </div>
 
                         <asp:SqlDataSource ID="SqlDataSourceTabPublicAttach" runat="server"
                             ConnectionString="<%$ ConnectionStrings:webcon_ConnectionStr %>"
@@ -2967,114 +3136,110 @@
                 <asp:TabPanel runat="server" ID="tabUlasan" HeaderText="Ulasan">
                     <HeaderTemplate>Lampiran MPK</HeaderTemplate>
                     <ContentTemplate>
+                        <div class="table-responsive">
+                            <asp:GridView ID="gvTabUlasan" runat="server" ShowHeaderWhenEmpty="True"
+                                AllowSorting="True" AutoGenerateColumns="False" DataKeyNames="PermohonanFail_ID"
+                                DataSourceID="SqlDataSourceTabUlasan"
+                                CssClass="table table-hover table-bordered custom-gridview align-middle" Width="100%">
+                                <AlternatingRowStyle CssClass="alt" />
+                                <Columns>
 
-                        <asp:GridView ID="gvTabUlasan" runat="server" ShowHeaderWhenEmpty="True"
-                            AllowSorting="True" AutoGenerateColumns="False" DataKeyNames="PermohonanFail_ID"
-                            DataSourceID="SqlDataSourceTabUlasan"
-                            CssClass="table table-bordered" Width="100%">
-                            <AlternatingRowStyle CssClass="alt" />
-                            <Columns>
+                                    <asp:TemplateField HeaderText="ID" SortExpression="PermohonanFail_ID">
+                                        <EditItemTemplate>
+                                            <asp:Label ID="Label1" runat="server" Text='<%# Eval("PermohonanFail_ID") %>'></asp:Label>
+                                        </EditItemTemplate>
+                                        <ItemTemplate>
+                                            <asp:Label ID="Label1" runat="server" Text='<%# Bind("PermohonanFail_ID") %>'></asp:Label>
+                                        </ItemTemplate>
+                                        <HeaderStyle CssClass="styleDisplayNone" />
+                                        <ItemStyle CssClass="styleDisplayNone" />
+                                    </asp:TemplateField>
 
-                                <asp:TemplateField HeaderText="ID" SortExpression="PermohonanFail_ID">
-                                    <EditItemTemplate>
-                                        <asp:Label ID="Label1" runat="server" Text='<%# Eval("PermohonanFail_ID") %>'></asp:Label>
-                                    </EditItemTemplate>
-                                    <ItemTemplate>
-                                        <asp:Label ID="Label1" runat="server" Text='<%# Bind("PermohonanFail_ID") %>'></asp:Label>
-                                    </ItemTemplate>
-                                    <HeaderStyle CssClass="styleDisplayNone" />
-                                    <ItemStyle CssClass="styleDisplayNone" />
-                                </asp:TemplateField>
+                                    <asp:TemplateField HeaderText="No.">
+                                        <ItemTemplate>
+                                            <%# Container.DataItemIndex + 1 %>
+                                        </ItemTemplate>
+                                        <EditItemTemplate>
+                                            <%# Container.DataItemIndex + 1 %>
+                                        </EditItemTemplate>
+                                        <HeaderStyle Width="5%" />
+                                    </asp:TemplateField>
 
-                                <asp:TemplateField HeaderText="No.">
-                                    <ItemTemplate>
-                                        <%# Container.DataItemIndex + 1 %>
-                                    </ItemTemplate>
-                                    <EditItemTemplate>
-                                        <%# Container.DataItemIndex + 1 %>
-                                    </EditItemTemplate>
-                                    <HeaderStyle Width="5%" />
-                                </asp:TemplateField>
+                                    <asp:TemplateField HeaderText="Lampiran">
+                                        <ItemTemplate>
+                                            <asp:TextBox ID="txtPermohonanFail_Remarks" runat="server" Text='<%# Bind("PermohonanFail_Remarks") %>' CssClass="form-control" TextMode="MultiLine" Rows="4" ReadOnly="True" BorderStyle="None"></asp:TextBox>
+                                        </ItemTemplate>
+                                        <EditItemTemplate>
+                                            <asp:TextBox ID="txtPermohonanFail_Remarks" runat="server" Text='<%# Bind("PermohonanFail_Remarks") %>' CssClass="form-control" TextMode="MultiLine" Rows="4"></asp:TextBox>
+                                            <asp:RequiredFieldValidator ID="rvUlasanFail_Remarks" runat="server" CssClass="cssRequiredField"
+                                                ControlToValidate="txtPermohonanFail_Remarks" ErrorMessage="Sila Isi" ValidationGroup="frmEdit" Display="Dynamic"></asp:RequiredFieldValidator>
+                                        </EditItemTemplate>
+                                        <HeaderStyle Width="55%" HorizontalAlign="Left" />
+                                        <ItemStyle HorizontalAlign="Left" />
+                                    </asp:TemplateField>
 
-                                <asp:TemplateField HeaderText="Lampiran">
-                                    <ItemTemplate>
-                                        <asp:TextBox ID="txtPermohonanFail_Remarks" runat="server" Text='<%# Bind("PermohonanFail_Remarks") %>' CssClass="form-control" TextMode="MultiLine" Rows="4" ReadOnly="True" BorderStyle="None"></asp:TextBox>
-                                    </ItemTemplate>
-                                    <EditItemTemplate>
-                                        <asp:TextBox ID="txtPermohonanFail_Remarks" runat="server" Text='<%# Bind("PermohonanFail_Remarks") %>' CssClass="form-control" TextMode="MultiLine" Rows="4"></asp:TextBox>
-                                        <asp:RequiredFieldValidator ID="rvUlasanFail_Remarks" runat="server" CssClass="cssRequiredField"
-                                            ControlToValidate="txtPermohonanFail_Remarks" ErrorMessage="Sila Isi" ValidationGroup="frmEdit" Display="Dynamic"></asp:RequiredFieldValidator>
-                                    </EditItemTemplate>
-                                    <HeaderStyle Width="55%" HorizontalAlign="Left" />
-                                    <ItemStyle HorizontalAlign="Left" />
-                                </asp:TemplateField>
+                                    <asp:TemplateField>
+                                        <ItemTemplate>
+                                            Fail :
+                                            <asp:HyperLink ID="hpFile" runat="server" NavigateUrl='<%# Eval("PermohonanFail_FilePath") %>' Target="_blank"><%# Eval("PermohonanFail_FileName")  %></asp:HyperLink>
 
-                                <asp:TemplateField>
-                                    <ItemTemplate>
-                                        Fail :
-                                        <asp:HyperLink ID="hpFile" runat="server" NavigateUrl='<%# Eval("PermohonanFail_FilePath") %>' Target="_blank"><%# Eval("PermohonanFail_FileName")  %></asp:HyperLink>
+                                            <asp:HiddenField ID="hdnFldPermohonanFail_FileName" Value='<%# Bind("PermohonanFail_FileName") %>' runat="server" />
+                                            <asp:HiddenField ID="hdnFldPermohonanFail_ContentType" Value='<%# Bind("PermohonanFail_ContentType") %>' runat="server" />
+                                            <asp:HiddenField ID="hdnFldPermohonanFail_FilePath" Value='<%# Bind("PermohonanFail_FilePath") %>' runat="server" />
+                                        </ItemTemplate>
+                                        <EditItemTemplate>
+                                            <asp:FileUpload ID="FU_PermohonanFail" runat="server" CssClass="form-control"></asp:FileUpload>
+                                            <asp:Button ID="btnUpload" runat="server" Text="Muat Naik" OnClick="btnUpload_Click" Visible="false"
+                                                OnClientClick="return confirm('Fail sedia ada akan ditukar ke fail yang baru.');" />
 
-                                        <asp:HiddenField ID="hdnFldPermohonanFail_FileName" Value='<%# Bind("PermohonanFail_FileName") %>' runat="server" />
-                                        <asp:HiddenField ID="hdnFldPermohonanFail_ContentType" Value='<%# Bind("PermohonanFail_ContentType") %>' runat="server" />
-                                        <asp:HiddenField ID="hdnFldPermohonanFail_FilePath" Value='<%# Bind("PermohonanFail_FilePath") %>' runat="server" />
-                                    </ItemTemplate>
-                                    <EditItemTemplate>
-                                        <asp:FileUpload ID="FU_PermohonanFail" runat="server" CssClass="form-control"></asp:FileUpload>
-                                        <asp:Button ID="btnUpload" runat="server" Text="Muat Naik" OnClick="btnUpload_Click" Visible="false"
-                                            OnClientClick="return confirm('Fail sedia ada akan ditukar ke fail yang baru.');" />
+                                            <asp:HiddenField ID="hdnFldPermohonanFail_FileName" Value='<%# Bind("PermohonanFail_FileName") %>' runat="server" />
+                                            <asp:HiddenField ID="hdnFldPermohonanFail_ContentType" Value='<%# Bind("PermohonanFail_ContentType") %>' runat="server" />
+                                            <asp:HiddenField ID="hdnFldPermohonanFail_FilePath" Value='<%# Bind("PermohonanFail_FilePath") %>' runat="server" />
+                                        </EditItemTemplate>
+                                        <HeaderStyle Width="25%" />
+                                    </asp:TemplateField>
 
-                                        <asp:HiddenField ID="hdnFldPermohonanFail_FileName" Value='<%# Bind("PermohonanFail_FileName") %>' runat="server" />
-                                        <asp:HiddenField ID="hdnFldPermohonanFail_ContentType" Value='<%# Bind("PermohonanFail_ContentType") %>' runat="server" />
-                                        <asp:HiddenField ID="hdnFldPermohonanFail_FilePath" Value='<%# Bind("PermohonanFail_FilePath") %>' runat="server" />
-                                    </EditItemTemplate>
-                                    <HeaderStyle Width="25%" />
-                                </asp:TemplateField>
-
-                                <asp:TemplateField ShowHeader="False">
-                                    <EditItemTemplate>
-                                        <div class="row">
-
-                                            <div class="col-md-6">
-
-                                                <div class="form-group">
-                                                    <asp:LinkButton ID="LinkButton1" runat="server" CausesValidation="True" CommandName="Update" Text="Simpan"></asp:LinkButton>
-                                                </div>
+                                    <asp:TemplateField ShowHeader="False">
+                                        <EditItemTemplate>
+                                            <div class="d-flex flex-wrap gap-1 align-items-center justify-content-center">
+                                                <asp:LinkButton ID="LinkButton1" runat="server" CausesValidation="True" CommandName="Update" Text="Simpan" CssClass="btn btn-warning btn-sm">
+                                                    <i class="bi bi-save me-1"></i>Simpan
+                                                </asp:LinkButton>
+                                                <asp:LinkButton ID="LinkButton2" runat="server" CausesValidation="False" CommandName="Cancel" Text="Batal" CssClass="btn btn-secondary btn-sm">
+                                                    <i class="bi bi-x-circle me-1"></i>Batal
+                                                </asp:LinkButton>
                                             </div>
+                                        </EditItemTemplate>
+                                        <ItemTemplate>
+                                            <asp:LinkButton ID="lbEdit" runat="server" CausesValidation="False" CommandName="Edit" Text="Kemaskini" Visible='<%# If(CInt(Session.Item("sessionEstateID")) = 1, True, False) %>' CssClass="btn btn-warning btn-sm">
+                                                <i class="bi bi-pencil-square me-1"></i>Kemaskini
+                                            </asp:LinkButton>
+                                        </ItemTemplate>
+                                        <HeaderStyle Width="10%" />
+                                        <ItemStyle HorizontalAlign="Center" />
+                                    </asp:TemplateField>
 
-                                            <div class="col-md-6">
+                                    <asp:TemplateField>
+                                        <HeaderTemplate>
+                                            <asp:LinkButton ID="btnAddNew" runat="server" CssClass="btn btn-warning btn-sm" ToolTip="Tambah" Visible='<%# If(CInt(Session.Item("sessionEstateID")) = 1, True, False) %>' OnClick="btnAddNewUpload_Click">
+                                                <i class="bi bi-plus-lg me-1"></i>Tambah
+                                            </asp:LinkButton>
+                                        </HeaderTemplate>
+                                        <ItemTemplate>
+                                            <asp:LinkButton ID="lbDelete" runat="server" CausesValidation="False" CommandName="Delete" Text="Padam" OnClientClick="return confirm('Anda pasti untuk padam rekod ini?');" Visible='<%# If(CInt(Session.Item("sessionEstateID")) = 1, True, False) %>' CssClass="btn btn-danger btn-sm">
+                                                <i class="bi bi-trash me-1"></i>Padam
+                                            </asp:LinkButton>
+                                        </ItemTemplate>
+                                        <FooterStyle HorizontalAlign="Center" />
+                                        <HeaderStyle Width="5%" HorizontalAlign="Center" />
+                                        <ItemStyle HorizontalAlign="Center" />
+                                    </asp:TemplateField>
 
-                                                <div class="form-group">
-                                                    <asp:LinkButton ID="LinkButton2" runat="server" CausesValidation="False" CommandName="Cancel" Text="Batal"></asp:LinkButton>
-                                                </div>
+                                </Columns>
 
-                                            </div>
-
-                                        </div>
-
-                                    </EditItemTemplate>
-                                    <ItemTemplate>
-									<asp:LinkButton ID="lbEdit" runat="server" CausesValidation="False" CommandName="Edit" Text="Kemaskini" Visible='<%# If(CInt(Session.Item("sessionEstateID")) = 1, True, False) %>'></asp:LinkButton><%--If(Eval("StatusID") < 2, True, False)--%>
-                                    </ItemTemplate>
-                                    <HeaderStyle Width="10%" />
-                                    <ItemStyle HorizontalAlign="Center" />
-                                </asp:TemplateField>
-
-                                <asp:TemplateField>
-                                    <HeaderTemplate>
-                                        <asp:LinkButton ID="btnAddNew" runat="server" Text="+" CssClass="btn btn-warning btn-sm" ToolTip="Tambah" Visible='<%# If(CInt(Session.Item("sessionEstateID")) = 1, True, False) %>' OnClick="btnAddNewUpload_Click" />
-                                    </HeaderTemplate>
-                                    <ItemTemplate>
-                                        <asp:LinkButton ID="lbDelete" runat="server" CausesValidation="False" CommandName="Delete" Text="Padam" OnClientClick="return confirm('Anda pasti untuk padam rekod ini?');" Visible='<%# If(CInt(Session.Item("sessionEstateID")) = 1, True, False) %>'></asp:LinkButton>
-                                    </ItemTemplate>
-                                    <FooterStyle HorizontalAlign="Center" />
-                                    <HeaderStyle Width="5%" HorizontalAlign="Center" />
-                                    <ItemStyle HorizontalAlign="Center" />
-                                </asp:TemplateField>
-
-                            </Columns>
-
-                            <PagerStyle CssClass="pgr" />
-                        </asp:GridView>
+                                <PagerStyle CssClass="pgr" />
+                            </asp:GridView>
+                        </div>
 
                         <asp:SqlDataSource ID="SqlDataSourceTabUlasan" runat="server"
                             ConnectionString="<%$ ConnectionStrings:webcon_ConnectionStr %>"
@@ -3112,62 +3277,56 @@
                 <asp:TabPanel runat="server" ID="tabMesyuarat" HeaderText="Mesyuarat">
                     <HeaderTemplate>Mesyuarat</HeaderTemplate>
                     <ContentTemplate>
-                        <br />
-                        <div class="row">
-                            <label>Maklumat Mesyuarat</label>
+                        <div class="form-section-header">
+                            <i class="bi bi-calendar-event"></i>
+                            <span>Maklumat Mesyuarat</span>
                         </div>
-                        <br />
 
                         <div class="row">
-                            <div class="col-md-3">
-
+                            <div class="col-md-4 col-lg-3">
                                 <div class="form-group">
-                                    <label>Tarikh Mesyuarat</label>
+                                    <label class="form-label-custom">Tarikh Mesyuarat</label>
                                     <asp:TextBox ID="TB_TarikhMesyuarat" runat="server" TextMode="Date" CssClass="form-control" />
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="row">
-                            <div class="col-md-3">
-
+                            <div class="col-md-4 col-lg-3">
                                 <div class="form-group">
-                                    <label>No Mesyuarat</label>
+                                    <label class="form-label-custom">No Mesyuarat</label>
                                     <asp:TextBox ID="TB_NoMesyuarat" runat="server" CssClass="form-control" />
                                 </div>
                             </div>
                         </div>
 
-                        <br />
-                        <div class="row">
-                            <div class="col-md-6">
-
+                        <div class="row mt-2">
+                            <div class="col-md-6 col-lg-4">
                                 <div class="form-group">
-                                    <label runat="server">Hantar ke kewangan?</label>
-                                    <asp:CheckBox ID="CB_IsPulang" runat="server" OnCheckedChanged="CB_IsPulang_CheckedChanged" AutoPostBack="true" CausesValidation="false" />
+                                    <label class="form-label-custom">Tindakan Kewangan</label>
+                                    <div class="checkbox-box">
+                                        <asp:CheckBox ID="CB_IsPulang" runat="server" OnCheckedChanged="CB_IsPulang_CheckedChanged" AutoPostBack="true" CausesValidation="false" Text=" Hantar ke kewangan?" />
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
                         <asp:Panel runat="server" ID="pnlpulang" Visible="false">
                             <div class="row">
-                                <div class="col-md-3">
-
+                                <div class="col-md-4 col-lg-3">
                                     <div class="form-group">
-                                        <label>Tarikh hantar ke kewangan</label>
+                                        <label class="form-label-custom">Tarikh hantar ke kewangan</label>
                                         <asp:TextBox ID="TB_TarikhPulang" runat="server" TextMode="Date" CssClass="form-control" />
                                     </div>
                                 </div>
                             </div>
                         </asp:Panel>
-                        <br />
-                        <div class="row">
-                            <div class="col-md-3 text-center">
-                                <asp:LinkButton ID="BtnSaveMesyuarat" runat="server" CausesValidation="False" Text="Kemaskini" CssClass="btn btn-warning" OnClick="BtnSaveMesyuarat_Click" />
+
+                        <div class="row mt-3 mb-2">
+                            <div class="col-12">
+                                <asp:LinkButton ID="BtnSaveMesyuarat" runat="server" CausesValidation="False" Text="Kemaskini" CssClass="btn btn-warning px-4 fw-semibold shadow-sm" OnClick="BtnSaveMesyuarat_Click">
+                                    <i class="bi bi-check-circle me-1"></i>Kemaskini
+                                </asp:LinkButton>
                             </div>
                         </div>
-                        <br />
-
                     </ContentTemplate>
                 </asp:TabPanel>
 
@@ -3177,117 +3336,113 @@
                 <asp:TabPanel runat="server" ID="tabKadarBayaran" HeaderText="Kadar Bayaran">
                     <HeaderTemplate>Kadar Bayaran</HeaderTemplate>
                     <ContentTemplate>
-                        <asp:GridView ID="gvTabBayaran" runat="server" ShowHeaderWhenEmpty="true"
-                            AllowSorting="True" AutoGenerateColumns="False" DataKeyNames="KadarBayaran_ID"
-                            DataSourceID="SqlDataSourceTabBayaran"
-                            CssClass="table table-bordered" Width="100%">
-                            <AlternatingRowStyle CssClass="alt" />
-                            <Columns>
+                        <div class="table-responsive">
+                            <asp:GridView ID="gvTabBayaran" runat="server" ShowHeaderWhenEmpty="true"
+                                AllowSorting="True" AutoGenerateColumns="False" DataKeyNames="KadarBayaran_ID"
+                                DataSourceID="SqlDataSourceTabBayaran"
+                                CssClass="table table-hover table-bordered custom-gridview align-middle" Width="100%">
+                                <AlternatingRowStyle CssClass="alt" />
+                                <Columns>
 
-                                <asp:TemplateField HeaderText="ID" SortExpression="KadarBayaran_ID">
-                                    <EditItemTemplate>
-                                        <asp:Label ID="Label1" runat="server" Text='<%# Eval("KadarBayaran_ID") %>'></asp:Label>
-                                    </EditItemTemplate>
-                                    <ItemTemplate>
-                                        <asp:Label ID="Label1" runat="server" Text='<%# Bind("KadarBayaran_ID") %>'></asp:Label>
-                                    </ItemTemplate>
-                                    <HeaderStyle CssClass="styleDisplayNone" />
-                                    <ItemStyle CssClass="styleDisplayNone" />
-                                </asp:TemplateField>
+                                    <asp:TemplateField HeaderText="ID" SortExpression="KadarBayaran_ID">
+                                        <EditItemTemplate>
+                                            <asp:Label ID="Label1" runat="server" Text='<%# Eval("KadarBayaran_ID") %>'></asp:Label>
+                                        </EditItemTemplate>
+                                        <ItemTemplate>
+                                            <asp:Label ID="Label1" runat="server" Text='<%# Bind("KadarBayaran_ID") %>'></asp:Label>
+                                        </ItemTemplate>
+                                        <HeaderStyle CssClass="styleDisplayNone" />
+                                        <ItemStyle CssClass="styleDisplayNone" />
+                                    </asp:TemplateField>
 
+                                    <asp:TemplateField HeaderText="No.">
+                                        <ItemTemplate>
+                                            <%# Container.DataItemIndex + 1 %>
+                                        </ItemTemplate>
+                                        <EditItemTemplate>
+                                            <%# Container.DataItemIndex + 1 %>
+                                        </EditItemTemplate>
+                                        <HeaderStyle Width="5%" />
+                                    </asp:TemplateField>
 
-                                <asp:TemplateField HeaderText="No.">
-                                    <ItemTemplate>
-                                        <%# Container.DataItemIndex + 1 %>
-                                    </ItemTemplate>
-                                    <EditItemTemplate>
-                                        <%# Container.DataItemIndex + 1 %>
-                                    </EditItemTemplate>
-                                    <HeaderStyle Width="5%" />
-                                </asp:TemplateField>
+                                    <asp:TemplateField HeaderText="Bayaran">
+                                        <ItemTemplate>
+                                            <asp:TextBox ID="txtKadarBayaran_Desc" runat="server" Text='<%# Bind("KadarBayaran_Desc") %>' CssClass="form-control" ReadOnly="true" BorderStyle="None"></asp:TextBox><br />
+                                            <span class="text-secondary small fw-semibold">Jabatan/Agensi: </span>
+                                            <asp:Label ID="lblJabatanAgensi_Description" runat="server" CssClass="small" Text='<%# Eval("JabatanAgensi_Description") %>'></asp:Label>
+                                        </ItemTemplate>
+                                        <EditItemTemplate>
+                                            <asp:TextBox ID="txtKadarBayaran_Desc" runat="server" Text='<%# Bind("KadarBayaran_Desc") %>' onkeyup="this.value=this.value.toUpperCase()" CssClass="form-control"></asp:TextBox>
+                                            <asp:RequiredFieldValidator ID="rvKadarBayaran_Desc" runat="server" CssClass="cssRequiredField"
+                                                ControlToValidate="txtKadarBayaran_Desc" ErrorMessage="Sila Isi" ValidationGroup="frmEdit" Display="Dynamic"></asp:RequiredFieldValidator>
+                                        </EditItemTemplate>
+                                        <HeaderStyle Width="55%" HorizontalAlign="Left" />
+                                        <ItemStyle HorizontalAlign="Left" />
+                                    </asp:TemplateField>
 
-                                <asp:TemplateField HeaderText="Bayaran">
-                                    <ItemTemplate>
-                                        <asp:TextBox ID="txtKadarBayaran_Desc" runat="server" Text='<%# Bind("KadarBayaran_Desc") %>' CssClass="form-control" ReadOnly="true" BorderStyle="None"></asp:TextBox><br />
-                                        Jabatan/Agensi :
-                                        <asp:Label ID="lblJabatanAgensi_Description" runat="server" Text='<%# Eval("JabatanAgensi_Description") %>'></asp:Label>
-                                    </ItemTemplate>
-                                    <EditItemTemplate>
-                                        <asp:TextBox ID="txtKadarBayaran_Desc" runat="server" Text='<%# Bind("KadarBayaran_Desc") %>' onkeyup="this.value=this.value.toUpperCase()" CssClass="form-control"></asp:TextBox>
-                                        <asp:RequiredFieldValidator ID="rvKadarBayaran_Desc" runat="server" CssClass="cssRequiredField"
-                                            ControlToValidate="txtKadarBayaran_Desc" ErrorMessage="Sila Isi" ValidationGroup="frmEdit" Display="Dynamic"></asp:RequiredFieldValidator>
-                                    </EditItemTemplate>
-                                    <HeaderStyle Width="55%" HorizontalAlign="Left" />
-                                    <ItemStyle HorizontalAlign="Left" />
-                                </asp:TemplateField>
+                                    <asp:TemplateField HeaderText="Jumlah (RM)">
+                                        <ItemTemplate>
+                                            <asp:Label ID="lblKadarBayaran_Amount" runat="server" CssClass="fw-bold" Text='<%# Eval("KadarBayaran_Amount", "{0:N2}") %>'></asp:Label>
+                                        </ItemTemplate>
+                                        <EditItemTemplate>
+                                            <asp:TextBox ID="txtKadarBayaran_Amount" runat="server" Text='<%# Bind("KadarBayaran_Amount") %>' CssClass="form-control" type="number"></asp:TextBox>
+                                            <asp:RequiredFieldValidator ID="rvKadarBayaran_Amount" runat="server" CssClass="cssRequiredField"
+                                                ControlToValidate="txtKadarBayaran_Amount" ErrorMessage="Sila Isi" ValidationGroup="frmEdit" Display="Dynamic"></asp:RequiredFieldValidator>
+                                        </EditItemTemplate>
+                                        <HeaderStyle Width="25%" />
+                                    </asp:TemplateField>
 
-                                <asp:TemplateField HeaderText="Jumlah (RM)">
-                                    <ItemTemplate>
-                                        <asp:Label ID="lblKadarBayaran_Amount" runat="server" Text='<%# Eval("KadarBayaran_Amount", "{0:N2}") %>'></asp:Label>
-                                    </ItemTemplate>
-                                    <EditItemTemplate>
-                                        <asp:TextBox ID="txtKadarBayaran_Amount" runat="server" Text='<%# Bind("KadarBayaran_Amount") %>' CssClass="form-control" type="number"></asp:TextBox>
-                                        <asp:RequiredFieldValidator ID="rvKadarBayaran_Amount" runat="server" CssClass="cssRequiredField"
-                                            ControlToValidate="txtKadarBayaran_Amount" ErrorMessage="Sila Isi" ValidationGroup="frmEdit" Display="Dynamic"></asp:RequiredFieldValidator>
-                                    </EditItemTemplate>
-                                    <HeaderStyle Width="25%" />
-                                </asp:TemplateField>
+                                    <asp:TemplateField ShowHeader="True" HeaderText="Pilih?">
+                                        <EditItemTemplate>
+                                        </EditItemTemplate>
+                                        <ItemTemplate>
+                                            <asp:CheckBox ID="cbsel" runat="server" Enabled='<%# If(Eval("IsPublish") = False, True, False) %>' Checked='<%# Eval("IsSelect") %>' OnCheckedChanged="cbsel_CheckedChanged" AutoPostBack="true" CausesValidation="false" />
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
 
-                                <asp:TemplateField ShowHeader="True" HeaderText="Pilih?">
-                                    <EditItemTemplate>
-                                    </EditItemTemplate>
-                                    <ItemTemplate>
-                                        <asp:CheckBox ID="cbsel" runat="server" Enabled='<%# If(Eval("IsPublish") = False, True, False) %>' Checked='<%# Eval("IsSelect") %>' OnCheckedChanged="cbsel_CheckedChanged" AutoPostBack="true" CausesValidation="false" />
-                                    </ItemTemplate>
-                                </asp:TemplateField>
-
-                                <asp:TemplateField ShowHeader="False">
-                                    <EditItemTemplate>
-                                        <div class="row">
-
-                                            <div class="col-md-12">
-
-                                                <div class="form-group">
-                                                    <asp:LinkButton ID="LinkButton1" runat="server" CausesValidation="True" CommandName="Update" Text="Simpan" CssClass="btn btn-warning btn-sm"></asp:LinkButton>
-                                                </div>
+                                    <asp:TemplateField ShowHeader="False">
+                                        <EditItemTemplate>
+                                            <div class="d-flex flex-wrap gap-1 align-items-center justify-content-center">
+                                                <asp:LinkButton ID="LinkButton1" runat="server" CausesValidation="True" CommandName="Update" Text="Simpan" CssClass="btn btn-warning btn-sm">
+                                                    <i class="bi bi-save me-1"></i>Simpan
+                                                </asp:LinkButton>
+                                                <asp:LinkButton ID="LinkButton2" runat="server" CausesValidation="False" CommandName="Cancel" Text="Cancel" CssClass="btn btn-secondary btn-sm">
+                                                    <i class="bi bi-x-circle me-1"></i>Batal
+                                                </asp:LinkButton>
                                             </div>
+                                        </EditItemTemplate>
+                                        <ItemTemplate>
+                                            <asp:LinkButton ID="lbEdit" runat="server" CausesValidation="False" CommandName="Edit" Text="Kemaskini"
+                                                Visible='<%# If(IsDBNull(Eval("KadarBayaran_PermohonanAgensiID")), True, If(Eval("KadarBayaran_PermohonanAgensiID") = Session.Item("sessionEstateId"), True, False)) %>' CssClass="btn btn-warning btn-sm">
+                                                <i class="bi bi-pencil-square me-1"></i>Kemaskini
+                                            </asp:LinkButton>
+                                        </ItemTemplate>
+                                        <HeaderStyle Width="10%" />
+                                        <ItemStyle HorizontalAlign="Center" />
+                                    </asp:TemplateField>
 
-                                            <div class="col-md-12">
+                                    <asp:TemplateField>
+                                        <HeaderTemplate>
+                                            <asp:LinkButton ID="btnAddNew" runat="server" CssClass="btn btn-warning btn-sm" ToolTip="Tambah" OnClick="btnAddNew_Click">
+                                                <i class="bi bi-plus-lg me-1"></i>Tambah
+                                            </asp:LinkButton>
+                                        </HeaderTemplate>
+                                        <ItemTemplate>
+                                            <asp:LinkButton ID="lbDelete" runat="server" CausesValidation="False" CssClass="btn btn-danger btn-sm"
+                                                Visible='<%# If(IsDBNull(Eval("KadarBayaran_PermohonanAgensiID")), True, If(Eval("KadarBayaran_PermohonanAgensiID") = Session.Item("sessionEstateId"), True, False)) %>' CommandName="Delete" Text="Padam" OnClientClick="return confirm('Anda pasti untuk padam rekod ini?');">
+                                                <i class="bi bi-trash me-1"></i>Padam
+                                            </asp:LinkButton>
+                                        </ItemTemplate>
+                                        <FooterStyle HorizontalAlign="Center" />
+                                        <HeaderStyle Width="5%" HorizontalAlign="Center" />
+                                        <ItemStyle HorizontalAlign="Center" />
+                                    </asp:TemplateField>
 
-                                                <div class="form-group">
-                                                    <asp:LinkButton ID="LinkButton2" runat="server" CausesValidation="False" CommandName="Cancel" Text="Cancel" CssClass="btn btn-default btn-sm"></asp:LinkButton>
-                                                </div>
+                                </Columns>
 
-                                            </div>
-
-                                        </div>
-
-                                    </EditItemTemplate>
-                                    <ItemTemplate>
-                                        <asp:LinkButton ID="lbEdit" runat="server" CausesValidation="False" CommandName="Edit" Text="Kemaskini"
-                                            Visible='<%# If(IsDBNull(Eval("KadarBayaran_PermohonanAgensiID")), True, If(Eval("KadarBayaran_PermohonanAgensiID") = Session.Item("sessionEstateId"), True, False)) %>' CssClass="btn btn-warning btn-sm"></asp:LinkButton>
-                                    </ItemTemplate>
-                                    <HeaderStyle Width="10%" />
-                                    <ItemStyle HorizontalAlign="Center" />
-                                </asp:TemplateField>
-
-                                <asp:TemplateField>
-                                    <HeaderTemplate>
-                                        <asp:LinkButton ID="btnAddNew" runat="server" Text="+" CssClass="btn btn-warning btn-sm" ToolTip="Tambah" OnClick="btnAddNew_Click" />
-                                    </HeaderTemplate>
-                                    <ItemTemplate>
-                                        <asp:LinkButton ID="lbDelete" runat="server" CausesValidation="False" CssClass="btn btn-danger btn-sm"
-                                            Visible='<%# If(IsDBNull(Eval("KadarBayaran_PermohonanAgensiID")), True, If(Eval("KadarBayaran_PermohonanAgensiID") = Session.Item("sessionEstateId"), True, False)) %>' CommandName="Delete" Text="Padam" OnClientClick="return confirm('Anda pasti untuk padam rekod ini?');"></asp:LinkButton>
-                                    </ItemTemplate>
-                                    <FooterStyle HorizontalAlign="Center" />
-                                    <HeaderStyle Width="5%" HorizontalAlign="Center" />
-                                    <ItemStyle HorizontalAlign="Center" />
-                                </asp:TemplateField>
-
-                            </Columns>
-
-                            <PagerStyle CssClass="pgr" />
-                        </asp:GridView>
+                                <PagerStyle CssClass="pgr" />
+                            </asp:GridView>
+                        </div>
 
                         <asp:SqlDataSource ID="SqlDataSourceTabBayaran" runat="server"
                             ConnectionString="<%$ ConnectionStrings:webcon_ConnectionStr %>"
@@ -3380,7 +3535,6 @@
         function resetAndHideUnsubmittedValidators() {
             formValidationTriggered.insertForm = false;
             formValidationTriggered.updateForm = false;
-
             if (typeof Page_Validators !== 'undefined' && Page_Validators && Page_Validators.length) {
                 for (var i = 0; i < Page_Validators.length; i++) {
                     var v = Page_Validators[i];
@@ -3403,11 +3557,13 @@
         $(document).ready(function () {
             setupValidationGuards();
             resetAndHideUnsubmittedValidators();
+            initFilterCollapse();
         });
 
         function pageLoad() {
             setupValidationGuards();
             resetAndHideUnsubmittedValidators();
+            initFilterCollapse();
 
             // Adjust tab container dimensions if rendered
             $("#ctl00_ContentPlaceHolder1_LabelAttributes1_TabContainer1").css({ 'width': 400, 'height': 400 });
@@ -3471,6 +3627,131 @@
                 }
             }
         });
+
+        /* =========================================================================
+           Collapsible Extra Filters (panelFilter)
+           ========================================================================= */
+        function initFilterCollapse() {
+            var $collapse = $('#collapseFilterExtra');
+            if (!$collapse.length) return;
+
+            var $hf = $('[id$="hfFilterExpanded"]');
+            var $topBtn = $('#btnToggleFilterExtra');
+            var $bottomBtn = $('#btnToggleFilterBottom');
+            var $topText = $('#btnToggleFilterExtraText');
+            var $bottomText = $('#btnToggleFilterBottomText');
+            var $topIcon = $('#iconFilterCollapse');
+            var $bottomIcon = $('#iconFilterCollapseBottom');
+            var $badge = $('#badgeActiveExtraCount');
+
+            function countActiveExtraFilters() {
+                var count = 0;
+                var $ddlPemohon = $('[id$="DDL_Pemohon"]');
+                if ($ddlPemohon.length && $ddlPemohon.val() && $ddlPemohon.val() !== '0' && $ddlPemohon.val() !== '') count++;
+
+                var $ddlSyarikat = $('[id$="DDL_Syarikat"]');
+                if ($ddlSyarikat.length && $ddlSyarikat.val() && $ddlSyarikat.val() !== '-- Syarikat --' && $ddlSyarikat.val() !== '') count++;
+
+                var $tbAlamat = $('[id$="TB_Alamat"]');
+                if ($tbAlamat.length && $tbAlamat.val() && $tbAlamat.val().trim() !== '') count++;
+
+                var $ddlJenis = $('[id$="DDL_JenisLesen"]');
+                if ($ddlJenis.length && $ddlJenis.val() && $ddlJenis.val() !== '0' && $ddlJenis.val() !== '') count++;
+
+                var $ddlRisiko = $('[id$="DDL_Risiko"]');
+                if ($ddlRisiko.length && $ddlRisiko.val() && $ddlRisiko.val() !== '2' && $ddlRisiko.val() !== '') count++;
+
+                var $ddlBatal = $('[id$="DDL_Pembatalan"]');
+                if ($ddlBatal.length && $ddlBatal.val() && $ddlBatal.val() !== '2' && $ddlBatal.val() !== '') count++;
+
+                return count;
+            }
+
+            function updateUiState(isOpen) {
+                if ($hf.length) $hf.val(isOpen ? '1' : '0');
+
+                var text = isOpen ? 'Kurang Penapis' : 'Penapis Tambahan';
+                if ($topText.length) $topText.text(text);
+                if ($bottomText.length) $bottomText.text(text);
+
+                var rotate = isOpen ? 'rotate(180deg)' : 'rotate(0deg)';
+                if ($topIcon.length) $topIcon.css('transform', rotate);
+                if ($bottomIcon.length) $bottomIcon.css('transform', rotate);
+
+                $topBtn.attr('aria-expanded', isOpen ? 'true' : 'false');
+                $bottomBtn.attr('aria-expanded', isOpen ? 'true' : 'false');
+
+                var activeCount = countActiveExtraFilters();
+                if ($badge.length) {
+                    if (activeCount > 0) {
+                        $badge.text(activeCount + ' aktif').removeClass('d-none');
+                    } else {
+                        $badge.addClass('d-none');
+                    }
+                }
+            }
+
+            // Determine if it should be open (from previous postback state or active filters)
+            var activeCount = countActiveExtraFilters();
+            var shouldOpen = ($hf.length && $hf.val() === '1') || (activeCount > 0);
+
+            if (shouldOpen) {
+                $collapse.addClass('show');
+                updateUiState(true);
+            } else {
+                $collapse.removeClass('show');
+                updateUiState(false);
+            }
+
+            // Collapse events
+            $collapse.off('show.bs.collapse shown.bs.collapse hide.bs.collapse hidden.bs.collapse');
+            $collapse.on('show.bs.collapse', function () {
+                updateUiState(true);
+            });
+            $collapse.on('shown.bs.collapse', function () {
+                $(window).trigger('resize');
+            });
+            $collapse.on('hide.bs.collapse', function () {
+                updateUiState(false);
+            });
+
+            // Recompute badge on filter change
+            $('#collapseFilterExtra').off('change.filterBadge input.filterBadge', 'select, input');
+            $('#collapseFilterExtra').on('change.filterBadge input.filterBadge', 'select, input', function () {
+                var c = countActiveExtraFilters();
+                if ($badge.length) {
+                    if (c > 0) {
+                        $badge.text(c + ' aktif').removeClass('d-none');
+                    } else {
+                        $badge.addClass('d-none');
+                    }
+                }
+            });
+
+            // Quick reset for extra filters only
+            $('#btnResetExtraOnly').off('click').on('click', function (e) {
+                e.preventDefault();
+                var $ddlPemohon = $('[id$="DDL_Pemohon"]');
+                if ($ddlPemohon.length) $ddlPemohon.val('0').trigger('change');
+
+                var $ddlSyarikat = $('[id$="DDL_Syarikat"]');
+                if ($ddlSyarikat.length) $ddlSyarikat.val('-- Syarikat --').trigger('change');
+
+                var $tbAlamat = $('[id$="TB_Alamat"]');
+                if ($tbAlamat.length) $tbAlamat.val('');
+
+                var $ddlJenis = $('[id$="DDL_JenisLesen"]');
+                if ($ddlJenis.length) $ddlJenis.val('0').trigger('change');
+
+                var $ddlRisiko = $('[id$="DDL_Risiko"]');
+                if ($ddlRisiko.length) $ddlRisiko.val('2').trigger('change');
+
+                var $ddlBatal = $('[id$="DDL_Pembatalan"]');
+                if ($ddlBatal.length) $ddlBatal.val('2').trigger('change');
+
+                updateUiState(true);
+            });
+        }
     </script>
 
 </asp:Content>

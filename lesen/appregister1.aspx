@@ -829,6 +829,9 @@
             background-color: rgba(255, 255, 255, 0.22) !important;
             color: #ffffff !important;
         }
+        .font-weight-bold {
+            font-weight: 700 !important;
+        }
     </style>
 </asp:Content>
 
@@ -865,7 +868,7 @@
     <section class="content">
         <div class="container-fluid">
 
-                        <%-- =========================================================================
+            <%-- =========================================================================
                  SECTION 1: FormView1 - Permohonan (Edit & Insert Templates)
                  ========================================================================= --%>
             <asp:FormView ID="FormView1" runat="server" DataKeyNames="Permohonan_ID"
@@ -3313,7 +3316,7 @@
                 <ItemTemplate></ItemTemplate>
             </asp:FormView>
 
-                        <%-- =========================================================================
+            <%-- =========================================================================
                  SECTION 2: Modal QR Code
                  ========================================================================= --%>
             <!-- Modal QR Code -->
@@ -3359,7 +3362,7 @@
                 </div>
             </div>
 
-                        <%-- =========================================================================
+            <%-- =========================================================================
                  SECTION 3: SqlDataSourceForm (Insert / Update / Select)
                  ========================================================================= --%>
             <asp:SqlDataSource runat="server" ID="SqlDataSourceForm" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
@@ -3572,7 +3575,7 @@
             </asp:SqlDataSource>
             <br />
 
-                        <%-- =========================================================================
+            <%-- =========================================================================
                  SECTION 4: Search Filter & Main GridView (whiteCard)
                  ========================================================================= --%>
             <div class="row" id="whiteCard" runat="server">
@@ -3581,23 +3584,36 @@
                         <div class="card-header d-flex justify-content-between align-items-center">
                             <h3 class="card-title mb-0 font-weight-bold"><i class="bi bi-card-checklist me-2"></i>Senarai Permohonan</h3>
                             <div>
-                                <asp:Button ID="ButtonAddAssignment" runat="server" Text="Permohonan Baru" CssClass="btn btn-light btn-sm font-weight-bold shadow-sm" CausesValidation="false" />
+                                <asp:Button ID="ButtonAddAssignment" runat="server" Text="Permohonan Baru" CssClass="btn btn-light btn-sm fw-semibold shadow-sm" CausesValidation="false" />
                             </div>
                         </div>
                         <div class="card-body">
 
                             <%--# START FILTER - set SortExpression at GridView as PRName & add WHERE 1=1 at SqlDataSource - SelectCommand #--%>
                             <div class="row" id="panelFilter" runat="server">
+                                <asp:HiddenField ID="hfFilterExpanded" runat="server" Value="0" />
                                 <div class="col-12">
-                                    <div class="form-section-header mt-0 mb-3">
-                                        <i class="bi bi-funnel"></i>
-                                        <span>Carian &amp; Penapis Rekod</span>
+                                    <div class="form-section-header mt-0 mb-3 d-flex flex-wrap justify-content-between align-items-center gap-2">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <i class="bi bi-funnel"></i>
+                                            <span>Carian &amp; Penapis Rekod</span>
+                                        </div>
+                                        <%--<div>
+                                            <button type="button" class="btn btn-outline-primary btn-sm d-inline-flex align-items-center gap-2 shadow-sm" 
+                                                data-bs-toggle="collapse" data-bs-target="#collapseFilterExtra" aria-expanded="false" aria-controls="collapseFilterExtra" id="btnToggleFilterExtra">
+                                                <i class="bi bi-sliders2"></i>
+                                                <span id="btnToggleFilterExtraText">Penapis Tambahan</span>
+                                                <span class="badge bg-primary text-white rounded-pill d-none" id="badgeActiveExtraCount">0</span>
+                                                <i class="bi bi-chevron-down" id="iconFilterCollapse" style="transition: transform 0.25s ease;"></i>
+                                            </button>
+                                        </div>--%>
                                     </div>
                                 </div>
                                 <div class="col-md-12">
+                                    <!-- ================= MAIN FILTERS (Not affected by collapse) ================= -->
                                     <div class="row">
-
-                                        <div class="col-md-3">
+                                        <!-- 1. Tarikh Mohon -->
+                                        <div class="col-lg-3 col-md-6 col-12">
                                             <div class="form-group">
                                                 <label class="form-label-custom">Tarikh Mohon</label>
                                                 <asp:TextBox ID="TB_TarikhMohon" runat="server"
@@ -3605,91 +3621,16 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-md-3">
+                                        <!-- 2. No Rujukan -->
+                                        <div class="col-lg-3 col-md-6 col-12">
                                             <div class="form-group">
                                                 <label class="form-label-custom">No Rujukan</label>
                                                 <asp:TextBox ID="txtNoRujukan" placeholder="No Rujukan" runat="server" CssClass="form-control"></asp:TextBox>
                                             </div>
                                         </div>
 
-                                        <div class="col-md-3" runat="server" id="filterPemohon">
-                                            <div class="form-group">
-                                                <label class="form-label-custom">Pemohon</label>
-                                                <asp:DropDownList ID="DDL_Pemohon" CssClass="form-control select2" runat="server"
-                                                    DataSourceID="sdsPemohon" DataTextField="Pemohon_Name" DataValueField="Pemohon_ID">
-                                                </asp:DropDownList>
-                                                <asp:SqlDataSource runat="server" ID="sdsPemohon" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
-                                                    SelectCommand="select * from 
-                                                (select 0 as Pemohon_ID, '-- Pemohon --' as Pemohon_Name
-                                                union all
-                                                select DISTINCT Pemohon_ID, Pemohon_Name from LESEN_Permohonan a INNER JOIN LESEN_Pemohon b ON b.Pemohon_ID = a.Permohonan_PemohonID where Pemohon_IsActive=1
-                                                ) as tbl1 order by Pemohon_Name"></asp:SqlDataSource>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-3" runat="server" id="filterSyarikat">
-                                            <div class="form-group">
-                                                <label class="form-label-custom">Syarikat</label>
-                                                <asp:DropDownList ID="DDL_Syarikat" CssClass="form-control select2" runat="server"
-                                                    DataSourceID="sdsSyarikat" DataTextField="NamaSyarikat" DataValueField="NamaSyarikat">
-                                                </asp:DropDownList>
-                                                <asp:SqlDataSource runat="server" ID="sdsSyarikat" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
-                                                    SelectCommand="select * from 
-                                                (select '-- Syarikat --' as NamaSyarikat
-                                                union all
-                                                select DISTINCT CONVERT(varchar(max), NamaSyarikat) AS NamaSyarikat from LESEN_Permohonan 
-                                                WHERE NamaSyarikat IS NOT NULL AND CONVERT(varchar(max), NamaSyarikat) <> '-' 
-                                                union all
-                                                select DISTINCT CONVERT(varchar(max), NamaBaruSyarikat) AS NamaSyarikat from LESEN_Permohonan 
-                                                WHERE NamaBaruSyarikat IS NOT NULL AND CONVERT(varchar(max), NamaBaruSyarikat) <> '-' ) as tbl1"></asp:SqlDataSource>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label class="form-label-custom">Alamat Premis</label>
-                                                <asp:TextBox ID="TB_Alamat" placeholder="Alamat" runat="server" CssClass="form-control"></asp:TextBox>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-3" runat="server" id="filterJenisLesen">
-                                            <div class="form-group">
-                                                <label class="form-label-custom">Jenis Lesen / Permit</label>
-                                                <asp:DropDownList ID="DDL_JenisLesen" CssClass="form-control select2" runat="server" AutoPostBack="false"
-                                                    DataSourceID="SqlDataSourceLesen" DataTextField="JenisLesen_Description" DataValueField="JenisLesen_ID">
-                                                </asp:DropDownList>
-                                                <asp:SqlDataSource runat="server" ID="SqlDataSourceLesen" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
-                                                    SelectCommand="select * from 
-                                                (select '0' as JenisLesen_ID, '-- Lesen/Permit --' as JenisLesen_Description
-                                                union all
-                                                select JenisLesen_Description AS JenisLesen_ID,  JenisLesen_Description from LESEN_JenisLesen where JenisLesen_IsActive=1
-                                                ) as tbl1 order by JenisLesen_Description "></asp:SqlDataSource>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-3" runat="server" id="filterRisiko">
-                                            <div class="form-group">
-                                                <label class="form-label-custom">Status Risiko</label>
-                                                <asp:DropDownList ID="DDL_Risiko" runat="server" AutoPostBack="false" CssClass="form-control select2">
-                                                    <asp:ListItem Value="2">-- Risiko --</asp:ListItem>
-                                                    <asp:ListItem Value="0">Berisiko</asp:ListItem>
-                                                    <asp:ListItem Value="1">Tidak Berisiko</asp:ListItem>
-                                                </asp:DropDownList>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-3" runat="server" id="filterPembatalan">
-                                            <div class="form-group">
-                                                <label class="form-label-custom">Status Pembatalan</label>
-                                                <asp:DropDownList ID="DDL_Pembatalan" runat="server" AutoPostBack="false" CssClass="form-control select2">
-                                                    <asp:ListItem Value="2">-- Pembatalan --</asp:ListItem>
-                                                    <asp:ListItem Value="1">Ya</asp:ListItem>
-                                                    <asp:ListItem Value="0">Tidak</asp:ListItem>
-                                                </asp:DropDownList>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-3" runat="server" id="filterStatus">
+                                        <!-- 3. Status Permohonan -->
+                                        <div class="col-lg-3 col-md-6 col-12" runat="server" id="filterStatus">
                                             <div class="form-group">
                                                 <label class="form-label-custom">Status Permohonan</label>
                                                 <asp:DropDownList ID="DDL_Status" CssClass="form-control select2" runat="server" AutoPostBack="false"
@@ -3704,7 +3645,8 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-md-3" runat="server" id="filterCreatedBy">
+                                        <!-- 4. Dicipta Oleh -->
+                                        <div class="col-lg-3 col-md-6 col-12" runat="server" id="filterCreatedBy">
                                             <div class="form-group">
                                                 <label class="form-label-custom">Dicipta Oleh</label>
                                                 <asp:DropDownList ID="DDL_CreatedBy" CssClass="form-control select2" runat="server" AutoPostBack="false"
@@ -3725,15 +3667,124 @@
                                                 </asp:SqlDataSource>
                                             </div>
                                         </div>
+                                    </div>
+                                    <!-- ================= END MAIN FILTERS ================= -->
 
-                                        <div class="col-md-3 d-flex align-items-end">
-                                            <div class="form-group mb-3 d-flex gap-2 w-100">
-                                                <asp:Button ID="btnSearch" runat="server" CssClass="btn btn-primary flex-fill" Text="Cari" CausesValidation="false" />
-                                                <asp:Button ID="btnReset" CssClass="btn btn-outline-secondary flex-fill" runat="server" Text="Reset" CausesValidation="false" />
+                                    <!-- ================= COLLAPSIBLE FILTERS ================= -->
+                                    <div class="collapse" id="collapseFilterExtra">
+                                        <div class="p-3 mb-3 rounded-3 border" style="background-color: #f8fafc; border-color: #e2e8f0 !important;">
+                                            <div class="d-flex align-items-center justify-content-between mb-3 pb-2 border-bottom">
+                                                <span class="text-secondary small fw-bold text-uppercase d-inline-flex align-items-center gap-1">
+                                                    <i class="bi bi-sliders text-primary"></i>Penapis Tambahan
+                                                </span>
+                                                <button type="button" class="btn btn-link btn-sm text-decoration-none p-0 text-muted small" id="btnResetExtraOnly" title="Kosongkan penapis tambahan sahaja">
+                                                    <i class="bi bi-arrow-counterclockwise me-1"></i>Kosongkan Pilihan Ini
+                                                </button>
+                                            </div>
+                                            <div class="row">
+                                                <!-- 1. Pemohon -->
+                                                <div class="col-lg-4 col-md-6 col-12" runat="server" id="filterPemohon">
+                                                    <div class="form-group">
+                                                        <label class="form-label-custom">Pemohon</label>
+                                                        <asp:DropDownList ID="DDL_Pemohon" CssClass="form-control select2" runat="server"
+                                                            DataSourceID="sdsPemohon" DataTextField="Pemohon_Name" DataValueField="Pemohon_ID">
+                                                        </asp:DropDownList>
+                                                        <asp:SqlDataSource runat="server" ID="sdsPemohon" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
+                                                            SelectCommand="select * from 
+                                                        (select 0 as Pemohon_ID, '-- Pemohon --' as Pemohon_Name
+                                                        union all
+                                                        select DISTINCT Pemohon_ID, Pemohon_Name from LESEN_Permohonan a INNER JOIN LESEN_Pemohon b ON b.Pemohon_ID = a.Permohonan_PemohonID where Pemohon_IsActive=1
+                                                        ) as tbl1 order by Pemohon_Name"></asp:SqlDataSource>
+                                                    </div>
+                                                </div>
+
+                                                <!-- 2. Syarikat -->
+                                                <div class="col-lg-4 col-md-6 col-12" runat="server" id="filterSyarikat">
+                                                    <div class="form-group">
+                                                        <label class="form-label-custom">Syarikat</label>
+                                                        <asp:DropDownList ID="DDL_Syarikat" CssClass="form-control select2" runat="server"
+                                                            DataSourceID="sdsSyarikat" DataTextField="NamaSyarikat" DataValueField="NamaSyarikat">
+                                                        </asp:DropDownList>
+                                                        <asp:SqlDataSource runat="server" ID="sdsSyarikat" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
+                                                            SelectCommand="select * from 
+                                                        (select '-- Syarikat --' as NamaSyarikat
+                                                        union all
+                                                        select DISTINCT CONVERT(varchar(max), NamaSyarikat) AS NamaSyarikat from LESEN_Permohonan 
+                                                        WHERE NamaSyarikat IS NOT NULL AND CONVERT(varchar(max), NamaSyarikat) <> '-' 
+                                                        union all
+                                                        select DISTINCT CONVERT(varchar(max), NamaBaruSyarikat) AS NamaSyarikat from LESEN_Permohonan 
+                                                        WHERE NamaBaruSyarikat IS NOT NULL AND CONVERT(varchar(max), NamaBaruSyarikat) <> '-' ) as tbl1"></asp:SqlDataSource>
+                                                    </div>
+                                                </div>
+
+                                                <!-- 3. Alamat Premis -->
+                                                <div class="col-lg-4 col-md-6 col-12">
+                                                    <div class="form-group">
+                                                        <label class="form-label-custom">Alamat Premis</label>
+                                                        <asp:TextBox ID="TB_Alamat" placeholder="Alamat" runat="server" CssClass="form-control"></asp:TextBox>
+                                                    </div>
+                                                </div>
+
+                                                <!-- 4. Jenis Lesen / Permit -->
+                                                <div class="col-lg-4 col-md-6 col-12" runat="server" id="filterJenisLesen">
+                                                    <div class="form-group">
+                                                        <label class="form-label-custom">Jenis Lesen / Permit</label>
+                                                        <asp:DropDownList ID="DDL_JenisLesen" CssClass="form-control select2" runat="server" AutoPostBack="false"
+                                                            DataSourceID="SqlDataSourceLesen" DataTextField="JenisLesen_Description" DataValueField="JenisLesen_ID">
+                                                        </asp:DropDownList>
+                                                        <asp:SqlDataSource runat="server" ID="SqlDataSourceLesen" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
+                                                            SelectCommand="select * from 
+                                                        (select '0' as JenisLesen_ID, '-- Lesen/Permit --' as JenisLesen_Description
+                                                        union all
+                                                        select JenisLesen_Description AS JenisLesen_ID,  JenisLesen_Description from LESEN_JenisLesen where JenisLesen_IsActive=1
+                                                        ) as tbl1 order by JenisLesen_Description "></asp:SqlDataSource>
+                                                    </div>
+                                                </div>
+
+                                                <!-- 5. Status Risiko -->
+                                                <div class="col-lg-4 col-md-6 col-12" runat="server" id="filterRisiko">
+                                                    <div class="form-group">
+                                                        <label class="form-label-custom">Status Risiko</label>
+                                                        <asp:DropDownList ID="DDL_Risiko" runat="server" AutoPostBack="false" CssClass="form-control select2">
+                                                            <asp:ListItem Value="2">-- Risiko --</asp:ListItem>
+                                                            <asp:ListItem Value="0">Berisiko</asp:ListItem>
+                                                            <asp:ListItem Value="1">Tidak Berisiko</asp:ListItem>
+                                                        </asp:DropDownList>
+                                                    </div>
+                                                </div>
+
+                                                <!-- 6. Status Pembatalan -->
+                                                <div class="col-lg-4 col-md-6 col-12" runat="server" id="filterPembatalan">
+                                                    <div class="form-group">
+                                                        <label class="form-label-custom">Status Pembatalan</label>
+                                                        <asp:DropDownList ID="DDL_Pembatalan" runat="server" AutoPostBack="false" CssClass="form-control select2">
+                                                            <asp:ListItem Value="2">-- Pembatalan --</asp:ListItem>
+                                                            <asp:ListItem Value="1">Ya</asp:ListItem>
+                                                            <asp:ListItem Value="0">Tidak</asp:ListItem>
+                                                        </asp:DropDownList>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
-
                                     </div>
+                                    <!-- ================= END COLLAPSIBLE FILTERS ================= -->
+
+                                    <!-- ================= ACTION BUTTONS ROW ================= -->
+                                    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 pt-1 pb-1">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <button type="button" class="btn btn-outline-secondary btn-sm d-inline-flex align-items-center gap-1 shadow-sm" 
+                                                data-bs-toggle="collapse" data-bs-target="#collapseFilterExtra" aria-expanded="false" aria-controls="collapseFilterExtra" id="btnToggleFilterBottom">
+                                                <i class="bi bi-sliders2"></i>
+                                                <span id="btnToggleFilterBottomText">Penapis Tambahan</span>
+                                                <i class="bi bi-chevron-down" id="iconFilterCollapseBottom" style="transition: transform 0.25s ease;"></i>
+                                            </button>
+                                        </div>
+                                        <div class="d-flex gap-2">
+                                            <asp:Button ID="btnSearch" runat="server" CssClass="btn btn-primary px-4 fw-semibold shadow-sm" Text="Cari" CausesValidation="false" />
+                                            <asp:Button ID="btnReset" CssClass="btn btn-outline-secondary px-3 fw-semibold shadow-sm" runat="server" Text="Reset" CausesValidation="false" />
+                                        </div>
+                                    </div>
+                                    <!-- ================= END ACTION BUTTONS ROW ================= -->
                                 </div>
                             </div>
                             <%--# END FILTER #--%>
@@ -3748,9 +3799,12 @@
                                         <asp:BoundField DataField="RowNo" HeaderText="No" SortExpression="RowNo"></asp:BoundField>
                                         <asp:BoundField DataField="TarikhMohon" HeaderText="Tarikh" DataFormatString="{0:dd/MM/yyyy}" SortExpression="TarikhMohon"></asp:BoundField>
                                         <asp:BoundField DataField="JenisLesenDescList" HeaderText="Jenis Lesen/Permit" SortExpression="JenisLesenDescList"></asp:BoundField>
-                                        <asp:TemplateField HeaderText="Pemohon">
+                                        <asp:TemplateField>
+                                            <HeaderTemplate>
+                                                <span class="fw-bold">Pemohon</span>
+                                            </HeaderTemplate>
                                             <ItemTemplate>
-                                                <div class="font-weight-bold text-dark"><asp:Label ID="lblNamaPemohon" runat="server" Text='<%# Eval("Pemohon_Name") %>'></asp:Label></div>
+                                                <div class="fw-semibold text-dark"><asp:Label ID="lblNamaPemohon" runat="server" Text='<%# Eval("Pemohon_Name") %>'></asp:Label></div>
                                                 <div class="text-primary small"><i class="bi bi-upc-scan me-1"></i><asp:Label ID="lblRujukan" runat="server" Text='<%# Eval("Rujukan") %>'></asp:Label></div>
                                                 <div class="text-muted small"><i class="bi bi-building me-1"></i><asp:Label ID="lblNamaSyarikatOrAlamat" runat="server" Text='<%# If(Not String.IsNullOrEmpty(Eval("NamaBaruSyarikat")?.ToString()), Eval("NamaBaruSyarikat"), If(Not String.IsNullOrEmpty(Eval("NamaSyarikat")?.ToString()), Eval("NamaSyarikat"), Eval("DisplayAlamat"))) %>'></asp:Label></div>
                                                 <div class="text-secondary small"><asp:Label ID="lblNamaAlamat" runat="server" Visible='<%# If(String.IsNullOrEmpty(Eval("NamaSyarikat")?.ToString()) And String.IsNullOrEmpty(Eval("NamaBaruSyarikat")?.ToString()), False, True) %>' 
@@ -3999,7 +4053,7 @@
             </div>
             <!-- row whiteCard -->
 
-                        <%-- =========================================================================
+            <%-- =========================================================================
                  SECTION 5: TabContainer1 - Tabs (Lampiran, Maklumat, Mesyuarat, Agensi)
                  ========================================================================= --%>
             <asp:TabContainer ID="TabContainer1" runat="server" ActiveTabIndex="0" Visible="false" CssClass="MyTabStyle">
@@ -5820,7 +5874,7 @@ ORDER BY
     <%--</ContentTemplate>
     </asp:UpdatePanel>--%>
 
-        <%-- =========================================================================
+    <%-- =========================================================================
          SECTION 6: Client Scripts (Initializers & QR Modal)
          ========================================================================= --%>
     <script type="text/javascript">
@@ -5896,12 +5950,14 @@ ORDER BY
         $(document).ready(function () {
             setupValidationGuards();
             resetAndHideUnsubmittedValidators();
+            initFilterCollapse();
         });
 
         function pageLoad() {
             setupValidationGuards();
             resetAndHideUnsubmittedValidators();
             initPembetulanDiffFilter();
+            initFilterCollapse();
 
             $(function () {
                 $('.datepicker').datepicker({
@@ -6362,5 +6418,130 @@ ORDER BY
                 initPembetulanDiffFilter();
             }, 300);
         });
+
+        /* =========================================================================
+           Collapsible Extra Filters (panelFilter)
+           ========================================================================= */
+        function initFilterCollapse() {
+            var $collapse = $('#collapseFilterExtra');
+            if (!$collapse.length) return;
+
+            var $hf = $('[id$="hfFilterExpanded"]');
+            var $topBtn = $('#btnToggleFilterExtra');
+            var $bottomBtn = $('#btnToggleFilterBottom');
+            var $topText = $('#btnToggleFilterExtraText');
+            var $bottomText = $('#btnToggleFilterBottomText');
+            var $topIcon = $('#iconFilterCollapse');
+            var $bottomIcon = $('#iconFilterCollapseBottom');
+            var $badge = $('#badgeActiveExtraCount');
+
+            function countActiveExtraFilters() {
+                var count = 0;
+                var $ddlPemohon = $('[id$="DDL_Pemohon"]');
+                if ($ddlPemohon.length && $ddlPemohon.val() && $ddlPemohon.val() !== '0' && $ddlPemohon.val() !== '') count++;
+
+                var $ddlSyarikat = $('[id$="DDL_Syarikat"]');
+                if ($ddlSyarikat.length && $ddlSyarikat.val() && $ddlSyarikat.val() !== '-- Syarikat --' && $ddlSyarikat.val() !== '') count++;
+
+                var $tbAlamat = $('[id$="TB_Alamat"]');
+                if ($tbAlamat.length && $tbAlamat.val() && $tbAlamat.val().trim() !== '') count++;
+
+                var $ddlJenis = $('[id$="DDL_JenisLesen"]');
+                if ($ddlJenis.length && $ddlJenis.val() && $ddlJenis.val() !== '0' && $ddlJenis.val() !== '') count++;
+
+                var $ddlRisiko = $('[id$="DDL_Risiko"]');
+                if ($ddlRisiko.length && $ddlRisiko.val() && $ddlRisiko.val() !== '2' && $ddlRisiko.val() !== '') count++;
+
+                var $ddlBatal = $('[id$="DDL_Pembatalan"]');
+                if ($ddlBatal.length && $ddlBatal.val() && $ddlBatal.val() !== '2' && $ddlBatal.val() !== '') count++;
+
+                return count;
+            }
+
+            function updateUiState(isOpen) {
+                if ($hf.length) $hf.val(isOpen ? '1' : '0');
+
+                var text = isOpen ? 'Kurang Penapis' : 'Penapis Tambahan';
+                if ($topText.length) $topText.text(text);
+                if ($bottomText.length) $bottomText.text(text);
+
+                var rotate = isOpen ? 'rotate(180deg)' : 'rotate(0deg)';
+                if ($topIcon.length) $topIcon.css('transform', rotate);
+                if ($bottomIcon.length) $bottomIcon.css('transform', rotate);
+
+                $topBtn.attr('aria-expanded', isOpen ? 'true' : 'false');
+                $bottomBtn.attr('aria-expanded', isOpen ? 'true' : 'false');
+
+                var activeCount = countActiveExtraFilters();
+                if ($badge.length) {
+                    if (activeCount > 0) {
+                        $badge.text(activeCount + ' aktif').removeClass('d-none');
+                    } else {
+                        $badge.addClass('d-none');
+                    }
+                }
+            }
+
+            // Determine if it should be open (from previous postback state or active filters)
+            var activeCount = countActiveExtraFilters();
+            var shouldOpen = ($hf.length && $hf.val() === '1') || (activeCount > 0);
+
+            if (shouldOpen) {
+                $collapse.addClass('show');
+                updateUiState(true);
+            } else {
+                $collapse.removeClass('show');
+                updateUiState(false);
+            }
+
+            // Collapse events
+            $collapse.off('show.bs.collapse shown.bs.collapse hide.bs.collapse hidden.bs.collapse');
+            $collapse.on('show.bs.collapse', function () {
+                updateUiState(true);
+            });
+            $collapse.on('shown.bs.collapse', function () {
+                $(window).trigger('resize');
+            });
+            $collapse.on('hide.bs.collapse', function () {
+                updateUiState(false);
+            });
+
+            // Recompute badge on filter change
+            $('#collapseFilterExtra').off('change.filterBadge input.filterBadge', 'select, input');
+            $('#collapseFilterExtra').on('change.filterBadge input.filterBadge', 'select, input', function () {
+                var c = countActiveExtraFilters();
+                if ($badge.length) {
+                    if (c > 0) {
+                        $badge.text(c + ' aktif').removeClass('d-none');
+                    } else {
+                        $badge.addClass('d-none');
+                    }
+                }
+            });
+
+            // Quick reset for extra filters only
+            $('#btnResetExtraOnly').off('click').on('click', function (e) {
+                e.preventDefault();
+                var $ddlPemohon = $('[id$="DDL_Pemohon"]');
+                if ($ddlPemohon.length) $ddlPemohon.val('0').trigger('change');
+
+                var $ddlSyarikat = $('[id$="DDL_Syarikat"]');
+                if ($ddlSyarikat.length) $ddlSyarikat.val('-- Syarikat --').trigger('change');
+
+                var $tbAlamat = $('[id$="TB_Alamat"]');
+                if ($tbAlamat.length) $tbAlamat.val('');
+
+                var $ddlJenis = $('[id$="DDL_JenisLesen"]');
+                if ($ddlJenis.length) $ddlJenis.val('0').trigger('change');
+
+                var $ddlRisiko = $('[id$="DDL_Risiko"]');
+                if ($ddlRisiko.length) $ddlRisiko.val('2').trigger('change');
+
+                var $ddlBatal = $('[id$="DDL_Pembatalan"]');
+                if ($ddlBatal.length) $ddlBatal.val('2').trigger('change');
+
+                updateUiState(true);
+            });
+        }
     </script>
 </asp:Content>
