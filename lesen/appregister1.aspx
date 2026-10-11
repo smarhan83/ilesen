@@ -634,6 +634,201 @@
             border-top: 1px solid #e2e8f0;
             padding: 14px 24px;
         }
+
+        /* =========================================================================
+           GridView1 & Table Modern Styling (FormView1 Compatibility)
+           ========================================================================= */
+        .custom-gridview {
+            border-collapse: separate !important;
+            border-spacing: 0 !important;
+            width: 100% !important;
+            margin-bottom: 0 !important;
+            background-color: #fff;
+            border: 1px solid #e2e8f0 !important;
+            border-radius: 8px !important;
+            overflow: hidden;
+        }
+        .custom-gridview th {
+            background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%) !important;
+            color: #1e3a8a !important;
+            font-size: 0.81rem !important;
+            font-weight: 700 !important;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            padding: 11px 12px !important;
+            vertical-align: middle !important;
+            border-bottom: 2px solid #cbd5e1 !important;
+            border-top: none !important;
+            white-space: nowrap;
+        }
+        .custom-gridview th a {
+            color: #1e3a8a !important;
+            text-decoration: none !important;
+            font-weight: 700 !important;
+        }
+        .custom-gridview th a:hover {
+            color: #2D6CDF !important;
+            text-decoration: underline !important;
+        }
+        .custom-gridview td {
+            padding: 10px 12px !important;
+            vertical-align: middle !important;
+            font-size: 0.84rem !important;
+            border-color: #e9ecef !important;
+            color: #334155;
+        }
+        .custom-gridview tr:hover td {
+            background-color: #f8fafc !important;
+        }
+        .custom-gridview .badge {
+            font-size: 0.76rem !important;
+            font-weight: 600 !important;
+            padding: 4px 8px !important;
+            border-radius: 6px !important;
+        }
+        .custom-gridview .badge-success {
+            background-color: #10b981 !important;
+            color: #fff !important;
+        }
+        .custom-gridview .badge-warning {
+            background-color: #f59e0b !important;
+            color: #fff !important;
+        }
+        .custom-gridview .badge-secondary {
+            background-color: #64748b !important;
+            color: #fff !important;
+        }
+        .custom-gridview tr:last-child td table {
+            margin: 0 !important;
+        }
+        .custom-gridview tr:last-child td {
+            background-color: #f8fafc !important;
+            border-top: 1px solid #e2e8f0 !important;
+            padding: 10px 16px !important;
+        }
+        .custom-gridview tr:last-child td table td {
+            padding: 2px 4px !important;
+            border: none !important;
+            background: transparent !important;
+        }
+        .custom-gridview tr:last-child td table td a,
+        .custom-gridview tr:last-child td table td span {
+            display: inline-block;
+            min-width: 32px;
+            height: 32px;
+            line-height: 30px;
+            text-align: center;
+            border-radius: 6px;
+            font-size: 0.84rem;
+            font-weight: 600;
+            text-decoration: none !important;
+            border: 1px solid #d1d5db;
+            margin: 0 2px;
+            transition: all 0.15s ease-in-out;
+        }
+        .custom-gridview tr:last-child td table td a {
+            background-color: #fff;
+            color: #2D6CDF;
+        }
+        .custom-gridview tr:last-child td table td a:hover {
+            background-color: #eff6ff;
+            border-color: #2D6CDF;
+            color: #1d4ed8;
+        }
+        .custom-gridview tr:last-child td table td span {
+            background-color: #2D6CDF;
+            border-color: #2D6CDF;
+            color: #fff;
+        }
+
+        /* -------------------------------------------------------------
+           Pembetulan Maklumat Permohonan - Differences Display Styles
+           ------------------------------------------------------------- */
+        .card-pembetulan.filter-diff-active [data-has-diff="false"] {
+            display: none !important;
+        }
+        .card-pembetulan.filter-diff-active .row[data-row-has-diff="false"] {
+            display: none !important;
+        }
+        .card-pembetulan.filter-diff-active [data-panel-has-diff="false"] {
+            display: none !important;
+        }
+
+        .field-has-diff {
+            position: relative;
+        }
+        .field-has-diff .form-control,
+        .field-has-diff .select2-selection {
+            border-color: #f59e0b !important;
+            background-color: #fffdf5 !important;
+            box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.15) !important;
+        }
+        .field-has-diff .form-label-custom {
+            color: #b45309 !important;
+            font-weight: 700 !important;
+        }
+        .badge-diff-status {
+            display: inline-flex;
+            align-items: center;
+            font-size: 0.72rem;
+            font-weight: 600;
+            padding: 0.2rem 0.5rem;
+            border-radius: 9999px;
+            background-color: #fef3c7;
+            color: #92400e;
+            border: 1px solid #fcd34d;
+            vertical-align: middle;
+        }
+        .hint-orig-val {
+            font-size: 0.75rem;
+            color: #64748b;
+            margin-top: 0.35rem;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.3rem;
+            line-height: 1.3;
+        }
+        .hint-orig-val .badge-orig {
+            background-color: #f1f5f9;
+            color: #1e293b;
+            border: 1px solid #cbd5e1;
+            padding: 0.12rem 0.45rem;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 0.75rem;
+            max-width: 100%;
+            word-break: break-word;
+        }
+        .table-has-diff {
+            border: 2px solid #f59e0b !important;
+            border-radius: 6px;
+        }
+
+        /* Light Toggle Button Group in Dark Blue Card Header */
+        #btnGroupDiffFilter {
+            border: 1px solid rgba(255, 255, 255, 0.45);
+            border-radius: 6px;
+            overflow: hidden;
+            background-color: rgba(255, 255, 255, 0.15);
+        }
+        #btnGroupDiffFilter .btn-light {
+            background-color: #ffffff !important;
+            color: #1e3a8a !important;
+            border-color: #ffffff !important;
+            font-weight: 700 !important;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2) !important;
+        }
+        #btnGroupDiffFilter .btn-outline-light {
+            color: #ffffff !important;
+            border-color: transparent !important;
+            background-color: transparent !important;
+            font-weight: 600 !important;
+        }
+        #btnGroupDiffFilter .btn-outline-light:hover {
+            background-color: rgba(255, 255, 255, 0.22) !important;
+            color: #ffffff !important;
+        }
     </style>
 </asp:Content>
 
@@ -676,7 +871,7 @@
             <asp:FormView ID="FormView1" runat="server" DataKeyNames="Permohonan_ID"
                 DataSourceID="SqlDataSourceForm" Width="100%" DefaultMode="Edit">
                 <EditItemTemplate>
-                    <div class="card card-warning">
+                    <div class="card">
                         <div class="card-header d-flex justify-content-between align-items-center">
                             <h3 class="card-title mb-0 font-weight-bold"><i class="bi bi-pencil-square me-2"></i>Kemaskini Permohonan</h3>
                         </div>
@@ -3382,25 +3577,29 @@
                  ========================================================================= --%>
             <div class="row" id="whiteCard" runat="server">
                 <div class="col-12">
-                    <div class="card">
-                        <div class="card-body">
-
-                            <div class="row mb-4">
-                                <div class="col-12 text-end">
-                                    <asp:Button ID="ButtonAddAssignment" runat="server" Text="Permohonan Baru" CssClass="btn btn-block btn-primary" CausesValidation="false" />
-                                    <br />
-                                </div>
+                    <div class="card card-primary">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h3 class="card-title mb-0 font-weight-bold"><i class="bi bi-card-checklist me-2"></i>Senarai Permohonan</h3>
+                            <div>
+                                <asp:Button ID="ButtonAddAssignment" runat="server" Text="Permohonan Baru" CssClass="btn btn-light btn-sm font-weight-bold shadow-sm" CausesValidation="false" />
                             </div>
+                        </div>
+                        <div class="card-body">
 
                             <%--# START FILTER - set SortExpression at GridView as PRName & add WHERE 1=1 at SqlDataSource - SelectCommand #--%>
                             <div class="row" id="panelFilter" runat="server">
-                                <div class="col-md-10">
-                                    <%--<div id="pnlFilter" runat="server" class="row" hidden="hidden"></div>--%>
-
+                                <div class="col-12">
+                                    <div class="form-section-header mt-0 mb-3">
+                                        <i class="bi bi-funnel"></i>
+                                        <span>Carian &amp; Penapis Rekod</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
                                     <div class="row">
 
                                         <div class="col-md-3">
                                             <div class="form-group">
+                                                <label class="form-label-custom">Tarikh Mohon</label>
                                                 <asp:TextBox ID="TB_TarikhMohon" runat="server"
                                                     TextMode="Date" CssClass="form-control" />
                                             </div>
@@ -3408,12 +3607,14 @@
 
                                         <div class="col-md-3">
                                             <div class="form-group">
+                                                <label class="form-label-custom">No Rujukan</label>
                                                 <asp:TextBox ID="txtNoRujukan" placeholder="No Rujukan" runat="server" CssClass="form-control"></asp:TextBox>
                                             </div>
                                         </div>
 
                                         <div class="col-md-3" runat="server" id="filterPemohon">
                                             <div class="form-group">
+                                                <label class="form-label-custom">Pemohon</label>
                                                 <asp:DropDownList ID="DDL_Pemohon" CssClass="form-control select2" runat="server"
                                                     DataSourceID="sdsPemohon" DataTextField="Pemohon_Name" DataValueField="Pemohon_ID">
                                                 </asp:DropDownList>
@@ -3428,6 +3629,7 @@
 
                                         <div class="col-md-3" runat="server" id="filterSyarikat">
                                             <div class="form-group">
+                                                <label class="form-label-custom">Syarikat</label>
                                                 <asp:DropDownList ID="DDL_Syarikat" CssClass="form-control select2" runat="server"
                                                     DataSourceID="sdsSyarikat" DataTextField="NamaSyarikat" DataValueField="NamaSyarikat">
                                                 </asp:DropDownList>
@@ -3445,12 +3647,14 @@
 
                                         <div class="col-md-3">
                                             <div class="form-group">
+                                                <label class="form-label-custom">Alamat Premis</label>
                                                 <asp:TextBox ID="TB_Alamat" placeholder="Alamat" runat="server" CssClass="form-control"></asp:TextBox>
                                             </div>
                                         </div>
 
                                         <div class="col-md-3" runat="server" id="filterJenisLesen">
                                             <div class="form-group">
+                                                <label class="form-label-custom">Jenis Lesen / Permit</label>
                                                 <asp:DropDownList ID="DDL_JenisLesen" CssClass="form-control select2" runat="server" AutoPostBack="false"
                                                     DataSourceID="SqlDataSourceLesen" DataTextField="JenisLesen_Description" DataValueField="JenisLesen_ID">
                                                 </asp:DropDownList>
@@ -3465,6 +3669,7 @@
 
                                         <div class="col-md-3" runat="server" id="filterRisiko">
                                             <div class="form-group">
+                                                <label class="form-label-custom">Status Risiko</label>
                                                 <asp:DropDownList ID="DDL_Risiko" runat="server" AutoPostBack="false" CssClass="form-control select2">
                                                     <asp:ListItem Value="2">-- Risiko --</asp:ListItem>
                                                     <asp:ListItem Value="0">Berisiko</asp:ListItem>
@@ -3475,6 +3680,7 @@
 
                                         <div class="col-md-3" runat="server" id="filterPembatalan">
                                             <div class="form-group">
+                                                <label class="form-label-custom">Status Pembatalan</label>
                                                 <asp:DropDownList ID="DDL_Pembatalan" runat="server" AutoPostBack="false" CssClass="form-control select2">
                                                     <asp:ListItem Value="2">-- Pembatalan --</asp:ListItem>
                                                     <asp:ListItem Value="1">Ya</asp:ListItem>
@@ -3484,19 +3690,23 @@
                                         </div>
 
                                         <div class="col-md-3" runat="server" id="filterStatus">
-                                            <asp:DropDownList ID="DDL_Status" CssClass="form-control select2" runat="server" AutoPostBack="false"
-                                                DataSourceID="sdsStatus" DataTextField="Description" DataValueField="ApprStatusID">
-                                            </asp:DropDownList>
-                                            <asp:SqlDataSource runat="server" ID="sdsStatus" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
-                                                SelectCommand="select * from 
-                                                (select -1 as ApprStatusID, '-- Status --' as Description
-                                                union all
-                                                select ApprStatusID,  Description from ApprovalStatus
-                                                ) as tbl1 order by ApprStatusID "></asp:SqlDataSource>
+                                            <div class="form-group">
+                                                <label class="form-label-custom">Status Permohonan</label>
+                                                <asp:DropDownList ID="DDL_Status" CssClass="form-control select2" runat="server" AutoPostBack="false"
+                                                    DataSourceID="sdsStatus" DataTextField="Description" DataValueField="ApprStatusID">
+                                                </asp:DropDownList>
+                                                <asp:SqlDataSource runat="server" ID="sdsStatus" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
+                                                    SelectCommand="select * from 
+                                                    (select -1 as ApprStatusID, '-- Status --' as Description
+                                                    union all
+                                                    select ApprStatusID,  Description from ApprovalStatus
+                                                    ) as tbl1 order by ApprStatusID "></asp:SqlDataSource>
+                                            </div>
                                         </div>
 
                                         <div class="col-md-3" runat="server" id="filterCreatedBy">
                                             <div class="form-group">
+                                                <label class="form-label-custom">Dicipta Oleh</label>
                                                 <asp:DropDownList ID="DDL_CreatedBy" CssClass="form-control select2" runat="server" AutoPostBack="false"
                                                     DataSourceID="sdsCreatedBy" DataTextField="Users_Fullname" DataValueField="Users_Name">
                                                 </asp:DropDownList>
@@ -3505,8 +3715,8 @@
                                                 (select '0' as Users_Name, '-- Semua Pengguna --' as Users_Fullname
                                                 union all
                                                 select Users_Name,  Users_Fullname from TBL_USERS where Users_Enabled=1 AND Users_Name NOT LIKE '%[^0-9]%'
-								                                        union all
-								                                        select @username AS Users_Name, @fullname AS Users_Fullname 
+								                                                        union all
+								                                                        select @username AS Users_Name, @fullname AS Users_Fullname 
                                                 ) as tbl1 group by Users_Name, Users_Fullname order by Users_Fullname ">
                                                     <SelectParameters>
                                                         <asp:SessionParameter Name="username" SessionField="sessionUserName" />
@@ -3516,162 +3726,169 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <asp:TextBox ID="TB_PermohonanID" placeholder="ID Permohonan" runat="server" CssClass="form-control"></asp:TextBox>
+                                        <div class="col-md-3 d-flex align-items-end">
+                                            <div class="form-group mb-3 d-flex gap-2 w-100">
+                                                <asp:Button ID="btnSearch" runat="server" CssClass="btn btn-primary flex-fill" Text="Cari" CausesValidation="false" />
+                                                <asp:Button ID="btnReset" CssClass="btn btn-outline-secondary flex-fill" runat="server" Text="Reset" CausesValidation="false" />
                                             </div>
                                         </div>
 
-                                    </div>
-
-                                </div>
-                                <div class="col-md-2">
-                                    <div class="form-group">
-                                        <asp:Button ID="btnSearch" runat="server" CssClass="btn btn-default" Text="Cari" CausesValidation="false" />
-                                        <asp:Button ID="btnReset" CssClass="btn btn-default" runat="server" Text="Reset" CausesValidation="false" />
                                     </div>
                                 </div>
                             </div>
                             <%--# END FILTER #--%>
 
-                            <asp:GridView ID="GridView1" HeaderStyle-ForeColor="Black" CssClass="table table-bordered" AllowPaging="True" PageSize="20"
-                                ShowHeaderWhenEmpty="True" EmptyDataText="Tiada Rekod Dijumpai" AllowSorting="True" runat="server" AutoGenerateColumns="False"
-                                DataKeyNames="Permohonan_ID, StatusID, IsBatal, JenisLesen_ID, IsPublish, Is24Jam, JenisLesenIdList" DataSourceID="SqlDataSourceGrid">
-                                <Columns>
-                                    <asp:BoundField DataField="Permohonan_ID" HeaderText="ID" SortExpression="Permohonan_ID" Visible="false"></asp:BoundField>
-                                    <asp:BoundField DataField="RowNo" HeaderText="No" SortExpression="RowNo"></asp:BoundField>
-                                    <asp:BoundField DataField="TarikhMohon" HeaderText="Tarikh" DataFormatString="{0:dd/MM/yyyy}" SortExpression="TarikhMohon"></asp:BoundField>
-                                    <asp:BoundField DataField="JenisLesenDescList" HeaderText="Jenis Lesen/Permit" SortExpression="JenisLesenDescList"></asp:BoundField>
-                                    <asp:TemplateField HeaderText="Pemohon">
-                                        <ItemTemplate>
-                                            <asp:Label ID="lblNamaPemohon" runat="server" Text='<%# Eval("Pemohon_Name") %>'></asp:Label><br />
-                                            <asp:Label ID="lblRujukan" runat="server" Text='<%# Eval("Rujukan") %>' Font-Size="10pt"></asp:Label><br />
-                                            <asp:Label ID="lblNamaSyarikatOrAlamat" runat="server" Text='<%# If(Not String.IsNullOrEmpty(Eval("NamaBaruSyarikat")?.ToString()), Eval("NamaBaruSyarikat"), If(Not String.IsNullOrEmpty(Eval("NamaSyarikat")?.ToString()), Eval("NamaSyarikat"), Eval("DisplayAlamat"))) %>' 
-                                                Font-Size="10pt"></asp:Label><br />
-                                            <asp:Label ID="lblNamaAlamat" runat="server" Visible='<%# If(String.IsNullOrEmpty(Eval("NamaSyarikat")?.ToString()) And String.IsNullOrEmpty(Eval("NamaBaruSyarikat")?.ToString()), False, True) %>' 
-                                                Text='<%# Eval("DisplayAlamat") %>' Font-Size="10pt"></asp:Label>
-                                        </ItemTemplate>
-                                    </asp:TemplateField>
-                                    <asp:TemplateField ShowHeader="True" HeaderText="Berisiko" SortExpression="IsNotRisk">
-                                        <ItemTemplate>
-                                            <span runat="server" class="badge badge-success" visible='<%# If(Eval("IsNotRisk") = False, True, False) %>'>Ya</span>
-                                            <span runat="server" class="badge badge-secondary" visible='<%# If(Eval("IsNotRisk"), True, False) %>'>Tidak</span>
-                                        </ItemTemplate>
-                                    </asp:TemplateField>
-                                    <asp:TemplateField ShowHeader="True" HeaderText="Pembatalan" SortExpression="IsBatal">
-                                        <ItemTemplate>
-                                            <span runat="server" class="badge badge-success" visible='<%# If(Eval("IsBatal"), True, False) %>'>Ya</span>
-                                            <span runat="server" class="badge badge-secondary" visible='<%# If(Eval("IsBatal") = False, True, False) %>'>Tidak</span>
-                                        </ItemTemplate>
-                                    </asp:TemplateField>
-                                    <asp:TemplateField ShowHeader="True" HeaderText="Surat Balasan" SortExpression="InvolvedAgensiInfo">
-                                        <ItemTemplate>
-                                            <asp:Repeater ID="rptAgensi" runat="server" DataSource='<%# GetAgensiList(Eval("InvolvedAgensiInfo"), Eval("Permohonan_ID")) %>' OnItemCommand="rptAgensi_ItemCommand">
-                                                <ItemTemplate>
-                                                    <div style="margin-bottom: 2px;">
+                            <div class="table-responsive mt-3">
+                                <asp:GridView ID="GridView1" CssClass="table table-hover table-bordered custom-gridview align-middle" AllowPaging="True" PageSize="20"
+                                    ShowHeaderWhenEmpty="True" EmptyDataText="Tiada Rekod Dijumpai" AllowSorting="True" runat="server" AutoGenerateColumns="False"
+                                    DataKeyNames="Permohonan_ID, StatusID, IsBatal, JenisLesen_ID, IsPublish, Is24Jam, JenisLesenIdList" DataSourceID="SqlDataSourceGrid">
+                                    <PagerStyle CssClass="pagination-custom" HorizontalAlign="Right" />
+                                    <Columns>
+                                        <asp:BoundField DataField="Permohonan_ID" HeaderText="ID" SortExpression="Permohonan_ID" Visible="false"></asp:BoundField>
+                                        <asp:BoundField DataField="RowNo" HeaderText="No" SortExpression="RowNo"></asp:BoundField>
+                                        <asp:BoundField DataField="TarikhMohon" HeaderText="Tarikh" DataFormatString="{0:dd/MM/yyyy}" SortExpression="TarikhMohon"></asp:BoundField>
+                                        <asp:BoundField DataField="JenisLesenDescList" HeaderText="Jenis Lesen/Permit" SortExpression="JenisLesenDescList"></asp:BoundField>
+                                        <asp:TemplateField HeaderText="Pemohon">
+                                            <ItemTemplate>
+                                                <div class="font-weight-bold text-dark"><asp:Label ID="lblNamaPemohon" runat="server" Text='<%# Eval("Pemohon_Name") %>'></asp:Label></div>
+                                                <div class="text-primary small"><i class="bi bi-upc-scan me-1"></i><asp:Label ID="lblRujukan" runat="server" Text='<%# Eval("Rujukan") %>'></asp:Label></div>
+                                                <div class="text-muted small"><i class="bi bi-building me-1"></i><asp:Label ID="lblNamaSyarikatOrAlamat" runat="server" Text='<%# If(Not String.IsNullOrEmpty(Eval("NamaBaruSyarikat")?.ToString()), Eval("NamaBaruSyarikat"), If(Not String.IsNullOrEmpty(Eval("NamaSyarikat")?.ToString()), Eval("NamaSyarikat"), Eval("DisplayAlamat"))) %>'></asp:Label></div>
+                                                <div class="text-secondary small"><asp:Label ID="lblNamaAlamat" runat="server" Visible='<%# If(String.IsNullOrEmpty(Eval("NamaSyarikat")?.ToString()) And String.IsNullOrEmpty(Eval("NamaBaruSyarikat")?.ToString()), False, True) %>' 
+                                                    Text='<%# Eval("DisplayAlamat") %>'></asp:Label></div>
+                                            </ItemTemplate>
+                                        </asp:TemplateField>
+                                        <asp:TemplateField ShowHeader="True" HeaderText="Berisiko" SortExpression="IsNotRisk">
+                                            <ItemTemplate>
+                                                <span runat="server" class="badge badge-success" visible='<%# If(Eval("IsNotRisk") = False, True, False) %>'>Ya</span>
+                                                <span runat="server" class="badge badge-secondary" visible='<%# If(Eval("IsNotRisk"), True, False) %>'>Tidak</span>
+                                            </ItemTemplate>
+                                        </asp:TemplateField>
+                                        <asp:TemplateField ShowHeader="True" HeaderText="Pembatalan" SortExpression="IsBatal">
+                                            <ItemTemplate>
+                                                <span runat="server" class="badge badge-success" visible='<%# If(Eval("IsBatal"), True, False) %>'>Ya</span>
+                                                <span runat="server" class="badge badge-secondary" visible='<%# If(Eval("IsBatal") = False, True, False) %>'>Tidak</span>
+                                            </ItemTemplate>
+                                        </asp:TemplateField>
+                                        <asp:TemplateField ShowHeader="True" HeaderText="Surat Balasan" SortExpression="InvolvedAgensiInfo">
+                                            <ItemTemplate>
+                                                <asp:Repeater ID="rptAgensi" runat="server" DataSource='<%# GetAgensiList(Eval("InvolvedAgensiInfo"), Eval("Permohonan_ID")) %>' OnItemCommand="rptAgensi_ItemCommand">
+                                                    <ItemTemplate>
+                                                        <div class="mb-1">
+                                                            <asp:LinkButton runat="server" 
+                                                                ID="btnSuratAgensi"
+                                                                Visible='<%# If(Eval("Status").ToString() = "completed", True, False) %>'
+                                                                CssClass="badge badge-success text-decoration-none"
+                                                                CommandName="SuratAgensi" 
+                                                                CommandArgument='<%# Eval("CommandArg") %>'
+                                                                Text='<%# Eval("Name") %>'
+                                                                ToolTip='<%# Eval("TooltipText") %>'
+                                                                style="display: inline-block;" />
+                                                            <span runat="server" 
+                                                                visible='<%# If(Eval("Status").ToString() = "in-progress", True, False) %>'
+                                                                class="badge badge-warning"
+                                                                title='<%# Eval("TooltipText") %>'
+                                                                style="display: inline-block;"><%# Eval("Name") %></span>
+                                                            <span runat="server" 
+                                                                visible='<%# If(Eval("Status").ToString() = "pending", True, False) %>'
+                                                                class="badge badge-secondary"
+                                                                title='<%# Eval("TooltipText") %>'
+                                                                style="display: inline-block;"><%# Eval("Name") %></span>
+                                                        </div>
+                                                    </ItemTemplate>
+                                                </asp:Repeater>
+                                                <span runat="server" class="badge badge-secondary" visible='<%# If(String.IsNullOrEmpty(Eval("InvolvedAgensiInfo")?.ToString()), True, False) %>'>Tiada</span>
+                                            </ItemTemplate>
+                                        </asp:TemplateField>
+                                        <asp:BoundField DataField="Description" HeaderText="Status" SortExpression="Description"></asp:BoundField>
+                                        <asp:BoundField DataField="LastModDt" HeaderText="Tarikh Dikemaskini" DataFormatString="{0:dd/MM/yyyy}" SortExpression="LastModDt" NullDisplayText="-"></asp:BoundField>
+                                        <asp:BoundField DataField="RemarksFail" HeaderText="Catatan" SortExpression="RemarksFail"></asp:BoundField>
+
+                                        <asp:TemplateField HeaderText="Maklumat Permohonan" HeaderStyle-Font-Size="10pt" HeaderStyle-Width="90%" ItemStyle-Width="90%">
+                                            <ItemTemplate>
+                                                <asp:Label ID="lblMobHdrTarikh" runat="server" Text="Tarikh Mohon :" Font-Bold="True" Font-Size="10pt"></asp:Label><br />
+                                                <asp:Label ID="lblMobTarikh" runat="server" Text='<%# Eval("TarikhMohon", "{0:dd/MM/yyyy}") %>' Font-Size="10pt"></asp:Label><br />
+
+                                                <asp:Label ID="lblMobHdrJenis" runat="server" Text="Jenis Lesen/Permit :" Font-Bold="True" Font-Size="10pt"></asp:Label><br />
+                                                <asp:Label ID="lblMobJenis" runat="server" Text='<%# Eval("JenisLesenDescList") %>' Font-Size="10pt"></asp:Label><br />
+
+                                                <asp:Label ID="lblMobHdrRujukan" runat="server" Text="No Rujukan :" Font-Bold="True" Font-Size="10pt"></asp:Label><br />
+                                                <asp:Label ID="lblMobRujukan" runat="server" Text='<%# Eval("Rujukan") %>' Font-Size="10pt"></asp:Label><br />
+
+                                                <asp:Label ID="lblMobHdrPemohon" runat="server" Text="Nama Pemohon :" Font-Bold="True" Font-Size="10pt"></asp:Label><br />
+                                                <asp:Label ID="lblMobNamaPemohon" runat="server" Text='<%# Eval("Pemohon_Name") %>' Font-Size="10pt"></asp:Label><br />
+                                                <asp:Label ID="lblMobNamaSyarikatOrAlamat" runat="server" Text='<%# If(Not String.IsNullOrEmpty(Eval("NamaBaruSyarikat")?.ToString()), Eval("NamaBaruSyarikat"), If(Not String.IsNullOrEmpty(Eval("NamaSyarikat")?.ToString()), Eval("NamaSyarikat"), Eval("DisplayAlamat"))) %>' Font-Size="10pt"></asp:Label><br />
+                                                <asp:Label ID="lblMobNamaAlamat" runat="server" Visible='<%# If(String.IsNullOrEmpty(Eval("NamaSyarikat")?.ToString()) And String.IsNullOrEmpty(Eval("NamaBaruSyarikat")?.ToString()), False, True) %>' Text='<%# Eval("DisplayAlamat") + "<br />" %>' Font-Size="10pt"></asp:Label>
+
+                                                <asp:Label ID="lblMobHdrRisiko" runat="server" Text="Berisiko :" Font-Bold="True" Font-Size="10pt"></asp:Label><br />
+                                                <span runat="server" class="badge badge-success" visible='<%# If(Eval("IsNotRisk") = False, True, False) %>'>Ya</span>
+                                                <span runat="server" class="badge badge-secondary" visible='<%# If(Eval("IsNotRisk"), True, False) %>'>Tidak</span><br />
+
+                                                <asp:Label ID="lblMobHdrBatal" runat="server" Text="Pembatalan :" Font-Bold="True" Font-Size="10pt"></asp:Label><br />
+                                                <span runat="server" class="badge badge-success" visible='<%# If(Eval("IsBatal"), True, False) %>'>Ya</span>
+                                                <span runat="server" class="badge badge-secondary" visible='<%# If(Eval("IsBatal") = False, True, False) %>'>Tidak</span><br />
+
+                                                <asp:Label ID="lblMobHdrSurat" runat="server" Text="Surat Balasan :" Font-Bold="True" Font-Size="10pt"></asp:Label><br />
+                                                <asp:Repeater ID="rptAgensiMob" runat="server" DataSource='<%# GetAgensiList(Eval("InvolvedAgensiInfo"), Eval("Permohonan_ID")) %>' OnItemCommand="rptAgensi_ItemCommand">
+                                                    <ItemTemplate>
                                                         <asp:LinkButton runat="server" 
-                                                            ID="btnSuratAgensi"
+                                                            ID="btnSuratAgensiMob"
                                                             Visible='<%# If(Eval("Status").ToString() = "completed", True, False) %>'
                                                             CssClass="badge badge-success"
                                                             CommandName="SuratAgensi" 
                                                             CommandArgument='<%# Eval("CommandArg") %>'
                                                             Text='<%# Eval("Name") %>'
                                                             ToolTip='<%# Eval("TooltipText") %>'
-                                                            style="display: inline-block; text-decoration: none;" />
+                                                            style="margin-right: 3px; margin-bottom: 2px; display: inline-block; text-decoration: none;" />
                                                         <span runat="server" 
                                                             visible='<%# If(Eval("Status").ToString() = "in-progress", True, False) %>'
                                                             class="badge badge-warning"
                                                             title='<%# Eval("TooltipText") %>'
-                                                            style="display: inline-block;"><%# Eval("Name") %></span>
+                                                            style="margin-right: 3px; margin-bottom: 2px; display: inline-block;"><%# Eval("Name") %></span>
                                                         <span runat="server" 
                                                             visible='<%# If(Eval("Status").ToString() = "pending", True, False) %>'
                                                             class="badge badge-secondary"
                                                             title='<%# Eval("TooltipText") %>'
-                                                            style="display: inline-block;"><%# Eval("Name") %></span>
-                                                    </div>
-                                                </ItemTemplate>
-                                            </asp:Repeater>
-                                            <span runat="server" class="badge badge-secondary" visible='<%# If(String.IsNullOrEmpty(Eval("InvolvedAgensiInfo")?.ToString()), True, False) %>'>Tiada</span>
-                                        </ItemTemplate>
-                                    </asp:TemplateField>
-                                    <asp:BoundField DataField="Description" HeaderText="Status" SortExpression="Description"></asp:BoundField>
-                                    <asp:BoundField DataField="LastModDt" HeaderText="Tarikh Dikemaskini" DataFormatString="{0:dd/MM/yyyy}" SortExpression="LastModDt" NullDisplayText="-"></asp:BoundField>
-                                    <asp:BoundField DataField="RemarksFail" HeaderText="Catatan" SortExpression="RemarksFail"></asp:BoundField>
+                                                            style="margin-right: 3px; margin-bottom: 2px; display: inline-block;"><%# Eval("Name") %></span>
+                                                    </ItemTemplate>
+                                                </asp:Repeater>
+                                                <span runat="server" class="badge badge-secondary" visible='<%# If(String.IsNullOrEmpty(Eval("InvolvedAgensiInfo")?.ToString()), True, False) %>'>Tiada</span><br />
 
-                                    <asp:TemplateField HeaderText="Maklumat Permohonan" HeaderStyle-Font-Size="10pt" HeaderStyle-Width="90%" ItemStyle-Width="90%">
-                                        <ItemTemplate>
-                                            <asp:Label ID="lblMobHdrTarikh" runat="server" Text="Tarikh Mohon :" Font-Bold="True" Font-Size="10pt"></asp:Label><br />
-                                            <asp:Label ID="lblMobTarikh" runat="server" Text='<%# Eval("TarikhMohon", "{0:dd/MM/yyyy}") %>' Font-Size="10pt"></asp:Label><br />
+                                                <asp:Label ID="lblMobHdrStatus" runat="server" Text="Status :" Font-Bold="True" Font-Size="10pt"></asp:Label><br />
+                                                <asp:Label ID="lblMobStatus" runat="server" Text='<%# Eval("Description") %>' Font-Size="10pt"></asp:Label><br />
 
-                                            <asp:Label ID="lblMobHdrJenis" runat="server" Text="Jenis Lesen/Permit :" Font-Bold="True" Font-Size="10pt"></asp:Label><br />
-                                            <asp:Label ID="lblMobJenis" runat="server" Text='<%# Eval("JenisLesenDescList") %>' Font-Size="10pt"></asp:Label><br />
+                                                <asp:Label ID="lblMobHdrLastMod" runat="server" Text="Tarikh Dikemaskini :" Font-Bold="True" Font-Size="10pt"></asp:Label><br />
+                                                <asp:Label ID="lblMobLastMod" runat="server" Text='<%# If(IsDBNull(Eval("LastModDt")), "-", Eval("LastModDt", "{0:dd/MM/yyyy}")) %>' Font-Size="10pt"></asp:Label><br />
 
-                                            <asp:Label ID="lblMobHdrRujukan" runat="server" Text="No Rujukan :" Font-Bold="True" Font-Size="10pt"></asp:Label><br />
-                                            <asp:Label ID="lblMobRujukan" runat="server" Text='<%# Eval("Rujukan") %>' Font-Size="10pt"></asp:Label><br />
+                                                <asp:Label ID="lblMobHdrCatatan" runat="server" Text="Catatan :" Font-Bold="True" Font-Size="10pt"></asp:Label><br />
+                                                <asp:Label ID="lblMobCatatan" runat="server" Text='<%# If(IsDBNull(Eval("RemarksFail")) OrElse String.IsNullOrEmpty(Eval("RemarksFail").ToString()), "-", Eval("RemarksFail")) %>' Font-Size="10pt"></asp:Label>
+                                            </ItemTemplate>
+                                            <ItemStyle HorizontalAlign="Left" />
+                                        </asp:TemplateField>
 
-                                            <asp:Label ID="lblMobHdrPemohon" runat="server" Text="Nama Pemohon :" Font-Bold="True" Font-Size="10pt"></asp:Label><br />
-                                            <asp:Label ID="lblMobNamaPemohon" runat="server" Text='<%# Eval("Pemohon_Name") %>' Font-Size="10pt"></asp:Label><br />
-                                            <asp:Label ID="lblMobNamaSyarikatOrAlamat" runat="server" Text='<%# If(Not String.IsNullOrEmpty(Eval("NamaBaruSyarikat")?.ToString()), Eval("NamaBaruSyarikat"), If(Not String.IsNullOrEmpty(Eval("NamaSyarikat")?.ToString()), Eval("NamaSyarikat"), Eval("DisplayAlamat"))) %>' Font-Size="10pt"></asp:Label><br />
-                                            <asp:Label ID="lblMobNamaAlamat" runat="server" Visible='<%# If(String.IsNullOrEmpty(Eval("NamaSyarikat")?.ToString()) And String.IsNullOrEmpty(Eval("NamaBaruSyarikat")?.ToString()), False, True) %>' Text='<%# Eval("DisplayAlamat") + "<br />" %>' Font-Size="10pt"></asp:Label>
-
-                                            <asp:Label ID="lblMobHdrRisiko" runat="server" Text="Berisiko :" Font-Bold="True" Font-Size="10pt"></asp:Label><br />
-                                            <span runat="server" class="badge badge-success" visible='<%# If(Eval("IsNotRisk") = False, True, False) %>'>Ya</span>
-                                            <span runat="server" class="badge badge-secondary" visible='<%# If(Eval("IsNotRisk"), True, False) %>'>Tidak</span><br />
-
-                                            <asp:Label ID="lblMobHdrBatal" runat="server" Text="Pembatalan :" Font-Bold="True" Font-Size="10pt"></asp:Label><br />
-                                            <span runat="server" class="badge badge-success" visible='<%# If(Eval("IsBatal"), True, False) %>'>Ya</span>
-                                            <span runat="server" class="badge badge-secondary" visible='<%# If(Eval("IsBatal") = False, True, False) %>'>Tidak</span><br />
-
-                                            <asp:Label ID="lblMobHdrSurat" runat="server" Text="Surat Balasan :" Font-Bold="True" Font-Size="10pt"></asp:Label><br />
-                                            <asp:Repeater ID="rptAgensiMob" runat="server" DataSource='<%# GetAgensiList(Eval("InvolvedAgensiInfo"), Eval("Permohonan_ID")) %>' OnItemCommand="rptAgensi_ItemCommand">
-                                                <ItemTemplate>
-                                                    <asp:LinkButton runat="server" 
-                                                        ID="btnSuratAgensiMob"
-                                                        Visible='<%# If(Eval("Status").ToString() = "completed", True, False) %>'
-                                                        CssClass="badge badge-success"
-                                                        CommandName="SuratAgensi" 
-                                                        CommandArgument='<%# Eval("CommandArg") %>'
-                                                        Text='<%# Eval("Name") %>'
-                                                        ToolTip='<%# Eval("TooltipText") %>'
-                                                        style="margin-right: 3px; margin-bottom: 2px; display: inline-block; text-decoration: none;" />
-                                                    <span runat="server" 
-                                                        visible='<%# If(Eval("Status").ToString() = "in-progress", True, False) %>'
-                                                        class="badge badge-warning"
-                                                        title='<%# Eval("TooltipText") %>'
-                                                        style="margin-right: 3px; margin-bottom: 2px; display: inline-block;"><%# Eval("Name") %></span>
-                                                    <span runat="server" 
-                                                        visible='<%# If(Eval("Status").ToString() = "pending", True, False) %>'
-                                                        class="badge badge-secondary"
-                                                        title='<%# Eval("TooltipText") %>'
-                                                        style="margin-right: 3px; margin-bottom: 2px; display: inline-block;"><%# Eval("Name") %></span>
-                                                </ItemTemplate>
-                                            </asp:Repeater>
-                                            <span runat="server" class="badge badge-secondary" visible='<%# If(String.IsNullOrEmpty(Eval("InvolvedAgensiInfo")?.ToString()), True, False) %>'>Tiada</span><br />
-
-                                            <asp:Label ID="lblMobHdrStatus" runat="server" Text="Status :" Font-Bold="True" Font-Size="10pt"></asp:Label><br />
-                                            <asp:Label ID="lblMobStatus" runat="server" Text='<%# Eval("Description") %>' Font-Size="10pt"></asp:Label><br />
-
-                                            <asp:Label ID="lblMobHdrLastMod" runat="server" Text="Tarikh Dikemaskini :" Font-Bold="True" Font-Size="10pt"></asp:Label><br />
-                                            <asp:Label ID="lblMobLastMod" runat="server" Text='<%# If(IsDBNull(Eval("LastModDt")), "-", Eval("LastModDt", "{0:dd/MM/yyyy}")) %>' Font-Size="10pt"></asp:Label><br />
-
-                                            <asp:Label ID="lblMobHdrCatatan" runat="server" Text="Catatan :" Font-Bold="True" Font-Size="10pt"></asp:Label><br />
-                                            <asp:Label ID="lblMobCatatan" runat="server" Text='<%# If(IsDBNull(Eval("RemarksFail")) OrElse String.IsNullOrEmpty(Eval("RemarksFail").ToString()), "-", Eval("RemarksFail")) %>' Font-Size="10pt"></asp:Label>
-                                        </ItemTemplate>
-                                        <ItemStyle HorizontalAlign="Left" />
-                                    </asp:TemplateField>
-
-                                    <asp:TemplateField ShowHeader="False">
-                                        <ItemTemplate>
-                                            <asp:LinkButton runat="server" CssClass="btn btn-primary btn-sm" CommandName="Hantar" CausesValidation="False" ID="LinkButton6" data-toggle="tooltip" data-placement="top" title="Send" Text="Hantar" Visible='<%# If(Eval("Description") = "Draf (Telah Disemak)", True, False) %>' OnClientClick="return confirm('Hantar ke jabatan agensi sekarang?');" CommandArgument='<%# Container.DataItemIndex %>'/> 
-                                            <asp:LinkButton runat="server" CssClass="btn btn-primary btn-sm" CommandName="Select" CausesValidation="False" ID="LinkButton1" data-toggle="tooltip" data-placement="top" title="Edit" Text="Lihat" />
-                                            <asp:LinkButton runat="server" CssClass="btn btn-warning btn-sm" CommandName="SuratKelulusan" CausesValidation="False" ID="lbSuratKelulusan" data-toggle="tooltip" data-placement="top" title='<%# If(Eval("IsBatal") = False, "Surat Kelulusan", "Surat Pembatalan") %>' Text='<%# If(Eval("IsBatal") = False, "Surat Kelulusan", "Surat Pembatalan") %>' Visible='<%# If(Eval("StatusID") = 10, True, False) %>' CommandArgument='<%# Container.DataItemIndex %>' />
-                                            <asp:LinkButton runat="server" CssClass="btn btn-default btn-sm" CommandName="Delete" CausesValidation="False" ID="LinkButton2" OnClientClick="return confirm('Anda pasti untuk memadam rekod ini?');" data-toggle="tooltip" data-placement="top" title="Delete" Visible='<%# If(Eval("StatusID") < 1 And IsDBNull(Eval("SuratKelulusan1")) And Eval("IsSuratKelulusanFail") = False, True, False) %>'>Padam</asp:LinkButton>
-                                            <asp:LinkButton runat="server" CssClass="btn btn-danger btn-sm" CommandName="BatalProses" CausesValidation="False" ID="LinkButton5" OnClientClick="return confirm('Anda pasti untuk membatalkan proses ini?');" data-toggle="tooltip" data-placement="top" title="Cancel" Visible='<%# If(Eval("StatusID") < 9 And (Eval("StatusID") > 0 Or (Eval("StatusID") >= 0 And Eval("IsBatal") = True And (IsDBNull(Eval("SuratKelulusan1")) = False Or Eval("IsSuratKelulusanFail") = True))), True, False) %>' CommandArgument='<%# Container.DataItemIndex %>'>Batal Proses</asp:LinkButton>
-                                        
-                                        </ItemTemplate>
-                                    </asp:TemplateField>
-                                </Columns>
-                            </asp:GridView>
+                                        <asp:TemplateField ShowHeader="False">
+                                            <ItemTemplate>
+                                                <div class="d-flex flex-wrap gap-1 align-items-center justify-content-center">
+                                                    <asp:LinkButton runat="server" CssClass="btn btn-primary btn-sm text-nowrap" CommandName="Select" CausesValidation="False" ID="LinkButton1" data-toggle="tooltip" data-placement="top" title="Lihat">
+                                                        <i class="bi bi-eye me-1"></i>Lihat
+                                                    </asp:LinkButton>
+                                                    <asp:LinkButton runat="server" CssClass="btn btn-success btn-sm text-nowrap" CommandName="Hantar" CausesValidation="False" ID="LinkButton6" data-toggle="tooltip" data-placement="top" title="Hantar" Visible='<%# If(Eval("Description") = "Draf (Telah Disemak)", True, False) %>' OnClientClick="return confirm('Hantar ke jabatan agensi sekarang?');" CommandArgument='<%# Container.DataItemIndex %>'>
+                                                        <i class="bi bi-send me-1"></i>Hantar
+                                                    </asp:LinkButton> 
+                                                    <asp:LinkButton runat="server" CssClass="btn btn-warning btn-sm text-nowrap" CommandName="SuratKelulusan" CausesValidation="False" ID="lbSuratKelulusan" data-toggle="tooltip" data-placement="top" title='<%# If(Eval("IsBatal") = False, "Surat Kelulusan", "Surat Pembatalan") %>' Visible='<%# If(Eval("StatusID") = 10, True, False) %>' CommandArgument='<%# Container.DataItemIndex %>'>
+                                                        <i class="bi bi-file-earmark-text me-1"></i><%# If(Eval("IsBatal") = False, "Surat Kelulusan", "Surat Pembatalan") %>
+                                                    </asp:LinkButton>
+                                                    <asp:LinkButton runat="server" CssClass="btn btn-outline-danger btn-sm text-nowrap" CommandName="Delete" CausesValidation="False" ID="LinkButton2" OnClientClick="return confirm('Anda pasti untuk memadam rekod ini?');" data-toggle="tooltip" data-placement="top" title="Padam" Visible='<%# If(Eval("StatusID") < 1 And IsDBNull(Eval("SuratKelulusan1")) And Eval("IsSuratKelulusanFail") = False, True, False) %>'>
+                                                        <i class="bi bi-trash me-1"></i>Padam
+                                                    </asp:LinkButton>
+                                                    <asp:LinkButton runat="server" CssClass="btn btn-danger btn-sm text-nowrap" CommandName="BatalProses" CausesValidation="False" ID="LinkButton5" OnClientClick="return confirm('Anda pasti untuk membatalkan proses ini?');" data-toggle="tooltip" data-placement="top" title="Batal" Visible='<%# If(Eval("StatusID") < 9 And (Eval("StatusID") > 0 Or (Eval("StatusID") >= 0 And Eval("IsBatal") = True And (IsDBNull(Eval("SuratKelulusan1")) = False Or Eval("IsSuratKelulusanFail") = True))), True, False) %>' CommandArgument='<%# Container.DataItemIndex %>'>
+                                                        <i class="bi bi-x-circle me-1"></i>Batal
+                                                    </asp:LinkButton>
+                                                </div>
+                                            </ItemTemplate>
+                                        </asp:TemplateField>
+                                    </Columns>
+                                </asp:GridView>
+                            </div>
 
                             <asp:SqlDataSource runat="server" ID="SqlDataSourceGrid" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
                                 DeleteCommand="DELETE FROM LESEN_Permohonan WHERE Permohonan_ID = @Permohonan_ID"
@@ -3741,7 +3958,6 @@
                                         INNER JOIN LESEN_Pemohon c ON a.Permohonan_PemohonID = c.Pemohon_ID 
                                         INNER JOIN ApprovalStatus d ON a.StatusID = d.ApprStatusID 
                                         WHERE 1=1 AND a.JenisLesenIdList is not null AND a.IsRekodLama = 0 
-                                        AND a.Permohonan_ID = CASE WHEN @pid = 0 THEN a.Permohonan_ID ELSE @pid END 
                                         AND a.JenisLesenDescList LIKE CASE WHEN @lesenID = '0' THEN a.JenisLesenDescList ELSE '%'+@lesenID+'%' END 
                                         AND a.Permohonan_PemohonID = CASE WHEN @pemohonID = 0 THEN a.Permohonan_PemohonID ELSE @pemohonID END 
                                         AND CONVERT(varchar(max), ISNULL(a.NamaSyarikat,'')) = CASE WHEN @namaSyarikat = '-- Syarikat --' THEN CONVERT(varchar(max), ISNULL(a.NamaSyarikat,'')) ELSE @namaSyarikat END 
@@ -3765,7 +3981,6 @@
                                     <asp:Parameter Name="Permohonan_ID"></asp:Parameter>
                                 </DeleteParameters>
                                 <SelectParameters>
-                                    <asp:ControlParameter ControlID="TB_PermohonanID" PropertyName="Text" DefaultValue="0" Name="pid"></asp:ControlParameter>
                                     <asp:ControlParameter ControlID="txtNoRujukan" PropertyName="Text" DefaultValue="%%" Name="Rujukan"></asp:ControlParameter>
                                     <asp:ControlParameter ControlID="DDL_JenisLesen" PropertyName="SelectedValue" Name="lesenID"></asp:ControlParameter>
                                     <asp:ControlParameter ControlID="DDL_Pemohon" PropertyName="SelectedValue" Name="pemohonID"></asp:ControlParameter>
@@ -4079,807 +4294,599 @@
                 <asp:TabPanel runat="server" ID="tabMaklumat" HeaderText="Maklumat" Visible="false">
                     <HeaderTemplate>Inspektorat</HeaderTemplate>
                     <ContentTemplate>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <asp:LinkButton runat="server" CssClass="btn btn-warning" Text="Lihat Laporan" ID="BT_ViewLaporan" OnCommand="BT_ViewLaporan_Command" CausesValidation="False" Visible="false" />
+                        <div class="card mt-2 mb-3 card-pembetulan filter-diff-active" id="cardPembetulanMaklumat">
+                            <div class="card-header d-flex flex-wrap justify-content-between align-items-center gap-2">
+                                <div class="d-flex align-items-center flex-wrap gap-2">
+                                    <h3 class="card-title mb-0 font-weight-bold">
+                                        <i class="bi bi-pencil-square me-2"></i>Pembetulan Maklumat Permohonan
+                                    </h3>
+                                    <span id="badgeDiffCount" class="badge badge-warning text-dark font-weight-bold shadow-xs">Memeriksa data...</span>
+                                </div>
+                                <div class="d-flex align-items-center flex-wrap gap-2">
+                                    <div class="btn-group btn-group-sm shadow-sm" role="group" id="btnGroupDiffFilter">
+                                        <button type="button" class="btn btn-light active" id="btnShowDiffOnly" title="Hanya papar maklumat yang berbeza berbanding permohonan asal">
+                                            <i class="bi bi-funnel-fill me-1 text-primary"></i>Perbezaan Sahaja (<span id="countDiffSpan">0</span>)
+                                        </button>
+                                        <button type="button" class="btn btn-outline-light" id="btnShowAllFields" title="Papar semua medan maklumat permohonan">
+                                            <i class="bi bi-view-list me-1"></i>Papar Semua Maklumat
+                                        </button>
+                                    </div>
+                                    <asp:LinkButton runat="server" CssClass="btn btn-light btn-sm font-weight-bold shadow-sm" Text="Lihat Laporan" ID="BT_ViewLaporan" OnCommand="BT_ViewLaporan_Command" CausesValidation="False" Visible="false">
+                                        <i class="bi bi-file-earmark-pdf me-1 text-danger"></i>Lihat Laporan
+                                    </asp:LinkButton>
+                                </div>
                             </div>
-                        </div>
-                        <br />
-                        <div class="row">
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <asp:Label runat="server" Font-Bold="true" Font-Underline="true">Pembetulan Maklumat Permohonan</asp:Label>
-                                </div>
-                            </div>
-                            <br />
-
-                            <asp:HiddenField ID="HF_SaizIklanList_ins" runat="server" />
-                            <asp:HiddenField ID="HF_CahayaIklanList_ins" runat="server" />
-                            <asp:HiddenField ID="HF_UnitIklanList_ins" runat="server" />
-                            <asp:HiddenField ID="HF_LokasiList_ins" runat="server" />
-                            <asp:HiddenField ID="HF_BakaAnjingList_ins" runat="server" />
-                            <asp:HiddenField ID="HF_AnjingJantanList_ins" runat="server" />
-                            <asp:HiddenField ID="HF_AnjingBetinaList_ins" runat="server" />
-                            <asp:HiddenField ID="HF_AnjingJantanMandulList_ins" runat="server" />
-                            <asp:HiddenField ID="HF_AnjingBetinaMandulList_ins" runat="server" />
-
-                        </div>
-                        
-                        <%--# Perniagaan Berisiko dan tidak berisiko #--%>
-                        <asp:Panel ID="pnlesen1_ins" runat="server" Visible="False" Enabled="True">
-
-                            <div class="row">
-
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>Nama Syarikat/Sediada</label>
-                                        <asp:TextBox ID="TB_NamaSyarikat_ins" runat="server" CssClass="form-control" />
-
+                            <div class="card-body">
+                                <div id="alertNoDiff" class="alert alert-light border border-info d-flex align-items-center p-3 mb-3 shadow-sm rounded" style="display: none;">
+                                    <i class="bi bi-info-circle-fill text-info fs-3 me-3 flex-shrink-0"></i>
+                                    <div>
+                                        <h6 class="mb-1 font-weight-bold">Tiada Perbezaan Maklumat Dikesan</h6>
+                                        <span class="text-muted small">Semua maklumat permohonan di bahagian ini adalah tepat dan sama seperti maklumat asal di atas. Klik butang <a href="javascript:void(0);" onclick="$('#btnShowAllFields').click();" class="font-weight-bold text-primary text-decoration-underline">"Papar Semua Maklumat"</a> jika anda ingin melihat atau mengemas kini keseluruhan maklumat permohonan.</span>
                                     </div>
                                 </div>
+                                <asp:HiddenField ID="HF_SaizIklanList_ins" runat="server" />
+                                <asp:HiddenField ID="HF_CahayaIklanList_ins" runat="server" />
+                                <asp:HiddenField ID="HF_UnitIklanList_ins" runat="server" />
+                                <asp:HiddenField ID="HF_BakaAnjingList_ins" runat="server" />
+                                <asp:HiddenField ID="HF_AnjingJantanList_ins" runat="server" />
+                                <asp:HiddenField ID="HF_AnjingBetinaList_ins" runat="server" />
+                                <asp:HiddenField ID="HF_AnjingJantanMandulList_ins" runat="server" />
+                                <asp:HiddenField ID="HF_AnjingBetinaMandulList_ins" runat="server" />
 
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>No Pendaftaran</label>
-                                        <asp:TextBox ID="TB_NoPendaftaran_ins" runat="server" CssClass="form-control" />
-
+                                <%--# Perniagaan Berisiko dan tidak berisiko #--%>
+                                <asp:Panel ID="pnlesen1_ins" runat="server" Visible="False" Enabled="True">
+                                    <div class="form-section-header">
+                                        <i class="bi bi-shop"></i>
+                                        <span>Maklumat Perniagaan / Premis</span>
                                     </div>
-                                </div>
 
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>No Akaun Lesen</label>
-                                        <asp:TextBox ID="TB_NoAkaun_ins" runat="server" CssClass="form-control" />
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="form-label-custom">Nama Syarikat / Sediada</label>
+                                                <asp:TextBox ID="TB_NamaSyarikat_ins" runat="server" CssClass="form-control" />
+                                            </div>
+                                        </div>
 
-                                    </div>
-                                </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label class="form-label-custom">No Pendaftaran</label>
+                                                <asp:TextBox ID="TB_NoPendaftaran_ins" runat="server" CssClass="form-control" />
+                                            </div>
+                                        </div>
 
-                            </div>
-
-                            <div class="row">
-
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>Alamat Premis/Sediada</label>
-                                        <asp:TextBox ID="TB_AlamatPremis_ins" runat="server" TextMode="MultiLine" Rows="3" CssClass="form-control" />
-
-                                    </div>
-                                </div>
-
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>Jenis Perniagaan/Sediada</label>
-                                        <asp:TextBox ID="TB_JenisPerniagaan_ins" runat="server" CssClass="form-control" />
-
-                                    </div>
-                                </div>
-
-                            </div>
-
-                            <%--# Tukar Pemilik #--%>
-                            <asp:Panel ID="pnlesen1b_ins" runat="server" Visible="False" Enabled="True">
-                                <div class="row">
-
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label>Nama Pemilik Baru</label>
-                                            <asp:TextBox ID="TB_PemilikBaru_ins" runat="server" CssClass="form-control" />
-
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label class="form-label-custom">No Akaun Lesen</label>
+                                                <asp:TextBox ID="TB_NoAkaun_ins" runat="server" CssClass="form-control" />
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </asp:Panel>
 
-                        </asp:Panel>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="form-label-custom">Alamat Premis / Sediada</label>
+                                                <asp:TextBox ID="TB_AlamatPremis_ins" runat="server" TextMode="MultiLine" Rows="3" CssClass="form-control" />
+                                            </div>
+                                        </div>
 
-                        <%--# Tukar Alamat #--%>
-                        <asp:Panel ID="pnlesen1c_ins" runat="server" Visible="False" Enabled="True">
-
-                            <div class="row">
-
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <asp:Label ID="Lbl_AlamatBaru_ins" runat="server" Text="Alamat Baru" Font-Bold="true"/>
-                                        <asp:TextBox ID="TB_AlamatBaru_ins" runat="server" TextMode="MultiLine" Rows="3" CssClass="form-control" />
-
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="form-label-custom">Jenis Perniagaan / Sediada</label>
+                                                <asp:TextBox ID="TB_JenisPerniagaan_ins" runat="server" TextMode="MultiLine" Rows="3" CssClass="form-control" />
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
 
-                            </div>
-                        </asp:Panel>
+                                    <%--# Tukar Pemilik #--%>
+                                    <asp:Panel ID="pnlesen1b_ins" runat="server" Visible="False" Enabled="True">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="form-label-custom">Nama Pemilik Baru</label>
+                                                    <asp:TextBox ID="TB_PemilikBaru_ins" runat="server" CssClass="form-control" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </asp:Panel>
 
-                        <%--# Tambah Jenis Perniagaan #--%>
-                        <asp:Panel ID="pnlesen1d_ins" runat="server" Visible="False" Enabled="True">
+                                    <%--# Tukar Alamat #--%>
+                                    <asp:Panel ID="pnlesen1c_ins" runat="server" Visible="False" Enabled="True">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <asp:Label ID="Lbl_AlamatBaru_ins" runat="server" Text="Alamat Baru" CssClass="form-label-custom" />
+                                                    <asp:TextBox ID="TB_AlamatBaru_ins" runat="server" TextMode="MultiLine" Rows="3" CssClass="form-control" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </asp:Panel>
 
-                            <div class="row">
+                                    <%--# Tambah Jenis Perniagaan #--%>
+                                    <asp:Panel ID="pnlesen1d_ins" runat="server" Visible="False" Enabled="True">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <asp:Label ID="Lbl_JenisPerniagaanBaru_ins" runat="server" Text="Jenis Perniagaan Tambahan" CssClass="form-label-custom" />
+                                                    <asp:TextBox ID="TB_JenisPerniagaanBaru_ins" runat="server" CssClass="form-control" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </asp:Panel>
 
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <asp:Label ID="Lbl_JenisPerniagaanBaru_ins" runat="server" Text="Jenis Perniagaan Tambahan" Font-Bold="true" />
-                                        <asp:TextBox ID="TB_JenisPerniagaanBaru_ins" runat="server" CssClass="form-control" />
+                                    <%--# Tukar Nama Syarikat #--%>
+                                    <asp:Panel ID="pnlesen1e_ins" runat="server" Visible="False" Enabled="True">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="form-label-custom">Nama Baru Syarikat</label>
+                                                    <asp:TextBox ID="TB_NamaBaruSyarikat_ins" runat="server" CssClass="form-control" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </asp:Panel>
+                                </asp:Panel>
 
+                                <%--# Papan iklan, Billboard #--%>
+                                <asp:Panel ID="pnlesen1a_ins" runat="server" Visible="False" Enabled="True">
+                                    <div class="form-section-header">
+                                        <i class="bi bi-badge-ad"></i>
+                                        <span>Maklumat Papan Iklan</span>
                                     </div>
-                                </div>
 
-                            </div>
-                        </asp:Panel>
+                                    <div class="row align-items-end">
+                                        <div class="col-md-3">
+                                            <div class="form-group mb-md-0">
+                                                <label class="form-label-custom">Saiz Iklan (cm)</label>
+                                                <asp:TextBox ID="TB_SaizIklan1_ins" placeholder="Contoh: 10x5" runat="server" CssClass="form-control" />
+                                            </div>
+                                        </div>
 
-                        <%--# Tukar Nama Syarikat #--%>
-                        <asp:Panel ID="pnlesen1e_ins" runat="server" Visible="False" Enabled="True">
+                                        <div class="col-md-3">
+                                            <div class="form-group mb-md-0">
+                                                <label class="form-label-custom">Iklan Bercahaya</label>
+                                                <asp:DropDownList ID="DDL_Iklan1_ins" runat="server"
+                                                    CssClass="form-control select2" style="width: 100%;">
+                                                    <asp:ListItem Value="">-- Sila Pilih --</asp:ListItem>
+                                                    <asp:ListItem Value="Bercahaya">Ya</asp:ListItem>
+                                                    <asp:ListItem Value="Tidak Bercahaya">Tidak</asp:ListItem>
+                                                </asp:DropDownList>
+                                            </div>
+                                        </div>
 
-                            <div class="row">
+                                        <div class="col-md-3">
+                                            <div class="form-group mb-md-0">
+                                                <label class="form-label-custom">Bil. Unit</label>
+                                                <asp:TextBox ID="TB_UnitIklan1_ins" TextMode="Number" runat="server" CssClass="form-control" />
+                                            </div>
+                                        </div>
 
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>Nama Baru Syarikat</label>
-                                        <asp:TextBox ID="TB_NamaBaruSyarikat_ins" runat="server" CssClass="form-control" />
-
+                                        <div class="col-md-3">
+                                            <div class="form-group mb-0">
+                                                <asp:LinkButton ID="btnAddIklan_ins" runat="server" CssClass="btn btn-primary w-100" Text="Tambah" OnClick="btnAddIklan_ins_Click" CausesValidation="false">
+                                                    <i class="bi bi-plus-circle me-1"></i> Tambah Iklan
+                                                </asp:LinkButton>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
 
-                            </div>
-
-                        </asp:Panel>
-
-                        <%--# Banting #--%>
-                        <asp:Panel ID="pnlesen6_ins" runat="server" Visible="False">
-
-                            <div class="row">
-
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>Nama Syarikat Kontraktor Pemasang Iklan</label>
-                                        <asp:TextBox ID="TB_KontraktorIklan_ins" runat="server" CssClass="form-control" />
-
+                                    <div class="row mt-3">
+                                        <div class="col-md-12 col-lg-8">
+                                            <asp:GridView ID="gvIklanList_ins" runat="server" HeaderStyle-ForeColor="Black" CssClass="table table-bordered table-sm align-middle" AutoGenerateColumns="False" 
+                                                ShowHeaderWhenEmpty="true" EmptyDataText="Senarai kosong." OnRowDeleting="gvIklanList_ins_RowDeleting">
+                                                <Columns>
+                                                    <asp:BoundField DataField="SaizIklan" HeaderText="Saiz Iklan (cm)" />
+                                                    <asp:BoundField DataField="Bercahaya" HeaderText="Bercahaya / Tidak Bercahaya" />
+                                                    <asp:BoundField DataField="Unit" HeaderText="Bil. Unit" />
+                                                    <asp:TemplateField>
+                                                        <ItemTemplate>
+                                                            <asp:LinkButton ID="btnRemove_ins" runat="server"  
+                                                                CommandName="Delete" CssClass="btn btn-danger btn-sm" CausesValidation="false">
+                                                                <i class="bi bi-trash"></i>
+                                                            </asp:LinkButton>
+                                                        </ItemTemplate>
+                                                    </asp:TemplateField>
+                                                </Columns>
+                                            </asp:GridView>
+                                        </div>
                                     </div>
-                                </div>
+                                </asp:Panel>
 
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>No Telefon Syarikat Kontraktor</label>
-                                        <asp:TextBox ID="TB_NoTelKontraktor_ins" runat="server" CssClass="form-control" />
-
+                                <%--#  Billboard #--%>
+                                <asp:Panel ID="pnlbillboard_ins" runat="server" Visible="False" Enabled="True">
+                                    <div class="form-section-header">
+                                        <i class="bi bi-display"></i>
+                                        <span>Maklumat Billboard</span>
                                     </div>
-                                </div>
 
-                            </div>
-
-                            <div class="row">
-
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>Ukuran (Kaki)</label>
-                                        <asp:TextBox ID="TB_UkuranBanting_ins" runat="server" placeholder="Contoh: 5x10" CssClass="form-control" />
-
+                                    <div class="row">
+                                        <div class="col-md-8 col-lg-6">
+                                            <div class="form-group">
+                                                <label class="form-label-custom">Lokasi Billboard</label>
+                                                <asp:TextBox ID="TB_BillboardLokasi_ins" runat="server" TextMode="MultiLine" Rows="3" CssClass="form-control" />
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
+                                </asp:Panel>
 
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>Bilangan Banting/Sepanduk</label>
-                                        <asp:TextBox ID="TB_BilBanting_ins" runat="server" CssClass="form-control" />
-
+                                <%--# Pasar Lambak #--%>
+                                <asp:Panel ID="pnlesen2_ins" runat="server" Visible="False" Enabled="True">
+                                    <div class="form-section-header">
+                                        <i class="bi bi-basket"></i>
+                                        <span>Maklumat Pasar</span>
                                     </div>
-                                </div>
 
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>Tarikh Mula Pemasangan</label>
-                                        <asp:TextBox ID="TB_TarikhBanting1_ins" runat="server" TextMode="Date" CssClass="form-control" />
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label class="form-label-custom">Lokasi Pasar #1</label>
+                                                <asp:TextBox ID="TB_LokasiPasar1_ins" runat="server" TextMode="MultiLine" Rows="2" CssClass="form-control" />
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label class="form-label-custom">Lokasi Pasar #2</label>
+                                                <asp:TextBox ID="TB_LokasiPasar2_ins" runat="server" TextMode="MultiLine" Rows="2" CssClass="form-control" />
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label class="form-label-custom">Lokasi Pasar #3</label>
+                                                <asp:TextBox ID="TB_LokasiPasar3_ins" runat="server" TextMode="MultiLine" Rows="2" CssClass="form-control" />
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
 
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>Tarikh Akhir Pemasangan</label>
-                                        <asp:TextBox ID="TB_TarikhBanting2_ins" runat="server" TextMode="Date" CssClass="form-control" />
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label class="form-label-custom">Jenis Pasar</label>
+                                                <asp:DropDownList ID="DDL_JenisPasar_ins" runat="server"
+                                                    CssClass="form-control select2">
+                                                    <asp:ListItem Value="">-- Sila Pilih --</asp:ListItem>
+                                                    <asp:ListItem>Pasar Pagi</asp:ListItem>
+                                                    <asp:ListItem>Pasar Malam</asp:ListItem>
+                                                    <asp:ListItem>Pasar Lambak</asp:ListItem>
+                                                    <asp:ListItem>Pasar Sehari</asp:ListItem>
+                                                </asp:DropDownList>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label class="form-label-custom">Jumlah Petak/Tapak/Lot</label>
+                                                <asp:TextBox ID="TB_JumlahPetak_ins" runat="server" TextMode="Number" CssClass="form-control" />
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label class="form-label-custom">Jenis Jualan</label>
+                                                <asp:TextBox ID="TB_JenisPerniagaanPasar_ins" runat="server" CssClass="form-control" />
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
+                                </asp:Panel>
 
-                            </div>
-
-                             <div class="row">
-
-                                 <div class="col-md-6">
-                                     <div class="form-group">
-                                         <label>Lokasi/Tempat Pemasagan</label>
-                                         <asp:TextBox ID="TB_LokasiBanting_ins" runat="server" TextMode="MultiLine" Rows="3" CssClass="form-control" />
-                                     </div>
-                                 </div>
-
-                                 <div class="col-md-2">
-                                    <div class="form-group">
-                                        <label> </label>
-                                        <asp:LinkButton ID="btnAddLokasi_ins" runat="server" CssClass="btn btn-primary" Text="Tambah" OnClick="btnAddLokasi_ins_Click" />
+                                <%--# Anjing #--%>
+                                <asp:Panel ID="pnlesen3_ins" runat="server" Visible="False" Enabled="True">
+                                    <div class="form-section-header">
+                                        <i class="bi bi-heart-pulse"></i>
+                                        <span>Maklumat Lesen Anjing</span>
                                     </div>
-                                </div>
 
-                             </div>
+                                    <div class="row">
+                                        <div class="col-md-8">
+                                            <div class="form-group">
+                                                <label class="form-label-custom">Alamat Lokasi</label>
+                                                <asp:TextBox ID="TB_AnjingAlamat_ins" runat="server" TextMode="MultiLine" Rows="2" CssClass="form-control" />
+                                            </div>
+                                        </div>
 
-                             <div class="row">
-                                <div class="col-md-8">
-                                    <asp:GridView ID="gvLokasiList_ins" runat="server" HeaderStyle-ForeColor="Black" CssClass="table table-bordered" AutoGenerateColumns="False" 
-                                        ShowHeaderWhenEmpty="true" EmptyDataText="Senarai kosong." OnRowDeleting="gvLokasiList_ins_RowDeleting">
-                                        <Columns>
-                                            <asp:BoundField DataField="No" HeaderText="No." />
-                                            <asp:BoundField DataField="Lokasi" HeaderText="Lokasi/Tempat Pemasangan" />
-                                            <asp:TemplateField>
-                                                <ItemTemplate>
-                                                    <asp:LinkButton ID="btnRemove_ins" runat="server"  
-                                                        CommandName="Delete" CssClass="btn btn-danger btn-sm">&times;</asp:LinkButton>
-                                                </ItemTemplate>
-                                            </asp:TemplateField>
-                                        </Columns>
-                                    </asp:GridView>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>Status Kelulusan DBP</label>
-                                        <asp:DropDownList ID="DDL_StatusDBP_ins" runat="server" 
-                                            CssClass="form-control select2">
-                                            <asp:ListItem Value="">-- Sila Pilih --</asp:ListItem>
-                                            <asp:ListItem Value="1">Lulus</asp:ListItem>
-                                            <asp:ListItem Value="0">Tidak Diluluskan</asp:ListItem>
-                                        </asp:DropDownList>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label class="form-label-custom">Jenis Premis</label>
+                                                <asp:DropDownList ID="DDL_AnjingJenisPremis_ins" CssClass="form-control select2" runat="server"
+                                                    DataSourceID="SqlDataSourceAnjingJenisPremis_ins" DataTextField="name" DataValueField="id">
+                                                </asp:DropDownList>
+                                                <asp:SqlDataSource runat="server" ID="SqlDataSourceAnjingJenisPremis_ins" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
+                                                    SelectCommand="SELECT NULL AS id, '-- Sila Pilih --' AS name UNION ALL SELECT id, name 
+                                                        FROM TBL_LOOKUPS WHERE lookupgrp_id = 10001 AND status = 1"></asp:SqlDataSource>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
 
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>No Pengesahan</label>
-                                        <asp:TextBox ID="TB_NoPengesahan_ins" runat="server" CssClass="form-control" />
+                                    <div class="row align-items-end">
+                                        <div class="col-md-3">
+                                            <div class="form-group mb-md-0">
+                                                <label class="form-label-custom">Jenis Baka</label>
+                                                <asp:DropDownList ID="DDL_BakaAnjing1_ins" CssClass="form-control select2" runat="server"
+                                                    DataSourceID="SqlDataSourceAnjingBaka1_ins" DataTextField="name" DataValueField="id">
+                                                </asp:DropDownList>
+                                                <asp:SqlDataSource runat="server" ID="SqlDataSourceAnjingBaka1_ins" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
+                                                    SelectCommand="SELECT NULL AS id, '-- Sila Pilih --' AS name UNION ALL SELECT id, name 
+                                                            FROM TBL_LOOKUPS WHERE lookupgrp_id = 10004 AND status = 1"></asp:SqlDataSource>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-2">
+                                            <div class="form-group mb-md-0">
+                                                <label class="form-label-custom">Bil. Jantan</label>
+                                                <asp:TextBox ID="TB_Jantan1_ins" runat="server" TextMode="Number" CssClass="form-control" />
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-2">
+                                            <div class="form-group mb-md-0">
+                                                <label class="form-label-custom">Bil. Betina</label>
+                                                <asp:TextBox ID="TB_Betina1_ins" runat="server" TextMode="Number" CssClass="form-control" />
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-2">
+                                            <div class="form-group mb-md-0">
+                                                <label class="form-label-custom">Bil. Jantan Mandul</label>
+                                                <asp:TextBox ID="TB_JantanMandul1_ins" runat="server" TextMode="Number" CssClass="form-control" />
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <div class="form-group mb-0">
+                                                <label class="form-label-custom">Bil. Betina Mandul</label>
+                                                <div class="d-flex gap-2">
+                                                    <asp:TextBox ID="TB_BetinaMandul1_ins" runat="server" TextMode="Number" CssClass="form-control" />
+                                                    <asp:LinkButton ID="btnAddAnjing_ins" runat="server" CssClass="btn btn-primary text-nowrap" Text="Tambah" OnClick="btnAddAnjing_ins_Click" CausesValidation="false">
+                                                        <i class="bi bi-plus-circle me-1"></i> Tambah
+                                                    </asp:LinkButton>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
 
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>Tarikh Mula Pengesahan</label>
-                                        <asp:TextBox ID="TB_TarikhPengesahanBanting1_ins" runat="server" TextMode="Date" CssClass="form-control" />
+                                    <div class="row mt-3">
+                                        <div class="col-md-12">
+                                            <asp:GridView ID="gvAnjingList_ins" runat="server" HeaderStyle-ForeColor="Black" CssClass="table table-bordered table-sm align-middle" AutoGenerateColumns="False" 
+                                                ShowHeaderWhenEmpty="true" EmptyDataText="Senarai kosong." OnRowDeleting="gvAnjingList_ins_RowDeleting">
+                                                <Columns>
+                                                    <asp:BoundField DataField="Baka" HeaderText="Baka Anjing" />
+                                                    <asp:BoundField DataField="Jantan" HeaderText="Bil. Jantan" />
+                                                    <asp:BoundField DataField="Betina" HeaderText="Bil. Betina" />
+                                                    <asp:BoundField DataField="JantanMandul" HeaderText="Bil. Jantan Mandul" />
+                                                    <asp:BoundField DataField="BetinaMandul" HeaderText="Bil. Betina Mandul" />
+                                                    <asp:TemplateField>
+                                                        <ItemTemplate>
+                                                            <asp:LinkButton ID="btnRemove_ins" runat="server"  
+                                                                CommandName="Delete" CssClass="btn btn-danger btn-sm" CausesValidation="false">
+                                                                <i class="bi bi-trash"></i>
+                                                            </asp:LinkButton>
+                                                        </ItemTemplate>
+                                                    </asp:TemplateField>
+                                                </Columns>
+                                            </asp:GridView>
+                                        </div>
                                     </div>
-                                </div>
+                                </asp:Panel>
 
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>Tarikh Akhir Pengesahan</label>
-                                        <asp:TextBox ID="TB_TarikhPengesahanBanting2_ins" runat="server" TextMode="Date" CssClass="form-control" />
+                                <%--# Penjaja #--%>
+                                <asp:Panel ID="pnlesen4_ins" runat="server" Visible="False" Enabled="True">
+                                    <div class="form-section-header">
+                                        <i class="bi bi-truck"></i>
+                                        <span>Maklumat Penjaja</span>
                                     </div>
-                                </div>
 
-                            </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label class="form-label-custom">Jenis Penjaja</label>
+                                                <asp:DropDownList ID="DDL_JenisPenjaja_ins" CssClass="form-control select2" runat="server"
+                                                    DataSourceID="SqlDataSourceJenisPenjaja_ins" DataTextField="name" DataValueField="id">
+                                                </asp:DropDownList>
+                                                <asp:SqlDataSource runat="server" ID="SqlDataSourceJenisPenjaja_ins" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
+                                                    SelectCommand="SELECT NULL AS id, '-- Sila Pilih --' AS name UNION ALL SELECT id, name 
+                                                            FROM TBL_LOOKUPS WHERE lookupgrp_id = 10006 AND status = 1"></asp:SqlDataSource>
+                                            </div>
+                                        </div>
 
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>No Resit</label>
-                                        <asp:TextBox ID="TB_NoResitBanting_ins" runat="server" CssClass="form-control" />
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label class="form-label-custom">Status Tanah</label>
+                                                <asp:DropDownList ID="DDL_StatusTanahPenjaja_ins" CssClass="form-control select2" runat="server"
+                                                    DataSourceID="SqlDataSourceStatusTanahPenjaja_ins" DataTextField="name" DataValueField="id">
+                                                </asp:DropDownList>
+                                                <asp:SqlDataSource runat="server" ID="SqlDataSourceStatusTanahPenjaja_ins" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
+                                                    SelectCommand="SELECT NULL AS id, '-- Sila Pilih --' AS name UNION ALL SELECT id, name 
+                                                            FROM TBL_LOOKUPS WHERE lookupgrp_id = 10007 AND status = 1"></asp:SqlDataSource>
+                                            </div>
+                                        </div>
 
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label class="form-label-custom">Jenis Jualan</label>
+                                                <asp:TextBox ID="TB_JenisPerniagaanPenjaja_ins" runat="server" CssClass="form-control" />
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
 
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>No Siri Stiker</label>
-                                        <asp:TextBox ID="TB_NoSiriStiker_ins" runat="server" CssClass="form-control" />
-
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label class="form-label-custom">Alamat Aktiviti Penjajaan</label>
+                                                <asp:TextBox ID="TB_AlamatPenjajaan_ins" runat="server" TextMode="MultiLine" Rows="2" CssClass="form-control" />
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
 
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>Tarikh</label>
-                                        <asp:TextBox ID="TB_TarikhBanting3_ins" runat="server" TextMode="Date" CssClass="form-control" />
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label class="form-label-custom">Masa Mula Jualan</label>
+                                                <asp:TextBox ID="TB_MasaPenjaja1_ins" runat="server" TextMode="Time" CssClass="form-control" />
+                                            </div>
+                                        </div>
 
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label class="form-label-custom">Masa Tamat Jualan</label>
+                                                <asp:TextBox ID="TB_MasaPenjaja2_ins" runat="server" TextMode="Time" CssClass="form-control" />
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label class="form-label-custom">Jenis Kenderaan (Penjaja Berkenderaan)</label>
+                                                <asp:DropDownList ID="DDL_JenisKenderaanPenjaja_ins" CssClass="form-control select2" runat="server"
+                                                    DataSourceID="SqlDataSourceJenisKenderaanPenjaja_ins" DataTextField="name" DataValueField="id">
+                                                </asp:DropDownList>
+                                                <asp:SqlDataSource runat="server" ID="SqlDataSourceJenisKenderaanPenjaja_ins" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
+                                                    SelectCommand="SELECT NULL AS id, '-- Sila Pilih --' AS name UNION ALL SELECT id, name 
+                                                            FROM TBL_LOOKUPS WHERE lookupgrp_id = 10008 AND status = 1"></asp:SqlDataSource>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label class="form-label-custom">No Pendaftaran Kenderaan</label>
+                                                <asp:TextBox ID="TB_NoKenderaanPenjaja_ins" runat="server" CssClass="form-control" />
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
+                                </asp:Panel>
 
-                            </div>
-
-                        </asp:Panel>
-
-                        <%--# Papan iklan, Billboard #--%>
-                        <asp:Panel ID="pnlesen1a_ins" runat="server" Visible="False" Enabled="True">
-
-                            <div class="row">
-
-                              <div class="col-md-2">
-                                  <div class="form-group">
-                                      <label>Saiz Iklan (cm)</label>
-                                      <asp:TextBox ID="TB_SaizIklan1_ins" placeholder="Contoh:10x5" runat="server" CssClass="form-control" />
-                                  </div>
-                              </div>
-                               <div class="col-md-2">
-                                   <div class="form-group">
-                                       <label>Iklan Bercahaya</label>
-                                       <asp:DropDownList ID="DDL_Iklan1_ins" runat="server"
-                                           CssClass="form-control select2" style="width: 100%;">
-                                           <asp:ListItem Value="">-- Sila Pilih --</asp:ListItem>
-                                           <asp:ListItem Value="Bercahaya">Ya</asp:ListItem>
-                                           <asp:ListItem Value="Tidak Bercahaya">Tidak</asp:ListItem>
-                                       </asp:DropDownList>
-                                   </div>
-                               </div>
-                              <div class="col-md-2">
-                                  <div class="form-group">
-                                      <label>Bil. Unit</label>
-                                      <div class="row">
-                                          <div class="col">
-                                              <asp:TextBox ID="TB_UnitIklan1_ins" runat="server" CssClass="form-control" />
-                                          </div>
-                                          <div class="col">
-                                              <asp:LinkButton ID="btnAddIklan_ins" runat="server" CssClass="btn btn-primary" Text="Tambah" OnClick="btnAddIklan_ins_Click" />
-      
-                                          </div>
-                                      </div>
-              
-                                  </div>
-                              </div>
-
-                          </div>
-
-                          <div class="row">
-                              <div class="col-md-6">
-                                  <asp:GridView ID="gvIklanList_ins" runat="server" HeaderStyle-ForeColor="Black" CssClass="table table-bordered" AutoGenerateColumns="False" 
-                                      ShowHeaderWhenEmpty="true" EmptyDataText="Senarai kosong." OnRowDeleting="gvIklanList_ins_RowDeleting">
-                                      <Columns>
-                                          <asp:BoundField DataField="SaizIklan" HeaderText="Saiz Iklan (cm)" />
-                                          <asp:BoundField DataField="Bercahaya" HeaderText="Bercahaya/Tidak Bercahaya" />
-                                          <asp:BoundField DataField="Unit" HeaderText="Bil. Unit" />
-                                          <asp:TemplateField>
-                                              <ItemTemplate>
-                                                  <asp:LinkButton ID="btnRemove_ins" runat="server"  
-                                                      CommandName="Delete" CssClass="btn btn-danger btn-sm">
-                                                      <i class="bi bi-trash"></i>
-                                                  </asp:LinkButton>
-                                              </ItemTemplate>
-                                          </asp:TemplateField>
-                                      </Columns>
-                                  </asp:GridView>
-                              </div>
-                          </div>
-
-                        </asp:Panel>
-
-                        <%--#  Billboard #--%>
-                        <asp:Panel ID="pnlbillboard_ins" runat="server" Visible="False" Enabled="True">
-
-                            <div class="row">
-
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>Lokasi Billboard</label>
-                                        <asp:TextBox ID="TB_BillboardLokasi_ins" runat="server" TextMode="MultiLine" Rows="3" CssClass="form-control" />
-
+                                <%--# Ekspo #--%>
+                                <asp:Panel ID="pnlesen5_ins" runat="server" Visible="False" Enabled="True">
+                                    <div class="form-section-header">
+                                        <i class="bi bi-calendar-event"></i>
+                                        <span>Maklumat Ekspo / Program</span>
                                     </div>
-                                </div>
 
-                            </div>
+                                    <div class="row">
+                                        <div class="col-md-5">
+                                            <div class="form-group">
+                                                <label class="form-label-custom">Nama Penganjur</label>
+                                                <asp:TextBox ID="TB_PenganjurEkspo_ins" runat="server" CssClass="form-control" />
+                                            </div>
+                                        </div>
 
-                        </asp:Panel>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label class="form-label-custom">PIC Penganjur</label>
+                                                <asp:TextBox ID="TB_PicEkspo_ins" runat="server" CssClass="form-control" />
+                                            </div>
+                                        </div>
 
-                        <%--# Pasar Lambak #--%>
-                        <asp:Panel ID="pnlesen2_ins" runat="server" Visible="False" Enabled="True">
-
-                            <div class="row">
-
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>Lokasi Pasar #1</label>
-                                        <asp:TextBox ID="TB_LokasiPasar1_ins" runat="server" TextMode="MultiLine" Rows="3" CssClass="form-control" />
-
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label class="form-label-custom">No. Tel. PIC</label>
+                                                <asp:TextBox ID="TB_NoTel_ins" runat="server" CssClass="form-control" />
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
 
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>Lokasi Pasar #2</label>
-                                        <asp:TextBox ID="TB_LokasiPasar2_ins" runat="server" TextMode="MultiLine" Rows="3" CssClass="form-control" />
-
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label class="form-label-custom">Alamat Penganjur</label>
+                                                <asp:TextBox ID="TB_AlamatPenganjurEkspo_ins" runat="server" TextMode="MultiLine" Rows="2" CssClass="form-control" />
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
 
-                            </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="form-label-custom">Nama Aktiviti / Program</label>
+                                                <asp:TextBox ID="TB_NamaEkspo_ins" runat="server" CssClass="form-control" />
+                                            </div>
+                                        </div>
 
-                            <div class="row">
-
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>Lokasi Pasar #3</label>
-                                        <asp:TextBox ID="TB_LokasiPasar3_ins" runat="server" TextMode="MultiLine" Rows="3" CssClass="form-control" />
-
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="form-label-custom">Lokasi Program</label>
+                                                <asp:TextBox ID="TB_LokasiEkspo_ins" runat="server" TextMode="MultiLine" Rows="2" CssClass="form-control" />
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
 
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>Jumlah Petak/Tapak/Lot</label>
-                                        <asp:TextBox ID="TB_JumlahPetak_ins" runat="server" TextMode="Number" CssClass="form-control" />
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label class="form-label-custom">Tarikh Mula</label>
+                                                <asp:TextBox ID="TB_TarikhEkspo1_ins" runat="server" TextMode="Date" CssClass="form-control" />
+                                            </div>
+                                        </div>
 
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label class="form-label-custom">Tarikh Tamat</label>
+                                                <asp:TextBox ID="TB_TarikhEkspo2_ins" runat="server" TextMode="Date" CssClass="form-control" />
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label class="form-label-custom">Masa Mula</label>
+                                                <asp:TextBox ID="TB_MasaEkspo1_ins" runat="server" TextMode="Time" CssClass="form-control" />
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label class="form-label-custom">Masa Tamat</label>
+                                                <asp:TextBox ID="TB_MasaEkspo2_ins" runat="server" TextMode="Time" CssClass="form-control" />
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
 
-                            </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="form-label-custom">Tentatif Program</label>
+                                                <asp:TextBox ID="TB_TentatifEkspo_ins" runat="server" TextMode="MultiLine" Rows="2" CssClass="form-control" />
+                                            </div>
+                                        </div>
 
-                            <div class="row">
-
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>Jenis Jualan</label>
-                                        <asp:TextBox ID="TB_JenisPerniagaanPasar_ins" runat="server" CssClass="form-control" />
-
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="form-label-custom">Selebriti / Penceramah / Artis Yang Dijangka Terlibat</label>
+                                                <asp:TextBox ID="TB_JemputanEkspo_ins" runat="server" TextMode="MultiLine" Rows="2" CssClass="form-control" />
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
 
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>Jenis Pasar</label>
-                                        <asp:DropDownList ID="DDL_JenisPasar_ins" runat="server"
-                                            CssClass="form-control select2">
-                                            <asp:ListItem Value="">-- Sila Pilih --</asp:ListItem>
-                                            <asp:ListItem>Pasar Pagi</asp:ListItem>
-                                            <asp:ListItem>Pasar Malam</asp:ListItem>
-                                            <asp:ListItem>Pasar Lambak</asp:ListItem>
-                                            <asp:ListItem>Pasar Sehari</asp:ListItem>
-                                        </asp:DropDownList>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="form-label-custom">Kontraktor Pembersihan</label>
+                                                <asp:TextBox ID="TB_PembersihanEkspo_ins" runat="server" CssClass="form-control" />
+                                            </div>
+                                        </div>
 
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label class="form-label-custom">Cadangan Tarikh Mula Pasang Khemah</label>
+                                                <asp:TextBox ID="TB_TarikhKhemahEkspo1_ins" runat="server" TextMode="Date" CssClass="form-control" />
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label class="form-label-custom">Cadangan Tarikh Buka Khemah</label>
+                                                <asp:TextBox ID="TB_TarikhKhemahEkspo2_ins" runat="server" TextMode="Date" CssClass="form-control" />
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-
-                            </div>
-
-                        </asp:Panel>
-
-                        <%--# Anjing #--%>
-                        <asp:Panel ID="pnlesen3_ins" runat="server" Visible="False" Enabled="True">
-
-                            <div class="row">
-
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>Alamat lokasi</label>
-                                        <asp:TextBox ID="TB_AnjingAlamat_ins" runat="server" TextMode="MultiLine" Rows="3" CssClass="form-control" />
-                                    </div>
-                                </div>
-
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>Jenis Premis</label>
-                                        <asp:DropDownList ID="DDL_AnjingJenisPremis_ins" CssClass="form-control select2" runat="server"
-                                            DataSourceID="SqlDataSourceAnjingJenisPremis_ins" DataTextField="name" DataValueField="id">
-                                        </asp:DropDownList>
-                                        <asp:SqlDataSource runat="server" ID="SqlDataSourceAnjingJenisPremis_ins" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
-                                            SelectCommand="SELECT NULL AS id, '-- Sila Pilih --' AS name UNION ALL SELECT id, name 
-                                                FROM TBL_LOOKUPS WHERE lookupgrp_id = 10001 AND status = 1"></asp:SqlDataSource>
-                                    </div>
-                                </div>
-
-                            </div>
-
-                            <div class="row">
-
-                             <div class="col-md-2">
-                                 <div class="form-group">
-                                     <label>Jenis Baka</label>
-                                     <asp:DropDownList ID="DDL_BakaAnjing1_ins" CssClass="form-control select2" runat="server"
-                                         DataSourceID="SqlDataSourceAnjingBaka1_ins" DataTextField="name" DataValueField="id">
-                                     </asp:DropDownList>
-                                     <asp:SqlDataSource runat="server" ID="SqlDataSourceAnjingBaka1_ins" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
-                                         SelectCommand="SELECT NULL AS id, '-- Sila Pilih --' AS name UNION ALL SELECT id, name 
-                                                 FROM TBL_LOOKUPS WHERE lookupgrp_id = 10004 AND status = 1"></asp:SqlDataSource>
-                                 </div>
-                             </div>
-
-                             <div class="col-md-2">
-                                 <div class="form-group">
-                                     <label>Bilangan anjing jantan</label>
-                                     <asp:TextBox ID="TB_Jantan1_ins" runat="server" TextMode="Number" CssClass="form-control" />
-                                 </div>
-                             </div>
-
-                             <div class="col-md-2">
-                                 <div class="form-group">
-                                     <label>Bilangan anjing betina</label>
-                                     <asp:TextBox ID="TB_Betina1_ins" runat="server" TextMode="Number" CssClass="form-control" />
-                                 </div>
-                             </div>
-
-                             <div class="col-md-2">
-                                 <div class="form-group">
-                                     <label>Bilangan anjing jantan mandul</label>
-                                     <asp:TextBox ID="TB_JantanMandul1_ins" runat="server" TextMode="Number" CssClass="form-control" />
-                                 </div>
-                             </div>
-
-                             <div class="col-md-4">
-                                 <div class="form-group">
-                                     <label>Bilangan anjing betina mandul</label>
-                                     <div class="row">
-                                         <div class="col">
-                                             <asp:TextBox ID="TB_BetinaMandul1_ins" runat="server" TextMode="Number" CssClass="form-control" />
-                                         </div>
-                                         <div class="col">
-                                             <asp:LinkButton ID="btnAddAnjing_ins" runat="server" CssClass="btn btn-primary" Text="Tambah" OnClick="btnAddAnjing_ins_Click" />
-    
-                                         </div>
-
-                                     </div>
-            
-                                 </div>
-                             </div>
-
-                            </div>
-
-                             <div class="row">
-                                 <div class="col-md-12">
-                                     <asp:GridView ID="gvAnjingList_ins" runat="server" HeaderStyle-ForeColor="Black" CssClass="table table-bordered" AutoGenerateColumns="False" 
-                                         ShowHeaderWhenEmpty="true" EmptyDataText="Senarai kosong." OnRowDeleting="gvAnjingList_ins_RowDeleting">
-                                         <Columns>
-                                             <asp:BoundField DataField="Baka" HeaderText="Baka Anjing" />
-                                             <asp:BoundField DataField="Jantan" HeaderText=" Bil. Jantan" />
-                                             <asp:BoundField DataField="Betina" HeaderText="Bil. Betina" />
-                                             <asp:BoundField DataField="JantanMandul" HeaderText="Bil. Jantan Mandul" />
-                                             <asp:BoundField DataField="BetinaMandul" HeaderText="Bil. Betina Mandul" />
-                                             <asp:TemplateField>
-                                                 <ItemTemplate>
-                                                     <asp:LinkButton ID="btnRemove_ins" runat="server"  
-                                                         CommandName="Delete" CssClass="btn btn-danger btn-sm">
-                                                         <i class="bi bi-trash"></i>
-                                                     </asp:LinkButton>
-                                                 </ItemTemplate>
-                                             </asp:TemplateField>
-                                         </Columns>
-                                     </asp:GridView>
-                                 </div>
-                             </div>
-
-                        </asp:Panel>
-
-                        <%--# Penjaja #--%>
-                        <asp:Panel ID="pnlesen4_ins" runat="server" Visible="False" Enabled="True">
-
-                            <div class="row">
-
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>Jenis Penjaja</label>
-                                        <asp:DropDownList ID="DDL_JenisPenjaja_ins" CssClass="form-control select2" runat="server"
-                                            DataSourceID="SqlDataSourceJenisPenjaja_ins" DataTextField="name" DataValueField="id">
-                                        </asp:DropDownList>
-                                        <asp:SqlDataSource runat="server" ID="SqlDataSourceJenisPenjaja_ins" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
-                                            SelectCommand="SELECT NULL AS id, '-- Sila Pilih --' AS name UNION ALL SELECT id, name 
-                                                    FROM TBL_LOOKUPS WHERE lookupgrp_id = 10006 AND status = 1"></asp:SqlDataSource>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>Status Tanah</label>
-                                        <asp:DropDownList ID="DDL_StatusTanahPenjaja_ins" CssClass="form-control select2" runat="server"
-                                            DataSourceID="SqlDataSourceStatusTanahPenjaja_ins" DataTextField="name" DataValueField="id">
-                                        </asp:DropDownList>
-                                        <asp:SqlDataSource runat="server" ID="SqlDataSourceStatusTanahPenjaja_ins" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
-                                            SelectCommand="SELECT NULL AS id, '-- Sila Pilih --' AS name UNION ALL SELECT id, name 
-                                                    FROM TBL_LOOKUPS WHERE lookupgrp_id = 10007 AND status = 1"></asp:SqlDataSource>
-                                    </div>
-                                </div>
-
-                            </div>
-
-                            <div class="row">
-
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>Alamat aktiviti penjajaan</label>
-                                        <asp:TextBox ID="TB_AlamatPenjajaan_ins" runat="server" TextMode="MultiLine" Rows="3" CssClass="form-control" />
-
-                                    </div>
-                                </div>
-
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>Jenis Jualan</label>
-                                        <asp:TextBox ID="TB_JenisPerniagaanPenjaja_ins" runat="server" CssClass="form-control" />
-
-                                    </div>
-                                </div>
-
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>Masa Mula Jualan</label>
-                                        <asp:TextBox ID="TB_MasaPenjaja1_ins" runat="server" TextMode="Time" CssClass="form-control" />
-
-                                    </div>
-                                </div>
-
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>Masa Tamat Jualan</label>
-                                        <asp:TextBox ID="TB_MasaPenjaja2_ins" runat="server" TextMode="Time" CssClass="form-control" />
-
-                                    </div>
-                                </div>
-
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>Jenis Kenderaan (Penjaja Berkenderaan)</label>
-                                        <asp:DropDownList ID="DDL_JenisKenderaanPenjaja_ins" CssClass="form-control select2" runat="server"
-                                            DataSourceID="SqlDataSourceJenisKenderaanPenjaja_ins" DataTextField="name" DataValueField="id">
-                                        </asp:DropDownList>
-                                        <asp:SqlDataSource runat="server" ID="SqlDataSourceJenisKenderaanPenjaja_ins" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
-                                            SelectCommand="SELECT NULL AS id, '-- Sila Pilih --' AS name UNION ALL SELECT id, name 
-                                                    FROM TBL_LOOKUPS WHERE lookupgrp_id = 10008 AND status = 1"></asp:SqlDataSource>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>No Pendaftaran Kenderaan</label>
-                                        <asp:TextBox ID="TB_NoKenderaanPenjaja_ins" runat="server" CssClass="form-control" />
-
-                                    </div>
-                                </div>
+                                </asp:Panel>
                             </div>
 
-                        </asp:Panel>
-
-                        <%--# Ekspo #--%>
-                        <asp:Panel ID="pnlesen5_ins" runat="server" Visible="False" Enabled="True">
-
-                            <div class="row">
-
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>Nama Penganjur</label>
-                                        <asp:TextBox ID="TB_PenganjurEkspo_ins" runat="server" CssClass="form-control" />
-
-                                    </div>
-                                </div>
-
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>Alamat Penganjur</label>
-                                        <asp:TextBox ID="TB_AlamatPenganjurEkspo_ins" runat="server" TextMode="MultiLine" Rows="3" CssClass="form-control" />
-
-                                    </div>
-                                </div>
-
-                            </div>
-
-                            <div class="row">
-
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>PIC Penganjur</label>
-                                        <asp:TextBox ID="TB_PicEkspo_ins" runat="server" CssClass="form-control" />
-
-                                    </div>
-                                </div>
-
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>No. Tel.</label>
-                                        <asp:TextBox ID="TB_NoTel_ins" runat="server" CssClass="form-control" />
-
-                                    </div>
-                                </div>
-
-                            </div>
-
-                            <div class="row">
-
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>Nama Aktiviti/Program</label>
-                                        <asp:TextBox ID="TB_NamaEkspo_ins" runat="server" CssClass="form-control" />
-
-                                    </div>
-                                </div>
-
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>Lokasi Program</label>
-                                        <asp:TextBox ID="TB_LokasiEkspo_ins" runat="server" TextMode="MultiLine" Rows="3" CssClass="form-control" />
-
-                                    </div>
-                                </div>
-
-                            </div>
-
-                            <div class="row">
-
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>Tarikh Mula</label>
-                                        <asp:TextBox ID="TB_TarikhEkspo1_ins" runat="server" TextMode="Date" CssClass="form-control" />
-                                    </div>
-                                </div>
-
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>Tarikh Tamat</label>
-                                        <asp:TextBox ID="TB_TarikhEkspo2_ins" runat="server" TextMode="Date" CssClass="form-control" />
-                                    </div>
-                                </div>
-
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>Masa Mula</label>
-                                        <asp:TextBox ID="TB_MasaEkspo1_ins" runat="server" TextMode="Time" CssClass="form-control" />
-                                    </div>
-                                </div>
-
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>Masa Tamat</label>
-                                        <asp:TextBox ID="TB_MasaEkspo2_ins" runat="server" TextMode="Time" CssClass="form-control" />
-
-                                    </div>
-                                </div>
-
-                            </div>
-
-                            <div class="row">
-
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>Tentatif Program</label>
-                                        <asp:TextBox ID="TB_TentatifEkspo_ins" runat="server" TextMode="MultiLine" Rows="3" CssClass="form-control" />
-
-                                    </div>
-                                </div>
-
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>Selebriti/Penceramah/Artis Yang Dijangka Terlibat</label>
-                                        <asp:TextBox ID="TB_JemputanEkspo_ins" runat="server" TextMode="MultiLine" Rows="3" CssClass="form-control" />
-
-                                    </div>
-                                </div>
-
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>Kontraktor Pembersihan</label>
-                                        <asp:TextBox ID="TB_PembersihanEkspo_ins" runat="server" CssClass="form-control" />
-
-                                    </div>
-                                </div>
-
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>Cadangan Tarikh Mula Pasang Khemah</label>
-                                        <asp:TextBox ID="TB_TarikhKhemahEkspo1_ins" runat="server" TextMode="Date" CssClass="form-control" />
-
-                                    </div>
-                                </div>
-
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>Cadangan Tarikh Buka Khemah</label>
-                                        <asp:TextBox ID="TB_TarikhKhemahEkspo2_ins" runat="server" TextMode="Date" CssClass="form-control" />
-
-                                    </div>
-                                </div>
-
-                            </div>
-
-                        </asp:Panel>
-                        <div class="row">
-                            <div class="col-md-10">
-                                <asp:LinkButton ID="BT_Maklumat" runat="server" CausesValidation="False" Text="Kemaskini" CssClass="btn btn-warning" OnClick="btnSaveInfo_Click"/>
+                            <div class="card-footer d-flex flex-wrap gap-2 align-items-center">
+                                <asp:LinkButton ID="BT_Maklumat" runat="server" CausesValidation="False" Text="Kemaskini" CssClass="btn btn-primary" OnClick="btnSaveInfo_Click">
+                                    <i class="bi bi-check-lg me-1"></i> Kemaskini Maklumat
+                                </asp:LinkButton>
                             </div>
                         </div>
-                        <br />
                     </ContentTemplate>
                 </asp:TabPanel>
 
@@ -5894,6 +5901,7 @@ ORDER BY
         function pageLoad() {
             setupValidationGuards();
             resetAndHideUnsubmittedValidators();
+            initPembetulanDiffFilter();
 
             $(function () {
                 $('.datepicker').datepicker({
@@ -6082,5 +6090,277 @@ ORDER BY
                 toggleLokasiEdit(input, false);
             }
         }
+
+        // =========================================================================
+        // Pembetulan Maklumat Permohonan - Differences Filter & Detection Engine
+        // =========================================================================
+        function initPembetulanDiffFilter() {
+            var $card = $('#cardPembetulanMaklumat');
+            var $tabMaklumat = $('#tabMaklumat').length ? $('#tabMaklumat') : $('[id$="tabMaklumat"]');
+            var $formView = $('#FormView1').length ? $('#FormView1') : $('[id$="FormView1"]');
+
+            if (!$card.length || !$tabMaklumat.length || !$formView.length) {
+                return;
+            }
+
+            var aliasMap = {};
+
+            var skipInputIds = [
+                'TB_SaizIklan1_ins', 'DDL_Iklan1_ins', 'TB_UnitIklan1_ins',
+                'DDL_BakaAnjing1_ins', 'TB_Jantan1_ins', 'TB_Betina1_ins', 'TB_JantanMandul1_ins', 'TB_BetinaMandul1_ins'
+            ];
+
+            function normalizeVal(val) {
+                if (val === null || val === undefined) return '';
+                return String(val).replace(/\r\n/g, '\n').replace(/\r/g, '\n').trim();
+            }
+
+            function isEquivalentBlank(v) {
+                return v === '' || v === '-' || v === '0' || v === '-- Sila Pilih --' || v === 'NULL';
+            }
+
+            function areDatesEqual(d1, d2) {
+                if (!d1 || !d2) return false;
+                var t1 = Date.parse(d1);
+                var t2 = Date.parse(d2);
+                return !isNaN(t1) && !isNaN(t2) && t1 === t2;
+            }
+
+            var diffCount = 0;
+
+            // 1. Process regular fields in tabMaklumat
+            var $allInsInputs = $tabMaklumat.find('input[id$="_ins"], textarea[id$="_ins"], select[id$="_ins"]');
+
+            $allInsInputs.each(function () {
+                var $insInput = $(this);
+                if ($insInput.attr('type') === 'hidden') return;
+
+                var rawId = $insInput.attr('id') || '';
+                var lastIdPart = rawId.indexOf('$') !== -1 ? rawId.split('$').pop() : rawId.split('_').slice(-2).join('_');
+                if (lastIdPart.indexOf('_ins') === -1) {
+                    var parts = rawId.split('_');
+                    lastIdPart = parts[parts.length - 1] === 'ins' ? parts[parts.length - 2] + '_ins' : parts[parts.length - 1];
+                }
+
+                if (skipInputIds.indexOf(lastIdPart) !== -1) return;
+
+                var targetBaseId = aliasMap[lastIdPart] || lastIdPart.replace(/_ins$/, '');
+
+                var $origCtrl = $formView.find('[id$="_' + targetBaseId + '"]').not('[id$="_ins"]');
+                if (!$origCtrl.length) {
+                    $origCtrl = $('[id$="_' + targetBaseId + '"]').not('[id*="tabMaklumat"]').not('[id$="_ins"]');
+                }
+
+                var valIns = normalizeVal($insInput.val());
+                var valOrig = $origCtrl.length ? normalizeVal($origCtrl.val()) : '';
+
+                var isDiff = false;
+                if ($origCtrl.length) {
+                    if (areDatesEqual(valIns, valOrig)) {
+                        isDiff = false;
+                    } else if (isEquivalentBlank(valIns) && isEquivalentBlank(valOrig)) {
+                        isDiff = false;
+                    } else if (valIns.toLowerCase() === valOrig.toLowerCase()) {
+                        isDiff = false;
+                    } else {
+                        isDiff = true;
+                    }
+                }
+
+                var $fieldCol = $insInput.closest('[class*="col-"]');
+                if (!$fieldCol.length) $fieldCol = $insInput.parent();
+
+                if (isDiff) {
+                    diffCount++;
+                    $fieldCol.attr('data-has-diff', 'true');
+                    $fieldCol.addClass('field-has-diff');
+
+                    var $label = $fieldCol.find('label.form-label-custom');
+                    if ($label.length && !$label.find('.badge-diff-status').length) {
+                        $label.append('<span class="badge-diff-status ms-2"><i class="bi bi-pencil-fill me-1"></i>Diubah</span>');
+                    }
+
+                    var displayOrig = valOrig;
+                    if ($origCtrl.is('select') && $origCtrl[0].selectedIndex >= 0) {
+                        var opt = $origCtrl[0].options[$origCtrl[0].selectedIndex];
+                        if (opt && opt.text && !isEquivalentBlank(opt.text)) displayOrig = opt.text;
+                    }
+                    if (!displayOrig || displayOrig === '') displayOrig = '(Tiada / Kosong)';
+
+                    $fieldCol.find('.hint-orig-val').remove();
+                    var $hint = $('<div class="hint-orig-val"><i class="bi bi-clock-history me-1 text-secondary"></i><span>Asal di FormView1:</span> <span class="badge-orig" title="' + $('<div>').text(displayOrig).html() + '">' + $('<div>').text(displayOrig).html() + '</span></div>');
+                    $insInput.after($hint);
+                } else {
+                    $fieldCol.attr('data-has-diff', 'false');
+                    $fieldCol.removeClass('field-has-diff');
+                    $fieldCol.find('.badge-diff-status').remove();
+                    $fieldCol.find('.hint-orig-val').remove();
+                }
+            });
+
+            // 2. Process list sections (Iklan, Anjing)
+            // (a) Papan Iklan
+            var hfIklanSaizIns = $('[id$="HF_SaizIklanList_ins"]').val() || '';
+            var hfIklanSaizOrig = $('[id$="HF_SaizIklanList"]').not('[id$="_ins"]').val() || '';
+            var hfIklanCahayaIns = $('[id$="HF_CahayaIklanList_ins"]').val() || '';
+            var hfIklanCahayaOrig = $('[id$="HF_CahayaIklanList"]').not('[id$="_ins"]').val() || '';
+            var hfIklanUnitIns = $('[id$="HF_UnitIklanList_ins"]').val() || '';
+            var hfIklanUnitOrig = $('[id$="HF_UnitIklanList"]').not('[id$="_ins"]').val() || '';
+
+            var isIklanDiff = (normalizeVal(hfIklanSaizIns) !== normalizeVal(hfIklanSaizOrig)) ||
+                              (normalizeVal(hfIklanCahayaIns) !== normalizeVal(hfIklanCahayaOrig)) ||
+                              (normalizeVal(hfIklanUnitIns) !== normalizeVal(hfIklanUnitOrig));
+
+            var $iklanTable = $('[id$="gvIklanList_ins"]').closest('[class*="col-"]');
+            var $iklanAddRow = $tabMaklumat.find('#TB_SaizIklan1_ins, [id$="TB_SaizIklan1_ins"]').closest('.row');
+            if ($iklanTable.length) {
+                if (isIklanDiff) {
+                    diffCount++;
+                    $iklanTable.attr('data-has-diff', 'true');
+                    $iklanTable.addClass('table-has-diff');
+                    if ($iklanAddRow.length) $iklanAddRow.attr('data-has-diff', 'true');
+                } else {
+                    $iklanTable.attr('data-has-diff', 'false');
+                    $iklanTable.removeClass('table-has-diff');
+                    if ($iklanAddRow.length) $iklanAddRow.attr('data-has-diff', 'false');
+                }
+            }
+
+            // (b) Anjing List
+            var hfAnjingBakaIns = $('[id$="HF_BakaAnjingList_ins"]').val() || '';
+            var hfAnjingBakaOrig = $('[id$="HF_BakaAnjingList"]').not('[id$="_ins"]').val() || '';
+            var hfAnjingJantanIns = $('[id$="HF_AnjingJantanList_ins"]').val() || '';
+            var hfAnjingJantanOrig = $('[id$="HF_AnjingJantanList"]').not('[id$="_ins"]').val() || '';
+            var hfAnjingBetinaIns = $('[id$="HF_AnjingBetinaList_ins"]').val() || '';
+            var hfAnjingBetinaOrig = $('[id$="HF_AnjingBetinaList"]').not('[id$="_ins"]').val() || '';
+
+            var isAnjingDiff = (normalizeVal(hfAnjingBakaIns) !== normalizeVal(hfAnjingBakaOrig)) ||
+                               (normalizeVal(hfAnjingJantanIns) !== normalizeVal(hfAnjingJantanOrig)) ||
+                               (normalizeVal(hfAnjingBetinaIns) !== normalizeVal(hfAnjingBetinaOrig));
+
+            var $anjingTable = $('[id$="gvAnjingList_ins"]').closest('[class*="col-"]');
+            var $anjingAddRow = $tabMaklumat.find('#DDL_BakaAnjing1_ins, [id$="DDL_BakaAnjing1_ins"]').closest('.row');
+            if ($anjingTable.length) {
+                if (isAnjingDiff) {
+                    diffCount++;
+                    $anjingTable.attr('data-has-diff', 'true');
+                    $anjingTable.addClass('table-has-diff');
+                    if ($anjingAddRow.length) $anjingAddRow.attr('data-has-diff', 'true');
+                } else {
+                    $anjingTable.attr('data-has-diff', 'false');
+                    $anjingTable.removeClass('table-has-diff');
+                    if ($anjingAddRow.length) $anjingAddRow.attr('data-has-diff', 'false');
+                }
+            }
+
+            // 3. Update Rows: Mark rows with diff
+            $tabMaklumat.find('.row').each(function () {
+                var $row = $(this);
+                var rowDiffs = $row.find('[data-has-diff="true"]').length;
+                if ($row.attr('data-has-diff') === 'true') rowDiffs++;
+                $row.attr('data-row-has-diff', rowDiffs > 0 ? 'true' : 'false');
+            });
+
+            // 4. Update Panels: Mark panels with diff
+            var subPanels = ['pnlesen1_ins', 'pnlesen1b_ins', 'pnlesen1c_ins', 'pnlesen1d_ins', 'pnlesen1e_ins', 'pnlesen1a_ins', 'pnlbillboard_ins', 'pnlesen2_ins', 'pnlesen3_ins', 'pnlesen4_ins', 'pnlesen5_ins'];
+            $.each(subPanels, function (idx, pnlId) {
+                var $pnl = $('[id$="' + pnlId + '"]');
+                if ($pnl.length) {
+                    var pnlDiffs = $pnl.find('[data-has-diff="true"]').length;
+                    $pnl.attr('data-panel-has-diff', pnlDiffs > 0 ? 'true' : 'false');
+                }
+            });
+
+            // 5. Update Header Badge and Counts
+            $('#countDiffSpan').text(diffCount);
+            var $badge = $('#badgeDiffCount');
+            if (diffCount > 0) {
+                $badge.removeClass('badge-success text-white').addClass('badge-warning text-dark')
+                      .html('<i class="bi bi-exclamation-circle-fill me-1"></i>' + diffCount + ' Medan Diubah');
+            } else {
+                $badge.removeClass('badge-warning text-dark').addClass('badge-success text-white')
+                      .html('<i class="bi bi-check-circle-fill me-1"></i>Semua Data Sama');
+            }
+
+            // 6. Apply current filter mode
+            applyPembetulanDiffDisplay();
+        }
+
+        function applyPembetulanDiffDisplay() {
+            var $card = $('#cardPembetulanMaklumat');
+            var $tabMaklumat = $('#tabMaklumat').length ? $('#tabMaklumat') : $('[id$="tabMaklumat"]');
+            var isDiffOnly = $card.hasClass('filter-diff-active');
+            var diffCount = parseInt($('#countDiffSpan').text(), 10) || 0;
+
+            if (isDiffOnly) {
+                $tabMaklumat.find('[data-has-diff="false"]').hide();
+                $tabMaklumat.find('[data-has-diff="true"]').show();
+
+                $tabMaklumat.find('.row[data-row-has-diff="false"]').hide();
+                $tabMaklumat.find('.row[data-row-has-diff="true"]').show();
+
+                $tabMaklumat.find('[data-panel-has-diff="false"]').hide();
+                $tabMaklumat.find('[data-panel-has-diff="true"]').show();
+
+                if (diffCount === 0) {
+                    $('#alertNoDiff').slideDown(150);
+                } else {
+                    $('#alertNoDiff').hide();
+                }
+            } else {
+                $tabMaklumat.find('[data-has-diff]').show();
+                $tabMaklumat.find('.row').show();
+                $tabMaklumat.find('[data-panel-has-diff]').show();
+                $('#alertNoDiff').hide();
+            }
+
+            // Check Read-Only Mode (when BT_Maklumat is not visible)
+            var $btMaklumat = $('#MainContent_BT_Maklumat, [id$="BT_Maklumat"]');
+            var isReadOnly = (!$btMaklumat.length || !$btMaklumat.is(':visible'));
+            if (isReadOnly) {
+                $tabMaklumat.find('input:not([type="hidden"]), textarea').prop('readonly', true);
+                $tabMaklumat.find('select').prop('disabled', true);
+                $tabMaklumat.find('[id$="btnAddIklan_ins"], [id$="btnAddAnjing_ins"], [id$="btnRemove_ins"]').hide();
+            } else {
+                $tabMaklumat.find('input:not([type="hidden"]), textarea').prop('readonly', false);
+                $tabMaklumat.find('select').prop('disabled', false);
+                $tabMaklumat.find('[id$="btnAddIklan_ins"], [id$="btnAddAnjing_ins"], [id$="btnRemove_ins"]').show();
+            }
+        }
+
+        $(document).on('click', '#btnShowDiffOnly', function (e) {
+            e.preventDefault();
+            $('#cardPembetulanMaklumat').addClass('filter-diff-active').removeClass('filter-all-active');
+            $('#btnShowDiffOnly').addClass('btn-light active').removeClass('btn-outline-light');
+            $('#btnShowDiffOnly').find('i').addClass('text-primary');
+            $('#btnShowAllFields').addClass('btn-outline-light').removeClass('btn-light active');
+            $('#btnShowAllFields').find('i').removeClass('text-primary');
+            applyPembetulanDiffDisplay();
+        });
+
+        $(document).on('click', '#btnShowAllFields', function (e) {
+            e.preventDefault();
+            $('#cardPembetulanMaklumat').removeClass('filter-diff-active').addClass('filter-all-active');
+            $('#btnShowAllFields').addClass('btn-light active').removeClass('btn-outline-light');
+            $('#btnShowAllFields').find('i').addClass('text-primary');
+            $('#btnShowDiffOnly').addClass('btn-outline-light').removeClass('btn-light active');
+            $('#btnShowDiffOnly').find('i').removeClass('text-primary');
+            applyPembetulanDiffDisplay();
+        });
+
+        // Trigger on tab header click
+        $(document).on('click', '[id*="tabMaklumat"], .ajax__tab_header', function () {
+            setTimeout(function () {
+                initPembetulanDiffFilter();
+            }, 100);
+        });
+
+        // Re-evaluate on user typing/editing in tabMaklumat
+        $(document).on('input change', '#tabMaklumat input, #tabMaklumat textarea, #tabMaklumat select', function () {
+            clearTimeout(window._diffDebounceTimer);
+            window._diffDebounceTimer = setTimeout(function () {
+                initPembetulanDiffFilter();
+            }, 300);
+        });
     </script>
 </asp:Content>
