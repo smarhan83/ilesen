@@ -1264,6 +1264,8 @@ Partial Class appregister1
         SetControlReadOnly(tabMaklumat, isReadOnly)
         btnAddIklan_ins.Visible = Not isReadOnly
         btnAddAnjing_ins.Visible = Not isReadOnly
+        rowAddIklan_ins.Visible = Not isReadOnly
+        rowAddAnjing_ins.Visible = Not isReadOnly
         If gvIklanList_ins.Columns.Count >= 4 Then
             gvIklanList_ins.Columns(3).Visible = Not isReadOnly
         End If
