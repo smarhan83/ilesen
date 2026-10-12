@@ -458,6 +458,15 @@
             width: 100% !important;
             display: block !important;
         }
+
+        /* Suis Arkib (custom-admin.css paksa .form-check-input 20x20 tanpa border) */
+        .arkib-switch { min-height: 0; display: flex; align-items: center; }
+        .arkib-switch .form-check-input {
+            width: 2.2em !important; height: 1.15em !important; margin-top: 0; cursor: pointer;
+            border: 1px solid #adb5bd !important;
+        }
+        .arkib-switch .form-check-input:checked { background-color: #2D6CDF; border-color: #2D6CDF !important; }
+        .arkib-switch .form-check-label { font-size: 0.8rem; font-weight: 600; color: #475569; cursor: pointer; margin-left: 4px; }
         .select2-container .select2-selection--single {
             height: 38px !important;
             border: 1px solid #d1d5db !important;
@@ -3675,15 +3684,22 @@
                                         <!-- 3. Status Permohonan -->
                                         <div class="col-lg-3 col-md-6 col-12" runat="server" id="filterStatus">
                                             <div class="form-group">
-                                                <label class="form-label-custom">Status Permohonan</label>
+                                                <div class="d-flex align-items-center justify-content-between">
+                                                    <label class="form-label-custom">Status Permohonan</label>
+                                                    <%-- Arkib: papar permohonan yang telah lulus sahaja (status ditapis keluar secara default) --%>
+                                                    <div class="form-check form-switch arkib-switch mb-1" title="Papar permohonan yang telah lulus sahaja">
+                                                        <asp:CheckBox ID="chkArkib" runat="server" AutoPostBack="true" Text="Arkib" CausesValidation="false"
+                                                            OnCheckedChanged="chkArkib_CheckedChanged" />
+                                                    </div>
+                                                </div>
                                                 <asp:DropDownList ID="DDL_Status" CssClass="form-control select2" runat="server" AutoPostBack="false"
                                                     DataSourceID="sdsStatus" DataTextField="Description" DataValueField="ApprStatusID">
                                                 </asp:DropDownList>
                                                 <asp:SqlDataSource runat="server" ID="sdsStatus" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
-                                                    SelectCommand="select * from 
+                                                    SelectCommand="select * from
                                                     (select -1 as ApprStatusID, '-- Status --' as Description
                                                     union all
-                                                    select ApprStatusID,  Description from ApprovalStatus
+                                                    select ApprStatusID,  Description from ApprovalStatus where ApprStatusID &lt;&gt; 10
                                                     ) as tbl1 order by ApprStatusID "></asp:SqlDataSource>
                                             </div>
                                         </div>
@@ -4140,7 +4156,8 @@
                                         AND (@namaSyarikat IS NULL OR @namaSyarikat = '' OR @namaSyarikat = '%%' OR ISNULL(a.NamaSyarikat,'') LIKE '%'+@namaSyarikat+'%' OR ISNULL(a.NamaBaruSyarikat,'') LIKE '%'+@namaSyarikat+'%')
                                         AND a.IsBatal = CASE WHEN @batalID = 2 THEN a.IsBatal ELSE @batalID END 
                                         AND a.Is24Jam = CASE WHEN @risikoID = 2 THEN a.Is24Jam ELSE @risikoID END 
-                                        AND a.StatusID = CASE WHEN @statusID = -1 THEN a.StatusID ELSE @statusID END 
+                                        AND ((@arkib = 1 AND a.StatusID = 10)
+                                             OR (@arkib = 0 AND a.StatusID &lt;&gt; 10 AND a.StatusID = CASE WHEN @statusID = -1 THEN a.StatusID ELSE @statusID END))
                                         AND a.CreatorID = CASE WHEN @creatorID = '0' THEN a.CreatorID ELSE @creatorID END 
                                         AND (ISNULL(a.AlamatPremis,'') LIKE CASE WHEN @Alamat='' THEN ISNULL(a.AlamatPremis,'') ELSE '%'+@Alamat+'%' END
                                         OR ISNULL(a.AlamatBaru,'') LIKE CASE WHEN @Alamat='' THEN ISNULL(a.AlamatBaru,'') ELSE '%'+@Alamat+'%' END
@@ -4172,6 +4189,7 @@
                                     <asp:ControlParameter ControlID="DDL_Pembatalan" PropertyName="SelectedValue" Name="batalID"></asp:ControlParameter>
                                     <asp:ControlParameter ControlID="DDL_Risiko" PropertyName="SelectedValue" Name="risikoID"></asp:ControlParameter>
                                     <asp:ControlParameter ControlID="DDL_Status" PropertyName="SelectedValue" Name="statusID"></asp:ControlParameter>
+                                    <asp:ControlParameter ControlID="chkArkib" PropertyName="Checked" Name="arkib" Type="Boolean"></asp:ControlParameter>
                                     <asp:ControlParameter ControlID="DDL_CreatedBy" PropertyName="SelectedValue" Name="creatorID"></asp:ControlParameter>
                                     <asp:ControlParameter ControlID="TB_TarikhMohon" PropertyName="Text" DefaultValue="%%" Name="TarikhMohon"></asp:ControlParameter>
                                     <asp:ControlParameter ControlID="TB_Alamat" PropertyName="Text" DefaultValue="%%" Name="Alamat"></asp:ControlParameter>
