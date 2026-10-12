@@ -6103,7 +6103,10 @@ ORDER BY
                 });
 
                 // Initialize Select2 Elements
-                $('.select2').each(function () {
+                // "select.select2" sahaja: span .select2-container yang dicipta oleh select2
+                // juga ada kelas "select2"; kalau di-init semula ia dapat select2-hidden-accessible
+                // (tinggi 1px, clip) dan dropdown nampak kosong
+                $('select.select2').each(function () {
                     var $el = $(this);
                     var ph = $el.attr('data-placeholder') || undefined;
                     var isMultiple = $el.prop('multiple');
@@ -6583,12 +6586,14 @@ ORDER BY
 
             function refreshSelect2In($container) {
                 if (!$container || !$container.length) return;
-                $container.find('.select2').each(function () {
+                $container.find('select.select2').each(function () {
                     var $s = $(this);
                     var ph = $s.attr('data-placeholder') || undefined;
                     var isMultiple = $s.prop('multiple');
                     if ($s.data('select2')) {
                         $s.next('.select2-container').css('width', '100%');
+                        // render semula supaya lebar placeholder (multi-select) dikira semasa panel kelihatan
+                        $s.trigger('change.select2');
                     } else {
                         $s.select2({
                             width: '100%',
