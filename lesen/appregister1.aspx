@@ -4644,7 +4644,7 @@
                                         <span>Maklumat Papan Iklan</span>
                                     </div>
 
-                                    <div class="row align-items-end">
+                                    <div class="row align-items-end" id="rowAddIklan_ins" runat="server">
                                         <div class="col-md-3">
                                             <div class="form-group mb-md-0">
                                                 <label class="form-label-custom">Saiz Iklan (cm)</label>
@@ -4808,7 +4808,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="row align-items-end">
+                                    <div class="row align-items-end" id="rowAddAnjing_ins" runat="server">
                                         <div class="col-md-3">
                                             <div class="form-group mb-md-0">
                                                 <label class="form-label-custom">Jenis Baka</label>
