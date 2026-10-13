@@ -1,10 +1,12 @@
 Imports System
+Imports System.Collections.Generic
 Imports System.Configuration
 Imports System.Data
 Imports System.Data.SqlClient
 Imports System.Drawing
 Imports System.Drawing.Imaging
 Imports System.IO
+Imports System.Linq
 
 Partial Class semakkelulusan1
     Inherits System.Web.UI.Page
@@ -92,32 +94,20 @@ Partial Class semakkelulusan1
         If frmwrite = False Then
             ' Deny write permission handling if required
         End If
+
+        Try
+            If GridView1.SelectedIndex >= 0 AndAlso GridView1.SelectedDataKey IsNot Nothing Then
+                Dim pid As Integer = 0
+                If Integer.TryParse(GridView1.SelectedDataKey.Values(0).ToString(), pid) AndAlso pid > 0 Then
+                    PopulateMaklumatPermohonanModal(pid)
+                End If
+            End If
+        Catch ex As Exception
+        End Try
     End Sub
 
     Private Sub initPageName()
-        Dim menuName As String = GlobalClass.writeTitlePage(Request.QueryString("m_Id"), "")
 
-        Dim idWindowTitle2 As HtmlGenericControl = DirectCast(FormView1.FindControl("idWindowTitle2"), HtmlGenericControl)
-        Dim idWindowTitle3 As HtmlGenericControl = DirectCast(FormView1.FindControl("idWindowTitle3"), HtmlGenericControl)
-
-        If String.IsNullOrEmpty(menuName) Then
-            menuName = "Semak Kelulusan"
-        End If
-
-        idWindowTitle.InnerText = menuName
-        Try
-            If idWindowTitle2 IsNot Nothing Then
-                idWindowTitle2.InnerText = idWindowTitle2.InnerText & " " & menuName
-            End If
-        Catch ex As Exception
-        End Try
-
-        Try
-            If idWindowTitle3 IsNot Nothing Then
-                idWindowTitle3.InnerText = idWindowTitle3.InnerText & " " & menuName
-            End If
-        Catch ex As Exception
-        End Try
     End Sub
 
 #End Region
@@ -154,6 +144,8 @@ Partial Class semakkelulusan1
         Dim ApprStatusID As Integer = CInt(GridView1.SelectedDataKey.Values(1))
         Dim IsFail As Boolean = CBool(GridView1.SelectedDataKey.Values(3))
         Dim IsPublish As Boolean = CBool(GridView1.SelectedDataKey.Values(4))
+
+        PopulateMaklumatPermohonanModal(PermohonanID)
 
         If getJabatanLesen(CInt(Session.Item("sessionEstateID"))) = False OrElse ApprStatusID < 9 Then
             tabSurat.Visible = False
@@ -207,26 +199,6 @@ Partial Class semakkelulusan1
             End Select
         Catch ex As Exception
         End Try
-
-        Try
-            If Session.Item("sessionEstateID") IsNot Nothing Then
-                If e.Row.RowType = DataControlRowType.DataRow Then
-                    Dim dtTmp As DateTime = Convert.ToDateTime(DataBinder.Eval(e.Row.DataItem, "TarikhMohon").ToString())
-                    Dim is24h As Boolean = Convert.ToBoolean(DataBinder.Eval(e.Row.DataItem, "Is24jam").ToString())
-                    Dim statusDesc As String = DataBinder.Eval(e.Row.DataItem, "StatusDesc").ToString()
-
-                    If (((DateTime.Now - dtTmp).TotalHours > 24 AndAlso is24h) OrElse
-                        ((DateTime.Now - dtTmp).TotalDays > 14 AndAlso Not is24h)) AndAlso
-                        Not statusDesc.Contains("Permohonan Lulus") AndAlso
-                        Not statusDesc.Contains("Peraku Tidak Sokong") Then
-
-                        e.Row.BackColor = Color.FromName("#ff7070")
-                    End If
-                End If
-            End If
-        Catch ex As Exception
-            MessageBox("Error checking delayed task.", Me)
-        End Try
     End Sub
 
     Private Sub GridView1_RowCommand(sender As Object, e As GridViewCommandEventArgs) Handles GridView1.RowCommand
@@ -278,7 +250,317 @@ Partial Class semakkelulusan1
 
     Private Sub FormView1_DataBound(sender As Object, e As EventArgs) Handles FormView1.DataBound
         initPageName()
+        Try
+            If FormView1.DataKey IsNot Nothing AndAlso FormView1.DataKey("Permohonan_ID") IsNot Nothing Then
+                Dim pid As Integer = 0
+                If Integer.TryParse(FormView1.DataKey("Permohonan_ID").ToString(), pid) AndAlso pid > 0 Then
+                    PopulateMaklumatPermohonanModal(pid)
+                End If
+            End If
+        Catch ex As Exception
+        End Try
     End Sub
+
+#Region "Modal Maklumat Permohonan Details"
+
+    Private Sub PopulateMaklumatPermohonanModal(PermohonanID As Integer)
+        If PermohonanID <= 0 Then Exit Sub
+
+        Try
+            Using con As New SqlConnection(CS)
+                Dim sql As String = "SELECT g.*, f.Pemohon_Name, f.Pemohon_ICNo, f.Pemohon_PassportNo, f.Pemohon_Address, f.Pemohon_Nationality, f.Pemohon_Remarks, " &
+                                    "f.Pemohon_MobileNo, f.Pemohon_TelNo, f.Pemohon_Email, " &
+                                    "lkNat.name AS Pemohon_NationalityDesc, " &
+                                    "lkPasar.name AS JenisPasarDesc, " &
+                                    "lkPenjaja.name AS JenisPenjajaDesc, " &
+                                    "lkTanah.name AS StatusTanahPenjajaDesc, " &
+                                    "lkKenderaan.name AS JenisKenderaanPenjajaDesc, " &
+                                    "lkAnjingPremis.name AS AnjingJenisPremisDesc, " &
+                                    "lkBatal1.name AS SebabBatalPermDesc, " &
+                                    "lkBatal2.name AS SebabBatalTanpaPermDesc, " &
+                                    "lkTindakan.name AS TindakanBatalDesc " &
+                                    "FROM LESEN_Permohonan g " &
+                                    "LEFT JOIN LESEN_Pemohon f ON f.Pemohon_ID = g.Permohonan_PemohonID " &
+                                    "LEFT JOIN TBL_LOOKUPS lkNat ON lkNat.id = f.Pemohon_Nationality AND lkNat.lookupgrp_id = 28 " &
+                                    "LEFT JOIN TBL_LOOKUPS lkPasar ON lkPasar.id = g.JenisPasar AND lkPasar.lookupgrp_id = 10001 " &
+                                    "LEFT JOIN TBL_LOOKUPS lkPenjaja ON lkPenjaja.id = g.JenisPenjaja AND lkPenjaja.lookupgrp_id = 10006 " &
+                                    "LEFT JOIN TBL_LOOKUPS lkTanah ON lkTanah.id = g.StatusTanahPenjaja AND lkTanah.lookupgrp_id = 10007 " &
+                                    "LEFT JOIN TBL_LOOKUPS lkKenderaan ON lkKenderaan.id = g.JenisKenderaanPenjaja AND lkKenderaan.lookupgrp_id = 10008 " &
+                                    "LEFT JOIN TBL_LOOKUPS lkAnjingPremis ON lkAnjingPremis.id = g.AnjingJenisPremis AND lkAnjingPremis.lookupgrp_id = 10001 " &
+                                    "LEFT JOIN TBL_LOOKUPS lkBatal1 ON lkBatal1.id = g.SebabBatalPerm AND lkBatal1.lookupgrp_id = 10002 " &
+                                    "LEFT JOIN TBL_LOOKUPS lkBatal2 ON lkBatal2.id = g.SebabBatalTanpaPerm AND lkBatal2.lookupgrp_id = 10003 " &
+                                    "LEFT JOIN TBL_LOOKUPS lkTindakan ON lkTindakan.id = g.TindakanBatal AND lkTindakan.lookupgrp_id = 10005 " &
+                                    "WHERE g.Permohonan_ID = @Permohonan_ID"
+
+                Using cmd As New SqlCommand(sql, con)
+                    cmd.Parameters.AddWithValue("@Permohonan_ID", PermohonanID)
+                    con.Open()
+                    Using dr As SqlDataReader = cmd.ExecuteReader()
+                        If dr.Read() Then
+                            ' Header / Title
+                            lblModalNoRujukan.Text = If(dr("Rujukan") Is DBNull.Value, "-", dr("Rujukan").ToString())
+
+                            ' 1. Maklumat Pemohon
+                            lblModalPemohonID.Text = If(dr("Permohonan_PemohonID") Is DBNull.Value, "-", dr("Permohonan_PemohonID").ToString())
+                            lblModalPemohonName.Text = If(dr("Pemohon_Name") Is DBNull.Value, "-", dr("Pemohon_Name").ToString())
+
+                            Dim icNo As String = If(dr("Pemohon_ICNo") IsNot DBNull.Value, dr("Pemohon_ICNo").ToString(), "")
+                            Dim passNo As String = If(dr("Pemohon_PassportNo") IsNot DBNull.Value, dr("Pemohon_PassportNo").ToString(), "")
+                            lblModalPemohonIC.Text = If(Not String.IsNullOrEmpty(icNo), icNo, If(Not String.IsNullOrEmpty(passNo), passNo, "-"))
+
+                            lblModalPemohonNat.Text = If(dr("Pemohon_NationalityDesc") IsNot DBNull.Value, dr("Pemohon_NationalityDesc").ToString(), If(dr("Pemohon_Nationality") IsNot DBNull.Value, dr("Pemohon_Nationality").ToString(), "-"))
+
+                            lblModalPemohonAddress.Text = If(dr("Pemohon_Address") IsNot DBNull.Value AndAlso Not String.IsNullOrWhiteSpace(dr("Pemohon_Address").ToString()), dr("Pemohon_Address").ToString(), "-")
+
+                            Dim mob As String = If(dr("Pemohon_MobileNo") IsNot DBNull.Value, dr("Pemohon_MobileNo").ToString().Trim(), "")
+                            Dim tel As String = If(dr("Pemohon_TelNo") IsNot DBNull.Value, dr("Pemohon_TelNo").ToString().Trim(), "")
+                            If Not String.IsNullOrEmpty(mob) AndAlso Not String.IsNullOrEmpty(tel) Then
+                                lblModalPemohonMobile.Text = mob & " / " & tel
+                            ElseIf Not String.IsNullOrEmpty(mob) Then
+                                lblModalPemohonMobile.Text = mob
+                            ElseIf Not String.IsNullOrEmpty(tel) Then
+                                lblModalPemohonMobile.Text = tel
+                            Else
+                                lblModalPemohonMobile.Text = "-"
+                            End If
+
+                            lblModalPemohonEmail.Text = If(dr("Pemohon_Email") IsNot DBNull.Value AndAlso Not String.IsNullOrWhiteSpace(dr("Pemohon_Email").ToString()), dr("Pemohon_Email").ToString().Trim(), "-")
+
+                            lblModalPemohonRemarks.Text = If(dr("Pemohon_Remarks") Is DBNull.Value, "-", dr("Pemohon_Remarks").ToString())
+
+                            ' 2. Maklumat Permohonan
+                            lblModalTarikhMohon.Text = If(dr("TarikhMohon") Is DBNull.Value, "-", Convert.ToDateTime(dr("TarikhMohon")).ToString("dd/MM/yyyy"))
+                            lblModalRujukanField.Text = If(dr("Rujukan") Is DBNull.Value, "-", dr("Rujukan").ToString())
+                            lblModalNoAkaunCukai.Text = If(dr("NoAkaunCukai") Is DBNull.Value, "-", dr("NoAkaunCukai").ToString())
+
+                            ' Jenis Lesen badges
+                            Dim jenisLesenDesc As String = If(dr("JenisLesenDescList") Is DBNull.Value, "", dr("JenisLesenDescList").ToString())
+                            Dim jenisLesenId As String = If(dr("JenisLesenIdList") Is DBNull.Value, "", dr("JenisLesenIdList").ToString())
+                            litModalJenisLesenBadges.Text = ""
+                            If Not String.IsNullOrEmpty(jenisLesenDesc) Then
+                                Dim descArr() As String = jenisLesenDesc.Split(","c)
+                                For Each desc In descArr
+                                    If Not String.IsNullOrWhiteSpace(desc) Then
+                                        litModalJenisLesenBadges.Text &= "<span class='tag-pill me-1 mb-1'><i class='bi bi-check2-circle me-1 text-primary'></i>" & Server.HtmlEncode(desc.Trim()) & "</span>"
+                                    End If
+                                Next
+                            End If
+
+                            ' Collect license IDs
+                            Dim idList As New List(Of Integer)()
+                            If Not String.IsNullOrEmpty(jenisLesenId) Then
+                                For Each sid In jenisLesenId.Split(","c)
+                                    Dim parsedId As Integer
+                                    If Integer.TryParse(sid.Trim(), parsedId) Then
+                                        idList.Add(parsedId)
+                                    End If
+                                Next
+                            End If
+
+                            ' 3. Perniagaan / Premis Panel
+                            Dim showPerniagaan As Boolean = idList.Any(Function(x) {1, 5, 6, 7, 8, 9, 28, 30}.Contains(x)) OrElse
+                                                            (dr("NamaSyarikat") IsNot DBNull.Value AndAlso Not String.IsNullOrWhiteSpace(dr("NamaSyarikat").ToString())) OrElse
+                                                            (dr("AlamatPremis") IsNot DBNull.Value AndAlso Not String.IsNullOrWhiteSpace(dr("AlamatPremis").ToString())) OrElse
+                                                            (dr("JenisPerniagaan") IsNot DBNull.Value AndAlso Not String.IsNullOrWhiteSpace(dr("JenisPerniagaan").ToString())) OrElse
+                                                            (dr("NoPendaftaran") IsNot DBNull.Value AndAlso Not String.IsNullOrWhiteSpace(dr("NoPendaftaran").ToString()))
+                            pnlModalPerniagaan.Visible = showPerniagaan
+                            If showPerniagaan Then
+                                lblModalNamaSyarikat.Text = If(dr("NamaSyarikat") Is DBNull.Value, "-", dr("NamaSyarikat").ToString())
+                                lblModalNoPendaftaran.Text = If(dr("NoPendaftaran") Is DBNull.Value, "-", dr("NoPendaftaran").ToString())
+                                lblModalNoAkaun.Text = If(dr("NoAkaun") Is DBNull.Value, "-", dr("NoAkaun").ToString())
+                                lblModalAlamatPremis.Text = If(dr("AlamatPremis") Is DBNull.Value, "-", dr("AlamatPremis").ToString())
+                                lblModalJenisPerniagaan.Text = If(dr("JenisPerniagaan") Is DBNull.Value, "-", dr("JenisPerniagaan").ToString())
+
+                                ' Tukar Pemilik
+                                Dim showPemilikBaru As Boolean = idList.Contains(5) OrElse (dr("PemilikBaru") IsNot DBNull.Value AndAlso Not String.IsNullOrWhiteSpace(dr("PemilikBaru").ToString()))
+                                pnlModalTukarPemilik.Visible = showPemilikBaru
+                                lblModalPemilikBaru.Text = If(dr("PemilikBaru") Is DBNull.Value, "-", dr("PemilikBaru").ToString())
+
+                                ' Tukar Alamat / Premis Tambahan
+                                Dim showAlamatBaru As Boolean = idList.Any(Function(x) {6, 7, 28}.Contains(x)) OrElse (dr("AlamatBaru") IsNot DBNull.Value AndAlso Not String.IsNullOrWhiteSpace(dr("AlamatBaru").ToString()))
+                                pnlModalTukarAlamat.Visible = showAlamatBaru
+                                lblModalAlamatBaru.Text = If(dr("AlamatBaru") Is DBNull.Value, "-", dr("AlamatBaru").ToString())
+
+                                ' Tambah Jenis Perniagaan
+                                Dim showJenisPerniagaanBaru As Boolean = idList.Contains(8) OrElse (dr("JenisPerniagaanBaru") IsNot DBNull.Value AndAlso Not String.IsNullOrWhiteSpace(dr("JenisPerniagaanBaru").ToString()))
+                                pnlModalTambahPerniagaan.Visible = showJenisPerniagaanBaru
+                                lblModalJenisPerniagaanBaru.Text = If(dr("JenisPerniagaanBaru") Is DBNull.Value, "-", dr("JenisPerniagaanBaru").ToString())
+
+                                ' Tukar Nama Syarikat
+                                Dim showNamaBaruSyarikat As Boolean = idList.Contains(9) OrElse (dr("NamaBaruSyarikat") IsNot DBNull.Value AndAlso Not String.IsNullOrWhiteSpace(dr("NamaBaruSyarikat").ToString()))
+                                pnlModalTukarNama.Visible = showNamaBaruSyarikat
+                                lblModalNamaBaruSyarikat.Text = If(dr("NamaBaruSyarikat") Is DBNull.Value, "-", dr("NamaBaruSyarikat").ToString())
+                            End If
+
+                            ' 4. Papan Iklan
+                            Dim saizIklanStr As String = If(dr("SaizIklanList") Is DBNull.Value, "", dr("SaizIklanList").ToString())
+                            Dim cahayaIklanStr As String = If(dr("CahayaIklanList") Is DBNull.Value, "", dr("CahayaIklanList").ToString())
+                            Dim unitIklanStr As String = If(dr("UnitIklanList") Is DBNull.Value, "", dr("UnitIklanList").ToString())
+
+                            If Not String.IsNullOrWhiteSpace(saizIklanStr) Then
+                                Dim saizArr() As String = saizIklanStr.Split(","c)
+                                Dim cahayaArr() As String = cahayaIklanStr.Split(","c)
+                                Dim unitArr() As String = unitIklanStr.Split(","c)
+
+                                Dim dtIklan As New DataTable()
+                                dtIklan.Columns.Add("SaizIklan", GetType(String))
+                                dtIklan.Columns.Add("Bercahaya", GetType(String))
+                                dtIklan.Columns.Add("Unit", GetType(String))
+
+                                For i As Integer = 0 To saizArr.Length - 1
+                                    If Not String.IsNullOrWhiteSpace(saizArr(i)) Then
+                                        Dim row = dtIklan.NewRow()
+                                        row("SaizIklan") = saizArr(i).Trim()
+                                        row("Bercahaya") = If(i < cahayaArr.Length, cahayaArr(i).Trim(), "-")
+                                        row("Unit") = If(i < unitArr.Length, unitArr(i).Trim(), "-")
+                                        dtIklan.Rows.Add(row)
+                                    End If
+                                Next
+
+                                gvModalIklan.DataSource = dtIklan
+                                gvModalIklan.DataBind()
+                                pnlModalIklan.Visible = (dtIklan.Rows.Count > 0)
+                            Else
+                                pnlModalIklan.Visible = False
+                            End If
+
+                            ' 5. Billboard
+                            Dim bLokasi As String = If(dr("BillboardLokasi") IsNot DBNull.Value, dr("BillboardLokasi").ToString().Trim(), "")
+                            Dim bList As String = If(dr("LokasiList") IsNot DBNull.Value, dr("LokasiList").ToString().Trim(), "")
+                            Dim showBillboard As Boolean = idList.Contains(26) OrElse Not String.IsNullOrEmpty(bLokasi) OrElse Not String.IsNullOrEmpty(bList)
+                            pnlModalBillboard.Visible = showBillboard
+                            If showBillboard Then
+                                Dim allLoc As String = bLokasi
+                                If Not String.IsNullOrEmpty(bList) AndAlso Not allLoc.Contains(bList) Then
+                                    If Not String.IsNullOrEmpty(allLoc) Then allLoc &= " | "
+                                    allLoc &= bList
+                                End If
+                                lblModalBillboardLokasi.Text = If(String.IsNullOrEmpty(allLoc), "-", allLoc)
+                            End If
+
+                            ' 6. Pasar
+                            Dim showPasar As Boolean = idList.Any(Function(x) {2, 25}.Contains(x)) OrElse (dr("LokasiPasar1") IsNot DBNull.Value AndAlso Not String.IsNullOrWhiteSpace(dr("LokasiPasar1").ToString()))
+                            pnlModalPasar.Visible = showPasar
+                            If showPasar Then
+                                lblModalLokasiPasar1.Text = If(dr("LokasiPasar1") Is DBNull.Value, "-", dr("LokasiPasar1").ToString())
+                                lblModalLokasiPasar2.Text = If(dr("LokasiPasar2") Is DBNull.Value, "-", dr("LokasiPasar2").ToString())
+                                lblModalLokasiPasar3.Text = If(dr("LokasiPasar3") Is DBNull.Value, "-", dr("LokasiPasar3").ToString())
+                                lblModalJenisPasar.Text = If(dr("JenisPasarDesc") IsNot DBNull.Value, dr("JenisPasarDesc").ToString(), If(dr("JenisPasar") IsNot DBNull.Value, dr("JenisPasar").ToString(), "-"))
+                                lblModalJenisPerniagaanPasar.Text = If(dr("JenisPerniagaanPasar") Is DBNull.Value, "-", dr("JenisPerniagaanPasar").ToString())
+                                lblModalJumlahPetak.Text = If(dr("JumlahPetak") Is DBNull.Value, "-", dr("JumlahPetak").ToString())
+                            End If
+
+                            ' 7. Lesen Anjing
+                            Dim bakaStr As String = If(dr("BakaAnjingList") Is DBNull.Value, "", dr("BakaAnjingList").ToString())
+                            Dim showAnjing As Boolean = idList.Contains(3) OrElse Not String.IsNullOrWhiteSpace(bakaStr) OrElse (dr("AnjingAlamat") IsNot DBNull.Value AndAlso Not String.IsNullOrWhiteSpace(dr("AnjingAlamat").ToString()))
+                            pnlModalAnjing.Visible = showAnjing
+                            If showAnjing Then
+                                lblModalAnjingAlamat.Text = If(dr("AnjingAlamat") Is DBNull.Value, "-", dr("AnjingAlamat").ToString())
+                                lblModalAnjingJenisPremis.Text = If(dr("AnjingJenisPremisDesc") IsNot DBNull.Value, dr("AnjingJenisPremisDesc").ToString(), If(dr("AnjingJenisPremis") IsNot DBNull.Value, dr("AnjingJenisPremis").ToString(), "-"))
+
+                                If Not String.IsNullOrWhiteSpace(bakaStr) Then
+                                    Dim bakaArr() As String = bakaStr.Split(","c)
+                                    Dim jantanArr() As String = If(dr("AnjingJantanList") Is DBNull.Value, "", dr("AnjingJantanList").ToString()).Split(","c)
+                                    Dim betinaArr() As String = If(dr("AnjingBetinaList") Is DBNull.Value, "", dr("AnjingBetinaList").ToString()).Split(","c)
+                                    Dim jmArr() As String = If(dr("AnjingJantanMandulList") Is DBNull.Value, "", dr("AnjingJantanMandulList").ToString()).Split(","c)
+                                    Dim bmArr() As String = If(dr("AnjingBetinaMandulList") Is DBNull.Value, "", dr("AnjingBetinaMandulList").ToString()).Split(","c)
+
+                                    Dim dtAnjing As New DataTable()
+                                    dtAnjing.Columns.Add("Baka", GetType(String))
+                                    dtAnjing.Columns.Add("Jantan", GetType(String))
+                                    dtAnjing.Columns.Add("Betina", GetType(String))
+                                    dtAnjing.Columns.Add("JantanMandul", GetType(String))
+                                    dtAnjing.Columns.Add("BetinaMandul", GetType(String))
+
+                                    For i As Integer = 0 To bakaArr.Length - 1
+                                        If Not String.IsNullOrWhiteSpace(bakaArr(i)) Then
+                                            Dim row = dtAnjing.NewRow()
+                                            row("Baka") = bakaArr(i).Trim()
+                                            row("Jantan") = If(i < jantanArr.Length, jantanArr(i).Trim(), "0")
+                                            row("Betina") = If(i < betinaArr.Length, betinaArr(i).Trim(), "0")
+                                            row("JantanMandul") = If(i < jmArr.Length, jmArr(i).Trim(), "0")
+                                            row("BetinaMandul") = If(i < bmArr.Length, bmArr(i).Trim(), "0")
+                                            dtAnjing.Rows.Add(row)
+                                        End If
+                                    Next
+
+                                    gvModalAnjing.DataSource = dtAnjing
+                                    gvModalAnjing.DataBind()
+                                End If
+                            End If
+
+                            ' 8. Penjaja
+                            Dim showPenjaja As Boolean = idList.Contains(4) OrElse (dr("AlamatPenjajaan") IsNot DBNull.Value AndAlso Not String.IsNullOrWhiteSpace(dr("AlamatPenjajaan").ToString()))
+                            pnlModalPenjaja.Visible = showPenjaja
+                            If showPenjaja Then
+                                lblModalJenisPenjaja.Text = If(dr("JenisPenjajaDesc") IsNot DBNull.Value, dr("JenisPenjajaDesc").ToString(), "-")
+                                lblModalStatusTanahPenjaja.Text = If(dr("StatusTanahPenjajaDesc") IsNot DBNull.Value, dr("StatusTanahPenjajaDesc").ToString(), "-")
+                                lblModalJenisPerniagaanPenjaja.Text = If(dr("JenisPerniagaanPenjaja") Is DBNull.Value, "-", dr("JenisPerniagaanPenjaja").ToString())
+                                lblModalAlamatPenjajaan.Text = If(dr("AlamatPenjajaan") Is DBNull.Value, "-", dr("AlamatPenjajaan").ToString())
+
+                                Dim masa1 As String = If(dr("MasaPenjaja1") Is DBNull.Value, "", dr("MasaPenjaja1").ToString())
+                                Dim masa2 As String = If(dr("MasaPenjaja2") Is DBNull.Value, "", dr("MasaPenjaja2").ToString())
+                                lblModalMasaPenjaja.Text = If(String.IsNullOrEmpty(masa1) And String.IsNullOrEmpty(masa2), "-", masa1 & " hingga " & masa2)
+
+                                Dim kenderaanDesc As String = If(dr("JenisKenderaanPenjajaDesc") IsNot DBNull.Value, dr("JenisKenderaanPenjajaDesc").ToString(), "")
+                                Dim noKenderaan As String = If(dr("NoKenderaanPenjaja") IsNot DBNull.Value, dr("NoKenderaanPenjaja").ToString(), "")
+                                lblModalKenderaanPenjaja.Text = If(String.IsNullOrEmpty(kenderaanDesc) And String.IsNullOrEmpty(noKenderaan), "-", kenderaanDesc & If(Not String.IsNullOrEmpty(noKenderaan), " (" & noKenderaan & ")", ""))
+                            End If
+
+                            ' 9. Ekspo / Program
+                            Dim showEkspo As Boolean = idList.Any(Function(x) (x >= 10 AndAlso x <= 24)) OrElse (dr("NamaEkspo") IsNot DBNull.Value AndAlso Not String.IsNullOrWhiteSpace(dr("NamaEkspo").ToString()))
+                            pnlModalEkspo.Visible = showEkspo
+                            If showEkspo Then
+                                lblModalPenganjurEkspo.Text = If(dr("PenganjurEkspo") Is DBNull.Value, "-", dr("PenganjurEkspo").ToString())
+                                lblModalAlamatPenganjurEkspo.Text = If(dr("AlamatPenganjurEkspo") Is DBNull.Value, "-", dr("AlamatPenganjurEkspo").ToString())
+                                lblModalPicEkspo.Text = If(dr("PicEkspo") Is DBNull.Value, "-", dr("PicEkspo").ToString())
+                                lblModalNoTelEkspo.Text = If(dr("NoTelEkspo") Is DBNull.Value, "-", dr("NoTelEkspo").ToString())
+                                lblModalNamaEkspo.Text = If(dr("NamaEkspo") Is DBNull.Value, "-", dr("NamaEkspo").ToString())
+                                lblModalLokasiEkspo.Text = If(dr("LokasiEkspo") Is DBNull.Value, "-", dr("LokasiEkspo").ToString())
+
+                                Dim tekspo1 As String = If(dr("TarikhEkspo1") Is DBNull.Value, "", Convert.ToDateTime(dr("TarikhEkspo1")).ToString("dd/MM/yyyy"))
+                                Dim tekspo2 As String = If(dr("TarikhEkspo2") Is DBNull.Value, "", Convert.ToDateTime(dr("TarikhEkspo2")).ToString("dd/MM/yyyy"))
+                                lblModalTarikhEkspo.Text = If(String.IsNullOrEmpty(tekspo1) And String.IsNullOrEmpty(tekspo2), "-", tekspo1 & " hingga " & tekspo2)
+
+                                Dim mekspo1 As String = If(dr("MasaEkspo1") Is DBNull.Value, "", dr("MasaEkspo1").ToString())
+                                Dim mekspo2 As String = If(dr("MasaEkspo2") Is DBNull.Value, "", dr("MasaEkspo2").ToString())
+                                lblModalMasaEkspo.Text = If(String.IsNullOrEmpty(mekspo1) And String.IsNullOrEmpty(mekspo2), "-", mekspo1 & " hingga " & mekspo2)
+
+                                lblModalTentatifEkspo.Text = If(dr("TentatifEkspo") Is DBNull.Value, "-", dr("TentatifEkspo").ToString())
+                                lblModalJemputanEkspo.Text = If(dr("JemputanEkspo") Is DBNull.Value, "-", dr("JemputanEkspo").ToString())
+                                lblModalPembersihanEkspo.Text = If(dr("PembersihanEkspo") Is DBNull.Value, "-", dr("PembersihanEkspo").ToString())
+
+                                Dim tkhemah1 As String = If(dr("TarikhKhemahEkspo1") Is DBNull.Value, "", Convert.ToDateTime(dr("TarikhKhemahEkspo1")).ToString("dd/MM/yyyy"))
+                                Dim tkhemah2 As String = If(dr("TarikhKhemahEkspo2") Is DBNull.Value, "", Convert.ToDateTime(dr("TarikhKhemahEkspo2")).ToString("dd/MM/yyyy"))
+                                lblModalTarikhKhemah.Text = If(String.IsNullOrEmpty(tkhemah1) And String.IsNullOrEmpty(tkhemah2), "-", tkhemah1 & " hingga " & tkhemah2)
+                            End If
+
+
+
+                            ' 12. Pembatalan
+                            Dim isBatalVal As Boolean = (dr("IsBatal") IsNot DBNull.Value AndAlso Convert.ToBoolean(dr("IsBatal")))
+                            pnlModalBatal.Visible = isBatalVal
+                            If isBatalVal Then
+                                Dim jbatal As String = If(dr("JenisBatal") Is DBNull.Value, "", dr("JenisBatal").ToString())
+                                lblModalJenisBatal.Text = If(jbatal = "1", "Dengan Permohonan", If(jbatal = "2", "Tanpa Permohonan", "-"))
+
+                                Dim sebabDesc As String = If(dr("SebabBatalPermDesc") IsNot DBNull.Value, dr("SebabBatalPermDesc").ToString(),
+                                                            If(dr("SebabBatalTanpaPermDesc") IsNot DBNull.Value, dr("SebabBatalTanpaPermDesc").ToString(), "-"))
+                                lblModalSebabBatal.Text = sebabDesc
+                                lblModalRemarksBatal.Text = If(dr("RemarksBatal") Is DBNull.Value, "-", dr("RemarksBatal").ToString())
+                                lblModalTindakanBatal.Text = If(dr("TindakanBatalDesc") IsNot DBNull.Value, dr("TindakanBatalDesc").ToString(), If(dr("TindakanBatal") IsNot DBNull.Value, dr("TindakanBatal").ToString(), "-"))
+                                lblModalTarikhBatal.Text = If(dr("TarikhBatal") Is DBNull.Value, "-", Convert.ToDateTime(dr("TarikhBatal")).ToString("dd/MM/yyyy"))
+                            End If
+                        End If
+                    End Using
+                End Using
+            End Using
+        Catch ex As Exception
+            System.Diagnostics.Trace.WriteLine("Error in PopulateMaklumatPermohonanModal: " & ex.Message)
+        End Try
+    End Sub
+
+#End Region
 
     Protected Sub FormView1_ItemInserting(ByVal sender As Object, ByVal e As System.Web.UI.WebControls.FormViewInsertEventArgs) Handles FormView1.ItemInserting
         Dim titleTxt As TextBox = DirectCast(FormView1.FindControl("txtJenisLesen_Description"), TextBox)

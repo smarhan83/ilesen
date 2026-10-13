@@ -63,6 +63,276 @@
         .table-bordered {
             text-align: center;
         }
+
+        /* =========================================================================
+           Design System & UI Look and Feel from appregister1.aspx
+           ========================================================================= */
+        .form-section-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #1e3a8a;
+            background: linear-gradient(90deg, #f0f4f9 0%, #f8fafc 100%);
+            padding: 9px 15px;
+            border-radius: 8px;
+            border-left: 4px solid #2D6CDF;
+            margin-top: 1.25rem;
+            margin-bottom: 1.15rem;
+        }
+        .form-section-header i {
+            font-size: 1.1rem;
+            color: #2D6CDF;
+        }
+        .form-section-header.danger-section {
+            background: linear-gradient(90deg, #fef2f2 0%, #fff 100%);
+            border-left-color: #ef4444;
+            color: #991b1b;
+        }
+        .form-section-header.danger-section i {
+            color: #ef4444;
+        }
+
+        .form-group {
+            margin-bottom: 1.1rem;
+        }
+        .form-group label, .form-label-custom {
+            display: block;
+            font-size: 0.83rem;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 0.35rem;
+            line-height: 1.3;
+        }
+
+        .form-control, .form-select, select.form-control {
+            height: 38px;
+            padding: 6px 12px;
+            font-size: 0.875rem;
+            border-radius: 6px;
+            border: 1px solid #d1d5db;
+            background-color: #fff;
+            transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+        }
+        textarea.form-control {
+            height: auto !important;
+            min-height: 76px;
+            resize: vertical;
+        }
+        .form-control:focus, .form-select:focus {
+            border-color: #2D6CDF;
+            box-shadow: 0 0 0 3px rgba(45, 108, 223, 0.15);
+            outline: 0;
+        }
+        .form-control:disabled, .form-control[readonly] {
+            background-color: #f8fafc !important;
+            border-color: #e2e8f0 !important;
+            color: #4b5563 !important;
+        }
+
+        /* Select2 Sizing Harmonization */
+        .select2.select2-container,
+        .form-group .select2-container:not(.select2-container--open),
+        .select2-container:not(.select2-container--open) {
+            width: 100% !important;
+            display: block !important;
+        }
+        .select2-container .select2-selection--single {
+            height: 38px !important;
+            border: 1px solid #d1d5db !important;
+            border-radius: 6px !important;
+            padding: 4px 8px !important;
+            display: flex !important;
+            align-items: center !important;
+            width: 100% !important;
+            box-sizing: border-box !important;
+        }
+        .select2-container--default .select2-selection--single .select2-selection__rendered {
+            line-height: 28px !important;
+            font-size: 0.875rem !important;
+            color: #374151 !important;
+            padding-left: 4px !important;
+            padding-right: 24px !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
+            white-space: nowrap !important;
+            display: block !important;
+            width: 100% !important;
+        }
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            height: 36px !important;
+            right: 6px !important;
+        }
+        .select2-container--default.select2-container--focus .select2-selection--single {
+            border-color: #2D6CDF !important;
+            box-shadow: 0 0 0 3px rgba(45, 108, 223, 0.15) !important;
+        }
+
+        /* Tag pill styling */
+        .tag-container {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 4px;
+        }
+        .tag-pill {
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            color: #1e40af;
+            padding: 4px 12px;
+            border-radius: 20px;
+            display: inline-flex;
+            align-items: center;
+            font-size: 0.83rem;
+            font-weight: 600;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+        }
+
+        /* Checkbox Box Card */
+        .checkbox-box {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 7px 12px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            min-height: 38px;
+            transition: background 0.15s, border-color 0.15s;
+        }
+        .checkbox-box:hover {
+            background: #f1f5f9;
+            border-color: #cbd5e1;
+        }
+        .checkbox-box input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: #2D6CDF;
+            margin: 0;
+        }
+        .checkbox-box label, .checkbox-box span {
+            margin: 0;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+            user-select: none;
+            color: #374151;
+        }
+
+        /* Card Form Enhancements */
+        .card.card-warning {
+            border: 1px solid rgba(245, 158, 11, 0.25);
+            border-radius: 12px;
+            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
+        .card.card-warning > .card-header {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: #fff;
+            padding: 12px 20px;
+        }
+        .card.card-primary {
+            border: 1px solid rgba(45, 108, 223, 0.25);
+            border-radius: 12px;
+            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
+        .card.card-primary > .card-header {
+            background: linear-gradient(135deg, #2D6CDF, #1d4ed8);
+            color: #fff;
+            padding: 12px 20px;
+        }
+        .card-body {
+            padding: 20px 24px;
+        }
+        .card-footer {
+            background-color: #f8fafc;
+            border-top: 1px solid #e2e8f0;
+            padding: 14px 24px;
+        }
+
+        /* GridView Modern Styling */
+        .custom-gridview {
+            border-collapse: separate !important;
+            border-spacing: 0 !important;
+            width: 100% !important;
+            margin-bottom: 0 !important;
+            background-color: #fff;
+            border: 1px solid #e2e8f0 !important;
+            border-radius: 8px !important;
+            overflow: hidden;
+        }
+        .custom-gridview th {
+            background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%) !important;
+            color: #1e3a8a !important;
+            font-size: 0.81rem !important;
+            font-weight: 700 !important;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            padding: 11px 12px !important;
+            vertical-align: middle !important;
+            border-bottom: 2px solid #cbd5e1 !important;
+            border-top: none !important;
+            white-space: nowrap;
+        }
+        .custom-gridview th a {
+            color: #1e3a8a !important;
+            text-decoration: none !important;
+            font-weight: 700 !important;
+        }
+        .custom-gridview th a:hover {
+            color: #2D6CDF !important;
+            text-decoration: underline !important;
+        }
+        .custom-gridview td {
+            padding: 10px 12px !important;
+            vertical-align: middle !important;
+            font-size: 0.84rem !important;
+            border-color: #e9ecef !important;
+            color: #334155;
+        }
+        .custom-gridview tr:hover td {
+            background-color: #f8fafc !important;
+        }
+
+        /* Modal Details View Styling */
+        .modal-details-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 18px 20px;
+            margin-bottom: 18px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+        }
+        .modal-field-group {
+            margin-bottom: 0.85rem;
+        }
+        .modal-field-label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #475569;
+            margin-bottom: 0.25rem;
+        }
+        .modal-field-value {
+            display: block;
+            width: 100%;
+            min-height: 38px;
+            padding: 7px 12px;
+            font-size: 0.86rem;
+            color: #1e293b;
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            box-sizing: border-box;
+        }
+        .modal-field-value-multiline {
+            min-height: 70px;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
     </style>
 </asp:Content>
 
@@ -99,13 +369,13 @@
             <asp:FormView ID="FormView1" runat="server" DataKeyNames="JenisLesenIdList, JenisLesenDescList, Permohonan_ID, ApprStatusID"
                 DataSourceID="SqlDataSourceForm" DefaultMode="Edit" Width="100%" CssClass="CustomTab">
                 <EditItemTemplate>
-                    <div class="card card-warning">
-                        <div class="card-header">
-                            <h3 class="card-title">
-                                <div runat="server" id="idWindowTitle2">Maklumat</div>
+                    <div class="card card-warning mb-3">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h3 class="card-title mb-0 font-weight-bold">
+                                <i class="bi bi-shield-check me-2"></i><span runat="server" id="idWindowTitle2">Maklumat Semakan</span>
                             </h3>
                             <div class="card-tools">
-                                <button class="btn btn-tool" data-card-widget="collapse" type="button">
+                                <button class="btn btn-tool text-white" data-card-widget="collapse" type="button">
                                     <i class="fas fa-minus"></i>
                                 </button>
                             </div>
@@ -114,64 +384,81 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label>Nama Pemohon</label>
-                                        <asp:Label ID="Label1" runat="server" Text='<%# Eval("Pemohon_Name") %>' CssClass="form-control"></asp:Label>
+                                        <label class="form-label-custom"><i class="bi bi-person me-1 text-primary"></i>Nama Pemohon</label>
+                                        <asp:Label ID="Label1" runat="server" Text='<%# Eval("Pemohon_Name") %>' CssClass="form-control" style="background-color: #f8fafc; font-weight: 600; color: #1e293b;"></asp:Label>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label>Tarikh mohon</label>
-                                        <asp:Label ID="Label2" runat="server" Text='<%# Eval("TarikhMohon", "{0:yyyy-MM-dd}") %>' CssClass="form-control"></asp:Label>
+                                        <label class="form-label-custom"><i class="bi bi-calendar3 me-1 text-primary"></i>Tarikh Mohon</label>
+                                        <asp:Label ID="Label2" runat="server" Text='<%# Eval("TarikhMohon", "{0:dd/MM/yyyy}") %>' CssClass="form-control" style="background-color: #f8fafc;"></asp:Label>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-md-8">
                                     <div class="form-group">
-                                        <label>Jenis Lesen</label>
-                                        <asp:Label ID="Label3" runat="server" Text='<%# Bind("JenisLesenDescList") %>' CssClass="form-control"></asp:Label>
+                                        <label class="form-label-custom"><i class="bi bi-card-checklist me-1 text-primary"></i>Jenis Lesen</label>
+                                        <asp:Label ID="Label3" runat="server" Text='<%# Bind("JenisLesenDescList") %>' CssClass="form-control" style="background-color: #f8fafc; font-weight: 500;"></asp:Label>
                                     </div>
                                 </div>
-                                <div class="col-md-3" runat="server">
-                                    <div class="form-group">
-                                        <label>&nbsp;</label>
+                                <div class="col-md-4 d-flex align-items-end" runat="server">
+                                    <div class="form-group w-100">
+                                        <label class="form-label-custom d-none d-md-block">&nbsp;</label>
                                         <asp:HyperLink ID="HyperLink1" runat="server"
-                                            CssClass="btn btn-primary form-control" NavigateUrl='<%# "~/lesen/appregister1.aspx?p_Id=3348&m_Id=3349&pid=" + Eval("Permohonan_ID").ToString() %>' Target="_blank">Lihat Maklumat Permohonan</asp:HyperLink>
+                                            CssClass="btn btn-primary w-100 d-inline-flex align-items-center justify-content-center"
+                                            NavigateUrl="javascript:void(0);"
+                                            onclick="showPermohonanModal(); return false;"
+                                            data-bs-toggle="modal" data-bs-target="#modalMaklumatPermohonan"
+                                            data-toggle="modal" data-target="#modalMaklumatPermohonan">
+                                            <i class="bi bi-file-earmark-text me-2"></i>Lihat Maklumat Permohonan
+                                        </asp:HyperLink>
                                     </div>
                                 </div>
                             </div>
-                            <hr />
+                            <hr class="my-3" style="border-color: #e2e8f0;" />
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label>Nota (Kelulusan)</label>
-                                        <asp:Label ID="Label6" runat="server" Text='<%# Bind("NotaKelulusan") %>' Height="114" CssClass="form-control"></asp:Label>
+                                        <label class="form-label-custom"><i class="bi bi-journal-text me-1 text-primary"></i>Nota (Kelulusan)</label>
+                                        <asp:Label ID="Label6" runat="server" Text='<%# Bind("NotaKelulusan") %>' CssClass="form-control" style="min-height: 85px; background-color: #f8fafc; white-space: pre-wrap;"></asp:Label>
                                     </div>
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-group">
-                                        <label>Status</label>
-                                        <asp:Label ID="Label5" runat="server" Text='<%# Eval("Description") %>' CssClass="form-control"></asp:Label>
+                                        <label class="form-label-custom"><i class="bi bi-info-circle me-1 text-primary"></i>Status</label>
+                                        <asp:Label ID="Label5" runat="server" Text='<%# Eval("Description") %>' CssClass="form-control" style="background-color: #f8fafc;"></asp:Label>
                                     </div>
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-group">
-                                        <label>Jumlah Paparan</label>
-                                        <asp:Label ID="Label7" runat="server" Text='<%# Eval("TotalViews") %>' CssClass="form-control"></asp:Label>
+                                        <label class="form-label-custom"><i class="bi bi-eye me-1 text-primary"></i>Jumlah Paparan</label>
+                                        <asp:Label ID="Label7" runat="server" Text='<%# Eval("TotalViews") %>' CssClass="form-control" style="background-color: #f8fafc;"></asp:Label>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="card-footer">
-                            <asp:LinkButton ID="btnBack" runat="server" CausesValidation="False" Text="Kembali ke senarai" CssClass="btn btn-default" OnClick="btnBack_Click" />
-                            <asp:LinkButton runat="server" CssClass="btn btn-warning" CausesValidation="False" Text="Lihat Surat Mohon Ulasan" ID="BT_SuratMohonUlasan" Visible='<%# If(CInt(Session.Item("sessionEstateId")) = 1, False, True) %>' OnCommand="BT_SuratMohonUlasan_Command" />
-                            <asp:LinkButton runat="server" CssClass="btn btn-warning" ValidationGroup="updateForm" Text="Lihat Surat Kelulusan" ID="BT_ViewMail" Visible='<%# If(Eval("ApprStatusID") < 9, False, True) %>' OnCommand="BT_ViewMail_Command" CausesValidation="False" />
-                            <label style="margin-left: 50px;">Janaan Komputer?</label>
-                            <asp:CheckBox ID="CB_IsDigitalSign" runat="server" Checked="true" AutoPostBack="true" Enabled='<%# If(Eval("ApprStatusID") < 9, False, True) %>'/>
-
-                            <label style="margin-left: 50px;">Terbit Kelulusan?</label>
-                            <asp:CheckBox ID="CB_IsPublish" runat="server" Checked='<%# Eval("IsPublish") %>' OnCheckedChanged="CB_IsPublish_CheckedChanged" AutoPostBack="true" Enabled='<%# If(Eval("ApprStatusID") < 9, False, True) %>'/>
+                        <div class="card-footer d-flex flex-wrap align-items-center justify-content-between gap-3">
+                            <div class="d-flex flex-wrap align-items-center gap-2">
+                                <asp:LinkButton ID="btnBack" runat="server" CausesValidation="False" Text="Kembali ke senarai" CssClass="btn btn-outline-secondary d-inline-flex align-items-center" OnClick="btnBack_Click">
+                                    <i class="bi bi-arrow-left me-1"></i>Kembali ke senarai
+                                </asp:LinkButton>
+                                <asp:LinkButton runat="server" CssClass="btn btn-warning d-inline-flex align-items-center text-dark" CausesValidation="False" Text="Lihat Surat Mohon Ulasan" ID="BT_SuratMohonUlasan" Visible='<%# If(CInt(Session.Item("sessionEstateId")) = 1, False, True) %>' OnCommand="BT_SuratMohonUlasan_Command">
+                                    <i class="bi bi-envelope-paper me-1"></i>Lihat Surat Mohon Ulasan
+                                </asp:LinkButton>
+                                <asp:LinkButton runat="server" CssClass="btn btn-success d-inline-flex align-items-center text-white" ValidationGroup="updateForm" Text="Lihat Surat Kelulusan" ID="BT_ViewMail" Visible='<%# If(Eval("ApprStatusID") < 9, False, True) %>' OnCommand="BT_ViewMail_Command" CausesValidation="False">
+                                    <i class="bi bi-file-earmark-pdf me-1"></i>Lihat Surat Kelulusan
+                                </asp:LinkButton>
+                            </div>
+                            <div class="d-flex flex-wrap align-items-center gap-3">
+                                <div class="checkbox-box">
+                                    <asp:CheckBox ID="CB_IsDigitalSign" runat="server" Checked="true" AutoPostBack="true" Enabled='<%# If(Eval("ApprStatusID") < 9, False, True) %>' Text="Janaan Komputer?" />
+                                </div>
+                                <div class="checkbox-box">
+                                    <asp:CheckBox ID="CB_IsPublish" runat="server" Checked='<%# Eval("IsPublish") %>' OnCheckedChanged="CB_IsPublish_CheckedChanged" AutoPostBack="true" Enabled='<%# If(Eval("ApprStatusID") < 9, False, True) %>' Text="Terbit Kelulusan?" />
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </EditItemTemplate>
@@ -882,128 +1169,132 @@
             <%-- ========================================================================= --%>
             <%-- SECTION 4: MAIN LISTING & SEARCH FILTER (idListing & GridView1)           --%>
             <%-- ========================================================================= --%>
-            <div class="card" runat="server" id="idListing">
-                <div class="card-body" style="overflow-x: auto;">
-                    <div class="row">
-                        <div class="col-md-10">
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <asp:TextBox ID="txtNoRujukan" placeholder="No Rujukan" runat="server" CssClass="form-control"></asp:TextBox>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-3" runat="server" id="filterJenisLesen">
-                                    <div class="form-group">
-                                        <asp:DropDownList ID="DDL_JenisLesen" CssClass="form-control select2" runat="server" AutoPostBack="false"
-                                            DataSourceID="SqlDataSourceLesen" DataTextField="JenisLesen_Description" DataValueField="JenisLesen_ID">
-                                        </asp:DropDownList>
-                                        <asp:SqlDataSource runat="server" ID="SqlDataSourceLesen" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
-                                            SelectCommand="SELECT * FROM 
-                                        (select '0' as JenisLesen_ID, '-- Lesen --' as JenisLesen_Description
-                                        union all
-                                        select JenisLesen_Description AS JenisLesen_ID, JenisLesen_Description from LESEN_JenisLesen where JenisLesen_IsActive=1
-                                        ) as tbl1 order by JenisLesen_Description "></asp:SqlDataSource>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <asp:TextBox ID="TB_TarikhLulus" runat="server" TextMode="Date" CssClass="form-control" />
-                                    </div>
-                                </div>
-
-                                <div class="col-md-2" runat="server" id="filterStatus">
-                                    <asp:DropDownList ID="ddlStatus" CssClass="form-control select2" runat="server" AutoPostBack="false"
-                                        DataSourceID="sdsStatus" DataTextField="Description" DataValueField="ApprStatusID">
-                                    </asp:DropDownList>
-                                    <asp:SqlDataSource runat="server" ID="sdsStatus" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
-                                        SelectCommand="select * from 
-                                        (select -1 as ApprStatusID, '-- Status --' as Description
-                                        union all
-                                        select ApprStatusID,  Description from ApprovalStatus
-                                        WHERE ApprStatusID > 8) as tbl1 order by ApprStatusID "></asp:SqlDataSource>
-                                </div>
+            <div class="card card-primary" runat="server" id="idListing">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h3 class="card-title mb-0 font-weight-bold">
+                        <i class="bi bi-card-checklist me-2"></i>Senarai Semakan Kelulusan
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div class="form-section-header mt-0 mb-3">
+                        <i class="bi bi-funnel"></i>
+                        <span>Carian & Penapis Rekod</span>
+                    </div>
+                    <div class="row align-items-end g-3 mb-4">
+                        <div class="col-md-3">
+                            <div class="form-group mb-0">
+                                <label class="form-label-custom">No Rujukan</label>
+                                <asp:TextBox ID="txtNoRujukan" placeholder="Cth: MPKS/..." runat="server" CssClass="form-control"></asp:TextBox>
                             </div>
                         </div>
+
+                        <div class="col-md-3" runat="server" id="filterJenisLesen">
+                            <div class="form-group mb-0">
+                                <label class="form-label-custom">Jenis Lesen</label>
+                                <asp:DropDownList ID="DDL_JenisLesen" CssClass="form-control select2" runat="server" AutoPostBack="false"
+                                    DataSourceID="SqlDataSourceLesen" DataTextField="JenisLesen_Description" DataValueField="JenisLesen_ID">
+                                </asp:DropDownList>
+                                <asp:SqlDataSource runat="server" ID="SqlDataSourceLesen" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
+                                    SelectCommand="SELECT * FROM 
+                                (select '0' as JenisLesen_ID, '-- Lesen --' as JenisLesen_Description
+                                union all
+                                select JenisLesen_Description AS JenisLesen_ID, JenisLesen_Description from LESEN_JenisLesen where JenisLesen_IsActive=1
+                                ) as tbl1 order by JenisLesen_Description "></asp:SqlDataSource>
+                            </div>
+                        </div>
+
                         <div class="col-md-2">
-                            <div class="form-group">
-                                <asp:Button ID="btnSearch" runat="server" CssClass="btn btn-default" Text="Cari" />
-                                <asp:Button ID="btnReset" CssClass="btn btn-default" runat="server" Text="Reset" />
+                            <div class="form-group mb-0">
+                                <label class="form-label-custom">Tarikh Lulus</label>
+                                <asp:TextBox ID="TB_TarikhLulus" runat="server" TextMode="Date" CssClass="form-control" />
+                            </div>
+                        </div>
+
+                        <div class="col-md-2" runat="server" id="filterStatus">
+                            <div class="form-group mb-0">
+                                <label class="form-label-custom">Status</label>
+                                <asp:DropDownList ID="ddlStatus" CssClass="form-control select2" runat="server" AutoPostBack="false"
+                                    DataSourceID="sdsStatus" DataTextField="Description" DataValueField="ApprStatusID">
+                                </asp:DropDownList>
+                                <asp:SqlDataSource runat="server" ID="sdsStatus" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
+                                    SelectCommand="select * from 
+                                (select -1 as ApprStatusID, '-- Status --' as Description
+                                union all
+                                select ApprStatusID,  Description from ApprovalStatus
+                                WHERE ApprStatusID > 8) as tbl1 order by ApprStatusID "></asp:SqlDataSource>
+                            </div>
+                        </div>
+
+                        <div class="col-md-2">
+                            <div class="form-group mb-0 d-flex gap-2">
+                                <asp:Button ID="btnSearch" runat="server" CssClass="btn btn-primary flex-fill" Text="Cari" />
+                                <asp:Button ID="btnReset" CssClass="btn btn-outline-secondary flex-fill" runat="server" Text="Reset" />
                             </div>
                         </div>
                     </div>
 
-                    <asp:GridView ID="GridView1" runat="server" Visible="true" AllowPaging="true"
-                        AllowSorting="True" AutoGenerateColumns="False" 
-                        DataKeyNames="Permohonan_ID,ApprStatusID,JenisLesenIdList,IsSuratKelulusanFail,IsPublish"
-                        DataSourceID="SqlDataSourceGrid"
-                        CssClass="table table-bordered" PagerStyle-CssClass="pgr"
-                        AlternatingRowStyle-CssClass="alt">
-                        <AlternatingRowStyle CssClass="alt" />
-                        <Columns>
-                            <asp:BoundField DataField="RowNo" HeaderText="No" SortExpression="RowNo"></asp:BoundField>
-                            <asp:BoundField DataField="Rujukan" HeaderText="No Rujukan" SortExpression="Rujukan" />
-                            <asp:BoundField DataField="JenisLesenDescList" HeaderText="Jenis Lesen" SortExpression="JenisLesenDescList" />
-                            <asp:BoundField DataField="Pemohon_Name" HeaderText="Nama Pemohon" SortExpression="Pemohon_Name" />
-                            <asp:BoundField DataField="CreatedDt" HeaderText="Tarikh Lulus" DataFormatString="{0:dd/MM/yyyy}" SortExpression="CreatedDt" />
-                            <asp:BoundField DataField="StatusDesc" HeaderText="Status" SortExpression="StatusDesc" />
+                    <div class="table-responsive">
+                        <asp:GridView ID="GridView1" runat="server" Visible="true" AllowPaging="true"
+                            AllowSorting="True" AutoGenerateColumns="False" 
+                            DataKeyNames="Permohonan_ID,ApprStatusID,JenisLesenIdList,IsSuratKelulusanFail,IsPublish"
+                            DataSourceID="SqlDataSourceGrid"
+                            CssClass="table custom-gridview table-hover align-middle" PagerStyle-CssClass="pgr"
+                            AlternatingRowStyle-CssClass="alt">
+                            <AlternatingRowStyle CssClass="alt" />
+                            <Columns>
+                                <asp:BoundField DataField="RowNo" HeaderText="No" SortExpression="RowNo"></asp:BoundField>
+                                <asp:BoundField DataField="Rujukan" HeaderText="No Rujukan" SortExpression="Rujukan" />
+                                <asp:BoundField DataField="JenisLesenDescList" HeaderText="Jenis Lesen" SortExpression="JenisLesenDescList" />
+                                <asp:BoundField DataField="Pemohon_Name" HeaderText="Nama Pemohon" SortExpression="Pemohon_Name" />
+                                <asp:BoundField DataField="CreatedDt" HeaderText="Tarikh Lulus" DataFormatString="{0:dd/MM/yyyy}" SortExpression="CreatedDt" />
+                                <asp:BoundField DataField="StatusDesc" HeaderText="Status" SortExpression="StatusDesc" />
 
-                            <asp:TemplateField HeaderText="Maklumat Permohonan" HeaderStyle-Font-Size="10pt" HeaderStyle-Width="90%" ItemStyle-Width="90%">
-                                <ItemTemplate>
-                                    <asp:Label ID="Label4" runat="server" Text="No Rujukan :" Font-Bold="True" Font-Size="10pt"></asp:Label><br />
-                                    <asp:Label ID="Label8" runat="server" Text='<%# Eval("Rujukan") %>' Font-Size="10pt"></asp:Label><br />
-                                    <asp:Label ID="Label15" runat="server" Text="Tarikh Lulus :" Font-Bold="True" Font-Size="10pt"></asp:Label><br />
-                                    <asp:Label ID="Label16" runat="server" Text='<%# Eval("CreatedDt", "{0:dd/MM/yyyy}") %>' Font-Size="10pt"></asp:Label><br />
-                                    <asp:Label ID="Label9" runat="server" Text="Jenis Lesen :" Font-Bold="True" Font-Size="10pt"></asp:Label><br />
-                                    <asp:Label ID="Label10" runat="server" Text='<%# Eval("JenisLesenDescList") %>' Font-Size="10pt"></asp:Label><br />
-                                    <asp:Label ID="Label11" runat="server" Text="Nama Pemohon :" Font-Bold="True" Font-Size="10pt"></asp:Label><br />
-                                    <asp:Label ID="Label12" runat="server" Text='<%# Eval("Pemohon_Name") %>' Font-Size="10pt"></asp:Label><br />
-                                    <asp:Label ID="Label17" runat="server" Text="Status :" Font-Bold="True" Font-Size="10pt"></asp:Label><br />
-                                    <asp:Label ID="Label18" runat="server" Text='<%# Eval("StatusDesc") %>' Font-Size="10pt"></asp:Label>
-                                </ItemTemplate>
-                                <ItemStyle HorizontalAlign="Left" />
-                            </asp:TemplateField>
+                                <asp:TemplateField HeaderText="Maklumat Permohonan" HeaderStyle-Font-Size="10pt" HeaderStyle-Width="90%" ItemStyle-Width="90%">
+                                    <ItemTemplate>
+                                        <div class="p-1">
+                                            <div class="fw-bold text-primary"><%# Eval("Rujukan") %></div>
+                                            <div class="text-muted small"><strong>Tarikh:</strong> <%# Eval("CreatedDt", "{0:dd/MM/yyyy}") %></div>
+                                            <div class="text-muted small"><strong>Lesen:</strong> <%# Eval("JenisLesenDescList") %></div>
+                                            <div class="text-muted small"><strong>Pemohon:</strong> <%# Eval("Pemohon_Name") %></div>
+                                            <div class="text-muted small"><strong>Status:</strong> <span class="badge bg-secondary"><%# Eval("StatusDesc") %></span></div>
+                                        </div>
+                                    </ItemTemplate>
+                                    <ItemStyle HorizontalAlign="Left" />
+                                </asp:TemplateField>
 
-                            <asp:TemplateField ShowHeader="False">
-                                <ItemTemplate>
-                                    <asp:LinkButton runat="server" Text="Lihat" CommandName="Select" CausesValidation="False"
-                                        ID="LinkButton5" Visible='<%# If(Eval("UserType") > 0 And Eval("StatusID") > 0, True, False) %>' CssClass="btn btn-warning btn-sm"></asp:LinkButton>
+                                <asp:TemplateField ShowHeader="False">
+                                    <ItemTemplate>
+                                        <div class="d-flex flex-wrap gap-1 align-items-center justify-content-end">
+                                            <asp:LinkButton runat="server" Text="Lihat" CommandName="Select" CausesValidation="False"
+                                                ID="LinkButton5" Visible='<%# If(Eval("UserType") > 0 And Eval("StatusID") > 0, True, False) %>' CssClass="btn btn-warning btn-sm d-inline-flex align-items-center">
+                                                <i class="bi bi-eye me-1"></i>Lihat
+                                            </asp:LinkButton>
 
-                                    <asp:LinkButton runat="server" Text="Surat" CommandName="Surat" CausesValidation="False" ID="LinkButton6"
-                                        Visible='<%# If(Eval("UserType") > 0 And Eval("IsPublish") = True, True, False) %>'
-                                        CssClass="btn btn-warning btn-sm" CommandArgument='<%# Container.DataItemIndex %>'></asp:LinkButton>
+                                            <asp:LinkButton runat="server" Text="Surat" CommandName="Surat" CausesValidation="False" ID="LinkButton6"
+                                                Visible='<%# If(Eval("UserType") > 0 And Eval("IsPublish") = True, True, False) %>'
+                                                CssClass="btn btn-info btn-sm text-white d-inline-flex align-items-center" CommandArgument='<%# Container.DataItemIndex %>'>
+                                                <i class="bi bi-file-earmark-pdf me-1"></i>Surat
+                                            </asp:LinkButton>
 
-                                    <asp:LinkButton runat="server" Text="Lampiran 1" CommandName="Lampiran1" CausesValidation="False" ID="LinkButton7"
-                                        Visible='<%# If(Eval("UserType") > 0 And Eval("IsPublish") = True, True, False) %>'
-                                        CssClass="btn btn-warning btn-sm" CommandArgument='<%# Container.DataItemIndex %>'></asp:LinkButton>
+                                            <asp:LinkButton runat="server" Text="Lampiran 1" CommandName="Lampiran1" CausesValidation="False" ID="LinkButton7"
+                                                Visible='<%# If(Eval("UserType") > 0 And Eval("IsPublish") = True, True, False) %>'
+                                                CssClass="btn btn-outline-primary btn-sm d-inline-flex align-items-center" CommandArgument='<%# Container.DataItemIndex %>'>
+                                                <i class="bi bi-paperclip me-1"></i>Lampiran 1
+                                            </asp:LinkButton>
 
-                                    <asp:LinkButton runat="server" Text="Lampiran 2" CommandName="Lampiran2" CausesValidation="False" ID="LinkButton3"
-                                        Visible='<%# If(Eval("UserType") > 0 And Eval("IsPublish") = True, True, False) %>'
-                                        CssClass="btn btn-warning btn-sm" CommandArgument='<%# Container.DataItemIndex %>'></asp:LinkButton>
-                                </ItemTemplate>
-                            </asp:TemplateField>
-                            <asp:BoundField DataField="TarikhMohon" HeaderText="TarikhMohon" DataFormatString="{0:dd/MM/yyyy}" SortExpression="TarikhMohon" Visible="false"></asp:BoundField>
-                            <asp:BoundField DataField="Is24jam" HeaderText="Risiko" SortExpression="Is24jam" Visible="false"></asp:BoundField>
-                        </Columns>
-                        <PagerStyle CssClass="pgr" />
-                    </asp:GridView>
-					
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="form-group" style="text-align: right; float: right;">
-                                <table>
-                                    <tr>
-                                        <td>
-                                            <div style="background-color: #ff7070; width: 20px">&nbsp;</div>
-                                        </td>
-                                        <td>
-                                            &nbsp;&nbsp;<asp:Label ID="legendTitle" runat="server" Text="Sedang dalam pemerhatian/proses oleh bahagian agensi" Font-Size="10pt"></asp:Label>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </div>
-                        </div>
+                                            <asp:LinkButton runat="server" Text="Lampiran 2" CommandName="Lampiran2" CausesValidation="False" ID="LinkButton3"
+                                                Visible='<%# If(Eval("UserType") > 0 And Eval("IsPublish") = True, True, False) %>'
+                                                CssClass="btn btn-outline-secondary btn-sm d-inline-flex align-items-center" CommandArgument='<%# Container.DataItemIndex %>'>
+                                                <i class="bi bi-paperclip me-1"></i>Lampiran 2
+                                            </asp:LinkButton>
+                                        </div>
+                                    </ItemTemplate>
+                                </asp:TemplateField>
+                                <asp:BoundField DataField="TarikhMohon" HeaderText="TarikhMohon" DataFormatString="{0:dd/MM/yyyy}" SortExpression="TarikhMohon" Visible="false"></asp:BoundField>
+                                <asp:BoundField DataField="Is24jam" HeaderText="Risiko" SortExpression="Is24jam" Visible="false"></asp:BoundField>
+                            </Columns>
+                            <PagerStyle CssClass="pgr" />
+                        </asp:GridView>
                     </div>
                 </div>
             </div>
@@ -1054,9 +1345,538 @@
     </asp:SqlDataSource>
 
     <%-- ========================================================================= --%>
-    <%-- SECTION 6: CLIENT SCRIPTS                                                 --%>
+    <%-- SECTION 6: MODAL POPUP (Maklumat Permohonan - Excludes Banting)           --%>
+    <%-- ========================================================================= --%>
+    <div class="modal fade" id="modalMaklumatPermohonan" tabindex="-1" aria-labelledby="modalMaklumatPermohonanLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-scrollable">
+            <div class="modal-content border-0 shadow-lg" style="border-radius: 12px; overflow: hidden;">
+                <div class="modal-header bg-primary text-white py-3">
+                    <h5 class="modal-title font-weight-bold d-flex align-items-center mb-0" id="modalMaklumatPermohonanLabel">
+                        <i class="bi bi-info-circle-fill me-2 fs-5"></i>
+                        <span>Butiran Maklumat Permohonan:</span>
+                        <span class="ms-2 badge bg-white text-primary fs-6 fw-bold">
+                            <asp:Label ID="lblModalNoRujukan" runat="server" Text="-"></asp:Label>
+                        </span>
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4 bg-light">
+
+                    <!-- SECTION 1: MAKLUMAT PEMOHON -->
+                    <div class="card modal-details-card mb-3">
+                        <div class="form-section-header mt-0">
+                            <i class="bi bi-person-vcard"></i>
+                            <span>Maklumat Pemohon</span>
+                        </div>
+                        <div class="row g-3">
+                            <div class="col-md-3 col-lg-2">
+                                <div class="modal-field-group">
+                                    <label class="modal-field-label">Pemohon ID</label>
+                                    <asp:Label ID="lblModalPemohonID" runat="server" CssClass="modal-field-value"></asp:Label>
+                                </div>
+                            </div>
+                            <div class="col-md-5 col-lg-6">
+                                <div class="modal-field-group">
+                                    <label class="modal-field-label">Nama Pemohon</label>
+                                    <asp:Label ID="lblModalPemohonName" runat="server" CssClass="modal-field-value"></asp:Label>
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-lg-4">
+                                <div class="modal-field-group">
+                                    <label class="modal-field-label">No. Kad Pengenalan / Pasport</label>
+                                    <asp:Label ID="lblModalPemohonIC" runat="server" CssClass="modal-field-value"></asp:Label>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="modal-field-group">
+                                    <label class="modal-field-label">Warganegara</label>
+                                    <asp:Label ID="lblModalPemohonNat" runat="server" CssClass="modal-field-value"></asp:Label>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="modal-field-group">
+                                    <label class="modal-field-label">No. Telefon Bimbit</label>
+                                    <asp:Label ID="lblModalPemohonMobile" runat="server" CssClass="modal-field-value"></asp:Label>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="modal-field-group">
+                                    <label class="modal-field-label">Emel</label>
+                                    <asp:Label ID="lblModalPemohonEmail" runat="server" CssClass="modal-field-value"></asp:Label>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="modal-field-group">
+                                    <label class="modal-field-label">Alamat</label>
+                                    <asp:Label ID="lblModalPemohonAddress" runat="server" CssClass="modal-field-value modal-field-value-multiline"></asp:Label>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="modal-field-group mb-0">
+                                    <label class="modal-field-label">Catatan Pemohon</label>
+                                    <asp:Label ID="lblModalPemohonRemarks" runat="server" CssClass="modal-field-value modal-field-value-multiline"></asp:Label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SECTION 2: MAKLUMAT PERMOHONAN -->
+                    <div class="card modal-details-card mb-3">
+                        <div class="form-section-header mt-0">
+                            <i class="bi bi-file-earmark-text"></i>
+                            <span>Maklumat Permohonan</span>
+                        </div>
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <div class="modal-field-group">
+                                    <label class="modal-field-label">Tarikh Mohon</label>
+                                    <asp:Label ID="lblModalTarikhMohon" runat="server" CssClass="modal-field-value"></asp:Label>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="modal-field-group">
+                                    <label class="modal-field-label">No Rujukan Permohonan</label>
+                                    <asp:Label ID="lblModalRujukanField" runat="server" CssClass="modal-field-value"></asp:Label>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="modal-field-group">
+                                    <label class="modal-field-label">No Akaun Cukai Taksiran</label>
+                                    <asp:Label ID="lblModalNoAkaunCukai" runat="server" CssClass="modal-field-value"></asp:Label>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="modal-field-group mb-0">
+                                    <label class="modal-field-label">Jenis Lesen / Permit Dipohon</label>
+                                    <div class="tag-container mt-1">
+                                        <asp:Literal ID="litModalJenisLesenBadges" runat="server"></asp:Literal>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SECTION 3: PERNIAGAAN / PREMIS -->
+                    <asp:Panel ID="pnlModalPerniagaan" runat="server" Visible="false">
+                        <div class="card modal-details-card mb-3">
+                            <div class="form-section-header mt-0">
+                                <i class="bi bi-shop"></i>
+                                <span>Maklumat Perniagaan / Premis</span>
+                            </div>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="modal-field-group">
+                                        <label class="modal-field-label">Nama Syarikat</label>
+                                        <asp:Label ID="lblModalNamaSyarikat" runat="server" CssClass="modal-field-value"></asp:Label>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="modal-field-group">
+                                        <label class="modal-field-label">No. Pendaftaran</label>
+                                        <asp:Label ID="lblModalNoPendaftaran" runat="server" CssClass="modal-field-value"></asp:Label>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="modal-field-group">
+                                        <label class="modal-field-label">No. Akaun Perniagaan</label>
+                                        <asp:Label ID="lblModalNoAkaun" runat="server" CssClass="modal-field-value"></asp:Label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="modal-field-group">
+                                        <label class="modal-field-label">Alamat Premis</label>
+                                        <asp:Label ID="lblModalAlamatPremis" runat="server" CssClass="modal-field-value modal-field-value-multiline"></asp:Label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="modal-field-group">
+                                        <label class="modal-field-label">Jenis Perniagaan</label>
+                                        <asp:Label ID="lblModalJenisPerniagaan" runat="server" CssClass="modal-field-value modal-field-value-multiline"></asp:Label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Sub-Panel: Tukar Pemilik -->
+                            <asp:Panel ID="pnlModalTukarPemilik" runat="server" Visible="false">
+                                <div class="row g-3 mt-1">
+                                    <div class="col-md-12">
+                                        <div class="modal-field-group">
+                                            <label class="modal-field-label text-primary"><i class="bi bi-person-gear me-1"></i>Nama Pemilik Baru</label>
+                                            <asp:Label ID="lblModalPemilikBaru" runat="server" CssClass="modal-field-value"></asp:Label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </asp:Panel>
+
+                            <!-- Sub-Panel: Tukar Alamat / Premis Tambahan -->
+                            <asp:Panel ID="pnlModalTukarAlamat" runat="server" Visible="false">
+                                <div class="row g-3 mt-1">
+                                    <div class="col-md-12">
+                                        <div class="modal-field-group">
+                                            <label class="modal-field-label text-primary"><i class="bi bi-geo-alt me-1"></i>Alamat Premis Baru / Premis Tambahan</label>
+                                            <asp:Label ID="lblModalAlamatBaru" runat="server" CssClass="modal-field-value modal-field-value-multiline"></asp:Label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </asp:Panel>
+
+                            <!-- Sub-Panel: Tambah Aktiviti Perniagaan -->
+                            <asp:Panel ID="pnlModalTambahPerniagaan" runat="server" Visible="false">
+                                <div class="row g-3 mt-1">
+                                    <div class="col-md-12">
+                                        <div class="modal-field-group">
+                                            <label class="modal-field-label text-primary"><i class="bi bi-plus-circle me-1"></i>Jenis Perniagaan Baru (Tambahan)</label>
+                                            <asp:Label ID="lblModalJenisPerniagaanBaru" runat="server" CssClass="modal-field-value modal-field-value-multiline"></asp:Label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </asp:Panel>
+
+                            <!-- Sub-Panel: Tukar Nama Syarikat -->
+                            <asp:Panel ID="pnlModalTukarNama" runat="server" Visible="false">
+                                <div class="row g-3 mt-1">
+                                    <div class="col-md-12">
+                                        <div class="modal-field-group">
+                                            <label class="modal-field-label text-primary"><i class="bi bi-building me-1"></i>Nama Baru Syarikat</label>
+                                            <asp:Label ID="lblModalNamaBaruSyarikat" runat="server" CssClass="modal-field-value"></asp:Label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </asp:Panel>
+                        </div>
+                    </asp:Panel>
+
+                    <!-- SECTION 4: PAPAN IKLAN -->
+                    <asp:Panel ID="pnlModalIklan" runat="server" Visible="false">
+                        <div class="card modal-details-card mb-3">
+                            <div class="form-section-header mt-0">
+                                <i class="bi bi-card-image"></i>
+                                <span>Maklumat Papan Iklan</span>
+                            </div>
+                            <div class="table-responsive">
+                                <asp:GridView ID="gvModalIklan" runat="server" AutoGenerateColumns="False" CssClass="table custom-gridview table-bordered align-middle">
+                                    <Columns>
+                                        <asp:TemplateField HeaderText="No.">
+                                            <ItemTemplate><%# Container.DataItemIndex + 1 %></ItemTemplate>
+                                            <HeaderStyle Width="6%" CssClass="text-center" />
+                                            <ItemStyle CssClass="text-center" />
+                                        </asp:TemplateField>
+                                        <asp:BoundField DataField="SaizIklan" HeaderText="Saiz Iklan (cm)" />
+                                        <asp:BoundField DataField="Bercahaya" HeaderText="Bercahaya" HeaderStyle-CssClass="text-center" ItemStyle-CssClass="text-center" />
+                                        <asp:BoundField DataField="Unit" HeaderText="Bilangan Unit" HeaderStyle-CssClass="text-center" ItemStyle-CssClass="text-center" />
+                                    </Columns>
+                                </asp:GridView>
+                            </div>
+                        </div>
+                    </asp:Panel>
+
+                    <!-- SECTION 5: BILLBOARD -->
+                    <asp:Panel ID="pnlModalBillboard" runat="server" Visible="false">
+                        <div class="card modal-details-card mb-3">
+                            <div class="form-section-header mt-0">
+                                <i class="bi bi-badge-ad"></i>
+                                <span>Maklumat Billboard</span>
+                            </div>
+                            <div class="row g-3">
+                                <div class="col-12">
+                                    <div class="modal-field-group mb-0">
+                                        <label class="modal-field-label">Lokasi Billboard</label>
+                                        <asp:Label ID="lblModalBillboardLokasi" runat="server" CssClass="modal-field-value modal-field-value-multiline"></asp:Label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </asp:Panel>
+
+                    <!-- SECTION 6: PASAR -->
+                    <asp:Panel ID="pnlModalPasar" runat="server" Visible="false">
+                        <div class="card modal-details-card mb-3">
+                            <div class="form-section-header mt-0">
+                                <i class="bi bi-basket"></i>
+                                <span>Maklumat Pasar</span>
+                            </div>
+                            <div class="row g-3">
+                                <div class="col-md-4">
+                                    <div class="modal-field-group">
+                                        <label class="modal-field-label">Lokasi Pasar 1</label>
+                                        <asp:Label ID="lblModalLokasiPasar1" runat="server" CssClass="modal-field-value"></asp:Label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="modal-field-group">
+                                        <label class="modal-field-label">Lokasi Pasar 2</label>
+                                        <asp:Label ID="lblModalLokasiPasar2" runat="server" CssClass="modal-field-value"></asp:Label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="modal-field-group">
+                                        <label class="modal-field-label">Lokasi Pasar 3</label>
+                                        <asp:Label ID="lblModalLokasiPasar3" runat="server" CssClass="modal-field-value"></asp:Label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="modal-field-group">
+                                        <label class="modal-field-label">Jenis Pasar</label>
+                                        <asp:Label ID="lblModalJenisPasar" runat="server" CssClass="modal-field-value"></asp:Label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="modal-field-group">
+                                        <label class="modal-field-label">Jenis Perniagaan Pasar</label>
+                                        <asp:Label ID="lblModalJenisPerniagaanPasar" runat="server" CssClass="modal-field-value"></asp:Label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="modal-field-group">
+                                        <label class="modal-field-label">Jumlah Petak</label>
+                                        <asp:Label ID="lblModalJumlahPetak" runat="server" CssClass="modal-field-value"></asp:Label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </asp:Panel>
+
+                    <!-- SECTION 7: LESEN ANJING -->
+                    <asp:Panel ID="pnlModalAnjing" runat="server" Visible="false">
+                        <div class="card modal-details-card mb-3">
+                            <div class="form-section-header mt-0">
+                                <i class="bi bi-heart-pulse"></i>
+                                <span>Maklumat Lesen Anjing</span>
+                            </div>
+                            <div class="row g-3 mb-3">
+                                <div class="col-md-8">
+                                    <div class="modal-field-group">
+                                        <label class="modal-field-label">Alamat Premis / Lokasi Anjing</label>
+                                        <asp:Label ID="lblModalAnjingAlamat" runat="server" CssClass="modal-field-value modal-field-value-multiline"></asp:Label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="modal-field-group">
+                                        <label class="modal-field-label">Jenis Premis</label>
+                                        <asp:Label ID="lblModalAnjingJenisPremis" runat="server" CssClass="modal-field-value"></asp:Label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="table-responsive">
+                                <asp:GridView ID="gvModalAnjing" runat="server" AutoGenerateColumns="False" CssClass="table custom-gridview table-bordered align-middle">
+                                    <Columns>
+                                        <asp:TemplateField HeaderText="No.">
+                                            <ItemTemplate><%# Container.DataItemIndex + 1 %></ItemTemplate>
+                                            <HeaderStyle Width="6%" CssClass="text-center" />
+                                            <ItemStyle CssClass="text-center" />
+                                        </asp:TemplateField>
+                                        <asp:BoundField DataField="Baka" HeaderText="Baka Anjing" />
+                                        <asp:BoundField DataField="Jantan" HeaderText="Jantan" HeaderStyle-CssClass="text-center" ItemStyle-CssClass="text-center" />
+                                        <asp:BoundField DataField="Betina" HeaderText="Betina" HeaderStyle-CssClass="text-center" ItemStyle-CssClass="text-center" />
+                                        <asp:BoundField DataField="JantanMandul" HeaderText="Jantan Mandul" HeaderStyle-CssClass="text-center" ItemStyle-CssClass="text-center" />
+                                        <asp:BoundField DataField="BetinaMandul" HeaderText="Betina Mandul" HeaderStyle-CssClass="text-center" ItemStyle-CssClass="text-center" />
+                                    </Columns>
+                                </asp:GridView>
+                            </div>
+                        </div>
+                    </asp:Panel>
+
+                    <!-- SECTION 8: PENJAJA -->
+                    <asp:Panel ID="pnlModalPenjaja" runat="server" Visible="false">
+                        <div class="card modal-details-card mb-3">
+                            <div class="form-section-header mt-0">
+                                <i class="bi bi-person-walking"></i>
+                                <span>Maklumat Penjaja</span>
+                            </div>
+                            <div class="row g-3">
+                                <div class="col-md-4">
+                                    <div class="modal-field-group">
+                                        <label class="modal-field-label">Jenis Penjaja</label>
+                                        <asp:Label ID="lblModalJenisPenjaja" runat="server" CssClass="modal-field-value"></asp:Label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="modal-field-group">
+                                        <label class="modal-field-label">Status Tanah Penjaja</label>
+                                        <asp:Label ID="lblModalStatusTanahPenjaja" runat="server" CssClass="modal-field-value"></asp:Label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="modal-field-group">
+                                        <label class="modal-field-label">Jenis Perniagaan Penjaja</label>
+                                        <asp:Label ID="lblModalJenisPerniagaanPenjaja" runat="server" CssClass="modal-field-value"></asp:Label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="modal-field-group">
+                                        <label class="modal-field-label">Alamat / Lokasi Penjajaan</label>
+                                        <asp:Label ID="lblModalAlamatPenjajaan" runat="server" CssClass="modal-field-value modal-field-value-multiline"></asp:Label>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="modal-field-group">
+                                        <label class="modal-field-label">Masa Operasi Penjaja</label>
+                                        <asp:Label ID="lblModalMasaPenjaja" runat="server" CssClass="modal-field-value"></asp:Label>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="modal-field-group">
+                                        <label class="modal-field-label">Kenderaan Penjaja</label>
+                                        <asp:Label ID="lblModalKenderaanPenjaja" runat="server" CssClass="modal-field-value"></asp:Label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </asp:Panel>
+
+                    <!-- SECTION 9: EKSPO / PROGRAM -->
+                    <asp:Panel ID="pnlModalEkspo" runat="server" Visible="false">
+                        <div class="card modal-details-card mb-3">
+                            <div class="form-section-header mt-0">
+                                <i class="bi bi-calendar-event"></i>
+                                <span>Maklumat Ekspo / Program</span>
+                            </div>
+                            <div class="row g-3">
+                                <div class="col-md-4">
+                                    <div class="modal-field-group">
+                                        <label class="modal-field-label">Nama Ekspo / Program</label>
+                                        <asp:Label ID="lblModalNamaEkspo" runat="server" CssClass="modal-field-value fw-bold"></asp:Label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="modal-field-group">
+                                        <label class="modal-field-label">Penganjur</label>
+                                        <asp:Label ID="lblModalPenganjurEkspo" runat="server" CssClass="modal-field-value"></asp:Label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="modal-field-group">
+                                        <label class="modal-field-label">Lokasi Ekspo</label>
+                                        <asp:Label ID="lblModalLokasiEkspo" runat="server" CssClass="modal-field-value"></asp:Label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="modal-field-group">
+                                        <label class="modal-field-label">Alamat Penganjur</label>
+                                        <asp:Label ID="lblModalAlamatPenganjurEkspo" runat="server" CssClass="modal-field-value modal-field-value-multiline"></asp:Label>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="modal-field-group">
+                                        <label class="modal-field-label">Nama PIC</label>
+                                        <asp:Label ID="lblModalPicEkspo" runat="server" CssClass="modal-field-value"></asp:Label>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="modal-field-group">
+                                        <label class="modal-field-label">No. Telefon PIC</label>
+                                        <asp:Label ID="lblModalNoTelEkspo" runat="server" CssClass="modal-field-value"></asp:Label>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="modal-field-group">
+                                        <label class="modal-field-label">Tarikh Program</label>
+                                        <asp:Label ID="lblModalTarikhEkspo" runat="server" CssClass="modal-field-value"></asp:Label>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="modal-field-group">
+                                        <label class="modal-field-label">Masa Program</label>
+                                        <asp:Label ID="lblModalMasaEkspo" runat="server" CssClass="modal-field-value"></asp:Label>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="modal-field-group">
+                                        <label class="modal-field-label">Tarikh Pasang / Buka Khemah</label>
+                                        <asp:Label ID="lblModalTarikhKhemah" runat="server" CssClass="modal-field-value"></asp:Label>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="modal-field-group">
+                                        <label class="modal-field-label">Kategori Jemputan</label>
+                                        <asp:Label ID="lblModalJemputanEkspo" runat="server" CssClass="modal-field-value"></asp:Label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="modal-field-group">
+                                        <label class="modal-field-label">Tentatif Program</label>
+                                        <asp:Label ID="lblModalTentatifEkspo" runat="server" CssClass="modal-field-value modal-field-value-multiline"></asp:Label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="modal-field-group">
+                                        <label class="modal-field-label">Pelan Pembersihan</label>
+                                        <asp:Label ID="lblModalPembersihanEkspo" runat="server" CssClass="modal-field-value modal-field-value-multiline"></asp:Label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </asp:Panel>
+
+
+                    <!-- SECTION 12: PEMBATALAN -->
+                    <asp:Panel ID="pnlModalBatal" runat="server" Visible="false">
+                        <div class="card modal-details-card mb-3">
+                            <div class="form-section-header danger-section mt-0">
+                                <i class="bi bi-x-octagon"></i>
+                                <span>Maklumat Pembatalan</span>
+                            </div>
+                            <div class="row g-3">
+                                <div class="col-md-3">
+                                    <div class="modal-field-group">
+                                        <label class="modal-field-label">Jenis Pembatalan</label>
+                                        <asp:Label ID="lblModalJenisBatal" runat="server" CssClass="modal-field-value text-danger fw-bold"></asp:Label>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="modal-field-group">
+                                        <label class="modal-field-label">Sebab Batal</label>
+                                        <asp:Label ID="lblModalSebabBatal" runat="server" CssClass="modal-field-value"></asp:Label>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="modal-field-group">
+                                        <label class="modal-field-label">Tindakan</label>
+                                        <asp:Label ID="lblModalTindakanBatal" runat="server" CssClass="modal-field-value"></asp:Label>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="modal-field-group">
+                                        <label class="modal-field-label">Tarikh Batal</label>
+                                        <asp:Label ID="lblModalTarikhBatal" runat="server" CssClass="modal-field-value"></asp:Label>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="modal-field-group mb-0">
+                                        <label class="modal-field-label">Catatan Pembatalan</label>
+                                        <asp:Label ID="lblModalRemarksBatal" runat="server" CssClass="modal-field-value modal-field-value-multiline"></asp:Label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </asp:Panel>
+
+                </div>
+                <div class="modal-footer bg-light py-2">
+                    <button type="button" class="btn btn-secondary px-4 d-inline-flex align-items-center" data-bs-dismiss="modal">
+                        <i class="bi bi-x-lg me-1"></i>Tutup
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <%-- ========================================================================= --%>
+    <%-- SECTION 7: CLIENT SCRIPTS                                                 --%>
     <%-- ========================================================================= --%>
     <script>
+        function showPermohonanModal() {
+            var modalEl = document.getElementById('modalMaklumatPermohonan');
+            if (modalEl) {
+                if (typeof bootstrap !== 'undefined' && bootstrap.Modal) {
+                    var modalObj = bootstrap.Modal.getOrCreateInstance(modalEl);
+                    modalObj.show();
+                } else if (typeof $ !== 'undefined' && $.fn.modal) {
+                    $('#modalMaklumatPermohonan').modal('show');
+                }
+            }
+        }
+
         function pageLoad() {
             $(function () {
                 // Initialize Select2 Elements
