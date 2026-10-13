@@ -1267,8 +1267,14 @@ Partial Class kelulusan1
             End If
 
             If AgensiID = 0 Then
-                If ApprStatusID = 5 Then
-                    SQL = "UPDATE LESEN_Permohonan set StatusID = " & statusUpdate & ", StatusIDPengesah = 1, LastModDt = getdate(), 
+                If ApprStatusID = 5 And Is24JamLulusSementara(Permohonan_ID) Then
+                    ' 24 jam: Pengesah lulus dahulu (sementara); bila semua agensi selesai, trigger agensi kembalikan ke Pengesah
+                    SQL = "UPDATE LESEN_Permohonan set StatusID = 10, StatusIDPengesah = 1, LastModDt = getdate(),
+                LastModID = @SessionUserName ,NotaKelulusanPengesah = @NotaKelulusanPengesah,
+                Lulus24JamID = @SessionUserName, Lulus24JamDt = getdate()
+                where Permohonan_ID = @Permohonan_ID "
+                ElseIf ApprStatusID = 5 Then
+                    SQL = "UPDATE LESEN_Permohonan set StatusID = " & statusUpdate & ", StatusIDPengesah = 1, LastModDt = getdate(),
                 LastModID = @SessionUserName ,NotaKelulusanPengesah = @NotaKelulusanPengesah
                 where Permohonan_ID = @Permohonan_ID "
                 ElseIf ApprStatusID = 8 Then
@@ -2937,7 +2943,8 @@ Partial Class kelulusan1
             If e.Item.ItemType = ListItemType.AlternatingItem OrElse e.Item.ItemType = ListItemType.Item Then
                 Dim hdn24jam As HiddenField = TryCast(e.Item.FindControl("hdn24jam"), HiddenField)
 
-                If hdn24jam.Value = "True" Or Session.Item("sessionIsPeraku") = "True" Then
+                If Session.Item("sessionIsPeraku") = "True" OrElse
+                    (hdn24jam.Value = "True" AndAlso e.Item.ItemIndex = 0 AndAlso Is24JamLulusSementara(CInt(GridView1.SelectedDataKey.Values(0)))) Then
                     btnApprove.Text = "Lulus"
                     btnReject.Text = "Tolak"
                 End If
@@ -2948,6 +2955,20 @@ Partial Class kelulusan1
 
         End Try
     End Sub
+
+    ' 24 jam di peringkat Pengesah, belum pernah lulus sementara dan masih ada agensi belum selesai
+    Private Function Is24JamLulusSementara(Permohonan_ID As Integer) As Boolean
+        Dim SQL As String = "SELECT COUNT(*) FROM LESEN_Permohonan p
+            WHERE p.Permohonan_ID = @Permohonan_ID AND p.Is24Jam = 1 AND p.StatusID = 5 AND p.Lulus24JamDt IS NULL
+            AND EXISTS (SELECT 1 FROM LESEN_ApprovalList a WHERE a.Permohonan_ID = p.Permohonan_ID AND a.ApprLevel = 2 AND a.IsComplete <> 1)"
+
+        Using myConnection As New SqlConnection(ConfigurationManager.ConnectionStrings("webcon_ConnectionStr").ConnectionString)
+            Dim myCommand As New SqlCommand(SQL, myConnection)
+            myCommand.Parameters.AddWithValue("@Permohonan_ID", Permohonan_ID)
+            myConnection.Open()
+            Return CInt(myCommand.ExecuteScalar()) > 0
+        End Using
+    End Function
 
     Protected Sub rblNotaKelulusanKJ_SelectedIndexChanged(sender As Object, e As EventArgs)
         Dim rblNotaKelulusanKJ As RadioButtonList = DirectCast(fvNotaKelulusan.FindControl("rblNotaKelulusanKJ"), RadioButtonList)

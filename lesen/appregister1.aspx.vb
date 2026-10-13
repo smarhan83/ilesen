@@ -94,6 +94,12 @@ Partial Class appregister1
 
         Page.Form.Attributes.Add("enctype", "multipart/form-data")
 
+        ' Suis Arkib: gaya Bootstrap form-switch; status permohonan tak boleh dipilih semasa Arkib
+        chkArkib.InputAttributes("class") = "form-check-input"
+        chkArkib.InputAttributes("role") = "switch"
+        chkArkib.LabelAttributes("class") = "form-check-label"
+        DDL_Status.Enabled = Not chkArkib.Checked
+
         If Not Page.IsPostBack Then
             Try
                 If Request.Browser.IsMobileDevice Then
@@ -197,6 +203,16 @@ Partial Class appregister1
 
     Private Sub btnSearch_Click(sender As Object, e As EventArgs) Handles btnSearch.Click
         GridView1.DataBind()
+    End Sub
+
+    ' Arkib = papar permohonan yang telah lulus (StatusID 10) sahaja.
+    ' Penapis status tidak digunakan semasa Arkib, jadi ia di-reset & dimatikan.
+    Protected Sub chkArkib_CheckedChanged(sender As Object, e As EventArgs)
+        If chkArkib.Checked Then
+            DDL_Status.SelectedValue = "-1"
+        End If
+        DDL_Status.Enabled = Not chkArkib.Checked
+        GridView1.PageIndex = 0
     End Sub
 
     Private Sub btnReset_Click(sender As Object, e As EventArgs) Handles btnReset.Click
@@ -601,6 +617,9 @@ Partial Class appregister1
 #Region "FormView Lifecycle & Panel Access"
 
     Private Sub ButtonAddAssignment_Click(sender As Object, e As EventArgs) Handles ButtonAddAssignment.Click
+        ' rekod baru (Draf) mesti kelihatan dalam senarai - keluar dari Arkib
+        chkArkib.Checked = False
+        DDL_Status.Enabled = True
         DDL_Status.SelectedValue = 0
         Session.Item("isInserted") = False
         Session.Remove("BantingDraftKey")
@@ -1245,6 +1264,8 @@ Partial Class appregister1
         SetControlReadOnly(tabMaklumat, isReadOnly)
         btnAddIklan_ins.Visible = Not isReadOnly
         btnAddAnjing_ins.Visible = Not isReadOnly
+        rowAddIklan_ins.Visible = Not isReadOnly
+        rowAddAnjing_ins.Visible = Not isReadOnly
         If gvIklanList_ins.Columns.Count >= 4 Then
             gvIklanList_ins.Columns(3).Visible = Not isReadOnly
         End If
