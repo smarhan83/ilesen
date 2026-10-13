@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "ilesen-iisexpress",
+      "runtimeExecutable": "C:\\Program Files\\IIS Express\\iisexpress.exe",
+      "runtimeArgs": ["/path:D:\\GITHUB\\ilesen", "/port:8090", "/clr:v4.0"],
+      "port": 8090
+    }
+  ]
+}
