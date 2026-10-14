@@ -5,6 +5,81 @@
 <asp:Content ID="HeaderContent" ContentPlaceHolderID="HeadContent" runat="Server">
 
     <style>
+        /* =====================================================================
+           SENARAI - tema ikut applicantregister / Semakan Sepanduk
+        ===================================================================== */
+        .kl-card { background: #fff; border: 1px solid #e9ecef; border-radius: 12px; box-shadow: 0 1px 3px rgba(16,24,40,.04); margin-bottom: 16px; }
+        .kl-head { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between; padding: 18px 20px; border-bottom: 1px solid #e9ecef; }
+        .kl-title { font-size: 17px; font-weight: 700; color: #212529; margin: 0; }
+        .kl-sub { color: #6c757d; font-size: 13px; margin-top: 2px; }
+        .kl-head-actions { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; }
+        .kl-head-actions .lsu-switch { margin: 0; }
+        .kl-count { color: #6c757d; font-size: 13px; font-weight: 600; background: #f1f3f5; border-radius: 999px; padding: 4px 12px; }
+
+        .kl-filter { padding: 14px 20px 16px; border-bottom: 1px solid #e9ecef; background: #fcfcfd; }
+        .kl-label { display: block; font-size: 12px; font-weight: 600; color: #6c757d; margin-bottom: 4px; }
+        .kl-filter .form-group { margin: 0; }
+        .kl-filter input.form-control { border: 1px solid #d0d5dd !important; border-radius: 6px !important; background: #fff; height: 38px !important; min-height: 38px !important; margin: 0 !important; }
+        .kl-filter-actions .btn { height: 38px; margin: 0 !important; display: inline-flex; align-items: center; justify-content: center; }
+        .kl-filter-foot { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between; margin-top: 12px; }
+        .kl-filter-extra { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; }
+        .kl-filter-extra .lsu-switch { margin: 0; }
+        .kl-status { min-width: 240px; }
+        .kl-filter-actions { display: flex; gap: 8px; margin-left: auto; }
+
+        .kl-table { margin: 0 !important; width: 100%; }
+        .kl-table.table-bordered, .kl-table.table-bordered > :not(caption) > * { border-width: 0; }
+        .kl-table.table-bordered > :not(caption) > * > * { border-width: 0 0 1px 0; border-color: #f1f3f5; }
+        .kl-table th { background: #f8f9fa !important; color: #6c757d !important; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; padding: 12px 16px !important; border-bottom: 1px solid #e9ecef !important; white-space: nowrap; }
+        .kl-table th a { color: #6c757d; text-decoration: none; }
+        .kl-table td { padding: 14px 16px !important; vertical-align: middle; color: #212529; font-size: 14px; background: #fff; }
+        .kl-table tr:hover td { background: #fafbff; }
+        .kl-col-no { width: 56px; color: #adb5bd !important; }
+        .kl-col-act { width: 1%; white-space: nowrap; text-align: right; }
+        .kl-nowrap { white-space: nowrap; }
+
+        .kl-ref { font-weight: 600; color: #2E3192; font-size: 13px; }
+        .kl-name { font-weight: 600; margin-top: 2px; }
+        .kl-company, .kl-addr { color: #6c757d; font-size: 12.5px; margin-top: 2px; }
+        .kl-company { color: #1D4ED8; }
+        .kl-company i, .kl-addr i { margin-right: 6px; color: #adb5bd; }
+        .kl-lesen { font-weight: 600; font-size: 13px; }
+        .kl-agensi { color: #495057; font-size: 13px; }
+
+        .kl-status-badge { display: inline-block; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 600; line-height: 1.4; }
+        .kl-status-badge.st-agensi   { background: #E4DFFB; color: #2E3192; }
+        .kl-status-badge.st-pengesah { background: #DCEBFF; color: #1D4ED8; }
+        .kl-status-badge.st-peraku   { background: #FDF1DC; color: #9A6408; }
+        .kl-status-badge.st-lulus    { background: #D4EDDA; color: #1e7e34; }
+        .kl-status-badge.st-tolak    { background: #FCEAEA; color: #C0392B; }
+        .kl-status-badge.st-info     { background: #E0F2F1; color: #00695C; }
+        .kl-status-badge.st-lain     { background: #f1f3f5; color: #6c757d; }
+
+        .kl-empty { text-align: center; padding: 48px 16px; color: #6c757d; }
+        .kl-empty i { font-size: 40px; color: #adb5bd; display: block; margin-bottom: 10px; }
+
+        .kl-pager td { padding: 14px 16px !important; border: 0 !important; background: #fff; }
+        .kl-pager table { margin-left: auto; }
+        .kl-pager a, .kl-pager span { display: inline-flex; min-width: 34px; height: 34px; padding: 0 8px; align-items: center; justify-content: center; margin-left: 4px; border-radius: 8px; border: 1px solid #dee2e6; color: #495057; text-decoration: none; font-size: 13px; }
+        .kl-pager span { background: #2E3192; border-color: #2E3192; color: #fff; font-weight: 600; }
+        .kl-pager a:hover { background: #f1f3f5; }
+
+        @media (max-width: 768px) {
+            .kl-head, .kl-filter { padding: 14px 16px; }
+            .kl-filter-actions { width: 100%; margin-left: 0; }
+            .kl-filter-actions .btn { flex: 1; }
+            .kl-status { min-width: 0; width: 100%; }
+        }
+
+        /* =====================================================================
+           DETAIL - butang tindakan kelulusan lebih jelas
+        ===================================================================== */
+        .card-footer[id$=idFooter] { background: #fff; border: 1px solid #e9ecef; border-radius: 12px; padding: 18px 20px; margin-top: 16px; }
+        a[id$=btnApprove].btn { background: #16a34a !important; box-shadow: 0 4px 10px rgba(22,163,74,.2); }
+        a[id$=btnApprove].btn:hover { background: #15803d !important; }
+        a[id$=btnReject].btn { background: #fff !important; color: #C0392B !important; border: 1px solid #C0392B !important; box-shadow: none; }
+        a[id$=btnReject].btn:hover { background: #FCEAEA !important; }
+
         /* Suis "Lihat Semua Ulasan" - gaya sama seperti suis "Semua Rekod" (Semakan Sepanduk) */
         .lsu-switch { display: inline-flex; align-items: center; margin: 4px 0 14px; }
         .lsu-switch input[type=checkbox] {
@@ -3781,249 +3856,194 @@ ORDER BY
                 </div>
             </div>			
 
-            <div class="card" runat="server" id="idListing">
-                <div class="card-body" style="overflow-x: auto;">
-                    <%--# START FILTER - set SortExpression at GridView as fieldname & add WHERE 1=1 at SqlDataSource - SelectCommand #--%>
-                    <div class="row">
-                        <div class="col-md-10">
-                            <%--<div id="pnlFilter" runat="server" class="row"></div>--%>
+            <div class="kl-card" runat="server" id="idListing">
 
-                            <div class="row">
-
-                                <div class="col-md-2">
-
-                                    <div class="form-group">
-                                        <asp:TextBox ID="txtNoRujukan" placeholder="No Rujukan" runat="server" CssClass="form-control"></asp:TextBox>
-                                    </div>
-
-                                </div>
-
-                                <div class="col-md-3" runat="server" id="filterJenisLesen">
-
-                                    <div class="form-group">
-                                        <asp:DropDownList ID="DDL_JenisLesen" CssClass="form-control select2" runat="server" AutoPostBack="false"
-                                            DataSourceID="SqlDataSourceLesen" DataTextField="JenisLesen_Description" DataValueField="JenisLesen_ID">
-                                        </asp:DropDownList>
-                                        <asp:SqlDataSource runat="server" ID="SqlDataSourceLesen" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
-                                            SelectCommand="select * from 
-                                        (select 0 as JenisLesen_ID, '-- Lesen --' as JenisLesen_Description
-                                        union all
-                                        select JenisLesen_ID,  JenisLesen_Description from LESEN_JenisLesen where JenisLesen_IsActive=1
-                                        ) as tbl1 order by JenisLesen_Description "></asp:SqlDataSource>
-                                    </div>
-
-                                </div>
-
-                                <div class="col-md-2" runat="server" id="filterPemohon">
-                                    <div class="form-group">
-                                        <asp:DropDownList ID="ddlPemohonCari" CssClass="form-control select2" runat="server"
-                                            DataSourceID="sdsPemohon" DataTextField="Pemohon_Name" DataValueField="Pemohon_ID">
-                                        </asp:DropDownList>
-                                        <asp:SqlDataSource runat="server" ID="sdsPemohon" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
-                                            SelectCommand="select * from 
-                                        (select 0 as Pemohon_ID, '-- Pemohon --' as Pemohon_Name
-                                        union all
-                                        select Pemohon_ID,  Pemohon_Name from LESEN_Pemohon where Pemohon_IsActive=1
-                                        ) as tbl1 order by Pemohon_Name "></asp:SqlDataSource>
-                                    </div>
-                                </div>
-
-                                <%--                                <div class="col-md-3">
-                                        <asp:DropDownList ID="DDL_JabatanAgensi" CssClass="form-control select2" runat="server"
-                                        DataSourceID="SqlDataSourceJabatanAgensi" DataTextField="JabatanAgensi_Description" DataValueField="JabatanAgensi_ID">
-                                        </asp:DropDownList>
-                                        <asp:SqlDataSource runat="server" ID="SqlDataSourceJabatanAgensi" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
-                                        SelectCommand="select * from 
-                                        (select 0 as JabatanAgensi_ID, '-- Jabatan/Agensi --' as JabatanAgensi_Description
-                                        union all
-                                        select JabatanAgensi_ID,  JabatanAgensi_Description from LESEN_JabatanAgensi where JabatanAgensi_IsActive=1
-                                        ) as tbl1 order by JabatanAgensi_Description "></asp:SqlDataSource>
-                                </div>--%>
-
-                                <div class="col-md-2">
-                                    <div class="form-group">
-                                        <asp:TextBox ID="TB_TarikhMohon" runat="server"
-                                            TextMode="Date" CssClass="form-control" />
-                                    </div>
-                                </div>
-								
-                                <div class="col-md-3">
-                                    <div class="form-group">
-
-                                    <div class="row">
-
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <asp:DropDownList ID="ddlYear" CssClass="form-control select2" runat="server"
-                                            DataSourceID="sdsYear" DataTextField="yearName" DataValueField="yearMohon">
-                                        </asp:DropDownList>
-                                        <asp:SqlDataSource runat="server" ID="sdsYear" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
-                                            SelectCommand="select 0 as yearMohon,'Tahun' as yearName
-                                            union all
-                                            select year(TarikhMohon) as yearMohon,cast(year(TarikhMohon) as varchar(20)) as yearName from LESEN_Permohonan
-				                            group by year(TarikhMohon)"></asp:SqlDataSource>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <asp:DropDownList ID="ddlMonth" runat="server" CssClass="form-control select2" Width="100px">
-                                        <asp:ListItem Value="0">Bulan</asp:ListItem>
-                                        <asp:ListItem>1</asp:ListItem>
-                                        <asp:ListItem>2</asp:ListItem>
-                                        <asp:ListItem>3</asp:ListItem>
-                                        <asp:ListItem>4</asp:ListItem>
-                                        <asp:ListItem>5</asp:ListItem>
-                                        <asp:ListItem>6</asp:ListItem>
-                                        <asp:ListItem>7</asp:ListItem>
-                                        <asp:ListItem>8</asp:ListItem>
-                                        <asp:ListItem>9</asp:ListItem>
-                                        <asp:ListItem>10</asp:ListItem>
-                                        <asp:ListItem>11</asp:ListItem>
-                                        <asp:ListItem>12</asp:ListItem>
-                                        </asp:DropDownList>
-                                    </div>
-                                </div>
-
-                            </div>
-                                                                                                                         
-                                    </div>
-                                </div>								
-
-                                <%--                                <div class="col-md-2">
-                                        <asp:DropDownList ID="ddlStatus" CssClass="form-control select2" runat="server"
-                                        DataSourceID="sdsStatus" DataTextField="Description" DataValueField="ApprStatusID">
-                                        </asp:DropDownList>
-                                        <asp:SqlDataSource runat="server" ID="sdsStatus" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
-                                        SelectCommand="select * from 
-                                        (select NULL as ApprStatusID, '-- Pemohon --' as Description
-                                        union all
-                                        select ApprStatusID,  Description from ApprovalStatus 
-                                        where ApprStatusID IN (2,3,4,5,8)
-                                        ) as tbl1 order by ApprStatusID "></asp:SqlDataSource>
-                                </div>--%>
-                            </div>
-
+                <div class="kl-head">
+                    <div>
+                        <h3 class="kl-title">Senarai Permohonan</h3>
+                        <div class="kl-sub">Permohonan yang memerlukan tindakan anda</div>
+                    </div>
+                    <div class="kl-head-actions">
+                        <%-- Suis Lihat Semua Ulasan (hanya untuk penyedia / read-only) --%>
+                        <div class="lsu-switch" runat="server" id="divLihatSemuaUlasan" title="Papar semua rekod termasuk ulasan yang telah selesai">
+                            <asp:CheckBox ID="cbAllUlasan" runat="server" AutoPostBack="true" Text="Lihat Semua Ulasan" />
                         </div>
-                        <div class="col-md-2">
-                            <div class="form-group">
-                                <asp:Button ID="btnSearch" runat="server" CssClass="btn btn-default" Text="Cari" />
-                                <asp:Button ID="btnReset" CssClass="btn btn-default" runat="server" Text="Reset" />
-                            </div>
+                        <span class="kl-count"><asp:Literal ID="litJumlah" runat="server" /></span>
+                    </div>
+                </div>
+
+                <%--# START FILTER #--%>
+                <asp:Panel ID="pnlCarianSenarai" runat="server" CssClass="kl-filter" DefaultButton="btnSearch">
+                    <div class="row g-2 align-items-end">
+
+                        <div class="col-md-6 col-lg-2">
+                            <label class="kl-label">No Rujukan</label>
+                            <asp:TextBox ID="txtNoRujukan" placeholder="Cari no rujukan" runat="server" CssClass="form-control"></asp:TextBox>
+                        </div>
+
+                        <div class="col-md-6 col-lg-3" runat="server" id="filterJenisLesen">
+                            <label class="kl-label">Jenis Lesen</label>
+                            <asp:DropDownList ID="DDL_JenisLesen" CssClass="form-control select2" runat="server" AutoPostBack="false"
+                                DataSourceID="SqlDataSourceLesen" DataTextField="JenisLesen_Description" DataValueField="JenisLesen_ID">
+                            </asp:DropDownList>
+                            <asp:SqlDataSource runat="server" ID="SqlDataSourceLesen" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
+                                SelectCommand="select * from
+                            (select 0 as JenisLesen_ID, '-- Lesen --' as JenisLesen_Description
+                            union all
+                            select JenisLesen_ID,  JenisLesen_Description from LESEN_JenisLesen where JenisLesen_IsActive=1
+                            ) as tbl1 order by JenisLesen_Description "></asp:SqlDataSource>
+                        </div>
+
+                        <div class="col-md-6 col-lg-3" runat="server" id="filterPemohon">
+                            <label class="kl-label">Pemohon</label>
+                            <asp:DropDownList ID="ddlPemohonCari" CssClass="form-control select2" runat="server"
+                                DataSourceID="sdsPemohon" DataTextField="Pemohon_Name" DataValueField="Pemohon_ID">
+                            </asp:DropDownList>
+                            <asp:SqlDataSource runat="server" ID="sdsPemohon" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
+                                SelectCommand="select * from
+                            (select 0 as Pemohon_ID, '-- Pemohon --' as Pemohon_Name
+                            union all
+                            select Pemohon_ID,  Pemohon_Name from LESEN_Pemohon where Pemohon_IsActive=1
+                            ) as tbl1 order by Pemohon_Name "></asp:SqlDataSource>
+                        </div>
+
+                        <div class="col-md-6 col-lg-2">
+                            <label class="kl-label">Tarikh Mohon</label>
+                            <asp:TextBox ID="TB_TarikhMohon" runat="server" TextMode="Date" CssClass="form-control" />
+                        </div>
+
+                        <div class="col-6 col-lg-1">
+                            <label class="kl-label">Tahun</label>
+                            <asp:DropDownList ID="ddlYear" CssClass="form-control select2" runat="server"
+                                DataSourceID="sdsYear" DataTextField="yearName" DataValueField="yearMohon">
+                            </asp:DropDownList>
+                            <asp:SqlDataSource runat="server" ID="sdsYear" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
+                                SelectCommand="select 0 as yearMohon,'Tahun' as yearName
+                                union all
+                                select year(TarikhMohon) as yearMohon,cast(year(TarikhMohon) as varchar(20)) as yearName from LESEN_Permohonan
+                                group by year(TarikhMohon)"></asp:SqlDataSource>
+                        </div>
+
+                        <div class="col-6 col-lg-1">
+                            <label class="kl-label">Bulan</label>
+                            <asp:DropDownList ID="ddlMonth" runat="server" CssClass="form-control select2">
+                                <asp:ListItem Value="0">Bulan</asp:ListItem>
+                                <asp:ListItem>1</asp:ListItem>
+                                <asp:ListItem>2</asp:ListItem>
+                                <asp:ListItem>3</asp:ListItem>
+                                <asp:ListItem>4</asp:ListItem>
+                                <asp:ListItem>5</asp:ListItem>
+                                <asp:ListItem>6</asp:ListItem>
+                                <asp:ListItem>7</asp:ListItem>
+                                <asp:ListItem>8</asp:ListItem>
+                                <asp:ListItem>9</asp:ListItem>
+                                <asp:ListItem>10</asp:ListItem>
+                                <asp:ListItem>11</asp:ListItem>
+                                <asp:ListItem>12</asp:ListItem>
+                            </asp:DropDownList>
                         </div>
                     </div>
-					
-                    <div class="row" runat="server" id="divLihatSemuaUlasan">
-                        <div class="col-md-12">
-                            <div class="lsu-switch" title="Papar semua rekod termasuk ulasan yang telah selesai">
-                                <asp:CheckBox ID="cbAllUlasan" runat="server" AutoPostBack="true" Text="Lihat Semua Ulasan" />
-                            </div>
-                        </div>
-						
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <%--<label>Status</label>--%>
+
+                    <div class="kl-filter-foot">
+                        <%-- Penapis Status (dipapar bersama suis Lihat Semua Ulasan) --%>
+                        <div class="kl-filter-extra" runat="server" id="divStatusUlasan">
+                            <div class="kl-status">
                                 <asp:DropDownList ID="DDL_Status" CssClass="form-control select2" runat="server" AutoPostBack="false"
                                     DataSourceID="sdsStatus" DataTextField="Description" DataValueField="ApprStatusID">
                                 </asp:DropDownList>
                                 <asp:SqlDataSource runat="server" ID="sdsStatus" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
-                                    SelectCommand="select * from 
+                                    SelectCommand="select * from
                                     (select -1 as ApprStatusID, '-- Status --' as Description
                                     union all
                                     select ApprStatusID,  Description from ApprovalStatus where ApprStatusID IN (2,3,4,5,6,7,8,9,10)
                                     ) as tbl1 order by ApprStatusID "></asp:SqlDataSource>
                             </div>
-                        </div>						
+                        </div>
+                        <div class="kl-filter-actions">
+                            <asp:Button ID="btnSearch" runat="server" CssClass="btn btn-default" Text="Cari" />
+                            <asp:Button ID="btnReset" CssClass="btn btn-default" runat="server" Text="Reset" />
+                        </div>
+                    </div>
+                </asp:Panel>
+                <%--# END FILTER #--%>
 
-                    </div>					
-                    <%--# END FILTER #--%>
-
+                <div class="table-responsive">
+                    <%-- Susunan lajur JANGAN diubah: kod-belakang sorok lajur ikut indeks (mobile 0-5 / 6, kebenaran 5) --%>
                     <asp:GridView ID="GridView1" runat="server"
                         AllowSorting="True" AutoGenerateColumns="False" DataKeyNames="Permohonan_ID,AgensiID,ApprStatusID,JabatanAgensi_Type,JenisLesen_ID,IsSuratPemeriksaanFail,IsPenilaianStatus,JenisLesenIdList"
-                        DataSourceID="SqlDataSourceGrid"
-                        CssClass="table table-bordered" PagerStyle-CssClass="pgr"
-                        AlternatingRowStyle-CssClass="alt" AllowPaging="True" PageSize="20">
-                        <AlternatingRowStyle CssClass="alt" />
+                        DataSourceID="SqlDataSourceGrid" GridLines="None"
+                        CssClass="kl-table table table-bordered" PagerStyle-CssClass="kl-pager"
+                        AllowPaging="True" PageSize="20">
+                        <PagerSettings Mode="NumericFirstLast" PageButtonCount="5" FirstPageText="&laquo;" LastPageText="&raquo;" />
                         <Columns>
-                            <asp:TemplateField HeaderText="No." InsertVisible="False" SortExpression="JenisLesen_ID">
-                                <EditItemTemplate>
-                                </EditItemTemplate>
+                            <asp:TemplateField HeaderText="No." InsertVisible="False" SortExpression="JenisLesen_ID" HeaderStyle-CssClass="kl-col-no" ItemStyle-CssClass="kl-col-no">
                                 <ItemTemplate>
                                     <asp:Label runat="server" Text='<%# Container.DataItemIndex + 1 %>' ID="Label2"></asp:Label>
                                 </ItemTemplate>
                             </asp:TemplateField>
 
-                            <asp:BoundField DataField="JenisLesenDescList" HeaderText="Jenis Lesen"
-                                SortExpression="JenisLesenDescList" />
-                           <%-- <asp:BoundField DataField="Pemohon_Name" HeaderText="Nama Pemohon"
-                                SortExpression="Pemohon_Name" />--%>
+                            <asp:TemplateField HeaderText="Jenis Lesen" SortExpression="JenisLesenDescList">
+                                <ItemTemplate>
+                                    <span class="kl-lesen"><%# Eval("JenisLesenDescList") %></span>
+                                </ItemTemplate>
+                            </asp:TemplateField>
 
                             <asp:TemplateField HeaderText="Pemohon">
                                 <ItemTemplate>
-                                    <asp:Label ID="lblNamaPemohon" runat="server" Text='<%# Eval("Pemohon_Name") %>' Font-Size="12pt"></asp:Label><br />
-                                    <asp:Label ID="lblAlamatPremis" runat="server" Text='<%# Eval("AlamatPremis") %>' Font-Size="10pt"></asp:Label><br />
-                                    <asp:Label ID="lblRujukan" runat="server" Text='<%# Eval("Rujukan") %>' Font-Size="12pt"></asp:Label><br />
-									<asp:Label ID="lblSyarikat" runat="server" Text='<%# Eval("NamaSyarikat") %>' Font-Size="12pt" ForeColor="Blue"></asp:Label>
-                                </ItemTemplate>
-                            </asp:TemplateField>
-                            <asp:BoundField DataField="JabatanAgensi_Description" HeaderText="Jabatan/Agensi" />
-                            <asp:BoundField DataField="TarikhMohon" HeaderText="Tarikh Mohon" DataFormatString="{0:yyyy-MM-dd}"
-                                SortExpression="TarikhMohon" />
-                            <asp:BoundField DataField="Description" HeaderText="Status"
-                                SortExpression="Description" />
-
-                            <asp:TemplateField HeaderText="Maklumat Permohonan" HeaderStyle-Font-Size="10pt" HeaderStyle-Width="90%" ItemStyle-Width="90%">
-                                <ItemTemplate>
-                                    <asp:Label ID="Label15" runat="server" Text="Tarikh Mohon :" Font-Bold="True" Font-Size="10pt"></asp:Label><br />
-                                    <asp:Label ID="Label16" runat="server" Text='<%# Eval("TarikhMohon", "{0:yyyy-MM-dd}") %>' Font-Size="10pt"></asp:Label><br />
-                                    <asp:Label ID="Label9" runat="server" Text="Jenis Lesen :" Font-Bold="True" Font-Size="10pt"></asp:Label><br />
-                                    <asp:Label ID="Label10" runat="server" Text='<%# Eval("JenisLesenDescList") %>' Font-Size="10pt"></asp:Label><br />
-                                    <asp:Label ID="Label11" runat="server" Text="Nama Pemohon :" Font-Bold="True" Font-Size="10pt"></asp:Label><br />
-                                    <asp:Label ID="Label12" runat="server" Text='<%# Eval("Pemohon_Name") %>' Font-Size="10pt"></asp:Label><br />
-                                    <asp:Label ID="Label17" runat="server" Text="Status :" Font-Bold="True" Font-Size="10pt"></asp:Label><br />
-                                    <asp:Label ID="Label14" runat="server" Text='<%#If(IsDBNull(Eval("JabatanAgensi_Description")), "", Eval("JabatanAgensi_Description") + "<br />") %>' Font-Bold="True" Font-Size="10pt"></asp:Label>
-                                    <asp:Label ID="Label18" runat="server" Text='<%# Eval("Description") %>' Font-Size="10pt"></asp:Label><br />
-									<asp:Label ID="lblAlamatPremis2" runat="server" Text='<%# Eval("AlamatPremis") %>' Font-Size="10pt"></asp:Label><br/>
-									<asp:Label ID="lblRujukan2" runat="server" Text='<%# Eval("Rujukan") %>' Font-Size="10pt"></asp:Label>
-                                </ItemTemplate>
-                                <ItemStyle HorizontalAlign="Left" />
-                            </asp:TemplateField>
-
-                            <%--<asp:CheckBoxField DataField="JenisLesen_IsActive" HeaderText="Aktif?" SortExpression="JenisLesen_IsActive" />--%>
-                            <asp:TemplateField HeaderText="Operasi">
-                                <ItemTemplate>
-
-
-                                    <%--  <asp:LinkButton ID="LinkButton1" runat="server" CausesValidation="False"
-                                        CommandName="Delete" Text="Nyah Aktif" OnClientClick="return confirm('Anda Pasti Untuk Nyah Aktif rekod ini?');" CssClass="btn btn-danger btn-sm"></asp:LinkButton>--%>
-
-                                    <div class="card-body">
-                                        <div class="row">
-                                            <div class="col-lg-6">
-
-                                                <div class="form-group">
-                                                    <asp:LinkButton runat="server" Text="Lihat Maklumat" CommandName="Select" CausesValidation="False"
-                                                        ID="lbLihat" CssClass="btn btn-warning btn-sm"></asp:LinkButton>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-lg-6">
-
-                                                <div class="form-group">
-                                                    <asp:LinkButton runat="server" Text="Surat Mohon Ulasan" CommandName="Surat" CausesValidation="False" ID="lbSurat"
-                                                        Visible='<%# If(IsDBNull(Eval("AgensiID")), True, True) %>'
-                                                        CssClass="btn btn-warning btn-sm" CommandArgument='<%# Container.DataItemIndex %>'></asp:LinkButton>
-                                                </div>
-
-                                            </div>
-
-                                        </div>
-
+                                    <div class="kl-ref"><%# Eval("Rujukan") %></div>
+                                    <div class="kl-name"><asp:Label ID="lblNamaPemohon" runat="server" Text='<%# Eval("Pemohon_Name") %>'></asp:Label></div>
+                                    <div class="kl-company" runat="server" visible='<%# Not String.IsNullOrWhiteSpace(Convert.ToString(Eval("NamaSyarikat"))) AndAlso Convert.ToString(Eval("NamaSyarikat")).Trim() <> "-" %>'>
+                                        <i class="bi bi-building"></i><asp:Label ID="lblSyarikat" runat="server" Text='<%# Eval("NamaSyarikat") %>'></asp:Label>
                                     </div>
+                                    <div class="kl-addr" runat="server" visible='<%# Not String.IsNullOrWhiteSpace(Convert.ToString(Eval("AlamatPremis"))) %>'>
+                                        <i class="bi bi-geo-alt"></i><asp:Label ID="lblAlamatPremis" runat="server" Text='<%# Eval("AlamatPremis") %>'></asp:Label>
+                                    </div>
+                                </ItemTemplate>
+                            </asp:TemplateField>
 
+                            <asp:TemplateField HeaderText="Jabatan/Agensi">
+                                <ItemTemplate>
+                                    <span class="kl-agensi"><%# If(IsDBNull(Eval("JabatanAgensi_Description")), "-", Eval("JabatanAgensi_Description")) %></span>
+                                </ItemTemplate>
+                            </asp:TemplateField>
+
+                            <asp:BoundField DataField="TarikhMohon" HeaderText="Tarikh Mohon" DataFormatString="{0:dd/MM/yyyy}"
+                                SortExpression="TarikhMohon" ItemStyle-CssClass="kl-nowrap" />
+
+                            <asp:TemplateField HeaderText="Status" SortExpression="Description">
+                                <ItemTemplate>
+                                    <span class='kl-status-badge <%# GetStatusCss(Eval("ApprStatusID")) %>'><%# Eval("Description") %></span>
+                                </ItemTemplate>
+                            </asp:TemplateField>
+
+                            <asp:TemplateField HeaderText="Maklumat Permohonan">
+                                <ItemTemplate>
+                                    <div class="kl-ref"><%# Eval("Rujukan") %></div>
+                                    <div class="kl-name"><%# Eval("Pemohon_Name") %></div>
+                                    <div class="kl-addr"><%# Eval("JenisLesenDescList") %></div>
+                                    <div class="kl-addr"><i class="bi bi-calendar3"></i><%# Eval("TarikhMohon", "{0:dd/MM/yyyy}") %></div>
+                                    <div class="kl-addr" runat="server" visible='<%# Not IsDBNull(Eval("JabatanAgensi_Description")) %>'><i class="bi bi-diagram-3"></i><%# Eval("JabatanAgensi_Description") %></div>
+                                    <div class="kl-addr"><i class="bi bi-geo-alt"></i><%# Eval("AlamatPremis") %></div>
+                                    <span class='kl-status-badge <%# GetStatusCss(Eval("ApprStatusID")) %>'><%# Eval("Description") %></span>
+                                </ItemTemplate>
+                            </asp:TemplateField>
+
+                            <asp:TemplateField HeaderText="Operasi" ItemStyle-CssClass="kl-col-act">
+                                <ItemTemplate>
+                                    <asp:LinkButton runat="server" Text="Lihat Maklumat" CommandName="Select" CausesValidation="False"
+                                        ID="lbLihat" CssClass="btn btn-warning btn-sm"></asp:LinkButton>
+                                    <asp:LinkButton runat="server" Text="Surat Mohon Ulasan" CommandName="Surat" CausesValidation="False" ID="lbSurat"
+                                        Visible='<%# If(IsDBNull(Eval("AgensiID")), True, True) %>'
+                                        CssClass="btn btn-warning btn-sm" CommandArgument='<%# Container.DataItemIndex %>'></asp:LinkButton>
                                 </ItemTemplate>
                             </asp:TemplateField>
                         </Columns>
-                        <PagerStyle CssClass="pgr" />
+                        <EmptyDataTemplate>
+                            <div class="kl-empty">
+                                <i class="bi bi-inbox"></i>
+                                Tiada permohonan untuk dipaparkan.
+                            </div>
+                        </EmptyDataTemplate>
                     </asp:GridView>
                 </div>
             </div>
@@ -4033,7 +4053,7 @@ ORDER BY
     <asp:Button ID="ui_btnPageBottom" runat="server" Text="-" Style="margin-left: -999px;" />
 
 
-    <asp:SqlDataSource ID="SqlDataSourceGrid" runat="server"
+    <asp:SqlDataSource ID="SqlDataSourceGrid" runat="server" OnSelected="SqlDataSourceGrid_Selected"
         ConnectionString="<%$ ConnectionStrings:webcon_ConnectionStr %>"
         SelectCommand="SELECT a.*,e.*,f.*, g.Rujukan,g.IsSuratPemeriksaanFail,ISNULL(g.AlamatBaru,ISNULL(g.AlamatPremis,ISNULL(g.AlamatPenjajaan,ISNULL(g.AnjingAlamat,isnull(g.LokasiPasar1,ISNULL(g.LokasiPasar2,ISNULL(g.LokasiPasar3,''))))))) as AlamatPremis, isnull(h.IsPenilaian,0) as IsPenilaianStatus,   
             g.NamaSyarikat, g.JenisLesenDescList, g.JenisLesenIdList FROM 

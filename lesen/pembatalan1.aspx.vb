@@ -63,6 +63,7 @@ Partial Class pembatalan1
         Else
             divLihatSemuaUlasan.Visible = False
         End If
+        divStatusUlasan.Visible = divLihatSemuaUlasan.Visible
     End Sub
 
     Protected Sub Page_PreRenderComplete(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.PreRenderComplete
@@ -109,6 +110,27 @@ Partial Class pembatalan1
     Private Sub btnSearch_Click(sender As Object, e As EventArgs) Handles btnSearch.Click
         GridView1.DataBind()
     End Sub
+
+    Protected Sub SqlDataSourceGrid_Selected(sender As Object, e As SqlDataSourceStatusEventArgs)
+        If e.Exception Is Nothing Then
+            litJumlah.Text = e.AffectedRows.ToString("N0") & " rekod"
+        End If
+    End Sub
+
+    ' Warna badge status senarai (ApprovalStatusBatal)
+    Protected Function GetStatusCss(ByVal apprStatusId As Object) As String
+        Dim id As Integer = -1
+        If apprStatusId IsNot Nothing AndAlso Not IsDBNull(apprStatusId) Then Integer.TryParse(Convert.ToString(apprStatusId), id)
+        Select Case id
+            Case 2, 3, 4 : Return "st-agensi"
+            Case 5 : Return "st-pengesah"
+            Case 7, 8 : Return "st-peraku"
+            Case 10 : Return "st-lulus"
+            Case 6, 9 : Return "st-tolak"
+            Case 11, 12 : Return "st-info"
+            Case Else : Return "st-lain"
+        End Select
+    End Function
 
     Private Sub btnReset_Click(sender As Object, e As EventArgs) Handles btnReset.Click
         Response.Redirect(Request.RawUrl)
