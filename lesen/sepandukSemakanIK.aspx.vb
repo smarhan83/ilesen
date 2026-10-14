@@ -271,16 +271,18 @@ Partial Class sepandukSemakanIK
                     Else
                         subTeks = tarikh
                     End If
-                    ' tooltip: pegawai & catatan (jika ada)
+                    ' tooltip: catatan (jika ada)
                     Dim tip As String = ""
-                    If r("Oleh").ToString() <> "" Then tip = "Oleh: " & r("Oleh").ToString()
-                    If r("Catatan").ToString() <> "" Then tip &= If(tip = "", "", vbLf) & "Catatan: " & r("Catatan").ToString()
+                    If r("Catatan").ToString() <> "" Then tip = "Catatan: " & r("Catatan").ToString()
 
                     sb.Append("<div class=""road-node " & status & """" & If(tip = "", "", " title=""" & HttpUtility.HtmlAttributeEncode(tip) & """") & ">")
                     sb.Append("<div class=""road-dot"">" & StepIcon(r("Ikon")) & "</div>")
                     sb.Append("<div class=""road-text"">")
                     sb.Append("<div class=""road-title"">" & HttpUtility.HtmlEncode(r("Tajuk").ToString()) & "</div>")
                     sb.Append("<div class=""road-sub"">" & HttpUtility.HtmlEncode(subTeks) & "</div>")
+                    If r("Oleh").ToString() <> "" Then
+                        sb.Append("<div class=""road-by""><i class=""bi bi-person""></i>" & HttpUtility.HtmlEncode(r("Oleh").ToString()) & "</div>")
+                    End If
                     If r("Keputusan").ToString() <> "" Then
                         sb.Append("<span class=""road-badge " & r("KeputusanCss").ToString() & """>" & HttpUtility.HtmlEncode(r("Keputusan").ToString()) & "</span>")
                     End If
@@ -348,7 +350,8 @@ Partial Class sepandukSemakanIK
 
     Private Sub ResetPanel()
 
-        If DefaultScreen = 1 Then
+        ' Kembali ke senarai jika URL ?list=1 atau pengguna masuk melalui butang "Lihat Senarai"
+        If DefaultScreen = 1 OrElse CBool(If(ViewState("PaparSenarai"), False)) Then
             idListing.Visible = True
             pnlCarian.Visible = False
         Else
@@ -392,8 +395,13 @@ Partial Class sepandukSemakanIK
         GridViewCarian.DataBind()
     End Sub
 
+    ' Butang "Lihat Senarai" pada panel Carian - terus ke senarai (ResetPanel hanya papar senarai jika URL ada ?list=1)
     Protected Sub btnBatalCarian_Click(sender As Object, e As EventArgs) Handles btnBatalCarian.Click
+        ViewState("PaparSenarai") = True
         ResetPanel()
+        idListing.Visible = True
+        pnlCarian.Visible = False
+        GridView1.DataBind()
     End Sub
 
     '===================== PEGAWAI IK: SCAN QR =====================
