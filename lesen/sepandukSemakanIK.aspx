@@ -183,17 +183,18 @@
        SENARAI SEMAKAN - tema ikut lesen/applicantregister.aspx (ar-*)
     ===================================================================== */
     .ss-card {
-        background: #fff; border: 1px solid #e9ecef; border-radius: 12px;
-        box-shadow: 0 1px 3px rgba(16, 24, 40, .04);
+        background: #fff; border: 1px solid #E3E7F1; border-radius: 12px; overflow: hidden;
+        box-shadow: 0 2px 8px rgba(46,49,146,.06);
     }
 
     /* ---------- Header ---------- */
     .ss-head {
         display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between;
-        padding: 18px 20px; border-bottom: 1px solid #e9ecef;
+        padding: 18px 20px; border-bottom: 1px solid #E4DFFB;
+        background: linear-gradient(135deg, #F4F3FF 0%, #EEF4FF 100%); border-left: 4px solid #2E3192;
     }
-    .ss-title { font-size: 17px; font-weight: 700; color: #212529; margin: 0; }
-    .ss-sub { color: #6c757d; font-size: 13px; margin-top: 2px; }
+    .ss-title { font-size: 17px; font-weight: 700; color: #23267a; margin: 0; }
+    .ss-sub { color: #5B6478; font-size: 13px; margin-top: 2px; }
     .ss-head-actions { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; }
     .ss-btn-add { display: inline-flex; align-items: center; gap: 8px; font-weight: 600; }
 
@@ -209,7 +210,7 @@
     /* ---------- Filter ---------- */
     .ss-filter {
         display: flex; flex-wrap: wrap; gap: 10px; align-items: flex-start; /* butang sebaris dengan baris pertama penapis */
-        padding: 14px 20px; border-bottom: 1px solid #e9ecef; background: #fcfcfd;
+        padding: 14px 20px; border-bottom: 1px solid #E6EBF5; background: #F8FAFE;
     }
     .ss-filter-fields { flex: 1 1 520px; margin: calc(-1 * var(--bs-gutter-y)) 0 0; } /* kekalkan offset .row.g-2 supaya baris pertama bermula di atas */
     .ss-filter-fields .form-group { margin: 0; }
@@ -221,7 +222,7 @@
     .ss-filter-actions .btn { height: 38px; margin: 0 !important; display: inline-flex; align-items: center; justify-content: center; }
     /* custom-admin.css (.compact-form input.form-control) paksa tinggi 34px + margin 5px - samakan dengan butang */
     .ss-filter .ss-filter-fields input.form-control { height: 38px !important; min-height: 38px !important; margin: 0 !important; }
-    .ss-count { color: #6c757d; font-size: 13px; white-space: nowrap; margin-left: 4px; }
+    .ss-count { color: #2E3192; font-size: 13px; font-weight: 700; white-space: nowrap; margin-left: 4px; background: #fff; border: 1px solid #D9D5FA; border-radius: 999px; padding: 4px 12px; }
 
     /* ---------- Table ---------- */
     .ss-table { margin: 0; width: 100%; }
@@ -229,14 +230,14 @@
     .ss-table.table-bordered, .ss-table.table-bordered > :not(caption) > * { border-width: 0; }
     .ss-table.table-bordered > :not(caption) > * > * { border-width: 0 0 1px 0; border-color: #f1f3f5; }
     .ss-table th {
-        background: #f8f9fa; color: #6c757d; font-size: 12px; font-weight: 600;
+        background: #EEF1FA; color: #3F4A6B; font-size: 12px; font-weight: 600;
         text-transform: uppercase; letter-spacing: .04em;
         padding: 12px 16px; border-bottom: 1px solid #e9ecef; white-space: nowrap;
     }
-    .ss-table th a { color: #6c757d; text-decoration: none; }
+    .ss-table th a { color: #3F4A6B; text-decoration: none; }
     .ss-table th a:hover { color: #2E3192; }
     .ss-table td { padding: 14px 16px; vertical-align: middle; border-bottom: 1px solid #f1f3f5; color: #212529; font-size: 14px; }
-    .ss-table tr:hover td { background: #fafbff; }
+    .ss-table tr:hover td { background: #F6F7FF; }
     .ss-col-bil { width: 56px; color: #adb5bd !important; }
     .ss-col-act { width: 1%; text-align: right; white-space: nowrap; }
     /* Saiz butang Lihat seragam (btn-warning & btn-primary ada padding/border berbeza) supaya ikon sebaris */
@@ -293,7 +294,8 @@
     /* Ringkasan */
     .ss-summary {
         display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between;
-        background: #fff; border: 1px solid #e9ecef; border-radius: 12px; box-shadow: 0 1px 3px rgba(16,24,40,.04);
+        background: linear-gradient(135deg, #F4F3FF 0%, #EEF4FF 100%); border: 1px solid #E3E7F1; border-left: 4px solid #2E3192;
+        border-radius: 12px; box-shadow: 0 2px 8px rgba(46,49,146,.06);
         padding: 18px 20px; margin-bottom: 16px;
     }
     .ss-summary-main { display: flex; gap: 14px; align-items: center; min-width: 0; }

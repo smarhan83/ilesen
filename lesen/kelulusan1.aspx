@@ -8,19 +8,25 @@
         /* =====================================================================
            SENARAI - tema ikut applicantregister / Semakan Sepanduk
         ===================================================================== */
-        .kl-card { background: #fff; border: 1px solid #e9ecef; border-radius: 12px; box-shadow: 0 1px 3px rgba(16,24,40,.04); margin-bottom: 16px; }
-        .kl-head { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between; padding: 18px 20px; border-bottom: 1px solid #e9ecef; }
-        .kl-title { font-size: 17px; font-weight: 700; color: #212529; margin: 0; }
-        .kl-sub { color: #6c757d; font-size: 13px; margin-top: 2px; }
+        .kl-card { background: #fff; border: 1px solid #E3E7F1; border-radius: 12px; box-shadow: 0 2px 8px rgba(46,49,146,.06); margin-bottom: 16px; overflow: hidden; }
+        .kl-head { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between; padding: 18px 20px; border-bottom: 1px solid #E4DFFB; background: linear-gradient(135deg, #F4F3FF 0%, #EEF4FF 100%); border-left: 4px solid #2E3192; }
+        .kl-title { font-size: 17px; font-weight: 700; color: #23267a; margin: 0; }
+        .kl-sub { color: #5B6478; font-size: 13px; margin-top: 2px; }
         .kl-head-actions { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; }
         .kl-head-actions .lsu-switch { margin: 0; }
-        .kl-count { color: #6c757d; font-size: 13px; font-weight: 600; background: #f1f3f5; border-radius: 999px; padding: 4px 12px; }
+        .kl-count { color: #2E3192; font-size: 13px; font-weight: 700; background: #fff; border: 1px solid #D9D5FA; border-radius: 999px; padding: 4px 12px; }
 
-        .kl-filter { padding: 14px 20px 16px; border-bottom: 1px solid #e9ecef; background: #fcfcfd; }
-        .kl-label { display: block; font-size: 12px; font-weight: 600; color: #6c757d; margin-bottom: 4px; }
+        .kl-filter { padding: 14px 20px 16px; border-bottom: 1px solid #E6EBF5; background: #F8FAFE; }
+        .kl-label { display: block; font-size: 12px; font-weight: 600; color: #4B5675; margin-bottom: 4px; }
         .kl-filter .form-group { margin: 0; }
-        .kl-filter input.form-control { border: 1px solid #d0d5dd !important; border-radius: 6px !important; background: #fff; height: 38px !important; min-height: 38px !important; margin: 0 !important; }
-        .kl-filter-actions .btn { height: 38px; margin: 0 !important; display: inline-flex; align-items: center; justify-content: center; }
+        /* Kawalan penapis seragam 38px tanpa margin. custom-admin.css dimuat selepas page ini dan beri
+           input 34px + margin 5px dan select2 35px + margin 5px, jadi selector perlu lebih spesifik (.kl-card .kl-filter). */
+        .kl-card .kl-filter input.form-control { height: 38px !important; min-height: 38px !important; margin: 0 !important; border: 1px solid #d0d5dd !important; border-radius: 6px !important; background: #fff; }
+        .kl-card .kl-filter .select2-container { margin: 0 !important; width: 100% !important; }
+        .kl-card .kl-filter .select2-container--default .select2-selection--single { height: 38px !important; margin: 0 !important; border: 1px solid #d0d5dd !important; border-radius: 6px !important; }
+        .kl-card .kl-filter .select2-container--default .select2-selection__rendered { line-height: 36px !important; padding-left: 10px; }
+        .kl-card .kl-filter .select2-container--default .select2-selection__arrow { height: 36px !important; }
+        .kl-card .kl-filter-actions .btn { height: 38px; margin: 0 !important; display: inline-flex; align-items: center; justify-content: center; }
         .kl-filter-foot { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between; margin-top: 12px; }
         .kl-filter-extra { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; }
         .kl-filter-extra .lsu-switch { margin: 0; }
@@ -30,10 +36,10 @@
         .kl-table { margin: 0 !important; width: 100%; }
         .kl-table.table-bordered, .kl-table.table-bordered > :not(caption) > * { border-width: 0; }
         .kl-table.table-bordered > :not(caption) > * > * { border-width: 0 0 1px 0; border-color: #f1f3f5; }
-        .kl-table th { background: #f8f9fa !important; color: #6c757d !important; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; padding: 12px 16px !important; border-bottom: 1px solid #e9ecef !important; white-space: nowrap; }
-        .kl-table th a { color: #6c757d; text-decoration: none; }
+        .kl-table th { background: #EEF1FA !important; color: #3F4A6B !important; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; padding: 12px 16px !important; border-bottom: 1px solid #e9ecef !important; white-space: nowrap; }
+        .kl-table th a { color: #3F4A6B; text-decoration: none; }
         .kl-table td { padding: 14px 16px !important; vertical-align: middle; color: #212529; font-size: 14px; background: #fff; }
-        .kl-table tr:hover td { background: #fafbff; }
+        .kl-table tr:hover td { background: #F6F7FF; }
         .kl-col-no { width: 56px; color: #adb5bd !important; }
         .kl-col-act { width: 1%; white-space: nowrap; text-align: right; }
         .kl-nowrap { white-space: nowrap; }
@@ -3874,7 +3880,7 @@ ORDER BY
 
                 <%--# START FILTER #--%>
                 <asp:Panel ID="pnlCarianSenarai" runat="server" CssClass="kl-filter" DefaultButton="btnSearch">
-                    <div class="row g-2 align-items-end">
+                    <div class="row g-2 align-items-start">
 
                         <div class="col-md-6 col-lg-2">
                             <label class="kl-label">No Rujukan</label>
