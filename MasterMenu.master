@@ -2576,7 +2576,7 @@ h1{
                 }
 
                 var actionButtons = td.querySelectorAll(
-                    'a.btn-warning.btn-sm, a.btn-primary.btn-sm, a.btn-danger.btn-sm, a.btn-info.btn-sm, a.btn-success.btn-sm'
+                    'a.btn-warning.btn-sm, a.btn-primary.btn-sm, a.btn-danger.btn-sm, a.btn-info.btn-sm, a.btn-success.btn-sm, a.btn-outline-primary.btn-sm, a.btn-outline-secondary.btn-sm, a.btn-outline-info.btn-sm, a.btn-outline-danger.btn-sm'
                 );
 
                 // kalau takde button, atau cuma 1 button je - skip, tak payah convert
@@ -2597,10 +2597,10 @@ h1{
 
                 actionButtons.forEach(function (btn) {
                     var li = document.createElement('li');
-                    var isDanger = btn.classList.contains('btn-danger');
+                    var isDanger = btn.classList.contains('btn-danger') || btn.classList.contains('btn-outline-danger');
                     var label = btn.textContent.trim().toLowerCase();
 
-                    btn.classList.remove('btn', 'btn-warning', 'btn-primary', 'btn-danger', 'btn-info', 'btn-success', 'btn-sm', 'btn-action-icon');
+                    btn.classList.remove('btn', 'btn-warning', 'btn-primary', 'btn-danger', 'btn-info', 'btn-success', 'btn-outline-primary', 'btn-outline-secondary', 'btn-outline-info', 'btn-outline-danger', 'btn-sm', 'btn-action-icon');
                     btn.classList.add('dropdown-item');
                     btn.classList.add(isDanger ? 'text-danger' : 'text-primary');
 
@@ -2618,6 +2618,8 @@ h1{
                         iconClass = 'bi bi-envelope me-2';
                     } else if (label.includes('kemaskini') || label.includes('kemas kini')) {
                         iconClass = 'bi bi-pencil me-2';
+                    } else if (label.includes('lampiran')) {
+                        iconClass = 'bi bi-paperclip me-2';
                     }
 
                     // KUNCI FIX: kalau dah ada icon sedia ada, buang dulu sebelum insert baru

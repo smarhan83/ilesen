@@ -161,6 +161,10 @@ Partial Class semakpembatalan1
         End If
     End Sub
 
+    Private Sub GridView1_DataBinding(sender As Object, e As EventArgs) Handles GridView1.DataBinding
+        isHaveButton = False
+    End Sub
+
     Private Sub GridView1_DataBound(sender As Object, e As EventArgs) Handles GridView1.DataBound
         If isHaveButton Then
             GridView1.Columns(7).Visible = True
@@ -177,6 +181,24 @@ Partial Class semakpembatalan1
                     Dim LinkButton5 = DirectCast(e.Row.FindControl("LinkButton5"), LinkButton)
                     Dim LinkButton6 = DirectCast(e.Row.FindControl("LinkButton6"), LinkButton)
                     Dim LinkButton7 = DirectCast(e.Row.FindControl("LinkButton7"), LinkButton)
+
+                    If e.Row.DataItem IsNot Nothing Then
+                        Dim drv As DataRowView = TryCast(e.Row.DataItem, DataRowView)
+                        If drv IsNot Nothing Then
+                            If drv.DataView.Table.Columns.Contains("HasLampiran1") Then
+                                Dim hasL1 As Integer = 0
+                                If Integer.TryParse(drv("HasLampiran1").ToString(), hasL1) AndAlso hasL1 = 0 Then
+                                    If LinkButton7 IsNot Nothing Then LinkButton7.Visible = False
+                                End If
+                            End If
+                            If drv.DataView.Table.Columns.Contains("HasLampiran2") Then
+                                Dim hasL2 As Integer = 0
+                                If Integer.TryParse(drv("HasLampiran2").ToString(), hasL2) AndAlso hasL2 = 0 Then
+                                    If LinkButton3 IsNot Nothing Then LinkButton3.Visible = False
+                                End If
+                            End If
+                        End If
+                    End If
 
                     If (LinkButton3 IsNot Nothing AndAlso LinkButton3.Visible) OrElse
                        (LinkButton5 IsNot Nothing AndAlso LinkButton5.Visible) OrElse

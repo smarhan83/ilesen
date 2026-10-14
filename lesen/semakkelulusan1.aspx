@@ -328,6 +328,48 @@
             background-color: #64748b !important;
             color: #fff !important;
         }
+        .custom-gridview tr:last-child td table {
+            margin: 0 !important;
+        }
+        .custom-gridview tr:last-child td {
+            background-color: #f8fafc !important;
+            border-top: 1px solid #e2e8f0 !important;
+            padding: 10px 16px !important;
+        }
+        .custom-gridview tr:last-child td table td {
+            padding: 2px 4px !important;
+            border: none !important;
+            background: transparent !important;
+        }
+        .custom-gridview tr:last-child td table td a,
+        .custom-gridview tr:last-child td table td span {
+            display: inline-block;
+            min-width: 32px;
+            height: 32px;
+            line-height: 30px;
+            text-align: center;
+            border-radius: 6px;
+            font-size: 0.84rem;
+            font-weight: 600;
+            text-decoration: none !important;
+            border: 1px solid #d1d5db;
+            margin: 0 2px;
+            transition: all 0.15s ease-in-out;
+        }
+        .custom-gridview tr:last-child td table td a {
+            background-color: #fff;
+            color: #2D6CDF;
+        }
+        .custom-gridview tr:last-child td table td a:hover {
+            background-color: #eff6ff;
+            border-color: #2D6CDF;
+            color: #1d4ed8;
+        }
+        .custom-gridview tr:last-child td table td span {
+            background-color: #2D6CDF;
+            border-color: #2D6CDF;
+            color: #fff;
+        }
 
         /* Modal Details View Styling */
         #modalMaklumatPermohonan .modal-dialog {
@@ -1276,21 +1318,21 @@
                         </div>
                     </div>
 
-                    <div class="table-responsive">
-                        <asp:GridView ID="GridView1" runat="server" Visible="true" AllowPaging="true"
+                    <div class="table-responsive mt-3">
+                        <asp:GridView ID="GridView1" runat="server" Visible="true" AllowPaging="True" PageSize="20"
                             AllowSorting="True" AutoGenerateColumns="False" 
-                            DataKeyNames="Permohonan_ID,ApprStatusID,JenisLesenIdList,IsSuratKelulusanFail,IsPublish"
+                            ShowHeaderWhenEmpty="True" EmptyDataText="Tiada Rekod Dijumpai"
+                            DataKeyNames="Permohonan_ID,ApprStatusID,JenisLesenIdList,IsSuratKelulusanFail,IsPublish,HasLampiran1,HasLampiran2"
                             DataSourceID="SqlDataSourceGrid"
-                            CssClass="table custom-gridview table-hover align-middle" PagerStyle-CssClass="pgr"
-                            AlternatingRowStyle-CssClass="alt">
-                            <AlternatingRowStyle CssClass="alt" />
+                            CssClass="table table-hover table-bordered custom-gridview align-middle">
+                            <PagerStyle CssClass="pagination-custom" HorizontalAlign="Right" />
                             <Columns>
-                                <asp:BoundField DataField="RowNo" HeaderText="No" SortExpression="RowNo"></asp:BoundField>
-                                <asp:BoundField DataField="Rujukan" HeaderText="No Rujukan" SortExpression="Rujukan" />
-                                <asp:BoundField DataField="JenisLesenDescList" HeaderText="Jenis Lesen" SortExpression="JenisLesenDescList" />
-                                <asp:BoundField DataField="Pemohon_Name" HeaderText="Nama Pemohon" SortExpression="Pemohon_Name" />
-                                <asp:BoundField DataField="CreatedDt" HeaderText="Tarikh Lulus" DataFormatString="{0:dd/MM/yyyy}" SortExpression="CreatedDt" />
-                                <asp:BoundField DataField="StatusDesc" HeaderText="Status" SortExpression="StatusDesc" />
+                                <asp:BoundField DataField="RowNo" HeaderText="No" SortExpression="RowNo" HeaderStyle-CssClass="text-center" ItemStyle-CssClass="text-center" HeaderStyle-Width="4%"></asp:BoundField>
+                                <asp:BoundField DataField="Rujukan" HeaderText="No Rujukan" SortExpression="Rujukan" HeaderStyle-CssClass="text-center" ItemStyle-CssClass="text-center fw-semibold text-primary" HeaderStyle-Width="15%" />
+                                <asp:BoundField DataField="JenisLesenDescList" HeaderText="Jenis Lesen" SortExpression="JenisLesenDescList" HeaderStyle-Width="20%" />
+                                <asp:BoundField DataField="Pemohon_Name" HeaderText="Nama Pemohon" SortExpression="Pemohon_Name" ItemStyle-CssClass="fw-semibold text-dark" HeaderStyle-Width="22%" />
+                                <asp:BoundField DataField="CreatedDt" HeaderText="Tarikh Lulus" DataFormatString="{0:dd/MM/yyyy}" SortExpression="CreatedDt" HeaderStyle-CssClass="text-center" ItemStyle-CssClass="text-center" HeaderStyle-Width="11%" />
+                                <asp:BoundField DataField="StatusDesc" HeaderText="Status" SortExpression="StatusDesc" HeaderStyle-CssClass="text-center" ItemStyle-CssClass="text-center" HeaderStyle-Width="14%" />
 
                                 <asp:TemplateField HeaderText="Maklumat Permohonan" HeaderStyle-Font-Size="10pt" HeaderStyle-Width="90%" ItemStyle-Width="90%">
                                     <ItemTemplate>
@@ -1299,13 +1341,13 @@
                                             <div class="text-muted small"><strong>Tarikh:</strong> <%# Eval("CreatedDt", "{0:dd/MM/yyyy}") %></div>
                                             <div class="text-muted small"><strong>Lesen:</strong> <%# Eval("JenisLesenDescList") %></div>
                                             <div class="text-muted small"><strong>Pemohon:</strong> <%# Eval("Pemohon_Name") %></div>
-                                            <div class="text-muted small"><strong>Status:</strong> <span class="badge bg-secondary"><%# Eval("StatusDesc") %></span></div>
+                                            <div class="text-muted small"><strong>Status:</strong> <span class="badge badge-secondary"><%# Eval("StatusDesc") %></span></div>
                                         </div>
                                     </ItemTemplate>
                                     <ItemStyle HorizontalAlign="Left" />
                                 </asp:TemplateField>
 
-                                <asp:TemplateField ShowHeader="False">
+                                <asp:TemplateField ShowHeader="False" HeaderStyle-CssClass="text-center" ItemStyle-CssClass="text-center" HeaderStyle-Width="6%">
                                     <ItemTemplate>
                                         <div class="d-flex flex-wrap gap-1 align-items-center justify-content-center">
                                             <asp:LinkButton runat="server" CssClass="btn btn-primary btn-sm text-nowrap" CommandName="Select" CausesValidation="False"
@@ -1319,12 +1361,12 @@
                                             </asp:LinkButton>
 
                                             <asp:LinkButton runat="server" CssClass="btn btn-outline-primary btn-sm text-nowrap" CommandName="Lampiran1" CausesValidation="False" ID="LinkButton7"
-                                                Visible='<%# If(Eval("UserType") > 0 And Eval("IsPublish") = True, True, False) %>' CommandArgument='<%# Container.DataItemIndex %>' data-toggle="tooltip" data-placement="top" title="Lampiran 1">
+                                                Visible='<%# If(Eval("UserType") > 0 AndAlso Eval("IsPublish") = True AndAlso Not IsDBNull(Eval("HasLampiran1")) AndAlso Convert.ToInt32(Eval("HasLampiran1")) = 1, True, False) %>' CommandArgument='<%# Container.DataItemIndex %>' data-toggle="tooltip" data-placement="top" title="Lampiran 1">
                                                 <i class="bi bi-paperclip me-1"></i>Lampiran 1
                                             </asp:LinkButton>
 
                                             <asp:LinkButton runat="server" CssClass="btn btn-outline-secondary btn-sm text-nowrap" CommandName="Lampiran2" CausesValidation="False" ID="LinkButton3"
-                                                Visible='<%# If(Eval("UserType") > 0 And Eval("IsPublish") = True, True, False) %>' CommandArgument='<%# Container.DataItemIndex %>' data-toggle="tooltip" data-placement="top" title="Lampiran 2">
+                                                Visible='<%# If(Eval("UserType") > 0 AndAlso Eval("IsPublish") = True AndAlso Not IsDBNull(Eval("HasLampiran2")) AndAlso Convert.ToInt32(Eval("HasLampiran2")) = 1, True, False) %>' CommandArgument='<%# Container.DataItemIndex %>' data-toggle="tooltip" data-placement="top" title="Lampiran 2">
                                                 <i class="bi bi-paperclip me-1"></i>Lampiran 2
                                             </asp:LinkButton>
                                         </div>
@@ -1333,7 +1375,6 @@
                                 <asp:BoundField DataField="TarikhMohon" HeaderText="TarikhMohon" DataFormatString="{0:dd/MM/yyyy}" SortExpression="TarikhMohon" Visible="false"></asp:BoundField>
                                 <asp:BoundField DataField="Is24jam" HeaderText="Risiko" SortExpression="Is24jam" Visible="false"></asp:BoundField>
                             </Columns>
-                            <PagerStyle CssClass="pgr" />
                         </asp:GridView>
                     </div>
                 </div>
@@ -1352,7 +1393,10 @@
         SelectCommand="SELECT ROW_NUMBER() OVER(ORDER BY TarikhMohon desc, Permohonan_ID desc) as RowNo, * FROM (
             SELECT ROW_NUMBER() OVER (PARTITION BY a.Permohonan_ID ORDER BY a.ApprovalID DESC) AS RepNo,
             (CASE WHEN a.ApprStatusID < 9 AND ISNULL(a.AgensiID, 0) > 0 then a.Description + ' - ' + e.JabatanAgensi_Description ELSE a.Description END) AS StatusDesc,
-            @AgensiID AS UserType, a.*, g.JenisLesenIdList, g.JenisLesenDescList, g.Rujukan, g.IsSuratKelulusanFail, g.StatusID, g.IsPublish, g.Is24jam, f.Pemohon_Name, h.CreatedDt FROM 
+            @AgensiID AS UserType, a.*, g.JenisLesenIdList, g.JenisLesenDescList, g.Rujukan, g.IsSuratKelulusanFail, g.StatusID, g.IsPublish, g.Is24jam, f.Pemohon_Name, h.CreatedDt,
+            (CASE WHEN EXISTS (SELECT 1 FROM LESEN_PermohonanFail pf WHERE pf.PermohonanFail_PermohonanID = a.Permohonan_ID AND pf.PermohonanFail_JenisLampiran = 'L1' AND ISNULL(pf.PermohonanFail_FilePath, '') <> '') THEN 1 ELSE 0 END) AS HasLampiran1,
+            (CASE WHEN EXISTS (SELECT 1 FROM LESEN_PermohonanFail pf WHERE pf.PermohonanFail_PermohonanID = a.Permohonan_ID AND pf.PermohonanFail_JenisLampiran = 'L2' AND ISNULL(pf.PermohonanFail_FilePath, '') <> '') THEN 1 ELSE 0 END) AS HasLampiran2
+            FROM 
             v_LESEN_ApprovalList_Curr a 
             left join LESEN_JabatanAgensi e on e.JabatanAgensi_ID = a.AgensiID
             inner join LESEN_Pemohon f on f.Pemohon_ID = a.Permohonan_PemohonID
