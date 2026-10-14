@@ -107,22 +107,6 @@
     .sp-shell .btn-info{ background:var(--sp-primary-light); border-color:var(--sp-primary-light); border-radius:var(--sp-radius-sm); }
     .sp-shell .btn-danger{ border-radius:var(--sp-radius-sm); }
 
-    /* ---------- "+ Tambah Semakan Baharu" - jadi FAB kat mobile ---------- */
-    #btnTambahSemakan{
-        display:inline-flex;
-        align-items:center;
-        gap:8px;
-        border-radius:999px;
-        background:var(--sp-accent);
-        border-color:var(--sp-accent);
-        color:#3A2A08;
-        font-weight:700;
-        padding:8px 18px;
-    }
-    #btnTambahSemakan:hover{ background:#d6922f; color:#3A2A08; }
-    #btnTambahSemakan .sp-fab-icon{ font-size:1.1rem; line-height:1; }
-    #btnTambahSemakan .sp-fab-label{ }
-
     /* ---------- Step indicator (flow Pegawai IK) ---------- */
     .sp-steps{
         display:flex;
@@ -185,53 +169,6 @@
 
         .sp-page-title{ font-size:1.15rem; }
 
-        /* Listing: table -> card list, guna urutan kolum sedia ada
-           (0 ID, 1 NoRujukan, 2 JenisKes, 3 NamaSyarikat, 4 Lokasi, 5 Tarikh, 6 Status, 7 Aksi) */
-        #idListing .table thead{ display:none; }
-        #idListing .table, #idListing .table tbody, #idListing .table tr, #idListing .table td{
-            display:block; width:100%;
-        }
-        #idListing .table{ border:none; }
-        #idListing .table tr{
-            background:var(--sp-surface);
-            border:1px solid var(--sp-border);
-            border-radius:var(--sp-radius);
-            box-shadow:var(--sp-shadow);
-            padding:12px 14px;
-            margin-bottom:12px;
-        }
-        #idListing .table td{
-            display:flex; justify-content:space-between; align-items:center;
-            padding:5px 0; border:none; text-align:right;
-        }
-        #idListing .table td:nth-child(1){ display:none; } /* sembunyikan ID teknikal */
-        #idListing .table td:nth-child(2)::before{ content:"No Rujukan"; }
-        #idListing .table td:nth-child(3)::before{ content:"Jenis Kes"; }
-        #idListing .table td:nth-child(4)::before{ content:"Syarikat"; }
-        #idListing .table td:nth-child(5)::before{ content:"Lokasi"; }
-        #idListing .table td:nth-child(6)::before{ content:"Tarikh"; }
-        #idListing .table td:nth-child(7)::before{ content:"Status"; }
-        #idListing .table td:nth-child(8){ justify-content:flex-end; padding-top:10px; }
-        #idListing .table td::before{
-            content:attr(data-lbl);
-            font-size:.75rem; font-weight:700; color:var(--sp-text-muted);
-            text-align:left;
-        }
-        #idListing .table td:nth-child(8) .btn{ width:100%; border-radius:var(--sp-radius-sm); }
-
-        /* FAB kat mobile */
-        #btnTambahSemakan{
-            position:fixed;
-            right:18px;
-            bottom:18px;
-            z-index:1030;
-            width:58px; height:58px;
-            padding:0;
-            box-shadow:var(--sp-shadow-lift);
-        }
-        #btnTambahSemakan .sp-fab-label{ display:none; }
-        #btnTambahSemakan .sp-fab-icon{ font-size:1.6rem; }
-
         .sp-sticky-actions .btn{ width:100%; margin-bottom:8px; }
         .sp-sticky-actions .btn:last-child{ margin-bottom:0; }
 
@@ -242,40 +179,227 @@
 </style>
 
 <style>
-    .btn-tambah-semakan {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 9px 16px;
-    border-radius: 8px;
-    font-size: 14px;
-    font-weight: 500;
-    line-height: 1;
-    text-decoration: none !important;
-    transition: all 0.2s ease;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
-}
+    /* =====================================================================
+       SENARAI SEMAKAN - tema ikut lesen/applicantregister.aspx (ar-*)
+    ===================================================================== */
+    .ss-card {
+        background: #fff; border: 1px solid #e9ecef; border-radius: 12px;
+        box-shadow: 0 1px 3px rgba(16, 24, 40, .04);
+    }
 
-.btn-tambah-semakan:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
-}
+    /* ---------- Header ---------- */
+    .ss-head {
+        display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between;
+        padding: 18px 20px; border-bottom: 1px solid #e9ecef;
+    }
+    .ss-title { font-size: 17px; font-weight: 700; color: #212529; margin: 0; }
+    .ss-sub { color: #6c757d; font-size: 13px; margin-top: 2px; }
+    .ss-head-actions { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; }
+    .ss-btn-add { display: inline-flex; align-items: center; gap: 8px; font-weight: 600; }
 
-.btn-tambah-semakan:active {
-    transform: translateY(0);
-}
+    /* Switch "Semua Rekod" - custom-admin.css paksa .form-check-input 20px tanpa border */
+    .ss-switch { display: flex; align-items: center; gap: 8px; margin: 0; padding-left: 2.6em; min-height: 0; }
+    .ss-switch .form-check-input {
+        width: 2.2em !important; height: 1.15em !important; margin-top: 0; cursor: pointer;
+        border: 1px solid #adb5bd !important;
+    }
+    .ss-switch .form-check-input:checked { background-color: #2E3192; border-color: #2E3192 !important; }
+    .ss-switch .form-check-label { font-size: 13px; font-weight: 600; color: #495057; cursor: pointer; }
 
-.btn-tambah-icon {
-    width: 22px;
-    height: 22px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.2);
-    font-size: 18px;
-    font-weight: 400;
-}
+    /* ---------- Filter ---------- */
+    .ss-filter {
+        display: flex; flex-wrap: wrap; gap: 10px; align-items: center;
+        padding: 14px 20px; border-bottom: 1px solid #e9ecef; background: #fcfcfd;
+    }
+    .ss-filter-fields { flex: 1 1 520px; margin: 0; }
+    .ss-filter-fields .form-group { margin: 0; }
+    .ss-filter .ss-filter-fields input.form-control {
+        border: 1px solid #d0d5dd !important; border-radius: 6px !important; background: #fff;
+    }
+    .ss-filter .ss-filter-fields input.form-control:focus { border-color: #3b82f6 !important; box-shadow: 0 0 0 4px rgba(59,130,246,.15); }
+    .ss-filter-actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+    .ss-count { color: #6c757d; font-size: 13px; white-space: nowrap; margin-left: 4px; }
+
+    /* ---------- Table ---------- */
+    .ss-table { margin: 0; width: 100%; }
+    /* table-bordered diperlukan oleh skrip master (butang tindakan); buang garisan menegak */
+    .ss-table.table-bordered, .ss-table.table-bordered > :not(caption) > * { border-width: 0; }
+    .ss-table.table-bordered > :not(caption) > * > * { border-width: 0 0 1px 0; border-color: #f1f3f5; }
+    .ss-table th {
+        background: #f8f9fa; color: #6c757d; font-size: 12px; font-weight: 600;
+        text-transform: uppercase; letter-spacing: .04em;
+        padding: 12px 16px; border-bottom: 1px solid #e9ecef; white-space: nowrap;
+    }
+    .ss-table th a { color: #6c757d; text-decoration: none; }
+    .ss-table th a:hover { color: #2E3192; }
+    .ss-table td { padding: 14px 16px; vertical-align: middle; border-bottom: 1px solid #f1f3f5; color: #212529; font-size: 14px; }
+    .ss-table tr:hover td { background: #fafbff; }
+    .ss-col-bil { width: 56px; color: #adb5bd !important; }
+    .ss-col-act { width: 1%; text-align: right; white-space: nowrap; }
+    .ss-nowrap { white-space: nowrap; }
+
+    .ss-ref { font-weight: 600; color: #2E3192; white-space: nowrap; }
+    .ss-name { font-weight: 600; }
+    .ss-loc { display: inline-block; max-width: 240px; color: #495057; font-size: 13px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; vertical-align: middle; }
+    .ss-loc i { color: #adb5bd; margin-right: 6px; }
+
+    /* Hasil pemeriksaan */
+    .ss-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px; font-size: 12px; font-weight: 600; white-space: nowrap; }
+    .ss-badge::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+    .ss-badge.ok { background: #D4EDDA; color: #1e7e34; }
+    .ss-badge.bad { background: #FCEAEA; color: #C0392B; }
+    .ss-badge.warn { background: #FDF1DC; color: #9A6408; }
+    .ss-badge.none { background: #f1f3f5; color: #6c757d; }
+
+    /* Status aliran */
+    .ss-status { display: inline-block; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 600; white-space: nowrap; }
+    .ss-status.st-ik { background: #E4DFFB; color: #2E3192; }
+    .ss-status.st-lesen { background: #DCEBFF; color: #1D4ED8; }
+    .ss-status.st-kj { background: #FDF1DC; color: #9A6408; }
+    .ss-status.st-kew { background: #E0F2F1; color: #00695C; }
+    .ss-status.st-done { background: #D4EDDA; color: #1e7e34; }
+    .ss-status.st-other { background: #f1f3f5; color: #6c757d; }
+
+    .ss-empty { text-align: center; padding: 48px 16px; color: #6c757d; }
+    .ss-empty i { font-size: 40px; color: #adb5bd; display: block; margin-bottom: 10px; }
+
+    .ss-pager td { padding: 14px 16px; border: 0; }
+    .ss-pager table { margin-left: auto; }
+    .ss-pager a, .ss-pager span {
+        display: inline-flex; min-width: 34px; height: 34px; padding: 0 8px;
+        align-items: center; justify-content: center; margin-left: 4px;
+        border-radius: 8px; border: 1px solid #dee2e6; color: #495057;
+        text-decoration: none; font-size: 13px;
+    }
+    .ss-pager span { background: #2E3192; border-color: #2E3192; color: #fff; font-weight: 600; }
+    .ss-pager a:hover { background: #f1f3f5; }
+
+    /* =====================================================================
+       PAPARAN DETAIL - override bs-* / wf-* (css/sepanduk-css.css) dalam .ss-detail sahaja
+    ===================================================================== */
+    .ss-detail { color: #212529; }
+    .ss-detail .bs-wrap, .ss-detail .wf-wrap { font-family: inherit; color: inherit; }
+    .ss-detail .wf-wrap { margin: 16px 0 0; }
+
+    /* Ringkasan */
+    .ss-summary {
+        display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between;
+        background: #fff; border: 1px solid #e9ecef; border-radius: 12px; box-shadow: 0 1px 3px rgba(16,24,40,.04);
+        padding: 18px 20px; margin-bottom: 16px;
+    }
+    .ss-summary-main { display: flex; gap: 14px; align-items: center; min-width: 0; }
+    .ss-summary-icon {
+        width: 46px; height: 46px; border-radius: 12px; flex-shrink: 0;
+        background: #E4DFFB; color: #2E3192; font-size: 20px;
+        display: flex; align-items: center; justify-content: center;
+    }
+    .ss-summary-label { font-size: 12px; font-weight: 600; color: #6c757d; text-transform: uppercase; letter-spacing: .04em; }
+    .ss-summary-title { font-size: 19px; font-weight: 700; margin: 2px 0 4px; color: #212529; word-break: break-word; }
+    .ss-summary-sub { display: flex; flex-wrap: wrap; gap: 4px 16px; color: #6c757d; font-size: 13px; }
+    .ss-summary-sub i { color: #adb5bd; margin-right: 6px; }
+    .ss-summary-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+
+    /* Kad (Butiran / Ulasan / Trail / Borang) */
+    .ss-detail .bs-card, .ss-detail .wf-card {
+        background: #fff; border: 1px solid #e9ecef; border-radius: 12px;
+        box-shadow: 0 1px 3px rgba(16,24,40,.04); margin-bottom: 16px;
+    }
+    .ss-detail .bs-card { height: auto; }
+    .ss-detail .bs-card-header, .ss-detail .bs-card-header.bs-secondary, .ss-detail .wf-head {
+        background: #fff !important; color: #212529;
+        padding: 14px 20px; border-bottom: 1px solid #e9ecef; gap: 10px;
+    }
+    .ss-detail .bs-card-header h3, .ss-detail .wf-head h3 { font-size: 15px; font-weight: 700; }
+    .ss-detail .bs-card-header-icon, .ss-detail .wf-head-icon {
+        width: 32px; height: 32px; border-radius: 8px; background: #fff; color: #2E3192;
+        box-shadow: 0 1px 2px rgba(16,24,40,.08);
+    }
+    .ss-detail .bs-card, .ss-detail .wf-card { overflow: hidden; }
+
+    /* Warna lembut ikut bahagian supaya tak nampak semua putih */
+    .ss-detail .bs-card-header                    { background: #F3F2FF !important; border-bottom-color: #E4DFFB; }  /* Butiran - indigo */
+    .ss-detail .bs-card-header.bs-secondary       { background: #EDF8F6 !important; border-bottom-color: #CDEBE6; }  /* Ulasan - teal */
+    .ss-detail .bs-card-header.bs-secondary .bs-card-header-icon { color: #00695C; }
+    .ss-detail .wf-head-trail                     { background: #F4F5F7 !important; border-bottom-color: #E6E8EB; }  /* Trail - kelabu */
+    .ss-detail .wf-head-trail .wf-head-icon       { color: #495057; }
+    .ss-detail .wf-head-ik                        { background: #F3F2FF !important; border-bottom-color: #E4DFFB; }  /* KB Inspektorat - indigo */
+    .ss-detail .wf-head-kblesen                   { background: #EEF4FF !important; border-bottom-color: #D6E4FF; }  /* KB Lesen - biru */
+    .ss-detail .wf-head-kblesen .wf-head-icon     { color: #1D4ED8; }
+    .ss-detail .wf-head-kj                        { background: #FFF7EA !important; border-bottom-color: #FBE5BF; }  /* KJ Lesen - amber */
+    .ss-detail .wf-head-kj .wf-head-icon          { color: #9A6408; }
+    .ss-detail .wf-head-kerani                    { background: #EDF8F6 !important; border-bottom-color: #CDEBE6; }  /* Kerani - teal */
+    .ss-detail .wf-head-kerani .wf-head-icon      { color: #00695C; }
+    .ss-detail .bs-card-body, .ss-detail .wf-body { padding: 18px 20px; }
+
+    /* Butiran: grid label / nilai */
+    .ss-info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px 20px; margin: 0; }
+    .ss-info { min-width: 0; }
+    .ss-info-wide { grid-column: 1 / -1; }
+    .ss-info dt { font-size: 12px; font-weight: 600; color: #6c757d; margin-bottom: 4px; }
+    .ss-info dt i { color: #adb5bd; margin-right: 6px; }
+    .ss-info dd { margin: 0; font-size: 14px; font-weight: 600; color: #212529; word-break: break-word; }
+
+    /* Jadual ulasan & trail */
+    .ss-detail .bs-list, .ss-detail .wf-list { border: 1px solid #e9ecef; border-radius: 8px; font-size: 13.5px; }
+    .ss-detail .bs-list th, .ss-detail .wf-list th { background: #f8f9fa; color: #6c757d; font-size: 11.5px; font-weight: 600; letter-spacing: .04em; }
+    .ss-detail .bs-list td, .ss-detail .wf-list td { border-bottom-color: #f1f3f5; }
+    .ss-muted-note { color: #6c757d; font-size: 13px; }
+
+    /* Lampiran */
+    .ss-detail .bs-attach-heading { margin: 18px 0 10px; }
+    .ss-detail .bs-attach-heading-icon { background: #EEF0FF; color: #2E3192; }
+    .ss-detail .bs-attach-item { border: 1px solid #e9ecef; border-radius: 8px; color: #2E3192; padding: 10px 12px; }
+    .ss-detail .bs-attach-item:hover { background: #fafbff; border-color: #c7d2fe; }
+    .ss-detail .bs-attach-item .bi-file-earmark { color: #adb5bd; }
+    .ss-attach-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .ss-attach-open { color: #adb5bd; font-size: 12px; }
+
+    /* Borang tindakan */
+    .ss-detail .wf-callout { border-radius: 8px; }
+    .ss-detail .wf-field, .ss-detail select.wf-field, .ss-detail textarea.wf-field { border-color: #d0d5dd; border-radius: 6px; }
+    .ss-detail .wf-field:focus { border-color: #3b82f6; box-shadow: 0 0 0 4px rgba(59,130,246,.15); }
+    .ss-detail .wf-actions { border-top-color: #e9ecef; }
+    .ss-detail .wf-btn-primary { background: #2E3192; border-radius: 8px; }
+    .ss-detail .wf-btn-primary:hover { background: #23267a; }
+    .ss-detail .wf-btn-outline { border-radius: 8px; border-color: #d0d5dd; }
+
+    .ss-detail-foot { padding: 4px 0 8px; }
+
+    @media (max-width: 768px) {
+        .ss-summary { padding: 16px; }
+        .ss-summary-title { font-size: 17px; }
+        .ss-info-grid { grid-template-columns: 1fr; }
+        .ss-detail-foot .btn { width: 100%; }
+    }
+
+    /* ---------- Mobile: baris jadi kad ---------- */
+    @media (max-width: 768px) {
+        .ss-head { padding: 16px; }
+        .ss-head-actions { width: 100%; justify-content: space-between; }
+        .ss-filter { padding: 12px 16px; }
+        .ss-filter-actions { width: 100%; }
+        .ss-filter-actions .btn { flex: 1; }
+        .ss-count { width: 100%; text-align: right; }
+
+        .ss-table thead, .ss-table tr:first-child:has(th) { display: none; }
+        .ss-table, .ss-table tbody, .ss-table tr, .ss-table td { display: block; width: 100%; }
+        .ss-table tr { border-bottom: 1px solid #e9ecef; padding: 12px 16px; }
+        .ss-table tr:hover td { background: transparent; }
+        .ss-table td { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 5px 0; border: 0 !important; text-align: right; }
+        .ss-table td::before { font-size: 12px; font-weight: 600; color: #6c757d; text-align: left; flex-shrink: 0; }
+        .ss-table td.ss-col-bil { display: none; }
+        .ss-table td:nth-child(2)::before { content: "No Rujukan"; }
+        .ss-table td:nth-child(3)::before { content: "Nama Syarikat"; }
+        .ss-table td:nth-child(4)::before { content: "Lokasi"; }
+        .ss-table td:nth-child(5)::before { content: "Tarikh Semakan"; }
+        .ss-table td:nth-child(6)::before { content: "Hasil Pemeriksaan"; }
+        .ss-table td:nth-child(7)::before { content: "Status"; }
+        .ss-table td.ss-col-act { width: 100%; padding-top: 10px; }
+        .ss-table td.ss-col-act .btn { width: 100%; }
+        .ss-loc { max-width: 60vw; }
+        .ss-table tr.ss-pager, .ss-table tr.ss-pager td { padding: 8px 0; }
+        .ss-table tr.ss-pager td::before { content: none; }
+    }
 </style>
 
 <link rel="stylesheet" href="<%= ResolveUrl("~/css/sepanduk-css.css") %>">
@@ -417,80 +541,97 @@
         <div class="container-fluid">
 
             <%--# =========================== SENARAI (LISTING) =========================== #--%>
-            <div class="card" runat="server" id="idListing" Visible="false">
-                <div class="d-flex justify-content-end mb-3">
-                    <asp:LinkButton ID="btnTambahSemakan"
-                        runat="server"
-                        CssClass="btn btn-primary btn-tambah-semakan">
-                        <span class="btn-tambah-icon">+</span>
-                        <span>Tambah Semakan Baharu</span>
-                    </asp:LinkButton>
-                </div>
-                <div class="card-body" style="overflow-x: auto;">
-                    <div class="row">
-                        <div class="col-md-12">
+            <div class="ss-card" runat="server" id="idListing" Visible="false">
+
+                <div class="ss-head">
+                    <div>
+                        <h3 class="ss-title">Senarai Semakan Sepanduk</h3>
+                        <div class="ss-sub">Rekod pemeriksaan sepanduk / bunting di lapangan</div>
+                    </div>
+                    <div class="ss-head-actions">
+                        <div class="form-check form-switch ss-switch" title="Papar semua rekod, bukan tugasan saya sahaja">
                             <asp:CheckBox ID="chkAll" AutoPostBack="True" runat="server" Text="Semua Rekod" />
                         </div>
+                        <asp:LinkButton ID="btnTambahSemakan" runat="server" CssClass="btn btn-primary ss-btn-add">
+                            <i class="bi bi-plus-lg"></i><span>Tambah Semakan Baharu</span>
+                        </asp:LinkButton>
                     </div>
-                    <%--# START FILTER #--%>
-                    <div class="row">
-                        <div class="col-md-10">
-                            <div id="pnlFilter" runat="server" class="row"></div>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="form-group">
-                                <asp:Button ID="btnSearch" runat="server" CssClass="btn btn-default" Text="Cari" />
-                                <asp:Button ID="btnReset" CssClass="btn btn-default" runat="server" Text="Set Semula" />
-                            </div>
-                        </div>
+                </div>
+
+                <%--# START FILTER #--%>
+                <asp:Panel ID="pnlFilterBox" runat="server" CssClass="ss-filter" DefaultButton="btnSearch">
+                    <div id="pnlFilter" runat="server" class="row g-2 ss-filter-fields"></div>
+                    <div class="ss-filter-actions">
+                        <asp:Button ID="btnSearch" runat="server" CssClass="btn btn-default" Text="Cari" />
+                        <asp:Button ID="btnReset" CssClass="btn btn-default" runat="server" Text="Set Semula" />
+                        <span class="ss-count"><asp:Literal ID="litJumlah" runat="server" /></span>
                     </div>
-                    <%--# END FILTER #--%>
-                    <div class="result-table-wrapper">
+                </asp:Panel>
+                <%--# END FILTER #--%>
+
+                <div class="table-responsive">
                     <asp:GridView ID="GridView1" runat="server"
-                        AllowSorting="True" AutoGenerateColumns="False" DataKeyNames="SemakanIK_ID"
+                        AllowSorting="True" AutoGenerateColumns="False" DataKeyNames="SemakanIK_ID,SemakanIK_Status,SemakanIK_NoRujukan"
                         DataSourceID="SqlDataSourceGridSemakan"
-                        AllowPaging="True" PageSize="20"
-                        CssClass="modern-grid" PagerStyle-CssClass="pgr"
-                        AlternatingRowStyle-CssClass="alt" Width="100%"
-                        OnRowCreated="GridViewCarian_RowCreated"
-                        >
-                        <AlternatingRowStyle CssClass="alt" />
+                        AllowPaging="True" PageSize="20" GridLines="None"
+                        CssClass="ss-table table-bordered" PagerStyle-CssClass="ss-pager">
+                        <PagerSettings Mode="NumericFirstLast" PageButtonCount="5" FirstPageText="&laquo;" LastPageText="&raquo;" />
                         <Columns>
-                            <asp:TemplateField HeaderText="Bil." ItemStyle-Width="60px">
+                            <asp:TemplateField HeaderText="Bil." HeaderStyle-CssClass="ss-col-bil" ItemStyle-CssClass="ss-col-bil">
                                 <ItemTemplate>
                                     <%# (GridView1.PageIndex * GridView1.PageSize) + Container.DisplayIndex + 1 %>
                                 </ItemTemplate>
                             </asp:TemplateField>
-                            <asp:BoundField DataField="SemakanIK_NoRujukan" HeaderText="No Rujukan" SortExpression="SemakanIK_NoRujukan" />
-                            <asp:BoundField DataField="SemakanIK_StatusPemeriksaan" HeaderText="Jenis Kes" SortExpression="SemakanIK_StatusPemeriksaan" />
-                            <asp:BoundField DataField="SemakanIK_NamaSyarikat" HeaderText="Nama Syarikat" SortExpression="SemakanIK_NamaSyarikat" />
-                            <asp:BoundField DataField="SemakanIK_AlamatLokasi" HeaderText="Lokasi" SortExpression="SemakanIK_AlamatLokasi" />
-                            <asp:BoundField DataField="SemakanIK_TarikhSemakan" HeaderText="Tarikh Semakan" DataFormatString="{0:dd/MM/yyyy}" SortExpression="SemakanIK_TarikhSemakan" />
-                            <asp:BoundField DataField="SemakanIK_Status" HeaderText="Status" SortExpression="SemakanIK_Status" />
-                            <asp:TemplateField ShowHeader="False">
+                            <asp:TemplateField HeaderText="No Rujukan" SortExpression="SemakanIK_NoRujukan">
+                                <ItemTemplate>
+                                    <span class="ss-ref"><%# Eval("SemakanIK_NoRujukan") %></span>
+                                </ItemTemplate>
+                            </asp:TemplateField>
+                            <asp:TemplateField HeaderText="Nama Syarikat" SortExpression="SemakanIK_NamaSyarikat">
+                                <ItemTemplate>
+                                    <span class="ss-name"><%# Eval("SemakanIK_NamaSyarikat") %></span>
+                                </ItemTemplate>
+                            </asp:TemplateField>
+                            <asp:TemplateField HeaderText="Lokasi" SortExpression="SemakanIK_AlamatLokasi">
+                                <ItemTemplate>
+                                    <span class="ss-loc" title='<%# Eval("SemakanIK_AlamatLokasi") %>'><i class="bi bi-geo-alt"></i><%# Eval("SemakanIK_AlamatLokasi") %></span>
+                                </ItemTemplate>
+                            </asp:TemplateField>
+                            <asp:BoundField DataField="SemakanIK_TarikhSemakan" HeaderText="Tarikh Semakan" DataFormatString="{0:dd/MM/yyyy}" SortExpression="SemakanIK_TarikhSemakan" ItemStyle-CssClass="ss-nowrap" />
+                            <asp:TemplateField HeaderText="Hasil Pemeriksaan" SortExpression="SemakanIK_StatusPemeriksaan">
+                                <ItemTemplate>
+                                    <span class='ss-badge <%# GetHasilCss(Eval("SemakanIK_StatusPemeriksaan")) %>'><%# GetHasilText(Eval("SemakanIK_StatusPemeriksaan")) %></span>
+                                </ItemTemplate>
+                            </asp:TemplateField>
+                            <asp:TemplateField HeaderText="Status" SortExpression="SemakanIK_Status">
+                                <ItemTemplate>
+                                    <span class='ss-status <%# GetStatusCss(Eval("SemakanIK_Status")) %>'><%# Eval("SemakanIK_Status") %></span>
+                                </ItemTemplate>
+                            </asp:TemplateField>
+                            <asp:TemplateField ShowHeader="False" ItemStyle-CssClass="ss-col-act">
                                 <ItemTemplate>
                                     <asp:LinkButton
                                         runat="server"
-                                        Text="Lihat &rsaquo;"
+                                        Text="Lihat"
                                         CommandName="Select"
                                         CausesValidation="False"
                                         ID="LinkButton2"
                                         CssClass='<%# If(CanSemak(Eval("SemakanIK_Status")), "btn btn-warning btn-sm", "btn btn-primary btn-sm") %>'
-                                        ><%--Visible='<%# CanSemak(Eval("SemakanIK_Status")) %>'--%>
-                                    </asp:LinkButton>
+                                        />
                                 </ItemTemplate>
                             </asp:TemplateField>
                         </Columns>
-                        <PagerStyle CssClass="pgr" />
                         <EmptyDataTemplate>
-                            <div class="text-center text-muted py-4">Tiada rekod semakan buat masa ini.</div>
+                            <div class="ss-empty">
+                                <i class="bi bi-clipboard-check"></i>
+                                Tiada rekod semakan buat masa ini.
+                            </div>
                         </EmptyDataTemplate>
                     </asp:GridView>
-                    </div>
                 </div>
             </div>
 
-            <asp:SqlDataSource ID="SqlDataSourceGridSemakan" runat="server"
+            <asp:SqlDataSource ID="SqlDataSourceGridSemakan" runat="server" OnSelected="SqlDataSourceGridSemakan_Selected"
                 ConnectionString="<%$ ConnectionStrings:webcon_ConnectionStr %>"
                 SelectCommand="SELECT * FROM (
                                     SELECT * FROM LESEN_SepandukSemakanIK
@@ -1394,13 +1535,13 @@
                 </div>
             </div>
 
-            <%--# Status Pemeriksaan #--%>
+            <%--# Hasil Pemeriksaan #--%>
             <div class="ru-section">
                 <div class="ru-section-head">
                     <div class="ru-section-icon">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>
                     </div>
-                    <h4 class="ru-section-title">Status Pemeriksaan</h4>
+                    <h4 class="ru-section-title">Hasil Pemeriksaan</h4>
                 </div>
 
                 <asp:RadioButtonList ID="rblStatusPemeriksaan" runat="server"
@@ -1521,12 +1662,33 @@
             <%--# =========================================================================================== #--%>
             <asp:Panel ID="pnlDetail" runat="server" Visible="false">
 
+                <div class="ss-detail">
 
-                <div class="card">
-                    <div class="card-body">
+                    <%--# Ringkasan kes #--%>
+                    <asp:FormView ID="fvRingkasan" runat="server" DataSourceID="SqlDataSourceDetail" DefaultMode="ReadOnly" RenderOuterTable="false">
+                        <ItemTemplate>
+                            <div class="ss-summary">
+                                <div class="ss-summary-main">
+                                    <div class="ss-summary-icon"><i class="bi bi-clipboard-check"></i></div>
+                                    <div>
+                                        <div class="ss-summary-label">Semakan Sepanduk</div>
+                                        <h3 class="ss-summary-title"><%# Eval("SemakanIK_NoRujukan") %></h3>
+                                        <div class="ss-summary-sub">
+                                            <span><i class="bi bi-building"></i><%# If(String.IsNullOrWhiteSpace(Convert.ToString(Eval("SemakanIK_NamaSyarikat"))), "-", Eval("SemakanIK_NamaSyarikat")) %></span>
+                                            <span><i class="bi bi-calendar3"></i><%# Eval("SemakanIK_TarikhSemakan", "{0:dd/MM/yyyy}") %></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="ss-summary-tags">
+                                    <span class='ss-badge <%# GetHasilCss(Eval("SemakanIK_StatusPemeriksaan")) %>'><%# GetHasilText(Eval("SemakanIK_StatusPemeriksaan")) %></span>
+                                    <span class='ss-status <%# GetStatusCss(Eval("SemakanIK_Status")) %>'><%# Eval("SemakanIK_Status") %></span>
+                                </div>
+                            </div>
+                        </ItemTemplate>
+                    </asp:FormView>
+
                         <div class="bs-wrap">
-                            <div class="row">
-                            
+                            <div class="row g-3">
 
                                 <!-- KIRI: Maklumat Kes -->
                                 <div class="col-md-6">
@@ -1540,88 +1702,53 @@
                                         <div class="bs-card-body">
                                             <asp:FormView ID="FormView1" runat="server" DataSourceID="SqlDataSourceDetail" DefaultMode="ReadOnly" RenderOuterTable="false">
                                                 <ItemTemplate>
-
-                                                    <div class="bs-info-row">
-                                                        <div class="bs-info-icon">
-                                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+                                                    <dl class="ss-info-grid">
+                                                        <div class="ss-info">
+                                                            <dt><i class="bi bi-hash"></i>No rujukan</dt>
+                                                            <dd><%# Eval("SemakanIK_NoRujukan") %></dd>
                                                         </div>
-                                                        <div>
-                                                            <div class="bs-info-label">Tempoh Iklan</div>
-                                                            <div class="bs-info-value"><%# Eval("TarikhPengesahanBanting1", "{0:dd MMM yyyy}") %> – <%# Eval("TarikhPengesahanBanting2", "{0:dd MMM yyyy}") %></div>
+                                                        <div class="ss-info">
+                                                            <dt><i class="bi bi-calendar3"></i>Tarikh semakan</dt>
+                                                            <dd><%# Eval("SemakanIK_TarikhSemakan", "{0:dd/MM/yyyy}") %></dd>
                                                         </div>
-                                                    </div>
-                                                    <div class="bs-info-row">
-                                                        <div class="bs-info-icon">
-                                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2"/></svg>
+                                                        <div class="ss-info ss-info-wide">
+                                                            <dt><i class="bi bi-building"></i>Nama syarikat</dt>
+                                                            <dd><%# GetNilai(Eval("SemakanIK_NamaSyarikat")) %></dd>
                                                         </div>
-                                                        <div>
-                                                            <div class="bs-info-label">No rujukan</div>
-                                                            <div class="bs-info-value"><%# Eval("SemakanIK_NoRujukan") %></div>
+                                                        <div class="ss-info">
+                                                            <dt><i class="bi bi-card-text"></i>No pendaftaran</dt>
+                                                            <dd><%# GetNilai(Eval("SemakanIK_NoPendaftaran")) %></dd>
                                                         </div>
-                                                    </div>
-                                                    <div class="bs-info-row">
-                                                        <div class="bs-info-icon">
-                                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                                                        <div class="ss-info">
+                                                            <dt><i class="bi bi-patch-check"></i>Status lesen</dt>
+                                                            <dd><%# GetNilai(Eval("SemakanIK_StatusLesen")) %></dd>
                                                         </div>
-                                                        <div>
-                                                            <div class="bs-info-label">Jenis kes</div>
-                                                            <div class="bs-info-value"><%# Eval("SemakanIK_StatusPemeriksaan") %></div>
+                                                        <div class="ss-info ss-info-wide">
+                                                            <dt><i class="bi bi-geo-alt"></i>Alamat lokasi</dt>
+                                                            <dd><%# GetNilai(Eval("SemakanIK_AlamatLokasi")) %></dd>
                                                         </div>
-                                                    </div>
-                                                    <div class="bs-info-row">
-                                                        <div class="bs-info-icon">
-                                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M6 21V7l6-4 6 4v14M9 9h1m4 0h1m-6 4h1m4 0h1m-6 4h1m4 0h1"/></svg>
+                                                        <div class="ss-info">
+                                                            <dt><i class="bi bi-clipboard-check"></i>Hasil pemeriksaan</dt>
+                                                            <dd><span class='ss-badge <%# GetHasilCss(Eval("SemakanIK_StatusPemeriksaan")) %>'><%# GetHasilText(Eval("SemakanIK_StatusPemeriksaan")) %></span></dd>
                                                         </div>
-                                                        <div>
-                                                            <div class="bs-info-label">Nama syarikat</div>
-                                                            <div class="bs-info-value"><%# Eval("SemakanIK_NamaSyarikat") %></div>
+                                                        <div class="ss-info">
+                                                            <dt><i class="bi bi-calendar-range"></i>Tempoh iklan</dt>
+                                                            <dd><%# GetTempohIklan(Eval("TarikhPengesahanBanting1"), Eval("TarikhPengesahanBanting2")) %></dd>
                                                         </div>
-                                                    </div>
-                                                    <div class="bs-info-row">
-                                                        <div class="bs-info-icon">
-                                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 2v4M17 2v4M3 10h18"/></svg>
-                                                        </div>
-                                                        <div>
-                                                            <div class="bs-info-label">No pendaftaran</div>
-                                                            <div class="bs-info-value"><%# Eval("SemakanIK_NoPendaftaran") %></div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="bs-info-row">
-                                                        <div class="bs-info-icon">
-                                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                                                        </div>
-                                                        <div>
-                                                            <div class="bs-info-label">Alamat lokasi</div>
-                                                            <div class="bs-info-value"><%# Eval("SemakanIK_AlamatLokasi") %></div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="bs-info-row">
-                                                        <div class="bs-info-icon">
-                                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
-                                                        </div>
-                                                        <div>
-                                                            <div class="bs-info-label">Tarikh semakan</div>
-                                                            <div class="bs-info-value"><%# Eval("SemakanIK_TarikhSemakan", "{0:dd/MM/yyyy}") %></div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="bs-info-row">
-                                                        <div class="bs-info-icon">
-                                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/></svg>
-                                                        </div>
-                                                        <div>
-                                                            <div class="bs-info-label">Status</div>
-                                                            <div class="bs-info-value"><%# Eval("SemakanIK_Status") %></div>
-                                                        </div>
-                                                    </div>
+                                                    </dl>
                                                 </ItemTemplate>
+                                                <EmptyDataTemplate>
+                                                    <div class="ss-empty"><i class="bi bi-file-earmark-x"></i>Butiran semakan tidak dijumpai.</div>
+                                                </EmptyDataTemplate>
                                             </asp:FormView>
                                         </div>
                                     </div>
 
+                                    <%--# LEFT JOIN: semakan "Tidak Berdaftar" tiada permohonan #--%>
                                     <asp:SqlDataSource ID="SqlDataSourceDetail" runat="server"
                                         ConnectionString="<%$ ConnectionStrings:webcon_ConnectionStr %>"
                                         SelectCommand="SELECT a.*,b.TarikhPengesahanBanting1,b.TarikhPengesahanBanting2 FROM LESEN_SepandukSemakanIK a
-                                        INNER JOIN LESEN_Permohonan b ON a.SemakanIK_PermohonanID = b.Permohonan_ID
+                                        LEFT JOIN LESEN_Permohonan b ON a.SemakanIK_PermohonanID = b.Permohonan_ID
                                         WHERE SemakanIK_ID = @SemakanIK_ID">
                                         <SelectParameters>
                                             <asp:ControlParameter ControlID="GridView1" Name="SemakanIK_ID" PropertyName="SelectedValue" />
@@ -1644,8 +1771,11 @@
                                                 <Columns>
                                                     <asp:BoundField DataField="Ulasan_Jenis" HeaderText="Jenis" />
                                                     <asp:BoundField DataField="Ulasan_Catatan" HeaderText="Catatan" />
-                                                    <asp:BoundField DataField="Ulasan_Tarikh" HeaderText="Tarikh" DataFormatString="{0:dd/MM/yyyy hh:mm tt}" />
+                                                    <asp:BoundField DataField="Ulasan_Tarikh" HeaderText="Tarikh" DataFormatString="{0:dd/MM/yyyy hh:mm tt}" ItemStyle-CssClass="ss-nowrap" />
                                                 </Columns>
+                                                <EmptyDataTemplate>
+                                                    <span class="ss-muted-note">Tiada ulasan.</span>
+                                                </EmptyDataTemplate>
                                             </asp:GridView>
 
                                             <div class="bs-attach-heading">
@@ -1658,11 +1788,16 @@
                                             <div class="bs-attach-list">
                                                 <asp:Repeater ID="RepeaterLampiranIK" runat="server" DataSourceID="SqlDataSourceLampiranIK">
                                                     <ItemTemplate>
-                                                        <a class="bs-attach-item" href='<%# Eval("Lampiran_FilePath") %>' target="_blank">
-                                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
-                                                            <%# Eval("Lampiran_FileName") %>
+                                                        <a class="bs-attach-item" href='<%# GetFileUrl(Eval("Lampiran_FilePath")) %>' target="_blank" rel="noopener">
+                                                            <i class="bi bi-file-earmark"></i>
+                                                            <span class="ss-attach-name"><%# Eval("Lampiran_FileName") %></span>
+                                                            <i class="bi bi-box-arrow-up-right ss-attach-open"></i>
                                                         </a>
                                                     </ItemTemplate>
+                                                    <FooterTemplate>
+                                                        <asp:Label runat="server" CssClass="ss-muted-note" Text="Tiada lampiran."
+                                                            Visible='<%# DirectCast(DirectCast(Container, RepeaterItem).NamingContainer, Repeater).Items.Count = 0 %>' />
+                                                    </FooterTemplate>
                                                 </asp:Repeater>
                                             </div>
                                         </div>
@@ -1996,11 +2131,10 @@
                             </div>
 
                         </div>
-                    </div>
-                </div>
 
-                <div class="sp-sticky-actions" runat="server" id="idFooterKembali">
-                    <asp:Button ID="btnKembaliDetail" runat="server" CssClass="btn btn-default" Text="&larr; Kembali Ke Senarai" CausesValidation="False" />
+                    <div class="ss-detail-foot" runat="server" id="idFooterKembali">
+                        <asp:Button ID="btnKembaliDetail" runat="server" CssClass="btn btn-default" Text="&larr; Kembali Ke Senarai" CausesValidation="False" />
+                    </div>
                 </div>
 
             </asp:Panel>
@@ -2010,28 +2144,11 @@
 </div>
 
     <script>
-        function sp_applyStatusBadges() {
-            var rows = document.querySelectorAll('#idListing table tbody tr');
-            rows.forEach(function (tr) {
-                var cell = tr.children[6]; // kolum ke-7: Status (0-based index 6)
-                if (!cell || cell.getAttribute('data-badged') === '1') return;
-                var text = (cell.textContent || '').trim();
-                if (!text) return;
-                var cls = 'badge-pending';
-                if (text.indexOf('Selesai') > -1) cls = 'badge-success';
-                else if (text.indexOf('Tidak Diperakukan') > -1 || text.indexOf('Tidak Sokong') > -1) cls = 'badge-danger';
-                else if (text.indexOf('Kewangan') > -1) cls = 'badge-warning';
-                cell.innerHTML = '<span class="status-pill ' + cls + '">' + text + '</span>';
-                cell.setAttribute('data-badged', '1');
-            });
-        }
-
         function pageLoad() {
             $(function () {
                 $('.select2').select2();
                 $('.datepicker').datepicker({ dateFormat: 'yy-mm-dd', autoclose: true });
             });
-            sp_applyStatusBadges();
         }
     </script>
 

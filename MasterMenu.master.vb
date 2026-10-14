@@ -1326,6 +1326,41 @@ Partial Class MasterMenu
 
     End Function
 
+    ' ===== QR Sepanduk / Bunting (modal Semakan Status) =====
+    Protected Function AdaQr(ByVal status As Object, ByVal qrCount As Object) As Boolean
+        Dim n As Integer = 0
+        If qrCount IsNot Nothing AndAlso Not IsDBNull(qrCount) Then n = CInt(qrCount)
+        Return Convert.ToString(status).Trim() = "Diluluskan" AndAlso n > 0
+    End Function
+
+    Protected Function TempohBanting(ByVal mula As Object, ByVal tamat As Object) As String
+        If mula Is Nothing OrElse IsDBNull(mula) OrElse tamat Is Nothing OrElse IsDBNull(tamat) Then Return "-"
+        Return Convert.ToDateTime(mula).ToString("dd/MM/yyyy") & " - " & Convert.ToDateTime(tamat).ToString("dd/MM/yyyy")
+    End Function
+
+    ' Senarai kod QR bagi satu permohonan, ikut susunan lokasi (LokasiNo = 1, 2, ...)
+    Protected Function GetBantingQr(ByVal permohonanId As Object) As System.Data.DataTable
+        Dim dt As New System.Data.DataTable()
+        If permohonanId Is Nothing OrElse IsDBNull(permohonanId) Then Return dt
+
+        Dim sql As String =
+            "SELECT b.UniqueID, l.Lokasi, DENSE_RANK() OVER (ORDER BY b.Lokasi_ID) AS LokasiNo " &
+            "FROM LESEN_BantingImej b " &
+            "LEFT JOIN LESEN_BantingLokasi l ON l.Lokasi_ID = b.Lokasi_ID " &
+            "WHERE b.Permohonan_ID = @Permohonan_ID " &
+            "ORDER BY b.Lokasi_ID, b.Imej_ID"
+
+        Using conn As New SqlConnection(ConfigurationManager.ConnectionStrings("webcon_ConnectionStr").ConnectionString)
+            Using cmd As New SqlCommand(sql, conn)
+                cmd.Parameters.AddWithValue("@Permohonan_ID", CInt(permohonanId))
+                Using da As New SqlDataAdapter(cmd)
+                    da.Fill(dt)
+                End Using
+            End Using
+        End Using
+        Return dt
+    End Function
+
     Private Function GetIsSuratFail(pid As Integer) As Boolean
 
         Dim isFail As Boolean
