@@ -715,7 +715,9 @@
                                             'Semakan KB Inspektorat',
                                             'Semakan KB Lesen',
                                             'Perakuan KJ Lesen',
-                                            'Kemaskini Kewangan'
+                                            'Kemaskini Kewangan',
+                                            'Selesai',
+                                            'Tidak Diperakukan'   /* status akhir - hanya bila Semua Rekod */
                                         )
                                     )
 
@@ -728,7 +730,9 @@
                                         AND SemakanIK_Status IN (
                                             'Semakan KB Lesen',
                                             'Perakuan KJ Lesen',
-                                            'Kemaskini Kewangan'
+                                            'Kemaskini Kewangan',
+                                            'Selesai',
+                                            'Tidak Diperakukan'   /* status akhir - hanya bila Semua Rekod */
                                         )
                                     )
 
@@ -740,7 +744,9 @@
                                         AND @sessionEstateID = 1
                                         AND SemakanIK_Status IN (
                                             'Perakuan KJ Lesen',
-                                            'Kemaskini Kewangan'
+                                            'Kemaskini Kewangan',
+                                            'Selesai',
+                                            'Tidak Diperakukan'   /* status akhir - hanya bila Semua Rekod */
                                         )
                                     )
 
@@ -751,7 +757,7 @@
                                         @sessionEstateID = 1
                                         AND @sessionIsPeraku &lt;&gt; 1
                                         AND @sessionIsPenilai &lt;&gt; 1
-                                        AND SemakanIK_Status = 'Kemaskini Kewangan'
+                                        AND SemakanIK_Status IN ('Kemaskini Kewangan', 'Selesai', 'Tidak Diperakukan')
                                     )
                                 )
                                AND 
