@@ -5,6 +5,24 @@
 <asp:Content ID="HeaderContent" ContentPlaceHolderID="HeadContent" runat="Server">
 
     <style>
+        /* Suis "Lihat Semua Ulasan" - gaya sama seperti suis "Semua Rekod" (Semakan Sepanduk) */
+        .lsu-switch { display: inline-flex; align-items: center; margin: 4px 0 14px; }
+        .lsu-switch input[type=checkbox] {
+            -webkit-appearance: none; appearance: none; flex-shrink: 0; cursor: pointer;
+            width: 2.2em !important; height: 1.15em !important; margin: 0 8px 0 0 !important;
+            border: 1px solid #adb5bd !important; border-radius: 2em !important;
+            background-color: #fff;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='rgba%280,0,0,.25%29'/%3e%3c/svg%3e");
+            background-position: left center; background-repeat: no-repeat; background-size: contain;
+            transition: background-position .15s ease-in-out, background-color .15s ease-in-out;
+        }
+        .lsu-switch input[type=checkbox]:checked {
+            background-color: #2E3192; border-color: #2E3192 !important; background-position: right center;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='%23fff'/%3e%3c/svg%3e");
+        }
+        .lsu-switch input[type=checkbox]:focus-visible { outline: 0; box-shadow: 0 0 0 4px rgba(46,49,146,.15); }
+        .lsu-switch label { margin: 0; font-size: 13px; font-weight: 600; color: #495057; cursor: pointer; }
+
         .paraGraphtext {
             overflow: hidden;
             text-overflow: ellipsis;
@@ -3895,10 +3913,9 @@ ORDER BY
                     </div>
 					
                     <div class="row" runat="server" id="divLihatSemuaUlasan">
-                        <div class="col-md-2">
-                            <div class="form-group">
-                                <label>Lihat Semua Ulasan</label>
-                                <asp:CheckBox ID="cbAllUlasan" runat="server" AutoPostBack="true" />
+                        <div class="col-md-12">
+                            <div class="lsu-switch" title="Papar semua rekod termasuk ulasan yang telah selesai">
+                                <asp:CheckBox ID="cbAllUlasan" runat="server" AutoPostBack="true" Text="Lihat Semua Ulasan" />
                             </div>
                         </div>
 						
