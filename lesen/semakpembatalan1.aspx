@@ -300,8 +300,51 @@
         .custom-gridview tr:hover td {
             background-color: #f8fafc !important;
         }
+        .custom-gridview .btn-sm {
+            font-size: 0.78rem !important;
+            padding: 4px 9px !important;
+            border-radius: 6px !important;
+            font-weight: 500 !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            line-height: 1.4 !important;
+            transition: all 0.15s ease-in-out !important;
+        }
+        .custom-gridview .btn-sm:hover {
+            transform: translateY(-1px);
+        }
+        .custom-gridview .badge {
+            font-size: 0.76rem !important;
+            font-weight: 600 !important;
+            padding: 4px 8px !important;
+            border-radius: 6px !important;
+        }
+        .custom-gridview .badge-success {
+            background-color: #10b981 !important;
+            color: #fff !important;
+        }
+        .custom-gridview .badge-warning {
+            background-color: #f59e0b !important;
+            color: #fff !important;
+        }
+        .custom-gridview .badge-secondary {
+            background-color: #64748b !important;
+            color: #fff !important;
+        }
 
         /* Modal Details View Styling */
+        #modalMaklumatPermohonan .modal-dialog {
+            width: 92vw !important;
+            max-width: 92vw !important;
+        }
+        @media (min-width: 1400px) {
+            #modalMaklumatPermohonan .modal-dialog {
+                width: 90vw !important;
+                max-width: 90vw !important;
+            }
+        }
+
         .modal-details-card {
             background: #ffffff;
             border: 1px solid #e2e8f0;
@@ -1293,27 +1336,24 @@
 
                                 <asp:TemplateField ShowHeader="False">
                                     <ItemTemplate>
-                                        <div class="d-flex flex-wrap gap-1 align-items-center justify-content-end">
-                                            <asp:LinkButton runat="server" Text="Lihat" CommandName="Select" CausesValidation="False"
-                                                ID="LinkButton5" Visible='<%# If(Eval("UserType") > 0 And Eval("StatusID") > 0, True, False) %>' CssClass="btn btn-warning btn-sm d-inline-flex align-items-center">
+                                        <div class="d-flex flex-wrap gap-1 align-items-center justify-content-center">
+                                            <asp:LinkButton runat="server" CssClass="btn btn-primary btn-sm text-nowrap" CommandName="Select" CausesValidation="False"
+                                                ID="LinkButton5" Visible='<%# If(Eval("UserType") > 0 And Eval("StatusID") > 0, True, False) %>' data-toggle="tooltip" data-placement="top" title="Lihat">
                                                 <i class="bi bi-eye me-1"></i>Lihat
                                             </asp:LinkButton>
 
-                                            <asp:LinkButton runat="server" Text="Surat" CommandName="Surat" CausesValidation="False" ID="LinkButton6"
-                                                Visible='<%# If(Eval("UserType") > 0 And Eval("IsPublish") = True, True, False) %>'
-                                                CssClass="btn btn-info btn-sm text-white d-inline-flex align-items-center" CommandArgument='<%# Container.DataItemIndex %>'>
-                                                <i class="bi bi-file-earmark-pdf me-1"></i>Surat
+                                            <asp:LinkButton runat="server" CssClass="btn btn-warning btn-sm text-nowrap" CommandName="Surat" CausesValidation="False" ID="LinkButton6"
+                                                Visible='<%# If(Eval("UserType") > 0 And Eval("IsPublish") = True, True, False) %>' CommandArgument='<%# Container.DataItemIndex %>' data-toggle="tooltip" data-placement="top" title="Surat">
+                                                <i class="bi bi-file-earmark-text me-1"></i>Surat
                                             </asp:LinkButton>
 
-                                            <asp:LinkButton runat="server" Text="Lampiran 1" CommandName="Lampiran1" CausesValidation="False" ID="LinkButton7"
-                                                Visible='<%# If(Eval("UserType") > 0 And Eval("IsPublish") = True, True, False) %>'
-                                                CssClass="btn btn-outline-primary btn-sm d-inline-flex align-items-center" CommandArgument='<%# Container.DataItemIndex %>'>
+                                            <asp:LinkButton runat="server" CssClass="btn btn-outline-primary btn-sm text-nowrap" CommandName="Lampiran1" CausesValidation="False" ID="LinkButton7"
+                                                Visible='<%# If(Eval("UserType") > 0 And Eval("IsPublish") = True, True, False) %>' CommandArgument='<%# Container.DataItemIndex %>' data-toggle="tooltip" data-placement="top" title="Lampiran 1">
                                                 <i class="bi bi-paperclip me-1"></i>Lampiran 1
                                             </asp:LinkButton>
 
-                                            <asp:LinkButton runat="server" Text="Lampiran 2" CommandName="Lampiran2" CausesValidation="False" ID="LinkButton3"
-                                                Visible='<%# If(Eval("UserType") > 0 And Eval("IsPublish") = True, True, False) %>'
-                                                CssClass="btn btn-outline-secondary btn-sm d-inline-flex align-items-center" CommandArgument='<%# Container.DataItemIndex %>'>
+                                            <asp:LinkButton runat="server" CssClass="btn btn-outline-secondary btn-sm text-nowrap" CommandName="Lampiran2" CausesValidation="False" ID="LinkButton3"
+                                                Visible='<%# If(Eval("UserType") > 0 And Eval("IsPublish") = True, True, False) %>' CommandArgument='<%# Container.DataItemIndex %>' data-toggle="tooltip" data-placement="top" title="Lampiran 2">
                                                 <i class="bi bi-paperclip me-1"></i>Lampiran 2
                                             </asp:LinkButton>
                                         </div>
@@ -1377,7 +1417,7 @@
     <%-- SECTION 6: MODAL POPUP (Maklumat Permohonan - Excludes Banting)           --%>
     <%-- ========================================================================= --%>
     <div class="modal fade" id="modalMaklumatPermohonan" tabindex="-1" aria-labelledby="modalMaklumatPermohonanLabel" aria-hidden="true">
-        <div class="modal-dialog modal-xl modal-dialog-scrollable">
+        <div class="modal-dialog modal-xl modal-dialog-scrollable" style="max-width: 92vw; width: 92vw;">
             <div class="modal-content border-0 shadow-lg" style="border-radius: 12px; overflow: hidden;">
                 <div class="modal-header bg-primary text-white py-3">
                     <h5 class="modal-title font-weight-bold d-flex align-items-center mb-0" id="modalMaklumatPermohonanLabel">
@@ -1392,12 +1432,12 @@
                 <div class="modal-body p-4 bg-light">
 
                     <!-- SECTION 1: MAKLUMAT PEMOHON -->
-                    <div class="card modal-details-card mb-3">
+                    <div class="card modal-details-card mb-2">
                         <div class="form-section-header mt-0">
                             <i class="bi bi-person-vcard"></i>
                             <span>Maklumat Pemohon</span>
                         </div>
-                        <div class="row g-3">
+                        <div class="row g-2">
                             <div class="col-md-3 col-lg-2">
                                 <div class="modal-field-group">
                                     <label class="modal-field-label">Pemohon ID</label>
@@ -1450,12 +1490,12 @@
                     </div>
 
                     <!-- SECTION 2: MAKLUMAT PERMOHONAN -->
-                    <div class="card modal-details-card mb-3">
+                    <div class="card modal-details-card mb-2">
                         <div class="form-section-header mt-0">
                             <i class="bi bi-file-earmark-text"></i>
                             <span>Maklumat Permohonan</span>
                         </div>
-                        <div class="row g-3">
+                        <div class="row g-2">
                             <div class="col-md-4">
                                 <div class="modal-field-group">
                                     <label class="modal-field-label">Tarikh Mohon</label>
@@ -1487,12 +1527,12 @@
 
                     <!-- SECTION 3: PERNIAGAAN / PREMIS -->
                     <asp:Panel ID="pnlModalPerniagaan" runat="server" Visible="false">
-                        <div class="card modal-details-card mb-3">
+                        <div class="card modal-details-card mb-2">
                             <div class="form-section-header mt-0">
                                 <i class="bi bi-shop"></i>
                                 <span>Maklumat Perniagaan / Premis</span>
                             </div>
-                            <div class="row g-3">
+                            <div class="row g-2">
                                 <div class="col-md-6">
                                     <div class="modal-field-group">
                                         <label class="modal-field-label">Nama Syarikat</label>
@@ -1527,7 +1567,7 @@
 
                             <!-- Sub-Panel: Tukar Pemilik -->
                             <asp:Panel ID="pnlModalTukarPemilik" runat="server" Visible="false">
-                                <div class="row g-3 mt-1">
+                                <div class="row g-2 mt-1">
                                     <div class="col-md-12">
                                         <div class="modal-field-group">
                                             <label class="modal-field-label text-primary"><i class="bi bi-person-gear me-1"></i>Nama Pemilik Baru</label>
@@ -1539,7 +1579,7 @@
 
                             <!-- Sub-Panel: Tukar Alamat / Premis Tambahan -->
                             <asp:Panel ID="pnlModalTukarAlamat" runat="server" Visible="false">
-                                <div class="row g-3 mt-1">
+                                <div class="row g-2 mt-1">
                                     <div class="col-md-12">
                                         <div class="modal-field-group">
                                             <label class="modal-field-label text-primary"><i class="bi bi-geo-alt me-1"></i>Alamat Premis Baru / Premis Tambahan</label>
@@ -1551,7 +1591,7 @@
 
                             <!-- Sub-Panel: Tambah Aktiviti Perniagaan -->
                             <asp:Panel ID="pnlModalTambahPerniagaan" runat="server" Visible="false">
-                                <div class="row g-3 mt-1">
+                                <div class="row g-2 mt-1">
                                     <div class="col-md-12">
                                         <div class="modal-field-group">
                                             <label class="modal-field-label text-primary"><i class="bi bi-plus-circle me-1"></i>Jenis Perniagaan Baru (Tambahan)</label>
@@ -1563,7 +1603,7 @@
 
                             <!-- Sub-Panel: Tukar Nama Syarikat -->
                             <asp:Panel ID="pnlModalTukarNama" runat="server" Visible="false">
-                                <div class="row g-3 mt-1">
+                                <div class="row g-2 mt-1">
                                     <div class="col-md-12">
                                         <div class="modal-field-group">
                                             <label class="modal-field-label text-primary"><i class="bi bi-building me-1"></i>Nama Baru Syarikat</label>
@@ -1577,7 +1617,7 @@
 
                     <!-- SECTION 4: PAPAN IKLAN -->
                     <asp:Panel ID="pnlModalIklan" runat="server" Visible="false">
-                        <div class="card modal-details-card mb-3">
+                        <div class="card modal-details-card mb-2">
                             <div class="form-section-header mt-0">
                                 <i class="bi bi-card-image"></i>
                                 <span>Maklumat Papan Iklan</span>
@@ -1601,12 +1641,12 @@
 
                     <!-- SECTION 5: BILLBOARD -->
                     <asp:Panel ID="pnlModalBillboard" runat="server" Visible="false">
-                        <div class="card modal-details-card mb-3">
+                        <div class="card modal-details-card mb-2">
                             <div class="form-section-header mt-0">
                                 <i class="bi bi-badge-ad"></i>
                                 <span>Maklumat Billboard</span>
                             </div>
-                            <div class="row g-3">
+                            <div class="row g-2">
                                 <div class="col-12">
                                     <div class="modal-field-group mb-0">
                                         <label class="modal-field-label">Lokasi Billboard</label>
@@ -1619,12 +1659,12 @@
 
                     <!-- SECTION 6: PASAR -->
                     <asp:Panel ID="pnlModalPasar" runat="server" Visible="false">
-                        <div class="card modal-details-card mb-3">
+                        <div class="card modal-details-card mb-2">
                             <div class="form-section-header mt-0">
                                 <i class="bi bi-basket"></i>
                                 <span>Maklumat Pasar</span>
                             </div>
-                            <div class="row g-3">
+                            <div class="row g-2">
                                 <div class="col-md-4">
                                     <div class="modal-field-group">
                                         <label class="modal-field-label">Lokasi Pasar 1</label>
@@ -1667,12 +1707,12 @@
 
                     <!-- SECTION 7: LESEN ANJING -->
                     <asp:Panel ID="pnlModalAnjing" runat="server" Visible="false">
-                        <div class="card modal-details-card mb-3">
+                        <div class="card modal-details-card mb-2">
                             <div class="form-section-header mt-0">
                                 <i class="bi bi-heart-pulse"></i>
                                 <span>Maklumat Lesen Anjing</span>
                             </div>
-                            <div class="row g-3 mb-3">
+                            <div class="row g-2 mb-3">
                                 <div class="col-md-8">
                                     <div class="modal-field-group">
                                         <label class="modal-field-label">Alamat Premis / Lokasi Anjing</label>
@@ -1707,12 +1747,12 @@
 
                     <!-- SECTION 8: PENJAJA -->
                     <asp:Panel ID="pnlModalPenjaja" runat="server" Visible="false">
-                        <div class="card modal-details-card mb-3">
+                        <div class="card modal-details-card mb-2">
                             <div class="form-section-header mt-0">
                                 <i class="bi bi-person-walking"></i>
                                 <span>Maklumat Penjaja</span>
                             </div>
-                            <div class="row g-3">
+                            <div class="row g-2">
                                 <div class="col-md-4">
                                     <div class="modal-field-group">
                                         <label class="modal-field-label">Jenis Penjaja</label>
@@ -1755,12 +1795,12 @@
 
                     <!-- SECTION 9: EKSPO / PROGRAM -->
                     <asp:Panel ID="pnlModalEkspo" runat="server" Visible="false">
-                        <div class="card modal-details-card mb-3">
+                        <div class="card modal-details-card mb-2">
                             <div class="form-section-header mt-0">
                                 <i class="bi bi-calendar-event"></i>
                                 <span>Maklumat Ekspo / Program</span>
                             </div>
-                            <div class="row g-3">
+                            <div class="row g-2">
                                 <div class="col-md-4">
                                     <div class="modal-field-group">
                                         <label class="modal-field-label">Nama Ekspo / Program</label>
@@ -1840,12 +1880,12 @@
 
                     <!-- SECTION 12: PEMBATALAN -->
                     <asp:Panel ID="pnlModalBatal" runat="server" Visible="false">
-                        <div class="card modal-details-card mb-3">
+                        <div class="card modal-details-card mb-2">
                             <div class="form-section-header danger-section mt-0">
                                 <i class="bi bi-x-octagon"></i>
                                 <span>Maklumat Pembatalan</span>
                             </div>
-                            <div class="row g-3">
+                            <div class="row g-2">
                                 <div class="col-md-3">
                                     <div class="modal-field-group">
                                         <label class="modal-field-label">Jenis Pembatalan</label>
