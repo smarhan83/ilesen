@@ -122,6 +122,7 @@ Partial Class sepandukSemakanIK
         pnlKJLesen.Visible = (statusSemasa = "Perakuan KJ Lesen") AndAlso CanSemak(statusSemasa)
         pnlKeraniLesen.Visible = (statusSemasa = "Kemaskini Kewangan") AndAlso CanSemak(statusSemasa)
         pnlTrailKelulusan.Visible = True
+        BindTrailKelulusan(semakanIkId, statusSemasa)
 
         FormView1.ChangeMode(FormViewMode.ReadOnly)
         FormViewKBInspektorat.ChangeMode(FormViewMode.Insert)
@@ -145,6 +146,120 @@ Partial Class sepandukSemakanIK
             If hdn IsNot Nothing Then hdn.Value = syorKBLesen
         End If
     End Sub
+
+    '===================== TRAIL KELULUSAN (garis masa) =====================
+    ' Peringkat: Pegawai IK -> KB Inspektorat -> KB Lesen -> KJ Lesen -> Kewangan (jika syor wang amanah) -> Keputusan akhir
+    Private Sub BindTrailKelulusan(semakanIkId As Integer, statusSemasa As String)
+        Dim connStr As String = ConfigurationManager.ConnectionStrings("webcon_ConnectionStr").ConnectionString
+        Dim semakan As New DataTable(), kelulusan As New DataTable(), kewangan As New DataTable()
+
+        Using conn As New SqlConnection(connStr)
+            Dim sqlSemakan As String = "SELECT a.SemakanIK_TarikhSemakan, a.CreatedDt, a.LastModDt, a.SemakanIK_StatusPemeriksaan, u.Users_Fullname AS Oleh " &
+                "FROM LESEN_SepandukSemakanIK a LEFT JOIN TBL_USERS u ON CAST(u.Users_Id AS nvarchar(50)) = a.SemakanIK_PegawaiID " &
+                "WHERE a.SemakanIK_ID = @ID"
+            Dim sqlKelulusan As String = "SELECT k.Kelulusan_Peringkat, k.Kelulusan_Keputusan, k.Kelulusan_Catatan, k.Kelulusan_Tarikh, u.Users_Fullname AS Oleh " &
+                "FROM LESEN_SepandukKelulusan k LEFT JOIN TBL_USERS u ON u.Users_Id = k.Kelulusan_PegawaiID " &
+                "WHERE k.Kelulusan_SemakanIKID = @ID ORDER BY k.Kelulusan_ID"
+            Dim sqlKewangan As String = "SELECT TOP 1 w.Kewangan_Tindakan, w.Kewangan_Jumlah, w.Kewangan_NoResit, w.Kewangan_Catatan, w.CreatedDt, u.Users_Fullname AS Oleh " &
+                "FROM LESEN_SepandukKewangan w LEFT JOIN TBL_USERS u ON u.Users_Id = w.Kewangan_PegawaiID " &
+                "WHERE w.Kewangan_SemakanIKID = @ID ORDER BY w.Kewangan_ID DESC"
+            For Each pair In {New With {.Sql = sqlSemakan, .Dt = semakan}, New With {.Sql = sqlKelulusan, .Dt = kelulusan}, New With {.Sql = sqlKewangan, .Dt = kewangan}}
+                Using cmd As New SqlCommand(pair.Sql, conn)
+                    cmd.Parameters.AddWithValue("@ID", semakanIkId)
+                    Using da As New SqlDataAdapter(cmd)
+                        da.Fill(pair.Dt)
+                    End Using
+                End Using
+            Next
+        End Using
+
+        Dim steps As New DataTable()
+        For Each c In {"StepStatus", "Tajuk", "Keputusan", "KeputusanCss", "Tarikh", "Oleh", "Catatan", "Ikon"}
+            steps.Columns.Add(c)
+        Next
+
+        ' Indeks peringkat semasa (0-based). 6 = proses tamat.
+        Dim semasa As Integer
+        Select Case statusSemasa
+            Case "Semakan KB Inspektorat" : semasa = 1
+            Case "Semakan KB Lesen" : semasa = 2
+            Case "Perakuan KJ Lesen" : semasa = 3
+            Case "Kemaskini Kewangan" : semasa = 4
+            Case Else : semasa = 6   ' Selesai / Tidak Diperakukan
+        End Select
+
+        ' 1) Pegawai IK
+        If semakan.Rows.Count > 0 Then
+            Dim r As DataRow = semakan.Rows(0)
+            Dim tarikh As Object = If(IsDBNull(r("CreatedDt")), r("SemakanIK_TarikhSemakan"), r("CreatedDt"))
+            steps.Rows.Add("done", "Semakan Pegawai IK", GetHasilText(r("SemakanIK_StatusPemeriksaan")), "kp-" & GetHasilCss(r("SemakanIK_StatusPemeriksaan")),
+                           FormatTarikh(tarikh), Convert.ToString(r("Oleh")), "", "bi-search")
+        End If
+
+        ' 2-4) KB Inspektorat, KB Lesen, KJ Lesen
+        Dim peringkat As String() = {"KB Inspektorat", "KB Lesen", "KJ Lesen"}
+        Dim tajuk As String() = {"Semakan & Sokongan KB Inspektorat", "Syor Tindakan KB Lesen", "Perakuan KJ Lesen"}
+        Dim ikon As String() = {"bi-shield-check", "bi-clipboard-check", "bi-patch-check"}
+        For i As Integer = 0 To 2
+            Dim rows() As DataRow = kelulusan.Select("Kelulusan_Peringkat = '" & peringkat(i) & "'")
+            Dim idx As Integer = i + 1
+            If rows.Length > 0 AndAlso idx < semasa Then
+                Dim r As DataRow = rows(rows.Length - 1)
+                Dim kep As String = Convert.ToString(r("Kelulusan_Keputusan"))
+                steps.Rows.Add("done", tajuk(i), kep, KeputusanCss(kep), FormatTarikh(r("Kelulusan_Tarikh")), Convert.ToString(r("Oleh")), Convert.ToString(r("Kelulusan_Catatan")), ikon(i))
+            ElseIf idx = semasa Then
+                steps.Rows.Add("current", tajuk(i), "", "", "Menunggu tindakan", "", "", ikon(i))
+            Else
+                steps.Rows.Add("pending", tajuk(i), "", "", "Belum selesai", "", "", ikon(i))
+            End If
+        Next
+
+        ' 5) Kewangan - hanya jika syor KB Lesen melibatkan wang amanah
+        Dim syorKB As String = GetKeputusanPeringkat(semakanIkId, "KB Lesen")
+        Dim perluKewangan As Boolean = (syorKB = "Syor Rampas Wang Amanah" OrElse syorKB = "Syor Kembalikan Wang Amanah")
+        If kewangan.Rows.Count > 0 Then
+            Dim r As DataRow = kewangan.Rows(0)
+            Dim nota As String = "Jumlah: RM " & If(IsDBNull(r("Kewangan_Jumlah")), "-", CDec(r("Kewangan_Jumlah")).ToString("N2")) &
+                                 If(IsDBNull(r("Kewangan_NoResit")) OrElse Convert.ToString(r("Kewangan_NoResit")) = "", "", " | No resit: " & Convert.ToString(r("Kewangan_NoResit")))
+            If Convert.ToString(r("Kewangan_Catatan")) <> "" Then nota &= vbLf & Convert.ToString(r("Kewangan_Catatan"))
+            steps.Rows.Add("done", "Kemaskini Kewangan", Convert.ToString(r("Kewangan_Tindakan")), "kp-warn", FormatTarikh(r("CreatedDt")), Convert.ToString(r("Oleh")), nota, "bi-cash-coin")
+        ElseIf semasa = 4 Then
+            steps.Rows.Add("current", "Kemaskini Kewangan", "", "", "Menunggu tindakan", "", "", "bi-cash-coin")
+        ElseIf semasa < 4 AndAlso (perluKewangan OrElse syorKB = "") Then
+            steps.Rows.Add("pending", "Kemaskini Kewangan", "", "", "Jika ada syor wang amanah", "", "", "bi-cash-coin")
+        End If
+
+        ' 6) Keputusan akhir
+        If statusSemasa = "Tidak Diperakukan" Then
+            steps.Rows.Add("rejected", "Tidak Diperakukan", "", "", "Proses tamat", "", "", "bi-x-octagon")
+        ElseIf statusSemasa = "Selesai" Then
+            steps.Rows.Add("done", "Selesai", "", "", "Proses tamat", "", "", "bi-flag")
+        Else
+            steps.Rows.Add("pending", "Selesai", "", "", "Belum selesai", "", "", "bi-flag")
+        End If
+
+        rptTrail.DataSource = steps
+        rptTrail.DataBind()
+    End Sub
+
+    Private Function FormatTarikh(ByVal v As Object) As String
+        If v Is Nothing OrElse IsDBNull(v) Then Return "-"
+        Return Convert.ToDateTime(v).ToString("dd MMM yyyy hh:mm tt")
+    End Function
+
+    Private Function KeputusanCss(ByVal keputusan As String) As String
+        Select Case keputusan
+            Case "Sokong", "Diperakukan" : Return "kp-ok"
+            Case "Tidak Sokong", "Tidak Diperakukan" : Return "kp-bad"
+            Case "Syor Rampas Wang Amanah", "Syor Kembalikan Wang Amanah" : Return "kp-warn"
+            Case Else : Return "kp-info"
+        End Select
+    End Function
+
+    ' Ikon proses bagi setiap peringkat; warna bulatan (CSS) menunjukkan status
+    Protected Function StepIcon(ByVal ikon As Object) As String
+        Return "<i class=""bi " & HttpUtility.HtmlAttributeEncode(Convert.ToString(ikon)) & """></i>"
+    End Function
 
     Private Function GetKeputusanPeringkat(semakanIkId As Integer, peringkat As String) As String
         Dim connStr As String = ConfigurationManager.ConnectionStrings("webcon_ConnectionStr").ConnectionString
