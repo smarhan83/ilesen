@@ -378,10 +378,10 @@
 
     /* Trail kelulusan - laluan berliku (3 checkpoint sebaris; baris genap terbalik arah) */
     .road { padding: 6px 30px 4px; }
-    .road-row { display: flex; align-items: flex-start; position: relative; height: 156px; }
+    .road-row { display: flex; align-items: flex-start; position: relative; height: 184px; }
     .road-row:last-child { height: auto; }
     .road-row.rev { flex-direction: row-reverse; }
-    .road-node { width: 120px; flex-shrink: 0; display: flex; flex-direction: column; align-items: center; text-align: center; position: relative; z-index: 1; }
+    .road-node { width: 140px; flex-shrink: 0; display: flex; flex-direction: column; align-items: center; text-align: center; position: relative; z-index: 1; }
     .road-node.ghost { visibility: hidden; }
     .road-dot {
         width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
@@ -401,7 +401,7 @@
     .road-seg.done { background: #28a745; }
     .road-seg.ghost { visibility: hidden; }
     /* Lengkung belokan: dari bulatan terakhir baris ini, keluar ke tepi, turun, masuk ke bulatan pertama baris bawah */
-    .road-curve { position: absolute; top: 18px; height: 160px; width: 88px; border: 4px solid #e9ecef; z-index: 0; }
+    .road-curve { position: absolute; top: 18px; height: 188px; width: 98px; border: 4px solid #e9ecef; z-index: 0; }
     .road-curve.right { right: -28px; border-left: 0; border-radius: 0 40px 40px 0; }
     .road-curve.left { left: -28px; border-right: 0; border-radius: 40px 0 0 40px; }
     .road-curve.done { border-color: #28a745; }    .road-badge { display: inline-block; margin-top: 4px; padding: 1px 8px; border-radius: 999px; font-size: 10.5px; font-weight: 600; }
@@ -411,6 +411,8 @@
     .road-badge.kp-info, .road-badge.kp-none { background: #EEF4FF; color: #1D4ED8; }
     .road-node[title] { cursor: help; }
     .road-text { display: flex; flex-direction: column; align-items: center; }
+    .road-by { font-size: 11px; font-weight: 600; color: #495057; margin-top: 3px; line-height: 1.3; }
+    .road-by i { color: #2E3192; margin-right: 4px; }
 
     /* Mobile: checkpoint disusun menegak (bulatan kiri, teks kanan) */
     @media (max-width: 640px) {
@@ -694,21 +696,14 @@
                 SelectCommand="SELECT * FROM (
                                     SELECT * FROM LESEN_SepandukSemakanIK
                                     WHERE IsActive = 1
-                                    AND SemakanIK_Status IN ('Semakan KB Inspektorat','Semakan KB Lesen','Perakuan KJ Lesen','Kemaskini Kewangan')
                                ) as TBL1
                                WHERE 1=1
                                 AND
                                 (
-                                    -- LEVEL 0.5
+                                    -- LEVEL 0.5: Pegawai IK (penyedia Inspektorat) - semua status termasuk Selesai / Tidak Diperakukan
                                     (
                                         @sessionIsPenyedia = 1
                                         AND @sessionEstateID = 3
-                                        AND SemakanIK_Status IN (
-                                            'Semakan KB Inspektorat',
-                                            'Semakan KB Lesen',
-                                            'Perakuan KJ Lesen',
-                                            'Kemaskini Kewangan'
-                                        )
                                     )
 
                                     OR
@@ -763,7 +758,7 @@
                                (
                                    @chkAll = 1
                                    OR (
-                                        (SemakanIK_Status = 'Semakan KB Inspektorat' AND @sessionIsPenyedia = 1 AND @sessionEstateID = 3)
+                                        (SemakanIK_PegawaiID = CAST(@sessionUsersId AS nvarchar(50)) AND @sessionIsPenyedia = 1 AND @sessionEstateID = 3) /* IK: rekod semakan sendiri */
                                         OR
                                         (SemakanIK_Status = 'Semakan KB Inspektorat' AND @sessionIsPenilai = 1 AND @sessionEstateID = 3)
                                         OR
@@ -782,6 +777,7 @@
                     <%--# TODO: sahkan session field sebenar untuk Kerani Lesen, contoh sementara "sessionIsKerani" #--%>
                     <asp:SessionParameter SessionField="sessionIsKerani" DefaultValue="0" Name="sessionIsKerani"></asp:SessionParameter>
                     <asp:SessionParameter SessionField="sessionEstateID" DefaultValue="0" Name="sessionEstateID"></asp:SessionParameter>
+                    <asp:SessionParameter SessionField="sessionUsersId" DefaultValue="0" Name="sessionUsersId"></asp:SessionParameter>
                     <asp:ControlParameter
                         Name="chkAll"
                         ControlID="chkAll"
