@@ -6,7 +6,7 @@ Imports System.Data
 Partial Class sepandukSemakanIK
     Inherits System.Web.UI.Page
 
-    Private Const COL_STATUS As Integer = 6   ' index kolum Status dalam GridView1 (0=ID,1=NoRujukan,2=JenisKes,3=NamaSyarikat,4=Lokasi,5=TarikhSemakan,6=Status)
+    ' Status & No Rujukan dibaca dari DataKeyNames GridView1 (SemakanIK_ID, SemakanIK_Status, SemakanIK_NoRujukan)
     Private Const JENISLESEN_SEPANDUK As Integer = 27
     Private Const UPLOAD_FOLDER As String = "~/Uploads/Sepanduk/"
 
@@ -42,12 +42,16 @@ Partial Class sepandukSemakanIK
 
         DefaultScreen = Request.QueryString("list")
 
-        If DefaultScreen = 1 Then
-            idListing.Visible = True
-            pnlCarian.Visible = False
-        Else
-            idListing.Visible = False
-            pnlCarian.Visible = True
+        ' Paparan awal sahaja - selepas itu panel diurus oleh butang (Visible disimpan dalam ViewState).
+        ' Jika set setiap postback, panel Carian muncul semula semasa Tambah Ulasan / Lampiran.
+        If Not IsPostBack Then
+            If DefaultScreen = 1 Then
+                idListing.Visible = True
+                pnlCarian.Visible = False
+            Else
+                idListing.Visible = False
+                pnlCarian.Visible = True
+            End If
         End If
 
         If sm IsNot Nothing Then
@@ -58,6 +62,10 @@ Partial Class sepandukSemakanIK
         Dim ds As SqlDataSource = SqlDataSourceGridSemakan
 
         GlobalClass.GenerateFilter(gv, ds, pnlFilter)
+
+        chkAll.InputAttributes("class") = "form-check-input"
+        chkAll.InputAttributes("role") = "switch"
+        chkAll.LabelAttributes("class") = "form-check-label"
 
         '//auto fillup
         If Not IsPostBack Then
@@ -106,7 +114,7 @@ Partial Class sepandukSemakanIK
         pnlCarian.Visible = False
         pnlRekodSemakan.Visible = False
 
-        Dim statusSemasa As String = Trim(GridView1.SelectedRow.Cells(COL_STATUS).Text)
+        Dim statusSemasa As String = Trim(Convert.ToString(GridView1.SelectedDataKey("SemakanIK_Status")))
         Dim semakanIkId As Integer = CInt(GridView1.SelectedValue)
 
         pnlKBInspektorat.Visible = (statusSemasa = "Semakan KB Inspektorat") AndAlso CanSemak(statusSemasa)
@@ -122,6 +130,7 @@ Partial Class sepandukSemakanIK
         FormViewKerani.ChangeMode(FormViewMode.Insert)
 
         FormView1.DataBind()
+        fvRingkasan.DataBind()
 
         If statusSemasa = "Perakuan KJ Lesen" Then
             litSyorKBLesen.Text = GetKeputusanPeringkat(semakanIkId, "KB Lesen")
@@ -545,7 +554,7 @@ Partial Class sepandukSemakanIK
 
     '===================== KB INSPEKTORAT =====================
     Protected Sub FormViewKBInspektorat_ItemInserting(sender As Object, e As System.Web.UI.WebControls.FormViewInsertEventArgs) Handles FormViewKBInspektorat.ItemInserting
-        Dim noRujukan As String = GridView1.SelectedRow.Cells(1).Text
+        Dim noRujukan As String = Convert.ToString(GridView1.SelectedDataKey("SemakanIK_NoRujukan"))
         GlobalClass.auditTrail("Semakan KB Inspektorat", noRujukan, "Kunci Masuk")
     End Sub
 
@@ -560,7 +569,7 @@ Partial Class sepandukSemakanIK
 
     '===================== KB LESEN =====================
     Protected Sub FormViewKBLesen_ItemInserting(sender As Object, e As System.Web.UI.WebControls.FormViewInsertEventArgs) Handles FormViewKBLesen.ItemInserting
-        Dim noRujukan As String = GridView1.SelectedRow.Cells(1).Text
+        Dim noRujukan As String = Convert.ToString(GridView1.SelectedDataKey("SemakanIK_NoRujukan"))
         GlobalClass.auditTrail("Semakan KB Lesen", noRujukan, "Kunci Masuk")
     End Sub
 
@@ -575,7 +584,7 @@ Partial Class sepandukSemakanIK
 
     '===================== KJ LESEN =====================
     Protected Sub FormViewKJLesen_ItemInserting(sender As Object, e As System.Web.UI.WebControls.FormViewInsertEventArgs) Handles FormViewKJLesen.ItemInserting
-        Dim noRujukan As String = GridView1.SelectedRow.Cells(1).Text
+        Dim noRujukan As String = Convert.ToString(GridView1.SelectedDataKey("SemakanIK_NoRujukan"))
         GlobalClass.auditTrail("Perakuan KJ Lesen", noRujukan, "Kunci Masuk")
     End Sub
 
@@ -610,7 +619,7 @@ Partial Class sepandukSemakanIK
 
     '===================== KERANI LESEN - KEMASKINI KEWANGAN =====================
     Protected Sub FormViewKerani_ItemInserting(sender As Object, e As System.Web.UI.WebControls.FormViewInsertEventArgs) Handles FormViewKerani.ItemInserting
-        Dim noRujukan As String = GridView1.SelectedRow.Cells(1).Text
+        Dim noRujukan As String = Convert.ToString(GridView1.SelectedDataKey("SemakanIK_NoRujukan"))
         GlobalClass.auditTrail("Kemaskini Kewangan - Kerani Lesen", noRujukan, "Kunci Masuk")
 
         '// pastikan Kewangan_Tindakan diisi dari nilai syor KB Lesen (bukan input bebas)
@@ -736,6 +745,64 @@ Partial Class sepandukSemakanIK
 
         Return False
 
+    End Function
+
+    Protected Sub SqlDataSourceGridSemakan_Selected(sender As Object, e As SqlDataSourceStatusEventArgs)
+        If e.Exception Is Nothing Then
+            litJumlah.Text = e.AffectedRows.ToString("N0") & " rekod"
+        End If
+    End Sub
+
+    ' Hasil pemeriksaan (nilai rblStatusPemeriksaan) -> teks paparan
+    Protected Function GetHasilText(ByVal hasil As Object) As String
+        Select Case Convert.ToString(hasil)
+            Case "Mematuhi" : Return "Mematuhi"
+            Case "TidakMematuhi" : Return "Tidak Mematuhi"
+            Case "IklanTidakDijumpai" : Return "Iklan Tidak Dijumpai"
+            Case "LokasiTidakTepat" : Return "Lokasi Tidak Tepat"
+            Case "IklanBerbezaDaripadaKelulusan" : Return "Iklan Berbeza Daripada Kelulusan"
+            Case "" : Return "-"
+            Case Else : Return Convert.ToString(hasil)
+        End Select
+    End Function
+
+    Protected Function GetHasilCss(ByVal hasil As Object) As String
+        Select Case Convert.ToString(hasil)
+            Case "Mematuhi" : Return "ok"
+            Case "TidakMematuhi", "IklanBerbezaDaripadaKelulusan" : Return "bad"
+            Case "IklanTidakDijumpai", "LokasiTidakTepat" : Return "warn"
+            Case Else : Return "none"
+        End Select
+    End Function
+
+    Protected Function GetNilai(ByVal nilai As Object) As String
+        Dim s As String = Convert.ToString(nilai)
+        Return If(String.IsNullOrWhiteSpace(s), "-", HttpUtility.HtmlEncode(s))
+    End Function
+
+    Protected Function GetTempohIklan(ByVal mula As Object, ByVal tamat As Object) As String
+        If mula Is Nothing OrElse IsDBNull(mula) OrElse tamat Is Nothing OrElse IsDBNull(tamat) Then Return "-"
+        Return Convert.ToDateTime(mula).ToString("dd/MM/yyyy") & " - " & Convert.ToDateTime(tamat).ToString("dd/MM/yyyy")
+    End Function
+
+    ' Path lampiran disimpan sebagai "/Uploads/..." - tukar ikut virtual directory aplikasi (cth. /project/Uploads/...)
+    Protected Function GetFileUrl(ByVal path As Object) As String
+        Dim s As String = Convert.ToString(path).Trim()
+        If s = "" Then Return "#"
+        If s.StartsWith("~/") Then Return ResolveUrl(s)
+        If s.StartsWith("/") AndAlso Not s.StartsWith("//") Then Return ResolveUrl("~" & s)
+        Return s
+    End Function
+
+    Protected Function GetStatusCss(ByVal status As Object) As String
+        Select Case Convert.ToString(status)
+            Case "Semakan KB Inspektorat" : Return "st-ik"
+            Case "Semakan KB Lesen" : Return "st-lesen"
+            Case "Perakuan KJ Lesen" : Return "st-kj"
+            Case "Kemaskini Kewangan" : Return "st-kew"
+            Case "Selesai" : Return "st-done"
+            Case Else : Return "st-other"
+        End Select
     End Function
 
     Protected Sub GridViewCarian_RowCreated(sender As Object, e As GridViewRowEventArgs)

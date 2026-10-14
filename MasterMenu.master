@@ -1178,6 +1178,77 @@ h1{
         </div>
 
         <%--POPUP SEMAKAN--%>
+        <style>
+            /* ===== QR Sepanduk / Bunting dalam modal Semakan Status ===== */
+            #modalSemak .tindakan-wrap { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+            #modalSemak .qr-toggle {
+                display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px; border-radius: 6px;
+                border: 1px solid #2E3192; background: #fff; color: #2E3192;
+                font-weight: 600; font-size: 11.5px; line-height: 1.4; cursor: pointer;
+            }
+            #modalSemak .qr-toggle:hover, #modalSemak .qr-toggle.open { background: #2E3192; color: #fff; }
+            #modalSemak .qr-chev { transition: transform .2s ease; font-size: 10px; }
+            #modalSemak .qr-toggle.open .qr-chev { transform: rotate(180deg); }
+
+            #modalSemak tr.qr-detail-row > td { background: #f8f9fc !important; padding: 0 !important; }
+            #modalSemak .qr-panel { padding: 16px 18px; border-left: 3px solid #2E3192; }
+            #modalSemak .qr-panel-head { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+            #modalSemak .qr-panel-title { font-weight: 700; color: #2E3192; font-size: 14px; display: flex; align-items: center; gap: 8px; }
+            #modalSemak .qr-panel-sub { color: #6c757d; font-size: 12.5px; margin-top: 2px; }
+            #modalSemak .qr-panel-sub b { color: #343a40; }
+
+            #modalSemak .qr-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 12px; }
+            #modalSemak .qr-card {
+                display: flex; gap: 12px; align-items: center; background: #fff;
+                border: 1px solid #e3e7ef; border-radius: 10px; padding: 12px;
+            }
+            #modalSemak .qr-img { width: 96px; height: 96px; flex-shrink: 0; border: 1px solid #eef0f4; border-radius: 6px; image-rendering: pixelated; background: #fff; }
+            #modalSemak .qr-panel, #modalSemak .qr-info { text-align: left; }
+            #modalSemak .qr-info { min-width: 0; flex: 1; }
+            #modalSemak .qr-lokasi-no { font-size: 11px; font-weight: 700; color: #6c757d; text-transform: uppercase; letter-spacing: .04em; }
+            #modalSemak .qr-lokasi { font-weight: 700; color: #212529; font-size: 13.5px; word-break: break-word; }
+            #modalSemak .qr-kod { font-family: Consolas, "Courier New", monospace; font-size: 12px; color: #495057; margin: 2px 0 8px; }
+            #modalSemak .qr-actions { display: flex; flex-wrap: wrap; gap: 6px; }
+            #modalSemak .qr-actions .qr-btn { white-space: nowrap; }
+            #modalSemak .qr-btn {
+                display: inline-flex; align-items: center; gap: 5px; padding: 5px 10px; border-radius: 6px;
+                border: 1px solid #d0d5dd; background: #fff; color: #344054 !important;
+                font-weight: 600; font-size: 12px; text-decoration: none;
+            }
+            #modalSemak .qr-btn:hover { background: #f2f4f7; }
+            #modalSemak .qr-btn-primary { background: #2E3192; border-color: #2E3192; color: #fff !important; }
+            #modalSemak .qr-btn-primary:hover { background: #23267a; }
+
+            @media (max-width: 576px) {
+                #modalSemak .qr-panel { padding: 12px; }
+                #modalSemak .qr-panel-head .qr-btn { width: 100%; justify-content: center; }
+                #modalSemak .qr-grid { grid-template-columns: 1fr; }
+                #modalSemak .qr-img { width: 88px; height: 88px; }
+            }
+        </style>
+        <script>
+            // Buka/tutup panel QR sebagai baris penuh di bawah baris permohonan
+            function toggleQrPanel(btn) {
+                var tr = btn.closest('tr');
+                var next = tr.nextElementSibling;
+                if (next && next.classList.contains('qr-detail-row')) {
+                    next.hidden = !next.hidden;
+                } else {
+                    var src = tr.querySelector('.qr-panel-src');
+                    if (!src) return;
+                    next = document.createElement('tr');
+                    next.className = 'qr-detail-row';
+                    var td = document.createElement('td');
+                    td.colSpan = tr.children.length;
+                    td.appendChild(src.firstElementChild);
+                    next.appendChild(td);
+                    tr.parentNode.insertBefore(next, tr.nextSibling);
+                }
+                btn.classList.toggle('open', !next.hidden);
+                btn.setAttribute('aria-expanded', next.hidden ? 'false' : 'true');
+            }
+        </script>
+
         <div class="modal fade" id="modalSemak" tabindex="-1">
 
             <div class="modal-dialog modal-xl modal-dialog-centered">
@@ -1328,12 +1399,68 @@ h1{
                                     </asp:TemplateField>
                                     <asp:TemplateField HeaderText="Tindakan">
                                         <ItemTemplate>
-                                            <asp:LinkButton ID="lnkCetak"
-                                                runat="server"
-                                                CssClass='<%# GetButtonClass(Eval("StatusDesc")) %>'
-                                                CommandArgument='<%# CType(Container, GridViewRow).RowIndex %>'
-                                                Visible='<%# Eval("StatusDesc").ToString() = "Diluluskan" Or Eval("StatusDesc").ToString() = "Ditolak" %>'
-                                                OnClick="lnkCetak_Click"><i class="bi bi-printer me-1"></i>Cetak Surat</asp:LinkButton>
+                                            <div class="tindakan-wrap">
+                                                <asp:LinkButton ID="lnkCetak"
+                                                    runat="server"
+                                                    CssClass='<%# GetButtonClass(Eval("StatusDesc")) %>'
+                                                    CommandArgument='<%# CType(Container, GridViewRow).RowIndex %>'
+                                                    Visible='<%# Eval("StatusDesc").ToString() = "Diluluskan" Or Eval("StatusDesc").ToString() = "Ditolak" %>'
+                                                    OnClick="lnkCetak_Click"><i class="bi bi-printer me-1"></i>Cetak Surat</asp:LinkButton>
+
+                                                <%-- QR sepanduk/banting: hanya bila lulus & ada kod QR --%>
+                                                <asp:PlaceHolder ID="phQrBtn" runat="server" Visible='<%# AdaQr(Eval("StatusDesc"), Eval("QrCount")) %>'>
+                                                    <button type="button" class="qr-toggle" onclick="toggleQrPanel(this)" aria-expanded="false">
+                                                        <i class="bi bi-qr-code"></i>QR Sepanduk (<%# Eval("QrCount") %>)<i class="bi bi-chevron-down qr-chev"></i>
+                                                    </button>
+                                                </asp:PlaceHolder>
+                                            </div>
+
+                                            <%-- Panel QR - dipindahkan oleh toggleQrPanel() ke baris penuh di bawah baris ini --%>
+                                            <asp:PlaceHolder ID="phQrPanel" runat="server" Visible='<%# AdaQr(Eval("StatusDesc"), Eval("QrCount")) %>'>
+                                                <div class="qr-panel-src" hidden>
+                                                    <div class="qr-panel">
+                                                        <div class="qr-panel-head">
+                                                            <div>
+                                                                <div class="qr-panel-title"><i class="bi bi-qr-code"></i>QR Sepanduk / Bunting</div>
+                                                                <div class="qr-panel-sub">
+                                                                    Tempoh pemasangan: <b><%# TempohBanting(Eval("TarikhBanting1"), Eval("TarikhBanting2")) %></b>
+                                                                    &middot; <%# Eval("QrCount") %> kod QR
+                                                                </div>
+                                                            </div>
+                                                            <a class="qr-btn qr-btn-primary" target="_blank" rel="noopener"
+                                                                href='<%# ResolveUrl("~/CetakQRBanting.aspx?semua=1&id=" & HttpUtility.UrlEncode(Convert.ToString(Eval("QrFirstID")))) %>'>
+                                                                <i class="bi bi-printer"></i>Cetak Semua QR
+                                                            </a>
+                                                        </div>
+
+                                                        <asp:Repeater ID="rptQr" runat="server" DataSource='<%# If(AdaQr(Eval("StatusDesc"), Eval("QrCount")), GetBantingQr(Eval("Permohonan_ID")), Nothing) %>'>
+                                                            <HeaderTemplate><div class="qr-grid"></HeaderTemplate>
+                                                            <ItemTemplate>
+                                                                <div class="qr-card">
+                                                                    <img class="qr-img" loading="lazy" alt="Kod QR"
+                                                                        src='<%# ResolveUrl("~/QrBanting.ashx?id=" & HttpUtility.UrlEncode(Convert.ToString(Eval("UniqueID")))) %>' />
+                                                                    <div class="qr-info">
+                                                                        <div class="qr-lokasi-no">Lokasi <%# Eval("LokasiNo") %></div>
+                                                                        <div class="qr-lokasi"><%# HttpUtility.HtmlEncode(If(String.IsNullOrWhiteSpace(Convert.ToString(Eval("Lokasi"))), "-", Eval("Lokasi"))) %></div>
+                                                                        <div class="qr-kod"><%# HttpUtility.HtmlEncode(Eval("UniqueID")) %></div>
+                                                                        <div class="qr-actions">
+                                                                            <a class="qr-btn" data-no-loader="1" download='<%# "QR-" & HttpUtility.HtmlAttributeEncode(Convert.ToString(Eval("UniqueID"))) & ".png" %>'
+                                                                                href='<%# ResolveUrl("~/QrBanting.ashx?dl=1&id=" & HttpUtility.UrlEncode(Convert.ToString(Eval("UniqueID")))) %>'>
+                                                                                <i class="bi bi-download"></i>Muat Turun
+                                                                            </a>
+                                                                            <a class="qr-btn" target="_blank" rel="noopener"
+                                                                                href='<%# ResolveUrl("~/CetakQRBanting.aspx?id=" & HttpUtility.UrlEncode(Convert.ToString(Eval("UniqueID")))) %>'>
+                                                                                <i class="bi bi-printer"></i>Cetak
+                                                                            </a>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </ItemTemplate>
+                                                            <FooterTemplate></div></FooterTemplate>
+                                                        </asp:Repeater>
+                                                    </div>
+                                                </div>
+                                            </asp:PlaceHolder>
                                         </ItemTemplate>
                                     </asp:TemplateField>
 <%--                                    <asp:TemplateField HeaderText="Tindakan">
@@ -1355,7 +1482,11 @@ h1{
                                         ELSE 'Dalam Semakan'
                                     END AS StatusDesc,
                                 '' AS UserType, g.Permohonan_ID, g.JenisLesen_ID, g.TarikhMohon, g.JenisLesenDescList, g.Rujukan,
-                                g.IsSuratKelulusanFail, g.StatusID, g.IsPublish, g.Is24jam, f.Pemohon_Name
+                                g.IsSuratKelulusanFail, g.StatusID, g.IsPublish, g.Is24jam, f.Pemohon_Name,
+                                g.TarikhBanting1, g.TarikhBanting2,
+                                /* Kod QR sepanduk/banting (LESEN_BantingImej) - satu kod bagi setiap gambar di setiap lokasi */
+                                (SELECT COUNT(*) FROM LESEN_BantingImej bi WHERE bi.Permohonan_ID = g.Permohonan_ID) AS QrCount,
+                                (SELECT TOP 1 bi.UniqueID FROM LESEN_BantingImej bi WHERE bi.Permohonan_ID = g.Permohonan_ID ORDER BY bi.Lokasi_ID, bi.Imej_ID) AS QrFirstID
                                 /* Ambil terus dari LESEN_Permohonan: Permit Sepanduk/Bunting (27) terus lulus (StatusID=10)
                                    tanpa rekod LESEN_ApprovalList, jadi tiada dalam v_LESEN_ApprovalList_Curr */
                                 FROM LESEN_Permohonan g
@@ -1387,7 +1518,8 @@ h1{
                                 <i class="bi bi-info-circle-fill info-icon"></i>
                                 <div class="info-content">
                                     <strong>Maklumat</strong>
-                                    <p>Bagi permohonan yang telah diluluskan atau ditolak, klik butang <b>Cetak Surat</b> untuk memuat turun surat rasmi.</p>
+                                    <p>Bagi permohonan yang telah diluluskan atau ditolak, klik butang <b>Cetak Surat</b> untuk memuat turun surat rasmi.
+                                        Bagi permit sepanduk / bunting yang diluluskan, klik <b>QR Sepanduk</b> untuk memuat turun dan mencetak kod QR bagi setiap lokasi.</p>
                                 </div>
                             </div>
 
@@ -2292,8 +2424,24 @@ h1{
         </script>
 
         <script>
+            // Pautan muat turun (a[download] / data-no-loader) mencetuskan beforeunload tetapi page tidak bertukar,
+            // jadi loader tidak akan hilang - langkau loader untuk klik tersebut.
+            var skipPageLoader = false;
+            document.addEventListener("click", function (e) {
+                if (e.target.closest && e.target.closest("a[download], [data-no-loader]")) {
+                    skipPageLoader = true;
+                    setTimeout(function () { skipPageLoader = false; }, 1000);
+                }
+            }, true);
+
             window.addEventListener("beforeunload", function () {
+                if (skipPageLoader) return;
                 document.getElementById("pageLoader").style.display = "flex";
+            });
+
+            // Kembali melalui butang Back (bfcache) - pastikan loader disembunyikan
+            window.addEventListener("pageshow", function () {
+                document.getElementById("pageLoader").style.display = "none";
             });
         </script>
 
