@@ -236,6 +236,12 @@
     .ss-table tr:hover td { background: #fafbff; }
     .ss-col-bil { width: 56px; color: #adb5bd !important; }
     .ss-col-act { width: 1%; text-align: right; white-space: nowrap; }
+    /* Saiz butang Lihat seragam (btn-warning & btn-primary ada padding/border berbeza) supaya ikon sebaris */
+    .ss-col-act .btn {
+        width: 34px; height: 34px; padding: 0 !important; border-radius: 8px !important; margin: 0 !important; /* custom-admin.css beri .btn-warning margin 5px */
+        display: inline-flex; align-items: center; justify-content: center; vertical-align: middle;
+    }
+    .ss-col-act .btn i { margin: 0 !important; }
     .ss-nowrap { white-space: nowrap; }
 
     .ss-ref { font-weight: 600; color: #2E3192; white-space: nowrap; }
