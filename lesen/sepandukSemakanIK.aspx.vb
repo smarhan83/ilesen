@@ -238,9 +238,70 @@ Partial Class sepandukSemakanIK
             steps.Rows.Add("pending", "Selesai", "", "", "Belum selesai", "", "", "bi-flag")
         End If
 
-        rptTrail.DataSource = steps
-        rptTrail.DataBind()
+        litTrailRoad.Text = BuildTrailRoad(steps)
     End Sub
+
+    ' Laluan berliku: 3 checkpoint sebaris, baris genap terbalik arah (kanan -> turun -> kiri -> turun ...)
+    Private Function BuildTrailRoad(steps As DataTable) As String
+        Const perBaris As Integer = 3
+        Dim sb As New System.Text.StringBuilder("<div class=""road"">")
+        Dim n As Integer = steps.Rows.Count
+
+        For mula As Integer = 0 To n - 1 Step perBaris
+            Dim baris As Integer = mula \ perBaris
+            Dim terbalik As Boolean = (baris Mod 2 = 1)
+            Dim akhir As Integer = Math.Min(mula + perBaris, n) - 1
+            sb.Append("<div class=""road-row" & If(terbalik, " rev", "") & """>")
+
+            For k As Integer = 0 To perBaris - 1
+                Dim i As Integer = mula + k
+                If k > 0 Then
+                    ' segmen hijau jika peringkat sebelumnya selesai dan peringkat ini wujud
+                    Dim segCss As String = If(i > akhir, "ghost", If(steps.Rows(i - 1)("StepStatus").ToString() = "done", "done", ""))
+                    sb.Append("<div class=""road-seg " & segCss & """></div>")
+                End If
+
+                If i <= akhir Then
+                    Dim r As DataRow = steps.Rows(i)
+                    Dim status As String = r("StepStatus").ToString()
+                    Dim tarikh As String = r("Tarikh").ToString()
+                    Dim subTeks As String
+                    If (status = "done" OrElse status = "rejected") AndAlso tarikh.Length >= 11 AndAlso Char.IsDigit(tarikh(0)) Then
+                        subTeks = tarikh.Substring(0, 11)
+                    Else
+                        subTeks = tarikh
+                    End If
+                    ' tooltip: pegawai & catatan (jika ada)
+                    Dim tip As String = ""
+                    If r("Oleh").ToString() <> "" Then tip = "Oleh: " & r("Oleh").ToString()
+                    If r("Catatan").ToString() <> "" Then tip &= If(tip = "", "", vbLf) & "Catatan: " & r("Catatan").ToString()
+
+                    sb.Append("<div class=""road-node " & status & """" & If(tip = "", "", " title=""" & HttpUtility.HtmlAttributeEncode(tip) & """") & ">")
+                    sb.Append("<div class=""road-dot"">" & StepIcon(r("Ikon")) & "</div>")
+                    sb.Append("<div class=""road-text"">")
+                    sb.Append("<div class=""road-title"">" & HttpUtility.HtmlEncode(r("Tajuk").ToString()) & "</div>")
+                    sb.Append("<div class=""road-sub"">" & HttpUtility.HtmlEncode(subTeks) & "</div>")
+                    If r("Keputusan").ToString() <> "" Then
+                        sb.Append("<span class=""road-badge " & r("KeputusanCss").ToString() & """>" & HttpUtility.HtmlEncode(r("Keputusan").ToString()) & "</span>")
+                    End If
+                    sb.Append("</div></div>")
+                Else
+                    sb.Append("<div class=""road-node ghost""></div>")
+                End If
+            Next
+
+            ' lengkung ke baris seterusnya (di tepi kanan untuk baris biasa, kiri untuk baris terbalik)
+            If akhir < n - 1 Then
+                Dim curveDone As Boolean = (steps.Rows(akhir)("StepStatus").ToString() = "done")
+                sb.Append("<div class=""road-curve " & If(terbalik, "left", "right") & If(curveDone, " done", "") & """></div>")
+            End If
+
+            sb.Append("</div>")
+        Next
+
+        sb.Append("</div>")
+        Return sb.ToString()
+    End Function
 
     Private Function FormatTarikh(ByVal v As Object) As String
         If v Is Nothing OrElse IsDBNull(v) Then Return "-"

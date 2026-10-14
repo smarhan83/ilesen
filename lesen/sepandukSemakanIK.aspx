@@ -376,39 +376,52 @@
 
     .ss-detail-foot { padding: 4px 0 8px; }
 
-    /* Trail kelulusan - garis masa (gaya sama tab Log Kelulusan appregister1) */
-    .trail-timeline { position: relative; padding: 4px 0 0 8px; }
-    .trail-step { position: relative; padding-left: 42px; padding-bottom: 20px; text-align: left; } /* bukan .sp-step (penunjuk langkah IK) */
-    .trail-step:last-child { padding-bottom: 0; }
-    .trail-step::before { content: ''; position: absolute; left: 14px; top: 32px; bottom: -2px; width: 2px; background: #e9ecef; }
-    .trail-step:last-child::before { display: none; }
-    .trail-step.done::before { background: #28a745; }
-    .trail-step-icon {
-        position: absolute; left: 0; top: 0; width: 30px; height: 30px; border-radius: 50%;
-        display: flex; align-items: center; justify-content: center; font-size: 14px; color: #fff; background: #dee2e6; z-index: 1;
+    /* Trail kelulusan - laluan berliku (3 checkpoint sebaris; baris genap terbalik arah) */
+    .road { padding: 6px 30px 4px; }
+    .road-row { display: flex; align-items: flex-start; position: relative; height: 156px; }
+    .road-row:last-child { height: auto; }
+    .road-row.rev { flex-direction: row-reverse; }
+    .road-node { width: 120px; flex-shrink: 0; display: flex; flex-direction: column; align-items: center; text-align: center; position: relative; z-index: 1; }
+    .road-node.ghost { visibility: hidden; }
+    .road-dot {
+        width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+        font-size: 17px; color: #fff; background: #dee2e6;
     }
-    .trail-step.done .trail-step-icon { background: #28a745; }
-    .trail-step.current .trail-step-icon { background: #2E3192; box-shadow: 0 0 0 4px rgba(46,49,146,.15); }
-    .trail-step.pending .trail-step-icon { background: #fff; border: 2px solid #dee2e6; color: #adb5bd; }
-    .trail-step.rejected .trail-step-icon { background: #dc3545; }
-    .trail-step-head { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 3px; min-height: 30px; }
-    .trail-step-title { font-weight: 700; font-size: 13px; color: #212529; }
-    .trail-step.pending .trail-step-title { color: #adb5bd; font-weight: 600; }
-    .trail-step.rejected .trail-step-title { color: #C0392B; }
-    .trail-step-date { font-size: 11.5px; color: #6c757d; }
-    .trail-step.current .trail-step-date { color: #2E3192; font-weight: 600; }
-    .trail-step.pending .trail-step-date { color: #adb5bd; }
-    .trail-step-by { font-size: 11.5px; font-weight: 600; color: #495057; margin-top: 4px; display: flex; align-items: center; gap: 6px; }
-    .trail-step-by i { color: #2E3192; }
-    .trail-step-note {
-        margin-top: 6px; padding: 6px 10px; font-size: 12.5px; color: #495057;
-        background: #F8FAFE; border: 1px solid #E6EBF5; border-radius: 8px; max-width: 720px; word-break: break-word;
+    .road-node.done .road-dot { background: #28a745; }
+    .road-node.current .road-dot { background: #2E3192; box-shadow: 0 0 0 5px rgba(46,49,146,.15); }
+    .road-node.pending .road-dot { background: #fff; border: 2px solid #dee2e6; color: #adb5bd; }
+    .road-node.rejected .road-dot { background: #dc3545; }
+    .road-title { font-size: 12px; font-weight: 700; color: #212529; margin-top: 8px; line-height: 1.3; padding: 0 4px; background: #fff; }
+    .road-node.pending .road-title { color: #adb5bd; font-weight: 600; }
+    .road-node.rejected .road-title { color: #C0392B; }
+    .road-sub { font-size: 11px; color: #6c757d; margin-top: 2px; }
+    .road-node.current .road-sub { color: #2E3192; font-weight: 600; }
+    .road-node.pending .road-sub { color: #adb5bd; }
+    .road-seg { flex: 1; height: 4px; margin-top: 18px; border-radius: 2px; background: #e9ecef; }
+    .road-seg.done { background: #28a745; }
+    .road-seg.ghost { visibility: hidden; }
+    /* Lengkung belokan: dari bulatan terakhir baris ini, keluar ke tepi, turun, masuk ke bulatan pertama baris bawah */
+    .road-curve { position: absolute; top: 18px; height: 160px; width: 88px; border: 4px solid #e9ecef; z-index: 0; }
+    .road-curve.right { right: -28px; border-left: 0; border-radius: 0 40px 40px 0; }
+    .road-curve.left { left: -28px; border-right: 0; border-radius: 40px 0 0 40px; }
+    .road-curve.done { border-color: #28a745; }    .road-badge { display: inline-block; margin-top: 4px; padding: 1px 8px; border-radius: 999px; font-size: 10.5px; font-weight: 600; }
+    .road-badge.kp-ok   { background: #D4EDDA; color: #1e7e34; }
+    .road-badge.kp-bad  { background: #FCEAEA; color: #C0392B; }
+    .road-badge.kp-warn { background: #FDF1DC; color: #9A6408; }
+    .road-badge.kp-info, .road-badge.kp-none { background: #EEF4FF; color: #1D4ED8; }
+    .road-node[title] { cursor: help; }
+    .road-text { display: flex; flex-direction: column; align-items: center; }
+
+    /* Mobile: checkpoint disusun menegak (bulatan kiri, teks kanan) */
+    @media (max-width: 640px) {
+        .road { padding: 4px 0 6px; border-bottom: 0; margin-bottom: 0; }
+        .road-row, .road-row.rev { flex-direction: column; height: auto; }
+        .road-seg, .road-curve, .road-node.ghost { display: none; }
+        .road-node { width: 100%; flex-direction: row; align-items: flex-start; text-align: left; gap: 12px; padding-bottom: 14px; }
+        .road-text { align-items: flex-start; padding-top: 2px; }
+        .road-title { margin-top: 0; padding: 0; }
     }
-    .trail-step-badge { display: inline-block; padding: 2px 10px; border-radius: 999px; font-size: 11px; font-weight: 600; }
-    .trail-step-badge.kp-ok   { background: #D4EDDA; color: #1e7e34; }
-    .trail-step-badge.kp-bad  { background: #FCEAEA; color: #C0392B; }
-    .trail-step-badge.kp-warn { background: #FDF1DC; color: #9A6408; }
-    .trail-step-badge.kp-info, .trail-step-badge.kp-none { background: #EEF4FF; color: #1D4ED8; }
+
 
     @media (max-width: 768px) {
         .ss-summary { padding: 16px; }
@@ -1887,28 +1900,9 @@
                                 <h3>Trail kelulusan</h3>
                             </div>
                             <div class="wf-body">
-                                <%-- Garis masa ikut gaya tab Log Kelulusan (appregister1) - data dibina dalam BindTrailKelulusan() --%>
-                                <div class="trail-timeline">
-                                    <asp:Repeater ID="rptTrail" runat="server">
-                                        <ItemTemplate>
-                                            <div class='trail-step <%# Eval("StepStatus") %>'>
-                                                <div class="trail-step-icon"><%# StepIcon(Eval("Ikon")) %></div>
-                                                <div class="trail-step-head">
-                                                    <span class="trail-step-title"><%# HttpUtility.HtmlEncode(Eval("Tajuk")) %></span>
-                                                    <span class='trail-step-badge <%# Eval("KeputusanCss") %>' runat="server"
-                                                        visible='<%# Convert.ToString(Eval("Keputusan")) <> "" %>'><%# HttpUtility.HtmlEncode(Eval("Keputusan")) %></span>
-                                                </div>
-                                                <div class="trail-step-date"><%# HttpUtility.HtmlEncode(Eval("Tarikh")) %></div>
-                                                <div class="trail-step-by" runat="server" visible='<%# Convert.ToString(Eval("Oleh")) <> "" %>'>
-                                                    <i class="bi bi-person"></i><%# HttpUtility.HtmlEncode(Eval("Oleh")) %>
-                                                </div>
-                                                <div class="trail-step-note" runat="server" visible='<%# Convert.ToString(Eval("Catatan")) <> "" %>'>
-                                                    <%# HttpUtility.HtmlEncode(Eval("Catatan")).Replace(vbLf, "<br />") %>
-                                                </div>
-                                            </div>
-                                        </ItemTemplate>
-                                    </asp:Repeater>
-                                </div>
+                                <%-- Laluan berliku (ringkasan): kanan -> turun -> kiri -> turun. Dibina dalam BuildTrailRoad() --%>
+                                <asp:Literal ID="litTrailRoad" runat="server" />
+
                             </div>
                         </div>
                     </asp:Panel>
