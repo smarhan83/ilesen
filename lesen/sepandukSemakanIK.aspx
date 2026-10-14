@@ -208,16 +208,19 @@
 
     /* ---------- Filter ---------- */
     .ss-filter {
-        display: flex; flex-wrap: wrap; gap: 10px; align-items: center;
+        display: flex; flex-wrap: wrap; gap: 10px; align-items: flex-start; /* butang sebaris dengan baris pertama penapis */
         padding: 14px 20px; border-bottom: 1px solid #e9ecef; background: #fcfcfd;
     }
-    .ss-filter-fields { flex: 1 1 520px; margin: 0; }
+    .ss-filter-fields { flex: 1 1 520px; margin: calc(-1 * var(--bs-gutter-y)) 0 0; } /* kekalkan offset .row.g-2 supaya baris pertama bermula di atas */
     .ss-filter-fields .form-group { margin: 0; }
     .ss-filter .ss-filter-fields input.form-control {
         border: 1px solid #d0d5dd !important; border-radius: 6px !important; background: #fff;
     }
     .ss-filter .ss-filter-fields input.form-control:focus { border-color: #3b82f6 !important; box-shadow: 0 0 0 4px rgba(59,130,246,.15); }
     .ss-filter-actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+    .ss-filter-actions .btn { height: 38px; margin: 0 !important; display: inline-flex; align-items: center; justify-content: center; }
+    /* custom-admin.css (.compact-form input.form-control) paksa tinggi 34px + margin 5px - samakan dengan butang */
+    .ss-filter .ss-filter-fields input.form-control { height: 38px !important; min-height: 38px !important; margin: 0 !important; }
     .ss-count { color: #6c757d; font-size: 13px; white-space: nowrap; margin-left: 4px; }
 
     /* ---------- Table ---------- */
