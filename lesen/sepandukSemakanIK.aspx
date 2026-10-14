@@ -376,6 +376,40 @@
 
     .ss-detail-foot { padding: 4px 0 8px; }
 
+    /* Trail kelulusan - garis masa (gaya sama tab Log Kelulusan appregister1) */
+    .trail-timeline { position: relative; padding: 4px 0 0 8px; }
+    .trail-step { position: relative; padding-left: 42px; padding-bottom: 20px; text-align: left; } /* bukan .sp-step (penunjuk langkah IK) */
+    .trail-step:last-child { padding-bottom: 0; }
+    .trail-step::before { content: ''; position: absolute; left: 14px; top: 32px; bottom: -2px; width: 2px; background: #e9ecef; }
+    .trail-step:last-child::before { display: none; }
+    .trail-step.done::before { background: #28a745; }
+    .trail-step-icon {
+        position: absolute; left: 0; top: 0; width: 30px; height: 30px; border-radius: 50%;
+        display: flex; align-items: center; justify-content: center; font-size: 14px; color: #fff; background: #dee2e6; z-index: 1;
+    }
+    .trail-step.done .trail-step-icon { background: #28a745; }
+    .trail-step.current .trail-step-icon { background: #2E3192; box-shadow: 0 0 0 4px rgba(46,49,146,.15); }
+    .trail-step.pending .trail-step-icon { background: #fff; border: 2px solid #dee2e6; color: #adb5bd; }
+    .trail-step.rejected .trail-step-icon { background: #dc3545; }
+    .trail-step-head { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 3px; min-height: 30px; }
+    .trail-step-title { font-weight: 700; font-size: 13px; color: #212529; }
+    .trail-step.pending .trail-step-title { color: #adb5bd; font-weight: 600; }
+    .trail-step.rejected .trail-step-title { color: #C0392B; }
+    .trail-step-date { font-size: 11.5px; color: #6c757d; }
+    .trail-step.current .trail-step-date { color: #2E3192; font-weight: 600; }
+    .trail-step.pending .trail-step-date { color: #adb5bd; }
+    .trail-step-by { font-size: 11.5px; font-weight: 600; color: #495057; margin-top: 4px; display: flex; align-items: center; gap: 6px; }
+    .trail-step-by i { color: #2E3192; }
+    .trail-step-note {
+        margin-top: 6px; padding: 6px 10px; font-size: 12.5px; color: #495057;
+        background: #F8FAFE; border: 1px solid #E6EBF5; border-radius: 8px; max-width: 720px; word-break: break-word;
+    }
+    .trail-step-badge { display: inline-block; padding: 2px 10px; border-radius: 999px; font-size: 11px; font-weight: 600; }
+    .trail-step-badge.kp-ok   { background: #D4EDDA; color: #1e7e34; }
+    .trail-step-badge.kp-bad  { background: #FCEAEA; color: #C0392B; }
+    .trail-step-badge.kp-warn { background: #FDF1DC; color: #9A6408; }
+    .trail-step-badge.kp-info, .trail-step-badge.kp-none { background: #EEF4FF; color: #1D4ED8; }
+
     @media (max-width: 768px) {
         .ss-summary { padding: 16px; }
         .ss-summary-title { font-size: 17px; }
@@ -1852,26 +1886,31 @@
                                 </div>
                                 <h3>Trail kelulusan</h3>
                             </div>
-                            <div class="wf-body" style="overflow-x: auto;">
-                                <asp:GridView ID="GridViewTrail" runat="server" AutoGenerateColumns="False"
-                                    DataSourceID="SqlDataSourceTrail" CssClass="wf-list" GridLines="None" Width="100%">
-                                    <Columns>
-                                        <asp:BoundField DataField="Kelulusan_Peringkat" HeaderText="Peringkat" />
-                                        <asp:BoundField DataField="Kelulusan_Keputusan" HeaderText="Keputusan" />
-                                        <asp:BoundField DataField="Kelulusan_Catatan" HeaderText="Catatan" />
-                                        <asp:BoundField DataField="Kelulusan_Tarikh" HeaderText="Tarikh" DataFormatString="{0:dd/MM/yyyy hh:mm tt}" />
-                                    </Columns>
-                                </asp:GridView>
+                            <div class="wf-body">
+                                <%-- Garis masa ikut gaya tab Log Kelulusan (appregister1) - data dibina dalam BindTrailKelulusan() --%>
+                                <div class="trail-timeline">
+                                    <asp:Repeater ID="rptTrail" runat="server">
+                                        <ItemTemplate>
+                                            <div class='trail-step <%# Eval("StepStatus") %>'>
+                                                <div class="trail-step-icon"><%# StepIcon(Eval("Ikon")) %></div>
+                                                <div class="trail-step-head">
+                                                    <span class="trail-step-title"><%# HttpUtility.HtmlEncode(Eval("Tajuk")) %></span>
+                                                    <span class='trail-step-badge <%# Eval("KeputusanCss") %>' runat="server"
+                                                        visible='<%# Convert.ToString(Eval("Keputusan")) <> "" %>'><%# HttpUtility.HtmlEncode(Eval("Keputusan")) %></span>
+                                                </div>
+                                                <div class="trail-step-date"><%# HttpUtility.HtmlEncode(Eval("Tarikh")) %></div>
+                                                <div class="trail-step-by" runat="server" visible='<%# Convert.ToString(Eval("Oleh")) <> "" %>'>
+                                                    <i class="bi bi-person"></i><%# HttpUtility.HtmlEncode(Eval("Oleh")) %>
+                                                </div>
+                                                <div class="trail-step-note" runat="server" visible='<%# Convert.ToString(Eval("Catatan")) <> "" %>'>
+                                                    <%# HttpUtility.HtmlEncode(Eval("Catatan")).Replace(vbLf, "<br />") %>
+                                                </div>
+                                            </div>
+                                        </ItemTemplate>
+                                    </asp:Repeater>
+                                </div>
                             </div>
                         </div>
-
-                        <asp:SqlDataSource ID="SqlDataSourceTrail" runat="server"
-                            ConnectionString="<%$ ConnectionStrings:webcon_ConnectionStr %>"
-                            SelectCommand="SELECT * FROM LESEN_SepandukKelulusan WHERE Kelulusan_SemakanIKID = @SemakanIK_ID ORDER BY Kelulusan_ID ASC">
-                            <SelectParameters>
-                                <asp:ControlParameter ControlID="GridView1" Name="SemakanIK_ID" PropertyName="SelectedValue" />
-                            </SelectParameters>
-                        </asp:SqlDataSource>
                     </asp:Panel>
 
                     <%--# =========================== BORANG KB INSPEKTORAT =========================== #--%>
