@@ -167,6 +167,33 @@
       color: var(--primary) !important;
     }
 
+    /* Menu atas: pil kecil, font sederhana, ikon berwarna (navbar sahaja - sidebar tidak terjejas) */
+    .navbar{ padding-top: 6px; padding-bottom: 6px; box-shadow: 0 1px 8px rgba(17,24,39,0.04); }
+    .navbar .navbar-nav{ align-items: center; gap: 4px !important; }
+    .navbar .navbar-nav .nav-link{
+      font-size: 13.5px;
+      font-weight: 600;
+      color: #475467 !important;
+      padding: 8px 14px !important;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      white-space: nowrap;
+      transition: background .15s ease, color .15s ease;
+    }
+    .navbar .navbar-nav .nav-link i{ font-size: 15px; color: #2E3192; margin: 0 !important; }
+    .navbar .navbar-nav .nav-link:hover{ background: #EEF0FF; color: #2E3192 !important; }
+    .navbar .navbar-nav .nav-link.nav-login{ background: #2E3192; color: #fff !important; }
+    .navbar .navbar-nav .nav-link.nav-login i{ color: #fff; }
+    .navbar .navbar-nav .nav-link.nav-login:hover{ background: #23267a; }
+    .navbar .dropdown{ margin-left: 10px; }
+    @media (max-width: 991px){
+      .navbar .navbar-nav{ align-items: stretch; }
+      .navbar .navbar-nav .nav-link{ border-radius: 10px; }
+      .navbar .dropdown{ margin: 8px 0 4px; }
+    }
+
     /* ====== Hero Slider ====== */
     .hero{
       padding: 28px 0 10px 0;
@@ -404,22 +431,30 @@
       align-items:center;
       gap:10px;
       border-radius: 999px;
-      padding: 6px 10px;
-      border: 1px solid rgba(17,24,39,0.08);
-      background: rgba(255,255,255,0.9);
+      padding: 4px 12px 4px 4px;
+      border: 1px solid #E3E7F1;
+      background: #fff;
       cursor:pointer;
+      transition: border-color .15s ease, box-shadow .15s ease;
     }
+    .profile-btn:hover{ border-color: #C9CDF5; box-shadow: 0 2px 8px rgba(46,49,146,0.08); }
     .profile-btn img{
       width: 34px;
       height: 34px;
       border-radius: 999px;
       object-fit: cover;
-      border: 2px solid rgba(45,108,223,0.18);
+      border: 2px solid #EEF0FF;
     }
     .profile-name{
-      font-weight: 800;
-      font-size: 13px;
-      line-height: 1.1;
+      display: block;
+      font-weight: 700;
+      font-size: 12.5px;
+      line-height: 1.2;
+      color: #1F2937;
+      max-width: 190px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
     .profile-role{
       font-size: 11px;
@@ -833,14 +868,14 @@ h1{
                         Semak Permohonan
                     </asp:LinkButton>
                 </li>
-                <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-journal-check me-1"></i>Manual Pengguna Agensi & Jabatan</a></li>
-                <li class="nav-item"><a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#modalPautanPantas"><i class="bi bi-lightning-charge me-1"></i>Pautan Pantas Pengguna</a></li>
+                <li class="nav-item"><a class="nav-link" href="#" title="Manual Pengguna Agensi &amp; Jabatan"><i class="bi bi-journal-check me-1"></i>Manual Pengguna</a></li>
+                <li class="nav-item"><a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#modalPautanPantas" title="Pautan Pantas Pengguna"><i class="bi bi-lightning-charge me-1"></i>Pautan Pantas</a></li>
                 <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-telephone me-1"></i>Hubungi Kami</a></li>
                 <li class="nav-item">
 
                 <% If CInt(Session.Item("sessionUsersId")) = 0 Then %>
 
-                    <a class="nav-link"
+                    <a class="nav-link nav-login"
                        href="#"
                        onclick="showLoginModal(); return false;">
                         <i class="bi bi-box-arrow-in-right me-1"></i>Log Masuk
