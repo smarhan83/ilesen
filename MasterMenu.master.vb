@@ -1,4 +1,4 @@
-﻿Imports System.Data.SqlClient
+Imports System.Data.SqlClient
 
 Partial Class MasterMenu
     Inherits System.Web.UI.MasterPage
@@ -858,6 +858,37 @@ Partial Class MasterMenu
 
     End Function
     Private Sub setBadgeNotification()
+
+        '// Permit Sementara Perniagaan Tamat Tempoh pada hari ini (3 bulan selepas TarikhSuratKelulusan)
+        Using myConnection As New SqlConnection(ConfigurationManager.ConnectionStrings("webcon_ConnectionStr").ConnectionString)
+            Dim strSQLExpired As String = "SELECT count(*) as cnt FROM LESEN_Permohonan a " &
+                                          "WHERE a.IsRekodLama = 0 AND a.IsBatal = 0 " &
+                                          "AND a.TarikhSuratKelulusan IS NOT NULL " &
+                                          "AND (a.JenisLesen_ID = 30 OR (',' + ISNULL(a.JenisLesenIdList,'') + ',') LIKE '%,30,%' OR ISNULL(a.JenisLesenDescList,'') LIKE '%PERMIT SEMENTARA%') " &
+                                          "AND CAST(DATEADD(month, 3, a.TarikhSuratKelulusan) AS DATE) = CAST(GETDATE() AS DATE)"
+
+            Dim myCommandExpired As New SqlCommand(strSQLExpired, myConnection)
+            myConnection.Open()
+            Dim myReaderExpired As SqlDataReader = myCommandExpired.ExecuteReader
+
+            If myReaderExpired.Read Then
+                Try
+                    Dim cntExpired As Integer = CInt(myReaderExpired.Item("cnt"))
+                    lblNotiPermitExpired.Text = cntExpired.ToString()
+
+                    If cntExpired > 0 Then
+                        idSpanNoti.Visible = True
+                    End If
+                Catch ex As Exception
+                    lblNotiPermitExpired.Text = "0"
+                End Try
+            Else
+                lblNotiPermitExpired.Text = "0"
+            End If
+
+            myReaderExpired.Close()
+            myConnection.Close()
+        End Using
 
         'lblNotiApproval.Text = "10"
 
