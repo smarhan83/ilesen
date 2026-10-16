@@ -3087,8 +3087,8 @@ ORDER BY
 
                             </div>
 
-                            <div class="row" id="divTandatangan" runat="server">
-                                <div class="col-md-6" id="Tandatangan" runat="server">
+                            <div class="row">
+                                <div class="col-md-6">
 
                                     <div class="form-group">
                                         <label>Tandatangan</label>
