@@ -72,9 +72,7 @@ Partial Class pembatalan1
         Dim ctlDeny() As Object = {}
 
         Dim frmwrite As Boolean = GlobalClass.CheckPageWrite("Write", frmview, lbutton, ctlDeny)
-        If Not frmwrite Then
-            GridView1.Columns.Item(5).Visible = False
-        End If
+        '// lajur 5 kini "Status" - dulu disorok bagi pengguna tanpa kebenaran Write, jadi Status tak nampak
     End Sub
 
     Private Sub initPageName()
