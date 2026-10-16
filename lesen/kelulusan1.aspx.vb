@@ -1,4 +1,4 @@
-﻿
+
 Imports System
 Imports System.Data
 Imports System.Data.SqlClient
@@ -263,11 +263,13 @@ Partial Class kelulusan1
         If ApprStatusID = 2 Then
             tabUlasan.Visible = False
             tabKadarBayaran.Visible = False
+            tabSurat.Visible = False
             tabTetapan.Visible = True
             gvIK.Columns(1).Visible = "true"
         Else
             tabTetapan.Visible = False
             tabUlasan.Visible = True
+            tabSurat.Visible = True
 
             If getJabatanLesen(CInt(Session.Item("sessionEstateID"))) = True Or getJabatanDalaman(CInt(Session.Item("sessionEstateID"))) = True Then '//If agensiType = "J" Then
                 'tabKadarBayaran.Visible = True
@@ -295,6 +297,31 @@ Partial Class kelulusan1
                 gvTabBayaran.Columns(6).Visible = "false"
 
             End If
+        End If
+
+        ' Kawalan tab Surat berdasarkan butang btnKembaliIK
+        If Not btnKembaliIK.Visible Then
+            divtemplatsurat.Visible = False
+            BT_Generate.Visible = False
+            divTandatangan.Visible = False
+            Tandatangan.Visible = False
+            ddlTandatangan.Visible = False
+            pnlSuratContentAuto.Visible = False
+            TB_TarikhPeriksa.ReadOnly = True
+            TB_NoRujukan.ReadOnly = True
+        Else
+            divtemplatsurat.Visible = True
+            If Not IsFail Then
+                BT_Generate.Visible = True
+            Else
+                BT_Generate.Visible = False
+            End If
+            divTandatangan.Visible = True
+            Tandatangan.Visible = True
+            ddlTandatangan.Visible = True
+            pnlSuratContentAuto.Visible = True
+            TB_TarikhPeriksa.ReadOnly = False
+            TB_NoRujukan.ReadOnly = False
         End If
 
     End Sub
@@ -2951,7 +2978,7 @@ Partial Class kelulusan1
             pnlSuratFail.Visible = True
             pnlSuratAuto.Visible = False
         Else
-            BT_Generate.Visible = True
+            BT_Generate.Visible = btnKembaliIK.Visible
             'BT_Generate1.Visible = True
             pnlSuratFail.Visible = False
             pnlSuratAuto.Visible = True
