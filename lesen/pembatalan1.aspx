@@ -27,6 +27,12 @@
         .kl-card .kl-filter .select2-container--default .select2-selection__rendered { line-height: 36px !important; padding-left: 10px; }
         .kl-card .kl-filter .select2-container--default .select2-selection__arrow { height: 36px !important; }
         .kl-card .kl-filter-actions .btn { height: 38px; margin: 0 !important; display: inline-flex; align-items: center; justify-content: center; }
+        .kl-frow { display: flex; flex-wrap: wrap; gap: 10px; align-items: flex-end; }
+        .kl-frow > .kl-f { flex: 1 1 150px; min-width: 140px; }
+        .kl-frow > .kl-f-w { flex: 1.4 1 190px; }
+        .kl-frow > .kl-f-s { flex: 0 1 108px; min-width: 96px; }
+        .kl-frow > .kl-filter-extra { flex: 1.2 1 190px; display: block; min-width: 170px; }
+        .kl-frow .kl-status { min-width: 0; width: 100%; }
         .kl-filter-foot { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between; margin-top: 12px; }
         .kl-filter-extra { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; }
         .kl-filter-extra .lsu-switch { margin: 0; }
@@ -2840,14 +2846,14 @@ ORDER BY
 
                 <%--# START FILTER #--%>
                 <asp:Panel ID="pnlCarianSenarai" runat="server" CssClass="kl-filter" DefaultButton="btnSearch">
-                    <div class="row g-2 align-items-start">
+                    <div class="kl-frow">
 
-                        <div class="col-md-6 col-lg-2">
+                        <div class="kl-f">
                             <label class="kl-label">No Rujukan</label>
                             <asp:TextBox ID="txtNoRujukan" placeholder="Cari no rujukan" runat="server" CssClass="form-control"></asp:TextBox>
                         </div>
 
-                        <div class="col-md-6 col-lg-3" runat="server" id="filterJenisLesen">
+                        <div class="kl-f kl-f-w" runat="server" id="filterJenisLesen">
                             <label class="kl-label">Jenis Lesen</label>
                             <asp:DropDownList ID="DDL_JenisLesen" CssClass="form-control select2" runat="server" AutoPostBack="false"
                                 DataSourceID="SqlDataSourceLesen" DataTextField="JenisLesen_Description" DataValueField="JenisLesen_ID">
@@ -2860,7 +2866,7 @@ ORDER BY
                             ) as tbl1 order by JenisLesen_Description "></asp:SqlDataSource>
                         </div>
 
-                        <div class="col-md-6 col-lg-3" runat="server" id="filterPemohon">
+                        <div class="kl-f kl-f-w" runat="server" id="filterPemohon">
                             <label class="kl-label">Pemohon</label>
                             <asp:DropDownList ID="ddlPemohonCari" CssClass="form-control select2" runat="server"
                                 DataSourceID="sdsPemohon" DataTextField="Pemohon_Name" DataValueField="Pemohon_ID">
@@ -2873,12 +2879,12 @@ ORDER BY
                             ) as tbl1 order by Pemohon_Name "></asp:SqlDataSource>
                         </div>
 
-                        <div class="col-md-6 col-lg-2">
+                        <div class="kl-f">
                             <label class="kl-label">Tarikh Mohon</label>
                             <asp:TextBox ID="TB_TarikhMohon" runat="server" TextMode="Date" CssClass="form-control" />
                         </div>
 
-                        <div class="col-6 col-lg-1">
+                        <div class="kl-f-s">
                             <label class="kl-label">Tahun</label>
                             <asp:DropDownList ID="ddlYear" CssClass="form-control select2" runat="server"
                                 DataSourceID="sdsYear" DataTextField="yearName" DataValueField="yearMohon">
@@ -2890,7 +2896,7 @@ ORDER BY
                                 group by year(TarikhMohon)"></asp:SqlDataSource>
                         </div>
 
-                        <div class="col-6 col-lg-1">
+                        <div class="kl-f-s">
                             <label class="kl-label">Bulan</label>
                             <asp:DropDownList ID="ddlMonth" runat="server" CssClass="form-control select2">
                                 <asp:ListItem Value="0">Bulan</asp:ListItem>
@@ -2908,12 +2914,10 @@ ORDER BY
                                 <asp:ListItem>12</asp:ListItem>
                             </asp:DropDownList>
                         </div>
-                    </div>
-
-                    <div class="kl-filter-foot">
                         <%-- Penapis Status (dipapar bersama suis Lihat Semua Ulasan) --%>
                         <div class="kl-filter-extra" runat="server" id="divStatusUlasan">
                             <div class="kl-status">
+                                <label class="kl-label">Status</label>
                                 <asp:DropDownList ID="DDL_Status" CssClass="form-control select2" runat="server" AutoPostBack="false"
                                     DataSourceID="sdsStatus" DataTextField="Description" DataValueField="ApprStatusID">
                                 </asp:DropDownList>
