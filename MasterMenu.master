@@ -124,7 +124,7 @@
     .brand-wrap{
       display:flex;
       align-items:center;
-      gap:20px;
+      gap:28px; /* logo 87px melimpah kotak 42px (~22px setiap sisi); 28px = jarak ~5px dari teks */
     }
     .brand-logo{
       width: 42px;
