@@ -299,29 +299,50 @@ Partial Class kelulusan1
             End If
         End If
 
-        ' Kawalan tab Surat berdasarkan butang btnKembaliIK
-        If Not btnKembaliIK.Visible Then
+        ' Kawalan tab Surat & tab-tab lain berdasarkan butang btnKembaliIK
+        If btnKembaliIK.Visible Then
             divtemplatsurat.Visible = False
-            BT_Generate.Visible = False
-            divTandatangan.Visible = False
-            Tandatangan.Visible = False
-            ddlTandatangan.Visible = False
             pnlSuratContentAuto.Visible = False
             TB_TarikhPeriksa.ReadOnly = True
             TB_NoRujukan.ReadOnly = True
-        Else
-            divtemplatsurat.Visible = True
-            If Not IsFail Then
-                BT_Generate.Visible = True
-            Else
-                BT_Generate.Visible = False
+
+            ' Tab-tab lain dijadikan read-only semasa perakuan KB Inspektorat (btnKembaliIK visible)
+            If gvTabUlasan.Columns.Count >= 7 Then
+                gvTabUlasan.Columns(5).Visible = False
+                gvTabUlasan.Columns(6).Visible = False
             End If
-            divTandatangan.Visible = True
-            Tandatangan.Visible = True
-            ddlTandatangan.Visible = True
-            pnlSuratContentAuto.Visible = True
-            TB_TarikhPeriksa.ReadOnly = False
-            TB_NoRujukan.ReadOnly = False
+
+            If gvTabBayaran.Columns.Count >= 7 Then
+                gvTabBayaran.Columns(5).Visible = False
+                gvTabBayaran.Columns(6).Visible = False
+            End If
+
+            If gvTabPenjajaUlasan.Columns.Count >= 6 Then
+                gvTabPenjajaUlasan.Columns(4).Visible = False
+                gvTabPenjajaUlasan.Columns(5).Visible = False
+            End If
+
+            If gvIK.Columns.Count >= 2 Then
+                gvIK.Columns(1).Visible = False
+            End If
+
+            SetControlReadOnly(tabMaklumat, True)
+            BT_Maklumat.Visible = False
+            btnAddLokasi.Visible = False
+            btnAddIklan.Visible = False
+            btnAddAnjing.Visible = False
+
+            If gvIklanList.Columns.Count >= 4 Then
+                gvIklanList.Columns(3).Visible = False
+            End If
+            If gvAnjingList.Columns.Count >= 6 Then
+                gvAnjingList.Columns(5).Visible = False
+            End If
+            If gvLokasiList.Columns.Count >= 3 Then
+                gvLokasiList.Columns(2).Visible = False
+            End If
+        Else
+
         End If
 
     End Sub
@@ -806,6 +827,19 @@ Partial Class kelulusan1
 
         End If
 
+    End Sub
+
+    Private Sub SetControlReadOnly(ByVal parent As Control, ByVal isReadOnly As Boolean)
+        For Each c As Control In parent.Controls
+            If TypeOf c Is TextBox Then
+                DirectCast(c, TextBox).ReadOnly = isReadOnly
+            ElseIf TypeOf c Is DropDownList Then
+                DirectCast(c, DropDownList).Enabled = Not isReadOnly
+            End If
+            If c.HasControls() Then
+                SetControlReadOnly(c, isReadOnly)
+            End If
+        Next
     End Sub
 
     Private Function getJabatanLesen(agensiID As Integer) As Boolean
@@ -1775,9 +1809,34 @@ Partial Class kelulusan1
                 currPageScriptManager.RegisterPostBackControl(LinkButton1)
 
             End If
+
+            If btnKembaliIK.Visible Then
+                Dim lbEditMobile As LinkButton = TryCast(e.Row.FindControl("lbEditMobile"), LinkButton)
+                If lbEditMobile IsNot Nothing Then
+                    lbEditMobile.Visible = False
+                End If
+            End If
         End If
 
 
+    End Sub
+
+    Private Sub gvTabBayaran_RowDataBound(sender As Object, e As GridViewRowEventArgs) Handles gvTabBayaran.RowDataBound
+        If e.Row.RowType = DataControlRowType.DataRow AndAlso btnKembaliIK.Visible Then
+            Dim lbEditMobile As LinkButton = TryCast(e.Row.FindControl("lbEditMobile"), LinkButton)
+            If lbEditMobile IsNot Nothing Then
+                lbEditMobile.Visible = False
+            End If
+        End If
+    End Sub
+
+    Private Sub gvTabPenjajaUlasan_RowDataBound(sender As Object, e As GridViewRowEventArgs) Handles gvTabPenjajaUlasan.RowDataBound
+        If e.Row.RowType = DataControlRowType.DataRow AndAlso btnKembaliIK.Visible Then
+            Dim lbEditMobile As LinkButton = TryCast(e.Row.FindControl("lbEditMobile"), LinkButton)
+            If lbEditMobile IsNot Nothing Then
+                lbEditMobile.Visible = False
+            End If
+        End If
     End Sub
 
     Private Sub gvTabUlasan_RowDeleting(sender As Object, e As GridViewDeleteEventArgs) Handles gvTabUlasan.RowDeleting
@@ -2978,7 +3037,7 @@ Partial Class kelulusan1
             pnlSuratFail.Visible = True
             pnlSuratAuto.Visible = False
         Else
-            BT_Generate.Visible = btnKembaliIK.Visible
+            BT_Generate.Visible = True
             'BT_Generate1.Visible = True
             pnlSuratFail.Visible = False
             pnlSuratAuto.Visible = True
