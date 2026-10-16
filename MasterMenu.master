@@ -167,6 +167,16 @@
       color: var(--primary) !important;
     }
 
+    /* Footer: logo ProLesen + MPK */
+    .footer-brand{ display: flex; align-items: center; gap: 16px; }
+    .footer-logos{ display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+    .footer-logos img{ height: 46px; width: auto; object-fit: contain; }
+    .footer-logo-sep{ width: 1px; height: 36px; background: rgba(17,24,39,0.12); }
+    @media (max-width: 576px){
+      .footer-brand{ flex-direction: column; align-items: flex-start; gap: 10px; }
+      .footer-logos img{ height: 38px; }
+    }
+
     /* Menu atas: pil kecil, font sederhana, ikon berwarna (navbar sahaja - sidebar tidak terjejas) */
     .navbar{ padding-top: 6px; padding-bottom: 6px; box-shadow: 0 1px 8px rgba(17,24,39,0.04); }
     .navbar .navbar-nav{ align-items: center; gap: 4px !important; }
@@ -2322,9 +2332,19 @@ h1{
       <div class="container">
         <div class="soft-card p-4">
           <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
-            <div>
-              <strong>ProLesen</strong> &bull; Majlis Perbandaran Kluang
-              <div class="small text-muted">Sistem Permohonan & Pengurusan Lesen</div>
+            <div class="footer-brand">
+              <%-- Susunan: Jata Negara Malaysia -> Johor -> MPK | ProLesen. Logo yang belum ada fail akan disembunyikan (onerror). --%>
+              <div class="footer-logos">
+                <img src='<%= ResolveUrl("~/images/logo_malaysia.png") %>' alt="Kerajaan Malaysia" title="Kerajaan Malaysia" onerror="this.style.display='none'" />
+                <img src='<%= ResolveUrl("~/images/logo_johor.png") %>' alt="Kerajaan Negeri Johor" title="Kerajaan Negeri Johor" onerror="this.style.display='none'" />
+                <img src='<%= ResolveUrl("~/images/logo_mpk_new.png") %>' alt="Majlis Perbandaran Kluang" title="Majlis Perbandaran Kluang" />
+                <span class="footer-logo-sep"></span>
+                <img src='<%= ResolveUrl("~/images/logo.png") %>' alt="ProLesen" title="ProLesen" />
+              </div>
+              <div>
+                <strong>ProLesen</strong> &bull; Majlis Perbandaran Kluang
+                <div class="small text-muted">Sistem Permohonan & Pengurusan Lesen</div>
+              </div>
             </div>
             <div class="small text-muted">
               &copy; <span id="yearNow"></span> MPK Kluang &bull; All rights reserved
