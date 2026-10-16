@@ -880,7 +880,7 @@ h1{
                 </li>
                 <li class="nav-item"><a class="nav-link" href="#" title="Manual Pengguna Agensi &amp; Jabatan"><i class="bi bi-journal-check me-1"></i>Manual Pengguna</a></li>
                 <li class="nav-item"><a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#modalPautanPantas" title="Pautan Pantas Pengguna"><i class="bi bi-lightning-charge me-1"></i>Pautan Pantas</a></li>
-                <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-telephone me-1"></i>Hubungi Kami</a></li>
+                <li class="nav-item"><a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#modalHubungi"><i class="bi bi-telephone me-1"></i>Hubungi Kami</a></li>
                 <li class="nav-item">
 
                 <% If CInt(Session.Item("sessionUsersId")) = 0 Then %>
@@ -1087,156 +1087,265 @@ h1{
 
         <%--POPUP PAUTAN PANTAS--%>
         <style>
-          #modalPautanPantas .modal-dialog { max-width:1160px; }
+          /* ===== Popup Pautan Pantas - dua panel (gaya sama Hubungi Kami) ===== */
+          #modalPautanPantas .modal-dialog { max-width:900px; }
           #modalPautanPantas .modal-content { border:0; border-radius:18px; overflow:hidden; box-shadow:0 24px 60px rgba(15,23,42,.28); }
-          #modalPautanPantas .modal-header { background:linear-gradient(120deg,#1a3d7c 0%,#22508f 55%,#2f63a8 100%); color:#fff; padding:20px 28px; border:0; }
-          #modalPautanPantas .modal-title { font-size:1.45rem; font-weight:800; display:flex; align-items:center; gap:12px; }
-          #modalPautanPantas .modal-title i { font-size:1.6rem; }
-          #modalPautanPantas .modal-header .btn-close { opacity:.9; }
-          /* !important: master ada ".modal-body { padding:0 !important }" untuk modal login */
-          #modalPautanPantas .modal-body { padding:22px 26px 24px !important; background:#fff; overflow-x:hidden; }
-          #modalPautanPantas .pp-intro { color:#334155; font-size:15.5px; margin:0 0 20px; text-align:center; }
+          /* !important: master ada ".modal-body { padding:0 !important }" */
+          #modalPautanPantas .modal-body { padding:0 !important; background:#fff; }
+          #modalPautanPantas .pl-wrap { position:relative; display:grid; grid-template-columns:minmax(0,.72fr) minmax(0,1.28fr); }
 
-          /* Desktop / tablet: kad menegak */
-          .pp-tile { display:flex; flex-direction:column; align-items:center; text-align:center; height:100%;
-                     padding:18px 16px 18px; border-radius:14px; background:#fff; border:1px solid #e3e8f0;
-                     box-shadow:0 2px 8px rgba(15,23,42,.05); text-decoration:none; color:inherit;
-                     transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease; }
-          .pp-tile:hover { transform:translateY(-3px); border-color:#bcd0f5; box-shadow:0 14px 30px rgba(26,61,124,.12); color:inherit; }
-          .pp-logo { width:100px; height:100px; border-radius:50%; background:#fff; padding:8px; flex-shrink:0;
-                     border:3px solid #e6ecf6; box-shadow:0 4px 14px rgba(15,23,42,.08);
-                     display:flex; align-items:center; justify-content:center; overflow:hidden; }
-          .pp-logo img { max-width:100%; max-height:100%; object-fit:contain; }
-          .pp-body { display:flex; flex-direction:column; align-items:center; flex-grow:1; margin-top:12px; }
-          .pp-name { font-weight:800; color:#1a3d7c; font-size:17.5px; line-height:1.25; }
-          .pp-desc { color:#64748b; font-size:13.5px; margin:4px 0 12px; flex-grow:1; }
-          .pp-open { display:inline-flex; align-items:center; gap:7px; font-size:13.5px; font-weight:700; color:#1a3d7c;
-                     background:#e8f0fc; border-radius:999px; padding:7px 24px; transition:background .18s ease, color .18s ease; }
-          .pp-tile:hover .pp-open { background:#1a3d7c; color:#fff; }
+          #modalPautanPantas .pl-side { position:relative; overflow:hidden; background:linear-gradient(160deg,#23267a 0%,#2E3192 55%,#3b3fa8 100%); color:#fff; padding:26px 22px 22px; display:flex; flex-direction:column; gap:12px; }
+          #modalPautanPantas .pl-side::after { content:""; position:absolute; right:-60px; bottom:-60px; width:180px; height:180px; border-radius:50%; background:rgba(255,255,255,.06); pointer-events:none; }
+          #modalPautanPantas .pl-title { font-size:1.15rem; font-weight:700; display:flex; align-items:center; gap:9px; margin:0; }
+          #modalPautanPantas .pl-sub { font-size:12.5px; color:#cfd2f5; margin:0; }
+          #modalPautanPantas .pl-stat { position:relative; z-index:1; display:flex; align-items:center; gap:12px; padding:11px 12px; border-radius:12px;
+                                        background:rgba(255,255,255,.09); border:1px solid rgba(255,255,255,.12); }
+          #modalPautanPantas .pl-stat .ic { width:38px; height:38px; border-radius:10px; background:#fff; color:#2E3192; display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0; }
+          #modalPautanPantas .pl-stat .k { font-size:11px; color:#cfd2f5; line-height:1.2; }
+          #modalPautanPantas .pl-stat .v { font-size:13.5px; font-weight:700; line-height:1.3; }
 
-          #modalPautanPantas .modal-footer { background:#fff; border-top:1px solid #e8edf4; padding:14px 28px; justify-content:space-between; }
-          #modalPautanPantas .pp-note { color:#475569; font-size:14px; display:flex; align-items:center; gap:8px; }
-          #modalPautanPantas .pp-note i { font-size:18px; color:#64748b; }
-          #modalPautanPantas .pp-close { background:none; border:0; color:#1e293b; font-weight:700; padding:6px 4px; }
-          #modalPautanPantas .pp-close:hover { color:#1a3d7c; text-decoration:underline; }
+          #modalPautanPantas .pl-main { padding:16px 20px 12px; }
+          #modalPautanPantas .pl-close { position:absolute; top:12px; right:12px; z-index:2; }
+          #modalPautanPantas .pl-head { font-size:11px; font-weight:800; color:#6c757d; letter-spacing:.06em; text-transform:uppercase; margin:4px 0 4px; display:flex; align-items:center; gap:7px; }
+          #modalPautanPantas .pl-head i { color:#2E3192; font-size:13px; }
+          #modalPautanPantas .pl-row { display:flex; align-items:center; gap:12px; padding:9px 8px; margin:0 -8px; border-radius:10px; border-bottom:1px solid #f1f3f5;
+                                       text-decoration:none; color:inherit; transition:background .15s ease; }
+          #modalPautanPantas .pl-row:last-of-type { border-bottom:0; }
+          #modalPautanPantas .pl-row:hover { background:#F6F7FF; color:inherit; }
+          #modalPautanPantas .pl-logo { width:40px; height:40px; border-radius:50%; background:#fff; border:1px solid #e6ecf6; padding:4px; flex-shrink:0;
+                                        display:flex; align-items:center; justify-content:center; overflow:hidden; }
+          #modalPautanPantas .pl-logo img { max-width:100%; max-height:100%; object-fit:contain; }
+          #modalPautanPantas .pl-info { min-width:0; flex:1; }
+          #modalPautanPantas .pl-name { font-size:14px; font-weight:700; color:#1f2937; line-height:1.25; }
+          #modalPautanPantas .pl-desc { font-size:12px; color:#6c757d; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+          #modalPautanPantas .pl-btn { display:inline-flex; align-items:center; gap:5px; font-size:12px; font-weight:600; padding:5px 11px; border-radius:999px;
+                                       border:1px solid #dbe0ea; background:#fff; color:#344054; white-space:nowrap; transition:all .15s ease; }
+          #modalPautanPantas .pl-row:hover .pl-btn { background:#2E3192; border-color:#2E3192; color:#fff; }
+          #modalPautanPantas .pl-note { font-size:12px; color:#6c757d; margin-top:8px; display:flex; align-items:center; gap:6px; }
 
-          /* Telefon: senarai mendatar (logo kiri, maklumat kanan) */
           @media (max-width: 767.98px) {
             #modalPautanPantas .modal-dialog { margin:12px; }
-            #modalPautanPantas .modal-header { padding:16px 18px; }
-            #modalPautanPantas .modal-title { font-size:1.15rem; gap:10px; }
-            #modalPautanPantas .modal-title i { font-size:1.25rem; }
-            #modalPautanPantas .modal-body { padding:16px 14px 18px !important; }
-            #modalPautanPantas .pp-intro { font-size:13.5px; margin-bottom:14px; }
-            #modalPautanPantas .row { --bs-gutter-y:10px; }
-            .pp-tile { flex-direction:row; align-items:center; text-align:left; gap:14px; padding:12px 14px; }
-            .pp-tile:hover { transform:none; }
-            .pp-logo { width:64px; height:64px; padding:6px; border-width:2px; }
-            .pp-body { align-items:flex-start; margin-top:0; }
-            .pp-name { font-size:15px; }
-            .pp-desc { font-size:12.5px; margin:2px 0 8px; }
-            .pp-open { font-size:12px; padding:5px 14px; }
-            #modalPautanPantas .modal-footer { padding:12px 16px; }
-            #modalPautanPantas .pp-note { font-size:12px; }
+            #modalPautanPantas .pl-wrap { grid-template-columns:1fr; }
+            #modalPautanPantas .pl-side { padding:20px 16px 16px; }
+            #modalPautanPantas .pl-side::after { display:none; }
+            #modalPautanPantas .pl-main { padding:12px 16px 10px; }
+            #modalPautanPantas .pl-close { top:14px; right:14px; filter:invert(1) grayscale(1) brightness(2); }
+            #modalPautanPantas .pl-desc { white-space:normal; }
+          }
+
+          /* ===== Popup Hubungi Kami - dua panel: tindakan utama (kiri) + direktori bahagian (kanan) ===== */
+          #modalHubungi .modal-dialog { max-width:860px; }
+          #modalHubungi .modal-content { border:0; border-radius:18px; overflow:hidden; box-shadow:0 24px 60px rgba(15,23,42,.28); }
+          /* !important: master ada ".modal-body { padding:0 !important }" */
+          #modalHubungi .modal-body { padding:0 !important; background:#fff; }
+          #modalHubungi .hk-wrap { position:relative; display:grid; grid-template-columns:minmax(0,.92fr) minmax(0,1.08fr); }
+
+          #modalHubungi .hk-side { position:relative; background:linear-gradient(160deg,#23267a 0%,#2E3192 55%,#3b3fa8 100%); color:#fff; padding:26px 22px 22px; display:flex; flex-direction:column; gap:10px; }
+          #modalHubungi .hk-side::after { content:""; position:absolute; right:-60px; bottom:-60px; width:180px; height:180px; border-radius:50%; background:rgba(255,255,255,.06); pointer-events:none; }
+          #modalHubungi .hk-title { font-size:1.15rem; font-weight:700; display:flex; align-items:center; gap:9px; margin:0; }
+          #modalHubungi .hk-sub { font-size:12.5px; color:#cfd2f5; margin:0 0 8px; }
+          #modalHubungi .hk-act { position:relative; z-index:1; display:flex; align-items:center; gap:12px; padding:11px 12px; border-radius:12px;
+                                  background:rgba(255,255,255,.09); border:1px solid rgba(255,255,255,.12); color:#fff; text-decoration:none;
+                                  transition:background .15s ease, transform .15s ease; }
+          #modalHubungi .hk-act:hover { background:rgba(255,255,255,.17); color:#fff; transform:translateX(2px); }
+          #modalHubungi .hk-act .ic { width:38px; height:38px; border-radius:10px; background:#fff; display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0; }
+          #modalHubungi .hk-act .ic.tel { color:#2E3192; } #modalHubungi .hk-act .ic.wa { color:#128c3e; } #modalHubungi .hk-act .ic.mail { color:#b45309; }
+          #modalHubungi .hk-act .k { font-size:11px; color:#cfd2f5; line-height:1.2; }
+          #modalHubungi .hk-act .v { font-size:13.5px; font-weight:700; line-height:1.3; word-break:break-all; }
+          #modalHubungi .hk-act .go { margin-left:auto; color:#cfd2f5; font-size:14px; }
+
+          #modalHubungi .hk-main { padding:18px 20px 14px; }
+          #modalHubungi .hk-close { position:absolute; top:12px; right:12px; z-index:2; }
+          #modalHubungi .hk-dept { font-size:11px; font-weight:800; color:#6c757d; letter-spacing:.06em; text-transform:uppercase; margin:6px 0 4px; display:flex; align-items:center; gap:7px; }
+          #modalHubungi .hk-dept i { color:#2E3192; font-size:13px; }
+          #modalHubungi .hk-row { display:flex; align-items:center; gap:12px; padding:10px 0; border-bottom:1px solid #f1f3f5; }
+          #modalHubungi .hk-row:last-of-type { border-bottom:0; }
+          #modalHubungi .hk-row .ic { width:34px; height:34px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:16px; flex-shrink:0; background:#EEF0FF; color:#2E3192; }
+          #modalHubungi .hk-row .ic.mail { background:#FFF4E5; color:#b45309; }
+          #modalHubungi .hk-row .info { min-width:0; flex:1; }
+          #modalHubungi .hk-row .k { font-size:11.5px; color:#6c757d; }
+          #modalHubungi .hk-row .v { font-size:14px; font-weight:700; color:#1f2937; overflow-wrap:anywhere; }
+          #modalHubungi .hk-btn { display:inline-flex; align-items:center; gap:5px; font-size:12px; font-weight:600; padding:5px 11px; border-radius:999px;
+                                  border:1px solid #dbe0ea; background:#fff; color:#344054; text-decoration:none; white-space:nowrap; cursor:pointer; }
+          #modalHubungi .hk-btn:hover { background:#EEF0FF; border-color:#c9cdf5; color:#2E3192; }
+          #modalHubungi .hk-btn.done { background:#e6f4ea; border-color:#badbcc; color:#0f5132; }
+          #modalHubungi .hk-note { font-size:12px; color:#6c757d; margin-top:10px; display:flex; align-items:center; gap:6px; }
+
+          @media (max-width: 767.98px) {
+            #modalHubungi .modal-dialog { margin:12px; }
+            #modalHubungi .hk-wrap { grid-template-columns:1fr; }
+            #modalHubungi .hk-side { padding:20px 16px 16px; }
+            #modalHubungi .hk-side::after { display:none; }
+            #modalHubungi .hk-main { padding:14px 16px 12px; }
+            #modalHubungi .hk-row .v { font-size:13px; }
+            #modalHubungi .hk-close { top:14px; right:14px; filter:invert(1) grayscale(1) brightness(2); }
           }
         </style>
 
         <div class="modal fade" id="modalPautanPantas" tabindex="-1" aria-labelledby="modalPautanPantasTitle" aria-hidden="true">
-            <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-dialog modal-lg modal-dialog-centered">
                 <div class="modal-content">
-
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="modalPautanPantasTitle">
-                            <i class="bi bi-lightning-charge-fill me-2"></i>Pautan Pantas
-                        </h5>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Tutup"></button>
-                    </div>
-
                     <div class="modal-body">
-                        <p class="pp-intro">Akses pantas ke sistem dan portal dalam talian yang berkaitan.</p>
+                        <div class="pl-wrap">
 
-                        <div class="row g-3 justify-content-center">
-                            <div class="col-12 col-md-4 col-lg-3">
-                                <a class="pp-tile" href="https://johor.ekhidmat.my/ekhidmat/" target="_blank" rel="noopener">
-                                    <span class="pp-logo"><img src="<%= ResolveUrl("~/images/pautan/ekhidmat.jpg") %>" alt="eKhidmat Johor" /></span>
-                                    <span class="pp-body">
-                                    <span class="pp-name">eKhidmat Johor</span>
-                                    <span class="pp-desc">Perkhidmatan dalam talian Negeri Johor</span>
-                                    <span class="pp-open">Buka Sistem <i class="bi bi-box-arrow-up-right"></i></span>
-                                    </span>
-                                </a>
+                            <%-- Kiri: pengenalan --%>
+                            <div class="pl-side">
+                                <h5 class="pl-title" id="modalPautanPantasTitle"><i class="bi bi-lightning-charge-fill"></i>Pautan Pantas</h5>
+                                <p class="pl-sub">Akses pantas ke sistem dan portal dalam talian yang berkaitan.</p>
+
+                                <div class="pl-stat">
+                                    <span class="ic"><i class="bi bi-grid-3x3-gap-fill"></i></span>
+                                    <span><span class="k d-block">Sistem MPK Kluang</span><span class="v d-block">5 sistem dalaman</span></span>
+                                </div>
+                                <div class="pl-stat">
+                                    <span class="ic"><i class="bi bi-globe2"></i></span>
+                                    <span><span class="k d-block">Portal Kerajaan</span><span class="v d-block">Negeri &amp; Persekutuan</span></span>
+                                </div>
+                                <div class="pl-stat">
+                                    <span class="ic"><i class="bi bi-box-arrow-up-right"></i></span>
+                                    <span><span class="k d-block">Paparan</span><span class="v d-block">Dibuka dalam tab baharu</span></span>
+                                </div>
                             </div>
-                            <div class="col-12 col-md-4 col-lg-3">
-                                <a class="pp-tile" href="http://iperolehan.mpkluang.gov.my/Default.aspx" target="_blank" rel="noopener">
-                                    <span class="pp-logo"><img src="<%= ResolveUrl("~/images/pautan/eperolehan.jpg") %>" alt="e-Perolehan" /></span>
-                                    <span class="pp-body">
-                                    <span class="pp-name">e-Perolehan</span>
-                                    <span class="pp-desc">Sistem perolehan &amp; tender MPK</span>
-                                    <span class="pp-open">Buka Sistem <i class="bi bi-box-arrow-up-right"></i></span>
-                                    </span>
-                                </a>
+
+                            <%-- Kanan: senarai sistem --%>
+                            <div class="pl-main">
+                                <button type="button" class="btn-close pl-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+
+                                <div class="pl-head"><i class="bi bi-building"></i>Sistem MPK Kluang</div>
+                                <div class="pl-group">
+                                    <a class="pl-row" href="http://prolesen.mpkluang.gov.my/" target="_blank" rel="noopener">
+                                        <span class="pl-logo"><img src="<%= ResolveUrl("~/images/pautan/prolesen.png") %>" alt="Pro-Lesen" /></span>
+                                        <span class="pl-info"><span class="pl-name d-block">Pro-Lesen</span><span class="pl-desc d-block">Sistem permohonan dan pengurusan lesen</span></span>
+                                        <span class="pl-btn">Buka <i class="bi bi-arrow-up-right"></i></span>
+                                    </a>
+                                    <a class="pl-row" href="http://iperolehan.mpkluang.gov.my/Default.aspx" target="_blank" rel="noopener">
+                                        <span class="pl-logo"><img src="<%= ResolveUrl("~/images/pautan/eperolehan.jpg") %>" alt="e-Perolehan" /></span>
+                                        <span class="pl-info"><span class="pl-name d-block">e-Perolehan</span><span class="pl-desc d-block">Sistem perolehan &amp; tender MPK</span></span>
+                                        <span class="pl-btn">Buka <i class="bi bi-arrow-up-right"></i></span>
+                                    </a>
+                                    <a class="pl-row" href="https://aplas.mpkluang.gov.my/site/home" target="_blank" rel="noopener">
+                                        <span class="pl-logo"><img src="<%= ResolveUrl("~/images/pautan/aplas.jpg") %>" alt="A-Plas" /></span>
+                                        <span class="pl-info"><span class="pl-name d-block">A-Plas</span><span class="pl-desc d-block">Sistem semakan kelulusan pelan</span></span>
+                                        <span class="pl-btn">Buka <i class="bi bi-arrow-up-right"></i></span>
+                                    </a>
+                                    <a class="pl-row" href="http://esistem.mpkluang.gov.my/eJOB_MPKLUANG/" target="_blank" rel="noopener">
+                                        <span class="pl-logo"><img src="<%= ResolveUrl("~/images/pautan/ejob.jpg") %>" alt="eJob" /></span>
+                                        <span class="pl-info"><span class="pl-name d-block">eJob</span><span class="pl-desc d-block">Permohonan jawatan MPK Kluang</span></span>
+                                        <span class="pl-btn">Buka <i class="bi bi-arrow-up-right"></i></span>
+                                    </a>
+                                    <a class="pl-row" href="http://ehartampk.mpkluang.gov.my:83/user/login" target="_blank" rel="noopener">
+                                        <span class="pl-logo"><img src="<%= ResolveUrl("~/images/pautan/eharta.jpg") %>" alt="eHarta" /></span>
+                                        <span class="pl-info"><span class="pl-name d-block">eHarta</span><span class="pl-desc d-block">Sistem pengurusan harta MPK</span></span>
+                                        <span class="pl-btn">Buka <i class="bi bi-arrow-up-right"></i></span>
+                                    </a>
+                                </div>
+
+                                <div class="pl-head mt-3"><i class="bi bi-globe2"></i>Portal Kerajaan</div>
+                                <div class="pl-group">
+                                    <a class="pl-row" href="https://johor.ekhidmat.my/ekhidmat/" target="_blank" rel="noopener">
+                                        <span class="pl-logo"><img src="<%= ResolveUrl("~/images/pautan/ekhidmat.jpg") %>" alt="eKhidmat Johor" /></span>
+                                        <span class="pl-info"><span class="pl-name d-block">eKhidmat Johor</span><span class="pl-desc d-block">Perkhidmatan dalam talian Negeri Johor</span></span>
+                                        <span class="pl-btn">Buka <i class="bi bi-arrow-up-right"></i></span>
+                                    </a>
+                                    <a class="pl-row" href="https://osc3plus.kpkt.gov.my/" target="_blank" rel="noopener">
+                                        <span class="pl-logo"><img src="<%= ResolveUrl("~/images/pautan/osc3plus.jpg") %>" alt="OSC 3 Plus Online" /></span>
+                                        <span class="pl-info"><span class="pl-name d-block">OSC Online</span><span class="pl-desc d-block">OSC 3 Plus - permohonan pembangunan</span></span>
+                                        <span class="pl-btn">Buka <i class="bi bi-arrow-up-right"></i></span>
+                                    </a>
+                                </div>
+
+                                <div class="pl-note"><i class="bi bi-info-circle"></i>Pautan akan dibuka dalam tab baharu.</div>
                             </div>
-                            <div class="col-12 col-md-4 col-lg-3">
-                                <a class="pp-tile" href="https://osc3plus.kpkt.gov.my/" target="_blank" rel="noopener">
-                                    <span class="pp-logo"><img src="<%= ResolveUrl("~/images/pautan/osc3plus.jpg") %>" alt="OSC 3 Plus Online" /></span>
-                                    <span class="pp-body">
-                                    <span class="pp-name">OSC Online</span>
-                                    <span class="pp-desc">OSC 3 Plus - permohonan pembangunan</span>
-                                    <span class="pp-open">Buka Sistem <i class="bi bi-box-arrow-up-right"></i></span>
-                                    </span>
-                                </a>
-                            </div>
-                            <div class="col-12 col-md-4 col-lg-3">
-                                <a class="pp-tile" href="https://aplas.mpkluang.gov.my/site/home" target="_blank" rel="noopener">
-                                    <span class="pp-logo"><img src="<%= ResolveUrl("~/images/pautan/aplas.jpg") %>" alt="A-Plas" /></span>
-                                    <span class="pp-body">
-                                    <span class="pp-name">A-Plas</span>
-                                    <span class="pp-desc">Sistem semakan kelulusan pelan</span>
-                                    <span class="pp-open">Buka Sistem <i class="bi bi-box-arrow-up-right"></i></span>
-                                    </span>
-                                </a>
-                            </div>
-                            <div class="col-12 col-md-4 col-lg-3">
-                                <a class="pp-tile" href="http://prolesen.mpkluang.gov.my/" target="_blank" rel="noopener">
-                                    <span class="pp-logo"><img src="<%= ResolveUrl("~/images/pautan/prolesen.png") %>" alt="Pro-Lesen" /></span>
-                                    <span class="pp-body">
-                                    <span class="pp-name">Pro-Lesen</span>
-                                    <span class="pp-desc">Sistem permohonan dan pengurusan lesen</span>
-                                    <span class="pp-open">Buka Sistem <i class="bi bi-box-arrow-up-right"></i></span>
-                                    </span>
-                                </a>
-                            </div>
-                            <div class="col-12 col-md-4 col-lg-3">
-                                <a class="pp-tile" href="http://esistem.mpkluang.gov.my/eJOB_MPKLUANG/" target="_blank" rel="noopener">
-                                    <span class="pp-logo"><img src="<%= ResolveUrl("~/images/pautan/ejob.jpg") %>" alt="eJob" /></span>
-                                    <span class="pp-body">
-                                    <span class="pp-name">eJob</span>
-                                    <span class="pp-desc">Permohonan jawatan MPK Kluang</span>
-                                    <span class="pp-open">Buka Sistem <i class="bi bi-box-arrow-up-right"></i></span>
-                                    </span>
-                                </a>
-                            </div>
-                            <div class="col-12 col-md-4 col-lg-3">
-                                <a class="pp-tile" href="http://ehartampk.mpkluang.gov.my:83/user/login" target="_blank" rel="noopener">
-                                    <span class="pp-logo"><img src="<%= ResolveUrl("~/images/pautan/eharta.jpg") %>" alt="eHarta" /></span>
-                                    <span class="pp-body">
-                                    <span class="pp-name">eHarta</span>
-                                    <span class="pp-desc">Sistem pengurusan harta MPK</span>
-                                    <span class="pp-open">Buka Sistem <i class="bi bi-box-arrow-up-right"></i></span>
-                                    </span>
-                                </a>
-                            </div>
+
                         </div>
                     </div>
-
-                    <div class="modal-footer">
-                        <span class="pp-note"><i class="bi bi-info-circle"></i>Pautan akan dibuka dalam tab baharu.</span>
-                        <button type="button" class="pp-close" data-bs-dismiss="modal">Tutup</button>
-                    </div>
-
                 </div>
             </div>
         </div>
+
+        <%--POPUP HUBUNGI KAMI (reka bentuk dua panel)--%>
+        <div class="modal fade" id="modalHubungi" tabindex="-1" aria-labelledby="modalHubungiTitle" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <div class="hk-wrap">
+
+                            <%-- Kiri: tindakan utama --%>
+                            <div class="hk-side">
+                                <h5 class="hk-title" id="modalHubungiTitle"><i class="bi bi-headset"></i>Hubungi Kami</h5>
+                                <p class="hk-sub">Pertanyaan berkaitan permohonan dan pengurusan lesen.</p>
+
+                                <a class="hk-act" href="tel:+6077081111">
+                                    <span class="ic tel"><i class="bi bi-telephone-fill"></i></span>
+                                    <span><span class="k d-block">Talian utama</span><span class="v d-block">07-708 1111 ext 1400</span></span>
+                                    <i class="bi bi-chevron-right go"></i>
+                                </a>
+                                <a class="hk-act" href="https://wa.me/60187730500" target="_blank" rel="noopener">
+                                    <span class="ic wa"><i class="bi bi-whatsapp"></i></span>
+                                    <span><span class="k d-block">WhatsApp</span><span class="v d-block">018-773 0500</span></span>
+                                    <i class="bi bi-box-arrow-up-right go"></i>
+                                </a>
+                                <a class="hk-act" href="mailto:pelesenanmpkluang@gmail.com">
+                                    <span class="ic mail"><i class="bi bi-envelope-fill"></i></span>
+                                    <span style="min-width:0"><span class="k d-block">Emel</span><span class="v d-block">pelesenanmpkluang@gmail.com</span></span>
+                                    <i class="bi bi-chevron-right go"></i>
+                                </a>
+                            </div>
+
+                            <%-- Kanan: direktori bahagian --%>
+                            <div class="hk-main">
+                                <button type="button" class="btn-close hk-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+
+                                <div class="hk-dept"><i class="bi bi-file-earmark-text"></i>Bahagian Perlesenan</div>
+                                <div class="hk-row">
+                                    <span class="ic"><i class="bi bi-building"></i></span>
+                                    <span class="info"><span class="k d-block">Pejabat</span><span class="v d-block">07-777 1443</span></span>
+                                    <a class="hk-btn" href="tel:+6077771443"><i class="bi bi-telephone"></i>Telefon</a>
+                                </div>
+                                <div class="hk-row">
+                                    <span class="ic"><i class="bi bi-shop-window"></i></span>
+                                    <span class="info"><span class="k d-block">Kaunter</span><span class="v d-block">07-777 1413</span></span>
+                                    <a class="hk-btn" href="tel:+6077771413"><i class="bi bi-telephone"></i>Telefon</a>
+                                </div>
+
+                                <div class="hk-dept mt-3"><i class="bi bi-clipboard-check"></i>Bahagian Inspektorat</div>
+                                <div class="hk-row">
+                                    <span class="ic"><i class="bi bi-telephone"></i></span>
+                                    <span class="info"><span class="k d-block">Telefon</span><span class="v d-block">07-777 1912</span></span>
+                                    <a class="hk-btn" href="tel:+6077771912"><i class="bi bi-telephone"></i>Telefon</a>
+                                </div>
+                                <div class="hk-row">
+                                    <span class="ic mail"><i class="bi bi-envelope"></i></span>
+                                    <span class="info"><span class="k d-block">Emel</span><span class="v d-block">inspektorat@mpkluang.gov.my</span></span>
+                                    <button type="button" class="hk-btn" onclick="hkCopy(this, 'inspektorat@mpkluang.gov.my')"><i class="bi bi-copy"></i>Salin</button>
+                                </div>
+
+                                <div class="hk-note"><i class="bi bi-info-circle"></i>Klik untuk telefon, WhatsApp atau salin emel.</div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+            // Salin teks ke clipboard (fallback untuk pelayar / sambungan tanpa HTTPS)
+            function hkCopy(btn, text) {
+                function done() {
+                    var old = btn.innerHTML;
+                    btn.classList.add('done'); btn.innerHTML = '<i class="bi bi-check2"></i>Disalin';
+                    setTimeout(function () { btn.classList.remove('done'); btn.innerHTML = old; }, 1600);
+                }
+                if (navigator.clipboard && window.isSecureContext) {
+                    navigator.clipboard.writeText(text).then(done);
+                } else {
+                    var ta = document.createElement('textarea'); ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+                    document.body.appendChild(ta); ta.select();
+                    try { document.execCommand('copy'); done(); } catch (e) { }
+                    document.body.removeChild(ta);
+                }
+            }
+        </script>
 
         <%--POPUP SEMAKAN--%>
         <style>
@@ -1655,7 +1764,7 @@ h1{
 				  </p>
 				  <div class="hero-actions">
 					<button class="btn btn-hero"><i class="bi bi-bar-chart me-1"></i>Lihat Contoh</button>
-					<button class="btn btn-hero"><i class="bi bi-telephone me-1"></i>Hubungi Kami</button>
+					<button type="button" class="btn btn-hero" data-bs-toggle="modal" data-bs-target="#modalHubungi"><i class="bi bi-telephone me-1"></i>Hubungi Kami</button>
 				  </div>
 				</div>
 			  </div>
@@ -1870,7 +1979,7 @@ h1{
                 </asp:LinkButton>
                 <a class="qa-link" href="#"><i class="bi bi-book"></i>Manual Agensi &amp; Jabatan<i class="bi bi-chevron-right qa-chevron"></i></a>
                 <a class="qa-link" href="#" data-bs-toggle="modal" data-bs-target="#modalPautanPantas"><i class="bi bi-lightning-charge"></i>Pautan Pantas<i class="bi bi-chevron-right qa-chevron"></i></a>
-                <a class="qa-link" href="#"><i class="bi bi-telephone-fill"></i>Hubungi Kami<i class="bi bi-chevron-right qa-chevron"></i></a>
+                <a class="qa-link" href="#" data-bs-toggle="modal" data-bs-target="#modalHubungi"><i class="bi bi-telephone-fill"></i>Hubungi Kami<i class="bi bi-chevron-right qa-chevron"></i></a>
               </div>
             </div>
           </div>
