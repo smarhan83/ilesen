@@ -984,6 +984,22 @@ h1{
                         </li>
 
 
+                        <!-- Notification Permit Sementara Perniagaan Tamat Tempoh -->
+                        <li>
+                            <a class="dropdown-item py-2"
+                               href="<%= ResolveUrl("~/lesen/appregister1.aspx?p_Id=3348&m_Id=4357&statusPermit=expired") %>">
+
+                                <i class="bi bi-clock-history text-danger me-2"></i>
+                                Tamat Tempoh - Permit Sementara
+
+                                <span class="badge bg-danger ms-2">
+                                    <asp:Label ID="lblNotiPermitExpired" runat="server"></asp:Label>
+                                </span>
+
+                            </a>
+                        </li>
+
+
                         <!-- Notification 1 -->
                         <li>
                             <a class="dropdown-item py-2"

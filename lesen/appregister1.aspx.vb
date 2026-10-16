@@ -57,7 +57,15 @@ Partial Class appregister1
     Protected Sub Page_Load(sender As Object, e As EventArgs) Handles Me.Load
         If Not IsPostBack Then
             Try
-                If CInt(Request.QueryString("pid")) = 0 Then
+                If Request.QueryString("statusPermit") = "expired" Then
+                    hfFilterExpiredPermit.Value = "1"
+                    pnlExpiredAlert.Visible = True
+                    Try
+                        DDL_CreatedBy.SelectedValue = "0"
+                        DDL_Status.SelectedValue = -1
+                    Catch ex As Exception
+                    End Try
+                ElseIf CInt(Request.QueryString("pid")) = 0 Then
                     Try
                         DDL_Status.SelectedValue = 1
                         DDL_CreatedBy.SelectedValue = Session.Item("sessionUserName")
@@ -217,6 +225,12 @@ Partial Class appregister1
 
     Private Sub btnReset_Click(sender As Object, e As EventArgs) Handles btnReset.Click
         Response.Redirect(Request.RawUrl)
+    End Sub
+
+    Protected Sub btnResetExpiredFilter_Click(sender As Object, e As EventArgs)
+        hfFilterExpiredPermit.Value = "0"
+        pnlExpiredAlert.Visible = False
+        Response.Redirect("~/lesen/appregister1.aspx?p_Id=3348&m_Id=4357")
     End Sub
 
     Protected Sub GridView1_PageIndexChanged(sender As Object, e As EventArgs) Handles GridView1.PageIndexChanged

@@ -3834,6 +3834,7 @@
                                                                 data-placeholder="-- Pilih Jenis Lesen / Permit --">
                                                             </asp:ListBox>
                                                             <asp:HiddenField ID="hfSelectedJenisLesen" runat="server" Value="" />
+                                                            <asp:HiddenField ID="hfFilterExpiredPermit" runat="server" Value="0" />
                                                             <asp:SqlDataSource runat="server" ID="SqlDataSourceLesen" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
                                                                 SelectCommand="SELECT JenisLesen_Description FROM LESEN_JenisLesen WHERE JenisLesen_IsActive=1 ORDER BY JenisLesen_Description">
                                                             </asp:SqlDataSource>
@@ -3921,6 +3922,19 @@
                                 </div>
                             </div>
                             <%--# END FILTER #--%>
+
+                            <asp:Panel ID="pnlExpiredAlert" runat="server" Visible="false" CssClass="alert alert-warning border-start border-4 border-warning shadow-sm mt-3 mb-0 d-flex flex-wrap align-items-center justify-content-between gap-2">
+                                <div class="d-flex align-items-center">
+                                    <i class="bi bi-clock-history fs-4 text-warning me-3"></i>
+                                    <div>
+                                        <strong class="d-block text-dark">Permit Sementara Perniagaan - Tamat Tempoh Hari Ini</strong>
+                                        <div class="small text-muted">Menunjukkan permit yang tamat tempoh pada hari ini (3 bulan selepas tarikh surat kelulusan).</div>
+                                    </div>
+                                </div>
+                                <asp:LinkButton ID="btnResetExpiredFilter" runat="server" CssClass="btn btn-outline-secondary btn-sm text-nowrap" OnClick="btnResetExpiredFilter_Click" CausesValidation="false">
+                                    <i class="bi bi-arrow-counterclockwise me-1"></i>Kembali ke Senarai Asal
+                                </asp:LinkButton>
+                            </asp:Panel>
 
                             <div class="table-responsive mt-3">
                                 <asp:GridView ID="GridView1" CssClass="table table-hover table-bordered custom-gridview align-middle" AllowPaging="True" PageSize="20"
@@ -4156,9 +4170,20 @@
                                         AND (@namaSyarikat IS NULL OR @namaSyarikat = '' OR @namaSyarikat = '%%' OR ISNULL(a.NamaSyarikat,'') LIKE '%'+@namaSyarikat+'%' OR ISNULL(a.NamaBaruSyarikat,'') LIKE '%'+@namaSyarikat+'%')
                                         AND a.IsBatal = CASE WHEN @batalID = 2 THEN a.IsBatal ELSE @batalID END 
                                         AND a.Is24Jam = CASE WHEN @risikoID = 2 THEN a.Is24Jam ELSE @risikoID END 
-                                        AND ((@arkib = 1 AND a.StatusID = 10)
-                                             OR (@arkib = 0 AND a.StatusID &lt;&gt; 10 AND a.StatusID = CASE WHEN @statusID = -1 THEN a.StatusID ELSE @statusID END))
-                                        AND a.CreatorID = CASE WHEN @creatorID = '0' THEN a.CreatorID ELSE @creatorID END 
+                                        AND (
+                                            (@isExpiredPermit = 1 
+                                                AND a.TarikhSuratKelulusan IS NOT NULL 
+                                                AND a.IsBatal = 0
+                                                AND (a.JenisLesen_ID = 30 OR (',' + ISNULL(a.JenisLesenIdList,'') + ',') LIKE '%,30,%' OR ISNULL(a.JenisLesenDescList,'') LIKE '%PERMIT SEMENTARA%')
+                                                AND CAST(DATEADD(month, 3, a.TarikhSuratKelulusan) AS DATE) = CAST(GETDATE() AS DATE)
+                                            )
+                                            OR
+                                            (@isExpiredPermit = 0
+                                                AND ((@arkib = 1 AND a.StatusID = 10)
+                                                     OR (@arkib = 0 AND a.StatusID &lt;&gt; 10 AND a.StatusID = CASE WHEN @statusID = -1 THEN a.StatusID ELSE @statusID END))
+                                                AND a.CreatorID = CASE WHEN @creatorID = '0' THEN a.CreatorID ELSE @creatorID END
+                                            )
+                                        ) 
                                         AND (ISNULL(a.AlamatPremis,'') LIKE CASE WHEN @Alamat='' THEN ISNULL(a.AlamatPremis,'') ELSE '%'+@Alamat+'%' END
                                         OR ISNULL(a.AlamatBaru,'') LIKE CASE WHEN @Alamat='' THEN ISNULL(a.AlamatBaru,'') ELSE '%'+@Alamat+'%' END
                                         OR ISNULL(a.AnjingAlamat,'') LIKE CASE WHEN @Alamat='' THEN ISNULL(a.AnjingAlamat,'') ELSE '%'+@Alamat+'%' END
@@ -4182,6 +4207,7 @@
                                     <asp:Parameter Name="Permohonan_ID"></asp:Parameter>
                                 </DeleteParameters>
                                 <SelectParameters>
+                                    <asp:ControlParameter ControlID="hfFilterExpiredPermit" PropertyName="Value" Name="isExpiredPermit" DefaultValue="0" Type="Int32"></asp:ControlParameter>
                                     <asp:ControlParameter ControlID="txtNoRujukan" PropertyName="Text" DefaultValue="%%" Name="Rujukan"></asp:ControlParameter>
                                     <asp:ControlParameter ControlID="hfSelectedJenisLesen" PropertyName="Value" Name="selectedLesen" DefaultValue="" ConvertEmptyStringToNull="false"></asp:ControlParameter>
                                     <asp:ControlParameter ControlID="DDL_Pemohon" PropertyName="SelectedValue" Name="pemohonID"></asp:ControlParameter>
