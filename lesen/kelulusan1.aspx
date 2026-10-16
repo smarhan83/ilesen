@@ -1,4 +1,4 @@
-﻿<%@ Page MaintainScrollPositionOnPostback="true" Title="" Language="VB" MasterPageFile="~/MasterMenu.master" AutoEventWireup="false" CodeFile="kelulusan1.aspx.vb" Inherits="kelulusan1" %>
+<%@ Page MaintainScrollPositionOnPostback="true" Title="" Language="VB" MasterPageFile="~/MasterMenu.master" AutoEventWireup="false" CodeFile="kelulusan1.aspx.vb" Inherits="kelulusan1" %>
 
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="asp" %>
 
@@ -3087,8 +3087,8 @@ ORDER BY
 
                             </div>
 
-                            <div class="row">
-                                <div class="col-md-6">
+                            <div class="row" id="divTandatangan" runat="server">
+                                <div class="col-md-6" id="Tandatangan" runat="server">
 
                                     <div class="form-group">
                                         <label>Tandatangan</label>
