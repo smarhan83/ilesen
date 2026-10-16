@@ -997,8 +997,7 @@ Partial Class kelulusan1
         '// check gridview permission
         If frmwrite = False Then
             '//gridview select view
-            GridView1.Columns.Item(5).Visible = False '//grid delete
-
+            '// (lajur 5 kini "Status" - dulu "grid delete" dan menyorok Status bagi pengguna tanpa kebenaran Write)
         End If
     End Sub
 
