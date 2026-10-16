@@ -32,8 +32,6 @@ Partial Class kelulusan1
 
         showFormControl(GridView1)
 
-
-
     End Sub
 
     Private Sub showFormControl(gv1 As GridView)
@@ -149,8 +147,8 @@ Partial Class kelulusan1
 
             'End Try
 
-
         End If
+
         Dim agensiType As String = "L"
         '//hide tab kadar bayaran
         Try
@@ -190,6 +188,10 @@ Partial Class kelulusan1
                         divTarikhSurat.Visible = True
                     Else
                         divTarikhSurat.Visible = False
+                    End If
+
+                    If ApprStatusID = 2 Then
+                        tabSurat.Visible = False
                     End If
 
                     GetSuratContent(PermohonanID)
@@ -286,8 +288,6 @@ Partial Class kelulusan1
 
         End If
 
-
-
         '//hide column edit for kadar bayaran
         If ApprStatusID = 5 Or ApprStatusID >= 8 Then
             If Session.Item("sessionIsPenilai") = "True" Then
@@ -302,6 +302,8 @@ Partial Class kelulusan1
         ' Kawalan tab Surat & tab-tab lain berdasarkan butang btnKembaliIK
         If btnKembaliIK.Visible Then
             divtemplatsurat.Visible = False
+            BT_Generate.Visible = False
+            divCbSuratFail.Visible = False
             pnlSuratContentAuto.Visible = False
             TB_TarikhPeriksa.ReadOnly = True
             TB_NoRujukan.ReadOnly = True
@@ -1051,8 +1053,6 @@ Partial Class kelulusan1
                     End If
 
                     BT_Generate.Visible = "false"
-                    'BT_Generate1.Visible = "false"
-                    'btnSaveLetter.Visible = "false"
                     BT_Maklumat.Visible = "false"
 
                     idFooter.Visible = "false"

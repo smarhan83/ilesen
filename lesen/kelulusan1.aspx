@@ -2946,7 +2946,7 @@ ORDER BY
                     <ContentTemplate>
                         <br />
                         <div class="row">
-                            <div class="col-md-3" runat="server" id="divtemplatsurat">
+                            <div class="col-md-4" runat="server" id="divtemplatsurat">
                                 <div class="form-group">
                                     <asp:DropDownList ID="DDL_SuratTemplat" CssClass="form-control select2" runat="server" AutoPostBack="false"
                                         DataSourceID="SqlDataSourceSuratTemplat" DataTextField="NamaTemplatDesc" DataValueField="NamaTemplat">
@@ -2971,15 +2971,15 @@ ORDER BY
             
                                 </div>
                             </div>
-                            <div class="col-md-9">
-                                <asp:LinkButton runat="server" CssClass="btn btn-warning" ValidationGroup="updateForm" Text="Jana Surat" ID="BT_Generate" OnCommand="BT_Generate_Command" CausesValidation="True" /> &nbsp;
+                            <div class="col-md-8">
+                                <asp:LinkButton runat="server" CssClass="btn btn-warning" ValidationGroup="updateForm" Text="Jana Laporan" ID="BT_Generate" OnCommand="BT_Generate_Command" CausesValidation="True" /> &nbsp;
                                 <%--<asp:LinkButton runat="server" CssClass="btn btn-warning" ValidationGroup="updateForm" Text="Jana Surat Tidak Sokong" ID="BT_Generate1" OnCommand="BT_Generate1_Command" CausesValidation="True" /> &nbsp;--%>
-                                <asp:LinkButton runat="server" CssClass="btn btn-warning" ValidationGroup="updateForm" Text="Lihat Surat" ID="BT_ViewMail" OnCommand="BT_ViewMail_Command" CausesValidation="True" />
-					                        <asp:LinkButton runat="server" CssClass="btn btn-warning" ValidationGroup="updateForm" Text="Surat Mohon Ulasan" ID="BT_ViewMU" OnCommand="BT_ViewMU_Command" CausesValidation="True" />																
+                                <asp:LinkButton runat="server" CssClass="btn btn-warning" ValidationGroup="updateForm" Text="Lihat Laporan Pemeriksaan" ID="BT_ViewMail" OnCommand="BT_ViewMail_Command" CausesValidation="True" />
+					            <asp:LinkButton runat="server" CssClass="btn btn-warning" ValidationGroup="updateForm" Text="Surat Mohon Ulasan" ID="BT_ViewMU" OnCommand="BT_ViewMU_Command" CausesValidation="True" />																
                             </div>
                         </div>
                         <br />
-                        <div class="row">
+                        <div class="row" runat="server" id="divCbSuratFail">
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Muat naik fail surat?</label>
@@ -3012,7 +3012,7 @@ ORDER BY
                         <asp:Panel ID="pnlSuratAuto" runat="server">
                             <div class="row">
 
-                                <div class="col-md-2" runat="server" ID="divTarikhSurat" >
+                                <div class="col-md-4" runat="server" ID="divTarikhSurat" >
 
                                     <div class="form-group">
                                         <label>Tarikh Pengesahan KB</label>
@@ -3020,7 +3020,7 @@ ORDER BY
                                     </div>
                                 </div>
 
-                                <div class="col-md-2">
+                                <div class="col-md-4">
 
                                     <div class="form-group">
                                         <label>Tarikh Pemeriksaan IK</label>
