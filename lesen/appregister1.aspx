@@ -1493,7 +1493,7 @@
                                     <div class="row align-items-end">
                                         <div class="col-md-3">
                                             <div class="form-group mb-md-0">
-                                                <label class="form-label-custom">Saiz Iklan (cm)</label>
+                                                <label class="form-label-custom">Saiz Iklan (kaki)</label>
                                                 <asp:TextBox ID="TB_SaizIklan1" placeholder="Contoh: 10x5" runat="server" CssClass="form-control" />
                                             </div>
                                         </div>
@@ -1530,7 +1530,7 @@
                                             <asp:GridView ID="gvIklanList" runat="server" HeaderStyle-ForeColor="Black" CssClass="table table-bordered table-sm" AutoGenerateColumns="False" 
                                                 ShowHeaderWhenEmpty="true" EmptyDataText="Senarai kosong." OnRowDeleting="gvIklanList_RowDeleting">
                                                 <Columns>
-                                                    <asp:BoundField DataField="SaizIklan" HeaderText="Saiz Iklan (cm)" />
+                                                    <asp:BoundField DataField="SaizIklan" HeaderText="Saiz Iklan (kaki)" />
                                                     <asp:BoundField DataField="Bercahaya" HeaderText="Bercahaya/Tidak Bercahaya" />
                                                     <asp:BoundField DataField="Unit" HeaderText="Bil. Unit" />
                                                     <asp:TemplateField>
@@ -2664,7 +2664,7 @@
                                 <div class="row align-items-end">
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <label class="form-label-custom">Saiz Iklan (cm)</label>
+                                            <label class="form-label-custom">Saiz Iklan (kaki)</label>
                                             <asp:TextBox ID="TB_SaizIklan1" placeholder="Contoh: 10x5" runat="server" CssClass="form-control" />
                                         </div>
                                     </div>
@@ -2698,7 +2698,7 @@
                                         <asp:GridView ID="gvIklanList" runat="server" HeaderStyle-ForeColor="Black" CssClass="table table-bordered table-hover align-middle shadow-none" AutoGenerateColumns="False" 
                                             ShowHeaderWhenEmpty="true" EmptyDataText="Senarai kosong." OnRowDeleting="gvIklanList_RowDeleting">
                                             <Columns>
-                                                <asp:BoundField DataField="SaizIklan" HeaderText="Saiz Iklan (cm)" />
+                                                <asp:BoundField DataField="SaizIklan" HeaderText="Saiz Iklan (kaki)" />
                                                 <asp:BoundField DataField="Bercahaya" HeaderText="Bercahaya / Tidak" />
                                                 <asp:BoundField DataField="Unit" HeaderText="Bil. Unit" />
                                                 <asp:TemplateField ItemStyle-Width="60px" ItemStyle-CssClass="text-center">
@@ -4704,7 +4704,7 @@
                                     <div class="row align-items-end" id="rowAddIklan_ins" runat="server">
                                         <div class="col-md-3">
                                             <div class="form-group mb-md-0">
-                                                <label class="form-label-custom">Saiz Iklan (cm)</label>
+                                                <label class="form-label-custom">Saiz Iklan (kaki)</label>
                                                 <asp:TextBox ID="TB_SaizIklan1_ins" placeholder="Contoh: 10x5" runat="server" CssClass="form-control" />
                                             </div>
                                         </div>
@@ -4742,7 +4742,7 @@
                                             <asp:GridView ID="gvIklanList_ins" runat="server" HeaderStyle-ForeColor="Black" CssClass="table table-bordered table-sm align-middle" AutoGenerateColumns="False" 
                                                 ShowHeaderWhenEmpty="true" EmptyDataText="Senarai kosong." OnRowDeleting="gvIklanList_ins_RowDeleting">
                                                 <Columns>
-                                                    <asp:BoundField DataField="SaizIklan" HeaderText="Saiz Iklan (cm)" />
+                                                    <asp:BoundField DataField="SaizIklan" HeaderText="Saiz Iklan (kaki)" />
                                                     <asp:BoundField DataField="Bercahaya" HeaderText="Bercahaya / Tidak Bercahaya" />
                                                     <asp:BoundField DataField="Unit" HeaderText="Bil. Unit" />
                                                     <asp:TemplateField>
