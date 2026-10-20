@@ -1744,7 +1744,7 @@
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label class="form-label-custom">Jenis Penjaja</label>
-                                                <asp:DropDownList ID="DDL_JenisPenjaja" CssClass="form-control select2" runat="server"
+                                                <asp:DropDownList ID="DDL_JenisPenjaja" Text='<%# Bind("JenisPenjaja") %>' CssClass="form-control select2" runat="server"
                                                     DataSourceID="SqlDataSourceJenisPenjaja" DataTextField="name" DataValueField="id">
                                                 </asp:DropDownList>
                                                 <asp:SqlDataSource runat="server" ID="SqlDataSourceJenisPenjaja" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
@@ -1756,7 +1756,7 @@
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label class="form-label-custom">Status Tanah</label>
-                                                <asp:DropDownList ID="DDL_StatusTanahPenjaja" CssClass="form-control select2" runat="server"
+                                                <asp:DropDownList ID="DDL_StatusTanahPenjaja" Text='<%# Bind("StatusTanahPenjaja") %>' CssClass="form-control select2" runat="server"
                                                     DataSourceID="SqlDataSourceStatusTanahPenjaja" DataTextField="name" DataValueField="id">
                                                 </asp:DropDownList>
                                                 <asp:SqlDataSource runat="server" ID="SqlDataSourceStatusTanahPenjaja" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
@@ -1804,7 +1804,7 @@
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label class="form-label-custom">Jenis Kenderaan (Penjaja Berkenderaan)</label>
-                                                <asp:DropDownList ID="DDL_JenisKenderaanPenjaja" CssClass="form-control select2" runat="server"
+                                                <asp:DropDownList ID="DDL_JenisKenderaanPenjaja" Text='<%# Bind("JenisKenderaanPenjaja") %>' CssClass="form-control select2" runat="server"
                                                     DataSourceID="SqlDataSourceJenisKenderaanPenjaja" DataTextField="name" DataValueField="id">
                                                 </asp:DropDownList>
                                                 <asp:SqlDataSource runat="server" ID="SqlDataSourceJenisKenderaanPenjaja" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
@@ -2926,7 +2926,7 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label class="form-label-custom">Jenis Penjaja</label>
-                                            <asp:DropDownList ID="DDL_JenisPenjaja" CssClass="form-control select2" runat="server"
+                                            <asp:DropDownList ID="DDL_JenisPenjaja" Text='<%# Bind("JenisPenjaja") %>' CssClass="form-control select2" runat="server"
                                                 DataSourceID="SqlDataSourceJenisPenjaja" DataTextField="name" DataValueField="id">
                                             </asp:DropDownList>
                                             <asp:SqlDataSource runat="server" ID="SqlDataSourceJenisPenjaja" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
@@ -2938,7 +2938,7 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label class="form-label-custom">Status Tanah</label>
-                                            <asp:DropDownList ID="DDL_StatusTanahPenjaja" CssClass="form-control select2" runat="server"
+                                            <asp:DropDownList ID="DDL_StatusTanahPenjaja" Text='<%# Bind("StatusTanahPenjaja") %>' CssClass="form-control select2" runat="server"
                                                 DataSourceID="SqlDataSourceStatusTanahPenjaja" DataTextField="name" DataValueField="id">
                                             </asp:DropDownList>
                                             <asp:SqlDataSource runat="server" ID="SqlDataSourceStatusTanahPenjaja" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
@@ -2993,8 +2993,8 @@
 
                                     <div class="col-md-3">
                                         <div class="form-group">
-                                            <label class="form-label-custom">Jenis Kenderaan</label>
-                                            <asp:DropDownList ID="DDL_JenisKenderaanPenjaja" CssClass="form-control select2" runat="server"
+                                            <label class="form-label-custom">Jenis Kenderaan (Penjaja Berkenderaan)</label>
+                                            <asp:DropDownList ID="DDL_JenisKenderaanPenjaja" Text='<%# Bind("JenisKenderaanPenjaja") %>' CssClass="form-control select2" runat="server"
                                                 DataSourceID="SqlDataSourceJenisKenderaanPenjaja" DataTextField="name" DataValueField="id">
                                             </asp:DropDownList>
                                             <asp:SqlDataSource runat="server" ID="SqlDataSourceJenisKenderaanPenjaja" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
@@ -3176,8 +3176,8 @@
                                             <label class="form-label-custom">No. Rujukan <span class="text-danger">*</span></label>
                                             <asp:TextBox ID="TB_Rujukan" runat="server"
                                                 Text='<%# Bind("Rujukan") %>' CssClass="form-control" />
-                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator29" runat="server" CssClass="cssRequiredField"
-                                                ControlToValidate="TB_Rujukan" ErrorMessage="Sila Isi No. Rujukan" ForeColor="Red" ValidationGroup="insertForm" Display="Dynamic"></asp:RequiredFieldValidator>
+                                            <%--<asp:RequiredFieldValidator ID="RequiredFieldValidator29" runat="server" CssClass="cssRequiredField"
+                                                ControlToValidate="TB_Rujukan" ErrorMessage="Sila Isi No. Rujukan" ForeColor="Red" ValidationGroup="insertForm" Display="Dynamic"></asp:RequiredFieldValidator>--%>
                                         </div>
                                     </div>
 
