@@ -1065,6 +1065,7 @@ Partial Class appregister1
         Dim noruj As TextBox = DirectCast(FormView1.FindControl("TB_Rujukan"), TextBox)
         Dim lbljenisperniagaan As Label = DirectCast(FormView1.FindControl("Lbl_JenisPerniagaanBaru"), Label)
         Dim lblalamat As Label = DirectCast(FormView1.FindControl("Lbl_AlamatBaru"), Label)
+        Dim rfv As RequiredFieldValidator = TryCast(FormView1.FindControl("RequiredFieldValidator29"), RequiredFieldValidator)
 
         If clrflag Then
             pnlbillboard.Visible = False
@@ -1081,6 +1082,7 @@ Partial Class appregister1
             pnlf.Visible = False
             pnlbatal1.Visible = False
             pnl6.Visible = False
+            rfv.Enabled = True
             Exit Sub
         End If
 
@@ -1182,6 +1184,15 @@ Partial Class appregister1
             Case 27 ' Banting
                 pnla.Visible = True
                 pnl6.Visible = True
+
+                If FormView1.CurrentMode = FormViewMode.Insert Then
+                    If rfv IsNot Nothing Then
+                        rfv.Enabled = False
+                    End If
+
+                    noruj.Text = ""
+                End If
+
                 If FormView1.CurrentMode = FormViewMode.Edit Then
                     BindLokasiList()
                 End If
