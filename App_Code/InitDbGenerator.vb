@@ -46,7 +46,9 @@ Public Class InitDbGenerator
         New SeedDef With {.Table = "dbo.TBL_USER_GROUPMODULE", .KeyCols = {"UGM_Id"}, .PreserveIdentity = True, .Note = "Page / menu (ID dikekalkan - dirujuk oleh m_Id & UGM_ParentId)"},
         New SeedDef With {.Table = "dbo.TBL_USER_GROUPROLE", .KeyCols = {"UGR_UGN_Id", "UGR_UGM_Id"}, .PreserveIdentity = False, .Note = "Kebenaran page bagi setiap kumpulan"},
         New SeedDef With {.Table = "dbo.TBL_USER_GROUPLIST", .KeyCols = {"UGL_UGN_Id", "UGL_Users_Id"}, .PreserveIdentity = False, .Note = "Ahli kumpulan (pengguna dipadankan ikut Users_Name)",
-                          .Lookups = New List(Of SeedLookup) From {New SeedLookup With {.Col = "UGL_Users_Id", .RefTable = "dbo.TBL_USERS", .RefKey = "Users_Name", .RefId = "Users_Id"}}}
+                          .Lookups = New List(Of SeedLookup) From {New SeedLookup With {.Col = "UGL_Users_Id", .RefTable = "dbo.TBL_USERS", .RefKey = "Users_Name", .RefId = "Users_Id"}}},
+        New SeedDef With {.Table = "dbo.LESEN_ReportTemplate", .KeyCols = {"RTID"}, .PreserveIdentity = True, .Note = "Templat laporan (surat)"},
+        New SeedDef With {.Table = "dbo.LESEN_UlasanIKTemplate", .KeyCols = {"UTID"}, .PreserveIdentity = True, .Note = "Templat ulasan IK"}
     }
 
     ' Table dalaman page ini - tidak dibanding / tidak di-script
@@ -544,6 +546,16 @@ Public Class InitDbGenerator
         Dim missCnt = "(SELECT COUNT(*) FROM " & v & " s WHERE NOT EXISTS (SELECT 1 FROM " & tq & " t WHERE " & keyMatch & "))"
         Dim diffCnt = "(SELECT COUNT(*) FROM " & v & " s JOIN " & tq & " t ON " & keyMatch & " WHERE " & notSame & ")"
 
+        ' --- analisis: table sasaran mungkin belum wujud (table baru). Kiraan dalam cabang IF/ELSE kerana
+        '     deferred name resolution membenarkan cabang yang tidak dijalankan merujuk table yang tiada.
+        Dim mv = v & "_miss", dv = v & "_diff"
+        Dim anPrep As New StringBuilder(prep.ToString())
+        anPrep.AppendLine("DECLARE " & mv & " int, " & dv & " int;")
+        anPrep.AppendLine("IF OBJECT_ID(" & NLit(tq) & ", 'U') IS NULL")
+        anPrep.AppendLine("    SELECT " & mv & " = COUNT(*), " & dv & " = 0 FROM " & v & ";")
+        anPrep.AppendLine("ELSE")
+        anPrep.AppendLine("    SELECT " & mv & " = " & missCnt & ", " & dv & " = " & diffCnt & ";")
+
         ' --- run: kemas kini yang berbeza, tambah yang tiada (tiada padam)
         Dim run As New StringBuilder()
         run.AppendLine("SET NOCOUNT ON;")
@@ -561,9 +573,9 @@ Public Class InitDbGenerator
 
         Return New InitStep With {
             .Kind = "DATA", .Name = sd.Table, .Descr = sd.Note,
-            .AnalysisPrep = prep.ToString(),
-            .CheckSql = "CASE WHEN " & missCnt & " > 0 THEN 'MISSING' WHEN " & diffCnt & " > 0 THEN 'DIFFERENT' ELSE 'SAME' END",
-            .DescrSql = "CAST(" & missCnt & " AS varchar(10)) + ' tambah, ' + CAST(" & diffCnt & " AS varchar(10)) + ' kemas kini (" & rows.Rows.Count & " rekod sumber)'",
+            .AnalysisPrep = anPrep.ToString(),
+            .CheckSql = "CASE WHEN " & mv & " > 0 THEN 'MISSING' WHEN " & dv & " > 0 THEN 'DIFFERENT' ELSE 'SAME' END",
+            .DescrSql = "CAST(" & mv & " AS varchar(10)) + ' tambah, ' + CAST(" & dv & " AS varchar(10)) + ' kemas kini (" & rows.Rows.Count & " rekod sumber)'",
             .RunSql = run.ToString().TrimEnd()}
     End Function
 

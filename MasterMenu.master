@@ -126,6 +126,7 @@
       align-items:center;
       gap:28px; /* logo 87px melimpah kotak 42px (~22px setiap sisi); 28px = jarak ~5px dari teks */
     }
+    .brand-mpk{ height:48px; width:auto; object-fit:contain; flex-shrink:0; margin-right:4px; }
     .brand-logo{
       width: 42px;
       height: 42px;
@@ -851,13 +852,14 @@ h1{
         <div class="container">
 		    <a class="navbar-brand text-decoration-none" href='<%= ResolveUrl("~/") %>' >
 		        <div class="brand-wrap">
+			    <img class="brand-mpk" src='<%= ResolveUrl("~/images/logo_mpk_new.png") %>' alt="Majlis Perbandaran Kluang" title="Majlis Perbandaran Kluang">
 			    <div class="brand-logo">
 			        <img src='<%= ResolveUrl("~/images/logo.png") %>' alt="Logo">
 			    </div>
 
 			    <div class="brand-title">
 			        <strong>ProLesen</strong>
-			        <small>MPK Kluang</small>
+			        <small>Majlis Perbandaran Kluang</small>
 			    </div>
 		        </div>
 		    </a>
@@ -1115,6 +1117,9 @@ h1{
           #modalPautanPantas .pl-logo { width:40px; height:40px; border-radius:50%; background:#fff; border:1px solid #e6ecf6; padding:4px; flex-shrink:0;
                                         display:flex; align-items:center; justify-content:center; overflow:hidden; }
           #modalPautanPantas .pl-logo img { max-width:100%; max-height:100%; object-fit:contain; }
+          #modalPautanPantas .pl-logo.pl-ic { border:0; font-size:19px; }
+          #modalPautanPantas .pl-logo.pl-orange { background:#fde5c8; color:#c4670c; }
+          #modalPautanPantas .pl-logo.pl-green { background:#d9f0e2; color:#2e7d4f; }
           #modalPautanPantas .pl-info { min-width:0; flex:1; }
           #modalPautanPantas .pl-name { font-size:14px; font-weight:700; color:#1f2937; line-height:1.25; }
           #modalPautanPantas .pl-desc { font-size:12px; color:#6c757d; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
@@ -1195,7 +1200,7 @@ h1{
 
                                 <div class="pl-stat">
                                     <span class="ic"><i class="bi bi-grid-3x3-gap-fill"></i></span>
-                                    <span><span class="k d-block">Sistem MPK Kluang</span><span class="v d-block">5 sistem dalaman</span></span>
+                                    <span><span class="k d-block">Sistem MPK Kluang</span><span class="v d-block">7 sistem dalaman</span></span>
                                 </div>
                                 <div class="pl-stat">
                                     <span class="ic"><i class="bi bi-globe2"></i></span>
@@ -1216,6 +1221,16 @@ h1{
                                     <a class="pl-row" href="http://prolesen.mpkluang.gov.my/" target="_blank" rel="noopener">
                                         <span class="pl-logo"><img src="<%= ResolveUrl("~/images/pautan/prolesen.png") %>" alt="Pro-Lesen" /></span>
                                         <span class="pl-info"><span class="pl-name d-block">Pro-Lesen</span><span class="pl-desc d-block">Sistem permohonan dan pengurusan lesen</span></span>
+                                        <span class="pl-btn">Buka <i class="bi bi-arrow-up-right"></i></span>
+                                    </a>
+                                    <a class="pl-row" href="http://esistem.mpkluang.gov.my/forbidden/insyst/lesen/Inspect/main/" target="_blank" rel="noopener">
+                                        <span class="pl-logo pl-ic pl-orange"><i class="bi bi-clipboard2-check-fill"></i></span>
+                                        <span class="pl-info"><span class="pl-name d-block">Inspect</span><span class="pl-desc d-block">Sistem pemeriksaan dan penguatkuasaan pelesenan</span></span>
+                                        <span class="pl-btn">Buka <i class="bi bi-arrow-up-right"></i></span>
+                                    </a>
+                                    <a class="pl-row" href="http://esistem.mpkluang.gov.my/forbidden/insyst/lesen/iGreen/main/" target="_blank" rel="noopener">
+                                        <span class="pl-logo pl-ic pl-green"><i class="bi bi-tree-fill"></i></span>
+                                        <span class="pl-info"><span class="pl-name d-block">i-Green</span><span class="pl-desc d-block">Sistem pelesenan aktiviti alam sekitar dan berkaitan</span></span>
                                         <span class="pl-btn">Buka <i class="bi bi-arrow-up-right"></i></span>
                                     </a>
                                     <a class="pl-row" href="http://iperolehan.mpkluang.gov.my/Default.aspx" target="_blank" rel="noopener">
@@ -2458,9 +2473,8 @@ h1{
         <div class="soft-card p-4">
           <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
             <div class="footer-brand">
-              <%-- Susunan: Jata Negara Malaysia -> Johor -> MPK | ProLesen. Logo yang belum ada fail akan disembunyikan (onerror). --%>
+              <%-- Susunan: Johor -> MPK | ProLesen. Logo yang belum ada fail akan disembunyikan (onerror). --%>
               <div class="footer-logos">
-                <img src='<%= ResolveUrl("~/images/logo_malaysia.png") %>' alt="Kerajaan Malaysia" title="Kerajaan Malaysia" onerror="this.style.display='none'" />
                 <img src='<%= ResolveUrl("~/images/logo_johor.png") %>' alt="Kerajaan Negeri Johor" title="Kerajaan Negeri Johor" onerror="this.style.display='none'" />
                 <img src='<%= ResolveUrl("~/images/logo_mpk_new.png") %>' alt="Majlis Perbandaran Kluang" title="Majlis Perbandaran Kluang" />
                 <span class="footer-logo-sep"></span>
