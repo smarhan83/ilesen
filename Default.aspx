@@ -102,7 +102,7 @@
                     <img src="https://i.pravatar.cc/100?img=12" alt="Profile">
                     <div class="d-none d-md-block">
                         <div class="profile-name">Admin ProLesen</div>
-                        <div class="profile-role">MPK Kluang</div>
+                        <div class="profile-role">Majlis Perbandaran Kluang</div>
                     </div>
                     <i class="bi bi-chevron-down ms-1 text-muted"></i>
                     </div>

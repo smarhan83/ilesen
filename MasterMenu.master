@@ -939,7 +939,7 @@ h1{
 
                     <div class="d-none d-md-block">                        
                         <asp:Label ID="lblFullname1" runat="server" CssClass="profile-name"></asp:Label>
-                        <div class="profile-role">MPK Kluang</div>
+                        <div class="profile-role">Majlis Perbandaran Kluang</div>
                     </div>
                     <i class="bi bi-chevron-down ms-1 text-muted"></i>
                     </div>
@@ -1200,7 +1200,7 @@ h1{
 
                                 <div class="pl-stat">
                                     <span class="ic"><i class="bi bi-grid-3x3-gap-fill"></i></span>
-                                    <span><span class="k d-block">Sistem MPK Kluang</span><span class="v d-block">7 sistem dalaman</span></span>
+                                    <span><span class="k d-block">Sistem Majlis Perbandaran Kluang</span><span class="v d-block">7 sistem dalaman</span></span>
                                 </div>
                                 <div class="pl-stat">
                                     <span class="ic"><i class="bi bi-globe2"></i></span>
@@ -1216,7 +1216,7 @@ h1{
                             <div class="pl-main">
                                 <button type="button" class="btn-close pl-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
 
-                                <div class="pl-head"><i class="bi bi-building"></i>Sistem MPK Kluang</div>
+                                <div class="pl-head"><i class="bi bi-building"></i>Sistem Majlis Perbandaran Kluang</div>
                                 <div class="pl-group">
                                     <a class="pl-row" href="http://prolesen.mpkluang.gov.my/" target="_blank" rel="noopener">
                                         <span class="pl-logo"><img src="<%= ResolveUrl("~/images/pautan/prolesen.png") %>" alt="Pro-Lesen" /></span>
@@ -1245,7 +1245,7 @@ h1{
                                     </a>
                                     <a class="pl-row" href="http://esistem.mpkluang.gov.my/eJOB_MPKLUANG/" target="_blank" rel="noopener">
                                         <span class="pl-logo"><img src="<%= ResolveUrl("~/images/pautan/ejob.jpg") %>" alt="eJob" /></span>
-                                        <span class="pl-info"><span class="pl-name d-block">eJob</span><span class="pl-desc d-block">Permohonan jawatan MPK Kluang</span></span>
+                                        <span class="pl-info"><span class="pl-name d-block">eJob</span><span class="pl-desc d-block">Permohonan jawatan Majlis Perbandaran Kluang</span></span>
                                         <span class="pl-btn">Buka <i class="bi bi-arrow-up-right"></i></span>
                                     </a>
                                     <a class="pl-row" href="http://ehartampk.mpkluang.gov.my:83/user/login" target="_blank" rel="noopener">
@@ -1913,7 +1913,7 @@ h1{
                 <div class="sys-head-icon"><i class="bi bi-grid-fill"></i></div>
                 <div>
                   <h3>Sistem Pelesenan Berkaitan</h3>
-                  <p>Akses pantas kepada sistem pelesenan MPK Kluang.</p>
+                  <p>Akses pantas kepada sistem pelesenan Majlis Perbandaran Kluang.</p>
                 </div>
               </div>
 
@@ -2486,7 +2486,7 @@ h1{
               </div>
             </div>
             <div class="small text-muted">
-              &copy; <span id="yearNow"></span> MPK Kluang &bull; All rights reserved
+              &copy; <span id="yearNow"></span> Majlis Perbandaran Kluang &bull; All rights reserved
             </div>
           </div>
         </div>
