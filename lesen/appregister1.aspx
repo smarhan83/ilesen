@@ -4224,7 +4224,7 @@
                                         /*AND a.AlamatBaru LIKE CASE WHEN @Alamat='' THEN a.AlamatBaru ELSE '%'+@Alamat+'%' END */
                                         /*AND a.AnjingAlamat LIKE CASE WHEN @Alamat='%%' THEN a.AnjingAlamat ELSE '%'+@Alamat+'%' END*/ 
                                         AND a.TarikhMohon LIKE '%'+@TarikhMohon+'%' 
-                                        AND a.Rujukan LIKE '%'+@Rujukan+'%' 
+                                        AND (@Rujukan = '' OR @Rujukan = '%%' OR ISNULL(a.Rujukan,'') LIKE '%'+@Rujukan+'%') 
                                         AND (@PemohonIC = '' OR @PemohonIC = '%%' OR ISNULL(c.Pemohon_ICNo,'') LIKE '%'+@PemohonIC+'%' OR ISNULL(c.Pemohon_PassportNo,'') LIKE '%'+@PemohonIC+'%') 
                                         AND (@PemohonTel = '' OR @PemohonTel = '%%' OR ISNULL(c.Pemohon_MobileNo,'') LIKE '%'+@PemohonTel+'%' OR ISNULL(c.Pemohon_TelNo,'') LIKE '%'+@PemohonTel+'%') 
                                         AND (@PemohonEmail = '' OR @PemohonEmail = '%%' OR ISNULL(c.Pemohon_Email,'') LIKE '%'+@PemohonEmail+'%') 
