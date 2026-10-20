@@ -106,6 +106,15 @@ Partial Class appregister1
         chkArkib.InputAttributes("class") = "form-check-input"
         chkArkib.InputAttributes("role") = "switch"
         chkArkib.LabelAttributes("class") = "form-check-label"
+
+        ' ?isarchive=1 : halaman yang sama dibuka dalam mod Arkib (menu Arkib) - sentiasa papar permohonan lulus sahaja.
+        ' Suis disorok dengan CSS (bukan Visible) supaya nilainya kekal dihantar semasa postback.
+        If Request.QueryString("isarchive") = "1" Then
+            chkArkib.Checked = True
+            divArkibSwitch.Style("display") = "none"
+            ButtonAddAssignment.Visible = False
+            If Not Page.IsPostBack Then DDL_Status.SelectedValue = "-1"
+        End If
         DDL_Status.Enabled = Not chkArkib.Checked
 
         If Not Page.IsPostBack Then

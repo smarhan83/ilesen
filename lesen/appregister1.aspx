@@ -3687,7 +3687,7 @@
                                                 <div class="d-flex align-items-center justify-content-between">
                                                     <label class="form-label-custom">Status Permohonan</label>
                                                     <%-- Arkib: papar permohonan yang telah lulus sahaja (status ditapis keluar secara default) --%>
-                                                    <div class="form-check form-switch arkib-switch mb-1" title="Papar permohonan yang telah lulus sahaja">
+                                                    <div class="form-check form-switch arkib-switch mb-1" runat="server" id="divArkibSwitch" title="Papar permohonan yang telah lulus sahaja">
                                                         <asp:CheckBox ID="chkArkib" runat="server" AutoPostBack="true" Text="Arkib" CausesValidation="false"
                                                             OnCheckedChanged="chkArkib_CheckedChanged" />
                                                     </div>
