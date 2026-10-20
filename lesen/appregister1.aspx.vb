@@ -107,15 +107,20 @@ Partial Class appregister1
         chkArkib.InputAttributes("role") = "switch"
         chkArkib.LabelAttributes("class") = "form-check-label"
 
-        ' ?isarchive=1 : halaman yang sama dibuka dalam mod Arkib (menu Arkib) - sentiasa papar permohonan lulus sahaja.
-        ' Suis disorok dengan CSS (bukan Visible) supaya nilainya kekal dihantar semasa postback.
-        If Request.QueryString("isarchive") = "1" Then
-            chkArkib.Checked = True
-            divArkibSwitch.Style("display") = "none"
+        ' ?isarchive=1 : halaman yang sama dibuka dalam mod Arkib (menu Arkib) - papar permohonan yang selesai:
+        '   9 = Peraku Tidak Sokong (tidak lulus), 10 = Permohonan Lulus.
+        ' Tanpa isarchive, kedua-dua status ini tidak dipaparkan (lihat SQL grid & sdsStatus).
+        ' Mod ditentukan oleh URL sahaja; suis Arkib disorok dengan CSS (bukan Visible) dan nilainya ditetapkan setiap request.
+        Dim isArchive As Boolean = (Request.QueryString("isarchive") = "1")
+        chkArkib.Checked = isArchive
+        divArkibSwitch.Style("display") = "none"
+        If isArchive Then
+            sdsStatus.SelectCommand = "select * from (select -1 as ApprStatusID, '-- Status --' as Description " &
+                                      "union all select ApprStatusID, Description from ApprovalStatus where ApprStatusID IN (9, 10)) as tbl1 order by ApprStatusID"
             ButtonAddAssignment.Visible = False
             If Not Page.IsPostBack Then DDL_Status.SelectedValue = "-1"
         End If
-        DDL_Status.Enabled = Not chkArkib.Checked
+        DDL_Status.Enabled = True
 
         If Not Page.IsPostBack Then
             Try

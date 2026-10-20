@@ -3648,13 +3648,13 @@
                                     <div class="form-section-header mt-0 mb-3 d-flex flex-wrap justify-content-between align-items-center gap-2">
                                         <div class="d-flex align-items-center gap-2">
                                             <i class="bi bi-funnel"></i>
-                                            <span>Carian &amp; Penapis Rekod</span>
+                                            <span>Carian Maklumat</span>
                                         </div>
                                         <%--<div>
                                             <button type="button" class="btn btn-outline-primary btn-sm d-inline-flex align-items-center gap-2 shadow-sm" 
                                                 data-bs-toggle="collapse" data-bs-target="#collapseFilterExtra" aria-expanded="false" aria-controls="collapseFilterExtra" id="btnToggleFilterExtra">
                                                 <i class="bi bi-sliders2"></i>
-                                                <span id="btnToggleFilterExtraText">Penapis Tambahan</span>
+                                                <span id="btnToggleFilterExtraText">Carian Tambahan</span>
                                                 <span class="badge bg-primary text-white rounded-pill d-none" id="badgeActiveExtraCount">0</span>
                                                 <i class="bi bi-chevron-down" id="iconFilterCollapse" style="transition: transform 0.25s ease;"></i>
                                             </button>
@@ -3699,7 +3699,7 @@
                                                     SelectCommand="select * from
                                                     (select -1 as ApprStatusID, '-- Status --' as Description
                                                     union all
-                                                    select ApprStatusID,  Description from ApprovalStatus where ApprStatusID &lt;&gt; 10
+                                                    select ApprStatusID,  Description from ApprovalStatus where ApprStatusID NOT IN (9, 10)
                                                     ) as tbl1 order by ApprStatusID "></asp:SqlDataSource>
                                             </div>
                                         </div>
@@ -3734,9 +3734,9 @@
                                         <div class="p-3 mb-3 rounded-3 border shadow-sm" style="background-color: #f8fafc; border-color: #e2e8f0 !important;">
                                             <div class="d-flex align-items-center justify-content-between mb-3 pb-2 border-bottom">
                                                 <span class="text-secondary small fw-bold text-uppercase d-inline-flex align-items-center gap-1">
-                                                    <i class="bi bi-sliders text-primary"></i>Penapis Tambahan
+                                                    <i class="bi bi-sliders text-primary"></i>Carian Tambahan
                                                 </span>
-                                                <button type="button" class="btn btn-link btn-sm text-decoration-none p-0 text-muted small" id="btnResetExtraOnly" title="Kosongkan penapis tambahan sahaja">
+                                                <button type="button" class="btn btn-link btn-sm text-decoration-none p-0 text-muted small" id="btnResetExtraOnly" title="Kosongkan carian tambahan sahaja">
                                                     <i class="bi bi-arrow-counterclockwise me-1"></i>Kosongkan Pilihan Ini
                                                 </button>
                                             </div>
@@ -3889,7 +3889,23 @@
                                                         </div>
                                                     </div>
 
-                                                    <!-- 7. Catatan Permohonan -->
+                                                    <!-- 7. Tahun (tahun tarikh mohon) -->
+                                                    <div class="col-lg-3 col-md-6 col-12" id="wrapPermohonanTahun">
+                                                        <div class="form-group mb-0">
+                                                            <label class="form-label-custom">Tahun</label>
+                                                            <asp:DropDownList ID="DDL_Tahun" runat="server" AutoPostBack="false" CssClass="form-control select2"
+                                                                DataSourceID="sdsTahun" DataTextField="TahunName" DataValueField="TahunValue">
+                                                            </asp:DropDownList>
+                                                            <asp:SqlDataSource runat="server" ID="sdsTahun" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
+                                                                SelectCommand="select 0 as TahunValue, '-- Tahun --' as TahunName, 9999 as SortKey
+                                                                union all
+                                                                select YEAR(TarikhMohon), CAST(YEAR(TarikhMohon) AS varchar(4)), YEAR(TarikhMohon)
+                                                                from LESEN_Permohonan where TarikhMohon is not null group by YEAR(TarikhMohon)
+                                                                order by SortKey desc"></asp:SqlDataSource>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- 8. Catatan Permohonan -->
                                                     <div class="col-lg-6 col-md-12 col-12" id="wrapPermohonanRemarks">
                                                         <div class="form-group mb-0">
                                                             <label class="form-label-custom">Catatan Permohonan</label>
@@ -3908,7 +3924,7 @@
                                             <button type="button" class="btn btn-outline-secondary btn-sm d-inline-flex align-items-center gap-1 shadow-sm" 
                                                 data-bs-toggle="collapse" data-bs-target="#collapseFilterExtra" aria-expanded="false" aria-controls="collapseFilterExtra" id="btnToggleFilterBottom">
                                                 <i class="bi bi-sliders2"></i>
-                                                <span id="btnToggleFilterBottomText">Penapis Tambahan</span>
+                                                <span id="btnToggleFilterBottomText">Carian Tambahan</span>
                                                 <span class="badge bg-primary text-white rounded-pill d-none ms-1" id="badgeActiveExtraCountBottom">0</span>
                                                 <i class="bi bi-chevron-down ms-1" id="iconFilterCollapseBottom" style="transition: transform 0.25s ease;"></i>
                                             </button>
@@ -4169,7 +4185,8 @@
                                         AND a.Permohonan_PemohonID = CASE WHEN @pemohonID = 0 THEN a.Permohonan_PemohonID ELSE @pemohonID END 
                                         AND (@namaSyarikat IS NULL OR @namaSyarikat = '' OR @namaSyarikat = '%%' OR ISNULL(a.NamaSyarikat,'') LIKE '%'+@namaSyarikat+'%' OR ISNULL(a.NamaBaruSyarikat,'') LIKE '%'+@namaSyarikat+'%')
                                         AND a.IsBatal = CASE WHEN @batalID = 2 THEN a.IsBatal ELSE @batalID END 
-                                        AND a.Is24Jam = CASE WHEN @risikoID = 2 THEN a.Is24Jam ELSE @risikoID END 
+                                        AND a.Is24Jam = CASE WHEN @risikoID = 2 THEN a.Is24Jam ELSE @risikoID END
+                                        AND (@tahun = 0 OR YEAR(a.TarikhMohon) = @tahun)
                                         AND (
                                             (@isExpiredPermit = 1 
                                                 AND a.TarikhSuratKelulusan IS NOT NULL 
@@ -4179,8 +4196,8 @@
                                             )
                                             OR
                                             (@isExpiredPermit = 0
-                                                AND ((@arkib = 1 AND a.StatusID = 10)
-                                                     OR (@arkib = 0 AND a.StatusID &lt;&gt; 10 AND a.StatusID = CASE WHEN @statusID = -1 THEN a.StatusID ELSE @statusID END))
+                                                AND ((@arkib = 1 AND a.StatusID IN (9, 10) AND a.StatusID = CASE WHEN @statusID = -1 THEN a.StatusID ELSE @statusID END)
+                                                     OR (@arkib = 0 AND a.StatusID NOT IN (9, 10) AND a.StatusID = CASE WHEN @statusID = -1 THEN a.StatusID ELSE @statusID END))
                                                 AND a.CreatorID = CASE WHEN @creatorID = '0' THEN a.CreatorID ELSE @creatorID END
                                             )
                                         ) 
@@ -4214,6 +4231,7 @@
                                     <asp:ControlParameter ControlID="txtFilterSyarikat" PropertyName="Text" DefaultValue="%%" Name="namaSyarikat"></asp:ControlParameter>
                                     <asp:ControlParameter ControlID="DDL_Pembatalan" PropertyName="SelectedValue" Name="batalID"></asp:ControlParameter>
                                     <asp:ControlParameter ControlID="DDL_Risiko" PropertyName="SelectedValue" Name="risikoID"></asp:ControlParameter>
+                                    <asp:ControlParameter ControlID="DDL_Tahun" PropertyName="SelectedValue" Name="tahun" Type="Int32" DefaultValue="0"></asp:ControlParameter>
                                     <asp:ControlParameter ControlID="DDL_Status" PropertyName="SelectedValue" Name="statusID"></asp:ControlParameter>
                                     <asp:ControlParameter ControlID="chkArkib" PropertyName="Checked" Name="arkib" Type="Boolean"></asp:ControlParameter>
                                     <asp:ControlParameter ControlID="DDL_CreatedBy" PropertyName="SelectedValue" Name="creatorID"></asp:ControlParameter>
@@ -6728,6 +6746,10 @@ ORDER BY
                 var $d = $('[id$="DDL_Pembatalan"]');
                 return $d.length && $d.val() && $d.val() !== '2' && $d.val() !== '';
             }
+            function isTahunActive() {
+                var $d = $('[id$="DDL_Tahun"]');
+                return $d.length && $d.val() && $d.val() !== '0' && $d.val() !== '';
+            }
             function isRemarksActive() {
                 var $t = $('[id$="txtFilterRemarksFail"]');
                 return $t.length && $t.val() && $t.val().trim() !== '';
@@ -6752,6 +6774,7 @@ ORDER BY
                 if (isAkaunActive()) c++;
                 if (isRisikoActive()) c++;
                 if (isPembatalanActive()) c++;
+                if (isTahunActive()) c++;
                 if (isRemarksActive()) c++;
                 return c;
             }
@@ -6786,7 +6809,7 @@ ORDER BY
             function updateUiState(isOpen) {
                 if ($hf.length) $hf.val(isOpen ? '1' : '0');
 
-                var text = isOpen ? 'Kurang Penapis' : 'Penapis Tambahan';
+                var text = isOpen ? 'Tutup Carian Tambahan' : 'Carian Tambahan';
                 if ($topText.length) $topText.text(text);
                 if ($bottomText.length) $bottomText.text(text);
 
@@ -6843,6 +6866,7 @@ ORDER BY
                 if ($dPemohon.length) $dPemohon.val('0').trigger('change.select2');
                 if ($dRisiko.length) $dRisiko.val('2').trigger('change.select2');
                 if ($dPembatalan.length) $dPembatalan.val('2').trigger('change.select2');
+                $('[id$="DDL_Tahun"]').val('0').trigger('change.select2');
                 if ($lstLesen.length) $lstLesen.val(null).trigger('change.select2');
                 if ($hfLesen.length) $hfLesen.val('');
 
