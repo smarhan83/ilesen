@@ -14,7 +14,7 @@ Partial Class sepandukSemakanIK
     Private Const SESS_ULASAN As String = "SepandukIK_TempUlasan"
     Private Const SESS_LAMPIRAN As String = "SepandukIK_TempLampiran"
     Private Const SESS_PERMOHONANID As String = "SepandukIK_PilihPermohonanID"
-    Private Const SESS_STATUSLESEN As String = "SepandukIK_StatusLesen"           ' 'Tamat Tempoh' / 'Tidak Berdaftar'
+    Private Const SESS_STATUSLESEN As String = "SepandukIK_StatusLesen"           ' 'Berdaftar' / 'Tamat Tempoh' / 'Tidak Berdaftar'
     Private Const SESS_NAMASYARIKAT As String = "SepandukIK_NamaSyarikat"
     Private Const SESS_NOPENDAFTARAN As String = "SepandukIK_NoPendaftaran"
     Private Const SESS_TARIKHLUPUT As String = "SepandukIK_TarikhLuput"
@@ -455,7 +455,8 @@ Partial Class sepandukSemakanIK
         If e.CommandName = "PilihRekod" Then
             Dim permohonanId As Integer = CInt(e.CommandArgument)
             MuatMaklumatPermohonan(permohonanId)
-            BukaBorangRekod(statusLesen:="Tamat Tempoh")
+            ' Status lesen dikira daripada tarikh pengesahan permohonan (bukan ditetapkan tetap)
+            BukaBorangRekod(statusLesen:=KiraStatusLesen(permohonanId), dijumpai:=True)
 
             ' Cari row index yang berkaitan dengan butang yang diklik
             Dim btn As LinkButton = DirectCast(e.CommandSource, LinkButton)
@@ -487,6 +488,28 @@ Partial Class sepandukSemakanIK
         End Using
     End Sub
 
+    ' Status lesen bagi rekod yang dijumpai: dalam tempoh pengesahan = Berdaftar, luar tempoh = Tamat Tempoh, tiada tarikh = Tidak Berdaftar.
+    ' Logik sama dengan GetStatusIklan (banner carian).
+    Private Function KiraStatusLesen(permohonanId As Integer) As String
+        Dim connStr As String = ConfigurationManager.ConnectionStrings("webcon_ConnectionStr").ConnectionString
+        Using conn As New SqlConnection(connStr)
+            Using cmd As New SqlCommand("SELECT TarikhPengesahanBanting1, TarikhPengesahanBanting2 FROM LESEN_Permohonan WHERE Permohonan_ID = @ID", conn)
+                cmd.Parameters.AddWithValue("@ID", permohonanId)
+                conn.Open()
+                Using rdr = cmd.ExecuteReader()
+                    If rdr.Read() Then
+                        If IsDBNull(rdr("TarikhPengesahanBanting1")) OrElse IsDBNull(rdr("TarikhPengesahanBanting2")) Then Return "Tidak Berdaftar"
+                        Dim t1 As DateTime = Convert.ToDateTime(rdr("TarikhPengesahanBanting1")).Date
+                        Dim t2 As DateTime = Convert.ToDateTime(rdr("TarikhPengesahanBanting2")).Date
+                        If DateTime.Now.Date >= t1 AndAlso DateTime.Now.Date <= t2 Then Return "Berdaftar"
+                        Return "Tamat Tempoh"
+                    End If
+                End Using
+            End Using
+        End Using
+        Return "Tidak Berdaftar"
+    End Function
+
     '===================== PEGAWAI IK: TIADA REKOD / TIDAK BERDAFTAR =====================
     'Protected Sub btnTiadaRekod_Click(sender As Object, e As EventArgs) Handles btnTiadaRekod.Click
     '    Session.Remove(SESS_PERMOHONANID)
@@ -506,7 +529,7 @@ Partial Class sepandukSemakanIK
         BukaBorangRekod(statusLesen:="Tidak Berdaftar")
     End Sub
 
-    Private Sub BukaBorangRekod(statusLesen As String)
+    Private Sub BukaBorangRekod(statusLesen As String, Optional dijumpai As Boolean = False)
         Session.Item(SESS_STATUSLESEN) = statusLesen
         Session.Item(SESS_ULASAN) = New List(Of String)
         Session.Item(SESS_LAMPIRAN) = New List(Of KeyValuePair(Of String, String))  ' Key=FileName, Value=FilePath
@@ -514,8 +537,8 @@ Partial Class sepandukSemakanIK
         pnlCarian.Visible = False
         pnlRekodSemakan.Visible = True
 
-        If statusLesen = "Tamat Tempoh" Then
-            litTajukRekod.Text = "Rekod Ulasan - Lesen Tamat Tempoh"
+        If dijumpai Then
+            litTajukRekod.Text = "Rekod Ulasan - Lesen " & statusLesen
             litJenisCatatan.Text = "Ulasan"
             pnlMaklumatDijumpai.Visible = True
             'litNamaSyarikat.Text = CStr(Session.Item(SESS_NAMASYARIKAT))
@@ -643,7 +666,8 @@ Partial Class sepandukSemakanIK
         End If
 
         Dim statusLesen As String = CStr(Session.Item(SESS_STATUSLESEN))
-        Dim jenisCatatan As String = If(statusLesen = "Tamat Tempoh", "Ulasan", "Pemerhatian")
+        ' Ulasan = rekod permohonan dijumpai (SESS_PERMOHONANID ditetapkan); Pemerhatian = tiada rekod / tidak berdaftar
+        Dim jenisCatatan As String = If(Session.Item(SESS_PERMOHONANID) IsNot Nothing, "Ulasan", "Pemerhatian")
         Dim permohonanId As Object = If(Session.Item(SESS_PERMOHONANID) IsNot Nothing, Session.Item(SESS_PERMOHONANID), DBNull.Value)
         Dim namaSyarikat As Object = If(Session.Item(SESS_NAMASYARIKAT) IsNot Nothing, Session.Item(SESS_NAMASYARIKAT), DBNull.Value)
         Dim noPendaftaran As Object = If(Session.Item(SESS_NOPENDAFTARAN) IsNot Nothing, Session.Item(SESS_NOPENDAFTARAN), DBNull.Value)
