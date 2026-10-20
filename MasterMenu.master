@@ -1235,7 +1235,7 @@ h1{
                                     </a>
                                     <a class="pl-row" href="http://iperolehan.mpkluang.gov.my/Default.aspx" target="_blank" rel="noopener">
                                         <span class="pl-logo"><img src="<%= ResolveUrl("~/images/pautan/eperolehan.jpg") %>" alt="e-Perolehan" /></span>
-                                        <span class="pl-info"><span class="pl-name d-block">e-Perolehan</span><span class="pl-desc d-block">Sistem perolehan &amp; tender MPK</span></span>
+                                        <span class="pl-info"><span class="pl-name d-block">e-Perolehan</span><span class="pl-desc d-block">Sistem perolehan &amp; tender Majlis Perbandaran Kluang</span></span>
                                         <span class="pl-btn">Buka <i class="bi bi-arrow-up-right"></i></span>
                                     </a>
                                     <a class="pl-row" href="https://aplas.mpkluang.gov.my/site/home" target="_blank" rel="noopener">
@@ -1250,7 +1250,7 @@ h1{
                                     </a>
                                     <a class="pl-row" href="http://ehartampk.mpkluang.gov.my:83/user/login" target="_blank" rel="noopener">
                                         <span class="pl-logo"><img src="<%= ResolveUrl("~/images/pautan/eharta.jpg") %>" alt="eHarta" /></span>
-                                        <span class="pl-info"><span class="pl-name d-block">eHarta</span><span class="pl-desc d-block">Sistem pengurusan harta MPK</span></span>
+                                        <span class="pl-info"><span class="pl-name d-block">eHarta</span><span class="pl-desc d-block">Sistem pengurusan harta Majlis Perbandaran Kluang</span></span>
                                         <span class="pl-btn">Buka <i class="bi bi-arrow-up-right"></i></span>
                                     </a>
                                 </div>
@@ -1807,93 +1807,46 @@ h1{
 
     <section class="py-4">
       <div class="container">
-        <div class="row g-4">
-
-          <div class="col-lg-4">
-            <div class="soft-card p-4 h-100">
-              <div class="d-flex align-items-start gap-3">
-                <div class="feature-icon">
-                  <i class="bi bi-file-earmark-text"></i>
-                </div>
-                <div>
-                  <div class="section-title">Permohonan Berstruktur</div>
-                  <p class="section-subtitle">
-                    Borang permohonan direka kemas & mudah diisi untuk pengguna awam.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-lg-4">
-            <div class="soft-card p-4 h-100">
-              <div class="d-flex align-items-start gap-3">
-                <div class="feature-icon">
-                  <i class="bi bi-clock-history"></i>
-                </div>
-                <div>
-                  <div class="section-title">Jejak Status Permohonan</div>
-                  <p class="section-subtitle">
-                    Semak status secara real-time untuk kelulusan, semakan & tindakan.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-lg-4">
-            <div class="soft-card p-4 h-100">
-              <div class="d-flex align-items-start gap-3">
-                <div class="feature-icon">
-                  <i class="bi bi-shield-lock"></i>
-                </div>
-                <div>
-                  <div class="section-title">Keselamatan & Akses</div>
-                  <p class="section-subtitle">
-                    Kawalan akses pengguna mengikut peranan (role) untuk admin & agensi.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-        </div>
 
         <style>
-          /* ---------- Sistem Pelesenan Berkaitan ---------- */
+          /* ---------- Tajuk seksyen ---------- */
           .sys-head { display:flex; align-items:center; gap:14px; margin-bottom:18px; }
           .sys-head-icon { width:44px; height:44px; border-radius:12px; background:#eef4ff; color:#2563eb;
                            display:flex; align-items:center; justify-content:center; font-size:22px; flex-shrink:0; }
           .sys-head h3 { font-size:20px; font-weight:800; color:#1e293b; margin:0; }
           .sys-head p { margin:2px 0 0; color:#64748b; font-size:14px; }
 
-          .sys-tile { position:relative; overflow:hidden; height:100%; border-radius:14px; padding:20px;
-                      border:1px solid var(--sys-border); background:var(--sys-bg);
-                      display:flex; flex-direction:column; transition:transform .15s ease, box-shadow .15s ease; }
-          .sys-tile:hover { transform:translateY(-2px); box-shadow:0 10px 24px rgba(15,23,42,.08); }
-          .sys-tile .sys-bg-icon { position:absolute; right:-10px; top:-6px; font-size:96px; color:var(--sys-color);
-                                   opacity:.08; pointer-events:none; }
-          .sys-tile .sys-icon { width:56px; height:56px; border-radius:50%; background:var(--sys-soft); color:var(--sys-color);
-                                display:flex; align-items:center; justify-content:center; font-size:26px; margin-bottom:12px; }
-          .sys-tile h4 { font-size:22px; font-weight:800; color:var(--sys-dark); margin:0 0 4px; }
-          .sys-tile p { color:#475569; font-size:14px; margin:0 0 16px; flex-grow:1; }
-          .sys-tile .sys-actions { display:flex; align-items:center; justify-content:space-between; gap:10px; }
-          .sys-tile .btn-sys { background:var(--sys-color); color:#fff; border:0; border-radius:10px; font-weight:700;
-                               padding:9px 18px; display:inline-flex; align-items:center; gap:8px; text-decoration:none; flex-grow:1; justify-content:center; }
-          .sys-tile .btn-sys:hover { filter:brightness(.92); color:#fff; }
-          .sys-tile .sys-chevron { color:var(--sys-dark); font-size:18px; text-decoration:none; }
-
-          .sys-green  { --sys-color:#2e7d4f; --sys-dark:#1f5c39; --sys-soft:#d9f0e2; --sys-bg:#f3faf6; --sys-border:#e1f1e7; }
-          .sys-orange { --sys-color:#c4670c; --sys-dark:#7a3f06; --sys-soft:#fde5c8; --sys-bg:#fff8ef; --sys-border:#fbead4; }
-          .sys-blue   { --sys-color:#2563eb; --sys-dark:#1e3a8a; --sys-soft:#dbe7fd; --sys-bg:#f3f7ff; --sys-border:#e1eafb; }
 
           /* ---------- Akses Pantas ---------- */
-          .qa-link { display:flex; align-items:center; gap:12px; width:100%; padding:12px 16px; border-radius:10px;
-                     border:1px solid #dbe4f3; background:#f5f8fe; color:#1e3a8a; font-weight:700; text-decoration:none;
-                     transition:background .15s ease; }
-          .qa-link:hover { background:#e8effc; color:#1e3a8a; }
-          .qa-link i:first-child { font-size:18px; color:#2563eb; }
-          .qa-link .qa-chevron { margin-left:auto; color:#1e3a8a; }
+          /* Kotak ciri sistem - kad ringkas mendatar */
+          .soft-card.feat-tile { display:flex; flex-direction:row; align-items:center; gap:14px; padding:16px 18px !important; }
+          .feat-tile .feature-icon { width:46px; height:46px; border-radius:50%; flex-shrink:0; margin:0; background:var(--ft-soft); border:0; }
+          .feat-tile .feature-icon i { color:var(--ft-color); font-size:21px; }
+          .feat-tile .section-title { font-size:13px; font-weight:800; letter-spacing:.02em; text-transform:uppercase; color:var(--ft-dark); margin:0 0 2px; }
+          .feat-tile .section-subtitle { margin:0; font-size:13px; line-height:1.45; color:#475569; }
+          .ft-blue   { --ft-color:#2563eb; --ft-dark:#1e3a8a; --ft-soft:#dbe7fd; }
+          .ft-indigo { --ft-color:#4338ca; --ft-dark:#312e81; --ft-soft:#e3e1fb; }
+          .ft-green  { --ft-color:#2e7d4f; --ft-dark:#1f5c39; --ft-soft:#d9f0e2; }
+
+          /* ---------- Akses Pantas (kad 2 x 2) ---------- */
+          .qa-panel { background:linear-gradient(135deg,#f5f8ff 0%,#fbfcff 60%,#f4f7ff 100%) !important; }
+          .qa-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
+          .qa-card { display:flex; align-items:center; gap:14px; width:100%; padding:14px 16px; border-radius:14px; text-decoration:none !important;
+                     background:var(--qa-bg); border:1px solid var(--qa-border); color:inherit; transition:transform .15s ease, box-shadow .15s ease; }
+          .qa-card:hover { transform:translateY(-2px); box-shadow:0 10px 24px rgba(15,23,42,.08); color:inherit; }
+          .qa-ic { width:50px; height:50px; border-radius:14px; flex-shrink:0; display:flex; align-items:center; justify-content:center;
+                   background:var(--qa-soft); color:var(--qa-color); font-size:24px; }
+          .qa-txt { min-width:0; flex:1; }
+          .qa-title { display:block; font-size:15px; font-weight:800; color:var(--qa-dark); line-height:1.25; }
+          .qa-desc { display:block; font-size:12.5px; color:#64748b; margin-top:2px; line-height:1.4; }
+          .qa-go { width:34px; height:34px; border-radius:50%; flex-shrink:0; display:flex; align-items:center; justify-content:center;
+                   background:var(--qa-soft); color:var(--qa-color); font-size:16px; transition:background .15s ease, color .15s ease; }
+          .qa-card:hover .qa-go { background:var(--qa-color); color:#fff; }
+          .qa-blue   { --qa-color:#2563eb; --qa-dark:#1e3a8a; --qa-soft:#dbe7fd; --qa-bg:#f3f7ff; --qa-border:#e1eafb; }
+          .qa-purple { --qa-color:#6d4bd1; --qa-dark:#3b2a86; --qa-soft:#e7e0fb; --qa-bg:#f7f4ff; --qa-border:#e8e1fb; }
+          .qa-orange { --qa-color:#c4670c; --qa-dark:#7a3f06; --qa-soft:#fde5c8; --qa-bg:#fff8ef; --qa-border:#fbead4; }
+          .qa-green  { --qa-color:#2e7d4f; --qa-dark:#1f5c39; --qa-soft:#d9f0e2; --qa-bg:#f3faf6; --qa-border:#e1f1e7; }
+          @media (max-width: 767.98px) { .qa-grid { grid-template-columns:1fr; } }
 
           /* ---------- Pengumuman ---------- */
           .ann-item { display:flex; gap:12px; height:100%; }
@@ -1904,101 +1857,81 @@ h1{
           }
         </style>
 
-        <div class="row g-4 mt-1">
+        <div class="row g-3 mt-1">
 
-          <!-- Sistem Pelesenan Berkaitan -->
-          <div class="col-lg-8">
-            <div class="soft-card p-4 h-100">
-              <div class="sys-head">
-                <div class="sys-head-icon"><i class="bi bi-grid-fill"></i></div>
-                <div>
-                  <h3>Sistem Pelesenan Berkaitan</h3>
-                  <p>Akses pantas kepada sistem pelesenan Majlis Perbandaran Kluang.</p>
-                </div>
-              </div>
-
-              <div class="row g-3">
-                <div class="col-md-4">
-                  <div class="sys-tile sys-green">
-                    <i class="bi bi-tree-fill sys-bg-icon"></i>
-                    <div class="sys-icon"><i class="bi bi-tree-fill"></i></div>
-                    <h4>i-Green</h4>
-                    <p>Sistem pelesenan aktiviti alam sekitar dan berkaitan.</p>
-                    <div class="sys-actions">
-                      <a class="btn-sys" href="http://esistem.mpkluang.gov.my/forbidden/insyst/lesen/iGreen/main/" target="_blank" rel="noopener">
-                        Buka Sistem <i class="bi bi-box-arrow-up-right"></i>
-                      </a>
-                      <a class="sys-chevron" href="http://esistem.mpkluang.gov.my/forbidden/insyst/lesen/iGreen/main/" target="_blank" rel="noopener" aria-label="Buka i-Green">
-                        <i class="bi bi-chevron-right"></i>
-                      </a>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="col-md-4">
-                  <div class="sys-tile sys-orange">
-                    <i class="bi bi-clipboard2-check-fill sys-bg-icon"></i>
-                    <div class="sys-icon"><i class="bi bi-clipboard2-check-fill"></i></div>
-                    <h4>Inspect</h4>
-                    <p>Sistem pemeriksaan dan penguatkuasaan pelesenan.</p>
-                    <div class="sys-actions">
-                      <a class="btn-sys" href="http://esistem.mpkluang.gov.my/forbidden/insyst/lesen/Inspect/main/" target="_blank" rel="noopener">
-                        Buka Sistem <i class="bi bi-box-arrow-up-right"></i>
-                      </a>
-                      <a class="sys-chevron" href="http://esistem.mpkluang.gov.my/forbidden/insyst/lesen/Inspect/main/" target="_blank" rel="noopener" aria-label="Buka Inspect">
-                        <i class="bi bi-chevron-right"></i>
-                      </a>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="col-md-4">
-                  <div class="sys-tile sys-blue">
-                    <i class="bi bi-file-earmark-text-fill sys-bg-icon"></i>
-                    <div class="sys-icon"><i class="bi bi-file-earmark-text-fill"></i></div>
-                    <h4>ProLesen</h4>
-                    <p>Sistem permohonan dan pengurusan lesen.</p>
-                    <div class="sys-actions">
-                      <a class="btn-sys" href="http://prolesen.mpkluang.gov.my/" target="_blank" rel="noopener">
-                        Buka Sistem <i class="bi bi-box-arrow-up-right"></i>
-                      </a>
-                      <a class="sys-chevron" href="http://prolesen.mpkluang.gov.my/" target="_blank" rel="noopener" aria-label="Buka ProLesen">
-                        <i class="bi bi-chevron-right"></i>
-                      </a>
-                    </div>
-                  </div>
-                </div>
+          <!-- Ciri-ciri sistem (3 kotak) -->
+          <div class="col-lg-4">
+            <div class="soft-card feat-tile ft-blue h-100">
+              <div class="feature-icon"><i class="bi bi-file-earmark-text"></i></div>
+              <div>
+                <div class="section-title">Permohonan Berstruktur</div>
+                <p class="section-subtitle">Borang permohonan direka kemas &amp; mudah diisi untuk pengguna awam.</p>
               </div>
             </div>
           </div>
 
-          <!-- Akses Pantas -->
           <div class="col-lg-4">
-            <div class="soft-card p-4 h-100">
+            <div class="soft-card feat-tile ft-indigo h-100">
+              <div class="feature-icon"><i class="bi bi-clock-history"></i></div>
+              <div>
+                <div class="section-title">Jejak Status Permohonan</div>
+                <p class="section-subtitle">Semak status secara real-time untuk kelulusan, semakan &amp; tindakan.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-4">
+            <div class="soft-card feat-tile ft-green h-100">
+              <div class="feature-icon"><i class="bi bi-shield-check"></i></div>
+              <div>
+                <div class="section-title">Keselamatan &amp; Akses</div>
+                <p class="section-subtitle">Kawalan akses pengguna mengikut peranan (role) untuk admin &amp; agensi.</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="row g-4 mt-1">
+
+          <!-- Akses Pantas -->
+          <div class="col-12">
+            <div class="soft-card qa-panel p-4 h-100">
               <div class="sys-head">
                 <div class="sys-head-icon"><i class="bi bi-lightning-charge-fill"></i></div>
                 <div>
                   <div class="section-title mb-0">Akses Pantas</div>
-                  <p>Pautan yang kerap digunakan</p>
+                  <p>Pautan yang kerap digunakan untuk memudahkan urusan harian anda.</p>
                 </div>
               </div>
 
-              <div class="d-grid gap-2">
+              <div class="qa-grid">
                 <asp:LinkButton ID="LinkButton1"
                     runat="server"
-                    CssClass="qa-link"
+                    CssClass="qa-card qa-blue"
                     OnClick="lnkSemak_Click">
-                    <i class="bi bi-file-earmark-text"></i>
-                    Semak Permohonan
-                    <i class="bi bi-chevron-right qa-chevron"></i>
+                    <span class="qa-ic"><i class="bi bi-file-earmark-text"></i></span>
+                    <span class="qa-txt"><span class="qa-title">Semak Permohonan</span><span class="qa-desc">Semak status permohonan lesen anda dengan cepat.</span></span>
+                    <span class="qa-go"><i class="bi bi-arrow-right"></i></span>
                 </asp:LinkButton>
-                <a class="qa-link" href="#"><i class="bi bi-book"></i>Manual Agensi &amp; Jabatan<i class="bi bi-chevron-right qa-chevron"></i></a>
-                <a class="qa-link" href="#" data-bs-toggle="modal" data-bs-target="#modalPautanPantas"><i class="bi bi-lightning-charge"></i>Pautan Pantas<i class="bi bi-chevron-right qa-chevron"></i></a>
-                <a class="qa-link" href="#" data-bs-toggle="modal" data-bs-target="#modalHubungi"><i class="bi bi-telephone-fill"></i>Hubungi Kami<i class="bi bi-chevron-right qa-chevron"></i></a>
+                <a class="qa-card qa-purple" href="#">
+                    <span class="qa-ic"><i class="bi bi-book"></i></span>
+                    <span class="qa-txt"><span class="qa-title">Manual Agensi &amp; Jabatan</span><span class="qa-desc">Panduan pengguna, garis panduan dan dokumen rujukan.</span></span>
+                    <span class="qa-go"><i class="bi bi-arrow-right"></i></span>
+                </a>
+                <a class="qa-card qa-orange" href="#" data-bs-toggle="modal" data-bs-target="#modalPautanPantas">
+                    <span class="qa-ic"><i class="bi bi-link-45deg"></i></span>
+                    <span class="qa-txt"><span class="qa-title">Pautan Pantas</span><span class="qa-desc">Akses kepada pautan penting dan sistem berkaitan.</span></span>
+                    <span class="qa-go"><i class="bi bi-arrow-right"></i></span>
+                </a>
+                <a class="qa-card qa-green" href="#" data-bs-toggle="modal" data-bs-target="#modalHubungi">
+                    <span class="qa-ic"><i class="bi bi-telephone-fill"></i></span>
+                    <span class="qa-txt"><span class="qa-title">Hubungi Kami</span><span class="qa-desc">Dapatkan bantuan dan maklumat lanjut daripada kami.</span></span>
+                    <span class="qa-go"><i class="bi bi-arrow-right"></i></span>
+                </a>
               </div>
             </div>
           </div>
-
           <!-- Pengumuman & Makluman -->
           <div class="col-12">
             <div class="soft-card p-4">
@@ -3025,7 +2958,7 @@ h1{
                 <button type="button" class="pl-chat-x" id="plChatClose" aria-label="Tutup">&times;</button>
             </div>
             <div class="pl-chat-body">
-                <div class="pl-chat-msg">Hai! Saya Encik Lesen, pembantu ProLesen MPK. Tanya saya tentang permohonan lesen, dokumen diperlukan, proses kelulusan dan cara menggunakan sistem.</div>
+                <div class="pl-chat-msg">Hai! Saya Encik Lesen, pembantu ProLesen Majlis Perbandaran Kluang. Tanya saya tentang permohonan lesen, dokumen diperlukan, proses kelulusan dan cara menggunakan sistem.</div>
                 <div class="pl-chat-chips">
                     <span>Cara mohon lesen</span><span>Dokumen diperlukan</span><span>Semak status</span>
                 </div>
