@@ -1346,8 +1346,8 @@
                                                                             <asp:FileUpload ID="fuBantingImg" runat="server" CssClass="form-control form-control-sm" accept="image/*" />
                                                                         </div>
                                                                         <div class="col-md-5">
-                                                                            <label class="form-label small mb-1">Catatan:</label>
-                                                                            <asp:TextBox ID="txtBantingRemarks" runat="server" CssClass="form-control form-control-sm" placeholder="Catatan / Remarks (pilihan)" />
+                                                                            <label class="form-label small mb-1">Tajuk Visual:</label>
+                                                                            <asp:TextBox ID="txtBantingRemarks" runat="server" CssClass="form-control form-control-sm" placeholder="Tajuk Visual" />
                                                                         </div>
                                                                         <div class="col-md-2 mt-2 mt-md-0 d-flex align-items-end">
                                                                             <asp:LinkButton ID="btnUploadBantingImg" runat="server" OnClick="btnUploadBantingImg_Click" CommandArgument='<%# Eval("Lokasi_ID") %>' 
@@ -1376,7 +1376,7 @@
                                                                                     </ItemTemplate>
                                                                                 </asp:TemplateField>
                                                                                 <asp:BoundField DataField="UniqueID" HeaderText="ID Unik" ItemStyle-Width="25%" ItemStyle-VerticalAlign="Middle" ItemStyle-CssClass="small font-weight-bold" />
-                                                                                <asp:BoundField DataField="Remarks" HeaderText="Catatan" NullDisplayText="-" ItemStyle-Width="35%" ItemStyle-VerticalAlign="Middle" ItemStyle-CssClass="small" />
+                                                                                <asp:BoundField DataField="Remarks" HeaderText="Tajuk Visual" NullDisplayText="-" ItemStyle-Width="35%" ItemStyle-VerticalAlign="Middle" ItemStyle-CssClass="small" />
                                                                                 <asp:TemplateField HeaderText="Kod QR" ItemStyle-Width="13%" ItemStyle-HorizontalAlign="Center" ItemStyle-VerticalAlign="Middle">
                                                                                     <ItemTemplate>
                                                                                         <asp:LinkButton ID="btnQrCodeBanting" runat="server" CssClass="btn btn-outline-primary btn-sm p-2" OnClick="btnQrCodeBanting_Click" 
@@ -3419,6 +3419,7 @@
                  ========================================================================= --%>
             <asp:SqlDataSource runat="server" ID="SqlDataSourceForm" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
                 InsertCommand="INSERT INTO LESEN_Permohonan(JenisLesenDescList, JenisLesenIdList, SaizIklanList, CahayaIklanList, UnitIklanList, LokasiList, 
+                        BakaAnjingList, AnjingJantanList, AnjingBetinaList, AnjingJantanMandulList, AnjingBetinaMandulList,
                         Permohonan_PemohonID, TarikhMohon, JenisLesen_ID, StatusID, NamaSyarikat, NoPendaftaran, NoAkaun, AlamatPremis, JenisPerniagaan,
                         PemilikBaru, AlamatBaru, JenisPerniagaanBaru, NamaBaruSyarikat, BillboardLokasi, LokasiPasar1, LokasiPasar2, LokasiPasar3, JenisPasar,
                         JenisPerniagaanPasar, JumlahPetak, AnjingAlamat, AnjingJenisPremis, JenisPenjaja, StatusTanahPenjaja, AlamatPenjajaan, JenisPerniagaanPenjaja, MasaPenjaja1, MasaPenjaja2,
@@ -3429,6 +3430,7 @@
                         Rujukan, NoAkaunCukai, DepositAmount, DepositDate, DepositResitNo, DepositPulangAmount, 
                         Is24jam, IsBatal, JenisBatal, SebabBatalPerm, SebabBatalTanpaPerm, RemarksBatal, TindakanBatal, IsPulang, IsSuratKelulusanFail, IsSuratPembatalanFail, IsSuratPemeriksaanFail, RemarksFail, CreatorID, CreatedDt, LastModID, LastModDt) 
                         VALUES (@JenisLesenDescList, @JenisLesenIdList, @SaizIklanList, @CahayaIklanList, @UnitIklanList, @LokasiList, 
+                        @BakaAnjingList, @AnjingJantanList, @AnjingBetinaList, @AnjingJantanMandulList, @AnjingBetinaMandulList,
                         @Permohonan_PemohonID, @TarikhMohon, 0, 0, @NamaSyarikat, @NoPendaftaran, @NoAkaun, @AlamatPremis, @JenisPerniagaan, @PemilikBaru, @AlamatBaru,
                         @JenisPerniagaanBaru, @NamaBaruSyarikat, @BillboardLokasi, @LokasiPasar1, @LokasiPasar2, @LokasiPasar3, @JenisPasar, @JenisPerniagaanPasar,
                         @JumlahPetak, @AnjingAlamat, @AnjingJenisPremis, @JenisPenjaja, @StatusTanahPenjaja, @AlamatPenjajaan, @JenisPerniagaanPenjaja, @MasaPenjaja1, @MasaPenjaja2, @JenisKenderaanPenjaja, @NoKenderaanPenjaja,
@@ -3440,6 +3442,7 @@
                         @Is24jam, @IsBatal, @JenisBatal, @SebabBatalPerm, @SebabBatalTanpaPerm, @RemarksBatal, @TindakanBatal, 0, 0, 0, 0, @RemarksFail, @CreatorId, GETDATE(), @CreatorId, GETDATE()); SELECT @Permohonan_ID = SCOPE_IDENTITY();"
                 SelectCommand="SELECT * FROM LESEN_Permohonan WHERE Permohonan_ID = @Permohonan_ID"
                 UpdateCommand="UPDATE LESEN_Permohonan SET JenisLesenDescList = @JenisLesenDescList, JenisLesenIdList = @JenisLesenIdList, SaizIklanList = @SaizIklanList, CahayaIklanList = @CahayaIklanList, UnitIklanList = @UnitIklanList, LokasiList = @LokasiList, 
+                        BakaAnjingList = @BakaAnjingList, AnjingJantanList = @AnjingJantanList, AnjingBetinaList = @AnjingBetinaList, AnjingJantanMandulList = @AnjingJantanMandulList, AnjingBetinaMandulList = @AnjingBetinaMandulList, 
                         Permohonan_PemohonID = @Permohonan_PemohonID, TarikhMohon = @TarikhMohon, NamaSyarikat = @NamaSyarikat, NoPendaftaran = @NoPendaftaran, NoAkaun = @NoAkaun, AlamatPremis = @AlamatPremis, 
                         JenisPerniagaan = @JenisPerniagaan, PemilikBaru = @PemilikBaru, AlamatBaru = @AlamatBaru, JenisPerniagaanBaru = @JenisPerniagaanBaru, NamaBaruSyarikat = @NamaBaruSyarikat,  
                         BillboardLokasi = @BillboardLokasi, LokasiPasar1 = @LokasiPasar1, LokasiPasar2 = @LokasiPasar2, LokasiPasar3 = @LokasiPasar3,
@@ -3462,6 +3465,11 @@
                     <asp:Parameter Name="CahayaIklanList"></asp:Parameter>
                     <asp:Parameter Name="UnitIklanList"></asp:Parameter>
                     <asp:Parameter Name="LokasiList"></asp:Parameter>
+                    <asp:Parameter Name="BakaAnjingList"></asp:Parameter>
+                    <asp:Parameter Name="AnjingJantanList"></asp:Parameter>
+                    <asp:Parameter Name="AnjingBetinaList"></asp:Parameter>
+                    <asp:Parameter Name="AnjingJantanMandulList"></asp:Parameter>
+                    <asp:Parameter Name="AnjingBetinaMandulList"></asp:Parameter>
                     <asp:Parameter Name="Permohonan_PemohonID"></asp:Parameter>
                     <asp:Parameter Name="TarikhMohon"></asp:Parameter>
                     <asp:Parameter Name="NamaSyarikat"></asp:Parameter>
@@ -3547,6 +3555,11 @@
                     <asp:Parameter Name="SaizIklanList"></asp:Parameter>
                     <asp:Parameter Name="CahayaIklanList"></asp:Parameter>
                     <asp:Parameter Name="UnitIklanList"></asp:Parameter>
+                    <asp:Parameter Name="BakaAnjingList"></asp:Parameter>
+                    <asp:Parameter Name="AnjingJantanList"></asp:Parameter>
+                    <asp:Parameter Name="AnjingBetinaList"></asp:Parameter>
+                    <asp:Parameter Name="AnjingJantanMandulList"></asp:Parameter>
+                    <asp:Parameter Name="AnjingBetinaMandulList"></asp:Parameter>
                     <asp:Parameter Name="Permohonan_PemohonID"></asp:Parameter>
                     <asp:Parameter Name="TarikhMohon"></asp:Parameter>
                     <asp:Parameter Name="StatusID"></asp:Parameter>
