@@ -1468,7 +1468,7 @@
                                 DefaultMode="ReadOnly" RenderOuterTable="false">
                                 <ItemTemplate>
                                     <asp:Image ID="imgSepandukPreview" runat="server"
-                                        ImageUrl='<%# Eval("PermohonanFail_FilePath") %>'
+                                        ImageUrl='<%# Eval("FilePath") %>'
                                         AlternateText="Gambar Sepanduk"
                                         CssClass="ru-gambar-img" />
                                 </ItemTemplate>
@@ -1531,10 +1531,10 @@
             <asp:SqlDataSource ID="SqlDataSourceGambarPreview" runat="server"
                 ConnectionString="<%$ ConnectionStrings:webcon_ConnectionStr %>"
                 SelectCommand="
-                SELECT TOP 1 a.* FROM LESEN_PermohonanFail a
-                INNER JOIN LESEN_Permohonan b ON a.PermohonanFail_PermohonanID = b.Permohonan_ID
-                WHERE a.PermohonanFail_JenisLampiran = 'U' AND a.PermohonanFail_PermohonanID = @Permohonan_ID
-                ORDER BY a.PermohonanFail_ID">
+                SELECT TOP 1 a.Imej_ID, a.FileName, a.FilePath FROM LESEN_BantingImej a
+                WHERE a.Permohonan_ID = @Permohonan_ID
+                AND (a.ContentType IS NULL OR a.ContentType LIKE '%image%')
+                ORDER BY a.Imej_ID">
                 <SelectParameters>
                     <asp:ControlParameter ControlID="GridViewCarian" Name="Permohonan_ID" PropertyName="SelectedValue" />
                 </SelectParameters>
@@ -1543,11 +1543,10 @@
             <asp:SqlDataSource ID="SqlDataSourceGambarSepanduk" runat="server"
                 ConnectionString="<%$ ConnectionStrings:webcon_ConnectionStr %>"
                 SelectCommand="
-                SELECT a.*, b.StatusID FROM LESEN_PermohonanFail a
-                INNER JOIN LESEN_Permohonan b ON a.PermohonanFail_PermohonanID = b.Permohonan_ID
-                WHERE a.PermohonanFail_JenisLampiran = 'U' 
-                AND PermohonanFail_ContentType like '%image%'
-                AND a.PermohonanFail_PermohonanID = @Permohonan_ID">
+                SELECT a.Imej_ID, a.Lokasi_ID, a.FileName, a.FilePath FROM LESEN_BantingImej a
+                WHERE a.Permohonan_ID = @Permohonan_ID
+                AND (a.ContentType IS NULL OR a.ContentType LIKE '%image%')
+                ORDER BY a.Imej_ID">
                 <SelectParameters>
                     <asp:ControlParameter ControlID="GridViewCarian" Name="Permohonan_ID" PropertyName="SelectedValue" />
                 </SelectParameters>
@@ -1564,7 +1563,7 @@
                     <asp:Repeater ID="RepeaterGambarSepanduk" runat="server" DataSourceID="SqlDataSourceGambarSepanduk">
                         <ItemTemplate>
                             <div class="ru-modal-slide">
-                                <img src='<%# ResolveUrl(Eval("PermohonanFail_FilePath").ToString()) %>' alt="Gambar Sepanduk" />
+                                <img src='<%# ResolveUrl(Eval("FilePath").ToString()) %>' alt="Gambar Sepanduk" />
                             </div>
                         </ItemTemplate>
                     </asp:Repeater>
