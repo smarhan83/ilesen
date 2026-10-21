@@ -8,7 +8,7 @@ Imports System.Text.RegularExpressions
 Imports QRCoder
 
 ' Jana imej QR untuk satu sepanduk/banting (LESEN_BantingImej.UniqueID).
-' Awam (dipanggil dari modal Semakan Status) - hanya untuk permohonan yang telah lulus.
+' Awam (dipanggil dari modal Semakan Status) - hanya untuk permohonan yang telah lulus DAN dengan token sah daripada QrPin.ashx (No. Pin = BantingID) - &t=<token>.
 '   QrBanting.ashx?id=BTG-20261006-6B37D9        -> papar PNG
 '   QrBanting.ashx?id=BTG-20261006-6B37D9&dl=1   -> muat turun PNG
 ' Kandungan QR sama seperti appregister1.aspx (DisplayBantingQRModal).
@@ -21,10 +21,18 @@ Public Class QrBanting
 
         Dim uniqueId As String = Convert.ToString(req.QueryString("id")).Trim()
 
-        If uniqueId = "" OrElse uniqueId.Length > 50 OrElse Not Regex.IsMatch(uniqueId, "^[A-Za-z0-9\-]+$") OrElse Not IsBantingLulus(uniqueId) Then
+        Dim permohonanId As Integer = If(uniqueId = "" OrElse uniqueId.Length > 50 OrElse Not Regex.IsMatch(uniqueId, "^[A-Za-z0-9\-]+$"), 0, CariPermohonanLulus(uniqueId))
+        If permohonanId = 0 Then
             res.StatusCode = 404
             res.ContentType = "text/plain"
             res.Write("QR tidak dijumpai.")
+            Return
+        End If
+
+        If Not QrAccess.ValidToken(permohonanId, Convert.ToString(req.QueryString("t"))) Then
+            res.StatusCode = 403
+            res.ContentType = "text/plain"
+            res.Write("Sila masukkan No. Pin untuk mengakses kod QR.")
             Return
         End If
 
@@ -48,15 +56,17 @@ Public Class QrBanting
         res.BinaryWrite(qrBytes)
     End Sub
 
-    Private Function IsBantingLulus(ByVal uniqueId As String) As Boolean
-        Dim sql As String = "SELECT COUNT(*) FROM LESEN_BantingImej b " &
+    Private Function CariPermohonanLulus(ByVal uniqueId As String) As Integer
+        Dim sql As String = "SELECT TOP 1 p.Permohonan_ID FROM LESEN_BantingImej b " &
                             "INNER JOIN LESEN_Permohonan p ON p.Permohonan_ID = b.Permohonan_ID " &
                             "WHERE b.UniqueID = @UniqueID AND p.StatusID = 10 AND ISNULL(p.IsBatal, 0) = 0"
         Using conn As New SqlConnection(ConfigurationManager.ConnectionStrings("webcon_ConnectionStr").ConnectionString)
             Using cmd As New SqlCommand(sql, conn)
                 cmd.Parameters.AddWithValue("@UniqueID", uniqueId)
                 conn.Open()
-                Return CInt(cmd.ExecuteScalar()) > 0
+                Dim o As Object = cmd.ExecuteScalar()
+                If o Is Nothing OrElse IsDBNull(o) Then Return 0
+                Return CInt(o)
             End Using
         End Using
     End Function
