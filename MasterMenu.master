@@ -1480,7 +1480,7 @@ h1{
                             </p>--%>
 
                             <label class="fw-bold mb-2">
-                                No. Kad Pengenalan / No. Passport / No. Pendaftaran Syarikat (SSM) / No. Pin / Tajuk Visual
+                                No. Kad Pengenalan / No. Passport / No. Pendaftaran Syarikat (SSM) / No. Pin / Tajuk Visual / Nama Pemohon
                                 <span class="text-danger">*</span>
                             </label>
 
@@ -1489,7 +1489,7 @@ h1{
                                 <asp:TextBox ID="txtNoPengenalan"
                                     runat="server"
                                     CssClass="form-control"
-                                    placeholder="Contoh: 900101011234 / 202501123456 / BTG-20261006-6B37D9 / Tajuk Visual">
+                                    placeholder="Contoh: 900101011234 / 202501123456 / BTG-20261006-6B37D9 / Tajuk Visual / Nama Pemohon">
                                 </asp:TextBox>
 
 
@@ -1506,7 +1506,7 @@ h1{
 
                             <small class="text-muted d-block mt-3 hint-text">
                                 <i class="bi bi-info-circle-fill hint-icon"></i>
-                                <asp:Label runat="server" id="lblMessage">Sila masukkan No. Kad Pengenalan (tanpa -), No. Passport, No. Pendaftaran Syarikat (SSM), No. Pin (permohonan sepanduk) atau Tajuk Visual.</asp:Label>
+                                <asp:Label runat="server" id="lblMessage">Sila masukkan No. Kad Pengenalan (tanpa -), No. Passport, No. Pendaftaran Syarikat (SSM), No. Pin (permohonan sepanduk), Tajuk Visual atau Nama Pemohon.</asp:Label>
                             </small>                         
 
                             <%--STATUS--%>
@@ -1565,7 +1565,7 @@ h1{
                                               <line x1="173" y1="153" x2="196" y2="176" stroke="#3d5a80" stroke-width="8" stroke-linecap="round"/>
                                             </svg>
                                         </div>
-                                        <h5>Sila masukkan No. Kad Pengenalan, No. Passport, No. SSM, No. Pin atau Tajuk Visual</h5>
+                                        <h5>Sila masukkan No. Kad Pengenalan, No. Passport, No. SSM, No. Pin, Tajuk Visual atau Nama Pemohon</h5>
                                         <p>Masukkan maklumat di atas dan klik butang 'Semak' untuk melihat senarai permohonan lesen anda.</p>
                                     </div>
                                 </EmptyDataTemplate>
@@ -1666,7 +1666,7 @@ h1{
 
                             <asp:SqlDataSource ID="SqlDataSourceGrid" runat="server"
                                 ConnectionString="<%$ ConnectionStrings:webcon_ConnectionStr %>"
-                                SelectCommand="SELECT 
+                                SelectCommand="SELECT TOP 100 
 
                                 ROW_NUMBER() OVER(ORDER BY g.TarikhMohon desc, g.Permohonan_ID desc) as RowNo,
                                     CASE
@@ -1702,6 +1702,9 @@ h1{
                                         EXISTS (SELECT 1 FROM LESEN_BantingImej bi WHERE bi.Permohonan_ID = g.Permohonan_ID
                                             AND (bi.UniqueID = LTRIM(RTRIM(@Pemohon_ICNo))
                                                  OR (LEN(LTRIM(RTRIM(@Pemohon_ICNo))) >= 3 AND CHARINDEX(LTRIM(RTRIM(@Pemohon_ICNo)), ISNULL(bi.Remarks, '')) > 0)))
+                                        or
+                                        /* Nama Pemohon (mengandungi, min 4 aksara) */
+                                        (LEN(LTRIM(RTRIM(@Pemohon_ICNo))) >= 4 AND CHARINDEX(LTRIM(RTRIM(@Pemohon_ICNo)), ISNULL(f.Pemohon_Name, '')) > 0)
                                     )
                                 order by g.TarikhMohon desc, g.Permohonan_ID desc"
                                 >
