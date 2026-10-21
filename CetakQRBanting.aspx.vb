@@ -3,7 +3,7 @@ Imports System.Data.SqlClient
 Imports System.Text.RegularExpressions
 
 ' Halaman cetak label QR sepanduk/banting (awam, dibuka dari modal Semakan Status).
-' Dikunci dengan kod unik (LESEN_BantingImej.UniqueID), bukan Permohonan_ID, supaya tidak boleh diteka.
+' Dikunci dengan kod unik (LESEN_BantingImej.UniqueID) dan token No. Pin (BantingID) - lihat QrAccess / QrPin.ashx.
 '   CetakQRBanting.aspx?id=<UniqueID>          -> satu label
 '   CetakQRBanting.aspx?id=<UniqueID>&semua=1  -> semua label bagi permohonan yang sama
 Partial Class CetakQRBanting
@@ -19,7 +19,7 @@ Partial Class CetakQRBanting
 
         If uniqueId <> "" AndAlso uniqueId.Length <= 50 AndAlso Regex.IsMatch(uniqueId, "^[A-Za-z0-9\-]+$") Then
             Dim sql As String =
-                "SELECT b.UniqueID, l.Lokasi, p.Rujukan, ISNULL(NULLIF(p.NamaBaruSyarikat, ''), p.NamaSyarikat) AS NamaSyarikat, " &
+                "SELECT b.Permohonan_ID, b.UniqueID, l.Lokasi, p.Rujukan, ISNULL(NULLIF(p.NamaBaruSyarikat, ''), p.NamaSyarikat) AS NamaSyarikat, " &
                 "       p.TarikhBanting1, p.TarikhBanting2, " &
                 "       DENSE_RANK() OVER (ORDER BY b.Lokasi_ID) AS LokasiNo " &
                 "FROM LESEN_BantingImej b " &
@@ -46,6 +46,13 @@ Partial Class CetakQRBanting
             End If
         End If
 
+        ' Wajib sahkan No. Pin dahulu (token &t= daripada QrPin.ashx) - jika tiada / tamat, tiada label dipaparkan
+        Dim tiadaAkses As Boolean = False
+        If dt.Rows.Count > 0 AndAlso Not QrAccess.ValidToken(CInt(dt.Rows(0)("Permohonan_ID")), Convert.ToString(Request.QueryString("t"))) Then
+            dt.Clear()
+            tiadaAkses = True
+        End If
+
         rptLabel.DataSource = dt
         rptLabel.DataBind()
 
@@ -54,7 +61,7 @@ Partial Class CetakQRBanting
         If dt.Rows.Count > 0 Then
             litRingkasan.Text = HttpUtility.HtmlEncode(Nilai(dt.Rows(0)("Rujukan"))) & " &middot; " & dt.Rows.Count & " label"
         Else
-            litRingkasan.Text = "Tiada label untuk dicetak"
+            litRingkasan.Text = If(tiadaAkses, "Akses dinafikan - sila masukkan No. Pin pada Semakan Status Permohonan dahulu", "Tiada label untuk dicetak")
         End If
     End Sub
 

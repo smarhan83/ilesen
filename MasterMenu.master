@@ -1442,6 +1442,103 @@ h1{
             }
         </script>
 
+                <style>
+            /* ===== Overlay No. Pin untuk akses kod QR ===== */
+            #qrPinOverlay { position: fixed; inset: 0; z-index: 2100; display: none; align-items: center; justify-content: center;
+                            background: rgba(15,23,42,.55); padding: 16px; }
+            #qrPinOverlay.open { display: flex; }
+            #qrPinOverlay .qrpin-box { width: 100%; max-width: 400px; background: #fff; border-radius: 16px; padding: 24px 22px 20px;
+                                       box-shadow: 0 24px 60px rgba(15,23,42,.35); text-align: left; animation: qrPinIn .16s ease-out; }
+            @keyframes qrPinIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+            #qrPinOverlay .qrpin-ic { width: 48px; height: 48px; border-radius: 14px; background: #EEF0FF; color: #2E3192; display: flex;
+                                      align-items: center; justify-content: center; font-size: 22px; margin-bottom: 12px; }
+            #qrPinOverlay h5 { font-size: 17px; font-weight: 800; color: #1f2937; margin: 0 0 4px; }
+            #qrPinOverlay .qrpin-sub { font-size: 13px; color: #64748b; margin: 0 0 14px; }
+            #qrPinOverlay input.qrpin-input { width: 100%; height: 44px; border: 1px solid #d0d5dd; border-radius: 10px; padding: 0 14px;
+                                              font-size: 15px; letter-spacing: .04em; margin: 0 !important; }
+            #qrPinOverlay input.qrpin-input:focus { outline: none; border-color: #2E3192; box-shadow: 0 0 0 3px rgba(46,49,146,.15); }
+            #qrPinOverlay .qrpin-err { min-height: 20px; font-size: 12.5px; color: #c0392b; margin: 8px 0 0; }
+            #qrPinOverlay .qrpin-actions { display: flex; gap: 8px; margin-top: 12px; }
+            #qrPinOverlay .qrpin-btn { flex: 1; height: 42px; border-radius: 10px; font-weight: 700; font-size: 14px; border: 1px solid #d0d5dd;
+                                       background: #fff; color: #344054; cursor: pointer; }
+            #qrPinOverlay .qrpin-btn.primary { background: #2E3192; border-color: #2E3192; color: #fff; }
+            #qrPinOverlay .qrpin-btn.primary:hover { background: #23267a; }
+            #qrPinOverlay .qrpin-btn:disabled { opacity: .6; cursor: default; }
+        </style>
+
+        <%-- Overlay: masukkan No. Pin (LESEN_Permohonan.BantingID) sebelum kod QR dipaparkan / dimuat turun --%>
+        <div id="qrPinOverlay" role="dialog" aria-modal="true" aria-labelledby="qrPinTitle">
+            <div class="qrpin-box">
+                <div class="qrpin-ic"><i class="bi bi-shield-lock"></i></div>
+                <h5 id="qrPinTitle">Masukkan No. Pin</h5>
+                <p class="qrpin-sub">Untuk keselamatan, No. Pin permohonan sepanduk / bunting diperlukan setiap kali anda memaparkan atau memuat turun kod QR.</p>
+                <input type="text" id="qrPinInput" class="qrpin-input" maxlength="50" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="No. Pin" />
+                <div class="qrpin-err" id="qrPinErr" aria-live="polite"></div>
+                <div class="qrpin-actions">
+                    <button type="button" class="qrpin-btn" id="qrPinBatal">Batal</button>
+                    <button type="button" class="qrpin-btn primary" id="qrPinOk">Sahkan</button>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            // Letak / buang token (&t=) pada imej & pautan QR dalam panel. Tanpa token, server memulangkan 403.
+            function qrApply(panel, token) {
+                if (!panel) return;
+                var t = token ? ('&t=' + encodeURIComponent(token)) : '';
+                var kosong = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+                panel.querySelectorAll('img[data-src]').forEach(function (im) { im.src = token ? (im.getAttribute('data-src') + t) : kosong; });
+                panel.querySelectorAll('a[data-href]').forEach(function (a) { a.href = token ? (a.getAttribute('data-href') + t) : '#'; });
+            }
+
+            // Klik butang QR: tutup jika panel sedang terbuka; jika tidak, SETIAP KALI minta No. Pin dahulu
+            function qrBuka(btn, pid) {
+                var tr = btn.closest('tr');
+                var next = tr.nextElementSibling;
+                var terbuka = next && next.classList.contains('qr-detail-row') && !next.hidden;
+                if (terbuka) {
+                    qrApply(next, null);              // buang token - buka semula perlu No. Pin lagi
+                    toggleQrPanel(btn);
+                    return;
+                }
+
+                var ov = document.getElementById('qrPinOverlay'), inp = document.getElementById('qrPinInput'),
+                    err = document.getElementById('qrPinErr'), ok = document.getElementById('qrPinOk');
+                // Overlay mesti berada DALAM modal Bootstrap, jika tidak 'focus trap' modal merampas fokus dan input tak boleh ditaip
+                var host = document.getElementById('modalSemak');
+                if (host && ov.parentNode !== host) host.appendChild(ov);
+                inp.value = ''; err.textContent = ''; ok.disabled = false;
+                ov.classList.add('open'); setTimeout(function () { inp.focus(); }, 50);
+
+                function tutup() {
+                    ov.classList.remove('open'); inp.value = '';
+                    ok.onclick = null; document.getElementById('qrPinBatal').onclick = null; inp.onkeydown = null;
+                }
+                function hantar() {
+                    var pin = inp.value.trim();
+                    if (!pin) { err.textContent = 'Sila masukkan No. Pin.'; inp.focus(); return; }
+                    ok.disabled = true; err.textContent = '';
+                    var fd = new FormData(); fd.append('id', pid); fd.append('pin', pin);
+                    fetch('<%= ResolveUrl("~/QrPin.ashx") %>', { method: 'POST', body: fd, credentials: 'same-origin' })
+                        .then(function (r) { return r.json(); })
+                        .then(function (j) {
+                            if (j && j.ok && j.t) {
+                                tutup();
+                                var n = tr.nextElementSibling;
+                                var panel = (n && n.classList.contains('qr-detail-row')) ? n : tr.querySelector('.qr-panel-src');
+                                qrApply(panel, j.t);
+                                if (n && n.classList.contains('qr-detail-row')) { n.hidden = false; btn.classList.add('open'); btn.setAttribute('aria-expanded', 'true'); }
+                                else { toggleQrPanel(btn); }
+                            } else { err.textContent = (j && j.msg) ? j.msg : 'No. Pin tidak sah.'; ok.disabled = false; inp.select(); }
+                        })
+                        .catch(function () { err.textContent = 'Ralat sambungan. Sila cuba lagi.'; ok.disabled = false; });
+                }
+                ok.onclick = hantar;
+                document.getElementById('qrPinBatal').onclick = tutup;
+                inp.onkeydown = function (e) { if (e.key === 'Enter') { e.preventDefault(); hantar(); } else if (e.key === 'Escape') { tutup(); } };
+            }
+        </script>
+
         <div class="modal fade" id="modalSemak" tabindex="-1">
 
             <div class="modal-dialog modal-xl modal-dialog-centered">
@@ -1602,7 +1699,7 @@ h1{
 
                                                 <%-- QR sepanduk/banting: hanya bila lulus & ada kod QR --%>
                                                 <asp:PlaceHolder ID="phQrBtn" runat="server" Visible='<%# AdaQr(Eval("StatusDesc"), Eval("QrCount")) %>'>
-                                                    <button type="button" class="qr-toggle" onclick="toggleQrPanel(this)" aria-expanded="false">
+                                                    <button type="button" class="qr-toggle" onclick='qrBuka(this, <%# Eval("Permohonan_ID") %>)' aria-expanded="false">
                                                         <i class="bi bi-qr-code"></i>QR Sepanduk (<%# Eval("QrCount") %>)<i class="bi bi-chevron-down qr-chev"></i>
                                                     </button>
                                                 </asp:PlaceHolder>
@@ -1621,7 +1718,7 @@ h1{
                                                                 </div>
                                                             </div>
                                                             <a class="qr-btn qr-btn-primary" target="_blank" rel="noopener"
-                                                                href='<%# ResolveUrl("~/CetakQRBanting.aspx?semua=1&id=" & HttpUtility.UrlEncode(Convert.ToString(Eval("QrFirstID")))) %>'>
+                                                                href="#" data-href='<%# ResolveUrl("~/CetakQRBanting.aspx?semua=1&id=" & HttpUtility.UrlEncode(Convert.ToString(Eval("QrFirstID")))) %>'>
                                                                 <i class="bi bi-printer"></i>Cetak Semua QR
                                                             </a>
                                                         </div>
@@ -1631,18 +1728,18 @@ h1{
                                                             <ItemTemplate>
                                                                 <div class="qr-card">
                                                                     <img class="qr-img" loading="lazy" alt="Kod QR"
-                                                                        src='<%# ResolveUrl("~/QrBanting.ashx?id=" & HttpUtility.UrlEncode(Convert.ToString(Eval("UniqueID")))) %>' />
+                                                                        src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src='<%# ResolveUrl("~/QrBanting.ashx?id=" & HttpUtility.UrlEncode(Convert.ToString(Eval("UniqueID")))) %>' />
                                                                     <div class="qr-info">
                                                                         <div class="qr-lokasi-no">Lokasi <%# Eval("LokasiNo") %></div>
                                                                         <div class="qr-lokasi"><%# HttpUtility.HtmlEncode(If(String.IsNullOrWhiteSpace(Convert.ToString(Eval("Lokasi"))), "-", Eval("Lokasi"))) %></div>
                                                                         <div class="qr-kod"><%# HttpUtility.HtmlEncode(Eval("UniqueID")) %></div>
                                                                         <div class="qr-actions">
                                                                             <a class="qr-btn" data-no-loader="1" download='<%# "QR-" & HttpUtility.HtmlAttributeEncode(Convert.ToString(Eval("UniqueID"))) & ".png" %>'
-                                                                                href='<%# ResolveUrl("~/QrBanting.ashx?dl=1&id=" & HttpUtility.UrlEncode(Convert.ToString(Eval("UniqueID")))) %>'>
+                                                                                href="#" data-href='<%# ResolveUrl("~/QrBanting.ashx?dl=1&id=" & HttpUtility.UrlEncode(Convert.ToString(Eval("UniqueID")))) %>'>
                                                                                 <i class="bi bi-download"></i>Muat Turun
                                                                             </a>
                                                                             <a class="qr-btn" target="_blank" rel="noopener"
-                                                                                href='<%# ResolveUrl("~/CetakQRBanting.aspx?id=" & HttpUtility.UrlEncode(Convert.ToString(Eval("UniqueID")))) %>'>
+                                                                                href="#" data-href='<%# ResolveUrl("~/CetakQRBanting.aspx?id=" & HttpUtility.UrlEncode(Convert.ToString(Eval("UniqueID")))) %>'>
                                                                                 <i class="bi bi-printer"></i>Cetak
                                                                             </a>
                                                                         </div>
@@ -1698,10 +1795,12 @@ h1{
                                         '%'+REPLACE(REPLACE(REPLACE(@Pemohon_ICNo, '-', ''), ' ', ''), CHAR(9), '')+'%'
                                     
                                         or
-                                        /* No Pin = LESEN_BantingImej.UniqueID (padanan tepat); Tajuk Visual = LESEN_BantingImej.Remarks (mengandungi, min 3 aksara) */
+                                        /* No. Pin = LESEN_Permohonan.BantingID (padanan tepat) */
+                                        (LEN(ISNULL(g.BantingID, '')) > 0 AND g.BantingID = LTRIM(RTRIM(@Pemohon_ICNo)))
+                                        or
+                                        /* Tajuk Visual = LESEN_BantingImej.Remarks (mengandungi, min 3 aksara) */
                                         EXISTS (SELECT 1 FROM LESEN_BantingImej bi WHERE bi.Permohonan_ID = g.Permohonan_ID
-                                            AND (bi.UniqueID = LTRIM(RTRIM(@Pemohon_ICNo))
-                                                 OR (LEN(LTRIM(RTRIM(@Pemohon_ICNo))) >= 3 AND CHARINDEX(LTRIM(RTRIM(@Pemohon_ICNo)), ISNULL(bi.Remarks, '')) > 0)))
+                                            AND ((LEN(LTRIM(RTRIM(@Pemohon_ICNo))) >= 3 AND CHARINDEX(LTRIM(RTRIM(@Pemohon_ICNo)), ISNULL(bi.Remarks, '')) > 0)))
                                         or
                                         /* Nama Pemohon (mengandungi, min 4 aksara) */
                                         (LEN(LTRIM(RTRIM(@Pemohon_ICNo))) >= 4 AND CHARINDEX(LTRIM(RTRIM(@Pemohon_ICNo)), ISNULL(f.Pemohon_Name, '')) > 0)
