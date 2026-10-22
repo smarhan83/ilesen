@@ -44,6 +44,7 @@
         .li-empty { text-align: center; padding: 40px 16px; color: #6c757d; }
         .li-note { padding: 10px 20px 14px; font-size: 12px; color: #6c757d; }
         .li-printhead { display: none; }
+        .li-warn { margin: 12px 20px 0; padding: 9px 14px; border-radius: 8px; background: #FDF1DC; color: #9A6408; font-size: 12.5px; }
 
         @media (max-width: 991.98px) { .li-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); } .li-actions { width: 100%; margin-left: 0; } .li-table { table-layout: auto; min-width: 900px; } }
 
@@ -86,7 +87,7 @@
                 <div class="li-head">
                     <div>
                         <h3 class="li-title">Laporan Inspektorat</h3>
-                        <div class="li-sub">Tempoh proses permohonan di Bahagian Inspektorat (KPI: kurang 14 hari)</div>
+                        <div class="li-sub">Tempoh proses permohonan di Bahagian Inspektorat (KPI: kurang 14 hari bekerja)</div>
                     </div>
                 </div>
 
@@ -142,6 +143,8 @@
                     <div><asp:Literal ID="litTempohCetak" runat="server" /></div>
                 </div>
 
+                <asp:Literal ID="litAmaran" runat="server" />
+
                 <%-- Ringkasan --%>
                 <div class="li-stats">
                     <div class="li-stat info"><div class="k">Jumlah Permohonan</div><div class="v"><asp:Literal ID="litJumlah" runat="server" Text="0" /></div></div>
@@ -155,19 +158,20 @@
                     <asp:Repeater ID="rptLaporan" runat="server">
                         <HeaderTemplate>
                             <table class="li-table table">
-                                <colgroup><col style="width:4%" /><col style="width:13%" /><col style="width:15%" /><col style="width:11%" /><col style="width:8.5%" /><col style="width:8.5%" /><col style="width:8.5%" /><col style="width:8.5%" /><col style="width:8.5%" /><col style="width:6%" /><col style="width:8%" /></colgroup>
+                                <colgroup><col style="width:3.5%" /><col style="width:12%" /><col style="width:13%" /><col style="width:9%" /><col style="width:10%" /><col style="width:7.5%" /><col style="width:7.5%" /><col style="width:7.5%" /><col style="width:7.5%" /><col style="width:7.5%" /><col style="width:6.5%" /><col style="width:8.5%" /></colgroup>
                                 <thead>
                                     <tr>
                                         <th>Bil</th>
                                         <th>No. Rujukan</th>
                                         <th>Pemohon / Syarikat</th>
                                         <th>Jenis Lesen</th>
+                                        <th>Jenis Perniagaan</th>
                                         <th>Tarikh Permohonan Diterima daripada KB Lesen (KB)</th>
                                         <th>Tarikh Penetapan Siasatan (PPKP)</th>
                                         <th>Tarikh Siasatan Tapak (PPKP)</th>
                                         <th>Tarikh Ulasan Teknikal (PPKP)</th>
                                         <th>Tarikh Semakan dan Hantar Laporan ke Lesen (KB)</th>
-                                        <th>Tempoh Masa (hari)<br /><span class="li-muted">KPI: &lt;14 hari</span></th>
+                                        <th>Tempoh Masa (hari bekerja)<br /><span class="li-muted">KPI: &lt;14 hari</span></th>
                                         <th>Status KPI</th>
                                     </tr>
                                 </thead>
@@ -179,6 +183,7 @@
                                 <td><span class="li-ref"><%# HttpUtility.HtmlEncode(Eval("Rujukan")) %></span></td>
                                 <td><%# HttpUtility.HtmlEncode(Eval("Pemohon")) %></td>
                                 <td><%# HttpUtility.HtmlEncode(Eval("JenisLesen")) %></td>
+                                <td><%# HttpUtility.HtmlEncode(Eval("JenisPerniagaan")) %></td>
                                 <td class="c"><%# Tgl(Eval("TarikhDiterima")) %></td>
                                 <td class="c"><%# Tgl(Eval("TarikhPenetapan")) %></td>
                                 <td class="c"><%# Tgl(Eval("TarikhSiasatan")) %></td>
@@ -200,7 +205,7 @@
 
                 <div class="li-note">
                     Nota: Tempoh Masa dikira daripada <b>Tarikh Permohonan Diterima</b> hingga <b>Tarikh Semakan dan Hantar Laporan ke Lesen</b>;
-                    bagi permohonan yang belum selesai, ia dikira sehingga hari ini. Dalam KPI jika kurang 14 hari.
+                    dalam <b>hari bekerja</b> (Sabtu, Ahad dan kelepasan am ditolak). Bagi permohonan yang belum selesai, ia dikira sehingga hari ini. Dalam KPI jika kurang 14 hari bekerja.
                 </div>
             </div>
 
