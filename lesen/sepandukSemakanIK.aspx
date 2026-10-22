@@ -261,6 +261,19 @@
     .ss-badge.warn { background: #FDF1DC; color: #9A6408; }
     .ss-badge.none { background: #f1f3f5; color: #6c757d; }
 
+    /* Audit Trail Semakan Sepanduk / Bunting */
+    .ru-audit-note { display: flex; align-items: center; gap: 10px; padding: 11px 14px; border-radius: 10px; font-size: 13.5px; margin-bottom: 12px; }
+    .ru-audit-note i { font-size: 18px; }
+    .ru-audit-note.done { background: #D4EDDA; color: #1e7e34; }
+    .ru-audit-note.none { background: #FDF1DC; color: #9A6408; margin-bottom: 0; }
+    .ru-audit-wrap { overflow-x: auto; border: 1px solid #e3e8f2; border-radius: 10px; }
+    .ru-audit-table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+    .ru-audit-table th { background: #EEF1FA; color: #3F4A6B; font-size: 12px; font-weight: 700; text-align: left; padding: 9px 12px; border-bottom: 1px solid #dfe5f1; white-space: nowrap; }
+    .ru-audit-table td { padding: 10px 12px; border-bottom: 1px solid #f1f3f5; vertical-align: middle; color: #212529; }
+    .ru-audit-table tr:last-child td { border-bottom: 0; }
+    .ru-audit-table .c { text-align: center; }
+    .ru-audit-sub { font-size: 12px; color: #6c757d; margin-top: 3px; }
+
     /* Status aliran */
     .ss-status { display: inline-block; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 600; white-space: nowrap; }
     .ss-status.st-ik { background: #E4DFFB; color: #2E3192; }
@@ -1368,6 +1381,66 @@
 
         <%--# maklumat ringkas (jika rekod dijumpai) #--%>
         <asp:Panel ID="pnlMaklumatDijumpai" runat="server" Visible="false" >
+
+        <%--audit trail semakan sepanduk/banting (sejarah semakan Pegawai IK)--%>
+        <div class="ru-section">
+            <div class="ru-section-head">
+                <div class="ru-section-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+                </div>
+                <h4 class="ru-section-title">Audit Trail Semakan Sepanduk / Bunting</h4>
+            </div>
+
+            <asp:Literal ID="litAuditRingkas" runat="server" />
+
+            <asp:ListView ID="lvAuditSemakan" runat="server" DataSourceID="SqlDataSourceAuditSemakan" OnDataBound="lvAuditSemakan_DataBound" OnItemDataBound="lvAuditSemakan_ItemDataBound">
+                <LayoutTemplate>
+                    <div class="ru-audit-wrap">
+                        <table class="ru-audit-table">
+                            <thead>
+                                <tr>
+                                    <th class="c" style="width:48px;">Bil</th>
+                                    <th>Nama IK</th>
+                                    <th>Tarikh Semakan</th>
+                                    <th>Status Semakan</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <asp:PlaceHolder ID="itemPlaceholder" runat="server" />
+                            </tbody>
+                        </table>
+                    </div>
+                </LayoutTemplate>
+                <ItemTemplate>
+                    <tr>
+                        <td class="c"><%# Container.DataItemIndex + 1 %></td>
+                        <td><i class="bi bi-person-badge me-1"></i><%# HttpUtility.HtmlEncode(GetNilai(Eval("NamaIK"))) %></td>
+                        <td><%# Eval("SemakanIK_TarikhSemakan", "{0:dd/MM/yyyy HH:mm}") %></td>
+                        <td>
+                            <span class='ss-badge <%# GetHasilCss(Eval("SemakanIK_StatusPemeriksaan")) %>'><%# GetHasilText(Eval("SemakanIK_StatusPemeriksaan")) %></span>
+                            <div class="ru-audit-sub"><%# HttpUtility.HtmlEncode(GetNilai(Eval("SemakanIK_Status"))) %></div>
+                        </td>
+                    </tr>
+                </ItemTemplate>
+                <EmptyDataTemplate>
+                    <div class="ru-audit-note none"><i class="bi bi-hourglass-split"></i><span>Belum pernah dibuat semakan oleh Pegawai IK.</span></div>
+                </EmptyDataTemplate>
+            </asp:ListView>
+
+            <asp:SqlDataSource ID="SqlDataSourceAuditSemakan" runat="server"
+                ConnectionString="<%$ ConnectionStrings:webcon_ConnectionStr %>"
+                SelectCommand="
+                SELECT a.SemakanIK_ID, a.SemakanIK_NoRujukan, a.SemakanIK_TarikhSemakan, a.SemakanIK_Status, a.SemakanIK_StatusPemeriksaan,
+                       ISNULL(u.Users_Fullname, a.SemakanIK_PegawaiID) AS NamaIK
+                FROM LESEN_SepandukSemakanIK a
+                LEFT JOIN TBL_USERS u ON CAST(u.Users_Id AS nvarchar(50)) = a.SemakanIK_PegawaiID
+                WHERE a.SemakanIK_PermohonanID = @Permohonan_ID AND a.IsActive = 1
+                ORDER BY a.SemakanIK_TarikhSemakan DESC, a.SemakanIK_ID DESC">
+                <SelectParameters>
+                    <asp:ControlParameter ControlID="GridViewCarian" Name="Permohonan_ID" PropertyName="SelectedValue" />
+                </SelectParameters>
+            </asp:SqlDataSource>
+        </div>
 
         <%--maklumat iklan--%>
         <div class="ru-section">

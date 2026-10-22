@@ -962,6 +962,28 @@ Partial Class sepandukSemakanIK
     End Sub
 
     ' Hasil pemeriksaan (nilai rblStatusPemeriksaan) -> teks paparan
+    '===================== AUDIT TRAIL SEMAKAN (sejarah semakan Pegawai IK bagi permohonan) =====================
+    Private auditTerkiniTarikh As Object = Nothing
+    Private auditTerkiniNama As String = ""
+
+    Protected Sub lvAuditSemakan_ItemDataBound(sender As Object, e As ListViewItemEventArgs)
+        If e.Item.ItemType = ListViewItemType.DataItem AndAlso e.Item.DisplayIndex = 0 Then
+            Dim di As ListViewDataItem = DirectCast(e.Item, ListViewDataItem)
+            auditTerkiniTarikh = DataBinder.Eval(di.DataItem, "SemakanIK_TarikhSemakan")
+            auditTerkiniNama = Convert.ToString(DataBinder.Eval(di.DataItem, "NamaIK"))
+        End If
+    End Sub
+
+    Protected Sub lvAuditSemakan_DataBound(sender As Object, e As EventArgs)
+        Dim n As Integer = lvAuditSemakan.Items.Count
+        If n = 0 Then
+            litAuditRingkas.Text = ""
+            Return
+        End If
+        Dim tarikh As String = If(auditTerkiniTarikh Is Nothing OrElse IsDBNull(auditTerkiniTarikh), "-", Convert.ToDateTime(auditTerkiniTarikh).ToString("dd/MM/yyyy HH:mm"))
+        litAuditRingkas.Text = "<div class=""ru-audit-note done""><i class=""bi bi-check-circle-fill""></i><span>Sepanduk ini <b>telah disemak " & n & " kali</b>. Semakan terkini: <b>" &
+            tarikh & "</b> oleh <b>" & HttpUtility.HtmlEncode(auditTerkiniNama) & "</b>.</span></div>"
+    End Sub
     Protected Function GetHasilText(ByVal hasil As Object) As String
         Select Case Convert.ToString(hasil)
             Case "Mematuhi" : Return "Mematuhi"
