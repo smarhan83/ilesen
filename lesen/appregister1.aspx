@@ -3717,7 +3717,7 @@
                                                 <div class="d-flex align-items-center justify-content-between">
                                                     <label class="form-label-custom">Status Permohonan</label>
                                                     <%-- Arkib: papar permohonan yang telah lulus sahaja (status ditapis keluar secara default) --%>
-                                                    <div class="form-check form-switch arkib-switch mb-1" runat="server" id="divArkibSwitch" title="Papar permohonan yang telah lulus sahaja">
+                                                    <div class="form-check form-switch arkib-switch" runat="server" id="divArkibSwitch" title="Papar permohonan yang telah lulus sahaja">
                                                         <asp:CheckBox ID="chkArkib" runat="server" AutoPostBack="true" Text="Arkib" CausesValidation="false"
                                                             OnCheckedChanged="chkArkib_CheckedChanged" />
                                                     </div>
@@ -3935,7 +3935,15 @@
                                                         </div>
                                                     </div>
 
-                                                    <!-- 8. Catatan Permohonan -->
+                                                    <!-- 8. Tajuk Visual (Banting) -->
+                                                    <div class="col-lg-3 col-md-6 col-12" id="wrapPermohonanTajukVisual">
+                                                        <div class="form-group mb-0">
+                                                            <label class="form-label-custom">Tajuk Visual (Banting)</label>
+                                                            <asp:TextBox ID="txtFilterTajukVisual" placeholder="Tajuk Visual Banting" runat="server" CssClass="form-control"></asp:TextBox>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- 9. Catatan Permohonan -->
                                                     <div class="col-lg-6 col-md-12 col-12" id="wrapPermohonanRemarks">
                                                         <div class="form-group mb-0">
                                                             <label class="form-label-custom">Catatan Permohonan</label>
@@ -4249,6 +4257,11 @@
                                         AND (@JenisPerniagaan = '' OR @JenisPerniagaan = '%%' OR ISNULL(a.JenisPerniagaan,'') LIKE '%'+@JenisPerniagaan+'%' OR ISNULL(a.JenisPerniagaanBaru,'') LIKE '%'+@JenisPerniagaan+'%') 
                                         AND (@NoAkaun = '' OR @NoAkaun = '%%' OR ISNULL(a.NoAkaun,'') LIKE '%'+@NoAkaun+'%' OR ISNULL(a.NoAkaunCukai,'') LIKE '%'+@NoAkaun+'%') 
                                         AND (@RemarksFail = '' OR @RemarksFail = '%%' OR ISNULL(a.RemarksFail,'') LIKE '%'+@RemarksFail+'%') 
+                                        AND (@TajukVisual IS NULL OR @TajukVisual = '' OR @TajukVisual = '%%' OR EXISTS (
+                                            SELECT 1 FROM LESEN_BantingImej bi 
+                                            WHERE bi.Permohonan_ID = a.Permohonan_ID 
+                                              AND bi.Remarks LIKE '%'+@TajukVisual+'%'
+                                        )) 
                                         order by a.TarikhMohon desc">
                                 <DeleteParameters>
                                     <asp:Parameter Name="Permohonan_ID"></asp:Parameter>
@@ -4274,6 +4287,7 @@
                                     <asp:ControlParameter ControlID="txtFilterJenisPerniagaan" PropertyName="Text" DefaultValue="%%" Name="JenisPerniagaan"></asp:ControlParameter>
                                     <asp:ControlParameter ControlID="txtFilterNoAkaun" PropertyName="Text" DefaultValue="%%" Name="NoAkaun"></asp:ControlParameter>
                                     <asp:ControlParameter ControlID="txtFilterRemarksFail" PropertyName="Text" DefaultValue="%%" Name="RemarksFail"></asp:ControlParameter>
+                                    <asp:ControlParameter ControlID="txtFilterTajukVisual" PropertyName="Text" DefaultValue="%%" Name="TajukVisual"></asp:ControlParameter>
                                 </SelectParameters>
                             </asp:SqlDataSource>
                         </div>
@@ -6784,6 +6798,10 @@ ORDER BY
                 var $t = $('[id$="txtFilterRemarksFail"]');
                 return $t.length && $t.val() && $t.val().trim() !== '';
             }
+            function isTajukVisualActive() {
+                var $t = $('[id$="txtFilterTajukVisual"]');
+                return $t.length && $t.val() && $t.val().trim() !== '';
+            }
 
             function countActivePemohonFilters() {
                 var c = 0;
@@ -6805,6 +6823,7 @@ ORDER BY
                 if (isRisikoActive()) c++;
                 if (isPembatalanActive()) c++;
                 if (isTahunActive()) c++;
+                if (isTajukVisualActive()) c++;
                 if (isRemarksActive()) c++;
                 return c;
             }
@@ -6908,6 +6927,7 @@ ORDER BY
                 $('[id$="TB_Alamat"]').val('');
                 $('[id$="txtFilterJenisPerniagaan"]').val('');
                 $('[id$="txtFilterNoAkaun"]').val('');
+                $('[id$="txtFilterTajukVisual"]').val('');
                 $('[id$="txtFilterRemarksFail"]').val('');
 
                 updateBadges();
