@@ -770,7 +770,10 @@
                                         @sessionEstateID = 1
                                         AND @sessionIsPeraku &lt;&gt; 1
                                         AND @sessionIsPenilai &lt;&gt; 1
-                                        AND SemakanIK_Status IN ('Kemaskini Kewangan', 'Selesai', 'Tidak Diperakukan')
+                                        AND (
+                                            SemakanIK_Status IN ('Kemaskini Kewangan', 'Selesai', 'Tidak Diperakukan')
+                                            OR @chkAll = 1   /* Kerani Lesen: tanda Semua Rekod = papar semua rekod, semua status */
+                                        )
                                     )
                                 )
                                AND 
