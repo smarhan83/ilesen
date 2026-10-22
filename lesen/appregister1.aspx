@@ -3711,17 +3711,16 @@
                                             </div>
                                         </div>
 
+                                        <%-- Arkib: papar permohonan yang telah lulus sahaja (status ditapis keluar secara default) --%>
+                                        <div class="form-check form-switch arkib-switch" runat="server" id="divArkibSwitch" title="Papar permohonan yang telah lulus sahaja">
+                                            <asp:CheckBox ID="chkArkib" runat="server" AutoPostBack="true" Text="Arkib" CausesValidation="false"
+                                                OnCheckedChanged="chkArkib_CheckedChanged" />
+                                        </div>
+
                                         <!-- 3. Status Permohonan -->
                                         <div class="col-lg-3 col-md-6 col-12" runat="server" id="filterStatus">
                                             <div class="form-group">
-                                                <div class="d-flex align-items-center justify-content-between">
-                                                    <label class="form-label-custom">Status Permohonan</label>
-                                                    <%-- Arkib: papar permohonan yang telah lulus sahaja (status ditapis keluar secara default) --%>
-                                                    <div class="form-check form-switch arkib-switch" runat="server" id="divArkibSwitch" title="Papar permohonan yang telah lulus sahaja">
-                                                        <asp:CheckBox ID="chkArkib" runat="server" AutoPostBack="true" Text="Arkib" CausesValidation="false"
-                                                            OnCheckedChanged="chkArkib_CheckedChanged" />
-                                                    </div>
-                                                </div>
+                                                <label class="form-label-custom">Status Permohonan</label>
                                                 <asp:DropDownList ID="DDL_Status" CssClass="form-control select2" runat="server" AutoPostBack="false"
                                                     DataSourceID="sdsStatus" DataTextField="Description" DataValueField="ApprStatusID">
                                                 </asp:DropDownList>
