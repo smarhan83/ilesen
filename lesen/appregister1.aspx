@@ -982,17 +982,24 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-md-5 col-lg-6">
+                                    <div class="col-md-5 col-lg-4">
                                         <div class="form-group">
                                             <label class="form-label-custom">Nama Pemohon</label>
                                             <asp:TextBox ID="TB_Name" runat="server" Enabled="false" Text="NULL" CssClass="form-control" />
                                         </div>
                                     </div>
 
-                                    <div class="col-md-4 col-lg-4">
+                                    <div class="col-md-4 col-lg-3">
                                         <div class="form-group">
                                             <label class="form-label-custom">Warganegara</label>
                                             <asp:TextBox ID="TB_Nat" runat="server" Enabled="false" Text="NULL" CssClass="form-control" />
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-12 col-lg-3">
+                                        <div class="form-group">
+                                            <label class="form-label-custom"><i class="bi bi-envelope me-1 text-primary"></i>Emel</label>
+                                            <asp:TextBox ID="TB_Email" runat="server" CssClass="form-control" placeholder="cth: pemohon@email.com" />
                                         </div>
                                     </div>
                                 </div>
@@ -2155,6 +2162,9 @@
                             <asp:LinkButton runat="server" CssClass="btn btn-info text-white" Visible='<%# If(Eval("StatusID") = 10 And Eval("JenisLesenIdList") <> "27", True, False) %>' Text='<%# If(Eval("IsBatal") = False, "Surat Kelulusan", "Surat Pembatalan") %>' ID="ViewSuratKelulusanPembatalan" OnCommand="OnClickSuratKelulusanPembatalan" CausesValidation="False">
                                 <i class="bi bi-file-earmark-pdf me-1"></i> <%# If(Eval("IsBatal") = False, "Surat Kelulusan", "Surat Pembatalan") %>
                             </asp:LinkButton>
+                            <asp:LinkButton runat="server" CssClass="btn btn-info text-white" Visible='<%# If(Eval("StatusID") = 10 And Eval("JenisLesenIdList") = "27", True, False) %>' Text="Hantar Semula Emel" ID="BtnHantarSemulaEmel" OnCommand="OnClickHantarSemulaEmel" CausesValidation="False">
+                                <i class="bi bi-envelope-arrow-up me-1"></i> Hantar Semula Emel
+                            </asp:LinkButton>
                             <asp:LinkButton runat="server" Text="Kembali" ID="BackButton" CausesValidation="False" CssClass="btn btn-outline-secondary" OnClick="BackButton_Click">
                                 <i class="bi bi-arrow-left me-1"></i> Kembali
                             </asp:LinkButton>
@@ -2213,24 +2223,31 @@
 
                             <asp:Panel runat="server" ID="pnlpemohon" Visible="false">
                                 <div class="row">
-                                    <div class="col-md-3">
+                                    <div class="col-md-3 col-lg-2">
                                         <div class="form-group">
                                             <label class="form-label-custom">Pemohon ID</label>
                                             <asp:TextBox ID="TB_PemohonID" runat="server" Enabled="false" Text='<%# Bind("Permohonan_PemohonID") %>' CssClass="form-control" />
                                         </div>
                                     </div>
 
-                                    <div class="col-md-6">
+                                    <div class="col-md-5 col-lg-4">
                                         <div class="form-group">
                                             <label class="form-label-custom">Nama Pemohon</label>
                                             <asp:TextBox ID="TB_Name" runat="server" Enabled="false" Text="NULL" CssClass="form-control" />
                                         </div>
                                     </div>
 
-                                    <div class="col-md-3">
+                                    <div class="col-md-4 col-lg-3">
                                         <div class="form-group">
                                             <label class="form-label-custom">Warganegara</label>
                                             <asp:TextBox ID="TB_Nat" runat="server" Enabled="false" Text="NULL" CssClass="form-control" />
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-12 col-lg-3">
+                                        <div class="form-group">
+                                            <label class="form-label-custom"><i class="bi bi-envelope me-1 text-primary"></i>Emel</label>
+                                            <asp:TextBox ID="TB_Email" runat="server" CssClass="form-control" placeholder="cth: pemohon@email.com" />
                                         </div>
                                     </div>
                                 </div>

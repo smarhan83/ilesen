@@ -414,9 +414,23 @@ Partial Class appregister1
                     Return
                 End If
 
-                Dim Sql As String = "UPDATE LESEN_Permohonan SET StatusID=1 WHERE StatusID=0 AND Permohonan_ID=" & hfid
+                Dim jenisIdList As String = Convert.ToString(Me.GridView1.DataKeys(intRow)("JenisLesenIdList"))
+                Dim jenisId As String = Convert.ToString(Me.GridView1.DataKeys(intRow)("JenisLesen_ID"))
+                Dim isBanting As Boolean = (jenisId = "27" OrElse jenisIdList = "27" OrElse ("," & jenisIdList & ",").Contains(",27,"))
+
+                Dim Sql As String = "UPDATE LESEN_Permohonan SET StatusID=1 WHERE StatusID=0 AND Permohonan_ID=@Permohonan_ID"
+                Dim pinBanting As String = ""
+                If isBanting Then
+                    pinBanting = GenerateUniqueBantingPin(myConnection)
+                    Sql = "UPDATE LESEN_Permohonan SET StatusID=10, BantingID=@BantingID WHERE StatusID=0 AND Permohonan_ID=@Permohonan_ID"
+                End If
+
                 Dim result As Integer
                 Using myCommand As New SqlCommand(Sql, myConnection)
+                    myCommand.Parameters.AddWithValue("@Permohonan_ID", hfid)
+                    If isBanting Then
+                        myCommand.Parameters.AddWithValue("@BantingID", pinBanting)
+                    End If
                     result = myCommand.ExecuteNonQuery()
                 End Using
 
@@ -685,6 +699,9 @@ Partial Class appregister1
             Dim tbRemarks As TextBox = TryCast(FormView1.FindControl("TB_Remarks"), TextBox)
             If tbRemarks IsNot Nothing Then tbRemarks.Text = "NULL"
 
+            Dim tbEmail As TextBox = TryCast(FormView1.FindControl("TB_Email"), TextBox)
+            If tbEmail IsNot Nothing Then tbEmail.Text = ""
+
             ' Reset visibility of all dynamic panels inside InsertItemTemplate
             Dim panelNames() As String = {
                 "pnlpemohon", "pnlesen1", "pnlesen1a", "pnlesen1b", "pnlesen1c", "pnlesen1d", "pnlesen1e",
@@ -771,6 +788,7 @@ Partial Class appregister1
     End Sub
 
     Private Sub FormView1_ItemInserting(sender As Object, e As FormViewInsertEventArgs) Handles FormView1.ItemInserting
+        SavePemohonEmail()
     End Sub
 
     Private Sub FormView1_ItemInserted(sender As Object, e As FormViewInsertedEventArgs) Handles FormView1.ItemInserted
@@ -785,6 +803,8 @@ Partial Class appregister1
         If cb IsNot Nothing AndAlso cb.Visible AndAlso cb.Checked Then
             e.NewValues("StatusID") = 0
         End If
+
+        SavePemohonEmail()
     End Sub
 
     Private Sub FormView1_ItemUpdated(sender As Object, e As FormViewUpdatedEventArgs) Handles FormView1.ItemUpdated
@@ -832,6 +852,7 @@ Partial Class appregister1
         Dim tbnation As TextBox = DirectCast(FormView1.FindControl("TB_Nat"), TextBox)
         Dim tbaddress As TextBox = DirectCast(FormView1.FindControl("TB_Address"), TextBox)
         Dim tbnote As TextBox = DirectCast(FormView1.FindControl("TB_Remarks"), TextBox)
+        Dim tbemail As TextBox = TryCast(FormView1.FindControl("TB_Email"), TextBox)
 
         Dim HF_JenisLesenDescList As HiddenField = DirectCast(FormView1.FindControl("HF_JenisLesenDescList"), HiddenField)
         Dim HF_JenisLesenIdList As HiddenField = DirectCast(FormView1.FindControl("HF_JenisLesenIdList"), HiddenField)
@@ -979,11 +1000,17 @@ Partial Class appregister1
                                 tbnation.Text = myReader.Item("name").ToString()
                                 tbaddress.Text = myReader.Item("Pemohon_Address").ToString()
                                 tbnote.Text = myReader.Item("Pemohon_Remarks").ToString()
+                                If tbemail IsNot Nothing Then
+                                    tbemail.Text = If(IsDBNull(myReader.Item("Pemohon_Email")), "", myReader.Item("Pemohon_Email").ToString())
+                                End If
                             Else
                                 tbnote.Text = "NULL"
                                 tbname.Text = "NULL"
                                 tbnation.Text = "NULL"
                                 tbaddress.Text = "NULL"
+                                If tbemail IsNot Nothing Then
+                                    tbemail.Text = ""
+                                End If
                                 ShowAlert("error", "", "Rekod pemohon tiada di dalam sistem")
                             End If
                         End Using
@@ -2067,7 +2094,7 @@ Partial Class appregister1
 
         Dim btn As LinkButton = DirectCast(sender, LinkButton)
         Dim lokasiId As Integer = CInt(btn.CommandArgument)
-        
+
         Dim row As GridViewRow = TryCast(btn.NamingContainer, GridViewRow)
         If row Is Nothing Then
             Dim c As Control = btn.Parent
@@ -2214,6 +2241,77 @@ Partial Class appregister1
 
         Return uid
     End Function
+
+    Private Function GenerateUniqueBantingPin(ByVal conn As SqlConnection) As String
+        Dim pin As String = ""
+        Dim isUnique As Boolean = False
+        Dim attempts As Integer = 0
+        Dim bytes(3) As Byte
+        Dim rng As System.Security.Cryptography.RandomNumberGenerator = System.Security.Cryptography.RandomNumberGenerator.Create()
+
+        If conn.State <> ConnectionState.Open Then
+            conn.Open()
+        End If
+
+        While Not isUnique AndAlso attempts < 50
+            attempts += 1
+            rng.GetBytes(bytes)
+            Dim val As UInteger = BitConverter.ToUInt32(bytes, 0)
+            Dim num As Integer = CInt(100000 + (val Mod 900000UI))
+            pin = num.ToString()
+
+            Using cmd As New SqlCommand("SELECT COUNT(*) FROM LESEN_Permohonan WHERE BantingID = @Pin", conn)
+                cmd.Parameters.AddWithValue("@Pin", pin)
+                Dim cnt As Integer = Convert.ToInt32(cmd.ExecuteScalar())
+                If cnt = 0 Then
+                    isUnique = True
+                End If
+            End Using
+        End While
+
+        Return pin
+    End Function
+
+    Private Sub SavePemohonEmail(Optional ByVal explicitPemohonId As Integer = 0)
+        Dim pemohonId As Integer = explicitPemohonId
+        Dim tbid As TextBox = TryCast(FormView1.FindControl("TB_PemohonID"), TextBox)
+        Dim tbemail As TextBox = TryCast(FormView1.FindControl("TB_Email"), TextBox)
+
+        If tbemail Is Nothing Then Return
+
+        If pemohonId <= 0 AndAlso tbid IsNot Nothing Then
+            Integer.TryParse(tbid.Text.Trim(), pemohonId)
+        End If
+
+        If pemohonId <= 0 Then
+            Dim hfid As HiddenField = TryCast(FormView1.FindControl("HF_PermohonanID"), HiddenField)
+            If hfid IsNot Nothing AndAlso Not String.IsNullOrEmpty(hfid.Value) Then
+                Using conn As New SqlConnection(CS)
+                    conn.Open()
+                    Using cmd As New SqlCommand("SELECT Permohonan_PemohonID FROM LESEN_Permohonan WHERE Permohonan_ID = @PID", conn)
+                        cmd.Parameters.AddWithValue("@PID", hfid.Value)
+                        Dim o = cmd.ExecuteScalar()
+                        If o IsNot Nothing AndAlso Not IsDBNull(o) Then
+                            Integer.TryParse(o.ToString(), pemohonId)
+                        End If
+                    End Using
+                End Using
+            End If
+        End If
+
+        If pemohonId > 0 Then
+            Dim newEmail As String = tbemail.Text.Trim()
+            Using conn As New SqlConnection(CS)
+                conn.Open()
+                Dim sql As String = "UPDATE LESEN_Pemohon SET Pemohon_Email = @Email, LastModDt = GETDATE() WHERE Pemohon_ID = @Pemohon_ID"
+                Using cmd As New SqlCommand(sql, conn)
+                    cmd.Parameters.AddWithValue("@Email", If(String.IsNullOrEmpty(newEmail), DBNull.Value, CObj(newEmail)))
+                    cmd.Parameters.AddWithValue("@Pemohon_ID", pemohonId)
+                    cmd.ExecuteNonQuery()
+                End Using
+            End Using
+        End If
+    End Sub
 
     Private Sub DeleteBantingImage(imejId As Integer)
         Dim filePath As String = ""
@@ -2662,6 +2760,7 @@ Partial Class appregister1
 #Region "Report & Letter Generation"
 
     Protected Sub OnClickBtnSubmit(ByVal sender As Object, ByVal e As CommandEventArgs)
+        SavePemohonEmail()
         Dim counter As Integer = 0
         Dim extstr As String = ""
         Dim hfid As HiddenField = DirectCast(FormView1.FindControl("HF_PermohonanID"), HiddenField)
@@ -2693,14 +2792,20 @@ Partial Class appregister1
                     Return
                 End If
 
+                Dim isBanting As Boolean = (ddl IsNot Nothing AndAlso (ddl.Value = "27" OrElse ("," & ddl.Value & ",").Contains(",27,")))
                 Dim Sql As String = "UPDATE LESEN_Permohonan SET StatusID = 1 WHERE StatusID = 0 AND Permohonan_ID = @PermohonanID"
-                If ddl.Value = "27" Then
-                    Sql = "UPDATE LESEN_Permohonan SET StatusID = 10 WHERE StatusID = 0 AND Permohonan_ID = @PermohonanID"
+                Dim pinBanting As String = ""
+                If isBanting Then
+                    pinBanting = GenerateUniqueBantingPin(myConnection)
+                    Sql = "UPDATE LESEN_Permohonan SET StatusID = 10, BantingID = @BantingID WHERE StatusID = 0 AND Permohonan_ID = @PermohonanID"
                 End If
 
                 Dim result As Integer
                 Using myCommand As New SqlCommand(Sql, myConnection)
                     myCommand.Parameters.AddWithValue("@PermohonanID", hfid.Value)
+                    If isBanting Then
+                        myCommand.Parameters.AddWithValue("@BantingID", pinBanting)
+                    End If
                     result = myCommand.ExecuteNonQuery()
                 End Using
 
@@ -2736,6 +2841,39 @@ Partial Class appregister1
             Else
                 ViewSuratKelulusanAuto(Permohonan_ID.Value, True)
             End If
+        End If
+    End Sub
+
+    Protected Sub OnClickHantarSemulaEmel(ByVal sender As Object, ByVal e As CommandEventArgs)
+        SavePemohonEmail()
+
+        Dim Permohonan_ID As HiddenField = DirectCast(FormView1.FindControl("HF_PermohonanID"), HiddenField)
+        Dim pid As Integer = 0
+
+        If Permohonan_ID IsNot Nothing Then
+            Integer.TryParse(Permohonan_ID.Value, pid)
+        End If
+
+        If pid <= 0 AndAlso FormView1.DataKey IsNot Nothing Then
+            Integer.TryParse(Convert.ToString(FormView1.DataKey.Value), pid)
+        End If
+
+        If pid > 0 Then
+            Try
+                Using myConnection As New SqlConnection(CS)
+                    myConnection.Open()
+                    Dim sql As String = "EXEC SP_NotiBantingPin @Permohonan_ID"
+                    Using myCommand As New SqlCommand(sql, myConnection)
+                        myCommand.Parameters.AddWithValue("@Permohonan_ID", pid)
+                        myCommand.ExecuteNonQuery()
+                    End Using
+                End Using
+                ShowAlert("success", "", "Emel No. Pin telah berjaya dihantar semula.")
+            Catch ex As Exception
+                ShowAlert("error", "Ralat", "Gagal hantar semula emel: " & ex.Message)
+            End Try
+        Else
+            ShowAlert("error", "Ralat", "ID Permohonan tidak sah.")
         End If
     End Sub
 
@@ -3805,6 +3943,7 @@ Partial Class appregister1
         Dim tbnation As TextBox = DirectCast(FormView1.FindControl("TB_Nat"), TextBox)
         Dim tbaddress As TextBox = DirectCast(FormView1.FindControl("TB_Address"), TextBox)
         Dim tbnote As TextBox = DirectCast(FormView1.FindControl("TB_Remarks"), TextBox)
+        Dim tbemail As TextBox = TryCast(FormView1.FindControl("TB_Email"), TextBox)
         Dim pnl As Panel = DirectCast(FormView1.FindControl("pnlpemohon"), Panel)
 
         Using myConnection As New SqlConnection(CS)
@@ -3820,6 +3959,9 @@ Partial Class appregister1
                         tbnation.Text = myReader.Item("name").ToString()
                         tbaddress.Text = myReader.Item("Pemohon_Address").ToString()
                         tbnote.Text = myReader.Item("Pemohon_Remarks").ToString()
+                        If tbemail IsNot Nothing Then
+                            tbemail.Text = If(IsDBNull(myReader.Item("Pemohon_Email")), "", myReader.Item("Pemohon_Email").ToString())
+                        End If
 
                         pnl.Visible = True
                         ShowAlert("success", "", "Rekod pemohon jumpa")
@@ -3828,6 +3970,9 @@ Partial Class appregister1
                         tbname.Text = "NULL"
                         tbnation.Text = "NULL"
                         tbaddress.Text = "NULL"
+                        If tbemail IsNot Nothing Then
+                            tbemail.Text = ""
+                        End If
 
                         pnl.Visible = False
                         ShowAlert("error", "", "Rekod pemohon tiada di dalam sistem")
