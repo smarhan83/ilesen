@@ -1577,7 +1577,7 @@ h1{
                             </p>--%>
 
                             <label class="fw-bold mb-2">
-                                No. Kad Pengenalan / No. Passport / No. Pendaftaran Syarikat (SSM) / No. Pin / Tajuk Visual / Nama Pemohon
+                                Nama Pemohon / No. Kad Pengenalan / No. Passport / No. Pendaftaran Syarikat (SSM) / No. Pengesahan DBP / Tajuk Visual
                                 <span class="text-danger">*</span>
                             </label>
 
@@ -1586,7 +1586,7 @@ h1{
                                 <asp:TextBox ID="txtNoPengenalan"
                                     runat="server"
                                     CssClass="form-control"
-                                    placeholder="Contoh: 900101011234 / 202501123456 / BTG-20261006-6B37D9 / Tajuk Visual / Nama Pemohon">
+                                    placeholder="Contoh: 900101011234 / 202501123456 / DBPSB123456789 / Tajuk Visual / Nama Pemohon">
                                 </asp:TextBox>
 
 
@@ -1603,7 +1603,7 @@ h1{
 
                             <small class="text-muted d-block mt-3 hint-text">
                                 <i class="bi bi-info-circle-fill hint-icon"></i>
-                                <asp:Label runat="server" id="lblMessage">Sila masukkan No. Kad Pengenalan (tanpa -), No. Passport, No. Pendaftaran Syarikat (SSM), No. Pin (permohonan sepanduk), Tajuk Visual atau Nama Pemohon.</asp:Label>
+                                <asp:Label runat="server" id="lblMessage">Sila masukkan Nama Pemohon, No. Kad Pengenalan (tanpa -), No. Passport, No. Pendaftaran Syarikat (SSM), No. Pengesahan DBP (permohonan sepanduk) atau Tajuk Visual.</asp:Label>
                             </small>                         
 
                             <%--STATUS--%>
@@ -1662,7 +1662,7 @@ h1{
                                               <line x1="173" y1="153" x2="196" y2="176" stroke="#3d5a80" stroke-width="8" stroke-linecap="round"/>
                                             </svg>
                                         </div>
-                                        <h5>Sila masukkan No. Kad Pengenalan, No. Passport, No. SSM, No. Pin, Tajuk Visual atau Nama Pemohon</h5>
+                                        <h5>Sila masukkan Nama Pemohon, No. Kad Pengenalan, No. Passport, No. SSM, No. Pengesahan DBP atau Tajuk Visual</h5>
                                         <p>Masukkan maklumat di atas dan klik butang 'Semak' untuk melihat senarai permohonan lesen anda.</p>
                                     </div>
                                 </EmptyDataTemplate>
@@ -1795,8 +1795,8 @@ h1{
                                         '%'+REPLACE(REPLACE(REPLACE(@Pemohon_ICNo, '-', ''), ' ', ''), CHAR(9), '')+'%'
                                     
                                         or
-                                        /* No. Pin = LESEN_Permohonan.BantingID (padanan tepat) */
-                                        (LEN(ISNULL(g.BantingID, '')) > 0 AND g.BantingID = LTRIM(RTRIM(@Pemohon_ICNo)))
+                                        /* No. Pengesahan DBP = LESEN_Permohonan.NoPengesahanBanting (padanan tepat) */
+                                        (LEN(ISNULL(g.NoPengesahanBanting, '')) > 0 AND g.NoPengesahanBanting = LTRIM(RTRIM(@Pemohon_ICNo)))
                                         or
                                         /* Tajuk Visual = LESEN_BantingImej.Remarks (mengandungi, min 3 aksara) */
                                         EXISTS (SELECT 1 FROM LESEN_BantingImej bi WHERE bi.Permohonan_ID = g.Permohonan_ID
