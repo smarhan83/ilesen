@@ -71,6 +71,41 @@ Partial Class laporaninspektorat
         Return Tuple.Create(dari, hingga)
     End Function
 
+    ' Tempoh masa dalam HARI BEKERJA (tolak Sabtu, Ahad & kelepasan am) melalui dbo.fn_HariBekerja.
+    ' Jika fungsi belum dipasang (sql/2026-10-22_kelepasan_am_hari_bekerja.sql), guna beza hari kalendar sebagai sandaran.
+    Private Function FungsiHariBekerjaAda() As Boolean
+        Using conn As New SqlConnection(ConfigurationManager.ConnectionStrings("webcon_ConnectionStr").ConnectionString)
+            Using cmd As New SqlCommand("SELECT CASE WHEN OBJECT_ID('dbo.fn_HariBekerja', 'FN') IS NOT NULL AND OBJECT_ID('dbo.LESEN_KelepasanAm', 'U') IS NOT NULL THEN 1 ELSE 0 END", conn)
+                conn.Open()
+                Return Convert.ToInt32(cmd.ExecuteScalar()) = 1
+            End Using
+        End Using
+    End Function
+
+    Private Function ExprTempoh() As String
+        If FungsiHariBekerjaAda() Then
+            Return "dbo.fn_HariBekerja(CAST(x.TarikhDiterima AS date), CAST(ISNULL(x.TarikhHantar, GETDATE()) AS date))"
+        End If
+        Return "DATEDIFF(day, x.TarikhDiterima, ISNULL(x.TarikhHantar, GETDATE()))"
+    End Function
+
+    ' Amaran di atas laporan: fungsi belum dipasang, atau jadual kelepasan am kosong bagi tahun dalam julat
+    Private Function TeksAmaran(ByVal j As Tuple(Of DateTime, DateTime)) As String
+        If Not FungsiHariBekerjaAda() Then
+            Return "Fungsi hari bekerja belum dipasang pada pangkalan data - tempoh dikira mengikut hari kalendar (Sabtu, Ahad dan kelepasan am belum ditolak)."
+        End If
+        Using conn As New SqlConnection(ConfigurationManager.ConnectionStrings("webcon_ConnectionStr").ConnectionString)
+            Using cmd As New SqlCommand("SELECT COUNT(*) FROM dbo.LESEN_KelepasanAm WHERE IsActive = 1 AND Tarikh BETWEEN @a AND @b", conn)
+                cmd.Parameters.AddWithValue("@a", j.Item1)
+                cmd.Parameters.AddWithValue("@b", j.Item2)
+                conn.Open()
+                If Convert.ToInt32(cmd.ExecuteScalar()) = 0 Then
+                    Return "Tiada kelepasan am direkodkan bagi tempoh ini dalam jadual LESEN_KelepasanAm - hanya Sabtu dan Ahad ditolak."
+                End If
+            End Using
+        End Using
+        Return ""
+    End Function
     Private Function GetData() As DataTable
         Dim j As Tuple(Of DateTime, DateTime) = Julat()
         Dim jenisId As Integer = 0
@@ -84,6 +119,7 @@ Partial Class laporaninspektorat
             "  SELECT p.Permohonan_ID, ISNULL(p.Rujukan, '') AS Rujukan, " &
             "         ISNULL(NULLIF(p.NamaBaruSyarikat, ''), ISNULL(NULLIF(p.NamaSyarikat, ''), ISNULL(e.Pemohon_Name, ''))) AS Pemohon, " &
             "         ISNULL(NULLIF(p.JenisLesenDescList, ''), ISNULL(jl.JenisLesen_Description, '')) AS JenisLesen, " &
+            "         ISNULL(NULLIF(p.JenisPerniagaanBaru, ''), ISNULL(p.JenisPerniagaan, '')) AS JenisPerniagaan, " &
             "         COALESCE(a2.CreatedDt, p.TarikhMohon) AS TarikhDiterima, " &
             "         a2.ApprovalDate AS TarikhPenetapan, a3.ApprovalDate AS TarikhSiasatan, uf.TarikhUlasan, " &
             "         COALESCE(a4.ApprovalDate, CASE WHEN pa.StatusID = 3 THEN pa.LastModDt END) AS TarikhHantar " &
@@ -100,7 +136,7 @@ Partial Class laporaninspektorat
             "    AND (@Cari = '' OR p.Rujukan LIKE '%' + @Cari + '%' OR e.Pemohon_Name LIKE '%' + @Cari + '%' OR p.NamaSyarikat LIKE '%' + @Cari + '%' OR p.NamaBaruSyarikat LIKE '%' + @Cari + '%') " &
             ") x " &
             "CROSS APPLY (SELECT CASE WHEN x.TarikhHantar IS NULL THEN 0 ELSE 1 END AS Selesai, " &
-            "                    DATEDIFF(day, x.TarikhDiterima, ISNULL(x.TarikhHantar, GETDATE())) AS TempohHari) k " &
+            "                    " & ExprTempoh() & " AS TempohHari) k " &
             "WHERE CAST(x.TarikhDiterima AS date) BETWEEN @Dari AND @Hingga " &
             "  AND (@Kpi = 0 " &
             "       OR (@Kpi = 1 AND k.Selesai = 1 AND k.TempohHari < @KpiHari) " &
@@ -152,6 +188,9 @@ Partial Class laporaninspektorat
         litTempohCetak.Text = "Tarikh diterima: " & j.Item1.ToString("dd/MM/yyyy") & " hingga " & j.Item2.ToString("dd/MM/yyyy") &
                               " &middot; Dicetak: " & DateTime.Now.ToString("dd/MM/yyyy HH:mm")
 
+        Dim amaran As String = TeksAmaran(j)
+        litAmaran.Text = If(amaran = "", "", "<div class=""li-warn""><i class=""bi bi-exclamation-triangle-fill""></i> " & HttpUtility.HtmlEncode(amaran) & "</div>")
+
         rptLaporan.DataSource = dt
         rptLaporan.DataBind()
         rptLaporan.Visible = dt.Rows.Count > 0
@@ -181,7 +220,7 @@ Partial Class laporaninspektorat
     End Function
 
     '===================== EKSPORT EXCEL (.xlsx sebenar, tanpa pustaka luar - System.IO.Compression) =====================
-    Private Shared ReadOnly LebarLajur() As Double = {5, 20, 28, 20, 17, 17, 17, 17, 19, 12, 14}
+    Private Shared ReadOnly LebarLajur() As Double = {5, 20, 28, 20, 24, 17, 17, 17, 17, 19, 14, 14}
 
     Private Function BinaXlsx(ByVal dt As DataTable) As Byte()
         Dim j As Tuple(Of DateTime, DateTime) = Julat()
@@ -275,9 +314,9 @@ Partial Class laporaninspektorat
         sb.Append("<row r=""3"">" & SelStr("A3", "Tarikh diterima: " & j.Item1.ToString("dd/MM/yyyy") & " hingga " & j.Item2.ToString("dd/MM/yyyy") &
                   " | KPI: kurang " & KPI_HARI & " hari | Dijana: " & DateTime.Now.ToString("dd/MM/yyyy HH:mm"), 2) & "</row>")
 
-        Dim tajuk() As String = {"Bil", "No. Rujukan", "Pemohon / Syarikat", "Jenis Lesen",
+        Dim tajuk() As String = {"Bil", "No. Rujukan", "Pemohon / Syarikat", "Jenis Lesen", "Jenis Perniagaan",
             "Tarikh Permohonan Diterima daripada KB Lesen (KB)", "Tarikh Penetapan Siasatan (PPKP)", "Tarikh Siasatan Tapak (PPKP)",
-            "Tarikh Ulasan Teknikal (PPKP)", "Tarikh Semakan dan Hantar Laporan ke Lesen (KB)", "Tempoh Masa (hari)", "Status KPI"}
+            "Tarikh Ulasan Teknikal (PPKP)", "Tarikh Semakan dan Hantar Laporan ke Lesen (KB)", "Tempoh Masa (hari bekerja)", "Status KPI"}
         sb.Append("<row r=""5"" ht=""45"" customHeight=""1"">")
         For i As Integer = 0 To tajuk.Length - 1
             sb.Append(SelStr(Ruj(i, 5), tajuk(i), 3))
@@ -294,18 +333,19 @@ Partial Class laporaninspektorat
             sb.Append(SelStr(Ruj(1, baris), Convert.ToString(r("Rujukan")), 4))
             sb.Append(SelStr(Ruj(2, baris), Convert.ToString(r("Pemohon")), 4))
             sb.Append(SelStr(Ruj(3, baris), Convert.ToString(r("JenisLesen")), 4))
-            sb.Append(SelTar(Ruj(4, baris), r("TarikhDiterima")))
-            sb.Append(SelTar(Ruj(5, baris), r("TarikhPenetapan")))
-            sb.Append(SelTar(Ruj(6, baris), r("TarikhSiasatan")))
-            sb.Append(SelTar(Ruj(7, baris), r("TarikhUlasan")))
-            sb.Append(SelTar(Ruj(8, baris), r("TarikhHantar")))
-            sb.Append(SelNum(Ruj(9, baris), CInt(r("TempohHari")), 5))
-            sb.Append(SelStr(Ruj(10, baris), KpiTeks(r("TempohHari"), r("Selesai")), 5))
+            sb.Append(SelStr(Ruj(4, baris), Convert.ToString(r("JenisPerniagaan")), 4))
+            sb.Append(SelTar(Ruj(5, baris), r("TarikhDiterima")))
+            sb.Append(SelTar(Ruj(6, baris), r("TarikhPenetapan")))
+            sb.Append(SelTar(Ruj(7, baris), r("TarikhSiasatan")))
+            sb.Append(SelTar(Ruj(8, baris), r("TarikhUlasan")))
+            sb.Append(SelTar(Ruj(9, baris), r("TarikhHantar")))
+            sb.Append(SelNum(Ruj(10, baris), CInt(r("TempohHari")), 5))
+            sb.Append(SelStr(Ruj(11, baris), KpiTeks(r("TempohHari"), r("Selesai")), 5))
             sb.Append("</row>")
         Next
 
         baris += 2
-        sb.Append("<row r=""" & baris & """>" & SelStr("A" & baris, "Jumlah rekod: " & dt.Rows.Count & " | Tempoh bagi permohonan yang belum selesai dikira sehingga hari ini.", 2) & "</row>")
+        sb.Append("<row r=""" & baris & """>" & SelStr("A" & baris, "Jumlah rekod: " & dt.Rows.Count & " | Tempoh dikira dalam hari bekerja (tolak Sabtu, Ahad dan kelepasan am); bagi permohonan yang belum selesai, dikira sehingga hari ini.", 2) & "</row>")
         sb.Append("</sheetData>")
         sb.Append("<pageMargins left=""0.4"" right=""0.4"" top=""0.5"" bottom=""0.5"" header=""0.3"" footer=""0.3""/>")
         sb.Append("<pageSetup paperSize=""9"" orientation=""landscape"" fitToHeight=""0""/>")
