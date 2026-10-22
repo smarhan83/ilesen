@@ -1209,10 +1209,11 @@ Partial Class appregister1
             Case 27 ' Banting
                 pnla.Visible = True
                 pnl6.Visible = True
-                noruj.Text = ""
 
                 If FormView1.CurrentMode = FormViewMode.Edit Then
                     BindLokasiList()
+                Else
+                    noruj.Text = ""
                 End If
         End Select
     End Sub
