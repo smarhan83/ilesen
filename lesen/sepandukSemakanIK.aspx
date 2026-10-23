@@ -2320,6 +2320,21 @@
         ruPaparSlide();
     }
 
+    // Klik di luar gambar (latar gelap) menutup paparan; kekunci Esc menutup, anak panah kiri/kanan menukar gambar.
+    // Guna delegasi pada document supaya masih berfungsi selepas UpdatePanel memaparkan semula elemen.
+    document.addEventListener('click', function (e) {
+        var ov = e.target.closest ? e.target.closest('#ruModalGambar') : null;
+        if (!ov) return;
+        if (e.target.closest('.ru-modal-slide img, .ru-modal-arrow, .ru-modal-counter')) return;
+        ruTutupModalGambar();
+    });
+    document.addEventListener('keydown', function (e) {
+        var m = document.getElementById('ruModalGambar');
+        if (!m || !m.classList.contains('is-open')) return;
+        if (e.key === 'Escape') ruTutupModalGambar();
+        else if (e.key === 'ArrowRight') ruGambarSeterusnya();
+        else if (e.key === 'ArrowLeft') ruGambarSebelum();
+    });
     function ruPaparSlide() {
         var slides = document.querySelectorAll('#ruModalGambar .ru-modal-slide');
         slides.forEach(function (slide, i) {
