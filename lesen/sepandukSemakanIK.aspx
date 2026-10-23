@@ -1516,7 +1516,9 @@
                         </div>
 
                         <div class="ru-detail-row">
-                            <div class="ru-detail-icon-empty"></div>
+                            <div class="ru-detail-icon">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 9h16M4 15h16M10 3L8 21M16 3l-2 18"/></svg>
+                            </div>
                             <div class="ru-detail-text">
                                 <span class="ru-detail-label">No. Kelulusan DBP</span>
                                 <span class="ru-detail-colon">:</span>
