@@ -273,6 +273,9 @@
     .ru-audit-table tr:last-child td { border-bottom: 0; }
     .ru-audit-table .c { text-align: center; }
     .ru-audit-sub { font-size: 12px; color: #6c757d; margin-top: 3px; }
+    .ru-gambar-cap { margin-top: 8px; display: flex; flex-wrap: wrap; gap: 8px; align-items: baseline; font-size: 13px; }
+    .ru-gambar-cap-lokasi { font-weight: 700; color: #212529; }
+    .ru-gambar-cap-kod { font-family: Consolas, 'Courier New', monospace; font-size: 12px; color: #6c757d; }
 
     /* Status aliran */
     .ss-status { display: inline-block; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 600; white-space: nowrap; }
@@ -1547,6 +1550,10 @@
                                         ImageUrl='<%# Eval("FilePath") %>'
                                         AlternateText="Gambar Sepanduk"
                                         CssClass="ru-gambar-img" />
+                                    <div class="ru-gambar-cap">
+                                        <span class="ru-gambar-cap-lokasi"><%# HttpUtility.HtmlEncode(If(String.IsNullOrWhiteSpace(Convert.ToString(Eval("Lokasi"))), "-", Eval("Lokasi"))) %></span>
+                                        <span class="ru-gambar-cap-kod"><%# HttpUtility.HtmlEncode(Eval("UniqueID")) %></span>
+                                    </div>
                                 </ItemTemplate>
                                 <EmptyDataTemplate>
                                     <div class="ru-gambar-img-placeholder">Tiada gambar</div>
@@ -1592,7 +1599,7 @@
 
                             <button type="button" class="ru-btn-lihat-gambar" onclick="ruBukaModalGambar()">
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-                                Lihat Semua Gambar
+                                Lihat Gambar
                             </button>
                         </div>
 
@@ -1607,12 +1614,18 @@
             <asp:SqlDataSource ID="SqlDataSourceGambarPreview" runat="server"
                 ConnectionString="<%$ ConnectionStrings:webcon_ConnectionStr %>"
                 SelectCommand="
-                SELECT TOP 1 a.Imej_ID, a.FileName, a.FilePath FROM LESEN_BantingImej a
+                SELECT TOP 1 a.Imej_ID, a.UniqueID, a.FileName, a.FilePath, ISNULL(l.Lokasi, '') AS Lokasi
+                FROM LESEN_BantingImej a
+                LEFT JOIN LESEN_BantingLokasi l ON l.Lokasi_ID = a.Lokasi_ID
                 WHERE a.Permohonan_ID = @Permohonan_ID
                 AND (a.ContentType IS NULL OR a.ContentType LIKE '%image%')
+                /* Imbasan QR: papar gambar bagi kod (UniqueID) yang diimbas sahaja; jika kod tiada padanan (cth. carian rujukan), papar semua */
+                AND (ISNULL(@UniqueID, '') = '' OR a.UniqueID = @UniqueID
+                     OR NOT EXISTS (SELECT 1 FROM LESEN_BantingImej z WHERE z.Permohonan_ID = @Permohonan_ID AND z.UniqueID = @UniqueID))
                 ORDER BY a.Imej_ID">
                 <SelectParameters>
                     <asp:ControlParameter ControlID="GridViewCarian" Name="Permohonan_ID" PropertyName="SelectedValue" />
+                    <asp:SessionParameter Name="UniqueID" SessionField="SepandukIK_QRCode" Type="String" ConvertEmptyStringToNull="False" DefaultValue="" />
                 </SelectParameters>
             </asp:SqlDataSource>
 
@@ -1622,9 +1635,12 @@
                 SELECT a.Imej_ID, a.Lokasi_ID, a.FileName, a.FilePath FROM LESEN_BantingImej a
                 WHERE a.Permohonan_ID = @Permohonan_ID
                 AND (a.ContentType IS NULL OR a.ContentType LIKE '%image%')
+                AND (ISNULL(@UniqueID, '') = '' OR a.UniqueID = @UniqueID
+                     OR NOT EXISTS (SELECT 1 FROM LESEN_BantingImej z WHERE z.Permohonan_ID = @Permohonan_ID AND z.UniqueID = @UniqueID))
                 ORDER BY a.Imej_ID">
                 <SelectParameters>
                     <asp:ControlParameter ControlID="GridViewCarian" Name="Permohonan_ID" PropertyName="SelectedValue" />
+                    <asp:SessionParameter Name="UniqueID" SessionField="SepandukIK_QRCode" Type="String" ConvertEmptyStringToNull="False" DefaultValue="" />
                 </SelectParameters>
             </asp:SqlDataSource>
 
@@ -1906,6 +1922,7 @@
                                                 <Columns>
                                                     <asp:BoundField DataField="Ulasan_Jenis" HeaderText="Jenis" />
                                                     <asp:BoundField DataField="Ulasan_Catatan" HeaderText="Catatan" />
+                                                    <asp:BoundField DataField="NamaIK" HeaderText="Nama IK" />
                                                     <asp:BoundField DataField="Ulasan_Tarikh" HeaderText="Tarikh" DataFormatString="{0:dd/MM/yyyy hh:mm tt}" ItemStyle-CssClass="ss-nowrap" />
                                                 </Columns>
                                                 <EmptyDataTemplate>
@@ -1940,7 +1957,10 @@
 
                                     <asp:SqlDataSource ID="SqlDataSourceUlasanIK" runat="server"
                                         ConnectionString="<%$ ConnectionStrings:webcon_ConnectionStr %>"
-                                        SelectCommand="SELECT * FROM LESEN_SepandukSemakanIK_Ulasan WHERE Ulasan_SemakanIKID = @SemakanIK_ID ORDER BY Ulasan_ID ASC">
+                                        SelectCommand="SELECT u.*, ISNULL(us.Users_Fullname, ISNULL(NULLIF(u.Ulasan_PegawaiID, ''), u.CreatorID)) AS NamaIK 
+                                                       FROM LESEN_SepandukSemakanIK_Ulasan u 
+                                                       LEFT JOIN TBL_USERS us ON CAST(us.Users_Id AS nvarchar(50)) = u.Ulasan_PegawaiID 
+                                                       WHERE u.Ulasan_SemakanIKID = @SemakanIK_ID ORDER BY u.Ulasan_ID ASC">
                                         <SelectParameters>
                                             <asp:ControlParameter ControlID="GridView1" Name="SemakanIK_ID" PropertyName="SelectedValue" />
                                         </SelectParameters>
