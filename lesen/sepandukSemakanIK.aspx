@@ -1376,12 +1376,15 @@
         ConnectionString="<%$ ConnectionStrings:webcon_ConnectionStr %>"
         SelectCommand="
         SELECT *,
-        (SELECT COUNT(*) FROM LESEN_SepandukSemakanIK x where x.SemakanIK_PermohonanID = a.Permohonan_ID ) as cntSemakanIK
+        /* Imbasan QR (kod = UniqueID satu gambar): kira semakan bagi kod itu sahaja; jika tiada kod / kod bukan kod gambar, kira semua semakan permohonan */
+        (SELECT COUNT(*) FROM LESEN_SepandukSemakanIK x WHERE x.SemakanIK_PermohonanID = a.Permohonan_ID AND x.IsActive = 1
+            AND (NOT EXISTS (SELECT 1 FROM LESEN_BantingImej z WHERE z.Permohonan_ID = a.Permohonan_ID AND z.UniqueID = @UniqueID) OR x.SemakanIK_QRCode = @UniqueID)) as cntSemakanIK
         FROM LESEN_Permohonan a
         
         WHERE a.Permohonan_ID = @Permohonan_ID">
         <SelectParameters>
             <asp:ControlParameter ControlID="GridViewCarian" Name="Permohonan_ID" PropertyName="SelectedValue" />
+            <asp:SessionParameter Name="UniqueID" SessionField="SepandukIK_QRCode" Type="String" ConvertEmptyStringToNull="False" DefaultValue="" />
         </SelectParameters>
     </asp:SqlDataSource>
 
@@ -1429,7 +1432,7 @@
                     </tr>
                 </ItemTemplate>
                 <EmptyDataTemplate>
-                    <div class="ru-audit-note none"><i class="bi bi-hourglass-split"></i><span>Belum pernah dibuat semakan oleh Pegawai IK.</span></div>
+                    <div class="ru-audit-note none"><i class="bi bi-hourglass-split"></i><span>Belum pernah dibuat semakan oleh Pegawai IK bagi sepanduk / kod ini.</span></div>
                 </EmptyDataTemplate>
             </asp:ListView>
 
@@ -1441,9 +1444,12 @@
                 FROM LESEN_SepandukSemakanIK a
                 LEFT JOIN TBL_USERS u ON CAST(u.Users_Id AS nvarchar(50)) = a.SemakanIK_PegawaiID
                 WHERE a.SemakanIK_PermohonanID = @Permohonan_ID AND a.IsActive = 1
+                /* Imbasan QR: hanya semakan bagi kod (UniqueID) itu; jika tiada kod / bukan kod gambar, semua semakan permohonan */
+                AND (NOT EXISTS (SELECT 1 FROM LESEN_BantingImej z WHERE z.Permohonan_ID = @Permohonan_ID AND z.UniqueID = @UniqueID) OR a.SemakanIK_QRCode = @UniqueID)
                 ORDER BY a.SemakanIK_TarikhSemakan DESC, a.SemakanIK_ID DESC">
                 <SelectParameters>
                     <asp:ControlParameter ControlID="GridViewCarian" Name="Permohonan_ID" PropertyName="SelectedValue" />
+                    <asp:SessionParameter Name="UniqueID" SessionField="SepandukIK_QRCode" Type="String" ConvertEmptyStringToNull="False" DefaultValue="" />
                 </SelectParameters>
             </asp:SqlDataSource>
         </div>

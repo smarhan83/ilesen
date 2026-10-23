@@ -487,7 +487,37 @@ Partial Class sepandukSemakanIK
                 End Using
             End Using
         End Using
+
+        ' Imbasan QR (scancode = UniqueID satu gambar/lokasi): alamat lokasi semakan ialah lokasi bagi kod itu, bukan alamat premis keseluruhan permohonan
+        Dim kod As String = KodUnikSah(permohonanId)
+        If kod <> "" Then
+            Using conn As New SqlConnection(connStr)
+                Using cmd As New SqlCommand("SELECT l.Lokasi FROM LESEN_BantingImej b LEFT JOIN LESEN_BantingLokasi l ON l.Lokasi_ID = b.Lokasi_ID WHERE b.UniqueID = @kod AND b.Permohonan_ID = @id", conn)
+                    cmd.Parameters.AddWithValue("@kod", kod)
+                    cmd.Parameters.AddWithValue("@id", permohonanId)
+                    conn.Open()
+                    Dim lokasi As Object = cmd.ExecuteScalar()
+                    If lokasi IsNot Nothing AndAlso Not IsDBNull(lokasi) AndAlso Convert.ToString(lokasi).Trim() <> "" Then
+                        Session.Item(txtAlamatLokasi.UniqueID) = Convert.ToString(lokasi).Trim()
+                    End If
+                End Using
+            End Using
+        End If
     End Sub
+
+    ' Kod QR (UniqueID) yang diimbas, hanya jika ia benar-benar kod satu gambar bagi permohonan ini; jika tidak, kosong (paparan ikut keseluruhan permohonan)
+    Private Function KodUnikSah(permohonanId As Integer) As String
+        Dim kod As String = Convert.ToString(Session.Item(SESS_QRCODE)).Trim()
+        If kod = "" OrElse permohonanId <= 0 Then Return ""
+        Using conn As New SqlConnection(ConfigurationManager.ConnectionStrings("webcon_ConnectionStr").ConnectionString)
+            Using cmd As New SqlCommand("SELECT COUNT(*) FROM LESEN_BantingImej WHERE UniqueID = @kod AND Permohonan_ID = @id", conn)
+                cmd.Parameters.AddWithValue("@kod", kod)
+                cmd.Parameters.AddWithValue("@id", permohonanId)
+                conn.Open()
+                Return If(Convert.ToInt32(cmd.ExecuteScalar()) > 0, kod, "")
+            End Using
+        End Using
+    End Function
 
     ' Status lesen bagi rekod yang dijumpai: dalam tempoh pengesahan = Berdaftar, luar tempoh = Tamat Tempoh, tiada tarikh = Tidak Berdaftar.
     ' Logik sama dengan GetStatusIklan (banner carian).
@@ -982,7 +1012,10 @@ Partial Class sepandukSemakanIK
             Return
         End If
         Dim tarikh As String = If(auditTerkiniTarikh Is Nothing OrElse IsDBNull(auditTerkiniTarikh), "-", Convert.ToDateTime(auditTerkiniTarikh).ToString("dd/MM/yyyy HH:mm"))
-        litAuditRingkas.Text = "<div class=""ru-audit-note done""><i class=""bi bi-check-circle-fill""></i><span>Sepanduk ini <b>telah disemak " & n & " kali</b>. Semakan terkini: <b>" &
+        Dim kod As String = ""
+        If GridViewCarian.SelectedValue IsNot Nothing Then kod = KodUnikSah(Convert.ToInt32(GridViewCarian.SelectedValue))
+        Dim subjek As String = If(kod = "", "Sepanduk ini", "Sepanduk kod <b>" & HttpUtility.HtmlEncode(kod) & "</b>")
+        litAuditRingkas.Text = "<div class=""ru-audit-note done""><i class=""bi bi-check-circle-fill""></i><span>" & subjek & " <b>telah disemak " & n & " kali</b>. Semakan terkini: <b>" &
             tarikh & "</b> oleh <b>" & HttpUtility.HtmlEncode(auditTerkiniNama) & "</b>.</span></div>"
     End Sub
     Protected Function GetHasilText(ByVal hasil As Object) As String
