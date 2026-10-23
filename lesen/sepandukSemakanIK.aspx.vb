@@ -422,6 +422,7 @@ Partial Class sepandukSemakanIK
         If kw = "" Then Exit Sub
 
         Session.Item(SESS_KAEDAH) = "Carian"
+        Session.Remove(SESS_QRCODE)   ' carian manual: tiada kod QR spesifik, jangan guna kod imbasan lama untuk menapis gambar
 
         CariRekodPermohonan("(NoPendaftaran LIKE @kwLike OR NamaSyarikat LIKE @kwLike OR AlamatPremis LIKE @kwLike OR Rujukan LIKE @kwLike OR Permohonan_ID IN (SELECT Permohonan_ID FROM LESEN_BantingImej WHERE UniqueID LIKE @kwLike))", kw)
     End Sub
