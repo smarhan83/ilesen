@@ -96,7 +96,7 @@
                             </div>
                         </div>
 
-                        <img class="qr" src='<%# ResolveUrl("~/QrBanting.ashx?id=" & HttpUtility.UrlEncode(Convert.ToString(Eval("UniqueID")))) %>' alt="Kod QR" />
+                        <img class="qr" src='<%# ResolveUrl("~/QrBanting.ashx?id=" & HttpUtility.UrlEncode(Convert.ToString(Eval("UniqueID"))) & "&t=" & HttpUtility.UrlEncode(Convert.ToString(Request.QueryString("t")))) %>' alt="Kod QR" />
                         <div class="kod"><%# HttpUtility.HtmlEncode(Eval("UniqueID")) %></div>
 
                         <div class="lokasi-no">Lokasi <%# Eval("LokasiNo") %></div>
