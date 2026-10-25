@@ -815,6 +815,7 @@ Partial Class appregister2
     ' -------------------------------------------------------------
     Protected Sub btnAddAnjing_Click(sender As Object, e As EventArgs)
         Dim ddlBaka As DropDownList = DirectCast(FormView1.FindControl("DDL_BakaAnjing1"), DropDownList)
+        Dim tbBakaLain As TextBox = DirectCast(FormView1.FindControl("TB_BakaLain1"), TextBox)
         Dim tbJantan As TextBox = DirectCast(FormView1.FindControl("TB_Jantan1"), TextBox)
         Dim tbBetina As TextBox = DirectCast(FormView1.FindControl("TB_Betina1"), TextBox)
         Dim tbJantanMandul As TextBox = DirectCast(FormView1.FindControl("TB_JantanMandul1"), TextBox)
@@ -832,7 +833,17 @@ Partial Class appregister2
 
             Dim dt As DataTable = GetOrCreateAnjingTable()
             Dim newRow As DataRow = dt.NewRow()
-            newRow("Baka") = ddlBaka.SelectedItem.Text
+            Dim bakaText As String = ddlBaka.SelectedItem.Text.Trim()
+            If bakaText.ToUpper() = "LAIN-LAIN" AndAlso tbBakaLain IsNot Nothing AndAlso Not String.IsNullOrWhiteSpace(tbBakaLain.Text) Then
+                Dim customBaka As String = System.Text.RegularExpressions.Regex.Replace(tbBakaLain.Text.Trim(), "[^a-zA-Z\s]", "")
+                customBaka = System.Text.RegularExpressions.Regex.Replace(customBaka, "\s+", " ").Trim().ToUpper()
+                If customBaka.StartsWith("LAIN-LAIN", StringComparison.OrdinalIgnoreCase) Then
+                    bakaText = customBaka
+                Else
+                    bakaText = "LAIN-LAIN (" & customBaka & ")"
+                End If
+            End If
+            newRow("Baka") = bakaText
             newRow("Jantan") = tbJantan.Text.Trim()
             newRow("Betina") = tbBetina.Text.Trim()
             newRow("JantanMandul") = tbJantanMandul.Text.Trim()
@@ -852,6 +863,9 @@ Partial Class appregister2
             tbBetina.Text = ""
             tbJantanMandul.Text = ""
             tbBetinaMandul.Text = ""
+            If tbBakaLain IsNot Nothing Then
+                tbBakaLain.Text = ""
+            End If
             ddlBaka.SelectedIndex = 0
         End If
     End Sub

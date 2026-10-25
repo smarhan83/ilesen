@@ -1679,6 +1679,9 @@
                                                 <asp:SqlDataSource runat="server" ID="SqlDataSourceAnjingBaka1" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
                                                     SelectCommand="SELECT NULL AS id, '-- Sila Pilih --' AS name UNION ALL SELECT id, name 
                                                             FROM TBL_LOOKUPS WHERE lookupgrp_id = 10004 AND status = 1"></asp:SqlDataSource>
+                                                <div id="pnlBakaLain1" class="mt-2 pnl-baka-lain" style="display:none;">
+                                                    <asp:TextBox ID="TB_BakaLain1" runat="server" CssClass="form-control" placeholder="Nyatakan Jenis Baka" MaxLength="100" oninput="this.value = this.value.replace(/[^a-zA-Z\s]/g, '');"></asp:TextBox>
+                                                </div>
                                             </div>
                                         </div>
 
@@ -2074,7 +2077,7 @@
                                 </div>
                             </asp:Panel>
 
-                            <asp:Panel ID="pnlbatal2" runat="server" Visible='<%# If(Eval("IsBatal") = True, True, False) %>' Enabled='<%# If(Eval("StatusID") = 10, True, False) %>'>
+                            <asp:Panel ID="pnlbatal2" runat="server" Visible='<%# If(Eval("IsBatal") = True, True, False) %>' Enabled='<%# If(Eval("StatusID") = 10, False, True) %>'>
                                 <div class="form-section-header danger-section">
                                     <i class="bi bi-x-circle"></i>
                                     <span>Maklumat Pembatalan</span>
@@ -2883,6 +2886,9 @@
                                             <asp:SqlDataSource runat="server" ID="SqlDataSourceAnjingBaka1" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
                                                 SelectCommand="SELECT NULL AS id, '-- Sila Pilih --' AS name UNION ALL SELECT id, name 
                                                         FROM TBL_LOOKUPS WHERE lookupgrp_id = 10004 AND status = 1"></asp:SqlDataSource>
+                                            <div id="pnlBakaLain1" class="mt-2 pnl-baka-lain" style="display:none;">
+                                                <asp:TextBox ID="TB_BakaLain1" runat="server" CssClass="form-control" placeholder="Nyatakan Jenis Baka" MaxLength="100" oninput="this.value = this.value.replace(/[^a-zA-Z\s]/g, '');"></asp:TextBox>
+                                            </div>
                                         </div>
                                     </div>
 
@@ -4931,6 +4937,9 @@
                                                 <asp:SqlDataSource runat="server" ID="SqlDataSourceAnjingBaka1_ins" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
                                                     SelectCommand="SELECT NULL AS id, '-- Sila Pilih --' AS name UNION ALL SELECT id, name 
                                                             FROM TBL_LOOKUPS WHERE lookupgrp_id = 10004 AND status = 1"></asp:SqlDataSource>
+                                                <div id="pnlBakaLain1_ins" class="mt-2 pnl-baka-lain" style="display:none;">
+                                                    <asp:TextBox ID="TB_BakaLain1_ins" runat="server" CssClass="form-control" placeholder="Nyatakan Jenis Baka" MaxLength="100" oninput="this.value = this.value.replace(/[^a-zA-Z\s]/g, '');"></asp:TextBox>
+                                                </div>
                                             </div>
                                         </div>
 
@@ -6224,11 +6233,11 @@ ORDER BY
             }
 
             function checkVisibility(animate) {
-                var $pnl = [id$="pnlbatalTarikh"];
+                var $pnl = $('[id$="pnlbatalTarikh"]');
                 if (!$pnl.length) return;
 
-                var $ddl2 = select[id$="DDL_SebabBatal2"];
-                var $ddl1 = select[id$="DDL_SebabBatal1"];
+                var $ddl2 = $('select[id$="DDL_SebabBatal2"]');
+                var $ddl1 = $('select[id$="DDL_SebabBatal1"]');
 
                 var val = '';
                 var text = '';
@@ -6272,8 +6281,55 @@ ORDER BY
             checkVisibility(false);
         }
 
+        function initBakaLain() {
+            function checkBaka($ddl) {
+                if (!$ddl || !$ddl.length) return;
+                var text = ($ddl.find('option:selected').text() || '').trim().toUpperCase();
+                var $pnl = $ddl.closest('.form-group').find('.pnl-baka-lain');
+                if (text === 'LAIN-LAIN') {
+                    $pnl.slideDown(150);
+                } else {
+                    $pnl.hide();
+                }
+            }
+
+            $('select[id$="DDL_BakaAnjing1"], select[id$="DDL_BakaAnjing1_ins"]').each(function () {
+                var $ddl = $(this);
+                checkBaka($ddl);
+
+                $ddl.off('change.bakaLain select2:select.bakaLain select2:clear.bakaLain')
+                    .on('change.bakaLain select2:select.bakaLain select2:clear.bakaLain', function () {
+                        checkBaka($(this));
+                    });
+            });
+
+            $(document).off('keypress.bakaLain', 'input[id*="TB_BakaLain1"]')
+                       .on('keypress.bakaLain', 'input[id*="TB_BakaLain1"]', function (e) {
+                           if (e.ctrlKey || e.altKey || e.metaKey || (e.key && e.key.length > 1)) {
+                               return true;
+                           }
+                           var char = e.key || String.fromCharCode(e.which || e.keyCode);
+                           if (!/^[a-zA-Z\s]$/.test(char)) {
+                               e.preventDefault();
+                               return false;
+                           }
+                       });
+
+            $(document).off('input.bakaLain paste.bakaLain', 'input[id*="TB_BakaLain1"]')
+                       .on('input.bakaLain paste.bakaLain', 'input[id*="TB_BakaLain1"]', function () {
+                           var $el = $(this);
+                           setTimeout(function () {
+                               var clean = $el.val().replace(/[^a-zA-Z\s]/g, '');
+                               if ($el.val() !== clean) {
+                                   $el.val(clean);
+                               }
+                           }, 0);
+                       });
+        }
+
         $(document).ready(function () {
             initTarikhSebabBatal();
+            initBakaLain();
             setupValidationGuards();
             resetAndHideUnsubmittedValidators();
             initFilterCollapse();
@@ -6281,6 +6337,7 @@ ORDER BY
 
         function pageLoad() {
             initTarikhSebabBatal();
+            initBakaLain();
             setupValidationGuards();
             resetAndHideUnsubmittedValidators();
             initPembetulanDiffFilter();

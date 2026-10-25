@@ -1,4 +1,4 @@
-
+﻿
 Imports System
 Imports System.Data
 Imports System.Data.SqlClient
@@ -3259,7 +3259,17 @@ Partial Class kelulusan1
             End If
 
             Dim newRow As DataRow = dt.NewRow()
-            newRow("Baka") = DDL_BakaAnjing1.SelectedItem.Text
+            Dim bakaText As String = DDL_BakaAnjing1.SelectedItem.Text.Trim()
+            If bakaText.ToUpper() = "LAIN-LAIN" AndAlso TB_BakaLain1 IsNot Nothing AndAlso Not String.IsNullOrWhiteSpace(TB_BakaLain1.Text) Then
+                Dim customBaka As String = System.Text.RegularExpressions.Regex.Replace(TB_BakaLain1.Text.Trim(), "[^a-zA-Z\s]", "")
+                customBaka = System.Text.RegularExpressions.Regex.Replace(customBaka, "\s+", " ").Trim().ToUpper()
+                If customBaka.StartsWith("LAIN-LAIN", StringComparison.OrdinalIgnoreCase) Then
+                    bakaText = customBaka
+                Else
+                    bakaText = "LAIN-LAIN (" & customBaka & ")"
+                End If
+            End If
+            newRow("Baka") = bakaText
             newRow("Jantan") = TB_Jantan1.Text
             newRow("Betina") = TB_Betina1.Text
             newRow("JantanMandul") = TB_JantanMandul1.Text
@@ -3277,6 +3287,9 @@ Partial Class kelulusan1
             TB_Betina1.Text = ""
             TB_JantanMandul1.Text = ""
             TB_BetinaMandul1.Text = ""
+            If TB_BakaLain1 IsNot Nothing Then
+                TB_BakaLain1.Text = ""
+            End If
             DDL_BakaAnjing1.SelectedIndex = 0
 
         End If
