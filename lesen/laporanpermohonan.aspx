@@ -49,19 +49,17 @@
                                     <asp:ListItem Value="6">Lesen Anjing</asp:ListItem>
                                     <asp:ListItem Value="7">Lesen Penjaja</asp:ListItem>
                                 </asp:DropDownList>
-                                <%--<asp:DropDownList ID="DropDownListFieldStatus" CssClass="form-control select2" runat="server">
-                                    <asp:ListItem Value="0">-- Sila Pilih --</asp:ListItem>  
-                                    <asp:ListItem Value="1">Jenis Lesen</asp:ListItem>  
-                                    <asp:ListItem Value="2">Kategori</asp:ListItem>  
-                                </asp:DropDownList>--%>
                             </div>
                         </div>
-                        <asp:Panel ID="pnlJenisPerniagaan" runat="server" Visible="false" CssClass="col-md-6">
+                    </div>
+
+                    <div class="row" runat="server" id="pnlJenisPerniagaan" visible="false">
+                        <div class="col-md-6">
                             <div class="form-group">
                                 <label>Jenis Perniagaan</label>
-                                <asp:TextBox ID="TB_JenisPerniagaan" CssClass="form-control" runat="server" Visible="false" placeholder="Cari Jenis Perniagaan"></asp:TextBox>
+                                <asp:TextBox ID="TB_JenisPerniagaan" CssClass="form-control" runat="server" Visible="false" placeholder=""></asp:TextBox>
                             </div>
-                        </asp:Panel>
+                        </div>
                     </div>
         
                     <div class="row">
