@@ -1,4 +1,4 @@
-<%@ Page MaintainScrollPositionOnPostback="true" Title="" Language="VB" MasterPageFile="~/MasterMenu.master" AutoEventWireup="false" CodeFile="appregister1.aspx.vb" Inherits="appregister1" %>
+﻿<%@ Page MaintainScrollPositionOnPostback="true" Title="" Language="VB" MasterPageFile="~/MasterMenu.master" AutoEventWireup="false" CodeFile="appregister1.aspx.vb" Inherits="appregister1" %>
 
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="asp" %>
 
@@ -2138,6 +2138,18 @@
                                     </div>
                                 </div>
 
+                                <asp:Panel ID="pnlbatalTarikh" runat="server" CssClass="pnl-tarikh-batal" style="display:none;">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label class="form-label-custom">Tarikh</label>
+                                                <asp:TextBox ID="TB_TarikhSebabBatal" runat="server"
+                                                    Text='<%# Bind("TarikhSebabBatal", "{0:yyyy-MM-dd}") %>' TextMode="Date" CssClass="form-control" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </asp:Panel>
+
                                 <asp:Panel ID="pnlbatal5" runat="server" Visible="false">
                                     <div class="row">
                                         <div class="col-md-12">
@@ -3358,6 +3370,18 @@
                                     </div>
                                 </div>
 
+                                <asp:Panel ID="pnlbatalTarikh" runat="server" CssClass="pnl-tarikh-batal" style="display:none;">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label class="form-label-custom">Tarikh</label>
+                                                <asp:TextBox ID="TB_TarikhSebabBatal" runat="server"
+                                                    Text='<%# Bind("TarikhSebabBatal", "{0:yyyy-MM-dd}") %>' TextMode="Date" CssClass="form-control" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </asp:Panel>
+
                                 <asp:Panel ID="pnlbatal5" runat="server" Visible="false">
                                     <div class="row">
                                         <div class="col-md-12">
@@ -3445,7 +3469,7 @@
                         KontraktorIklan, NoTelKontraktor, UkuranBanting, BilBanting, TarikhBanting1, TarikhBanting2, StatusBanting, NoPengesahanBanting, TarikhPengesahanBanting1, TarikhPengesahanBanting2, NoResitBanting, NoSiriStiker, 
                         TarikhBanting3, RenewBanting, JenisBanting, 
                         Rujukan, NoAkaunCukai, DepositAmount, DepositDate, DepositResitNo, DepositPulangAmount, 
-                        Is24jam, IsBatal, JenisBatal, SebabBatalPerm, SebabBatalTanpaPerm, RemarksBatal, TindakanBatal, IsPulang, IsSuratKelulusanFail, IsSuratPembatalanFail, IsSuratPemeriksaanFail, RemarksFail, CreatorID, CreatedDt, LastModID, LastModDt) 
+                        Is24jam, IsBatal, JenisBatal, SebabBatalPerm, SebabBatalTanpaPerm, TarikhSebabBatal, RemarksBatal, TindakanBatal, IsPulang, IsSuratKelulusanFail, IsSuratPembatalanFail, IsSuratPemeriksaanFail, RemarksFail, CreatorID, CreatedDt, LastModID, LastModDt) 
                         VALUES (@JenisLesenDescList, @JenisLesenIdList, @SaizIklanList, @CahayaIklanList, @UnitIklanList, @LokasiList, 
                         @BakaAnjingList, @AnjingJantanList, @AnjingBetinaList, @AnjingJantanMandulList, @AnjingBetinaMandulList,
                         @Permohonan_PemohonID, @TarikhMohon, 0, 0, @NamaSyarikat, @NoPendaftaran, @NoAkaun, @AlamatPremis, @JenisPerniagaan, @PemilikBaru, @AlamatBaru,
@@ -3456,7 +3480,7 @@
                         @KontraktorIklan, @NoTelKontraktor, @UkuranBanting, @BilBanting, @TarikhBanting1, @TarikhBanting2, @StatusBanting, @NoPengesahanBanting, @TarikhPengesahanBanting1, @TarikhPengesahanBanting2, @NoResitBanting, @NoSiriStiker, 
                         @TarikhBanting3, @RenewBanting, @JenisBanting,
                         @Rujukan, @NoAkaunCukai, @DepositAmount, @DepositDate, @DepositResitNo, @DepositPulangAmount, 
-                        @Is24jam, @IsBatal, @JenisBatal, @SebabBatalPerm, @SebabBatalTanpaPerm, @RemarksBatal, @TindakanBatal, 0, 0, 0, 0, @RemarksFail, @CreatorId, GETDATE(), @CreatorId, GETDATE()); SELECT @Permohonan_ID = SCOPE_IDENTITY();"
+                        @Is24jam, @IsBatal, @JenisBatal, @SebabBatalPerm, @SebabBatalTanpaPerm, @TarikhSebabBatal, @RemarksBatal, @TindakanBatal, 0, 0, 0, 0, @RemarksFail, @CreatorId, GETDATE(), @CreatorId, GETDATE()); SELECT @Permohonan_ID = SCOPE_IDENTITY();"
                 SelectCommand="SELECT * FROM LESEN_Permohonan WHERE Permohonan_ID = @Permohonan_ID"
                 UpdateCommand="UPDATE LESEN_Permohonan SET JenisLesenDescList = @JenisLesenDescList, JenisLesenIdList = @JenisLesenIdList, SaizIklanList = @SaizIklanList, CahayaIklanList = @CahayaIklanList, UnitIklanList = @UnitIklanList, LokasiList = @LokasiList, 
                         BakaAnjingList = @BakaAnjingList, AnjingJantanList = @AnjingJantanList, AnjingBetinaList = @AnjingBetinaList, AnjingJantanMandulList = @AnjingJantanMandulList, AnjingBetinaMandulList = @AnjingBetinaMandulList, 
@@ -3473,7 +3497,7 @@
                         TarikhBanting3 = @TarikhBanting3, RenewBanting = @RenewBanting, JenisBanting = @JenisBanting, 
                         Rujukan = @Rujukan, NoAkaunCukai = @NoAkaunCukai, DepositAmount = @DepositAmount, 
                         DepositDate = @DepositDate, DepositResitNo = @DepositResitNo, DepositPulangAmount = @DepositPulangAmount, Is24jam = @Is24jam, IsBatal = @IsBatal, JenisBatal = @JenisBatal, SebabBatalPerm = @SebabBatalPerm, 
-                        SebabBatalTanpaPerm = @SebabBatalTanpaPerm, RemarksBatal = @RemarksBatal, TindakanBatal = @TindakanBatal, RemarksFail = @RemarksFail, LastModId = @LastModId, LastModDt = GETDATE() 
+                        SebabBatalTanpaPerm = @SebabBatalTanpaPerm, TarikhSebabBatal = @TarikhSebabBatal, RemarksBatal = @RemarksBatal, TindakanBatal = @TindakanBatal, RemarksFail = @RemarksFail, LastModId = @LastModId, LastModDt = GETDATE() 
                         WHERE (Permohonan_ID = @Permohonan_ID)">
                 <InsertParameters>
                     <asp:Parameter Name="JenisLesenDescList"></asp:Parameter>
@@ -3558,6 +3582,7 @@
                     <asp:Parameter Name="JenisBatal"></asp:Parameter>
                     <asp:Parameter Name="SebabBatalPerm"></asp:Parameter>
                     <asp:Parameter Name="SebabBatalTanpaPerm"></asp:Parameter>
+                    <asp:Parameter Name="TarikhSebabBatal"></asp:Parameter>
                     <asp:Parameter Name="RemarksBatal"></asp:Parameter>
                     <asp:Parameter Name="TindakanBatal"></asp:Parameter>
                     <asp:SessionParameter SessionField="sessionUserName" Name="CreatorID"></asp:SessionParameter>
@@ -3649,6 +3674,7 @@
                     <asp:Parameter Name="JenisBatal"></asp:Parameter>
                     <asp:Parameter Name="SebabBatalPerm"></asp:Parameter>
                     <asp:Parameter Name="SebabBatalTanpaPerm"></asp:Parameter>
+                    <asp:Parameter Name="TarikhSebabBatal"></asp:Parameter>
                     <asp:Parameter Name="RemarksBatal"></asp:Parameter>
                     <asp:Parameter Name="TindakanBatal"></asp:Parameter>
                     <asp:SessionParameter SessionField="sessionUserName" Name="LastModId"></asp:SessionParameter>
@@ -6189,13 +6215,72 @@ ORDER BY
             }
         }
 
+        function initTarikhSebabBatal() {
+            function isTargetSebab(val, text) {
+                val = (val || '').toString().trim();
+                text = (text || '').toString().trim().toLowerCase();
+                return (val === '30700' || val === '30701' || val === '30702' ||
+                        text === 'notis' || text === 'tindakan polis' || text === 'ulasan teknikal');
+            }
+
+            function checkVisibility(animate) {
+                var $pnl = [id$="pnlbatalTarikh"];
+                if (!$pnl.length) return;
+
+                var $ddl2 = select[id$="DDL_SebabBatal2"];
+                var $ddl1 = select[id$="DDL_SebabBatal1"];
+
+                var val = '';
+                var text = '';
+
+                if ($ddl2.length && $ddl2.closest('[id$="pnlbatal4"]').is(':visible')) {
+                    val = $ddl2.val();
+                    text = $ddl2.find('option:selected').text();
+                } else if ($ddl1.length && $ddl1.closest('[id$="pnlbatal3"]').is(':visible')) {
+                    val = $ddl1.val();
+                    text = $ddl1.find('option:selected').text();
+                } else if ($ddl2.length && $ddl2.val()) {
+                    val = $ddl2.val();
+                    text = $ddl2.find('option:selected').text();
+                }
+
+                if (isTargetSebab(val, text)) {
+                    if (animate) {
+                        $pnl.slideDown(200);
+                    } else {
+                        $pnl.show();
+                    }
+                } else {
+                    if (animate) {
+                        $pnl.slideUp(200);
+                    } else {
+                        $pnl.hide();
+                    }
+                }
+            }
+
+            $(document).off('change.tarikhBatal select2:select.tarikhBatal select2:clear.tarikhBatal', 'select[id$="DDL_SebabBatal2"], select[id$="DDL_SebabBatal1"]')
+                       .on('change.tarikhBatal select2:select.tarikhBatal select2:clear.tarikhBatal', 'select[id$="DDL_SebabBatal2"], select[id$="DDL_SebabBatal1"]', function () {
+                           checkVisibility(true);
+                       });
+
+            $(document).off('change.tarikhBatalJenis select2:select.tarikhBatalJenis', 'select[id$="DDL_JenisBatal"]')
+                       .on('change.tarikhBatalJenis select2:select.tarikhBatalJenis', 'select[id$="DDL_JenisBatal"]', function () {
+                           checkVisibility(false);
+                       });
+
+            checkVisibility(false);
+        }
+
         $(document).ready(function () {
+            initTarikhSebabBatal();
             setupValidationGuards();
             resetAndHideUnsubmittedValidators();
             initFilterCollapse();
         });
 
         function pageLoad() {
+            initTarikhSebabBatal();
             setupValidationGuards();
             resetAndHideUnsubmittedValidators();
             initPembetulanDiffFilter();

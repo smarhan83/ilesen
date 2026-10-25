@@ -1,4 +1,4 @@
-Imports System
+﻿Imports System
 Imports System.Collections.Generic
 Imports System.Configuration
 Imports System.Data
@@ -713,6 +713,9 @@ Partial Class appregister1
                 If pnl IsNot Nothing Then pnl.Visible = False
             Next
 
+            Dim pnlTarikh As Panel = TryCast(FormView1.FindControl("pnlbatalTarikh"), Panel)
+            If pnlTarikh IsNot Nothing Then pnlTarikh.Style("display") = "none"
+
             ' Reset bound child controls
             Dim rptSelectedItems As Repeater = TryCast(FormView1.FindControl("rptSelectedItems"), Repeater)
             If rptSelectedItems IsNot Nothing Then
@@ -789,6 +792,21 @@ Partial Class appregister1
 
     Private Sub FormView1_ItemInserting(sender As Object, e As FormViewInsertEventArgs) Handles FormView1.ItemInserting
         SavePemohonEmail()
+
+        Dim cb As CheckBox = TryCast(FormView1.FindControl("CB_IsBatal"), CheckBox)
+        Dim ddlJenis As DropDownList = TryCast(FormView1.FindControl("DDL_JenisBatal"), DropDownList)
+        Dim ddlSebab2 As DropDownList = TryCast(FormView1.FindControl("DDL_SebabBatal2"), DropDownList)
+        Dim isTargetSebab As Boolean = False
+        If cb IsNot Nothing AndAlso cb.Checked AndAlso ddlJenis IsNot Nothing AndAlso ddlJenis.SelectedValue = "2" AndAlso ddlSebab2 IsNot Nothing Then
+            Dim sVal As String = ddlSebab2.SelectedValue
+            Dim sTxt As String = If(ddlSebab2.SelectedItem IsNot Nothing, ddlSebab2.SelectedItem.Text.Trim().ToLower(), "")
+            If sVal = "30700" OrElse sVal = "30701" OrElse sVal = "30702" OrElse sTxt = "notis" OrElse sTxt = "tindakan polis" OrElse sTxt = "ulasan teknikal" Then
+                isTargetSebab = True
+            End If
+        End If
+        If Not isTargetSebab Then
+            e.Values("TarikhSebabBatal") = DBNull.Value
+        End If
     End Sub
 
     Private Sub FormView1_ItemInserted(sender As Object, e As FormViewInsertedEventArgs) Handles FormView1.ItemInserted
@@ -802,6 +820,20 @@ Partial Class appregister1
         Dim cb As CheckBox = DirectCast(FormView1.FindControl("CB_IsBatal"), CheckBox)
         If cb IsNot Nothing AndAlso cb.Visible AndAlso cb.Checked Then
             e.NewValues("StatusID") = 0
+        End If
+
+        Dim ddlJenis As DropDownList = TryCast(FormView1.FindControl("DDL_JenisBatal"), DropDownList)
+        Dim ddlSebab2 As DropDownList = TryCast(FormView1.FindControl("DDL_SebabBatal2"), DropDownList)
+        Dim isTargetSebab As Boolean = False
+        If cb IsNot Nothing AndAlso cb.Checked AndAlso ddlJenis IsNot Nothing AndAlso ddlJenis.SelectedValue = "2" AndAlso ddlSebab2 IsNot Nothing Then
+            Dim sVal As String = ddlSebab2.SelectedValue
+            Dim sTxt As String = If(ddlSebab2.SelectedItem IsNot Nothing, ddlSebab2.SelectedItem.Text.Trim().ToLower(), "")
+            If sVal = "30700" OrElse sVal = "30701" OrElse sVal = "30702" OrElse sTxt = "notis" OrElse sTxt = "tindakan polis" OrElse sTxt = "ulasan teknikal" Then
+                isTargetSebab = True
+            End If
+        End If
+        If Not isTargetSebab Then
+            e.NewValues("TarikhSebabBatal") = DBNull.Value
         End If
 
         SavePemohonEmail()
@@ -912,6 +944,22 @@ Partial Class appregister1
                     ElseIf ddl2.SelectedIndex = 2 Then
                         pnlbatal2.Visible = True
                         pnlbatal3.Visible = True
+                    End If
+                End If
+
+                Dim pnlTarikhBound As Panel = TryCast(FormView1.FindControl("pnlbatalTarikh"), Panel)
+                Dim ddlSebab2Bound As DropDownList = TryCast(FormView1.FindControl("DDL_SebabBatal2"), DropDownList)
+                If pnlTarikhBound IsNot Nothing Then
+                    If ddl2 IsNot Nothing AndAlso ddl2.SelectedIndex = 2 AndAlso ddlSebab2Bound IsNot Nothing Then
+                        Dim sVal As String = ddlSebab2Bound.SelectedValue
+                        Dim sTxt As String = If(ddlSebab2Bound.SelectedItem IsNot Nothing, ddlSebab2Bound.SelectedItem.Text.Trim().ToLower(), "")
+                        If sVal = "30700" OrElse sVal = "30701" OrElse sVal = "30702" OrElse sTxt = "notis" OrElse sTxt = "tindakan polis" OrElse sTxt = "ulasan teknikal" Then
+                            pnlTarikhBound.Style("display") = "block"
+                        Else
+                            pnlTarikhBound.Style("display") = "none"
+                        End If
+                    Else
+                        pnlTarikhBound.Style("display") = "none"
                     End If
                 End If
 
@@ -4008,6 +4056,8 @@ Partial Class appregister1
         Dim pnl As Panel = DirectCast(FormView1.FindControl("pnlbatal3"), Panel)
         Dim pnl1 As Panel = DirectCast(FormView1.FindControl("pnlbatal4"), Panel)
         Dim pnl2 As Panel = DirectCast(FormView1.FindControl("pnlbatal5"), Panel)
+        Dim pnlTarikh As Panel = TryCast(FormView1.FindControl("pnlbatalTarikh"), Panel)
+        Dim ddlSebab2 As DropDownList = TryCast(FormView1.FindControl("DDL_SebabBatal2"), DropDownList)
 
         pnl.Visible = False
         pnl1.Visible = False
@@ -4015,9 +4065,19 @@ Partial Class appregister1
         If ddl.SelectedIndex = 1 Then
             pnl.Visible = True
             pnl2.Visible = True
+            If pnlTarikh IsNot Nothing Then pnlTarikh.Style("display") = "none"
         ElseIf ddl.SelectedIndex = 2 Then
             pnl1.Visible = True
             pnl2.Visible = True
+            If pnlTarikh IsNot Nothing Then
+                If ddlSebab2 IsNot Nothing AndAlso (ddlSebab2.SelectedValue = "30700" OrElse ddlSebab2.SelectedValue = "30701" OrElse ddlSebab2.SelectedValue = "30702") Then
+                    pnlTarikh.Style("display") = "block"
+                Else
+                    pnlTarikh.Style("display") = "none"
+                End If
+            End If
+        Else
+            If pnlTarikh IsNot Nothing Then pnlTarikh.Style("display") = "none"
         End If
     End Sub
 
