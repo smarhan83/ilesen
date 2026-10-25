@@ -1,6 +1,17 @@
-﻿
+
 Partial Class laporanpermohonan
     Inherits System.Web.UI.Page
+
+    Private Sub ddlReport_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ddlReport.SelectedIndexChanged
+        If ddlReport.SelectedValue = "1" Then
+            pnlJenisPerniagaan.Visible = True
+            TB_JenisPerniagaan.Visible = True
+        Else
+            pnlJenisPerniagaan.Visible = False
+            TB_JenisPerniagaan.Visible = False
+            TB_JenisPerniagaan.Text = ""
+        End If
+    End Sub
 
     Private Sub ButtonSubmit_Click(sender As Object, e As EventArgs) Handles ButtonSubmit.Click
 
@@ -14,6 +25,9 @@ Partial Class laporanpermohonan
 
         Try
             If ddlReport.SelectedValue = "1" Then
+                If Not String.IsNullOrWhiteSpace(TB_JenisPerniagaan.Text) Then
+                    sqlwhere = " AND (ISNULL(a.JenisPerniagaanBaru, a.JenisPerniagaan) LIKE '%" & TB_JenisPerniagaan.Text.Trim().Replace("'", "''") & "%') "
+                End If
                 sql = "SELECT a.Permohonan_ID, a.StatusID, a.Is24Jam, a.Rujukan, b.Pemohon_Name, b.Pemohon_MobileNo, ISNULL(a.NamaBaruSyarikat, a.NamaSyarikat) AS NamaSyarikat, 
             ISNULL(a.JenisPerniagaanBaru, a.JenisPerniagaan) AS JenisPerniagaan, b.Pemohon_Address, ISNULL(a.AlamatBaru, a.AlamatPremis) AS AlamatPremis, a.JenisLesenDescList, a.TarikhMohon, 
 
@@ -35,7 +49,7 @@ Partial Class laporanpermohonan
                 WHERE IsSelect = 1 
                 GROUP BY KadarBayaran_PermohonanID 
             ) kb ON kb.KadarBayaran_PermohonanID = a.Permohonan_ID 
-            WHERE a.IsBatal = 0 AND (a.JenisLesenDescList LIKE '%PERNIAGAAN%' OR a.JenisLesenDescList LIKE '%SEMENTARA%') 
+            WHERE a.IsBatal = 0 AND (a.JenisLesenDescList LIKE '%PERNIAGAAN%' OR a.JenisLesenDescList LIKE '%SEMENTARA%') " & sqlwhere & " 
             AND a.TarikhMohon BETWEEN '@entrydatea' AND '@entrydateb' 
             ORDER BY a.TarikhMohon ASC"
 

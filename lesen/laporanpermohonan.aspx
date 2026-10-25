@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="VB" MasterPageFile="~/MasterMenu.master" AutoEventWireup="false" CodeFile="laporanpermohonan.aspx.vb" Inherits="laporanpermohonan" %>
+<%@ Page Title="" Language="VB" MasterPageFile="~/MasterMenu.master" AutoEventWireup="false" CodeFile="laporanpermohonan.aspx.vb" Inherits="laporanpermohonan" %>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="HeadContent" Runat="Server">
 </asp:Content>
@@ -39,7 +39,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Jenis Laporan</label>
-                                <asp:DropDownList ID="ddlReport" runat="server" CssClass="form-control select2">
+                                <asp:DropDownList ID="ddlReport" runat="server" CssClass="form-control select2" AutoPostBack="true" CausesValidation="false">
                                     <asp:ListItem Value="0">-- Sila Pilih --</asp:ListItem> 
                                     <asp:ListItem Value="1">Lesen Perniagaan Permit</asp:ListItem>
                                     <asp:ListItem Value="2">Lesen Pembatalan</asp:ListItem>
@@ -56,6 +56,12 @@
                                 </asp:DropDownList>--%>
                             </div>
                         </div>
+                        <asp:Panel ID="pnlJenisPerniagaan" runat="server" Visible="false" CssClass="col-md-6">
+                            <div class="form-group">
+                                <label>Jenis Perniagaan</label>
+                                <asp:TextBox ID="TB_JenisPerniagaan" CssClass="form-control" runat="server" Visible="false" placeholder="Cari Jenis Perniagaan"></asp:TextBox>
+                            </div>
+                        </asp:Panel>
                     </div>
         
                     <div class="row">
