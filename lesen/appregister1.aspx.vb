@@ -1817,12 +1817,7 @@ Partial Class appregister1
             Dim bakaText As String = DDL_BakaAnjing1.SelectedItem.Text.Trim()
             If bakaText.ToUpper() = "LAIN-LAIN" AndAlso TB_BakaLain1 IsNot Nothing AndAlso Not String.IsNullOrWhiteSpace(TB_BakaLain1.Text) Then
                 Dim customBaka As String = System.Text.RegularExpressions.Regex.Replace(TB_BakaLain1.Text.Trim(), "[^a-zA-Z\s]", "")
-                customBaka = System.Text.RegularExpressions.Regex.Replace(customBaka, "\s+", " ").Trim().ToUpper()
-                If customBaka.StartsWith("LAIN-LAIN", StringComparison.OrdinalIgnoreCase) Then
-                    bakaText = customBaka
-                Else
-                    bakaText = "LAIN-LAIN (" & customBaka & ")"
-                End If
+                bakaText = System.Text.RegularExpressions.Regex.Replace(customBaka, "\s+", " ").Trim().ToUpper()
             End If
             newRow("Baka") = bakaText
             newRow("Jantan") = TB_Jantan1.Text
@@ -2561,12 +2556,7 @@ Partial Class appregister1
             Dim bakaText As String = DDL_BakaAnjing1_ins.SelectedItem.Text.Trim()
             If bakaText.ToUpper() = "LAIN-LAIN" AndAlso TB_BakaLain1_ins IsNot Nothing AndAlso Not String.IsNullOrWhiteSpace(TB_BakaLain1_ins.Text) Then
                 Dim customBaka As String = System.Text.RegularExpressions.Regex.Replace(TB_BakaLain1_ins.Text.Trim(), "[^a-zA-Z\s]", "")
-                customBaka = System.Text.RegularExpressions.Regex.Replace(customBaka, "\s+", " ").Trim().ToUpper()
-                If customBaka.StartsWith("LAIN-LAIN", StringComparison.OrdinalIgnoreCase) Then
-                    bakaText = customBaka
-                Else
-                    bakaText = "LAIN-LAIN (" & customBaka & ")"
-                End If
+                bakaText = System.Text.RegularExpressions.Regex.Replace(customBaka, "\s+", " ").Trim().ToUpper()
             End If
             newRow("Baka") = bakaText
             newRow("Jantan") = TB_Jantan1_ins.Text
