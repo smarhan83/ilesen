@@ -1790,6 +1790,7 @@ Partial Class appregister1
     ' --- Anjing (Regular) ---
     Protected Sub btnAddAnjing_Click(sender As Object, e As EventArgs)
         Dim DDL_BakaAnjing1 As DropDownList = DirectCast(FormView1.FindControl("DDL_BakaAnjing1"), DropDownList)
+        Dim TB_BakaLain1 As TextBox = DirectCast(FormView1.FindControl("TB_BakaLain1"), TextBox)
         Dim TB_Jantan1 As TextBox = DirectCast(FormView1.FindControl("TB_Jantan1"), TextBox)
         Dim TB_Betina1 As TextBox = DirectCast(FormView1.FindControl("TB_Betina1"), TextBox)
         Dim TB_JantanMandul1 As TextBox = DirectCast(FormView1.FindControl("TB_JantanMandul1"), TextBox)
@@ -1813,7 +1814,17 @@ Partial Class appregister1
             End If
 
             Dim newRow As DataRow = dt.NewRow()
-            newRow("Baka") = DDL_BakaAnjing1.SelectedItem.Text
+            Dim bakaText As String = DDL_BakaAnjing1.SelectedItem.Text.Trim()
+            If bakaText.ToUpper() = "LAIN-LAIN" AndAlso TB_BakaLain1 IsNot Nothing AndAlso Not String.IsNullOrWhiteSpace(TB_BakaLain1.Text) Then
+                Dim customBaka As String = System.Text.RegularExpressions.Regex.Replace(TB_BakaLain1.Text.Trim(), "[^a-zA-Z\s]", "")
+                customBaka = System.Text.RegularExpressions.Regex.Replace(customBaka, "\s+", " ").Trim().ToUpper()
+                If customBaka.StartsWith("LAIN-LAIN", StringComparison.OrdinalIgnoreCase) Then
+                    bakaText = customBaka
+                Else
+                    bakaText = "LAIN-LAIN (" & customBaka & ")"
+                End If
+            End If
+            newRow("Baka") = bakaText
             newRow("Jantan") = TB_Jantan1.Text
             newRow("Betina") = TB_Betina1.Text
             newRow("JantanMandul") = TB_JantanMandul1.Text
@@ -1830,6 +1841,9 @@ Partial Class appregister1
             TB_Betina1.Text = ""
             TB_JantanMandul1.Text = ""
             TB_BetinaMandul1.Text = ""
+            If TB_BakaLain1 IsNot Nothing Then
+                TB_BakaLain1.Text = ""
+            End If
             DDL_BakaAnjing1.SelectedIndex = 0
         End If
     End Sub
@@ -2544,7 +2558,17 @@ Partial Class appregister1
             End If
 
             Dim newRow As DataRow = dt.NewRow()
-            newRow("Baka") = DDL_BakaAnjing1_ins.SelectedItem.Text
+            Dim bakaText As String = DDL_BakaAnjing1_ins.SelectedItem.Text.Trim()
+            If bakaText.ToUpper() = "LAIN-LAIN" AndAlso TB_BakaLain1_ins IsNot Nothing AndAlso Not String.IsNullOrWhiteSpace(TB_BakaLain1_ins.Text) Then
+                Dim customBaka As String = System.Text.RegularExpressions.Regex.Replace(TB_BakaLain1_ins.Text.Trim(), "[^a-zA-Z\s]", "")
+                customBaka = System.Text.RegularExpressions.Regex.Replace(customBaka, "\s+", " ").Trim().ToUpper()
+                If customBaka.StartsWith("LAIN-LAIN", StringComparison.OrdinalIgnoreCase) Then
+                    bakaText = customBaka
+                Else
+                    bakaText = "LAIN-LAIN (" & customBaka & ")"
+                End If
+            End If
+            newRow("Baka") = bakaText
             newRow("Jantan") = TB_Jantan1_ins.Text
             newRow("Betina") = TB_Betina1_ins.Text
             newRow("JantanMandul") = TB_JantanMandul1_ins.Text
@@ -2561,6 +2585,9 @@ Partial Class appregister1
             TB_Betina1_ins.Text = ""
             TB_JantanMandul1_ins.Text = ""
             TB_BetinaMandul1_ins.Text = ""
+            If TB_BakaLain1_ins IsNot Nothing Then
+                TB_BakaLain1_ins.Text = ""
+            End If
             DDL_BakaAnjing1_ins.SelectedIndex = 0
         End If
     End Sub
