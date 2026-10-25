@@ -836,12 +836,7 @@ Partial Class appregister2
             Dim bakaText As String = ddlBaka.SelectedItem.Text.Trim()
             If bakaText.ToUpper() = "LAIN-LAIN" AndAlso tbBakaLain IsNot Nothing AndAlso Not String.IsNullOrWhiteSpace(tbBakaLain.Text) Then
                 Dim customBaka As String = System.Text.RegularExpressions.Regex.Replace(tbBakaLain.Text.Trim(), "[^a-zA-Z\s]", "")
-                customBaka = System.Text.RegularExpressions.Regex.Replace(customBaka, "\s+", " ").Trim().ToUpper()
-                If customBaka.StartsWith("LAIN-LAIN", StringComparison.OrdinalIgnoreCase) Then
-                    bakaText = customBaka
-                Else
-                    bakaText = "LAIN-LAIN (" & customBaka & ")"
-                End If
+                bakaText = System.Text.RegularExpressions.Regex.Replace(customBaka, "\s+", " ").Trim().ToUpper()
             End If
             newRow("Baka") = bakaText
             newRow("Jantan") = tbJantan.Text.Trim()
