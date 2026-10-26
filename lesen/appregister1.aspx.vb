@@ -626,6 +626,26 @@ Partial Class appregister1
     Private Sub GridView1_RowDataBound(sender As Object, e As GridViewRowEventArgs) Handles GridView1.RowDataBound
         Try
             If e.Row.RowType = DataControlRowType.DataRow Then
+                Dim drv As DataRowView = TryCast(e.Row.DataItem, DataRowView)
+                If drv IsNot Nothing Then
+                    Dim statusId As Integer = 0
+                    Dim isSementara As Boolean = False
+                    If drv("StatusID") IsNot DBNull.Value Then Integer.TryParse(drv("StatusID").ToString(), statusId)
+                    If drv.Row.Table.Columns.Contains("IsKelulusanSementara") AndAlso drv("IsKelulusanSementara") IsNot DBNull.Value Then
+                        Boolean.TryParse(drv("IsKelulusanSementara").ToString(), isSementara)
+                    End If
+
+                    If statusId = 10 AndAlso isSementara Then
+                        If e.Row.Cells.Count > 8 Then
+                            e.Row.Cells(8).Text = "Lulus Sementara"
+                        End If
+                        Dim lblMobStatus As Label = TryCast(e.Row.FindControl("lblMobStatus"), Label)
+                        If lblMobStatus IsNot Nothing Then
+                            lblMobStatus.Text = "Lulus Sementara"
+                        End If
+                    End If
+                End If
+
                 Dim dtTmp As DateTime = Convert.ToDateTime(e.Row.DataItem("TarikhMohon").ToString())
                 Dim is24h As Boolean = Convert.ToBoolean(e.Row.DataItem("Is24jam").ToString())
                 Dim isbatal As Boolean = Convert.ToBoolean(e.Row.DataItem("IsBatal").ToString())
@@ -633,7 +653,7 @@ Partial Class appregister1
                 ' Check delayed status if needed
                 If (((DateTime.Now - dtTmp).TotalHours > 24 And is24h) OrElse
                     ((DateTime.Now - dtTmp).TotalDays > 14 And Not is24h)) AndAlso
-                    Not isbatal AndAlso Not e.Row.DataItem("Description").ToString().Contains("Permohonan Lulus") AndAlso
+                    Not isbatal AndAlso Not e.Row.DataItem("Description").ToString().Contains("Lulus") AndAlso
                     Not e.Row.DataItem("Description").ToString().Contains("Peraku Tidak Sokong") Then
                     ' Optional highlighting logic
                 End If
