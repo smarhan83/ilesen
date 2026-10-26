@@ -4256,6 +4256,7 @@
                                         AND a.IsBatal = CASE WHEN @batalID = 2 THEN a.IsBatal ELSE @batalID END 
                                         AND a.Is24Jam = CASE WHEN @risikoID = 2 THEN a.Is24Jam ELSE @risikoID END
                                         AND (@tahun = 0 OR YEAR(a.TarikhMohon) = @tahun)
+                                        AND (@pid = 0 OR a.Permohonan_ID = @pid)   /* dibuka melalui ?pid= (cth. Lihat Maklumat Permohonan): hanya permohonan itu */
                                         AND (
                                             (@isExpiredPermit = 1 
                                                 AND a.TarikhSuratKelulusan IS NOT NULL 
@@ -4265,9 +4266,14 @@
                                             )
                                             OR
                                             (@isExpiredPermit = 0
-                                                AND ((@arkib = 1 AND a.StatusID IN (9, 10) AND a.StatusID = CASE WHEN @statusID = -1 THEN a.StatusID ELSE @statusID END)
-                                                     OR (@arkib = 0 AND a.StatusID NOT IN (9, 10) AND a.StatusID = CASE WHEN @statusID = -1 THEN a.StatusID ELSE @statusID END))
-                                                AND a.CreatorID = CASE WHEN @creatorID = '0' THEN a.CreatorID ELSE @creatorID END
+                                                AND (
+                                                    @pid > 0   /* ?pid= : papar permohonan itu walau apa status / pencipta (penapis status, arkib & pencipta diabaikan) */
+                                                    OR (
+                                                        ((@arkib = 1 AND a.StatusID IN (9, 10) AND a.StatusID = CASE WHEN @statusID = -1 THEN a.StatusID ELSE @statusID END)
+                                                         OR (@arkib = 0 AND a.StatusID NOT IN (9, 10) AND a.StatusID = CASE WHEN @statusID = -1 THEN a.StatusID ELSE @statusID END))
+                                                        AND a.CreatorID = CASE WHEN @creatorID = '0' THEN a.CreatorID ELSE @creatorID END
+                                                    )
+                                                )
                                             )
                                         ) 
                                         AND (ISNULL(a.AlamatPremis,'') LIKE CASE WHEN @Alamat='' THEN ISNULL(a.AlamatPremis,'') ELSE '%'+@Alamat+'%' END
@@ -4309,6 +4315,7 @@
                                     <asp:ControlParameter ControlID="DDL_Status" PropertyName="SelectedValue" Name="statusID"></asp:ControlParameter>
                                     <asp:ControlParameter ControlID="chkArkib" PropertyName="Checked" Name="arkib" Type="Boolean"></asp:ControlParameter>
                                     <asp:ControlParameter ControlID="DDL_CreatedBy" PropertyName="SelectedValue" Name="creatorID"></asp:ControlParameter>
+                                    <asp:QueryStringParameter Name="pid" QueryStringField="pid" Type="Int32" DefaultValue="0" />
                                     <asp:ControlParameter ControlID="TB_TarikhMohon" PropertyName="Text" DefaultValue="%%" Name="TarikhMohon"></asp:ControlParameter>
                                     <asp:ControlParameter ControlID="TB_Alamat" PropertyName="Text" DefaultValue="%%" Name="Alamat"></asp:ControlParameter>
                                     <asp:ControlParameter ControlID="txtFilterPemohonIC" PropertyName="Text" DefaultValue="%%" Name="PemohonIC"></asp:ControlParameter>

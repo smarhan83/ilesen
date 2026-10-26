@@ -1407,7 +1407,7 @@
                     <div runat="server" visible='<%# If(IsDBNull(Eval("JabatanAgensi_IsLesen")), "true", If(Eval("JabatanAgensi_IsLesen") = "1", "true", "false")) %>' style="margin-top: 15px;">
                         <asp:HyperLink ID="HyperLink1" runat="server"
                             CssClass="btn btn-primary btn-sm"
-                            NavigateUrl='<%# "~/lesen/appregister.aspx?p_Id=3348&m_Id=3349&pid=" + Eval("Permohonan_ID").ToString() %>'
+                            NavigateUrl='<%# "~/lesen/appregister1.aspx?p_Id=3348&m_Id=4357&pid=" + Eval("Permohonan_ID").ToString() %>'
                             Target="_blank">Lihat Maklumat Permohonan</asp:HyperLink>
                     </div>
 

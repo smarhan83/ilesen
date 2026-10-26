@@ -1,4 +1,4 @@
-﻿Imports System
+Imports System
 Imports System.Collections.Generic
 Imports System.Configuration
 Imports System.Data
@@ -87,12 +87,7 @@ Partial Class appregister1
                 If CInt(Request.QueryString("pid")) > 0 Then
                     ButtonAddAssignment.Visible = False
 
-                    Dim script As String = "<script>" &
-                        "document.getElementById('MainContent_TB_PermohonanID').value = '" & Request.QueryString("pid") & "';" &
-                        "document.getElementById('MainContent_btnSearch').click();" &
-                        "</script>"
-
-                    Page.ClientScript.RegisterStartupScript(Me.GetType(), "showPage", script, False)
+                    ' Senarai ditapis terus oleh parameter ?pid= pada SqlDataSourceGrid (@pid); panel penapis disorok
                     panelFilter.Attributes.Add("style", "display:none")
                 End If
             Catch ex As Exception
