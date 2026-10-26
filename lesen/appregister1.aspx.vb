@@ -1,4 +1,4 @@
-Imports System
+﻿Imports System
 Imports System.Collections.Generic
 Imports System.Configuration
 Imports System.Data
@@ -47,13 +47,13 @@ Partial Class appregister1
 #Region "Fields & Constants"
     Public Shared CS As String = ConfigurationManager.ConnectionStrings("webcon_ConnectionStr").ConnectionString
     Private Const MaxFileSizeInBytes As Integer = 5 * 1024 * 1024 ' 5 MB max upload
+    Private Const MaxKelulusanSementaraCount As Integer = 5
 
     Public Property OriginalImageSize As Size
     Public Property NewImageSize As Size
 #End Region
 
 #Region "Page Lifecycle & Permissions"
-
     Protected Sub Page_Load(sender As Object, e As EventArgs) Handles Me.Load
         If Not IsPostBack Then
             Try
@@ -152,7 +152,7 @@ Partial Class appregister1
                 Dim btnBack As LinkButton = DirectCast(FormView1.FindControl("BackButton"), LinkButton)
                 Dim frmview() As Object = {FormView1, FormViewMaintenanceTemplate}
                 Dim lbutton() As Object = {btnBack, BT_ViewLaporan}
-                Dim ctlDeny() As Object = {BtnSaveMesyuarat, btnSaveLetter, ButtonAddAssignment}
+                Dim ctlDeny() As Object = {BtnSaveMesyuarat, btnSaveLetter, ButtonAddAssignment, pnlAddKelulusanSementara}
 
                 ' Check write permissions
                 Dim frmwrite As Boolean = GlobalClass.CheckPageWrite("Write", frmview, lbutton, ctlDeny)
@@ -169,6 +169,9 @@ Partial Class appregister1
                     gvTabBayaran.Columns.Item(4).Visible = False
                     gvTabBayaran.Columns.Item(5).Visible = False
                     gvTabBayaran.Columns.Item(6).Visible = False
+                    If gvKelulusanSementara.Columns.Count >= 6 Then
+                        gvKelulusanSementara.Columns.Item(5).Visible = False
+                    End If
                 End If
             End If
         Catch ex As Exception
@@ -324,6 +327,9 @@ Partial Class appregister1
         End If
 
         GetSuratMohon(pid)
+        gvKelulusanSementara.EditIndex = -1
+        UpdateKelulusanSementaraUI()
+        BindKelulusanSementara()
     End Sub
 
     Private Sub GridView1_RowCommand(sender As Object, e As GridViewCommandEventArgs) Handles GridView1.RowCommand
@@ -645,6 +651,9 @@ Partial Class appregister1
         FormView1.Visible = False
         whiteCard.Visible = True
         TabContainer1.Visible = False
+        If tabKelulusanSementara IsNot Nothing Then
+            tabKelulusanSementara.Visible = False
+        End If
         GridView1.SelectedIndex = -1
         GridView1.DataBind()
     End Sub
@@ -660,6 +669,10 @@ Partial Class appregister1
         DDL_Status.SelectedValue = 0
         Session.Item("isInserted") = False
         Session.Remove("BantingDraftKey")
+        TabContainer1.Visible = False
+        If tabKelulusanSementara IsNot Nothing Then
+            tabKelulusanSementara.Visible = False
+        End If
         FormView1.Visible = True
         FormView1.ChangeMode(FormViewMode.Insert)
         ClearFormViewInsertData()
@@ -710,6 +723,10 @@ Partial Class appregister1
 
             Dim pnlTarikh As Panel = TryCast(FormView1.FindControl("pnlbatalTarikh"), Panel)
             If pnlTarikh IsNot Nothing Then pnlTarikh.Style("display") = "none"
+
+            Dim divSementara As HtmlGenericControl = TryCast(FormView1.FindControl("divKelulusanSementaraChk"), HtmlGenericControl)
+            If divSementara IsNot Nothing Then divSementara.Visible = False
+            If tabKelulusanSementara IsNot Nothing Then tabKelulusanSementara.Visible = False
 
             ' Reset bound child controls
             Dim rptSelectedItems As Repeater = TryCast(FormView1.FindControl("rptSelectedItems"), Repeater)
@@ -802,6 +819,11 @@ Partial Class appregister1
         If Not isTargetSebab Then
             e.Values("TarikhSebabBatal") = DBNull.Value
         End If
+
+        Dim cb24h As CheckBox = TryCast(FormView1.FindControl("CB_24h"), CheckBox)
+        Dim cbSementara As CheckBox = TryCast(FormView1.FindControl("CB_KelulusanSementara"), CheckBox)
+        Dim isSementara As Boolean = (IsBorangLesenPerniagaan() AndAlso (cb24h Is Nothing OrElse Not cb24h.Checked) AndAlso cbSementara IsNot Nothing AndAlso cbSementara.Checked)
+        e.Values("IsKelulusanSementara") = isSementara
     End Sub
 
     Private Sub FormView1_ItemInserted(sender As Object, e As FormViewInsertedEventArgs) Handles FormView1.ItemInserted
@@ -830,6 +852,11 @@ Partial Class appregister1
         If Not isTargetSebab Then
             e.NewValues("TarikhSebabBatal") = DBNull.Value
         End If
+
+        Dim cb24h As CheckBox = TryCast(FormView1.FindControl("CB_24h"), CheckBox)
+        Dim cbSementara As CheckBox = TryCast(FormView1.FindControl("CB_KelulusanSementara"), CheckBox)
+        Dim isSementara As Boolean = (IsBorangLesenPerniagaan() AndAlso (cb24h Is Nothing OrElse Not cb24h.Checked) AndAlso cbSementara IsNot Nothing AndAlso cbSementara.Checked)
+        e.NewValues("IsKelulusanSementara") = isSementara
 
         SavePemohonEmail()
     End Sub
@@ -1031,6 +1058,10 @@ Partial Class appregister1
                 ' Load Senarai Lokasi
                 BindLokasiList()
 
+                ' Kemaskini UI & Senarai Kelulusan Sementara
+                UpdateKelulusanSementaraUI()
+                BindKelulusanSementara()
+
                 Using myConnection As New SqlConnection(CS)
                     myConnection.Open()
                     Dim SQL As String = "SELECT a.*, b.name FROM LESEN_Pemohon a " &
@@ -1061,6 +1092,7 @@ Partial Class appregister1
                 End Using
             ElseIf FormView1.CurrentMode = FormViewMode.Insert Then
                 ' Lokasi dan gambar banting hanya boleh diurus dalam FormViewMode.Edit
+                UpdateKelulusanSementaraUI()
             End If
         Catch ex As Exception
             ' Safe fallback
@@ -1151,6 +1183,7 @@ Partial Class appregister1
             pnlf.Visible = False
             pnlbatal1.Visible = False
             pnl6.Visible = False
+            UpdateKelulusanSementaraUI()
             Exit Sub
         End If
 
@@ -1259,6 +1292,8 @@ Partial Class appregister1
                     noruj.Text = ""
                 End If
         End Select
+
+        UpdateKelulusanSementaraUI()
     End Sub
 
     Private Sub PanelAccessPembetulan(lesenid As Integer, clrflag As Boolean)
@@ -1691,6 +1726,7 @@ Partial Class appregister1
                 pnla3.Visible = True
         End Select
 
+        UpdateKelulusanSementaraUI()
         Page.SetFocus(Me.ui_btnPageBottom.ClientID)
     End Sub
 
@@ -2880,7 +2916,7 @@ Partial Class appregister1
             End Using
         Else
             ShowAlert("error", "", "Surat belum dihantar untuk semakan.")
-            TabContainer1.ActiveTabIndex = 5
+            TabContainer1.ActiveTab = TabJabatanAgensi
         End If
     End Sub
 
@@ -4051,6 +4087,314 @@ Partial Class appregister1
         Dim cb As CheckBox = DirectCast(FormView1.FindControl("CB_Deposit"), CheckBox)
         Dim pnl As Panel = DirectCast(FormView1.FindControl("pnldeposit"), Panel)
         pnl.Visible = (cb IsNot Nothing AndAlso cb.Checked)
+    End Sub
+
+    Protected Sub CB_24h_CheckedChanged(sender As Object, e As EventArgs)
+        Dim cb24h As CheckBox = TryCast(FormView1.FindControl("CB_24h"), CheckBox)
+        Dim cbSementara As CheckBox = TryCast(FormView1.FindControl("CB_KelulusanSementara"), CheckBox)
+        If cb24h IsNot Nothing AndAlso cb24h.Checked AndAlso cbSementara IsNot Nothing Then
+            cbSementara.Checked = False
+        End If
+
+        UpdateKelulusanSementaraUI()
+
+        If FormView1.CurrentMode = FormViewMode.Edit Then
+            Dim pid As Integer = GetCurrentPermohonanID()
+            If pid > 0 AndAlso cb24h IsNot Nothing Then
+                Dim isSementara As Boolean = (IsBorangLesenPerniagaan() AndAlso Not cb24h.Checked AndAlso cbSementara IsNot Nothing AndAlso cbSementara.Checked)
+                SaveIsKelulusanSementaraToDb(pid, isSementara, cb24h.Checked)
+            End If
+        End If
+    End Sub
+
+    Protected Sub CB_KelulusanSementara_CheckedChanged(sender As Object, e As EventArgs)
+        Dim cb24h As CheckBox = TryCast(FormView1.FindControl("CB_24h"), CheckBox)
+        Dim cbSementara As CheckBox = TryCast(FormView1.FindControl("CB_KelulusanSementara"), CheckBox)
+
+        UpdateKelulusanSementaraUI()
+
+        If FormView1.CurrentMode = FormViewMode.Edit Then
+            Dim pid As Integer = GetCurrentPermohonanID()
+            If pid > 0 Then
+                Dim isSementara As Boolean = (IsBorangLesenPerniagaan() AndAlso (cb24h Is Nothing OrElse Not cb24h.Checked) AndAlso cbSementara IsNot Nothing AndAlso cbSementara.Checked)
+                SaveIsKelulusanSementaraToDb(pid, isSementara)
+                If isSementara Then
+                    gvKelulusanSementara.EditIndex = -1
+                    BindKelulusanSementara()
+                End If
+            End If
+        End If
+    End Sub
+
+    Private Function IsBorangLesenPerniagaan() As Boolean
+        Dim pnla As Panel = TryCast(FormView1.FindControl("pnlesen1"), Panel)
+        Dim pnl6 As Panel = TryCast(FormView1.FindControl("pnlesen6"), Panel)
+        Dim pnlbillboard As Panel = TryCast(FormView1.FindControl("pnlbillboard"), Panel)
+        If pnla Is Nothing OrElse Not pnla.Visible Then Return False
+        If pnl6 IsNot Nothing AndAlso pnl6.Visible Then Return False
+        If pnlbillboard IsNot Nothing AndAlso pnlbillboard.Visible Then Return False
+        Return True
+    End Function
+
+    Private Sub UpdateKelulusanSementaraUI()
+        Dim cb24h As CheckBox = TryCast(FormView1.FindControl("CB_24h"), CheckBox)
+        Dim cbSementara As CheckBox = TryCast(FormView1.FindControl("CB_KelulusanSementara"), CheckBox)
+        Dim divSementara As HtmlGenericControl = TryCast(FormView1.FindControl("divKelulusanSementaraChk"), HtmlGenericControl)
+
+        Dim isPerniagaan As Boolean = IsBorangLesenPerniagaan()
+        Dim is24Jam As Boolean = (cb24h IsNot Nothing AndAlso cb24h.Checked)
+        Dim canShowOption As Boolean = (isPerniagaan AndAlso Not is24Jam)
+
+        If divSementara IsNot Nothing Then
+            divSementara.Visible = canShowOption
+        End If
+
+        If Not canShowOption AndAlso cbSementara IsNot Nothing Then
+            cbSementara.Checked = False
+        End If
+
+        Dim isEditMode As Boolean = (FormView1.Visible AndAlso FormView1.CurrentMode = FormViewMode.Edit)
+        Dim isSementaraChecked As Boolean = (canShowOption AndAlso cbSementara IsNot Nothing AndAlso cbSementara.Checked)
+
+        If tabKelulusanSementara IsNot Nothing Then
+            Dim shouldShowTab As Boolean = (isEditMode AndAlso isSementaraChecked)
+            tabKelulusanSementara.Visible = shouldShowTab
+            If Not shouldShowTab AndAlso TabContainer1.ActiveTab Is tabKelulusanSementara Then
+                TabContainer1.ActiveTabIndex = 0
+            End If
+        End If
+    End Sub
+
+    Private Sub SaveIsKelulusanSementaraToDb(permohonanId As Integer, isSementara As Boolean, Optional is24Jam As Boolean? = Nothing)
+        If permohonanId <= 0 Then Return
+        Try
+            Using conn As New SqlConnection(CS)
+                conn.Open()
+                Dim sql As String
+                If is24Jam.HasValue Then
+                    sql = "UPDATE dbo.LESEN_Permohonan SET IsKelulusanSementara = @IsKelulusanSementara, Is24jam = @Is24jam, LastModID = @LastModID, LastModDt = GETDATE() WHERE Permohonan_ID = @Permohonan_ID"
+                Else
+                    sql = "UPDATE dbo.LESEN_Permohonan SET IsKelulusanSementara = @IsKelulusanSementara, LastModID = @LastModID, LastModDt = GETDATE() WHERE Permohonan_ID = @Permohonan_ID"
+                End If
+                Using cmd As New SqlCommand(sql, conn)
+                    cmd.Parameters.AddWithValue("@IsKelulusanSementara", isSementara)
+                    If is24Jam.HasValue Then
+                        cmd.Parameters.AddWithValue("@Is24jam", is24Jam.Value)
+                    End If
+                    cmd.Parameters.AddWithValue("@LastModID", Convert.ToString(If(Session("sessionUserName"), "")))
+                    cmd.Parameters.AddWithValue("@Permohonan_ID", permohonanId)
+                    cmd.ExecuteNonQuery()
+                End Using
+            End Using
+        Catch ex As Exception
+        End Try
+    End Sub
+
+    Private Sub BindKelulusanSementara()
+        If FormView1.CurrentMode <> FormViewMode.Edit Then Return
+        If gvKelulusanSementara Is Nothing Then Return
+
+        Dim permohonanId As Integer = GetCurrentPermohonanID()
+        If permohonanId <= 0 Then
+            gvKelulusanSementara.DataSource = Nothing
+            gvKelulusanSementara.DataBind()
+            Return
+        End If
+
+        Dim dt As New DataTable()
+        Using conn As New SqlConnection(CS)
+            conn.Open()
+            Dim sql As String = "SELECT KelulusanSementara_ID, Permohonan_ID, TarikhMula, TarikhTamat, CreatorID, CreatedDt, LastModID, LastModDt " &
+                                "FROM dbo.LESEN_KelulusanSementara WHERE Permohonan_ID = @Permohonan_ID ORDER BY KelulusanSementara_ID ASC"
+            Using cmd As New SqlCommand(sql, conn)
+                cmd.Parameters.AddWithValue("@Permohonan_ID", permohonanId)
+                Using da As New SqlDataAdapter(cmd)
+                    da.Fill(dt)
+                End Using
+            End Using
+        End Using
+
+        gvKelulusanSementara.DataSource = dt
+        gvKelulusanSementara.DataBind()
+
+        Dim currentCount As Integer = dt.Rows.Count
+        If lblKelulusanSementaraCount IsNot Nothing Then
+            lblKelulusanSementaraCount.Text = currentCount.ToString() & " / " & MaxKelulusanSementaraCount.ToString() & " Pembaharuan"
+        End If
+
+        Dim reachedMax As Boolean = (currentCount >= MaxKelulusanSementaraCount)
+        If pnlMaxKelulusanSementara IsNot Nothing Then
+            pnlMaxKelulusanSementara.Visible = reachedMax
+        End If
+        If TB_TarikhMulaSementara IsNot Nothing Then
+            TB_TarikhMulaSementara.Enabled = Not reachedMax
+        End If
+        If TB_TarikhTamatSementara IsNot Nothing Then
+            TB_TarikhTamatSementara.Enabled = Not reachedMax
+        End If
+        If btnAddKelulusanSementara IsNot Nothing Then
+            btnAddKelulusanSementara.Enabled = Not reachedMax
+            btnAddKelulusanSementara.CssClass = If(reachedMax, "btn btn-secondary w-100 disabled", "btn btn-primary w-100")
+        End If
+    End Sub
+
+    Protected Function GetNamaPembaharuan(urutanObj As Object) As String
+        Dim urutan As Integer = 0
+        If urutanObj IsNot Nothing AndAlso Integer.TryParse(urutanObj.ToString(), urutan) Then
+            Select Case urutan
+                Case 1 : Return "Pertama"
+                Case 2 : Return "Kedua"
+                Case 3 : Return "Ketiga"
+                Case 4 : Return "Keempat"
+                Case 5 : Return "Kelima"
+                Case Else
+                    If urutan > 5 Then
+                        Return "Ke-" & urutan.ToString()
+                    End If
+            End Select
+        End If
+        Return "Pertama"
+    End Function
+
+    Protected Sub btnAddKelulusanSementara_Click(sender As Object, e As EventArgs)
+        If FormView1.CurrentMode <> FormViewMode.Edit Then Return
+
+        Dim permohonanId As Integer = GetCurrentPermohonanID()
+        If permohonanId <= 0 Then
+            ShowAlert("error", "", "Sila pilih rekod permohonan terlebih dahulu.")
+            Return
+        End If
+
+        Dim strMula As String = If(TB_TarikhMulaSementara IsNot Nothing, TB_TarikhMulaSementara.Text.Trim(), "")
+        Dim strTamat As String = If(TB_TarikhTamatSementara IsNot Nothing, TB_TarikhTamatSementara.Text.Trim(), "")
+
+        Dim dtMula As DateTime
+        Dim dtTamat As DateTime
+
+        If String.IsNullOrEmpty(strMula) OrElse Not DateTime.TryParse(strMula, dtMula) Then
+            ShowAlert("warning", "", "Sila masukkan Tarikh Mula yang sah.")
+            Return
+        End If
+
+        If String.IsNullOrEmpty(strTamat) OrElse Not DateTime.TryParse(strTamat, dtTamat) Then
+            ShowAlert("warning", "", "Sila masukkan Tarikh Tamat yang sah.")
+            Return
+        End If
+
+        If dtTamat.Date < dtMula.Date Then
+            ShowAlert("warning", "", "Tarikh Tamat mestilah sama atau selepas Tarikh Mula.")
+            Return
+        End If
+
+        Using conn As New SqlConnection(CS)
+            conn.Open()
+
+            Dim countSql As String = "SELECT COUNT(*) FROM dbo.LESEN_KelulusanSementara WHERE Permohonan_ID = @Permohonan_ID"
+            Using countCmd As New SqlCommand(countSql, conn)
+                countCmd.Parameters.AddWithValue("@Permohonan_ID", permohonanId)
+                Dim currentCount As Integer = Convert.ToInt32(countCmd.ExecuteScalar())
+                If currentCount >= MaxKelulusanSementaraCount Then
+                    ShowAlert("warning", "", "Maksimum " & MaxKelulusanSementaraCount.ToString() & " kali pembaharuan kelulusan sementara sahaja dibenarkan.")
+                    BindKelulusanSementara()
+                    Return
+                End If
+            End Using
+
+            Dim insertSql As String = "INSERT INTO dbo.LESEN_KelulusanSementara (Permohonan_ID, TarikhMula, TarikhTamat, CreatorID, CreatedDt) " &
+                                      "VALUES (@Permohonan_ID, @TarikhMula, @TarikhTamat, @CreatorID, GETDATE())"
+            Using insCmd As New SqlCommand(insertSql, conn)
+                insCmd.Parameters.AddWithValue("@Permohonan_ID", permohonanId)
+                insCmd.Parameters.AddWithValue("@TarikhMula", dtMula.Date)
+                insCmd.Parameters.AddWithValue("@TarikhTamat", dtTamat.Date)
+                insCmd.Parameters.AddWithValue("@CreatorID", Convert.ToString(If(Session("sessionUserName"), "")))
+                insCmd.ExecuteNonQuery()
+            End Using
+        End Using
+
+        If TB_TarikhMulaSementara IsNot Nothing Then TB_TarikhMulaSementara.Text = ""
+        If TB_TarikhTamatSementara IsNot Nothing Then TB_TarikhTamatSementara.Text = ""
+
+        gvKelulusanSementara.EditIndex = -1
+        BindKelulusanSementara()
+        ShowAlert("success", "", "Rekod kelulusan sementara berjaya ditambah.")
+    End Sub
+
+    Protected Sub gvKelulusanSementara_RowEditing(sender As Object, e As GridViewEditEventArgs)
+        gvKelulusanSementara.EditIndex = e.NewEditIndex
+        BindKelulusanSementara()
+    End Sub
+
+    Protected Sub gvKelulusanSementara_RowCancelingEdit(sender As Object, e As GridViewCancelEditEventArgs)
+        gvKelulusanSementara.EditIndex = -1
+        BindKelulusanSementara()
+    End Sub
+
+    Protected Sub gvKelulusanSementara_RowUpdating(sender As Object, e As GridViewUpdateEventArgs)
+        Dim id As Integer = Convert.ToInt32(gvKelulusanSementara.DataKeys(e.RowIndex).Value)
+        Dim row As GridViewRow = gvKelulusanSementara.Rows(e.RowIndex)
+
+        Dim txtMula As TextBox = TryCast(row.FindControl("txtEditTarikhMulaSementara"), TextBox)
+        Dim txtTamat As TextBox = TryCast(row.FindControl("txtEditTarikhTamatSementara"), TextBox)
+
+        Dim strMula As String = If(txtMula IsNot Nothing, txtMula.Text.Trim(), "")
+        Dim strTamat As String = If(txtTamat IsNot Nothing, txtTamat.Text.Trim(), "")
+
+        Dim dtMula As DateTime
+        Dim dtTamat As DateTime
+
+        If String.IsNullOrEmpty(strMula) OrElse Not DateTime.TryParse(strMula, dtMula) Then
+            ShowAlert("warning", "", "Sila masukkan Tarikh Mula yang sah.")
+            Return
+        End If
+
+        If String.IsNullOrEmpty(strTamat) OrElse Not DateTime.TryParse(strTamat, dtTamat) Then
+            ShowAlert("warning", "", "Sila masukkan Tarikh Tamat yang sah.")
+            Return
+        End If
+
+        If dtTamat.Date < dtMula.Date Then
+            ShowAlert("warning", "", "Tarikh Tamat mestilah sama atau selepas Tarikh Mula.")
+            Return
+        End If
+
+        Dim permohonanId As Integer = GetCurrentPermohonanID()
+        Using conn As New SqlConnection(CS)
+            conn.Open()
+            Dim updSql As String = "UPDATE dbo.LESEN_KelulusanSementara " &
+                                   "SET TarikhMula = @TarikhMula, TarikhTamat = @TarikhTamat, LastModID = @LastModID, LastModDt = GETDATE() " &
+                                   "WHERE KelulusanSementara_ID = @KelulusanSementara_ID AND Permohonan_ID = @Permohonan_ID"
+            Using updCmd As New SqlCommand(updSql, conn)
+                updCmd.Parameters.AddWithValue("@TarikhMula", dtMula.Date)
+                updCmd.Parameters.AddWithValue("@TarikhTamat", dtTamat.Date)
+                updCmd.Parameters.AddWithValue("@LastModID", Convert.ToString(If(Session("sessionUserName"), "")))
+                updCmd.Parameters.AddWithValue("@KelulusanSementara_ID", id)
+                updCmd.Parameters.AddWithValue("@Permohonan_ID", permohonanId)
+                updCmd.ExecuteNonQuery()
+            End Using
+        End Using
+
+        gvKelulusanSementara.EditIndex = -1
+        BindKelulusanSementara()
+        ShowAlert("success", "", "Rekod kelulusan sementara berjaya dikemaskini.")
+    End Sub
+
+    Protected Sub gvKelulusanSementara_RowDeleting(sender As Object, e As GridViewDeleteEventArgs)
+        Dim id As Integer = Convert.ToInt32(gvKelulusanSementara.DataKeys(e.RowIndex).Value)
+        Dim permohonanId As Integer = GetCurrentPermohonanID()
+
+        Using conn As New SqlConnection(CS)
+            conn.Open()
+            Dim delSql As String = "DELETE FROM dbo.LESEN_KelulusanSementara WHERE KelulusanSementara_ID = @KelulusanSementara_ID AND Permohonan_ID = @Permohonan_ID"
+            Using delCmd As New SqlCommand(delSql, conn)
+                delCmd.Parameters.AddWithValue("@KelulusanSementara_ID", id)
+                delCmd.Parameters.AddWithValue("@Permohonan_ID", permohonanId)
+                delCmd.ExecuteNonQuery()
+            End Using
+        End Using
+
+        gvKelulusanSementara.EditIndex = -1
+        BindKelulusanSementara()
+        ShowAlert("success", "", "Rekod kelulusan sementara telah dipadam.")
     End Sub
 
     Protected Sub CB_IsBatal_CheckedChanged(sender As Object, e As EventArgs)

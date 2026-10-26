@@ -2008,7 +2008,7 @@
                                             <div class="form-group">
                                                 <label class="form-label-custom">&nbsp;</label>
                                                 <div class="checkbox-box">
-                                                    <asp:CheckBox ID="CB_24h" Checked='<%# Bind("Is24jam") %>' runat="server" />
+                                                    <asp:CheckBox ID="CB_24h" Checked='<%# Bind("Is24jam") %>' runat="server" OnCheckedChanged="CB_24h_CheckedChanged" AutoPostBack="true" CausesValidation="false" />
                                                     <span class="text-danger fw-bold">Kelulusan 24 jam?</span>
                                                 </div>
                                             </div>
@@ -2017,7 +2017,13 @@
                                 </asp:Panel>
                             </asp:Panel>
 
-                            <div class="row my-2">
+                            <div class="row my-2 g-3">
+                                <div class="col-md-4 col-lg-3" id="divKelulusanSementaraChk" runat="server" visible="false">
+                                    <div class="checkbox-box">
+                                        <asp:CheckBox ID="CB_KelulusanSementara" runat="server" Checked='<%# If(IsDBNull(Eval("IsKelulusanSementara")), False, CBool(Eval("IsKelulusanSementara"))) %>' OnCheckedChanged="CB_KelulusanSementara_CheckedChanged" AutoPostBack="true" CausesValidation="false" />
+                                        <span class="fw-bold text-primary">Kelulusan Sementara?</span>
+                                    </div>
+                                </div>
                                 <div class="col-md-4 col-lg-3">
                                     <div class="checkbox-box">
                                         <asp:CheckBox ID="CB_Deposit" runat="server" Checked='<%# If(Eval("DepositAmount") Is DBNull.Value, False, True) %>' OnCheckedChanged="CB_Deposit_CheckedChanged" AutoPostBack="true" CausesValidation="false" />
@@ -3238,8 +3244,15 @@
                                 <div class="row my-2 g-3">
                                     <div class="col-md-6 col-lg-3">
                                         <div class="checkbox-box">
-                                            <asp:CheckBox ID="CB_24h" Checked='<%# Bind("Is24jam") %>' runat="server" />
+                                            <asp:CheckBox ID="CB_24h" Checked='<%# Bind("Is24jam") %>' runat="server" OnCheckedChanged="CB_24h_CheckedChanged" AutoPostBack="true" CausesValidation="false" />
                                             <span class="text-danger fw-bold">Kelulusan 24 Jam?</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6 col-lg-3" id="divKelulusanSementaraChk" runat="server" visible="false">
+                                        <div class="checkbox-box">
+                                            <asp:CheckBox ID="CB_KelulusanSementara" runat="server" OnCheckedChanged="CB_KelulusanSementara_CheckedChanged" AutoPostBack="true" CausesValidation="false" />
+                                            <span class="fw-bold text-primary">Kelulusan Sementara?</span>
                                         </div>
                                     </div>
 
@@ -3475,7 +3488,7 @@
                         KontraktorIklan, NoTelKontraktor, UkuranBanting, BilBanting, TarikhBanting1, TarikhBanting2, StatusBanting, NoPengesahanBanting, TarikhPengesahanBanting1, TarikhPengesahanBanting2, NoResitBanting, NoSiriStiker, 
                         TarikhBanting3, RenewBanting, JenisBanting, 
                         Rujukan, NoAkaunCukai, DepositAmount, DepositDate, DepositResitNo, DepositPulangAmount, 
-                        Is24jam, IsBatal, JenisBatal, SebabBatalPerm, SebabBatalTanpaPerm, TarikhSebabBatal, RemarksBatal, TindakanBatal, IsPulang, IsSuratKelulusanFail, IsSuratPembatalanFail, IsSuratPemeriksaanFail, RemarksFail, CreatorID, CreatedDt, LastModID, LastModDt) 
+                        Is24jam, IsKelulusanSementara, IsBatal, JenisBatal, SebabBatalPerm, SebabBatalTanpaPerm, TarikhSebabBatal, RemarksBatal, TindakanBatal, IsPulang, IsSuratKelulusanFail, IsSuratPembatalanFail, IsSuratPemeriksaanFail, RemarksFail, CreatorID, CreatedDt, LastModID, LastModDt) 
                         VALUES (@JenisLesenDescList, @JenisLesenIdList, @SaizIklanList, @CahayaIklanList, @UnitIklanList, @LokasiList, 
                         @BakaAnjingList, @AnjingJantanList, @AnjingBetinaList, @AnjingJantanMandulList, @AnjingBetinaMandulList,
                         @Permohonan_PemohonID, @TarikhMohon, 0, 0, @NamaSyarikat, @NoPendaftaran, @NoAkaun, @AlamatPremis, @JenisPerniagaan, @PemilikBaru, @AlamatBaru,
@@ -3486,7 +3499,7 @@
                         @KontraktorIklan, @NoTelKontraktor, @UkuranBanting, @BilBanting, @TarikhBanting1, @TarikhBanting2, @StatusBanting, @NoPengesahanBanting, @TarikhPengesahanBanting1, @TarikhPengesahanBanting2, @NoResitBanting, @NoSiriStiker, 
                         @TarikhBanting3, @RenewBanting, @JenisBanting,
                         @Rujukan, @NoAkaunCukai, @DepositAmount, @DepositDate, @DepositResitNo, @DepositPulangAmount, 
-                        @Is24jam, @IsBatal, @JenisBatal, @SebabBatalPerm, @SebabBatalTanpaPerm, @TarikhSebabBatal, @RemarksBatal, @TindakanBatal, 0, 0, 0, 0, @RemarksFail, @CreatorId, GETDATE(), @CreatorId, GETDATE()); SELECT @Permohonan_ID = SCOPE_IDENTITY();"
+                        @Is24jam, ISNULL(@IsKelulusanSementara, 0), @IsBatal, @JenisBatal, @SebabBatalPerm, @SebabBatalTanpaPerm, @TarikhSebabBatal, @RemarksBatal, @TindakanBatal, 0, 0, 0, 0, @RemarksFail, @CreatorId, GETDATE(), @CreatorId, GETDATE()); SELECT @Permohonan_ID = SCOPE_IDENTITY();"
                 SelectCommand="SELECT * FROM LESEN_Permohonan WHERE Permohonan_ID = @Permohonan_ID"
                 UpdateCommand="UPDATE LESEN_Permohonan SET JenisLesenDescList = @JenisLesenDescList, JenisLesenIdList = @JenisLesenIdList, SaizIklanList = @SaizIklanList, CahayaIklanList = @CahayaIklanList, UnitIklanList = @UnitIklanList, LokasiList = @LokasiList, 
                         BakaAnjingList = @BakaAnjingList, AnjingJantanList = @AnjingJantanList, AnjingBetinaList = @AnjingBetinaList, AnjingJantanMandulList = @AnjingJantanMandulList, AnjingBetinaMandulList = @AnjingBetinaMandulList, 
@@ -3502,7 +3515,7 @@
                         NoPengesahanBanting = @NoPengesahanBanting, TarikhPengesahanBanting1 = @TarikhPengesahanBanting1, TarikhPengesahanBanting2 = @TarikhPengesahanBanting2, NoResitBanting = @NoResitBanting, NoSiriStiker = @NoSiriStiker, 
                         TarikhBanting3 = @TarikhBanting3, RenewBanting = @RenewBanting, JenisBanting = @JenisBanting, 
                         Rujukan = @Rujukan, NoAkaunCukai = @NoAkaunCukai, DepositAmount = @DepositAmount, 
-                        DepositDate = @DepositDate, DepositResitNo = @DepositResitNo, DepositPulangAmount = @DepositPulangAmount, Is24jam = @Is24jam, IsBatal = @IsBatal, JenisBatal = @JenisBatal, SebabBatalPerm = @SebabBatalPerm, 
+                        DepositDate = @DepositDate, DepositResitNo = @DepositResitNo, DepositPulangAmount = @DepositPulangAmount, Is24jam = @Is24jam, IsKelulusanSementara = ISNULL(@IsKelulusanSementara, 0), IsBatal = @IsBatal, JenisBatal = @JenisBatal, SebabBatalPerm = @SebabBatalPerm, 
                         SebabBatalTanpaPerm = @SebabBatalTanpaPerm, TarikhSebabBatal = @TarikhSebabBatal, RemarksBatal = @RemarksBatal, TindakanBatal = @TindakanBatal, RemarksFail = @RemarksFail, LastModId = @LastModId, LastModDt = GETDATE() 
                         WHERE (Permohonan_ID = @Permohonan_ID)">
                 <InsertParameters>
@@ -3583,6 +3596,7 @@
                     <asp:Parameter Name="DepositResitNo"></asp:Parameter>
                     <asp:Parameter Name="DepositPulangAmount"></asp:Parameter>
                     <asp:Parameter Name="Is24jam"></asp:Parameter>
+                    <asp:Parameter Name="IsKelulusanSementara" Type="Boolean" DefaultValue="False"></asp:Parameter>
                     <asp:Parameter Name="RemarksFail"></asp:Parameter>
                     <asp:Parameter Name="IsBatal"></asp:Parameter>
                     <asp:Parameter Name="JenisBatal"></asp:Parameter>
@@ -3675,6 +3689,7 @@
                     <asp:Parameter Name="DepositResitNo"></asp:Parameter>
                     <asp:Parameter Name="DepositPulangAmount"></asp:Parameter>
                     <asp:Parameter Name="Is24jam"></asp:Parameter>
+                    <asp:Parameter Name="IsKelulusanSementara" Type="Boolean" DefaultValue="False"></asp:Parameter>
                     <asp:Parameter Name="RemarksFail"></asp:Parameter>
                     <asp:Parameter Name="IsBatal"></asp:Parameter>
                     <asp:Parameter Name="JenisBatal"></asp:Parameter>
@@ -4625,6 +4640,150 @@
                     </ContentTemplate>
                 </asp:TabPanel>
 
+                <%-- --- Tab 2b: Kelulusan Sementara --- --%>
+                <asp:TabPanel runat="server" ID="tabKelulusanSementara" HeaderText="Kelulusan Sementara" Visible="false">
+                    <HeaderTemplate>Kelulusan Sementara</HeaderTemplate>
+                    <ContentTemplate>
+                        <div class="card mt-2 mb-3">
+                            <div class="card-header d-flex flex-wrap justify-content-between align-items-center gap-2">
+                                <div class="d-flex align-items-center gap-2">
+                                    <h3 class="card-title mb-0 font-weight-bold">
+                                        <i class="bi bi-calendar-check me-2"></i>Maklumat Kelulusan Sementara
+                                    </h3>
+                                </div>
+                                <div>
+                                    <asp:Label ID="lblKelulusanSementaraCount" runat="server" CssClass="badge bg-primary text-white px-3 py-2" Text="0 / 5 Pembaharuan"></asp:Label>
+                                </div>
+                            </div>
+
+                            <div class="card-body">
+                                <asp:Panel ID="pnlMaxKelulusanSementara" runat="server" Visible="false" CssClass="alert alert-warning d-flex align-items-center mb-3">
+                                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                                    <span>Had maksimum 5 kali pembaharuan kelulusan sementara telah dicapai.</span>
+                                </asp:Panel>
+
+                                <asp:Panel ID="pnlAddKelulusanSementara" runat="server" CssClass="mb-4 p-3 bg-light rounded border">
+                                    <div class="row align-items-end g-3">
+                                        <div class="col-md-4">
+                                            <div class="form-group mb-0">
+                                                <label class="form-label-custom">Tarikh Mula <span class="text-danger">*</span></label>
+                                                <asp:TextBox ID="TB_TarikhMulaSementara" runat="server" TextMode="Date" CssClass="form-control" />
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <div class="form-group mb-0">
+                                                <label class="form-label-custom">Tarikh Tamat <span class="text-danger">*</span></label>
+                                                <asp:TextBox ID="TB_TarikhTamatSementara" runat="server" TextMode="Date" CssClass="form-control" />
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <div class="form-group mb-0">
+                                                <asp:LinkButton ID="btnAddKelulusanSementara" runat="server" CssClass="btn btn-primary w-100" OnClick="btnAddKelulusanSementara_Click" CausesValidation="false">
+                                                    <i class="bi bi-plus-circle me-1"></i> Tambah Kelulusan Sementara
+                                                </asp:LinkButton>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </asp:Panel>
+
+                                <div class="table-responsive">
+                                    <asp:GridView ID="gvKelulusanSementara" runat="server" ShowHeaderWhenEmpty="True"
+                                        AutoGenerateColumns="False" DataKeyNames="KelulusanSementara_ID"
+                                        CssClass="table table-bordered no-action-dropdown" Width="100%"
+                                        EmptyDataText="Tiada rekod kelulusan sementara."
+                                        OnRowEditing="gvKelulusanSementara_RowEditing"
+                                        OnRowCancelingEdit="gvKelulusanSementara_RowCancelingEdit"
+                                        OnRowUpdating="gvKelulusanSementara_RowUpdating"
+                                        OnRowDeleting="gvKelulusanSementara_RowDeleting">
+                                        <AlternatingRowStyle CssClass="alt" />
+                                        <Columns>
+                                            <asp:TemplateField HeaderText="No.">
+                                                <ItemTemplate>
+                                                    <%# Container.DataItemIndex + 1 %>
+                                                </ItemTemplate>
+                                                <EditItemTemplate>
+                                                    <%# Container.DataItemIndex + 1 %>
+                                                </EditItemTemplate>
+                                                <HeaderStyle Width="6%" HorizontalAlign="Center" />
+                                                <ItemStyle HorizontalAlign="Center" VerticalAlign="Middle" />
+                                            </asp:TemplateField>
+
+                                            <asp:TemplateField HeaderText="Pembaharuan">
+                                                <ItemTemplate>
+                                                    <span class="fw-bold"><%# GetNamaPembaharuan(Container.DataItemIndex + 1) %></span>
+                                                </ItemTemplate>
+                                                <EditItemTemplate>
+                                                    <span class="fw-bold"><%# GetNamaPembaharuan(Container.DataItemIndex + 1) %></span>
+                                                </EditItemTemplate>
+                                                <HeaderStyle Width="18%" />
+                                                <ItemStyle VerticalAlign="Middle" />
+                                            </asp:TemplateField>
+
+                                            <asp:TemplateField HeaderText="Tarikh Mula">
+                                                <ItemTemplate>
+                                                    <%# Eval("TarikhMula", "{0:dd/MM/yyyy}") %>
+                                                </ItemTemplate>
+                                                <EditItemTemplate>
+                                                    <asp:TextBox ID="txtEditTarikhMulaSementara" runat="server" Text='<%# Eval("TarikhMula", "{0:yyyy-MM-dd}") %>' TextMode="Date" CssClass="form-control" />
+                                                </EditItemTemplate>
+                                                <HeaderStyle Width="22%" />
+                                                <ItemStyle VerticalAlign="Middle" />
+                                            </asp:TemplateField>
+
+                                            <asp:TemplateField HeaderText="Tarikh Tamat">
+                                                <ItemTemplate>
+                                                    <%# Eval("TarikhTamat", "{0:dd/MM/yyyy}") %>
+                                                </ItemTemplate>
+                                                <EditItemTemplate>
+                                                    <asp:TextBox ID="txtEditTarikhTamatSementara" runat="server" Text='<%# Eval("TarikhTamat", "{0:yyyy-MM-dd}") %>' TextMode="Date" CssClass="form-control" />
+                                                </EditItemTemplate>
+                                                <HeaderStyle Width="22%" />
+                                                <ItemStyle VerticalAlign="Middle" />
+                                            </asp:TemplateField>
+
+                                            <asp:TemplateField HeaderText="Tarikh Kemaskini">
+                                                <ItemTemplate>
+                                                    <div><%# If(IsDBNull(Eval("LastModDt")), Eval("CreatedDt", "{0:dd/MM/yyyy HH:mm}"), Eval("LastModDt", "{0:dd/MM/yyyy HH:mm}")) %></div>
+                                                    <small class="text-muted"><%# If(IsDBNull(Eval("LastModID")) OrElse String.IsNullOrEmpty(Eval("LastModID").ToString()), Eval("CreatorID"), Eval("LastModID")) %></small>
+                                                </ItemTemplate>
+                                                <EditItemTemplate>
+                                                    <div><%# If(IsDBNull(Eval("LastModDt")), Eval("CreatedDt", "{0:dd/MM/yyyy HH:mm}"), Eval("LastModDt", "{0:dd/MM/yyyy HH:mm}")) %></div>
+                                                    <small class="text-muted"><%# If(IsDBNull(Eval("LastModID")) OrElse String.IsNullOrEmpty(Eval("LastModID").ToString()), Eval("CreatorID"), Eval("LastModID")) %></small>
+                                                </EditItemTemplate>
+                                                <HeaderStyle Width="16%" />
+                                                <ItemStyle VerticalAlign="Middle" />
+                                            </asp:TemplateField>
+
+                                            <asp:TemplateField HeaderText="Tindakan">
+                                                <ItemTemplate>
+                                                    <asp:LinkButton ID="lbEditSementara" runat="server" CausesValidation="False" CommandName="Edit" CssClass="btn btn-primary btn-sm me-1" ToolTip="Kemaskini">
+                                                        <i class="bi bi-pencil-square me-1"></i>Kemaskini
+                                                    </asp:LinkButton>
+                                                    <asp:LinkButton ID="lbDeleteSementara" runat="server" CausesValidation="False" CommandName="Delete" CssClass="btn btn-danger btn-sm" OnClientClick="return confirm('Anda pasti untuk padam rekod kelulusan sementara ini?');" ToolTip="Padam">
+                                                        <i class="bi bi-trash me-1"></i>Padam
+                                                    </asp:LinkButton>
+                                                </ItemTemplate>
+                                                <EditItemTemplate>
+                                                    <asp:LinkButton ID="lbUpdateSementara" runat="server" CausesValidation="False" CommandName="Update" CssClass="btn btn-success btn-sm me-1" ToolTip="Simpan">
+                                                        <i class="bi bi-check-lg me-1"></i>Simpan
+                                                    </asp:LinkButton>
+                                                    <asp:LinkButton ID="lbCancelSementara" runat="server" CausesValidation="False" CommandName="Cancel" CssClass="btn btn-secondary btn-sm" ToolTip="Batal">
+                                                        <i class="bi bi-x-lg me-1"></i>Batal
+                                                    </asp:LinkButton>
+                                                </EditItemTemplate>
+                                                <HeaderStyle Width="16%" HorizontalAlign="Center" />
+                                                <ItemStyle HorizontalAlign="Center" VerticalAlign="Middle" />
+                                            </asp:TemplateField>
+                                        </Columns>
+                                    </asp:GridView>
+                                </div>
+                            </div>
+                        </div>
+                    </ContentTemplate>
+                </asp:TabPanel>
+
                 <%-- --- Tab 3: Maklumat (Inspektorat / Pembetulan Maklumat) --- --%>
                 <asp:TabPanel runat="server" ID="tabMaklumat" HeaderText="Maklumat" Visible="false">
                     <HeaderTemplate>Inspektorat</HeaderTemplate>
@@ -4652,11 +4811,11 @@
                                 </div>
                             </div>
                             <div class="card-body">
-                                <div id="alertNoDiff" class="alert alert-light border border-info d-flex align-items-center p-3 mb-3 shadow-sm rounded" style="display: none;">
+                                <div id="alertNoDiff" class="alert alert-light border border-info p-3 mb-3 shadow-sm rounded" style="display: none;"><div class="d-flex align-items-center">
                                     <i class="bi bi-info-circle-fill text-info fs-3 me-3 flex-shrink-0"></i>
                                     <div>
                                         <h6 class="mb-1 font-weight-bold">Tiada Perbezaan Maklumat Dikesan</h6>
-                                        <span class="text-muted small">Semua maklumat permohonan di bahagian ini adalah tepat dan sama seperti maklumat asal di atas. Klik butang <a href="javascript:void(0);" onclick="$('#btnShowAllFields').click();" class="font-weight-bold text-primary text-decoration-underline">"Papar Semua Maklumat"</a> jika anda ingin melihat atau mengemas kini keseluruhan maklumat permohonan.</span>
+                                        <span class="text-muted small">Semua maklumat permohonan di bahagian ini adalah tepat dan sama seperti maklumat asal di atas. Klik butang <a href="javascript:void(0);" onclick="$('#btnShowAllFields').click();" class="font-weight-bold text-primary text-decoration-underline">"Papar Semua Maklumat"</a> jika anda ingin melihat atau mengemas kini keseluruhan maklumat permohonan.</span></div>
                                     </div>
                                 </div>
                                 <asp:HiddenField ID="HF_SaizIklanList_ins" runat="server" />
