@@ -4039,7 +4039,7 @@
                             <div class="table-responsive mt-3">
                                 <asp:GridView ID="GridView1" CssClass="table table-hover table-bordered custom-gridview align-middle" AllowPaging="True" PageSize="20"
                                     ShowHeaderWhenEmpty="True" EmptyDataText="Tiada Rekod Dijumpai" AllowSorting="True" runat="server" AutoGenerateColumns="False"
-                                    DataKeyNames="Permohonan_ID, StatusID, IsBatal, JenisLesen_ID, IsPublish, Is24Jam, JenisLesenIdList" DataSourceID="SqlDataSourceGrid">
+                                    DataKeyNames="Permohonan_ID, StatusID, IsBatal, JenisLesen_ID, IsPublish, Is24Jam, JenisLesenIdList, IsKelulusanSementara" DataSourceID="SqlDataSourceGrid">
                                     <PagerStyle CssClass="pagination-custom" HorizontalAlign="Right" />
                                     <Columns>
                                         <asp:BoundField DataField="Permohonan_ID" HeaderText="ID" SortExpression="Permohonan_ID" Visible="false"></asp:BoundField>
@@ -4208,7 +4208,8 @@
                                         WHEN MIN(ISNULL(reviewStatusID,0)) = 2 THEN ' (Telah Disemak)'
                                         WHEN MIN(ISNULL(reviewStatusID,0)) = 3 THEN ' (Semakan Semula)' END
                                         AS stts 
-                                        FROM LESEN_PermohonanAgensiBatal WHERE Permohonan_ID = a.Permohonan_ID),'Draf') else d.Description END
+                                        FROM LESEN_PermohonanAgensiBatal WHERE Permohonan_ID = a.Permohonan_ID),'Draf')
+                                        WHEN a.StatusID = 10 AND ISNULL(a.IsKelulusanSementara, 0) = 1 THEN 'Lulus Sementara' else d.Description END
                                         AS Description, 
                                         CASE WHEN a.IsBatal = 0 then a.Is24Jam 
                                         WHEN a.IsBatal = 1 then 1 END 
