@@ -1020,6 +1020,22 @@ h1{
                         </li>
 
 
+                        <!-- Notification Lesen Perniagaan Sementara Tamat Tempoh -->
+                        <li>
+                            <a class="dropdown-item py-2"
+                               href="<%= ResolveUrl("~/lesen/appregister1.aspx?p_Id=3348&m_Id=4357&statusLesenSementara=expired") %>">
+
+                                <i class="bi bi-calendar-x text-danger me-2"></i>
+                                Tamat Tempoh - Lesen Sementara
+
+                                <span class="badge bg-danger ms-2">
+                                    <asp:Label ID="lblNotiLesenSementaraExpired" runat="server"></asp:Label>
+                                </span>
+
+                            </a>
+                        </li>
+
+
                         <!-- Notification 1 -->
                         <li>
                             <a class="dropdown-item py-2"

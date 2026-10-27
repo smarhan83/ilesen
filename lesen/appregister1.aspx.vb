@@ -1,4 +1,4 @@
-﻿Imports System
+Imports System
 Imports System.Collections.Generic
 Imports System.Configuration
 Imports System.Data
@@ -59,7 +59,19 @@ Partial Class appregister1
             Try
                 If Request.QueryString("statusPermit") = "expired" Then
                     hfFilterExpiredPermit.Value = "1"
+                    hfFilterExpiredLesenSementara.Value = "0"
                     pnlExpiredAlert.Visible = True
+                    pnlExpiredSementaraAlert.Visible = False
+                    Try
+                        DDL_CreatedBy.SelectedValue = "0"
+                        DDL_Status.SelectedValue = -1
+                    Catch ex As Exception
+                    End Try
+                ElseIf Request.QueryString("statusLesenSementara") = "expired" Then
+                    hfFilterExpiredPermit.Value = "0"
+                    hfFilterExpiredLesenSementara.Value = "1"
+                    pnlExpiredAlert.Visible = False
+                    pnlExpiredSementaraAlert.Visible = True
                     Try
                         DDL_CreatedBy.SelectedValue = "0"
                         DDL_Status.SelectedValue = -1
@@ -245,6 +257,12 @@ Partial Class appregister1
         Response.Redirect("~/lesen/appregister1.aspx?p_Id=3348&m_Id=4357")
     End Sub
 
+    Protected Sub btnResetExpiredSementaraFilter_Click(sender As Object, e As EventArgs)
+        hfFilterExpiredLesenSementara.Value = "0"
+        pnlExpiredSementaraAlert.Visible = False
+        Response.Redirect("~/lesen/appregister1.aspx?p_Id=3348&m_Id=4357")
+    End Sub
+
     Protected Sub GridView1_PageIndexChanged(sender As Object, e As EventArgs) Handles GridView1.PageIndexChanged
         CallFilter()
     End Sub
@@ -330,6 +348,9 @@ Partial Class appregister1
         gvKelulusanSementara.EditIndex = -1
         UpdateKelulusanSementaraUI()
         BindKelulusanSementara()
+        If hfFilterExpiredLesenSementara.Value = "1" AndAlso tabKelulusanSementara IsNot Nothing AndAlso tabKelulusanSementara.Visible Then
+            TabContainer1.ActiveTab = tabKelulusanSementara
+        End If
     End Sub
 
     Private Sub GridView1_RowCommand(sender As Object, e As GridViewCommandEventArgs) Handles GridView1.RowCommand
@@ -4336,6 +4357,7 @@ Partial Class appregister1
 
         gvKelulusanSementara.EditIndex = -1
         BindKelulusanSementara()
+        GridView1.DataBind()
         ShowAlert("success", "", "Rekod kelulusan sementara berjaya ditambah.")
     End Sub
 
@@ -4395,6 +4417,7 @@ Partial Class appregister1
 
         gvKelulusanSementara.EditIndex = -1
         BindKelulusanSementara()
+        GridView1.DataBind()
         ShowAlert("success", "", "Rekod kelulusan sementara berjaya dikemaskini.")
     End Sub
 
@@ -4414,6 +4437,7 @@ Partial Class appregister1
 
         gvKelulusanSementara.EditIndex = -1
         BindKelulusanSementara()
+        GridView1.DataBind()
         ShowAlert("success", "", "Rekod kelulusan sementara telah dipadam.")
     End Sub
 

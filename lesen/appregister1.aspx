@@ -1,4 +1,4 @@
-﻿<%@ Page MaintainScrollPositionOnPostback="true" Title="" Language="VB" MasterPageFile="~/MasterMenu.master" AutoEventWireup="false" CodeFile="appregister1.aspx.vb" Inherits="appregister1" %>
+<%@ Page MaintainScrollPositionOnPostback="true" Title="" Language="VB" MasterPageFile="~/MasterMenu.master" AutoEventWireup="false" CodeFile="appregister1.aspx.vb" Inherits="appregister1" %>
 
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="asp" %>
 
@@ -3911,6 +3911,7 @@
                                                             </asp:ListBox>
                                                             <asp:HiddenField ID="hfSelectedJenisLesen" runat="server" Value="" />
                                                             <asp:HiddenField ID="hfFilterExpiredPermit" runat="server" Value="0" />
+                                                            <asp:HiddenField ID="hfFilterExpiredLesenSementara" runat="server" Value="0" />
                                                             <asp:SqlDataSource runat="server" ID="SqlDataSourceLesen" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
                                                                 SelectCommand="SELECT JenisLesen_Description FROM LESEN_JenisLesen WHERE JenisLesen_IsActive=1 ORDER BY JenisLesen_Description">
                                                             </asp:SqlDataSource>
@@ -4027,11 +4028,24 @@
                                 <div class="d-flex align-items-center">
                                     <i class="bi bi-clock-history fs-4 text-warning me-3"></i>
                                     <div>
-                                        <strong class="d-block text-dark">Permit Sementara Perniagaan - Tamat Tempoh Hari Ini</strong>
-                                        <div class="small text-muted">Menunjukkan permit yang tamat tempoh pada hari ini (3 bulan selepas tarikh surat kelulusan).</div>
+                                        <strong class="d-block text-dark">Permit Sementara Perniagaan - Tamat Tempoh</strong>
+                                        <div class="small text-muted">Menunjukkan permit yang tamat tempoh dalam tempoh 2 minggu dari tarikh tamat (3 bulan selepas tarikh surat kelulusan).</div>
                                     </div>
                                 </div>
                                 <asp:LinkButton ID="btnResetExpiredFilter" runat="server" CssClass="btn btn-outline-secondary btn-sm text-nowrap" OnClick="btnResetExpiredFilter_Click" CausesValidation="false">
+                                    <i class="bi bi-arrow-counterclockwise me-1"></i>Kembali ke Senarai Asal
+                                </asp:LinkButton>
+                            </asp:Panel>
+
+                            <asp:Panel ID="pnlExpiredSementaraAlert" runat="server" Visible="false" CssClass="alert alert-warning border-start border-4 border-warning shadow-sm mt-3 mb-0 d-flex flex-wrap align-items-center justify-content-between gap-2">
+                                <div class="d-flex align-items-center">
+                                    <i class="bi bi-calendar-x fs-4 text-warning me-3"></i>
+                                    <div>
+                                        <strong class="d-block text-dark">Lesen Perniagaan Sementara - Tamat Tempoh</strong>
+                                        <div class="small text-muted">Menunjukkan lesen sementara yang telah tamat tempoh dan memerlukan pembaharuan atau kemaskini tarikh dalam tab Kelulusan Sementara.</div>
+                                    </div>
+                                </div>
+                                <asp:LinkButton ID="btnResetExpiredSementaraFilter" runat="server" CssClass="btn btn-outline-secondary btn-sm text-nowrap" OnClick="btnResetExpiredSementaraFilter_Click" CausesValidation="false">
                                     <i class="bi bi-arrow-counterclockwise me-1"></i>Kembali ke Senarai Asal
                                 </asp:LinkButton>
                             </asp:Panel>
@@ -4278,10 +4292,26 @@
                                                 AND a.TarikhSuratKelulusan IS NOT NULL 
                                                 AND a.IsBatal = 0
                                                 AND (a.JenisLesen_ID = 30 OR (',' + ISNULL(a.JenisLesenIdList,'') + ',') LIKE '%,30,%' OR ISNULL(a.JenisLesenDescList,'') LIKE '%PERMIT SEMENTARA%')
-                                                AND CAST(DATEADD(month, 3, a.TarikhSuratKelulusan) AS DATE) = CAST(GETDATE() AS DATE)
+                                                AND CAST(GETDATE() AS DATE) >= CAST(DATEADD(month, 3, a.TarikhSuratKelulusan) AS DATE)
+                                                AND CAST(GETDATE() AS DATE) <= DATEADD(day, 14, CAST(DATEADD(month, 3, a.TarikhSuratKelulusan) AS DATE))
                                             )
                                             OR
-                                            (@isExpiredPermit = 0
+                                            (@isExpiredLesenSementara = 1
+                                                AND a.IsRekodLama = 0
+                                                AND a.IsBatal = 0
+                                                AND ISNULL(a.IsKelulusanSementara, 0) = 1
+                                                AND EXISTS (
+                                                    SELECT 1 FROM dbo.LESEN_KelulusanSementara ks 
+                                                    WHERE ks.Permohonan_ID = a.Permohonan_ID
+                                                )
+                                                AND (
+                                                    SELECT MAX(ks.TarikhTamat) 
+                                                    FROM dbo.LESEN_KelulusanSementara ks 
+                                                    WHERE ks.Permohonan_ID = a.Permohonan_ID
+                                                ) <= CAST(GETDATE() AS DATE)
+                                            )
+                                            OR
+                                            (@isExpiredPermit = 0 AND @isExpiredLesenSementara = 0
                                                 AND (
                                                     @pid > 0   /* ?pid= : papar permohonan itu walau apa status / pencipta (penapis status, arkib & pencipta diabaikan) */
                                                     OR (
@@ -4321,6 +4351,7 @@
                                 </DeleteParameters>
                                 <SelectParameters>
                                     <asp:ControlParameter ControlID="hfFilterExpiredPermit" PropertyName="Value" Name="isExpiredPermit" DefaultValue="0" Type="Int32"></asp:ControlParameter>
+                                    <asp:ControlParameter ControlID="hfFilterExpiredLesenSementara" PropertyName="Value" Name="isExpiredLesenSementara" DefaultValue="0" Type="Int32"></asp:ControlParameter>
                                     <asp:ControlParameter ControlID="txtNoRujukan" PropertyName="Text" DefaultValue="%%" Name="Rujukan"></asp:ControlParameter>
                                     <asp:ControlParameter ControlID="hfSelectedJenisLesen" PropertyName="Value" Name="selectedLesen" DefaultValue="" ConvertEmptyStringToNull="false"></asp:ControlParameter>
                                     <asp:ControlParameter ControlID="DDL_Pemohon" PropertyName="SelectedValue" Name="pemohonID"></asp:ControlParameter>

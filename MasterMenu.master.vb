@@ -859,13 +859,14 @@ Partial Class MasterMenu
     End Function
     Private Sub setBadgeNotification()
 
-        '// Permit Sementara Perniagaan Tamat Tempoh pada hari ini (3 bulan selepas TarikhSuratKelulusan)
+        '// Permit Sementara Perniagaan Tamat Tempoh (3 bulan selepas TarikhSuratKelulusan, dipaparkan selama 2 minggu atau sehingga tarikh dikemaskini)
         Using myConnection As New SqlConnection(ConfigurationManager.ConnectionStrings("webcon_ConnectionStr").ConnectionString)
             Dim strSQLExpired As String = "SELECT count(*) as cnt FROM LESEN_Permohonan a " &
                                           "WHERE a.IsRekodLama = 0 AND a.IsBatal = 0 " &
                                           "AND a.TarikhSuratKelulusan IS NOT NULL " &
                                           "AND (a.JenisLesen_ID = 30 OR (',' + ISNULL(a.JenisLesenIdList,'') + ',') LIKE '%,30,%' OR ISNULL(a.JenisLesenDescList,'') LIKE '%PERMIT SEMENTARA%') " &
-                                          "AND CAST(DATEADD(month, 3, a.TarikhSuratKelulusan) AS DATE) = CAST(GETDATE() AS DATE)"
+                                          "AND CAST(GETDATE() AS DATE) >= CAST(DATEADD(month, 3, a.TarikhSuratKelulusan) AS DATE) " &
+                                          "AND CAST(GETDATE() AS DATE) <= DATEADD(day, 14, CAST(DATEADD(month, 3, a.TarikhSuratKelulusan) AS DATE))"
 
             Dim myCommandExpired As New SqlCommand(strSQLExpired, myConnection)
             myConnection.Open()
@@ -887,6 +888,37 @@ Partial Class MasterMenu
             End If
 
             myReaderExpired.Close()
+            myConnection.Close()
+        End Using
+
+        '// Lesen Perniagaan Sementara Tamat Tempoh (IsKelulusanSementara = 1 sehingga pembaharuan atau tarikh dikemaskini dalam tab kelulusan sementara)
+        Using myConnection As New SqlConnection(ConfigurationManager.ConnectionStrings("webcon_ConnectionStr").ConnectionString)
+            Dim strSQLLesenSementaraExpired As String = "SELECT count(*) as cnt FROM LESEN_Permohonan a " &
+                                                        "WHERE a.IsRekodLama = 0 AND a.IsBatal = 0 " &
+                                                        "AND ISNULL(a.IsKelulusanSementara, 0) = 1 " &
+                                                        "AND EXISTS (SELECT 1 FROM dbo.LESEN_KelulusanSementara ks WHERE ks.Permohonan_ID = a.Permohonan_ID) " &
+                                                        "AND (SELECT MAX(ks.TarikhTamat) FROM dbo.LESEN_KelulusanSementara ks WHERE ks.Permohonan_ID = a.Permohonan_ID) <= CAST(GETDATE() AS DATE)"
+
+            Dim myCommandLesenSementara As New SqlCommand(strSQLLesenSementaraExpired, myConnection)
+            myConnection.Open()
+            Dim myReaderLesenSementara As SqlDataReader = myCommandLesenSementara.ExecuteReader
+
+            If myReaderLesenSementara.Read Then
+                Try
+                    Dim cntLesenSementara As Integer = CInt(myReaderLesenSementara.Item("cnt"))
+                    lblNotiLesenSementaraExpired.Text = cntLesenSementara.ToString()
+
+                    If cntLesenSementara > 0 Then
+                        idSpanNoti.Visible = True
+                    End If
+                Catch ex As Exception
+                    lblNotiLesenSementaraExpired.Text = "0"
+                End Try
+            Else
+                lblNotiLesenSementaraExpired.Text = "0"
+            End If
+
+            myReaderLesenSementara.Close()
             myConnection.Close()
         End Using
 
