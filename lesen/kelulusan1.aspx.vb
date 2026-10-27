@@ -2148,17 +2148,17 @@ Partial Class kelulusan1
         Dim jenisrepot As String = namatemplatList(0)
         Dim namatemplat As String = namatemplatList(1)
 
-        'If jid = "4" Then
+        If jid = "4" Then
 
-        '    If TabPenjajaUlasan.Visible = False Then
-        '        TabPenjajaUlasan.Visible = True
-        '    End If
+            If TabPenjajaUlasan.Visible = False Then
+                TabPenjajaUlasan.Visible = True
+            End If
 
-        '    insertPenjajaUlasan(pid, 1)
+            insertPenjajaUlasan(pid, 1)
 
-        '    Return
+            'Return
 
-        'End If
+        End If
 
         'Dim jenisReport As String = "LIL"
         Dim rujukan As String = ""
