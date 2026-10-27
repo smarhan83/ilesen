@@ -3031,15 +3031,19 @@ Partial Class kelulusan1
     Protected Sub CB_SuratFail_CheckedChanged(sender As Object, e As EventArgs)
 
         If CB_SuratFail.Checked Then
+            divtemplatsurat.Visible = False
             BT_Generate.Visible = False
             'BT_Generate1.Visible = False
             pnlSuratFail.Visible = True
             pnlSuratAuto.Visible = False
+            pnlSuratContentAuto.Visible = False
         Else
+            divtemplatsurat.Visible = True
             BT_Generate.Visible = True
             'BT_Generate1.Visible = True
             pnlSuratFail.Visible = False
             pnlSuratAuto.Visible = True
+            pnlSuratContentAuto.Visible = True
         End If
 
     End Sub
