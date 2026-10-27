@@ -1,4 +1,4 @@
-﻿
+
 Imports System
 Imports System.Data
 Imports System.Data.SqlClient
@@ -574,7 +574,7 @@ Partial Class kelulusan1
                         TB_JenisPerniagaanPasar.Text = myReader.Item("JenisPerniagaanPasar").ToString()
                     End If
 
-                    If myReader.Item("JumlahPetak").ToString().Length > 0 Then
+                    If myReader.Item("JumlahPetak").ToString().Length > 0 AndAlso Val(myReader.Item("JumlahPetak").ToString()) > 0 Then
                         TB_JumlahPetak.Text = myReader.Item("JumlahPetak").ToString()
                     End If
 
@@ -582,15 +582,15 @@ Partial Class kelulusan1
                         TB_AnjingAlamat.Text = myReader.Item("AnjingAlamat").ToString()
                     End If
 
-                    If myReader.Item("AnjingJenisPremis").ToString().Length > 0 Then
+                    If myReader.Item("AnjingJenisPremis").ToString().Length > 0 AndAlso Val(myReader.Item("AnjingJenisPremis").ToString()) > 0 Then
                         DDL_AnjingJenisPremis.SelectedValue = CInt(myReader.Item("AnjingJenisPremis").ToString())
                     End If
 
-                    If myReader.Item("JenisPenjaja").ToString().Length > 0 Then
+                    If myReader.Item("JenisPenjaja").ToString().Length > 0 AndAlso Val(myReader.Item("JenisPenjaja").ToString()) > 0 Then
                         DDL_JenisPenjaja.SelectedValue = CInt(myReader.Item("JenisPenjaja").ToString())
                     End If
 
-                    If myReader.Item("StatusTanahPenjaja").ToString().Length > 0 Then
+                    If myReader.Item("StatusTanahPenjaja").ToString().Length > 0 AndAlso Val(myReader.Item("StatusTanahPenjaja").ToString()) > 0 Then
                         DDL_StatusTanahPenjaja.SelectedValue = CInt(myReader.Item("StatusTanahPenjaja").ToString())
                     End If
 
@@ -610,7 +610,7 @@ Partial Class kelulusan1
                         TB_MasaPenjaja2.Text = myReader.Item("MasaPenjaja2").ToString()
                     End If
 
-                    If myReader.Item("JenisKenderaanPenjaja").ToString().Length > 0 Then
+                    If myReader.Item("JenisKenderaanPenjaja").ToString().Length > 0 AndAlso Val(myReader.Item("JenisKenderaanPenjaja").ToString()) > 0 Then
                         DDL_JenisKenderaanPenjaja.SelectedValue = CInt(myReader.Item("JenisKenderaanPenjaja").ToString())
                     End If
 
@@ -690,7 +690,7 @@ Partial Class kelulusan1
                         TB_UkuranBanting.Text = myReader.Item("UkuranBanting").ToString()
                     End If
 
-                    If myReader.Item("BilBanting").ToString().Length > 0 Then
+                    If myReader.Item("BilBanting").ToString().Length > 0 AndAlso Val(myReader.Item("BilBanting").ToString()) > 0 Then
                         TB_BilBanting.Text = CInt(myReader.Item("BilBanting").ToString())
                     End If
 
@@ -2762,16 +2762,36 @@ Partial Class kelulusan1
             myCommandSelect.Parameters.AddWithValue("@LokasiPasar3", TB_LokasiPasar3.Text)
             myCommandSelect.Parameters.AddWithValue("@JenisPasar", DDL_JenisPasar.SelectedValue)
             myCommandSelect.Parameters.AddWithValue("@JenisPerniagaanPasar", TB_JenisPerniagaanPasar.Text)
-            myCommandSelect.Parameters.AddWithValue("@JumlahPetak", TB_JumlahPetak.Text)
+            If Not String.IsNullOrWhiteSpace(TB_JumlahPetak.Text) AndAlso Val(TB_JumlahPetak.Text) > 0 Then
+                myCommandSelect.Parameters.AddWithValue("@JumlahPetak", CInt(TB_JumlahPetak.Text))
+            Else
+                myCommandSelect.Parameters.AddWithValue("@JumlahPetak", DBNull.Value)
+            End If
             myCommandSelect.Parameters.AddWithValue("@AnjingAlamat", TB_AnjingAlamat.Text)
-            myCommandSelect.Parameters.AddWithValue("@AnjingJenisPremis", DDL_AnjingJenisPremis.SelectedValue)
-            myCommandSelect.Parameters.AddWithValue("@JenisPenjaja", DDL_JenisPenjaja.SelectedValue)
-            myCommandSelect.Parameters.AddWithValue("@StatusTanahPenjaja", DDL_StatusTanahPenjaja.SelectedValue)
+            If Not String.IsNullOrEmpty(DDL_AnjingJenisPremis.SelectedValue) AndAlso DDL_AnjingJenisPremis.SelectedValue <> "0" Then
+                myCommandSelect.Parameters.AddWithValue("@AnjingJenisPremis", CInt(DDL_AnjingJenisPremis.SelectedValue))
+            Else
+                myCommandSelect.Parameters.AddWithValue("@AnjingJenisPremis", DBNull.Value)
+            End If
+            If Not String.IsNullOrEmpty(DDL_JenisPenjaja.SelectedValue) AndAlso DDL_JenisPenjaja.SelectedValue <> "0" Then
+                myCommandSelect.Parameters.AddWithValue("@JenisPenjaja", CInt(DDL_JenisPenjaja.SelectedValue))
+            Else
+                myCommandSelect.Parameters.AddWithValue("@JenisPenjaja", DBNull.Value)
+            End If
+            If Not String.IsNullOrEmpty(DDL_StatusTanahPenjaja.SelectedValue) AndAlso DDL_StatusTanahPenjaja.SelectedValue <> "0" Then
+                myCommandSelect.Parameters.AddWithValue("@StatusTanahPenjaja", CInt(DDL_StatusTanahPenjaja.SelectedValue))
+            Else
+                myCommandSelect.Parameters.AddWithValue("@StatusTanahPenjaja", DBNull.Value)
+            End If
             myCommandSelect.Parameters.AddWithValue("@AlamatPenjajaan", TB_AlamatPenjajaan.Text)
             myCommandSelect.Parameters.AddWithValue("@JenisPerniagaanPenjaja", TB_JenisPerniagaanPenjaja.Text)
             myCommandSelect.Parameters.AddWithValue("@MasaPenjaja1", TB_MasaPenjaja1.Text)
             myCommandSelect.Parameters.AddWithValue("@MasaPenjaja2", TB_MasaPenjaja2.Text)
-            myCommandSelect.Parameters.AddWithValue("@JenisKenderaanPenjaja", DDL_JenisKenderaanPenjaja.SelectedValue)
+            If Not String.IsNullOrEmpty(DDL_JenisKenderaanPenjaja.SelectedValue) AndAlso DDL_JenisKenderaanPenjaja.SelectedValue <> "0" Then
+                myCommandSelect.Parameters.AddWithValue("@JenisKenderaanPenjaja", CInt(DDL_JenisKenderaanPenjaja.SelectedValue))
+            Else
+                myCommandSelect.Parameters.AddWithValue("@JenisKenderaanPenjaja", DBNull.Value)
+            End If
             myCommandSelect.Parameters.AddWithValue("@NoKenderaanPenjaja", TB_NoKenderaanPenjaja.Text)
             myCommandSelect.Parameters.AddWithValue("@PenganjurEkspo", TB_PenganjurEkspo.Text)
             myCommandSelect.Parameters.AddWithValue("@AlamatPenganjurEkspo", TB_AlamatPenganjurEkspo.Text)
@@ -2779,24 +2799,56 @@ Partial Class kelulusan1
             myCommandSelect.Parameters.AddWithValue("@LokasiEkspo", TB_LokasiEkspo.Text)
             myCommandSelect.Parameters.AddWithValue("@PicEkspo", TB_PicEkspo.Text)
             myCommandSelect.Parameters.AddWithValue("@NoTelEkspo", TB_NoTel.Text)
-            myCommandSelect.Parameters.AddWithValue("@TarikhEkspo1", TB_TarikhEkspo1.Text)
-            myCommandSelect.Parameters.AddWithValue("@TarikhEkspo2", TB_TarikhEkspo2.Text)
+            If Not String.IsNullOrWhiteSpace(TB_TarikhEkspo1.Text) Then
+                myCommandSelect.Parameters.AddWithValue("@TarikhEkspo1", TB_TarikhEkspo1.Text)
+            Else
+                myCommandSelect.Parameters.AddWithValue("@TarikhEkspo1", DBNull.Value)
+            End If
+            If Not String.IsNullOrWhiteSpace(TB_TarikhEkspo2.Text) Then
+                myCommandSelect.Parameters.AddWithValue("@TarikhEkspo2", TB_TarikhEkspo2.Text)
+            Else
+                myCommandSelect.Parameters.AddWithValue("@TarikhEkspo2", DBNull.Value)
+            End If
             myCommandSelect.Parameters.AddWithValue("@MasaEkspo1", TB_MasaEkspo1.Text)
             myCommandSelect.Parameters.AddWithValue("@MasaEkspo2", TB_MasaEkspo2.Text)
             myCommandSelect.Parameters.AddWithValue("@TentatifEkspo", TB_TentatifEkspo.Text)
             myCommandSelect.Parameters.AddWithValue("@JemputanEkspo", TB_JemputanEkspo.Text)
             myCommandSelect.Parameters.AddWithValue("@PembersihanEkspo", TB_PembersihanEkspo.Text)
-            myCommandSelect.Parameters.AddWithValue("@TarikhKhemahEkspo1", TB_TarikhKhemahEkspo1.Text)
-            myCommandSelect.Parameters.AddWithValue("@TarikhKhemahEkspo2", TB_TarikhKhemahEkspo2.Text)
+            If Not String.IsNullOrWhiteSpace(TB_TarikhKhemahEkspo1.Text) Then
+                myCommandSelect.Parameters.AddWithValue("@TarikhKhemahEkspo1", TB_TarikhKhemahEkspo1.Text)
+            Else
+                myCommandSelect.Parameters.AddWithValue("@TarikhKhemahEkspo1", DBNull.Value)
+            End If
+            If Not String.IsNullOrWhiteSpace(TB_TarikhKhemahEkspo2.Text) Then
+                myCommandSelect.Parameters.AddWithValue("@TarikhKhemahEkspo2", TB_TarikhKhemahEkspo2.Text)
+            Else
+                myCommandSelect.Parameters.AddWithValue("@TarikhKhemahEkspo2", DBNull.Value)
+            End If
             myCommandSelect.Parameters.AddWithValue("@KontraktorIklan", TB_KontraktorIklan.Text)
             myCommandSelect.Parameters.AddWithValue("@NoTelKontraktor", TB_NoTelKontraktor.Text)
             myCommandSelect.Parameters.AddWithValue("@UkuranBanting", TB_UkuranBanting.Text)
-            myCommandSelect.Parameters.AddWithValue("@BilBanting", TB_BilBanting.Text)
-            myCommandSelect.Parameters.AddWithValue("@TarikhBanting1", TB_TarikhBanting1.Text)
-            myCommandSelect.Parameters.AddWithValue("@TarikhBanting2", TB_TarikhBanting2.Text)
+            If Not String.IsNullOrWhiteSpace(TB_BilBanting.Text) AndAlso Val(TB_BilBanting.Text) > 0 Then
+                myCommandSelect.Parameters.AddWithValue("@BilBanting", CInt(TB_BilBanting.Text))
+            Else
+                myCommandSelect.Parameters.AddWithValue("@BilBanting", DBNull.Value)
+            End If
+            If Not String.IsNullOrWhiteSpace(TB_TarikhBanting1.Text) Then
+                myCommandSelect.Parameters.AddWithValue("@TarikhBanting1", TB_TarikhBanting1.Text)
+            Else
+                myCommandSelect.Parameters.AddWithValue("@TarikhBanting1", DBNull.Value)
+            End If
+            If Not String.IsNullOrWhiteSpace(TB_TarikhBanting2.Text) Then
+                myCommandSelect.Parameters.AddWithValue("@TarikhBanting2", TB_TarikhBanting2.Text)
+            Else
+                myCommandSelect.Parameters.AddWithValue("@TarikhBanting2", DBNull.Value)
+            End If
             myCommandSelect.Parameters.AddWithValue("@NoResitBanting", TB_NoResitBanting.Text)
             myCommandSelect.Parameters.AddWithValue("@NoSiriStiker", TB_NoSiriStiker.Text)
-            myCommandSelect.Parameters.AddWithValue("@TarikhBanting3", TB_TarikhBanting3.Text)
+            If Not String.IsNullOrWhiteSpace(TB_TarikhBanting3.Text) Then
+                myCommandSelect.Parameters.AddWithValue("@TarikhBanting3", TB_TarikhBanting3.Text)
+            Else
+                myCommandSelect.Parameters.AddWithValue("@TarikhBanting3", DBNull.Value)
+            End If
 
             Try
                 Dim recordset As Integer = myCommandSelect.ExecuteNonQuery()
