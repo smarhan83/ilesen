@@ -9,12 +9,12 @@
            SENARAI - tema ikut applicantregister / Semakan Sepanduk
         ===================================================================== */
         .kl-card { background: #fff; border: 1px solid #E3E7F1; border-radius: 12px; box-shadow: 0 2px 8px rgba(46,49,146,.06); margin-bottom: 16px; overflow: hidden; }
-        .kl-head { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between; padding: 18px 20px; border-bottom: 1px solid #E4DFFB; background: linear-gradient(135deg, #F4F3FF 0%, #EEF4FF 100%); border-left: 4px solid #2E3192; }
+        .kl-head { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between; padding: 18px 20px; border-bottom: 1px solid #e9ecef; background: #EEF1FA; border-left: 4px solid #2E3192; }
         .kl-title { font-size: 17px; font-weight: 700; color: #23267a; margin: 0; }
         .kl-sub { color: #5B6478; font-size: 13px; margin-top: 2px; }
         .kl-head-actions { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; }
         .kl-head-actions .lsu-switch { margin: 0; }
-        .kl-count { color: #2E3192; font-size: 13px; font-weight: 700; background: #fff; border: 1px solid #D9D5FA; border-radius: 999px; padding: 4px 12px; }
+        .kl-count { color: #2E3192; font-size: 13px; font-weight: 700; background: #fff; border: 1px solid #dee2e6; border-radius: 999px; padding: 4px 12px; }
 
         .kl-filter { padding: 14px 20px 16px; border-bottom: 1px solid #E6EBF5; background: #F8FAFE; }
         .kl-label { display: block; font-size: 12px; font-weight: 600; color: #4B5675; margin-bottom: 4px; }
@@ -1067,17 +1067,19 @@
         overflow: hidden;
     }
 
-    .tab-content-card .card-header {
-        background: linear-gradient(135deg, #F4F3FF 0%, #EEF4FF 100%);
-        border-bottom: 1px solid #E4DFFB;
-        border-left: 4px solid #2E3192;
+    .tab-content-card .card-header,
+    .tab-content-card .card .card-header {
+        background: #EEF1FA !important;
+        border-bottom: 1px solid #e9ecef !important;
+        border-left: 4px solid #2E3192 !important;
         padding: 14px 20px;
     }
 
-    .tab-content-card .card-title {
+    .tab-content-card .card-title,
+    .tab-content-card .card .card-header .card-title {
         font-size: 15px;
         font-weight: 700;
-        color: #23267a;
+        color: #23267a !important;
         margin: 0;
         display: flex;
         align-items: center;
@@ -1102,7 +1104,7 @@
         font-size: 0.92rem;
         font-weight: 700;
         color: #23267a;
-        background: linear-gradient(90deg, #F4F3FF 0%, #F8FAFE 100%);
+        background: linear-gradient(90deg, #EEF1FA 0%, #F8FAFE 100%);
         padding: 9px 15px;
         border-radius: 8px;
         border-left: 4px solid #2E3192;
