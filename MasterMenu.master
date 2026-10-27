@@ -1023,7 +1023,7 @@ h1{
                         <!-- Notification 1 -->
                         <li>
                             <a class="dropdown-item py-2"
-                               href="<%= ResolveUrl("~/lesen/kelulusan.aspx?p_Id=3351&m_Id=3352") %>">
+                               href="<%= ResolveUrl("~/lesen/kelulusan1.aspx?p_Id=3351&m_Id=4358") %>">
 
                                 <i class="bi bi-check-circle text-primary me-2"></i>
                                 Kelulusan - Pendaftaran
@@ -1039,7 +1039,7 @@ h1{
                         <!-- Notification 2 -->
                         <li>
                             <a class="dropdown-item py-2"
-                               href="<%= ResolveUrl("~/lesen/pembatalan.aspx?p_Id=3351&m_Id=4351") %>">
+                               href="<%= ResolveUrl("~/lesen/pembatalan1.aspx?p_Id=3351&m_Id=4375") %>">
 
                                 <i class="bi bi-x-circle text-danger me-2"></i>
                                 Kelulusan - Pembatalan
@@ -1056,7 +1056,7 @@ h1{
                         <li id="divNotiSuratMohonUlasan" runat="server" visible="false">
 
                             <a class="dropdown-item py-2"
-                               href="<%= ResolveUrl("~/lesen/semakansurat.aspx?p_Id=3351&m_Id=4353") %>">
+                               href="<%= ResolveUrl("~/lesen/semakansurat1.aspx?p_Id=3351&m_Id=4360") %>">
 
                                 <i class="bi bi-envelope-check text-warning me-2"></i>
                                 Surat Mohon Ulasan

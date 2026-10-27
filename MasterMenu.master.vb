@@ -890,13 +890,14 @@ Partial Class MasterMenu
             myConnection.Close()
         End Using
 
+        ' Kiraan notifikasi TIDAK boleh inner join LESEN_JenisLesen: permohonan berbilang lesen guna JenisLesen_ID = 0 (senarai dalam JenisLesenIdList),
+        ' jadi join itu menggugurkannya dan notifikasi menunjuk 0 walaupun senarai kelulusan ada rekod.
         'lblNotiApproval.Text = "10"
 
         Using myConnection As New SqlConnection(ConfigurationManager.ConnectionStrings("webcon_ConnectionStr").ConnectionString)
 
             Dim strSQL As String = "SELECT count(*) as cnt FROM 
             v_LESEN_ApprovalList_Curr a
-            inner join LESEN_JenisLesen d on d.JenisLesen_ID = a.JenisLesen_ID
             left join LESEN_JabatanAgensi e on e.JabatanAgensi_ID = a.AgensiID
             inner join LESEN_Pemohon f on f.Pemohon_ID = a.Permohonan_PemohonID
             inner join LESEN_Permohonan g on g.Permohonan_ID = a.Permohonan_ID
@@ -961,7 +962,6 @@ Partial Class MasterMenu
 
             Dim strSQL As String = "SELECT count(*) as cnt FROM 
             v_LESEN_ApprovalListBatal_Curr a
-            inner join LESEN_JenisLesen d on d.JenisLesen_ID = a.JenisLesen_ID
             left join LESEN_JabatanAgensi e on e.JabatanAgensi_ID = a.AgensiID
             inner join LESEN_Pemohon f on f.Pemohon_ID = a.Permohonan_PemohonID
             inner join LESEN_Permohonan g on g.Permohonan_ID = a.Permohonan_ID
@@ -1027,11 +1027,10 @@ Partial Class MasterMenu
 		Dim strSQL As String = "select count(*) as cnt from (
 		select
 		a.Permohonan_ID,'Permohonan Baru' as jenisPermohonan,PermohonanAgensi_ID,b.JenisLesen_ID,TarikhMohon,
-		JenisLesen_Description,Pemohon_Name,JabatanAgensi_Description,Permohonan_PemohonID,Rujukan,JabatanAgensi_Type
+		Pemohon_Name,JabatanAgensi_Description,Permohonan_PemohonID,Rujukan,JabatanAgensi_Type
 		from LESEN_PermohonanAgensi a
 		inner join LESEN_Permohonan b on b.Permohonan_ID = a.Permohonan_ID
 		inner join LESEN_JabatanAgensi c on c.JabatanAgensi_ID = a.JabatanAgensi_ID
-		inner join LESEN_JenisLesen d on d.JenisLesen_ID = b.JenisLesen_ID
 		inner join LESEN_Pemohon e on e.Pemohon_ID = b.Permohonan_PemohonID
 		where reviewStatusID = 1 
 		and isnull(b.StatusID,0) = 0
@@ -1044,11 +1043,10 @@ Partial Class MasterMenu
 
 		select 
 		a.Permohonan_ID,'Pembatalan' as jenisPermohonan,PermohonanAgensi_ID,b.JenisLesen_ID,TarikhMohon,
-		JenisLesen_Description,Pemohon_Name,JabatanAgensi_Description,Permohonan_PemohonID,Rujukan,JabatanAgensi_Type
+		Pemohon_Name,JabatanAgensi_Description,Permohonan_PemohonID,Rujukan,JabatanAgensi_Type
 		from LESEN_PermohonanAgensiBatal a
 		inner join LESEN_Permohonan b on b.Permohonan_ID = a.Permohonan_ID
 		inner join LESEN_JabatanAgensi c on c.JabatanAgensi_ID = a.JabatanAgensi_ID
-		inner join LESEN_JenisLesen d on d.JenisLesen_ID = b.JenisLesen_ID
 		inner join LESEN_Pemohon e on e.Pemohon_ID = b.Permohonan_PemohonID
 		where reviewStatusID = 1 
 		and isnull(b.StatusID,0) = 0
