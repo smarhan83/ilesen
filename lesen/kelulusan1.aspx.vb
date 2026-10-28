@@ -1,4 +1,4 @@
-
+﻿
 Imports System
 Imports System.Data
 Imports System.Data.SqlClient
@@ -392,7 +392,9 @@ Partial Class kelulusan1
 
                     gvTabPublicAttach.Columns(2).Visible = "false"
                     gvTabPublicAttach.Columns(3).Visible = "false"
-                    gvTabPublicAttach.Columns(5).Visible = "false"
+                    If gvTabPublicAttach.Columns.Count > 5 Then
+                        gvTabPublicAttach.Columns(5).Visible = "false"
+                    End If
                     gvTabPublicAttach.Columns(4).Visible = "true"
                 Else
 
