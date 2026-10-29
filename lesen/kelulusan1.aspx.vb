@@ -1870,49 +1870,49 @@ Partial Class kelulusan1
         Try
             sql = "SELECT a.Permohonan_ID, a.TarikhMohon, a.CreatedDt, CAST(a.NamaSyarikat AS varchar(200)) AS NamaSyarikat, a.NoPendaftaran, a.NoAkaun, a.AlamatPremis, a.JenisPerniagaan, a.PemilikBaru, " &
             "a.AlamatBaru, a.JenisPerniagaanBaru, a.NamaBaruSyarikat, a.BillboardLokasi, a.LokasiPasar1, a.LokasiPasar2, a.LokasiPasar3, a.JenisPasar, a.JenisPerniagaanPasar, a.JumlahPetak, a.AnjingAlamat, " &
-            "a.AnjingJenisMohon, a.AnjingJenisPremis, a.AlamatPenjajaan, a.JenisPerniagaanPenjaja, a.TarikhBatal, a.PenganjurEkspo, a.NamaEkspo, a.LokasiEkspo, a.NoTelEkspo, a.TarikhEkspo1, a.TarikhEkspo2, " &
+            "a.AnjingJenisMohon, a.AnjingJenisPremis, a.AlamatPenjajaan, a.JenisPerniagaanPenjaja, FORMAT(CAST(a.MasaPenjaja1 AS DATETIME), 'hh:mm tt') AS MasaPenjaja1, FORMAT(CAST(a.MasaPenjaja2 AS DATETIME), 'hh:mm tt') AS MasaPenjaja2, " &
+            "a.TarikhBatal, a.PenganjurEkspo, a.NamaEkspo, a.LokasiEkspo, a.NoTelEkspo, a.TarikhEkspo1, a.TarikhEkspo2, " &
             "a.KontraktorIklan, a.NoTelKontraktor, a.UkuranBanting, a.BilBanting, a.TarikhBanting1, a.TarikhBanting2, a.NoResitBanting, a.NoSiriStiker, a.TarikhBanting3, " &
             "a.MasaEkspo1, a.MasaEkspo2, a.Rujukan, a.NoAkaunCukai, a.IsBatal, a.JenisLesenDescList, a.JenisLesenIdList, a.SaizIklanList, a.CahayaIklanList, a.UnitIklanList, a.LokasiList, a.BakaAnjingList, a.AnjingJantanList, " &
             "a.AnjingBetinaList, a.AnjingJantanMandulList, a.AnjingBetinaMandulList, e.JabatanAgensi_Address, e.JabatanAgensi_Kepada, b.Pemohon_Name, b.Pemohon_ICNo, b.Pemohon_PassportNo, b.Pemohon_Address, " &
             "b.Pemohon_Email, b.Pemohon_MobileNo, b.Pemohon_TelNo, g.Users_Fullname, g.Users_Signature " &
-            "FROM LESEN_Permohonan a INNER JOIN LESEN_Pemohon b ON a.Permohonan_PemohonID = b.Pemohon_ID INNER JOIN LESEN_PermohonanAgensi d ON a.Permohonan_ID = d.Permohonan_ID " &
+            "FROM LESEN_Permohonan a INNER JOIN LESEN_Pemohon b ON a.Permohonan_PemohonID = b.Pemohon_ID " &
+            "INNER JOIN LESEN_PermohonanAgensi d ON a.Permohonan_ID = d.Permohonan_ID " &
             "INNER JOIN LESEN_JabatanAgensi e ON d.JabatanAgensi_ID = e.JabatanAgensi_ID " &
             "LEFT JOIN TBL_USERS g ON g.Users_Id = (case when e.JabatanAgensi_Type = 'J' then a.TandatanganMohonUlasanId when e.JabatanAgensi_Type = 'L' then a.TandatanganMohonUlasanLuarId end) " &
             "WHERE a.Permohonan_ID=" & permohonanID & " AND e.JabatanAgensi_ID = " & agensiID
 
-            Dim ReportVar As String = jenisLesenDesc(0)
+            Dim ReportVar As String = jenisLesenDescLuar(0)
+
+            'Select Case JenisLesenIdList
+            '    Case "2", "25"
+            '        ReportVar = jenisLesenDesc(1)
+            '    Case "3"
+            '        ReportVar = jenisLesenDesc(2)
+            '    Case "4"
+            '        ReportVar = jenisLesenDesc(3)
+            '    Case "5"
+            '        ReportVar = jenisLesenDesc(4)
+            '    Case "15"
+            '        ReportVar = jenisLesenDesc(5)
+            'End Select
+
+            'If CInt(agensiID) > 3 Then
 
             Select Case JenisLesenIdList
                 Case "2", "25"
-                    ReportVar = jenisLesenDesc(1)
+                    ReportVar = jenisLesenDescLuar(1)
                 Case "3"
-                    ReportVar = jenisLesenDesc(2)
+                    ReportVar = jenisLesenDescLuar(2)
                 Case "4"
-                    ReportVar = jenisLesenDesc(3)
+                    ReportVar = jenisLesenDescLuar(3)
                 Case "5"
-                    ReportVar = jenisLesenDesc(4)
+                    ReportVar = jenisLesenDescLuar(4)
                 Case "15"
-                    ReportVar = jenisLesenDesc(5)
+                    ReportVar = jenisLesenDescLuar(5)
             End Select
 
-            If CInt(agensiID) > 3 Then
-
-                ReportVar = jenisLesenDescLuar(0)
-
-                Select Case JenisLesenIdList
-                    Case "2", "25"
-                        ReportVar = jenisLesenDescLuar(1)
-                    Case "3"
-                        ReportVar = jenisLesenDescLuar(2)
-                    Case "4"
-                        ReportVar = jenisLesenDescLuar(3)
-                    Case "5"
-                        ReportVar = jenisLesenDescLuar(4)
-                    Case "15"
-                        ReportVar = jenisLesenDescLuar(5)
-                End Select
-
-            End If
+            'End If
 
             Dim pobjData(0, 1)
             Dim lStrReportName = ReportVar + ".rpt"
@@ -1925,9 +1925,8 @@ Partial Class kelulusan1
             Session.Item("pobjData" + ReportVar) = pobjData
             Session.Item("pathUrl" + ReportVar) = "~/lesen/report/mohonulasan"
             'MessageBox(Session.Item("pathUrl" + ReportVar), Me)
-
-
             Session.Item("reportPrintType") = "pdf"
+
             ScriptManager.RegisterClientScriptBlock(Me.Page, Me.[GetType](), ReportVar, "window.open('../ReportViewer.aspx?name=" + ReportVar + "', '_blank', '');", True)
         Catch ex As Exception
             MessageBox(ex.Message, Me)
