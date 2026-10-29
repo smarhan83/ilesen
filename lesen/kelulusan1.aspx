@@ -1924,7 +1924,7 @@ ORDER BY
                         <br />
 
                         <asp:GridView ID="gvTabUlasan" runat="server" ShowHeaderWhenEmpty="True"
-                            AllowSorting="True" AutoGenerateColumns="False" DataKeyNames="PermohonanFail_ID"
+                            AllowSorting="True" AutoGenerateColumns="False" DataKeyNames="UlasanFail_ID"
                             DataSourceID="SqlDataSourceTabUlasan"
                             CssClass="table table-bordered" Width="100%">
                             <AlternatingRowStyle CssClass="alt" />
