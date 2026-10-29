@@ -3548,6 +3548,18 @@ Partial Class appregister1
     End Sub
 
     Protected Sub BT_ViewLaporan_Command(sender As Object, e As CommandEventArgs)
+        Dim currPid As Integer = 0
+        If GridView1.SelectedDataKey IsNot Nothing AndAlso GridView1.SelectedDataKey.Values.Count > 0 Then
+            Integer.TryParse(Convert.ToString(GridView1.SelectedDataKey.Values(0)), currPid)
+        End If
+        If currPid <= 0 Then
+            currPid = GetCurrentPermohonanID()
+        End If
+
+        If currPid > 0 Then
+            ShowSuratBalasanModal(currPid.ToString(), 3, currPid.ToString() & ",3,Inspektorat")
+        End If
+        Exit Sub
         Dim jid As Integer = CInt(GridView1.SelectedDataKey.Values(3))
         Dim pid As Integer = CInt(GridView1.SelectedDataKey.Values(0))
 
