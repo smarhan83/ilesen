@@ -1521,53 +1521,60 @@ Partial Class semakpembatalan1
     End Function
 
     Protected Sub BT_SuratMohonUlasan_Command(sender As Object, e As CommandEventArgs)
+        Dim permohonanID As Integer = CInt(Me.FormView1.DataKey("Permohonan_ID"))
+        Dim agensiID As Integer = CInt(Session.Item("sessionEstateID"))
         Dim jenisLesenIdList As String = ""
         If FormView1.DataKey("JenisLesenIdList") IsNot Nothing Then
             jenisLesenIdList = FormView1.DataKey("JenisLesenIdList").ToString()
         End If
 
-        Dim primaryJid As Integer = 1
-        If Not String.IsNullOrEmpty(jenisLesenIdList) Then
-            Dim parts() As String = jenisLesenIdList.Split(","c)
-            If parts.Length > 0 AndAlso IsNumeric(parts(0).Trim()) Then
-                primaryJid = CInt(parts(0).Trim())
-            End If
-        End If
-
-        Dim permohonanID As Integer = CInt(Me.FormView1.DataKey("Permohonan_ID"))
-        Dim agensiID As Integer = CInt(Session.Item("sessionEstateID"))
-
-        Dim jenisLesenDesc = {"", "smu_perniagaan", "smu_pasar", "smu_anjing", "smu_penjaja", "smu_billboard", "smu_tukaralamat", "smu_tambahpremis", "smu_tambahjenis",
-            "smu_tukarpemilik", "smu_tukariklan", "smu_tukarnama", "smu_kurangiklan", "smu_kakilima", "smu_batal", "smu_ekspo", "smu_tambahiklan", "smu_tepikedai", "smu_lebuhawam",
-            "smu_tukaralamatnamaiklan", "smu_tukarpemilikalamatiklan", "", "", "smu_tukarnamaiklan", "smu_tukarpemilikiklan"}
-
-        Dim jenisLesenDescLuar = {"", "smul_perniagaan", "smul_pasar", "smul_anjing", "smul_penjaja", "smul_billboard", "smul_tukaralamat", "smul_tambahpremis", "smul_tambahjenis",
-            "smul_tukarpemilik", "smul_tukariklan", "smul_tukarnama", "smul_kurangiklan", "smul_kakilima", "smul_batal", "smul_ekspo", "smul_tambahiklan", "smul_tepikedai", "smul_lebuhawam",
-            "smul_tukaralamatnamaiklan", "smul_tukarpemilikalamatiklan", "", "", "smul_tukarnamaiklan", "smul_tukarpemilikiklan"}
+        Dim sql As String = ""
+        Dim jenisLesenDesc = {"mpk_suratmohonulasan", "mpk_suratmohonulasan_psr", "mpk_suratmohonulasan_anj", "mpk_suratmohonulasan_pjj", "mpk_suratmohonulasan_bb", "mpk_suratmohonulasan_ep"}
+        Dim jenisLesenDescLuar = {"mpk_suratmohonulasan_l", "mpk_suratmohonulasan_psr_l", "mpk_suratmohonulasan_anj_l", "mpk_suratmohonulasan_pjj_l", "mpk_suratmohonulasan_bb_l", "mpk_suratmohonulasan_ep_l"}
 
         Try
-            Dim sql As String = "SELECT a.*, f.name AS AnjingBakaDesc, e.JabatanAgensi_Address, e.JabatanAgensi_Kepada, c.JenisLesen_Description, b.Pemohon_Name, b.Pemohon_ICNo, b.Pemohon_PassportNo, b.Pemohon_Address, b.Pemohon_Email, b.Pemohon_MobileNo, b.Pemohon_TelNo, g.Users_Fullname, g.Users_Signature " &
-                                "FROM LESEN_Permohonan a " &
-                                "INNER JOIN LESEN_Pemohon b ON a.Permohonan_PemohonID = b.Pemohon_ID " &
-                                "INNER JOIN LESEN_JenisLesen c ON a.JenisLesen_ID = c.JenisLesen_ID " &
-                                "INNER JOIN LESEN_PermohonanAgensi d ON a.Permohonan_ID = d.Permohonan_ID " &
-                                "INNER JOIN LESEN_JabatanAgensi e ON d.JabatanAgensi_ID = e.JabatanAgensi_ID " &
-                                "LEFT JOIN TBL_LOOKUPS f ON f.id = a.AnjingBaka " &
-                                "LEFT JOIN TBL_USERS g ON g.Users_Id = (CASE WHEN e.JabatanAgensi_Type = 'J' THEN a.TandatanganMohonUlasanId WHEN e.JabatanAgensi_Type = 'L' THEN a.TandatanganMohonUlasanLuarId END) " &
-                                "WHERE a.Permohonan_ID=" & permohonanID & " AND e.JabatanAgensi_ID = " & agensiID
+            sql = "SELECT a.Permohonan_ID, a.TarikhMohon, a.CreatedDt, CAST(a.NamaSyarikat AS varchar(200)) AS NamaSyarikat, a.NoPendaftaran, a.NoAkaun, a.AlamatPremis, a.JenisPerniagaan, a.PemilikBaru, " &
+                  "a.AlamatBaru, a.JenisPerniagaanBaru, a.NamaBaruSyarikat, a.BillboardLokasi, a.LokasiPasar1, a.LokasiPasar2, a.LokasiPasar3, a.JenisPasar, a.JenisPerniagaanPasar, a.JumlahPetak, a.AnjingAlamat, " &
+                  "a.AnjingJenisMohon, a.AnjingJenisPremis, a.AlamatPenjajaan, a.JenisPerniagaanPenjaja, FORMAT(CAST(a.MasaPenjaja1 AS DATETIME), 'hh:mm tt') AS MasaPenjaja1, FORMAT(CAST(a.MasaPenjaja2 AS DATETIME), 'hh:mm tt') AS MasaPenjaja2, " &
+                  "a.TarikhBatal, a.PenganjurEkspo, a.NamaEkspo, a.LokasiEkspo, a.NoTelEkspo, a.TarikhEkspo1, a.TarikhEkspo2, " &
+                  "a.KontraktorIklan, a.NoTelKontraktor, a.UkuranBanting, a.BilBanting, a.TarikhBanting1, a.TarikhBanting2, a.NoResitBanting, a.NoSiriStiker, a.TarikhBanting3, " &
+                  "a.MasaEkspo1, a.MasaEkspo2, a.Rujukan, a.NoAkaunCukai, a.IsBatal, a.JenisLesenDescList, a.JenisLesenIdList, a.SaizIklanList, a.CahayaIklanList, a.UnitIklanList, a.LokasiList, a.BakaAnjingList, a.AnjingJantanList, " &
+                  "a.AnjingBetinaList, a.AnjingJantanMandulList, a.AnjingBetinaMandulList, e.JabatanAgensi_Address, e.JabatanAgensi_Kepada, b.Pemohon_Name, b.Pemohon_ICNo, b.Pemohon_PassportNo, b.Pemohon_Address, " &
+                  "b.Pemohon_Email, b.Pemohon_MobileNo, b.Pemohon_TelNo, g.Users_Fullname, g.Users_Signature " &
+                  "FROM LESEN_Permohonan a INNER JOIN LESEN_Pemohon b ON a.Permohonan_PemohonID = b.Pemohon_ID " &
+                  "INNER JOIN LESEN_PermohonanAgensiBatal d ON a.Permohonan_ID = d.Permohonan_ID " &
+                  "INNER JOIN LESEN_JabatanAgensi e ON d.JabatanAgensi_ID = e.JabatanAgensi_ID " &
+                  "LEFT JOIN TBL_USERS g ON g.Users_Id = (CASE WHEN e.JabatanAgensi_Type = 'J' THEN a.TandatanganMohonUlasanId WHEN e.JabatanAgensi_Type = 'L' THEN a.TandatanganMohonUlasanLuarId END) " &
+                  "WHERE a.Permohonan_ID=" & permohonanID & " AND e.JabatanAgensi_ID = " & agensiID
 
-            Dim ReportVar As String = "smu_perniagaan"
-            If primaryJid < jenisLesenDesc.Length AndAlso Not String.IsNullOrEmpty(jenisLesenDesc(primaryJid)) Then
-                ReportVar = jenisLesenDesc(primaryJid)
-            End If
+            Dim ReportVar As String = jenisLesenDescLuar(0)
 
-            If getJabatanLesen(CInt(Session.Item("sessionEstateID"))) = False Then
-                If primaryJid < jenisLesenDescLuar.Length AndAlso Not String.IsNullOrEmpty(jenisLesenDescLuar(primaryJid)) Then
-                    ReportVar = jenisLesenDescLuar(primaryJid)
-                Else
-                    ReportVar = "smul_perniagaan"
-                End If
-            End If
+            'Select Case jenisLesenIdList
+            '    Case "2", "25"
+            '        ReportVar = jenisLesenDesc(1)
+            '    Case "3"
+            '        ReportVar = jenisLesenDesc(2)
+            '    Case "4"
+            '        ReportVar = jenisLesenDesc(3)
+            '    Case "5"
+            '        ReportVar = jenisLesenDesc(4)
+            '    Case "15"
+            '        ReportVar = jenisLesenDesc(5)
+            'End Select
+
+            'If getJabatanLesen(CInt(Session.Item("sessionEstateID"))) = False Then
+            Select Case jenisLesenIdList
+                Case "2", "25"
+                    ReportVar = jenisLesenDescLuar(1)
+                Case "3"
+                    ReportVar = jenisLesenDescLuar(2)
+                Case "4"
+                    ReportVar = jenisLesenDescLuar(3)
+                Case "5"
+                    ReportVar = jenisLesenDescLuar(4)
+                Case "15"
+                    ReportVar = jenisLesenDescLuar(5)
+            End Select
 
             Dim pobjData(0, 1) As Object
             Dim lStrReportName As String = ReportVar & ".rpt"
