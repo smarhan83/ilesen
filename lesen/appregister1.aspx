@@ -4455,28 +4455,17 @@
 
                                 <asp:TemplateField ShowHeader="False">
                                     <EditItemTemplate>
-                                        <div class="row">
-
-                                            <div class="col-md-6">
-
-                                                <div class="form-group">
-                                                    <asp:LinkButton ID="LinkButton1" runat="server" CausesValidation="True" CommandName="Update" Text="Simpan" CssClass="btn btn-warning btn-sm"></asp:LinkButton>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-md-6">
-
-                                                <div class="form-group">
-                                                    <asp:LinkButton ID="LinkButton2" runat="server" CausesValidation="False" CommandName="Cancel" Text="Batal" CssClass="btn btn-default btn-sm"></asp:LinkButton>
-                                                </div>
-
-                                            </div>
-
+                                        <div class="d-flex align-items-center justify-content-center gap-1">
+                                            <asp:LinkButton ID="LinkButton1" runat="server" CausesValidation="True" CommandName="Update" ToolTip="Simpan" CssClass="btn btn-warning btn-sm btn-action-icon">
+                                                <i class="bi bi-check-lg"></i>
+                                            </asp:LinkButton>
+                                            <asp:LinkButton ID="LinkButton2" runat="server" CausesValidation="False" CommandName="Cancel" ToolTip="Batal" CssClass="btn btn-default btn-sm btn-action-icon">
+                                                <i class="bi bi-x-lg"></i>
+                                            </asp:LinkButton>
                                         </div>
-
                                     </EditItemTemplate>
                                     <ItemTemplate>
-								                <asp:LinkButton ID="lbEdit" runat="server" CausesValidation="False" CommandName="Edit" Text="Kemaskini" Visible='<%# If(CInt(Session.Item("sessionEstateID")) = 1, True, False) %>'></asp:LinkButton><%--If(Eval("StatusID") < 2, True, False)--%>
+								                <asp:LinkButton ID="lbEdit" runat="server" CausesValidation="False" CommandName="Edit" Text="Kemaskini" Visible='<%# If(CInt(Session.Item("sessionEstateID")) = 1, True, False) %>' CssClass="btn btn-warning btn-sm" ToolTip="Kemaskini"></asp:LinkButton><%--If(Eval("StatusID") < 2, True, False)--%>
                                     </ItemTemplate>
                                     <HeaderStyle Width="10%" />
                                     <ItemStyle HorizontalAlign="Center" />
@@ -4487,7 +4476,7 @@
                                         <asp:LinkButton ID="btnAddNew" runat="server" Text="+" CssClass="btn btn-warning btn-sm" ToolTip="Tambah" Visible='<%# If(CInt(Session.Item("sessionEstateID")) = 1, True, False) %>' OnClick="btnAddNewUpload1_Click" />
                                     </HeaderTemplate>
                                     <ItemTemplate>
-                                        <asp:LinkButton ID="lbDelete" runat="server" CausesValidation="False" CommandName="Delete" Text="Padam" OnClientClick="return confirm('Anda pasti untuk padam rekod ini?');" Visible='<%# If(CInt(Session.Item("sessionEstateID")) = 1, True, False) %>'></asp:LinkButton>
+                                        <asp:LinkButton ID="lbDelete" runat="server" CausesValidation="False" CssClass="btn btn-danger btn-sm" CommandName="Delete" Text="Padam" OnClientClick="return confirm('Anda pasti untuk padam rekod ini?');" Visible='<%# If(CInt(Session.Item("sessionEstateID")) = 1, True, False) %>' ToolTip="Padam"></asp:LinkButton>
                                     </ItemTemplate>
                                     <FooterStyle HorizontalAlign="Center" />
                                     <HeaderStyle Width="5%" HorizontalAlign="Center" />
@@ -4598,28 +4587,17 @@
 
                                 <asp:TemplateField ShowHeader="False">
                                     <EditItemTemplate>
-                                        <div class="row">
-
-                                            <div class="col-md-6">
-
-                                                <div class="form-group">
-                                                    <asp:LinkButton ID="LinkButton1" runat="server" CausesValidation="True" CommandName="Update" Text="Simpan" CssClass="btn btn-warning btn-sm"></asp:LinkButton>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-md-6">
-
-                                                <div class="form-group">
-                                                    <asp:LinkButton ID="LinkButton2" runat="server" CausesValidation="False" CommandName="Cancel" Text="Batal" CssClass="btn btn-default btn-sm"></asp:LinkButton>
-                                                </div>
-
-                                            </div>
-
+                                        <div class="d-flex align-items-center justify-content-center gap-1">
+                                            <asp:LinkButton ID="LinkButton1" runat="server" CausesValidation="True" CommandName="Update" ToolTip="Simpan" CssClass="btn btn-warning btn-sm btn-action-icon">
+                                                <i class="bi bi-check-lg"></i>
+                                            </asp:LinkButton>
+                                            <asp:LinkButton ID="LinkButton2" runat="server" CausesValidation="False" CommandName="Cancel" ToolTip="Batal" CssClass="btn btn-default btn-sm btn-action-icon">
+                                                <i class="bi bi-x-lg"></i>
+                                            </asp:LinkButton>
                                         </div>
-
                                     </EditItemTemplate>
                                     <ItemTemplate>
-									<asp:LinkButton ID="lbEdit" runat="server" CausesValidation="False" CommandName="Edit" Text="Kemaskini" Visible='<%# If(CInt(Session.Item("sessionEstateID")) = 1, True, False) %>'></asp:LinkButton><%--If(Eval("StatusID") < 2, True, False)--%>
+									<asp:LinkButton ID="lbEdit" runat="server" CausesValidation="False" CommandName="Edit" Text="Kemaskini" Visible='<%# If(CInt(Session.Item("sessionEstateID")) = 1, True, False) %>' CssClass="btn btn-warning btn-sm" ToolTip="Kemaskini"></asp:LinkButton><%--If(Eval("StatusID") < 2, True, False)--%>
                                     </ItemTemplate>
                                     <HeaderStyle Width="10%" />
                                     <ItemStyle HorizontalAlign="Center" />
@@ -4630,7 +4608,7 @@
                                         <asp:LinkButton ID="btnAddNew" runat="server" Text="+" CssClass="btn btn-warning btn-sm" ToolTip="Tambah" Visible='<%# If(CInt(Session.Item("sessionEstateID")) = 1, True, False) %>' OnClick="btnAddNewUpload_Click" />
                                     </HeaderTemplate>
                                     <ItemTemplate>
-                                        <asp:LinkButton ID="lbDelete" runat="server" CausesValidation="False" CommandName="Delete" Text="Padam" OnClientClick="return confirm('Anda pasti untuk padam rekod ini?');" Visible='<%# If(CInt(Session.Item("sessionEstateID")) = 1, True, False) %>'></asp:LinkButton>
+                                        <asp:LinkButton ID="lbDelete" runat="server" CausesValidation="False" CssClass="btn btn-danger btn-sm" CommandName="Delete" Text="Padam" OnClientClick="return confirm('Anda pasti untuk padam rekod ini?');" Visible='<%# If(CInt(Session.Item("sessionEstateID")) = 1, True, False) %>' ToolTip="Padam"></asp:LinkButton>
                                     </ItemTemplate>
                                     <FooterStyle HorizontalAlign="Center" />
                                     <HeaderStyle Width="5%" HorizontalAlign="Center" />
@@ -5552,29 +5530,18 @@
 
                                 <asp:TemplateField ShowHeader="False">
                                     <EditItemTemplate>
-                                        <div class="row">
-
-                                            <div class="col-md-12">
-
-                                                <div class="form-group">
-                                                    <asp:LinkButton ID="LinkButton1" runat="server" CausesValidation="True" CommandName="Update" Text="Simpan" CssClass="btn btn-warning btn-sm"></asp:LinkButton>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-md-12">
-
-                                                <div class="form-group">
-                                                    <asp:LinkButton ID="LinkButton2" runat="server" CausesValidation="False" CommandName="Cancel" Text="Cancel" CssClass="btn btn-default btn-sm"></asp:LinkButton>
-                                                </div>
-
-                                            </div>
-
+                                        <div class="d-flex align-items-center justify-content-center gap-1">
+                                            <asp:LinkButton ID="LinkButton1" runat="server" CausesValidation="True" CommandName="Update" ToolTip="Simpan" CssClass="btn btn-warning btn-sm btn-action-icon">
+                                                <i class="bi bi-check-lg"></i>
+                                            </asp:LinkButton>
+                                            <asp:LinkButton ID="LinkButton2" runat="server" CausesValidation="False" CommandName="Cancel" ToolTip="Cancel" CssClass="btn btn-default btn-sm btn-action-icon">
+                                                <i class="bi bi-x-lg"></i>
+                                            </asp:LinkButton>
                                         </div>
-
                                     </EditItemTemplate>
                                     <ItemTemplate>
                                         <asp:LinkButton ID="lbEdit" runat="server" CausesValidation="False" CommandName="Edit" Text="Kemaskini"
-                                            Visible='<%# If(IsDBNull(Eval("KadarBayaran_PermohonanAgensiID")), True, If(Eval("KadarBayaran_PermohonanAgensiID") = Session.Item("sessionEstateId"), True, False)) %>' CssClass="btn btn-warning btn-sm"></asp:LinkButton>
+                                            Visible='<%# If(IsDBNull(Eval("KadarBayaran_PermohonanAgensiID")), True, If(Eval("KadarBayaran_PermohonanAgensiID") = Session.Item("sessionEstateId"), True, False)) %>' CssClass="btn btn-warning btn-sm" ToolTip="Kemaskini"></asp:LinkButton>
                                     </ItemTemplate>
                                     <HeaderStyle Width="10%" />
                                     <ItemStyle HorizontalAlign="Center" />
@@ -5586,7 +5553,7 @@
                                     </HeaderTemplate>
                                     <ItemTemplate>
                                         <asp:LinkButton ID="lbDelete" runat="server" CausesValidation="False" CssClass="btn btn-danger btn-sm"
-                                            Visible='<%# If(IsDBNull(Eval("KadarBayaran_PermohonanAgensiID")), True, If(Eval("KadarBayaran_PermohonanAgensiID") = Session.Item("sessionEstateId"), True, False)) %>' CommandName="Delete" Text="Padam" OnClientClick="return confirm('Anda pasti untuk padam rekod ini?');"></asp:LinkButton>
+                                            Visible='<%# If(IsDBNull(Eval("KadarBayaran_PermohonanAgensiID")), True, If(Eval("KadarBayaran_PermohonanAgensiID") = Session.Item("sessionEstateId"), True, False)) %>' CommandName="Delete" Text="Padam" OnClientClick="return confirm('Anda pasti untuk padam rekod ini?');" ToolTip="Padam"></asp:LinkButton>
                                     </ItemTemplate>
                                     <FooterStyle HorizontalAlign="Center" />
                                     <HeaderStyle Width="5%" HorizontalAlign="Center" />
@@ -5823,7 +5790,7 @@
                                                             Text='<%# If(IsDBNull(Eval("reviewStatusID")), "Hantar Untuk Semakan", If(Eval("reviewStatusID") = "1", "Dalam Proses Semakan", If(Eval("reviewStatusID") = "2", "Diluluskan", If(Eval("reviewStatusID") = "3", "Semakan Semula", "")))) %>'
                                                             readonly="true"
                                                             Enabled='<%# If(IsDBNull(Eval("reviewStatusID")), True, If(Eval("reviewStatusID") = "1", False, If(Eval("reviewStatusID") = "2", False, If(Eval("reviewStatusID") = "3", True, False)))) %>'
-                                                            BackColor='<%# If(IsDBNull(Eval("reviewStatusID")), System.Drawing.ColorTranslator.FromHtml("#0000ff"), If(Eval("reviewStatusID") = "1", System.Drawing.ColorTranslator.FromHtml("#FFA500"), If(Eval("reviewStatusID") = "2", System.Drawing.ColorTranslator.FromHtml("#00FF00"), If(Eval("reviewStatusID") = "3", System.Drawing.ColorTranslator.FromHtml("#FF0000"), "")))) %>'
+                                                            BackColor='<%# If(IsDBNull(Eval("reviewStatusID")), System.Drawing.ColorTranslator.FromHtml("#87CEEB"), If(Eval("reviewStatusID") = "1", System.Drawing.ColorTranslator.FromHtml("#FFA500"), If(Eval("reviewStatusID") = "2", System.Drawing.ColorTranslator.FromHtml("#00FF00"), If(Eval("reviewStatusID") = "3", System.Drawing.ColorTranslator.FromHtml("#FF0000"), "")))) %>'
                                                             CommandName="review" CausesValidation="False" ID="LinkButton4" CommandArgument='<%# Container.DataItemIndex %>'></asp:LinkButton>
 
                                                         <div class="wrapperTooltip" runat="server" visible='<%# If(IsDBNull(Eval("reviewStatusID")), False, If(Eval("reviewStatusID") = "3", True, True)) %>'>
@@ -5913,7 +5880,7 @@
                                                             Text='<%# If(IsDBNull(Eval("reviewStatusID")), "Hantar Untuk Semakan", If(Eval("reviewStatusID") = "1", "Dalam Proses Semakan", If(Eval("reviewStatusID") = "2", "Diluluskan", If(Eval("reviewStatusID") = "3", "Semakan Semula", "")))) %>'
                                                             readonly="true"
                                                             Enabled='<%# If(IsDBNull(Eval("reviewStatusID")), True, If(Eval("reviewStatusID") = "1", False, If(Eval("reviewStatusID") = "2", False, If(Eval("reviewStatusID") = "3", True, False)))) %>'
-                                                            BackColor='<%# If(IsDBNull(Eval("reviewStatusID")), System.Drawing.ColorTranslator.FromHtml("#0000ff"), If(Eval("reviewStatusID") = "1", System.Drawing.ColorTranslator.FromHtml("#FFA500"), If(Eval("reviewStatusID") = "2", System.Drawing.ColorTranslator.FromHtml("#00FF00"), If(Eval("reviewStatusID") = "3", System.Drawing.ColorTranslator.FromHtml("#FF0000"), "")))) %>'
+                                                            BackColor='<%# If(IsDBNull(Eval("reviewStatusID")), System.Drawing.ColorTranslator.FromHtml("#87CEEB"), If(Eval("reviewStatusID") = "1", System.Drawing.ColorTranslator.FromHtml("#FFA500"), If(Eval("reviewStatusID") = "2", System.Drawing.ColorTranslator.FromHtml("#00FF00"), If(Eval("reviewStatusID") = "3", System.Drawing.ColorTranslator.FromHtml("#FF0000"), "")))) %>'
                                                             CommandName="review" CausesValidation="False" ID="LinkButton4" CommandArgument='<%# Container.DataItemIndex %>'></asp:LinkButton>
 
                                                         <div class="wrapperTooltip" runat="server" visible='<%# If(IsDBNull(Eval("reviewStatusID")), False, If(Eval("reviewStatusID") = "3", True, False)) %>'>
