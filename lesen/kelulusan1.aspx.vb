@@ -149,7 +149,6 @@ Partial Class kelulusan1
         tabMaklumat.Visible = False
         tabSurat.Visible = False
         TabPenjajaUlasan.Visible = False
-        TabLampiran.Visible = False
         tabTetapan.Visible = False
         tabUlasan.Visible = False
 
@@ -164,7 +163,6 @@ Partial Class kelulusan1
 
             If isJabatanLesenOrDalaman Then
                 tabKadarBayaran.Visible = True
-                TabLampiran.Visible = True
             End If
 
             ' Tetapan agensi (gvIK) dipaparkan untuk semakan bagi sessionOCS = 3
