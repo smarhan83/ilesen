@@ -6814,7 +6814,79 @@ ORDER BY
             }, 300);
         }
 
+        function cleanupModalBackdrops() {
+            document.querySelectorAll('.modal-backdrop').forEach(function (el) {
+                el.remove();
+            });
+            document.body.classList.remove('modal-open');
+            document.body.style.overflow = '';
+            document.body.style.paddingRight = '';
+        }
+
         function showSuratBalasanModal() {
+            var modalEl = document.getElementById('modalSuratBalasan');
+            if (!modalEl) return;
+
+            // Clean up any orphaned backdrops left behind by UpdatePanel partial postback
+            cleanupModalBackdrops();
+
+            if (typeof bootstrap !== 'undefined' && bootstrap.Modal) {
+                var modalInstance = bootstrap.Modal.getOrCreateInstance ? bootstrap.Modal.getOrCreateInstance(modalEl) : new bootstrap.Modal(modalEl);
+                modalInstance.show();
+            } else if (typeof $ !== 'undefined' && $.fn.modal) {
+                $('#modalSuratBalasan').modal('show');
+            }
+
+            modalEl.removeEventListener('hidden.bs.modal', cleanupModalBackdrops);
+            modalEl.addEventListener('hidden.bs.modal', cleanupModalBackdrops);
+        }
+
+        function closeSuratBalasanModal() {
+            var modalEl = document.getElementById('modalSuratBalasan');
+            if (modalEl) {
+                if (typeof bootstrap !== 'undefined' && bootstrap.Modal) {
+                    var modalInstance = bootstrap.Modal.getInstance(modalEl);
+                    if (modalInstance) {
+                        modalInstance.hide();
+                    }
+                } else if (typeof $ !== 'undefined' && $.fn.modal) {
+                    $('#modalSuratBalasan').modal('hide');
+                }
+                modalEl.classList.remove('show');
+                modalEl.style.display = 'none';
+                modalEl.setAttribute('aria-hidden', 'true');
+                modalEl.removeAttribute('aria-modal');
+                modalEl.removeAttribute('role');
+            }
+            cleanupModalBackdrops();
+            setTimeout(cleanupModalBackdrops, 350);
+        }
+
+        function _unusedHelper1() {
+        }
+
+        function _tempCloseSuratBalasanModal() {
+            var modalEl = document.getElementById('modalSuratBalasan');
+            if (modalEl) {
+                if (typeof bootstrap !== 'undefined' && bootstrap.Modal) {
+                    var modalInstance = bootstrap.Modal.getInstance(modalEl);
+                    if (modalInstance) {
+                        modalInstance.hide();
+                    }
+                } else if (typeof $ !== 'undefined' && $.fn.modal) {
+                    $('#modalSuratBalasan').modal('hide');
+                }
+                modalEl.classList.remove('show');
+                modalEl.style.display = 'none';
+                modalEl.setAttribute('aria-hidden', 'true');
+                modalEl.removeAttribute('aria-modal');
+                modalEl.removeAttribute('role');
+            }
+            cleanupModalBackdrops();
+            setTimeout(cleanupModalBackdrops, 350);
+        }
+
+        function _unusedOldShowSuratBalasanModal() {
             var modalEl = document.getElementById('modalSuratBalasan');
             if (!modalEl) return;
             if (typeof $ !== 'undefined' && $.fn.modal) {
@@ -6825,7 +6897,7 @@ ORDER BY
             }
         }
 
-        function closeSuratBalasanModal() {
+        function _tempCloseSuratBalasanModal() {
             var modalEl = document.getElementById('modalSuratBalasan');
             if (!modalEl) return;
             if (typeof $ !== 'undefined' && $.fn.modal) {
