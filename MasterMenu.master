@@ -2780,7 +2780,10 @@ h1{
                 "Nyah Aktif": "bi bi-slash-circle",
                 "Padam": "bi bi-trash",
                 "Lihat": "bi bi-eye",
-                "+": "bi bi-plus-circle"
+                "+": "bi bi-plus-circle",
+                "Simpan": "bi bi-check-lg",
+                "Batal": "bi bi-x-lg",
+                "Cancel": "bi bi-x-lg"
             };
 
             $('.table-bordered .btn').each(function () {

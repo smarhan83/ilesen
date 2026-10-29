@@ -1,179 +1,15 @@
-﻿<%@ Page MaintainScrollPositionOnPostback="true" Title="" Language="VB" MasterPageFile="~/MasterMenu.master" AutoEventWireup="false" CodeFile="appregister2.aspx.vb" Inherits="appregister2" %>
+<%@ Page MaintainScrollPositionOnPostback="true" Title="" Language="VB" MasterPageFile="~/MasterMenu.master" AutoEventWireup="false" CodeFile="appregister2.aspx.vb" Inherits="appregister2" %>
 
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="asp" %>
 
 <asp:Content ID="HeaderContent" ContentPlaceHolderID="HeadContent" runat="Server">
     <style>
-        .ajax__scroll_none {
-            overflow: visible !important;
-        }
-
-        /* Tooltip Styling */
-        .wrapperTooltip {
-            cursor: help;
-            position: relative;
-            text-align: center;
-            width: 100%;
-            -webkit-transform: translateZ(0);
-            -webkit-font-smoothing: antialiased;
-            z-index: 9999999 !important;
-        }
-
-        .wrapperTooltip .tooltip {
-            background: #1496bb;
-            bottom: 100%;
-            color: #fff;
-            display: block;
-            left: -20px;
-            margin-bottom: 15px;
-            opacity: 0;
-            padding: 20px;
-            pointer-events: none;
-            position: absolute;
-            width: 100%;
-            box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.28);
-            z-index: 9999999 !important;
-            transition: opacity 0.25s ease-out;
-        }
-
-        .wrapperTooltip .tooltip:before {
-            bottom: -20px;
-            content: " ";
-            display: block;
-            left: 0;
-            position: absolute;
-            width: 100%;
-            z-index: 9999999 !important;
-        }
-
-        .wrapperTooltip .tooltip:after {
-            border-left: solid transparent 10px;
-            border-right: solid transparent 10px;
-            border-top: solid #1496bb 10px;
-            bottom: -10px;
-            content: " ";
-            height: 0;
-            left: 50%;
-            margin-left: -13px;
-            position: absolute;
-            width: 0;
-            z-index: 9999999 !important;
-        }
-
-        .wrapperTooltip:hover .tooltip {
-            opacity: 1;
-            pointer-events: auto;
-            z-index: 9999999 !important;
-        }
-
-        .Disabled {
-            pointer-events: none;
-            cursor: not-allowed;
-            opacity: 0.65;
-            box-shadow: none;
-        }
-
-        /* AjaxControlToolkit TabContainer Custom Styling */
-        .ajax__tab_xp .ajax__tab_header,
-        .ajax__tab_xp .ajax__tab_header .ajax__tab_outer,
-        .ajax__tab_xp .ajax__tab_header .ajax__tab_inner,
-        .ajax__tab_xp .ajax__tab_header .ajax__tab_tab,
-        .ajax__tab_xp .ajax__tab_header_verticalleft,
-        .ajax__tab_xp .ajax__tab_header_verticalright,
-        .ajax__tab_xp .ajax__tab_header_bottom {
-            background-image: none !important;
-        }
-
-        .ajax__tab_xp .ajax__tab_header {
-            font-size: 11pt !important;
-            height: 40px !important;
-            color: #000 !important;
-        }
-
-        .ajax__tab_xp .ajax__tab_header .ajax__tab_inner {
-            background-color: #E9ECEF !important;
-            width: 150px !important;
-            text-align: center !important;
-            vertical-align: middle !important;
-            border-top-right-radius: 10px !important;
-            border-top-left-radius: 10px !important;
-        }
-
-        .ajax__tab_xp .ajax__tab_header .ajax__tab_inner a {
-            color: #413a3a !important;
-        }
-
-        .ajax__tab_xp .ajax__tab_header .ajax__tab_active .ajax__tab_inner {
-            background-color: #ffc107 !important;
-            width: 150px !important;
-            text-align: center !important;
-            vertical-align: middle !important;
-            border-top-right-radius: 10px !important;
-            border-top-left-radius: 10px !important;
-        }
-
-        .ajax__tab_xp .ajax__tab_header .ajax__tab_active .ajax__tab_inner a {
-            color: #fff !important;
-            font-weight: 600 !important;
-        }
-
         .styleDisplayNone {
             display: none;
         }
 
         .table-bordered {
             text-align: center;
-        }
-
-        /* Status Pills */
-        .status-pill {
-            display: inline-flex;
-            align-items: flex-start;
-            min-width: 190px;
-            padding: 10px 12px;
-            border-radius: 8px;
-            font-weight: 600;
-            font-size: 13px;
-            text-align: left;
-        }
-
-        .status-pill-icon {
-            margin: 2px 10px 0 0;
-            font-size: 15px;
-            line-height: 1;
-        }
-
-        .status-pill-content {
-            display: block;
-        }
-
-        .status-pill-label {
-            display: block;
-            line-height: 1.25;
-        }
-
-        .status-pill-description {
-            display: block;
-            margin-top: 3px;
-            color: #6c757d;
-            font-size: 11px;
-            font-weight: 400;
-            line-height: 1.25;
-        }
-
-        .status-pill-sent {
-            background-color: #e7f8ee;
-            color: #1e9e57;
-        }
-
-        .status-pill-pending {
-            background-color: #fdf3dd;
-            color: #d99b1f;
-        }
-
-        .status-pill-notrequired {
-            background-color: #f0f1f4;
-            color: #6f7786;
         }
 
         /* =========================================================================
@@ -3229,19 +3065,17 @@
 
                                     <asp:TemplateField ShowHeader="False">
                                         <EditItemTemplate>
-                                            <div class="d-flex flex-wrap gap-1 align-items-center justify-content-center">
-                                                <asp:LinkButton ID="LinkButton1" runat="server" CausesValidation="True" CommandName="Update" Text="Simpan" CssClass="btn btn-warning btn-sm">
-                                                    <i class="bi bi-save me-1"></i>Simpan
+                                            <div class="d-flex align-items-center justify-content-center gap-1">
+                                                <asp:LinkButton ID="LinkButton1" runat="server" CausesValidation="True" CommandName="Update" ToolTip="Simpan" CssClass="btn btn-warning btn-sm btn-action-icon">
+                                                    <i class="bi bi-check-lg"></i>
                                                 </asp:LinkButton>
-                                                <asp:LinkButton ID="LinkButton2" runat="server" CausesValidation="False" CommandName="Cancel" Text="Batal" CssClass="btn btn-secondary btn-sm">
-                                                    <i class="bi bi-x-circle me-1"></i>Batal
+                                                <asp:LinkButton ID="LinkButton2" runat="server" CausesValidation="False" CommandName="Cancel" ToolTip="Batal" CssClass="btn btn-default btn-sm btn-action-icon">
+                                                    <i class="bi bi-x-lg"></i>
                                                 </asp:LinkButton>
                                             </div>
                                         </EditItemTemplate>
                                         <ItemTemplate>
-                                            <asp:LinkButton ID="lbEdit" runat="server" CausesValidation="False" CommandName="Edit" Text="Kemaskini" Visible='<%# If(CInt(Session.Item("sessionEstateID")) = 1, True, False) %>' CssClass="btn btn-warning btn-sm">
-                                                <i class="bi bi-pencil-square me-1"></i>Kemaskini
-                                            </asp:LinkButton>
+                                            <asp:LinkButton ID="lbEdit" runat="server" CausesValidation="False" CommandName="Edit" Text="Kemaskini" Visible='<%# If(CInt(Session.Item("sessionEstateID")) = 1, True, False) %>' CssClass="btn btn-warning btn-sm" ToolTip="Kemaskini"></asp:LinkButton>
                                         </ItemTemplate>
                                         <HeaderStyle Width="10%" />
                                         <ItemStyle HorizontalAlign="Center" />
@@ -3249,14 +3083,10 @@
 
                                     <asp:TemplateField>
                                         <HeaderTemplate>
-                                            <asp:LinkButton ID="btnAddNew" runat="server" CssClass="btn btn-warning btn-sm" ToolTip="Tambah" Visible='<%# If(CInt(Session.Item("sessionEstateID")) = 1, True, False) %>' OnClick="btnAddNewUpload1_Click">
-                                                <i class="bi bi-plus-lg me-1"></i>Tambah
-                                            </asp:LinkButton>
+                                            <asp:LinkButton ID="btnAddNew" runat="server" Text="+" CssClass="btn btn-warning btn-sm" ToolTip="Tambah" Visible='<%# If(CInt(Session.Item("sessionEstateID")) = 1, True, False) %>' OnClick="btnAddNewUpload1_Click" />
                                         </HeaderTemplate>
                                         <ItemTemplate>
-                                            <asp:LinkButton ID="lbDelete" runat="server" CausesValidation="False" CommandName="Delete" Text="Padam" OnClientClick="return confirm('Anda pasti untuk padam rekod ini?');" Visible='<%# If(CInt(Session.Item("sessionEstateID")) = 1, True, False) %>' CssClass="btn btn-danger btn-sm">
-                                                <i class="bi bi-trash me-1"></i>Padam
-                                            </asp:LinkButton>
+                                            <asp:LinkButton ID="lbDelete" runat="server" CausesValidation="False" CssClass="btn btn-danger btn-sm" CommandName="Delete" Text="Padam" OnClientClick="return confirm('Anda pasti untuk padam rekod ini?');" Visible='<%# If(CInt(Session.Item("sessionEstateID")) = 1, True, False) %>' ToolTip="Padam"></asp:LinkButton>
                                         </ItemTemplate>
                                         <FooterStyle HorizontalAlign="Center" />
                                         <HeaderStyle Width="5%" HorizontalAlign="Center" />
@@ -3370,19 +3200,17 @@
 
                                     <asp:TemplateField ShowHeader="False">
                                         <EditItemTemplate>
-                                            <div class="d-flex flex-wrap gap-1 align-items-center justify-content-center">
-                                                <asp:LinkButton ID="LinkButton1" runat="server" CausesValidation="True" CommandName="Update" Text="Simpan" CssClass="btn btn-warning btn-sm">
-                                                    <i class="bi bi-save me-1"></i>Simpan
+                                            <div class="d-flex align-items-center justify-content-center gap-1">
+                                                <asp:LinkButton ID="LinkButton1" runat="server" CausesValidation="True" CommandName="Update" ToolTip="Simpan" CssClass="btn btn-warning btn-sm btn-action-icon">
+                                                    <i class="bi bi-check-lg"></i>
                                                 </asp:LinkButton>
-                                                <asp:LinkButton ID="LinkButton2" runat="server" CausesValidation="False" CommandName="Cancel" Text="Batal" CssClass="btn btn-secondary btn-sm">
-                                                    <i class="bi bi-x-circle me-1"></i>Batal
+                                                <asp:LinkButton ID="LinkButton2" runat="server" CausesValidation="False" CommandName="Cancel" ToolTip="Batal" CssClass="btn btn-default btn-sm btn-action-icon">
+                                                    <i class="bi bi-x-lg"></i>
                                                 </asp:LinkButton>
                                             </div>
                                         </EditItemTemplate>
                                         <ItemTemplate>
-                                            <asp:LinkButton ID="lbEdit" runat="server" CausesValidation="False" CommandName="Edit" Text="Kemaskini" Visible='<%# If(CInt(Session.Item("sessionEstateID")) = 1, True, False) %>' CssClass="btn btn-warning btn-sm">
-                                                <i class="bi bi-pencil-square me-1"></i>Kemaskini
-                                            </asp:LinkButton>
+                                            <asp:LinkButton ID="lbEdit" runat="server" CausesValidation="False" CommandName="Edit" Text="Kemaskini" Visible='<%# If(CInt(Session.Item("sessionEstateID")) = 1, True, False) %>' CssClass="btn btn-warning btn-sm" ToolTip="Kemaskini"></asp:LinkButton>
                                         </ItemTemplate>
                                         <HeaderStyle Width="10%" />
                                         <ItemStyle HorizontalAlign="Center" />
@@ -3390,14 +3218,10 @@
 
                                     <asp:TemplateField>
                                         <HeaderTemplate>
-                                            <asp:LinkButton ID="btnAddNew" runat="server" CssClass="btn btn-warning btn-sm" ToolTip="Tambah" Visible='<%# If(CInt(Session.Item("sessionEstateID")) = 1, True, False) %>' OnClick="btnAddNewUpload_Click">
-                                                <i class="bi bi-plus-lg me-1"></i>Tambah
-                                            </asp:LinkButton>
+                                            <asp:LinkButton ID="btnAddNew" runat="server" Text="+" CssClass="btn btn-warning btn-sm" ToolTip="Tambah" Visible='<%# If(CInt(Session.Item("sessionEstateID")) = 1, True, False) %>' OnClick="btnAddNewUpload_Click" />
                                         </HeaderTemplate>
                                         <ItemTemplate>
-                                            <asp:LinkButton ID="lbDelete" runat="server" CausesValidation="False" CommandName="Delete" Text="Padam" OnClientClick="return confirm('Anda pasti untuk padam rekod ini?');" Visible='<%# If(CInt(Session.Item("sessionEstateID")) = 1, True, False) %>' CssClass="btn btn-danger btn-sm">
-                                                <i class="bi bi-trash me-1"></i>Padam
-                                            </asp:LinkButton>
+                                            <asp:LinkButton ID="lbDelete" runat="server" CausesValidation="False" CssClass="btn btn-danger btn-sm" CommandName="Delete" Text="Padam" OnClientClick="return confirm('Anda pasti untuk padam rekod ini?');" Visible='<%# If(CInt(Session.Item("sessionEstateID")) = 1, True, False) %>' ToolTip="Padam"></asp:LinkButton>
                                         </ItemTemplate>
                                         <FooterStyle HorizontalAlign="Center" />
                                         <HeaderStyle Width="5%" HorizontalAlign="Center" />
@@ -3571,20 +3395,18 @@
 
                                     <asp:TemplateField ShowHeader="False">
                                         <EditItemTemplate>
-                                            <div class="d-flex flex-wrap gap-1 align-items-center justify-content-center">
-                                                <asp:LinkButton ID="LinkButton1" runat="server" CausesValidation="True" CommandName="Update" Text="Simpan" CssClass="btn btn-warning btn-sm">
-                                                    <i class="bi bi-save me-1"></i>Simpan
+                                            <div class="d-flex align-items-center justify-content-center gap-1">
+                                                <asp:LinkButton ID="LinkButton1" runat="server" CausesValidation="True" CommandName="Update" ToolTip="Simpan" CssClass="btn btn-warning btn-sm btn-action-icon">
+                                                    <i class="bi bi-check-lg"></i>
                                                 </asp:LinkButton>
-                                                <asp:LinkButton ID="LinkButton2" runat="server" CausesValidation="False" CommandName="Cancel" Text="Cancel" CssClass="btn btn-secondary btn-sm">
-                                                    <i class="bi bi-x-circle me-1"></i>Batal
+                                                <asp:LinkButton ID="LinkButton2" runat="server" CausesValidation="False" CommandName="Cancel" ToolTip="Cancel" CssClass="btn btn-default btn-sm btn-action-icon">
+                                                    <i class="bi bi-x-lg"></i>
                                                 </asp:LinkButton>
                                             </div>
                                         </EditItemTemplate>
                                         <ItemTemplate>
                                             <asp:LinkButton ID="lbEdit" runat="server" CausesValidation="False" CommandName="Edit" Text="Kemaskini"
-                                                Visible='<%# If(IsDBNull(Eval("KadarBayaran_PermohonanAgensiID")), True, If(Eval("KadarBayaran_PermohonanAgensiID") = Session.Item("sessionEstateId"), True, False)) %>' CssClass="btn btn-warning btn-sm">
-                                                <i class="bi bi-pencil-square me-1"></i>Kemaskini
-                                            </asp:LinkButton>
+                                                Visible='<%# If(IsDBNull(Eval("KadarBayaran_PermohonanAgensiID")), True, If(Eval("KadarBayaran_PermohonanAgensiID") = Session.Item("sessionEstateId"), True, False)) %>' CssClass="btn btn-warning btn-sm" ToolTip="Kemaskini"></asp:LinkButton>
                                         </ItemTemplate>
                                         <HeaderStyle Width="10%" />
                                         <ItemStyle HorizontalAlign="Center" />
@@ -3592,15 +3414,11 @@
 
                                     <asp:TemplateField>
                                         <HeaderTemplate>
-                                            <asp:LinkButton ID="btnAddNew" runat="server" CssClass="btn btn-warning btn-sm" ToolTip="Tambah" OnClick="btnAddNew_Click">
-                                                <i class="bi bi-plus-lg me-1"></i>Tambah
-                                            </asp:LinkButton>
+                                            <asp:LinkButton ID="btnAddNew" runat="server" Text="+" CssClass="btn btn-warning btn-sm" ToolTip="Tambah" OnClick="btnAddNew_Click" />
                                         </HeaderTemplate>
                                         <ItemTemplate>
                                             <asp:LinkButton ID="lbDelete" runat="server" CausesValidation="False" CssClass="btn btn-danger btn-sm"
-                                                Visible='<%# If(IsDBNull(Eval("KadarBayaran_PermohonanAgensiID")), True, If(Eval("KadarBayaran_PermohonanAgensiID") = Session.Item("sessionEstateId"), True, False)) %>' CommandName="Delete" Text="Padam" OnClientClick="return confirm('Anda pasti untuk padam rekod ini?');">
-                                                <i class="bi bi-trash me-1"></i>Padam
-                                            </asp:LinkButton>
+                                                Visible='<%# If(IsDBNull(Eval("KadarBayaran_PermohonanAgensiID")), True, If(Eval("KadarBayaran_PermohonanAgensiID") = Session.Item("sessionEstateId"), True, False)) %>' CommandName="Delete" Text="Padam" OnClientClick="return confirm('Anda pasti untuk padam rekod ini?');" ToolTip="Padam"></asp:LinkButton>
                                         </ItemTemplate>
                                         <FooterStyle HorizontalAlign="Center" />
                                         <HeaderStyle Width="5%" HorizontalAlign="Center" />
