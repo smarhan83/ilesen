@@ -3597,7 +3597,7 @@
                                     <span>Senarai Rekod Cetakan (Lihat &amp; Cetak)</span>
                                 </div>
                                 <span class="badge-clicks-pill">
-                                    <i class="bi bi-hand-index-thumb"></i>
+                                    <%--<i class="bi bi-hand-index-thumb"></i>--%>
                                     <span>Jumlah Keseluruhan Klik:</span>
                                     <asp:Label ID="lblModalTotalClicksSummary" runat="server" Text="0"></asp:Label>
                                 </span>
@@ -3638,9 +3638,9 @@
                             </div>
                         </div>
                         <div class="modal-footer justify-content-end">
-                            <button type="button" class="btn btn-outline-secondary btn-sm px-3 fw-semibold" onclick="closeSuratBalasanModal()">
+                            <%--<button type="button" class="btn btn-outline-secondary btn-sm px-3 fw-semibold" onclick="closeSuratBalasanModal()">
                                 <i class="bi bi-x-lg me-1"></i>Tutup
-                            </button>
+                            </button>--%>
                         </div>
                     </div>
                 </div>
