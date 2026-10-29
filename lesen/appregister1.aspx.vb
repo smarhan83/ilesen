@@ -38,7 +38,7 @@ Partial Class appregister1
 
         Public ReadOnly Property CommandArg As String
             Get
-                Return PermohonanID & "," & AgensiID.ToString()
+                Return PermohonanID & "," & AgensiID.ToString() & "," & Name
             End Get
         End Property
     End Class
@@ -481,7 +481,7 @@ Partial Class appregister1
                 End If
 
                 If Not String.IsNullOrEmpty(pid) AndAlso agensiId > 0 Then
-                    OpenSuratAgensi(pid, agensiId)
+                    ShowSuratBalasanModal(pid, agensiId, rawArgument)
                 End If
             End If
 
@@ -536,11 +536,286 @@ Partial Class appregister1
                 Integer.TryParse(args(1).Trim(), agensiId)
 
                 If Not String.IsNullOrEmpty(pid) AndAlso agensiId > 0 Then
-                    OpenSuratAgensi(pid, agensiId)
+                    ShowSuratBalasanModal(pid, agensiId, rawArgument)
                 End If
             End If
         End If
     End Sub
+
+    Public Sub ShowSuratBalasanModal(ByVal pid As String, ByVal agensiId As Integer, Optional ByVal rawArgument As String = "")
+        Try
+            Dim permohonanId As Integer = 0
+            If Not Integer.TryParse(pid, permohonanId) OrElse permohonanId <= 0 OrElse agensiId <= 0 Then
+                Return
+            End If
+
+            hfSuratBalasanPid.Value = permohonanId.ToString()
+            hfSuratBalasanAgensiId.Value = agensiId.ToString()
+
+            Dim resolvedAgensiName As String = ""
+            If Not String.IsNullOrWhiteSpace(rawArgument) Then
+                Dim parts As String() = rawArgument.Split(","c)
+                If parts.Length >= 3 Then
+                    resolvedAgensiName = parts(2).Trim()
+                End If
+            End If
+
+            Dim rujukanInfo As String = ""
+
+            Using conn As New SqlConnection(CS)
+                conn.Open()
+                EnsureSuratBalasanCetakTableExists(conn)
+
+                If String.IsNullOrWhiteSpace(resolvedAgensiName) Then
+                    resolvedAgensiName = GetAgensiDisplayName(agensiId, conn)
+                End If
+
+                Dim sqlInfo As String = "SELECT ISNULL(a.Rujukan, '-') AS Rujukan, ISNULL(b.Pemohon_Name, '') AS Pemohon_Name " &
+                                        "FROM dbo.LESEN_Permohonan a " &
+                                        "LEFT JOIN dbo.LESEN_Pemohon b ON a.Permohonan_PemohonID = b.Pemohon_ID " &
+                                        "WHERE a.Permohonan_ID = @Permohonan_ID"
+                Using cmd As New SqlCommand(sqlInfo, conn)
+                    cmd.Parameters.AddWithValue("@Permohonan_ID", permohonanId)
+                    Using rdr As SqlDataReader = cmd.ExecuteReader()
+                        If rdr.Read() Then
+                            Dim ruj As String = Convert.ToString(rdr("Rujukan")).Trim()
+                            Dim pemohon As String = Convert.ToString(rdr("Pemohon_Name")).Trim()
+                            If Not String.IsNullOrEmpty(pemohon) Then
+                                rujukanInfo = ruj & " (" & pemohon & ")"
+                            Else
+                                rujukanInfo = ruj
+                            End If
+                        End If
+                    End Using
+                End Using
+            End Using
+
+            hfSuratBalasanAgensiName.Value = resolvedAgensiName
+            lblModalSuratAgensiName.Text = If(String.IsNullOrWhiteSpace(resolvedAgensiName), "Agensi", resolvedAgensiName)
+            lblModalSuratRujukan.Text = If(String.IsNullOrWhiteSpace(rujukanInfo), "ID #" & permohonanId.ToString(), rujukanInfo)
+
+            BindSuratBalasanCetakLog(permohonanId, agensiId)
+
+            ScriptManager.RegisterStartupScript(Me.Page, Me.GetType(), "showSuratBalasanModal", "showSuratBalasanModal();", True)
+        Catch ex As Exception
+            ShowAlert("error", "Ralat", ex.Message)
+        End Try
+    End Sub
+
+    Protected Sub btnModalLihatSurat_Click(ByVal sender As Object, ByVal e As EventArgs)
+        Dim pid As String = If(hfSuratBalasanPid IsNot Nothing, hfSuratBalasanPid.Value.Trim(), "")
+        Dim agensiId As Integer = 0
+        If hfSuratBalasanAgensiId IsNot Nothing Then
+            Integer.TryParse(hfSuratBalasanAgensiId.Value.Trim(), agensiId)
+        End If
+
+        Dim permohonanId As Integer = 0
+        If Integer.TryParse(pid, permohonanId) AndAlso permohonanId > 0 AndAlso agensiId > 0 Then
+            BindSuratBalasanCetakLog(permohonanId, agensiId)
+            OpenSuratAgensi(pid, agensiId)
+            ScriptManager.RegisterStartupScript(Me.Page, Me.GetType(), "showSuratBalasanModal", "showSuratBalasanModal();", True)
+        End If
+    End Sub
+
+    Protected Sub btnModalLihatCetakSurat_Click(ByVal sender As Object, ByVal e As EventArgs)
+        Dim pid As String = If(hfSuratBalasanPid IsNot Nothing, hfSuratBalasanPid.Value.Trim(), "")
+        Dim agensiId As Integer = 0
+        If hfSuratBalasanAgensiId IsNot Nothing Then
+            Integer.TryParse(hfSuratBalasanAgensiId.Value.Trim(), agensiId)
+        End If
+
+        Dim permohonanId As Integer = 0
+        If Integer.TryParse(pid, permohonanId) AndAlso permohonanId > 0 AndAlso agensiId > 0 Then
+            RecordSuratBalasanCetakClick(permohonanId, agensiId)
+            BindSuratBalasanCetakLog(permohonanId, agensiId)
+            OpenSuratAgensi(pid, agensiId)
+            ScriptManager.RegisterStartupScript(Me.Page, Me.GetType(), "showSuratBalasanModal", "showSuratBalasanModal();", True)
+        End If
+    End Sub
+
+    Private Sub EnsureSuratBalasanCetakTableExists(ByVal conn As SqlConnection)
+        Dim sql As String = "IF OBJECT_ID('dbo.LESEN_SuratBalasanCetakLog', 'U') IS NULL " &
+                            "BEGIN " &
+                            "    CREATE TABLE dbo.LESEN_SuratBalasanCetakLog ( " &
+                            "        CetakLog_ID INT IDENTITY(1,1) NOT NULL PRIMARY KEY, " &
+                            "        Permohonan_ID INT NOT NULL, " &
+                            "        JabatanAgensi_ID INT NOT NULL, " &
+                            "        Users_ID INT NULL, " &
+                            "        UserName NVARCHAR(150) NOT NULL, " &
+                            "        UserFullName NVARCHAR(255) NULL, " &
+                            "        PrintedDt DATETIME NOT NULL DEFAULT(GETDATE()), " &
+                            "        TotalClicks INT NOT NULL DEFAULT(1) " &
+                            "    ); " &
+                            "    CREATE INDEX IX_LESEN_SuratBalasanCetakLog_Permohonan_Agensi ON dbo.LESEN_SuratBalasanCetakLog(Permohonan_ID, JabatanAgensi_ID); " &
+                            "END"
+        Using cmd As New SqlCommand(sql, conn)
+            cmd.ExecuteNonQuery()
+        End Using
+    End Sub
+
+    Private Sub RecordSuratBalasanCetakClick(ByVal permohonanId As Integer, ByVal agensiId As Integer)
+        Try
+            Dim userId As Integer = 0
+            If Session.Item("sessionUsersId") IsNot Nothing Then
+                Integer.TryParse(Convert.ToString(Session.Item("sessionUsersId")), userId)
+            End If
+
+            Dim userName As String = Convert.ToString(If(Session.Item("sessionUserName"), "")).Trim()
+            Dim userFullName As String = Convert.ToString(If(Session.Item("sessionFullname"), "")).Trim()
+
+            Using conn As New SqlConnection(CS)
+                conn.Open()
+                EnsureSuratBalasanCetakTableExists(conn)
+
+                If String.IsNullOrEmpty(userFullName) AndAlso (userId > 0 OrElse Not String.IsNullOrEmpty(userName)) Then
+                    Dim sqlUser As String = "SELECT TOP 1 Users_Name, Users_Fullname FROM dbo.TBL_USERS WHERE (@Users_Id > 0 AND Users_Id = @Users_Id) OR (@Users_Name <> '' AND Users_Name = @Users_Name)"
+                    Using cmdUser As New SqlCommand(sqlUser, conn)
+                        cmdUser.Parameters.AddWithValue("@Users_Id", userId)
+                        cmdUser.Parameters.AddWithValue("@Users_Name", userName)
+                        Using rdr As SqlDataReader = cmdUser.ExecuteReader()
+                            If rdr.Read() Then
+                                If String.IsNullOrEmpty(userName) AndAlso Not IsDBNull(rdr("Users_Name")) Then
+                                    userName = Convert.ToString(rdr("Users_Name")).Trim()
+                                End If
+                                If Not IsDBNull(rdr("Users_Fullname")) Then
+                                    userFullName = Convert.ToString(rdr("Users_Fullname")).Trim()
+                                End If
+                            End If
+                        End Using
+                    End Using
+                End If
+
+                If String.IsNullOrEmpty(userName) Then
+                    userName = If(Not String.IsNullOrEmpty(userFullName), userFullName, "Pengguna")
+                End If
+                If String.IsNullOrEmpty(userFullName) Then
+                    userFullName = userName
+                End If
+
+                Dim existingId As Integer = 0
+                Dim sqlCheck As String = "SELECT TOP 1 CetakLog_ID FROM dbo.LESEN_SuratBalasanCetakLog " &
+                                         "WHERE Permohonan_ID = @Permohonan_ID AND JabatanAgensi_ID = @JabatanAgensi_ID " &
+                                         "AND ((@Users_ID > 0 AND Users_ID = @Users_ID) OR UserName = @UserName)"
+                Using cmdCheck As New SqlCommand(sqlCheck, conn)
+                    cmdCheck.Parameters.AddWithValue("@Permohonan_ID", permohonanId)
+                    cmdCheck.Parameters.AddWithValue("@JabatanAgensi_ID", agensiId)
+                    cmdCheck.Parameters.AddWithValue("@Users_ID", userId)
+                    cmdCheck.Parameters.AddWithValue("@UserName", userName)
+                    Dim obj = cmdCheck.ExecuteScalar()
+                    If obj IsNot Nothing AndAlso Not IsDBNull(obj) Then
+                        Integer.TryParse(obj.ToString(), existingId)
+                    End If
+                End Using
+
+                If existingId > 0 Then
+                    Dim sqlUpd As String = "UPDATE dbo.LESEN_SuratBalasanCetakLog " &
+                                           "SET TotalClicks = ISNULL(TotalClicks, 0) + 1, " &
+                                           "    PrintedDt = GETDATE(), " &
+                                           "    UserName = @UserName, " &
+                                           "    UserFullName = @UserFullName, " &
+                                           "    Users_ID = CASE WHEN @Users_ID > 0 THEN @Users_ID ELSE Users_ID END " &
+                                           "WHERE CetakLog_ID = @CetakLog_ID"
+                    Using cmdUpd As New SqlCommand(sqlUpd, conn)
+                        cmdUpd.Parameters.AddWithValue("@CetakLog_ID", existingId)
+                        cmdUpd.Parameters.AddWithValue("@UserName", userName)
+                        cmdUpd.Parameters.AddWithValue("@UserFullName", userFullName)
+                        cmdUpd.Parameters.AddWithValue("@Users_ID", userId)
+                        cmdUpd.ExecuteNonQuery()
+                    End Using
+                Else
+                    Dim sqlIns As String = "INSERT INTO dbo.LESEN_SuratBalasanCetakLog (Permohonan_ID, JabatanAgensi_ID, Users_ID, UserName, UserFullName, PrintedDt, TotalClicks) " &
+                                           "VALUES (@Permohonan_ID, @JabatanAgensi_ID, @Users_ID, @UserName, @UserFullName, GETDATE(), 1)"
+                    Using cmdIns As New SqlCommand(sqlIns, conn)
+                        cmdIns.Parameters.AddWithValue("@Permohonan_ID", permohonanId)
+                        cmdIns.Parameters.AddWithValue("@JabatanAgensi_ID", agensiId)
+                        cmdIns.Parameters.AddWithValue("@Users_ID", If(userId > 0, CObj(userId), DBNull.Value))
+                        cmdIns.Parameters.AddWithValue("@UserName", userName)
+                        cmdIns.Parameters.AddWithValue("@UserFullName", userFullName)
+                        cmdIns.ExecuteNonQuery()
+                    End Using
+                End If
+            End Using
+        Catch ex As Exception
+            ShowAlert("error", "Ralat", ex.Message)
+        End Try
+    End Sub
+
+    Private Sub BindSuratBalasanCetakLog(ByVal permohonanId As Integer, ByVal agensiId As Integer)
+        Dim dt As New DataTable()
+        Dim totalAllClicks As Integer = 0
+
+        Using conn As New SqlConnection(CS)
+            conn.Open()
+            EnsureSuratBalasanCetakTableExists(conn)
+
+            Dim sql As String = "SELECT l.CetakLog_ID, l.Permohonan_ID, l.JabatanAgensi_ID, l.Users_ID, l.UserName, " &
+                                "ISNULL(NULLIF(l.UserFullName, ''), ISNULL(u.Users_Fullname, l.UserName)) AS DisplayUserName, " &
+                                "l.PrintedDt, ISNULL(l.TotalClicks, 1) AS TotalClicks " &
+                                "FROM dbo.LESEN_SuratBalasanCetakLog l " &
+                                "LEFT JOIN dbo.TBL_USERS u ON (l.Users_ID IS NOT NULL AND l.Users_ID = u.Users_Id) " &
+                                "WHERE l.Permohonan_ID = @Permohonan_ID AND l.JabatanAgensi_ID = @JabatanAgensi_ID " &
+                                "ORDER BY l.PrintedDt DESC"
+            Using cmd As New SqlCommand(sql, conn)
+                cmd.Parameters.AddWithValue("@Permohonan_ID", permohonanId)
+                cmd.Parameters.AddWithValue("@JabatanAgensi_ID", agensiId)
+                Using da As New SqlDataAdapter(cmd)
+                    da.Fill(dt)
+                End Using
+            End Using
+        End Using
+
+        For Each row As DataRow In dt.Rows
+            Dim clicks As Integer = 0
+            If Not IsDBNull(row("TotalClicks")) Then
+                Integer.TryParse(row("TotalClicks").ToString(), clicks)
+            End If
+            totalAllClicks += clicks
+        Next
+
+        If lblModalTotalClicksSummary IsNot Nothing Then
+            lblModalTotalClicksSummary.Text = totalAllClicks.ToString()
+        End If
+
+        If gvSuratBalasanLog IsNot Nothing Then
+            gvSuratBalasanLog.DataSource = dt
+            gvSuratBalasanLog.DataBind()
+        End If
+    End Sub
+
+    Private Function GetAgensiDisplayName(ByVal agensiId As Integer, ByVal conn As SqlConnection) As String
+        Select Case agensiId
+            Case 1 : Return "Perlesenan"
+            Case 2 : Return "Bank Negara"
+            Case 3 : Return "Inspektorat"
+            Case 4 : Return "Kesihatan"
+            Case 5 : Return "Bomba"
+            Case 6 : Return "Farmasi"
+            Case 7 : Return "IT"
+            Case 8 : Return "Kejuruteraan"
+            Case 9 : Return "Kawalan Bangunan"
+            Case 10 : Return "Perancang Bandar & Landskap"
+            Case 11 : Return "Penguatkuasaan"
+            Case 12 : Return "Pengurusan Harta"
+            Case 13 : Return "PD Kluang"
+            Case 14 : Return "Polis"
+            Case 15 : Return "Kesihatan"
+            Case 16 : Return "Bomba"
+            Case 17 : Return "SWCorp"
+            Case 18 : Return "Kebajikan Masyarakat"
+            Case 19 : Return "Pendidikan"
+            Case 20 : Return "Pelancongan"
+        End Select
+
+        Using cmd As New SqlCommand("SELECT TOP 1 JabatanAgensi_Description FROM dbo.LESEN_JabatanAgensi WHERE JabatanAgensi_ID = @ID", conn)
+            cmd.Parameters.AddWithValue("@ID", agensiId)
+            Dim obj = cmd.ExecuteScalar()
+            If obj IsNot Nothing AndAlso Not IsDBNull(obj) Then
+                Return obj.ToString().Trim()
+            End If
+        End Using
+
+        Return "Agensi"
+    End Function
 
     Public Sub OpenSuratAgensi(ByVal pid As String, ByVal agensiId As Integer)
         Try

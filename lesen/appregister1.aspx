@@ -796,6 +796,98 @@
         /* -------------------------------------------------------------
            Pembetulan Maklumat Permohonan - Differences Display Styles
            ------------------------------------------------------------- */
+        /* =========================================================================
+           Modal Surat Balasan Agensi Styling (Matches Page Design)
+           ========================================================================= */
+        #modalSuratBalasan .modal-content {
+            border: 1px solid rgba(45, 108, 223, 0.25);
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.16);
+            overflow: hidden;
+        }
+        #modalSuratBalasan .modal-header {
+            background: linear-gradient(135deg, #2D6CDF, #1d4ed8);
+            color: #fff;
+            padding: 14px 20px;
+            border-bottom: none;
+        }
+        #modalSuratBalasan .modal-title {
+            font-size: 1rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        #modalSuratBalasan .btn-modal-close {
+            background: rgba(255, 255, 255, 0.18);
+            border: 1px solid rgba(255, 255, 255, 0.35);
+            color: #fff;
+            width: 30px;
+            height: 30px;
+            border-radius: 6px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background 0.15s ease;
+        }
+        #modalSuratBalasan .btn-modal-close:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        #modalSuratBalasan .modal-body {
+            padding: 20px 24px;
+            background-color: #fff;
+        }
+        #modalSuratBalasan .modal-footer {
+            background-color: #f8fafc;
+            border-top: 1px solid #e2e8f0;
+            padding: 12px 24px;
+        }
+        .surat-balasan-info-card {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 12px 16px;
+            margin-bottom: 16px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+        .surat-balasan-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+            padding: 6px 0 18px 0;
+            border-bottom: 1px dashed #e2e8f0;
+            margin-bottom: 16px;
+        }
+        .surat-balasan-actions .btn {
+            min-width: 165px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            padding: 9px 18px;
+        }
+        .surat-balasan-log-scroll {
+            max-height: 280px;
+            overflow-y: auto;
+            border-radius: 8px;
+        }
+        .badge-clicks-pill {
+            background-color: #eff6ff;
+            color: #1e40af;
+            border: 1px solid #bfdbfe;
+            font-weight: 700;
+            font-size: 0.78rem;
+            padding: 4px 10px;
+            border-radius: 999px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
         .card-pembetulan.filter-diff-active [data-has-diff="false"] {
             display: none !important;
         }
@@ -3448,6 +3540,107 @@
                                 <i class="fas fa-print"></i> Cetak
                             </button>
                             <button type="button" class="btn btn-secondary" onclick="closeQrModal()">Tutup</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Surat Balasan Agensi -->
+            <div class="modal fade" id="modalSuratBalasan" tabindex="-1" role="dialog" aria-labelledby="modalSuratBalasanLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header d-flex justify-content-between align-items-center">
+                            <h5 class="modal-title mb-0" id="modalSuratBalasanLabel">
+                                <i class="bi bi-file-earmark-check"></i>
+                                <span>Surat Balasan Agensi</span>
+                            </h5>
+                            <button type="button" class="btn-modal-close" onclick="closeSuratBalasanModal()" title="Tutup" aria-label="Tutup">
+                                <i class="bi bi-x-lg"></i>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <asp:HiddenField ID="hfSuratBalasanPid" runat="server" Value="" />
+                            <asp:HiddenField ID="hfSuratBalasanAgensiId" runat="server" Value="" />
+                            <asp:HiddenField ID="hfSuratBalasanAgensiName" runat="server" Value="" />
+
+                            <!-- Info Agensi & Permohonan -->
+                            <div class="surat-balasan-info-card">
+                                <div class="d-flex align-items-center gap-2 flex-wrap">
+                                    <span class="text-secondary small fw-semibold">Agensi:</span>
+                                    <span class="badge badge-success" style="background-color: #10b981 !important; color: #fff !important; font-size: 0.82rem; padding: 5px 10px; border-radius: 6px;">
+                                        <i class="bi bi-check-circle-fill me-1"></i>
+                                        <asp:Label ID="lblModalSuratAgensiName" runat="server" Text="-"></asp:Label>
+                                    </span>
+                                </div>
+                                <div class="text-muted small">
+                                    <i class="bi bi-upc-scan text-primary me-1"></i>
+                                    <asp:Label ID="lblModalSuratRujukan" runat="server" CssClass="fw-semibold text-dark" Text="-"></asp:Label>
+                                </div>
+                            </div>
+
+                            <!-- Butang Tindakan: Lihat / Lihat & Cetak -->
+                            <div class="surat-balasan-actions">
+                                <asp:LinkButton ID="btnModalLihatSurat" runat="server" CssClass="btn btn-outline-primary fw-semibold d-inline-flex align-items-center justify-content-center gap-2 shadow-sm" OnClick="btnModalLihatSurat_Click" CausesValidation="false">
+                                    <i class="bi bi-eye"></i>
+                                    <span>Lihat</span>
+                                </asp:LinkButton>
+                                <asp:LinkButton ID="btnModalLihatCetakSurat" runat="server" CssClass="btn btn-primary fw-semibold d-inline-flex align-items-center justify-content-center gap-2 shadow-sm" OnClick="btnModalLihatCetakSurat_Click" CausesValidation="false">
+                                    <i class="bi bi-printer"></i>
+                                    <span>Lihat &amp; Cetak</span>
+                                </asp:LinkButton>
+                            </div>
+
+                            <!-- Senarai Rekod Cetakan -->
+                            <div class="form-section-header mt-0 mb-2 d-flex justify-content-between align-items-center flex-wrap gap-2">
+                                <div class="d-flex align-items-center gap-2">
+                                    <i class="bi bi-clock-history"></i>
+                                    <span>Senarai Rekod Cetakan (Lihat &amp; Cetak)</span>
+                                </div>
+                                <span class="badge-clicks-pill">
+                                    <i class="bi bi-hand-index-thumb"></i>
+                                    <span>Jumlah Keseluruhan Klik:</span>
+                                    <asp:Label ID="lblModalTotalClicksSummary" runat="server" Text="0"></asp:Label>
+                                </span>
+                            </div>
+
+                            <div class="table-responsive surat-balasan-log-scroll">
+                                <asp:GridView ID="gvSuratBalasanLog" runat="server"
+                                    CssClass="table table-hover table-bordered custom-gridview align-middle mb-0"
+                                    AutoGenerateColumns="False"
+                                    ShowHeaderWhenEmpty="True"
+                                    EmptyDataText="Tiada rekod cetakan lagi.">
+                                    <Columns>
+                                        <asp:TemplateField HeaderText="No." ItemStyle-Width="8%" ItemStyle-HorizontalAlign="Center">
+                                            <ItemTemplate>
+                                                <%# Container.DataItemIndex + 1 %>
+                                            </ItemTemplate>
+                                        </asp:TemplateField>
+                                        <asp:TemplateField HeaderText="Nama Pengguna" ItemStyle-HorizontalAlign="Left">
+                                            <ItemTemplate>
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <i class="bi bi-person-circle text-primary"></i>
+                                                    <span class="fw-semibold text-dark"><%# Eval("DisplayUserName") %></span>
+                                                </div>
+                                            </ItemTemplate>
+                                        </asp:TemplateField>
+                                        <asp:TemplateField HeaderText="Tarikh Dicetak" ItemStyle-Width="32%" ItemStyle-HorizontalAlign="Center">
+                                            <ItemTemplate>
+                                                <span class="text-secondary"><i class="bi bi-calendar3 me-1"></i><%# Eval("PrintedDt", "{0:dd/MM/yyyy hh:mm tt}") %></span>
+                                            </ItemTemplate>
+                                        </asp:TemplateField>
+                                        <asp:TemplateField HeaderText="Jumlah Klik" ItemStyle-Width="20%" ItemStyle-HorizontalAlign="Center">
+                                            <ItemTemplate>
+                                                <span class="badge-clicks-pill"><%# Eval("TotalClicks") %></span>
+                                            </ItemTemplate>
+                                        </asp:TemplateField>
+                                    </Columns>
+                                </asp:GridView>
+                            </div>
+                        </div>
+                        <div class="modal-footer justify-content-end">
+                            <button type="button" class="btn btn-outline-secondary btn-sm px-3 fw-semibold" onclick="closeSuratBalasanModal()">
+                                <i class="bi bi-x-lg me-1"></i>Tutup
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -6619,6 +6812,28 @@ ORDER BY
                 printWindow.print();
                 printWindow.close();
             }, 300);
+        }
+
+        function showSuratBalasanModal() {
+            var modalEl = document.getElementById('modalSuratBalasan');
+            if (!modalEl) return;
+            if (typeof $ !== 'undefined' && $.fn.modal) {
+                $('#modalSuratBalasan').modal('show');
+            } else if (typeof bootstrap !== 'undefined' && bootstrap.Modal) {
+                var modalInstance = bootstrap.Modal.getOrCreateInstance ? bootstrap.Modal.getOrCreateInstance(modalEl) : new bootstrap.Modal(modalEl);
+                modalInstance.show();
+            }
+        }
+
+        function closeSuratBalasanModal() {
+            var modalEl = document.getElementById('modalSuratBalasan');
+            if (!modalEl) return;
+            if (typeof $ !== 'undefined' && $.fn.modal) {
+                $('#modalSuratBalasan').modal('hide');
+            } else if (typeof bootstrap !== 'undefined' && bootstrap.Modal) {
+                var modalInstance = bootstrap.Modal.getInstance(modalEl);
+                if (modalInstance) modalInstance.hide();
+            }
         }
 
         function closeBantingQrModal() {
