@@ -4460,14 +4460,14 @@
                                             <div class="col-md-6">
 
                                                 <div class="form-group">
-                                                    <asp:LinkButton ID="LinkButton1" runat="server" CausesValidation="True" CommandName="Update" Text="Simpan"></asp:LinkButton>
+                                                    <asp:LinkButton ID="LinkButton1" runat="server" CausesValidation="True" CommandName="Update" Text="Simpan" CssClass="btn btn-warning btn-sm"></asp:LinkButton>
                                                 </div>
                                             </div>
 
                                             <div class="col-md-6">
 
                                                 <div class="form-group">
-                                                    <asp:LinkButton ID="LinkButton2" runat="server" CausesValidation="False" CommandName="Cancel" Text="Batal"></asp:LinkButton>
+                                                    <asp:LinkButton ID="LinkButton2" runat="server" CausesValidation="False" CommandName="Cancel" Text="Batal" CssClass="btn btn-default btn-sm"></asp:LinkButton>
                                                 </div>
 
                                             </div>
@@ -4603,14 +4603,14 @@
                                             <div class="col-md-6">
 
                                                 <div class="form-group">
-                                                    <asp:LinkButton ID="LinkButton1" runat="server" CausesValidation="True" CommandName="Update" Text="Simpan"></asp:LinkButton>
+                                                    <asp:LinkButton ID="LinkButton1" runat="server" CausesValidation="True" CommandName="Update" Text="Simpan" CssClass="btn btn-warning btn-sm"></asp:LinkButton>
                                                 </div>
                                             </div>
 
                                             <div class="col-md-6">
 
                                                 <div class="form-group">
-                                                    <asp:LinkButton ID="LinkButton2" runat="server" CausesValidation="False" CommandName="Cancel" Text="Batal"></asp:LinkButton>
+                                                    <asp:LinkButton ID="LinkButton2" runat="server" CausesValidation="False" CommandName="Cancel" Text="Batal" CssClass="btn btn-default btn-sm"></asp:LinkButton>
                                                 </div>
 
                                             </div>

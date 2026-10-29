@@ -3240,7 +3240,7 @@ Partial Class appregister1
             "LEFT JOIN TBL_USERS g ON g.Users_Id = (case when e.JabatanAgensi_Type = 'J' then a.TandatanganMohonUlasanId when e.JabatanAgensi_Type = 'L' then a.TandatanganMohonUlasanLuarId end) " &
             "WHERE d.PermohonanAgensi_ID=" & permohonanAgensiID
 
-            Dim ReportVar As String = jenisLesenDesc(0)
+            Dim ReportVar As String = jenisLesenDescLuar(0)
 
             Select Case jenislesenIdList
                 Case "2", "25"
