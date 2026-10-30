@@ -6996,6 +6996,538 @@ ORDER BY
         // =========================================================================
         function initPembetulanDiffFilter() {
             var $card = $('#cardPembetulanMaklumat');
+    var $tabMaklumat = $('#tabMaklumat').length ? $('#tabMaklumat') : $('[id$="tabMaklumat"]');
+    var $formView = $('#FormView1').length ? $('#FormView1') : $('[id$="FormView1"]');
+
+           if (!$card.length || !$tabMaklumat.length || !$formView.length) {
+                return;
+            }
+
+            var aliasMap = {};
+
+            var skipInputIds = [
+                'TB_SaizIklan1_ins', 'DDL_Iklan1_ins', 'TB_UnitIklan1_ins',
+                'DDL_BakaAnjing1_ins', 'TB_Jantan1_ins', 'TB_Betina1_ins', 'TB_JantanMandul1_ins', 'TB_BetinaMandul1_ins'
+            ];
+
+            function normalizeVal(val) {
+                if (val === null || val === undefined) return '';
+                return String(val).replace(/\r\n/g, '\n').replace(/\r/g, '\n').trim();
+            }
+
+            function isEquivalentBlank(v) {
+                return v === '' || v === '-' || v === '0' || v === '-- Sila Pilih --' || v === 'NULL';
+            }
+
+            function areDatesEqual(d1, d2) {
+                if (!d1 || !d2) return false;
+                var t1 = Date.parse(d1);
+                var t2 = Date.parse(d2);
+                return !isNaN(t1) && !isNaN(t2) && t1 === t2;
+            }
+
+            var diffCount = 0;
+
+            // 1. Process regular fields in tabMaklumat
+            var $allInsInputs = $tabMaklumat.find('input[id$="_ins"], textarea[id$="_ins"], select[id$="_ins"]');
+
+            $allInsInputs.each(function () {
+                var $insInput = $(this);
+                if ($insInput.attr('type') === 'hidden') return;
+
+                var rawId = $insInput.attr('id') || '';
+                var lastIdPart = rawId.indexOf('$') !== -1 ? rawId.split('$').pop() : rawId.split('_').slice(-2).join('_');
+                if (lastIdPart.indexOf('_ins') === -1) {
+                    var parts = rawId.split('_');
+                    lastIdPart = parts[parts.length - 1] === 'ins' ? parts[parts.length - 2] + '_ins' : parts[parts.length - 1];
+                }
+
+                if (skipInputIds.indexOf(lastIdPart) !== -1) return;
+
+                var targetBaseId = aliasMap[lastIdPart] || lastIdPart.replace(/_ins$/, '');
+
+                var $origCtrl = $formView.find('[id$="_' + targetBaseId + '"]').not('[id$="_ins"]');
+                if (!$origCtrl.length) {
+                    $origCtrl = $('[id$="_' + targetBaseId + '"]').not('[id*="tabMaklumat"]').not('[id$="_ins"]');
+                }
+
+                var valIns = normalizeVal($insInput.val());
+                var valOrig = $origCtrl.length ? normalizeVal($origCtrl.val()) : '';
+
+                var isDiff = false;
+                if ($origCtrl.length) {
+                    if (areDatesEqual(valIns, valOrig)) {
+                        isDiff = false;
+                    } else if (isEquivalentBlank(valIns) && isEquivalentBlank(valOrig)) {
+                        isDiff = false;
+                    } else if (valIns.toLowerCase() === valOrig.toLowerCase()) {
+                        isDiff = false;
+                    } else {
+                        isDiff = true;
+                    }
+                }
+
+                var $fieldCol = $insInput.closest('[class*="col-"]');
+                if (!$fieldCol.length) $fieldCol = $insInput.parent();
+
+                if (isDiff) {
+                    diffCount++;
+                    $fieldCol.attr('data-has-diff', 'true');
+                    $fieldCol.addClass('field-has-diff');
+
+                    var $label = $fieldCol.find('label.form-label-custom');
+                    if ($label.length && !$label.find('.badge-diff-status').length) {
+                        $label.append('<span class="badge-diff-status ms-2"><i class="bi bi-pencil-fill me-1"></i>Diubah</span>');
+                    }
+
+                    var displayOrig = valOrig;
+                    if ($origCtrl.is('select') && $origCtrl[0].selectedIndex >= 0) {
+                        var opt = $origCtrl[0].options[$origCtrl[0].selectedIndex];
+                        if (opt && opt.text && !isEquivalentBlank(opt.text)) displayOrig = opt.text;
+                    }
+                    if (!displayOrig || displayOrig === '') displayOrig = '(Tiada / Kosong)';
+
+                    $fieldCol.find('.hint-orig-val').remove();
+                    var $hint = $('<div class="hint-orig-val"><i class="bi bi-clock-history me-1 text-secondary"></i><span>Asal di FormView1:</span> <span class="badge-orig" title="' + $('<div>').text(displayOrig).html() + '">' + $('<div>').text(displayOrig).html() + '</span></div>');
+                    $insInput.after($hint);
+                } else {
+                    $fieldCol.attr('data-has-diff', 'false');
+                    $fieldCol.removeClass('field-has-diff');
+                    $fieldCol.find('.badge-diff-status').remove();
+                    $fieldCol.find('.hint-orig-val').remove();
+                }
+            });
+
+            // 2. Process list sections (Iklan, Anjing)
+            // (a) Papan Iklan
+            var hfIklanSaizIns = $('[id$="HF_SaizIklanList_ins"]').val() || '';
+            var hfIklanSaizOrig = $('[id$="HF_SaizIklanList"]').not('[id$="_ins"]').val() || '';
+            var hfIklanCahayaIns = $('[id$="HF_CahayaIklanList_ins"]').val() || '';
+            var hfIklanCahayaOrig = $('[id$="HF_CahayaIklanList"]').not('[id$="_ins"]').val() || '';
+            var hfIklanUnitIns = $('[id$="HF_UnitIklanList_ins"]').val() || '';
+            var hfIklanUnitOrig = $('[id$="HF_UnitIklanList"]').not('[id$="_ins"]').val() || '';
+
+            var isIklanDiff = (normalizeVal(hfIklanSaizIns) !== normalizeVal(hfIklanSaizOrig)) ||
+                              (normalizeVal(hfIklanCahayaIns) !== normalizeVal(hfIklanCahayaOrig)) ||
+                              (normalizeVal(hfIklanUnitIns) !== normalizeVal(hfIklanUnitOrig));
+
+            var $iklanTable = $('[id$="gvIklanList_ins"]').closest('[class*="col-"]');
+            var $iklanAddRow = $tabMaklumat.find('#TB_SaizIklan1_ins, [id$="TB_SaizIklan1_ins"]').closest('.row');
+            if ($iklanTable.length) {
+                if (isIklanDiff) {
+                    diffCount++;
+                    $iklanTable.attr('data-has-diff', 'true');
+                    $iklanTable.addClass('table-has-diff');
+                    if ($iklanAddRow.length) $iklanAddRow.attr('data-has-diff', 'true');
+                } else {
+                    $iklanTable.attr('data-has-diff', 'false');
+                    $iklanTable.removeClass('table-has-diff');
+                    if ($iklanAddRow.length) $iklanAddRow.attr('data-has-diff', 'false');
+                }
+            }
+
+            // (b) Anjing List
+            var hfAnjingBakaIns = $('[id$="HF_BakaAnjingList_ins"]').val() || '';
+            var hfAnjingBakaOrig = $('[id$="HF_BakaAnjingList"]').not('[id$="_ins"]').val() || '';
+            var hfAnjingJantanIns = $('[id$="HF_AnjingJantanList_ins"]').val() || '';
+            var hfAnjingJantanOrig = $('[id$="HF_AnjingJantanList"]').not('[id$="_ins"]').val() || '';
+            var hfAnjingBetinaIns = $('[id$="HF_AnjingBetinaList_ins"]').val() || '';
+            var hfAnjingBetinaOrig = $('[id$="HF_AnjingBetinaList"]').not('[id$="_ins"]').val() || '';
+
+            var isAnjingDiff = (normalizeVal(hfAnjingBakaIns) !== normalizeVal(hfAnjingBakaOrig)) ||
+                               (normalizeVal(hfAnjingJantanIns) !== normalizeVal(hfAnjingJantanOrig)) ||
+                               (normalizeVal(hfAnjingBetinaIns) !== normalizeVal(hfAnjingBetinaOrig));
+
+            var $anjingTable = $('[id$="gvAnjingList_ins"]').closest('[class*="col-"]');
+            var $anjingAddRow = $tabMaklumat.find('#DDL_BakaAnjing1_ins, [id$="DDL_BakaAnjing1_ins"]').closest('.row');
+            if ($anjingTable.length) {
+                if (isAnjingDiff) {
+                    diffCount++;
+                    $anjingTable.attr('data-has-diff', 'true');
+                    $anjingTable.addClass('table-has-diff');
+                    if ($anjingAddRow.length) $anjingAddRow.attr('data-has-diff', 'true');
+                } else {
+                    $anjingTable.attr('data-has-diff', 'false');
+                    $anjingTable.removeClass('table-has-diff');
+                    if ($anjingAddRow.length) $anjingAddRow.attr('data-has-diff', 'false');
+                }
+            }
+
+            // 3. Update Rows: Mark rows with diff
+            $tabMaklumat.find('.row').each(function () {
+                var $row = $(this);
+                var rowDiffs = $row.find('[data-has-diff="true"]').length;
+                if ($row.attr('data-has-diff') === 'true') rowDiffs++;
+                $row.attr('data-row-has-diff', rowDiffs > 0 ? 'true' : 'false');
+            });
+
+            // 4. Update Panels: Mark panels with diff
+            var subPanels = ['pnlesen1_ins', 'pnlesen1b_ins', 'pnlesen1c_ins', 'pnlesen1d_ins', 'pnlesen1e_ins', 'pnlesen1a_ins', 'pnlbillboard_ins', 'pnlesen2_ins', 'pnlesen3_ins', 'pnlesen4_ins', 'pnlesen5_ins'];
+            $.each(subPanels, function (idx, pnlId) {
+                var $pnl = $('[id$="' + pnlId + '"]');
+                if ($pnl.length) {
+                    var pnlDiffs = $pnl.find('[data-has-diff="true"]').length;
+                    $pnl.attr('data-panel-has-diff', pnlDiffs > 0 ? 'true' : 'false');
+                }
+            });
+
+            // 5. Update Header Badge and Counts
+            $('#countDiffSpan').text(diffCount);
+            var $badge = $('#badgeDiffCount');
+            if (diffCount > 0) {
+                $badge.removeClass('badge-success text-white').addClass('badge-warning text-dark')
+                      .html('<i class="bi bi-exclamation-circle-fill me-1"></i>' + diffCount + ' Medan Diubah');
+            } else {
+                $badge.removeClass('badge-warning text-dark').addClass('badge-success text-white')
+                      .html('<i class="bi bi-check-circle-fill me-1"></i>Semua Data Sama');
+            }
+
+            // 6. Apply current filter mode
+            applyPembetulanDiffDisplay();
+        }
+
+        function applyPembetulanDiffDisplay() {
+            var $card = $('#cardPembetulanMaklumat');
             var $tabMaklumat = $('#tabMaklumat').length ? $('#tabMaklumat') : $('[id$="tabMaklumat"]');
-            var $formView = $('#FormView1').lengt
-... [truncated for diff preview]
+            var isDiffOnly = $card.hasClass('filter-diff-active');
+            var diffCount = parseInt($('#countDiffSpan').text(), 10) || 0;
+
+            if (isDiffOnly) {
+                $tabMaklumat.find('[data-has-diff="false"]').hide();
+                $tabMaklumat.find('[data-has-diff="true"]').show();
+
+                $tabMaklumat.find('.row[data-row-has-diff="false"]').hide();
+                $tabMaklumat.find('.row[data-row-has-diff="true"]').show();
+
+                $tabMaklumat.find('[data-panel-has-diff="false"]').hide();
+                $tabMaklumat.find('[data-panel-has-diff="true"]').show();
+
+                if (diffCount === 0) {
+                    $('#alertNoDiff').slideDown(150);
+                } else {
+                    $('#alertNoDiff').hide();
+                }
+            } else {
+                $tabMaklumat.find('[data-has-diff]').show();
+                $tabMaklumat.find('.row').show();
+                $tabMaklumat.find('[data-panel-has-diff]').show();
+                $('#alertNoDiff').hide();
+            }
+
+            // Check Read-Only Mode (when BT_Maklumat is not visible)
+            var $btMaklumat = $('#MainContent_BT_Maklumat, [id$="BT_Maklumat"]');
+            var isReadOnly = (!$btMaklumat.length || !$btMaklumat.is(':visible'));
+            if (isReadOnly) {
+                $tabMaklumat.find('input:not([type="hidden"]), textarea').prop('readonly', true);
+                $tabMaklumat.find('select').prop('disabled', true);
+                $tabMaklumat.find('[id$="btnAddIklan_ins"], [id$="btnAddAnjing_ins"], [id$="btnRemove_ins"]').hide();
+            } else {
+                $tabMaklumat.find('input:not([type="hidden"]), textarea').prop('readonly', false);
+                $tabMaklumat.find('select').prop('disabled', false);
+                $tabMaklumat.find('[id$="btnAddIklan_ins"], [id$="btnAddAnjing_ins"], [id$="btnRemove_ins"]').show();
+            }
+        }
+
+        $(document).on('click', '#btnShowDiffOnly', function (e) {
+            e.preventDefault();
+            $('#cardPembetulanMaklumat').addClass('filter-diff-active').removeClass('filter-all-active');
+            $('#btnShowDiffOnly').addClass('btn-light active').removeClass('btn-outline-light');
+            $('#btnShowDiffOnly').find('i').addClass('text-primary');
+            $('#btnShowAllFields').addClass('btn-outline-light').removeClass('btn-light active');
+            $('#btnShowAllFields').find('i').removeClass('text-primary');
+            applyPembetulanDiffDisplay();
+        });
+
+        $(document).on('click', '#btnShowAllFields', function (e) {
+            e.preventDefault();
+            $('#cardPembetulanMaklumat').removeClass('filter-diff-active').addClass('filter-all-active');
+            $('#btnShowAllFields').addClass('btn-light active').removeClass('btn-outline-light');
+            $('#btnShowAllFields').find('i').addClass('text-primary');
+            $('#btnShowDiffOnly').addClass('btn-outline-light').removeClass('btn-light active');
+            $('#btnShowDiffOnly').find('i').removeClass('text-primary');
+            applyPembetulanDiffDisplay();
+        });
+
+        // Trigger on tab header click
+        $(document).on('click', '[id*="tabMaklumat"], .ajax__tab_header', function () {
+            setTimeout(function () {
+                initPembetulanDiffFilter();
+            }, 100);
+        });
+
+        // Re-evaluate on user typing/editing in tabMaklumat
+        $(document).on('input change', '#tabMaklumat input, #tabMaklumat textarea, #tabMaklumat select', function () {
+            clearTimeout(window._diffDebounceTimer);
+            window._diffDebounceTimer = setTimeout(function () {
+                initPembetulanDiffFilter();
+            }, 300);
+        });
+
+        /* =========================================================================
+           Collapsible Extra Filters (panelFilter)
+           ========================================================================= */
+        function initFilterCollapse() {
+            var $collapse = $('#collapseFilterExtra');
+            if (!$collapse.length) return;
+
+            var $hf = $('[id$="hfFilterExpanded"]');
+
+            var $topBtn = $('#btnToggleFilterExtra');
+            var $bottomBtn = $('#btnToggleFilterBottom');
+            var $topText = $('#btnToggleFilterExtraText');
+            var $bottomText = $('#btnToggleFilterBottomText');
+            var $topIcon = $('#iconFilterCollapse');
+            var $bottomIcon = $('#iconFilterCollapseBottom');
+            var $badge = $('#badgeActiveExtraCount');
+            var $badgeBottom = $('#badgeActiveExtraCountBottom');
+            var $badgePemohon = $('#badgePemohonActive');
+            var $badgePermohonan = $('#badgePermohonanActive');
+
+            function refreshSelect2In($container) {
+                if (!$container || !$container.length) return;
+                $container.find('select.select2').each(function () {
+                    var $s = $(this);
+                    var ph = $s.attr('data-placeholder') || undefined;
+                    var isMultiple = $s.prop('multiple');
+                    if ($s.data('select2')) {
+                        $s.next('.select2-container').css('width', '100%');
+                        // render semula supaya lebar placeholder (multi-select) dikira semasa panel kelihatan
+                        $s.trigger('change.select2');
+                    } else {
+                        $s.select2({
+                            width: '100%',
+                            dropdownAutoWidth: false,
+                            placeholder: ph,
+                            closeOnSelect: !isMultiple
+                        });
+                    }
+                });
+            }
+
+            // Sync multi-select Jenis Lesen
+            var $lstJenis = $('[id$="lstJenisLesen"]');
+            var $hfJenis = $('[id$="hfSelectedJenisLesen"]');
+
+            if ($lstJenis.length && $hfJenis.length) {
+                var savedLesen = $hfJenis.val();
+                if (savedLesen && savedLesen.trim() !== '' && savedLesen !== '0') {
+                    var selectedArr = savedLesen.split('|');
+                    $lstJenis.val(selectedArr).trigger('change.select2');
+                }
+
+                $lstJenis.off('change.syncJenis').on('change.syncJenis', function () {
+                    var vals = $(this).val();
+                    var valStr = (vals && vals.length) ? vals.join('|') : '';
+                    $hfJenis.val(valStr);
+                    updateBadges();
+                });
+            }
+
+            $('[id$="btnSearch"]').off('click.syncJenis').on('click.syncJenis', function () {
+                if ($lstJenis.length && $hfJenis.length) {
+                    var vals = $lstJenis.val();
+                    var valStr = (vals && vals.length) ? vals.join('|') : '';
+                    $hfJenis.val(valStr);
+                }
+            });
+
+            // Value Checkers
+            function isPemohonActive() {
+                var $d = $('[id$="DDL_Pemohon"]');
+                return $d.length && $d.val() && $d.val() !== '0' && $d.val() !== '';
+            }
+            function isPemohonICActive() {
+                var $t = $('[id$="txtFilterPemohonIC"]');
+                return $t.length && $t.val() && $t.val().trim() !== '';
+            }
+            function isPemohonTelActive() {
+                var $t = $('[id$="txtFilterPemohonTel"]');
+                return $t.length && $t.val() && $t.val().trim() !== '';
+            }
+            function isPemohonEmailActive() {
+                var $t = $('[id$="txtFilterPemohonEmail"]');
+                return $t.length && $t.val() && $t.val().trim() !== '';
+            }
+            function isSyarikatActive() {
+                var $t = $('[id$="txtFilterSyarikat"]');
+                return $t.length && $t.val() && $t.val().trim() !== '';
+            }
+            function isNoPendaftaranActive() {
+                var $t = $('[id$="txtFilterNoPendaftaran"]');
+                return $t.length && $t.val() && $t.val().trim() !== '';
+            }
+
+            function isJenisLesenActive() {
+                var $hf = $('[id$="hfSelectedJenisLesen"]');
+                if ($hf.length && $hf.val() && $hf.val().trim() !== '' && $hf.val() !== '0') return true;
+                var $l = $('[id$="lstJenisLesen"]');
+                return $l.length && $l.val() && $l.val().length > 0;
+            }
+            function isAlamatActive() {
+                var $t = $('[id$="TB_Alamat"]');
+                return $t.length && $t.val() && $t.val().trim() !== '';
+            }
+            function isPerniagaanActive() {
+                var $t = $('[id$="txtFilterJenisPerniagaan"]');
+                return $t.length && $t.val() && $t.val().trim() !== '';
+            }
+            function isAkaunActive() {
+                var $t = $('[id$="txtFilterNoAkaun"]');
+                return $t.length && $t.val() && $t.val().trim() !== '';
+            }
+            function isRisikoActive() {
+                var $d = $('[id$="DDL_Risiko"]');
+                return $d.length && $d.val() && $d.val() !== '2' && $d.val() !== '';
+            }
+            function isPembatalanActive() {
+                var $d = $('[id$="DDL_Pembatalan"]');
+                return $d.length && $d.val() && $d.val() !== '2' && $d.val() !== '';
+            }
+            function isTahunActive() {
+                var $d = $('[id$="DDL_Tahun"]');
+                return $d.length && $d.val() && $d.val() !== '0' && $d.val() !== '';
+            }
+            function isRemarksActive() {
+                var $t = $('[id$="txtFilterRemarksFail"]');
+                return $t.length && $t.val() && $t.val().trim() !== '';
+            }
+            function isTajukVisualActive() {
+                var $t = $('[id$="txtFilterTajukVisual"]');
+                return $t.length && $t.val() && $t.val().trim() !== '';
+            }
+
+            function countActivePemohonFilters() {
+                var c = 0;
+                if (isPemohonActive()) c++;
+                if (isPemohonICActive()) c++;
+                if (isPemohonTelActive()) c++;
+                if (isPemohonEmailActive()) c++;
+                if (isSyarikatActive()) c++;
+                if (isNoPendaftaranActive()) c++;
+                return c;
+            }
+
+            function countActivePermohonanFilters() {
+                var c = 0;
+                if (isJenisLesenActive()) c++;
+                if (isAlamatActive()) c++;
+                if (isPerniagaanActive()) c++;
+                if (isAkaunActive()) c++;
+                if (isRisikoActive()) c++;
+                if (isPembatalanActive()) c++;
+                if (isTahunActive()) c++;
+                if (isTajukVisualActive()) c++;
+                if (isRemarksActive()) c++;
+                return c;
+            }
+
+            function countActiveExtraFilters() {
+                return countActivePemohonFilters() + countActivePermohonanFilters();
+            }
+
+            function updateBadges() {
+                var pemohonCount = countActivePemohonFilters();
+                var permohonanCount = countActivePermohonanFilters();
+                var totalCount = pemohonCount + permohonanCount;
+
+                if ($badgePemohon.length) {
+                    if (pemohonCount > 0) $badgePemohon.text(pemohonCount + ' aktif').removeClass('d-none');
+                    else $badgePemohon.addClass('d-none');
+                }
+                if ($badgePermohonan.length) {
+                    if (permohonanCount > 0) $badgePermohonan.text(permohonanCount + ' aktif').removeClass('d-none');
+                    else $badgePermohonan.addClass('d-none');
+                }
+                if ($badge.length) {
+                    if (totalCount > 0) $badge.text(totalCount + ' aktif').removeClass('d-none');
+                    else $badge.addClass('d-none');
+                }
+                if ($badgeBottom.length) {
+                    if (totalCount > 0) $badgeBottom.text(totalCount + ' aktif').removeClass('d-none');
+                    else $badgeBottom.addClass('d-none');
+                }
+            }
+
+            function updateUiState(isOpen) {
+                if ($hf.length) $hf.val(isOpen ? '1' : '0');
+
+                var text = isOpen ? 'Tutup Carian Tambahan' : 'Carian Tambahan';
+                if ($topText.length) $topText.text(text);
+                if ($bottomText.length) $bottomText.text(text);
+
+                var rotate = isOpen ? 'rotate(180deg)' : 'rotate(0deg)';
+                if ($topIcon.length) $topIcon.css('transform', rotate);
+                if ($bottomIcon.length) $bottomIcon.css('transform', rotate);
+
+                $topBtn.attr('aria-expanded', isOpen ? 'true' : 'false');
+                $bottomBtn.attr('aria-expanded', isOpen ? 'true' : 'false');
+
+                updateBadges();
+            }
+
+            // Determine if collapse should be open
+            var activeCount = countActiveExtraFilters();
+            var shouldOpen = ($hf.length && $hf.val() === '1') || (activeCount > 0);
+
+            if (shouldOpen) {
+                $collapse.addClass('show');
+                updateUiState(true);
+            } else {
+                $collapse.removeClass('show');
+                updateUiState(false);
+            }
+
+            // Collapse events
+            $collapse.off('show.bs.collapse shown.bs.collapse hide.bs.collapse hidden.bs.collapse');
+            $collapse.on('show.bs.collapse', function () {
+                updateUiState(true);
+            });
+            $collapse.on('shown.bs.collapse', function () {
+                $(window).trigger('resize');
+                refreshSelect2In($collapse);
+            });
+            $collapse.on('hide.bs.collapse', function () {
+                updateUiState(false);
+            });
+
+            // Recompute badge on filter change
+            $('#collapseFilterExtra').off('change.filterBadge input.filterBadge', 'select, input');
+            $('#collapseFilterExtra').on('change.filterBadge input.filterBadge', 'select, input', function () {
+                updateBadges();
+            });
+
+            // Quick reset for extra filters only
+            $('#btnResetExtraOnly').off('click').on('click', function (e) {
+                e.preventDefault();
+                var $dPemohon = $('[id$="DDL_Pemohon"]');
+                var $dRisiko = $('[id$="DDL_Risiko"]');
+                var $dPembatalan = $('[id$="DDL_Pembatalan"]');
+                var $lstLesen = $('[id$="lstJenisLesen"]');
+                var $hfLesen = $('[id$="hfSelectedJenisLesen"]');
+
+                if ($dPemohon.length) $dPemohon.val('0').trigger('change.select2');
+                if ($dRisiko.length) $dRisiko.val('2').trigger('change.select2');
+                if ($dPembatalan.length) $dPembatalan.val('2').trigger('change.select2');
+                $('[id$="DDL_Tahun"]').val('0').trigger('change.select2');
+                if ($lstLesen.length) $lstLesen.val(null).trigger('change.select2');
+                if ($hfLesen.length) $hfLesen.val('');
+
+                $('[id$="txtFilterSyarikat"]').val('');
+                $('[id$="txtFilterPemohonIC"]').val('');
+                $('[id$="txtFilterPemohonTel"]').val('');
+                $('[id$="txtFilterPemohonEmail"]').val('');
+                $('[id$="txtFilterNoPendaftaran"]').val('');
+                $('[id$="TB_Alamat"]').val('');
+                $('[id$="txtFilterJenisPerniagaan"]').val('');
+                $('[id$="txtFilterNoAkaun"]').val('');
+                $('[id$="txtFilterTajukVisual"]').val('');
+                $('[id$="txtFilterRemarksFail"]').val('');
+
+                updateBadges();
+            });
+
+            updateBadges();
+            refreshSelect2In($collapse);
+        }
+    </script>
+</asp:Content>
