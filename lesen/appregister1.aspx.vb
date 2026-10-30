@@ -1374,15 +1374,6 @@ Partial Class appregister1
                 ' Load Senarai Lokasi
                 BindLokasiList()
 
-                ' Pastikan nilai IsKelulusanSementara diikat semula kerana PanelAccess(0, True) mengosongkannya
-                Dim cbSementara As CheckBox = TryCast(FormView1.FindControl("CB_KelulusanSementara"), CheckBox)
-                If cbSementara IsNot Nothing AndAlso FormView1.DataItem IsNot Nothing Then
-                    Dim drv As DataRowView = TryCast(FormView1.DataItem, DataRowView)
-                    If drv IsNot Nothing AndAlso drv.Row.Table.Columns.Contains("IsKelulusanSementara") AndAlso Not IsDBNull(drv("IsKelulusanSementara")) Then
-                        cbSementara.Checked = Convert.ToBoolean(drv("IsKelulusanSementara"))
-                    End If
-                End If
-
                 ' Kemaskini UI & Senarai Kelulusan Sementara
                 UpdateKelulusanSementaraUI()
                 BindKelulusanSementara()
@@ -1826,12 +1817,9 @@ Partial Class appregister1
         Dim HF_JenisLesenDescList As HiddenField = DirectCast(FormView1.FindControl("HF_JenisLesenDescList"), HiddenField)
         Dim HF_JenisLesenIdList As HiddenField = DirectCast(FormView1.FindControl("HF_JenisLesenIdList"), HiddenField)
 
-            If e.CommandName = "Remove" Then
+        If e.CommandName = "Remove" Then
             Dim myList As List(Of SelectedItem) = DirectCast(ViewState("SelectedList"), List(Of SelectedItem))
             Dim valueToRemove As String = e.CommandArgument.ToString()
-
-            Dim cbSementara As CheckBox = TryCast(FormView1.FindControl("CB_KelulusanSementara"), CheckBox)
-            Dim wasSementaraChecked As Boolean = (cbSementara IsNot Nothing AndAlso cbSementara.Checked)
 
             myList.RemoveAll(Function(x) x.ItemValue = valueToRemove)
             ViewState("SelectedList") = myList
@@ -1846,11 +1834,6 @@ Partial Class appregister1
                 updateJenisLesenList(item.ItemValue, item.ItemText)
                 PanelAccess(CInt(item.ItemValue), False)
             Next
-
-            If cbSementara IsNot Nothing AndAlso wasSementaraChecked Then
-                cbSementara.Checked = True
-                UpdateKelulusanSementaraUI()
-            End If
         End If
     End Sub
 
