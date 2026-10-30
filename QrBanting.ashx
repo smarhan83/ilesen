@@ -39,13 +39,8 @@ Public Class QrBanting
         Dim baseUrl As String = req.Url.Scheme & "://" & req.Url.Authority & req.ApplicationPath.TrimEnd("/"c)
         Dim fullUrl As String = baseUrl & "/lesen/sepandukSemakanIK.aspx?scancode=" & HttpUtility.UrlEncode(uniqueId)
 
-        Dim qrBytes As Byte()
-        Using qrGenerator As New QRCodeGenerator()
-            Dim qrCodeData As QRCodeData = qrGenerator.CreateQrCode(fullUrl, QRCodeGenerator.ECCLevel.Q)
-            Using qrCode As New PngByteQRCode(qrCodeData)
-                qrBytes = qrCode.GetGraphic(20)
-            End Using
-        End Using
+        ' QR dengan logo MPK di tengah (App_Code/QrLogo.vb)
+        Dim qrBytes As Byte() = QrLogo.Png(fullUrl, 20)
 
         res.ContentType = "image/png"
         res.Cache.SetCacheability(HttpCacheability.Private)
