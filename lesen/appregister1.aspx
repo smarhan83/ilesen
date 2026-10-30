@@ -2112,7 +2112,7 @@
                             <div class="row my-2 g-3">
                                 <div class="col-md-4 col-lg-3" id="divKelulusanSementaraChk" runat="server" visible="false">
                                     <div class="checkbox-box">
-                                        <asp:CheckBox ID="CB_KelulusanSementara" runat="server" Checked='<%# If(IsDBNull(Eval("IsKelulusanSementara")), False, CBool(Eval("IsKelulusanSementara"))) %>' OnCheckedChanged="CB_KelulusanSementara_CheckedChanged" AutoPostBack="true" CausesValidation="false" />
+                                        <asp:CheckBox ID="CB_KelulusanSementara" runat="server" Checked='<%# Bind("IsKelulusanSementara") %>' OnCheckedChanged="CB_KelulusanSementara_CheckedChanged" AutoPostBack="true" CausesValidation="false" />
                                         <span class="fw-bold text-primary">Kelulusan Sementara?</span>
                                     </div>
                                 </div>
@@ -3343,7 +3343,7 @@
 
                                     <div class="col-md-6 col-lg-3" id="divKelulusanSementaraChk" runat="server" visible="false">
                                         <div class="checkbox-box">
-                                            <asp:CheckBox ID="CB_KelulusanSementara" runat="server" OnCheckedChanged="CB_KelulusanSementara_CheckedChanged" AutoPostBack="true" CausesValidation="false" />
+                                            <asp:CheckBox ID="CB_KelulusanSementara" Checked='<%# Bind("IsKelulusanSementara") %>' runat="server" OnCheckedChanged="CB_KelulusanSementara_CheckedChanged" AutoPostBack="true" CausesValidation="false" />
                                             <span class="fw-bold text-primary">Kelulusan Sementara?</span>
                                         </div>
                                     </div>
