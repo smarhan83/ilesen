@@ -2049,7 +2049,7 @@
                                         <div class="wf-actions sp-sticky-actions">
                                             <asp:LinkButton ID="InsertCancelButton" runat="server" CausesValidation="False" CommandName="Cancel" Text="Kembali" CssClass="wf-btn-outline" OnClick="InsertCancelButton_Click" />
                                             <asp:LinkButton ID="InsertButton" runat="server" CausesValidation="True" CommandName="Insert"
-                                                Text="Hantar kepada KB Lesen" ValidationGroup="frmKBInspektorat" CssClass="wf-btn-primary"
+                                                Text='<%# TeksButangKB() %>' ValidationGroup="frmKBInspektorat" CssClass="wf-btn-primary"
                                                 OnClientClick="return confirm('Anda pasti untuk menghantar rekod ini?');"/>
                                         </div>
                                     </InsertItemTemplate>

@@ -200,7 +200,11 @@ Partial Class sepandukSemakanIK
         Dim peringkat As String() = {"KB Inspektorat", "KB Lesen", "KJ Lesen"}
         Dim tajuk As String() = {"Semakan & Sokongan KB Inspektorat", "Syor Tindakan KB Lesen", "Perakuan KJ Lesen"}
         Dim ikon As String() = {"bi-shield-check", "bi-clipboard-check", "bi-patch-check"}
-        For i As Integer = 0 To 2
+        ' Hasil Mematuhi: proses hanya sampai KB Inspektorat (tiada KB Lesen / KJ Lesen / Kewangan) - kecuali rekod lama yang sudah melepasi KB Inspektorat
+        Dim mematuhi As Boolean = semakan.Rows.Count > 0 AndAlso Convert.ToString(semakan.Rows(0)("SemakanIK_StatusPemeriksaan")) = "Mematuhi" AndAlso
+                                  kelulusan.Select("Kelulusan_Peringkat IN ('KB Lesen', 'KJ Lesen')").Length = 0 AndAlso
+                                  (statusSemasa = "Semakan KB Inspektorat" OrElse statusSemasa = "Selesai")
+        For i As Integer = 0 To If(mematuhi, 0, 2)
             Dim rows() As DataRow = kelulusan.Select("Kelulusan_Peringkat = '" & peringkat(i) & "'")
             Dim idx As Integer = i + 1
             If rows.Length > 0 AndAlso idx < semasa Then
@@ -225,7 +229,7 @@ Partial Class sepandukSemakanIK
             steps.Rows.Add("done", "Kemaskini Kewangan", Convert.ToString(r("Kewangan_Tindakan")), "kp-warn", FormatTarikh(r("CreatedDt")), Convert.ToString(r("Oleh")), nota, "bi-cash-coin")
         ElseIf semasa = 4 Then
             steps.Rows.Add("current", "Kemaskini Kewangan", "", "", "Menunggu tindakan", "", "", "bi-cash-coin")
-        ElseIf semasa < 4 AndAlso (perluKewangan OrElse syorKB = "") Then
+        ElseIf semasa < 4 AndAlso Not mematuhi AndAlso (perluKewangan OrElse syorKB = "") Then
             steps.Rows.Add("pending", "Kemaskini Kewangan", "", "", "Jika ada syor wang amanah", "", "", "bi-cash-coin")
         End If
 
@@ -799,12 +803,42 @@ Partial Class sepandukSemakanIK
 
     Protected Sub FormViewKBInspektorat_ItemInserted(sender As Object, e As System.Web.UI.WebControls.FormViewInsertedEventArgs) Handles FormViewKBInspektorat.ItemInserted
         If e.Exception Is Nothing Then
-            UpdateStatusSemakan(CInt(GridView1.SelectedValue), "Semakan KB Lesen")
-            ShowAlert("success", "", "Rekod berjaya disimpan dan dihantar kepada KB Lesen")
+            Dim semakanIkId As Integer = CInt(GridView1.SelectedValue)
+            If HasilPemeriksaanSemakan(semakanIkId) = "Mematuhi" Then
+                ' Hasil pemeriksaan Mematuhi: selesai di peringkat KB Inspektorat - tidak perlu ke KB Lesen / KJ Lesen
+                UpdateStatusSemakan(semakanIkId, "Selesai")
+                ShowAlert("success", "", "Rekod berjaya disimpan. Hasil pemeriksaan Mematuhi - semakan selesai di peringkat KB Inspektorat")
+            Else
+                UpdateStatusSemakan(semakanIkId, "Semakan KB Lesen")
+                ShowAlert("success", "", "Rekod berjaya disimpan dan dihantar kepada KB Lesen")
+            End If
             ResetPanel()
             GridView1.DataBind()
         End If
     End Sub
+
+    ' Hasil pemeriksaan (SemakanIK_StatusPemeriksaan) bagi rekod semakan, cth. "Mematuhi"
+    Private Function HasilPemeriksaanSemakan(semakanIkId As Integer) As String
+        Using conn As New SqlConnection(ConfigurationManager.ConnectionStrings("webcon_ConnectionStr").ConnectionString)
+            Using cmd As New SqlCommand("SELECT SemakanIK_StatusPemeriksaan FROM LESEN_SepandukSemakanIK WHERE SemakanIK_ID = @ID", conn)
+                cmd.Parameters.AddWithValue("@ID", semakanIkId)
+                conn.Open()
+                Dim o As Object = cmd.ExecuteScalar()
+                Return If(o Is Nothing OrElse IsDBNull(o), "", Convert.ToString(o).Trim())
+            End Using
+        End Using
+    End Function
+
+    ' Teks butang borang KB Inspektorat: Mematuhi = sahkan & selesai; selain itu hantar kepada KB Lesen
+    Protected Function TeksButangKB() As String
+        Try
+            If GridView1.SelectedValue IsNot Nothing AndAlso HasilPemeriksaanSemakan(CInt(GridView1.SelectedValue)) = "Mematuhi" Then
+                Return "Sahkan & Selesai"
+            End If
+        Catch ex As Exception
+        End Try
+        Return "Hantar kepada KB Lesen"
+    End Function
 
     '===================== KB LESEN =====================
     Protected Sub FormViewKBLesen_ItemInserting(sender As Object, e As System.Web.UI.WebControls.FormViewInsertEventArgs) Handles FormViewKBLesen.ItemInserting
