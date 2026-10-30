@@ -3791,10 +3791,10 @@ ORDER BY
                                         <EditItemTemplate>
                                             <div class="nota-card">
 
-                                                <!-- Nota Kelulusan (Bahagian Perlesenan) -->
+                                                <!-- Nota Kelulusan (Bahagian Pelesenan) -->
                                                 <div class="nota-block">
                                                     <div class="nota-label-row">
-                                                        <p class="nota-label">Nota Kelulusan (Bahagian Perlesenan)</p>
+                                                        <p class="nota-label">Nota Kelulusan (Bahagian Pelesenan)</p>
 
                                                         <div runat="server" visible='<%# If(Eval("ApprStatusID") > 5, True, False) %>' class="nota-signoff">
                                                             <span class="actor-name"><asp:Label ID="Label25" runat="server" Text='<%# Bind("Users_Fullname") %>'></asp:Label></span>
