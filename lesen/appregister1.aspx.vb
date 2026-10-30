@@ -216,14 +216,9 @@ Partial Class appregister1
         Dim encodedRujukan As String = Server.UrlEncode(txtRujukan.Text.Trim())
         Dim fullUrl As String = baseUrl & "/lesen/sepandukSemakanIK.aspx?scancode=" & encodedRujukan
 
-        Using qrGenerator As New QRCodeGenerator()
-            Dim qrCodeData As QRCodeData = qrGenerator.CreateQrCode(fullUrl, QRCodeGenerator.ECCLevel.Q)
-            Using qrCode As New PngByteQRCode(qrCodeData)
-                Dim qrBytes As Byte() = qrCode.GetGraphic(20)
-                imgQrCode.ImageUrl = "data:image/png;base64," & Convert.ToBase64String(qrBytes)
-                imgQrCode.Visible = True
-            End Using
-        End Using
+        ' QR dengan logo MPK di tengah (QrLogo, tahap pembetulan ralat H)
+        imgQrCode.ImageUrl = "data:image/png;base64," & Convert.ToBase64String(QrLogo.Png(fullUrl, 20))
+        imgQrCode.Visible = True
 
         ' Open modal dialog on client side
         ScriptManager.RegisterStartupScript(Me, Me.GetType(), "showQrModal", "$('#modalQrCode').modal('show');", True)
@@ -2627,14 +2622,9 @@ Partial Class appregister1
         Dim baseUrl As String = Request.Url.Scheme & "://" & Request.Url.Authority & Request.ApplicationPath.TrimEnd("/"c)
         Dim fullUrl As String = baseUrl & "/lesen/sepandukSemakanIK.aspx?scancode=" & Server.UrlEncode(uniqueId)
 
-        Using qrGenerator As New QRCodeGenerator()
-            Dim qrCodeData As QRCodeData = qrGenerator.CreateQrCode(fullUrl, QRCodeGenerator.ECCLevel.Q)
-            Using qrCode As New PngByteQRCode(qrCodeData)
-                Dim qrBytes As Byte() = qrCode.GetGraphic(20)
-                imgBantingModalQr.ImageUrl = "data:image/png;base64," & Convert.ToBase64String(qrBytes)
-                imgBantingModalQr.Visible = True
-            End Using
-        End Using
+        ' QR dengan logo MPK di tengah (QrLogo, tahap pembetulan ralat H)
+        imgBantingModalQr.ImageUrl = "data:image/png;base64," & Convert.ToBase64String(QrLogo.Png(fullUrl, 20))
+        imgBantingModalQr.Visible = True
 
         ScriptManager.RegisterStartupScript(Me, Me.GetType(), "showBantingQrModal", "$('#modalBantingQrCode').modal('show');", True)
     End Sub
