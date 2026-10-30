@@ -1335,16 +1335,11 @@ h1{
                             <div class="hk-main">
                                 <button type="button" class="btn-close hk-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
 
-                                <div class="hk-dept"><i class="bi bi-file-earmark-text"></i>Bahagian Perlesenan</div>
+                                <div class="hk-dept"><i class="bi bi-file-earmark-text"></i>Bahagian Pelesenan</div>
                                 <div class="hk-row">
                                     <span class="ic"><i class="bi bi-building"></i></span>
-                                    <span class="info"><span class="k d-block">Pejabat</span><span class="v d-block">07-777 1443</span></span>
-                                    <a class="hk-btn" href="tel:+6077771443"><i class="bi bi-telephone"></i>Telefon</a>
-                                </div>
-                                <div class="hk-row">
-                                    <span class="ic"><i class="bi bi-shop-window"></i></span>
-                                    <span class="info"><span class="k d-block">Kaunter</span><span class="v d-block">07-777 1413</span></span>
-                                    <a class="hk-btn" href="tel:+6077771413"><i class="bi bi-telephone"></i>Telefon</a>
+                                    <span class="info"><span class="k d-block">Pejabat</span><span class="v d-block">07-708 1111 (3) Pelesenan</span></span>
+                                    <a class="hk-btn" href="tel:+6077081111"><i class="bi bi-telephone"></i>Telefon</a>
                                 </div>
 
                                 <div class="hk-dept mt-3"><i class="bi bi-clipboard-check"></i>Bahagian Inspektorat</div>

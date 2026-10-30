@@ -2552,7 +2552,7 @@ ORDER BY
                                                     <div class="col-md-12">
 
                                                         <div class="form-group">
-                                                            <label>Nota Kelulusan (Bahagian Perlesenan)</label>
+                                                            <label>Nota Kelulusan (Bahagian Pelesenan)</label>
                                                             <div runat="server" visible='<%# If(Eval("ApprStatusID") > 5, True, False) %>'>
                                                                 <asp:Label ID="Label25" runat="server" Text='<%# Bind("Users_Fullname") %>'></asp:Label>
                                                                 <asp:Label ID="Label8" runat="server" Font-Bold="true"
