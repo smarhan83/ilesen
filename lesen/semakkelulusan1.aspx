@@ -1808,27 +1808,33 @@
                         </div>
                     </asp:Panel>
 
-                    <!-- SECTION 9: EKSPO / PROGRAM -->
+                    <!-- SECTION 9: EKSPO -->
                     <asp:Panel ID="pnlModalEkspo" runat="server" Visible="false">
                         <div class="card modal-details-card mb-2">
                             <div class="form-section-header mt-0">
                                 <i class="bi bi-calendar-event"></i>
-                                <span>Maklumat Ekspo / Program</span>
+                                <span>Maklumat Acara / Program</span>
                             </div>
                             <div class="row g-2">
-                                <div class="col-md-4">
+                                <div class="col-md-3">
+                                    <div class="modal-field-group">
+                                        <label class="modal-field-label">Kategori Acara</label>
+                                        <asp:Label ID="lblModalKategoriEkspo" runat="server" CssClass="modal-field-value"></asp:Label>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
                                     <div class="modal-field-group">
                                         <label class="modal-field-label">Nama Ekspo / Program</label>
                                         <asp:Label ID="lblModalNamaEkspo" runat="server" CssClass="modal-field-value fw-bold"></asp:Label>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="modal-field-group">
                                         <label class="modal-field-label">Penganjur</label>
                                         <asp:Label ID="lblModalPenganjurEkspo" runat="server" CssClass="modal-field-value"></asp:Label>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="modal-field-group">
                                         <label class="modal-field-label">Lokasi Ekspo</label>
                                         <asp:Label ID="lblModalLokasiEkspo" runat="server" CssClass="modal-field-value"></asp:Label>

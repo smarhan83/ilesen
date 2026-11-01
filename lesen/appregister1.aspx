@@ -1036,6 +1036,7 @@
                             <asp:HiddenField ID="HF_AnjingBetinaList" Value='<%# Bind("AnjingBetinaList") %>' runat="server" />
                             <asp:HiddenField ID="HF_AnjingJantanMandulList" Value='<%# Bind("AnjingJantanMandulList") %>' runat="server" />
                             <asp:HiddenField ID="HF_AnjingBetinaMandulList" Value='<%# Bind("AnjingBetinaMandulList") %>' runat="server" />
+                            <asp:HiddenField ID="HF_KategoriEkspo" Value='<%# Bind("KategoriEkspo") %>' runat="server" />
 
                             <asp:Panel runat="server" ID="pnlpemohon">
                                 <div class="form-section-header">
@@ -1929,9 +1930,25 @@
                                 <asp:Panel ID="pnlesen5" runat="server" Visible="False">
                                     <div class="form-section-header">
                                         <i class="bi bi-calendar-event"></i>
-                                        <span>Maklumat Ekspo / Program</span>
+                                        <span>Maklumat Acara / Program</span>
                                     </div>
 
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="form-label-custom">Kategori Acara</label>
+                                                <asp:DropDownList ID="DDL_KategoriEkspo" CssClass="form-control select2" style="width: 100%;" runat="server"
+                                                    DataSourceID="SqlDataSourceKategoriEkspo" DataTextField="name" DataValueField="id">
+                                                </asp:DropDownList>
+                                                <asp:SqlDataSource runat="server" ID="SqlDataSourceKategoriEkspo" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
+                                                    SelectCommand="SELECT NULL AS id, '-- Sila Pilih --' AS name UNION ALL SELECT id, name FROM TBL_LOOKUPS WHERE lookupgrp_id = 10006 AND status = 1"></asp:SqlDataSource>
+                                                <div id="pnlKategoriEkspoLain" runat="server" class="mt-2 pnl-kategori-ekspo-lain" style="display:none;">
+                                                    <asp:TextBox ID="TB_KategoriEkspoLain" runat="server" CssClass="form-control" placeholder="Nyatakan Kategori Acara" MaxLength="100"></asp:TextBox>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
                                     <div class="row">
                                         <div class="col-md-5">
                                             <div class="form-group">
@@ -2305,6 +2322,7 @@
                             <asp:HiddenField ID="HF_AnjingBetinaList" Value='<%# Bind("AnjingBetinaList") %>' runat="server" />
                             <asp:HiddenField ID="HF_AnjingJantanMandulList" Value='<%# Bind("AnjingJantanMandulList") %>' runat="server" />
                             <asp:HiddenField ID="HF_AnjingBetinaMandulList" Value='<%# Bind("AnjingBetinaMandulList") %>' runat="server" />
+                            <asp:HiddenField ID="HF_KategoriEkspo" Value='<%# Bind("KategoriEkspo") %>' runat="server" />
 
                             <!-- Section: Carian / Pemilihan Pemohon -->
                             <div class="form-section-header">
@@ -3146,13 +3164,29 @@
                                 </div>
                             </asp:Panel>
 
-                            <%--# Ekspo #--%>
+                            <%--# Expo #--%>
                             <asp:Panel ID="pnlesen5" runat="server" Visible="False">
                                 <div class="form-section-header">
                                     <i class="bi bi-calendar-event"></i>
-                                    <span>Maklumat Ekspo / Program</span>
+                                    <span>Maklumat Acara / Program</span>
                                 </div>
 
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="form-label-custom">Kategori Acara</label>
+                                            <asp:DropDownList ID="DDL_KategoriEkspo" CssClass="form-control select2" style="width: 100%;" runat="server"
+                                                DataSourceID="SqlDataSourceKategoriEkspo" DataTextField="name" DataValueField="id">
+                                            </asp:DropDownList>
+                                            <asp:SqlDataSource runat="server" ID="SqlDataSourceKategoriEkspo" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
+                                                SelectCommand="SELECT NULL AS id, '-- Sila Pilih --' AS name UNION ALL SELECT id, name FROM TBL_LOOKUPS WHERE lookupgrp_id = 10006 AND status = 1"></asp:SqlDataSource>
+                                            <div id="pnlKategoriEkspoLain" runat="server" class="mt-2 pnl-kategori-ekspo-lain" style="display:none;">
+                                                <asp:TextBox ID="TB_KategoriEkspoLain" runat="server" CssClass="form-control" placeholder="Nyatakan Kategori Acara" MaxLength="100"></asp:TextBox>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
@@ -3677,7 +3711,7 @@
                         PemilikBaru, AlamatBaru, JenisPerniagaanBaru, NamaBaruSyarikat, BillboardLokasi, LokasiPasar1, LokasiPasar2, LokasiPasar3, JenisPasar,
                         JenisPerniagaanPasar, JumlahPetak, AnjingAlamat, AnjingJenisPremis, JenisPenjaja, StatusTanahPenjaja, AlamatPenjajaan, JenisPerniagaanPenjaja, MasaPenjaja1, MasaPenjaja2,
                         JenisKenderaanPenjaja, NoKenderaanPenjaja, TarikhBatal, PenganjurEkspo, AlamatPenganjurEkspo, PicEkspo, NoTelEkspo, NamaEkspo, LokasiEkspo, TarikhEkspo1, TarikhEkspo2, MasaEkspo1, MasaEkspo2, 
-                        TentatifEkspo, JemputanEkspo, PembersihanEkspo, TarikhKhemahEkspo1, TarikhKhemahEkspo2, 
+                        TentatifEkspo, JemputanEkspo, PembersihanEkspo, TarikhKhemahEkspo1, TarikhKhemahEkspo2, KategoriEkspo, 
                         KontraktorIklan, NoTelKontraktor, UkuranBanting, BilBanting, TarikhBanting1, TarikhBanting2, StatusBanting, NoPengesahanBanting, TarikhPengesahanBanting1, TarikhPengesahanBanting2, NoResitBanting, NoSiriStiker, 
                         TarikhBanting3, RenewBanting, JenisBanting, 
                         Rujukan, NoAkaunCukai, DepositAmount, DepositDate, DepositResitNo, DepositPulangAmount, 
@@ -3688,7 +3722,7 @@
                         @JenisPerniagaanBaru, @NamaBaruSyarikat, @BillboardLokasi, @LokasiPasar1, @LokasiPasar2, @LokasiPasar3, @JenisPasar, @JenisPerniagaanPasar,
                         @JumlahPetak, @AnjingAlamat, @AnjingJenisPremis, @JenisPenjaja, @StatusTanahPenjaja, @AlamatPenjajaan, @JenisPerniagaanPenjaja, @MasaPenjaja1, @MasaPenjaja2, @JenisKenderaanPenjaja, @NoKenderaanPenjaja,
                         @TarikhBatal, @PenganjurEkspo, @AlamatPenganjurEkspo, @PicEkspo, @NoTelEkspo, @NamaEkspo, @LokasiEkspo, @TarikhEkspo1, @TarikhEkspo2, @MasaEkspo1, @MasaEkspo2, 
-                        @TentatifEkspo, @JemputanEkspo, @PembersihanEkspo, @TarikhKhemahEkspo1, @TarikhKhemahEkspo2, 
+                        @TentatifEkspo, @JemputanEkspo, @PembersihanEkspo, @TarikhKhemahEkspo1, @TarikhKhemahEkspo2, @KategoriEkspo, 
                         @KontraktorIklan, @NoTelKontraktor, @UkuranBanting, @BilBanting, @TarikhBanting1, @TarikhBanting2, @StatusBanting, @NoPengesahanBanting, @TarikhPengesahanBanting1, @TarikhPengesahanBanting2, @NoResitBanting, @NoSiriStiker, 
                         @TarikhBanting3, @RenewBanting, @JenisBanting,
                         @Rujukan, @NoAkaunCukai, @DepositAmount, @DepositDate, @DepositResitNo, @DepositPulangAmount, 
@@ -3703,7 +3737,7 @@
                         AlamatPenjajaan = @AlamatPenjajaan, JenisPerniagaanPenjaja = @JenisPerniagaanPenjaja, MasaPenjaja1 = @MasaPenjaja1, MasaPenjaja2 = @MasaPenjaja2, JenisKenderaanPenjaja = @JenisKenderaanPenjaja, NoKenderaanPenjaja = @NoKenderaanPenjaja,
                         TarikhBatal = @TarikhBatal, PenganjurEkspo = @PenganjurEkspo, AlamatPenganjurEkspo = @AlamatPenganjurEkspo, PicEkspo = @PicEkspo, NoTelEkspo = @NoTelEkspo, NamaEkspo = @NamaEkspo, LokasiEkspo = @LokasiEkspo, 
                         TarikhEkspo1 = @TarikhEkspo1, TarikhEkspo2 = @TarikhEkspo2, MasaEkspo1 = @MasaEkspo1, MasaEkspo2 = @MasaEkspo2, TentatifEkspo = @TentatifEkspo, JemputanEkspo = @JemputanEkspo, PembersihanEkspo = @PembersihanEkspo, 
-                        TarikhKhemahEkspo1 = @TarikhKhemahEkspo1, TarikhKhemahEkspo2 = @TarikhKhemahEkspo2, 
+                        TarikhKhemahEkspo1 = @TarikhKhemahEkspo1, TarikhKhemahEkspo2 = @TarikhKhemahEkspo2, KategoriEkspo = @KategoriEkspo, 
                         KontraktorIklan = @KontraktorIklan, NoTelKontraktor = @NoTelKontraktor, UkuranBanting = @UkuranBanting, BilBanting = @BilBanting, TarikhBanting1 = @TarikhBanting1, TarikhBanting2 = @TarikhBanting2, StatusBanting = @StatusBanting, 
                         NoPengesahanBanting = @NoPengesahanBanting, TarikhPengesahanBanting1 = @TarikhPengesahanBanting1, TarikhPengesahanBanting2 = @TarikhPengesahanBanting2, NoResitBanting = @NoResitBanting, NoSiriStiker = @NoSiriStiker, 
                         TarikhBanting3 = @TarikhBanting3, RenewBanting = @RenewBanting, JenisBanting = @JenisBanting, 
@@ -3767,6 +3801,7 @@
                     <asp:Parameter Name="PembersihanEkspo"></asp:Parameter>
                     <asp:Parameter Name="TarikhKhemahEkspo1"></asp:Parameter>
                     <asp:Parameter Name="TarikhKhemahEkspo2"></asp:Parameter>
+                    <asp:Parameter Name="KategoriEkspo"></asp:Parameter>
                     <asp:Parameter Name="KontraktorIklan"></asp:Parameter>
                     <asp:Parameter Name="NoTelKontraktor"></asp:Parameter>
                     <asp:Parameter Name="UkuranBanting"></asp:Parameter>
@@ -3860,6 +3895,7 @@
                     <asp:Parameter Name="PembersihanEkspo"></asp:Parameter>
                     <asp:Parameter Name="TarikhKhemahEkspo1"></asp:Parameter>
                     <asp:Parameter Name="TarikhKhemahEkspo2"></asp:Parameter>
+                    <asp:Parameter Name="KategoriEkspo"></asp:Parameter>
                     <asp:Parameter Name="KontraktorIklan"></asp:Parameter>
                     <asp:Parameter Name="NoTelKontraktor"></asp:Parameter>
                     <asp:Parameter Name="UkuranBanting"></asp:Parameter>
@@ -5455,13 +5491,29 @@
                                     </div>
                                 </asp:Panel>
 
-                                <%--# Ekspo #--%>
+                                <%--# Expo #--%>
                                 <asp:Panel ID="pnlesen5_ins" runat="server" Visible="False" Enabled="True">
                                     <div class="form-section-header">
                                         <i class="bi bi-calendar-event"></i>
-                                        <span>Maklumat Ekspo / Program</span>
+                                        <span>Maklumat Acara / Program</span>
                                     </div>
 
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="form-label-custom">Kategori Acara</label>
+                                                <asp:DropDownList ID="DDL_KategoriEkspo_ins" CssClass="form-control select2" style="width: 100%;" runat="server"
+                                                    DataSourceID="SqlDataSourceKategoriEkspo_ins" DataTextField="name" DataValueField="id">
+                                                </asp:DropDownList>
+                                                <asp:SqlDataSource runat="server" ID="SqlDataSourceKategoriEkspo_ins" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
+                                                    SelectCommand="SELECT NULL AS id, '-- Sila Pilih --' AS name UNION ALL SELECT id, name FROM TBL_LOOKUPS WHERE lookupgrp_id = 10006 AND status = 1"></asp:SqlDataSource>
+                                                <div id="pnlKategoriEkspoLain_ins" runat="server" class="mt-2 pnl-kategori-ekspo-lain" style="display:none;">
+                                                    <asp:TextBox ID="TB_KategoriEkspoLain_ins" runat="server" CssClass="form-control" placeholder="Nyatakan Kategori Acara" MaxLength="100"></asp:TextBox>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
                                     <div class="row">
                                         <div class="col-md-5">
                                             <div class="form-group">
@@ -6639,6 +6691,34 @@ ORDER BY
             checkVisibility(false);
         }
 
+        function initKategoriEkspoLain() {
+            function checkKategori($ddl) {
+                if (!$ddl || !$ddl.length) return;
+                var text = ($ddl.find('option:selected').text() || '').trim().toUpperCase();
+                var $pnl = $ddl.closest('.form-group').find('.pnl-kategori-ekspo-lain');
+                if (text === 'LAIN-LAIN') {
+                    $pnl.slideDown(150);
+                } else {
+                    $pnl.hide();
+                }
+            }
+
+            $('select[id$="DDL_KategoriEkspo"], select[id$="DDL_KategoriEkspo_ins"]').each(function () {
+                var $ddl = $(this);
+                checkKategori($ddl);
+
+                $ddl.off('change.kategoriEkspo select2:select.kategoriEkspo select2:clear.kategoriEkspo')
+                    .on('change.kategoriEkspo select2:select.kategoriEkspo select2:clear.kategoriEkspo', function () {
+                        checkKategori($(this));
+                    });
+            });
+
+            $(document).off('change.kategoriEkspoDoc select2:select.kategoriEkspoDoc', 'select[id$="DDL_KategoriEkspo"], select[id$="DDL_KategoriEkspo_ins"]')
+                       .on('change.kategoriEkspoDoc select2:select.kategoriEkspoDoc', 'select[id$="DDL_KategoriEkspo"], select[id$="DDL_KategoriEkspo_ins"]', function () {
+                        checkKategori($(this));
+                       });
+        }
+
         function initBakaLain() {
             function checkBaka($ddl) {
                 if (!$ddl || !$ddl.length) return;
@@ -6688,6 +6768,7 @@ ORDER BY
         $(document).ready(function () {
             initTarikhSebabBatal();
             initBakaLain();
+            initKategoriEkspoLain();
             setupValidationGuards();
             resetAndHideUnsubmittedValidators();
             initFilterCollapse();
@@ -6696,6 +6777,7 @@ ORDER BY
         function pageLoad() {
             initTarikhSebabBatal();
             initBakaLain();
+            initKategoriEkspoLain();
             setupValidationGuards();
             resetAndHideUnsubmittedValidators();
             initPembetulanDiffFilter();

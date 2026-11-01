@@ -1,4 +1,5 @@
-﻿
+Imports System.Web.UI.HtmlControls
+
 Imports System
 Imports System.Data
 Imports System.Data.SqlClient
@@ -573,6 +574,12 @@ Partial Class kelulusan1
 
                     If myReader.Item("PenganjurEkspo").ToString().Length > 0 Then
                         TB_PenganjurEkspo.Text = myReader.Item("PenganjurEkspo").ToString()
+                    End If
+
+                    If Not IsDBNull(myReader.Item("KategoriEkspo")) Then
+                        PopulateKategoriEkspo(myReader.Item("KategoriEkspo").ToString(), DDL_KategoriEkspo, TB_KategoriEkspoLain, pnlKategoriEkspoLain)
+                    Else
+                        PopulateKategoriEkspo("", DDL_KategoriEkspo, TB_KategoriEkspoLain, pnlKategoriEkspoLain)
                     End If
 
                     If myReader.Item("AlamatPenganjurEkspo").ToString().Length > 0 Then
@@ -1864,7 +1871,7 @@ Partial Class kelulusan1
 
     Private Sub ViewSuratMohon(permohonanID As String, agensiID As String, JenisLesenIdList As String)
         Dim sql As String = ""
-        Dim jenisLesenDesc = {"mpk_suratmohonulasan", "mpk_suratmohonulasan_psr", "mpk_suratmohonulasan_anj", "mpk_suratmohonulasan_pjj", "mpk_suratmohonulasan_bb", "mpk_suratmohonulasan_ep"}
+        'Dim jenisLesenDesc = {"mpk_suratmohonulasan", "mpk_suratmohonulasan_psr", "mpk_suratmohonulasan_anj", "mpk_suratmohonulasan_pjj", "mpk_suratmohonulasan_bb", "mpk_suratmohonulasan_ep"}
         Dim jenisLesenDescLuar = {"mpk_suratmohonulasan_l", "mpk_suratmohonulasan_psr_l", "mpk_suratmohonulasan_anj_l", "mpk_suratmohonulasan_pjj_l", "mpk_suratmohonulasan_bb_l", "mpk_suratmohonulasan_ep_l"}
 
         Try
@@ -2620,7 +2627,7 @@ Partial Class kelulusan1
                 f.NoPendaftaran, f.NoAkaun, f.AlamatPremis, f.JenisPerniagaan, f.PemilikBaru, f.AlamatBaru, 
                 f.JenisPerniagaanBaru, f.NamaBaruSyarikat, f.BillboardLokasi, f.LokasiPasar1, f.LokasiPasar2, 
                 f.LokasiPasar3, f.JenisPasar, f.JenisPerniagaanPasar, f.JumlahPetak, f.AnjingAlamat, e.name AS AnjingJenisPremisDesc, 
-                f.AnjingJenisPremis, f.AlamatPenjajaan, f.JenisPerniagaanPenjaja, f.TarikhBatal, f.PenganjurEkspo, 
+                f.AnjingJenisPremis, f.AlamatPenjajaan, f.JenisPerniagaanPenjaja, f.TarikhBatal, f.PenganjurEkspo,  
                 f.NamaEkspo, f.LokasiEkspo, f.NoTelEkspo, f.TarikhEkspo1, f.TarikhEkspo2, f.MasaEkspo1, f.MasaEkspo2, 
                 f.KontraktorIklan, f.NoTelKontraktor, f.UkuranBanting, f.BilBanting, f.TarikhBanting1, f.TarikhBanting2, f.NoResitBanting, f.NoSiriStiker, f.TarikhBanting3, 
                 a.Rujukan, a.RujukanInspektorat, a.NoAkaunCukai, a.IsBatal, a.JenisLesenDescList, a.JenisLesenIdList, f.SaizIklanList, 
@@ -2683,7 +2690,7 @@ Partial Class kelulusan1
                         MasaPenjaja1 = @MasaPenjaja1, MasaPenjaja2 = @MasaPenjaja2, JenisKenderaanPenjaja = @JenisKenderaanPenjaja, NoKenderaanPenjaja = @NoKenderaanPenjaja, 
                         PenganjurEkspo = @PenganjurEkspo, AlamatPenganjurEkspo = @AlamatPenganjurEkspo, PicEkspo = @PicEkspo, NoTelEkspo = @NoTelEkspo,  NamaEkspo = @NamaEkspo, LokasiEkspo = @LokasiEkspo, 
                         TarikhEkspo1 = @TarikhEkspo1, TarikhEkspo2 = @TarikhEkspo2, MasaEkspo1 = @MasaEkspo1, MasaEkspo2 = @MasaEkspo2, TentatifEkspo = @TentatifEkspo, JemputanEkspo = @JemputanEkspo, 
-                        PembersihanEkspo = @PembersihanEkspo, TarikhKhemahEkspo1 = @TarikhKhemahEkspo1, TarikhKhemahEkspo2 = @TarikhKhemahEkspo2, 
+                        PembersihanEkspo = @PembersihanEkspo, TarikhKhemahEkspo1 = @TarikhKhemahEkspo1, TarikhKhemahEkspo2 = @TarikhKhemahEkspo2, KategoriEkspo = @KategoriEkspo, 
                         KontraktorIklan = @KontraktorIklan, NoTelKontraktor = @NoTelKontraktor, UkuranBanting = @UkuranBanting, BilBanting = @BilBanting, TarikhBanting1 = @TarikhBanting1, TarikhBanting2 = @TarikhBanting2, 
                         NoResitBanting = @NoResitBanting, NoSiriStiker=@NoSiriStiker, TarikhBanting3=@TarikhBanting3, LastModDt = GETDATE() 
                         WHERE Permohonan_ID = @Permohonan_ID"
@@ -2776,6 +2783,7 @@ Partial Class kelulusan1
             Else
                 myCommandSelect.Parameters.AddWithValue("@TarikhKhemahEkspo2", DBNull.Value)
             End If
+            myCommandSelect.Parameters.AddWithValue("@KategoriEkspo", GetKategoriEkspoValue(DDL_KategoriEkspo, TB_KategoriEkspoLain))
             myCommandSelect.Parameters.AddWithValue("@KontraktorIklan", TB_KontraktorIklan.Text)
             myCommandSelect.Parameters.AddWithValue("@NoTelKontraktor", TB_NoTelKontraktor.Text)
             myCommandSelect.Parameters.AddWithValue("@UkuranBanting", TB_UkuranBanting.Text)
@@ -3391,6 +3399,7 @@ Partial Class kelulusan1
             pnlesen3.Visible = False
             pnlesen4.Visible = False
             pnlesen5.Visible = False
+            If pnlKategoriEkspoLain IsNot Nothing Then pnlKategoriEkspoLain.Style("display") = "none"
             pnlesen6.Visible = False
 
             Exit Sub
@@ -3561,5 +3570,71 @@ Partial Class kelulusan1
 
 
     End Sub
+
+    ' --- Kategori Ekspo Helpers ---
+    Private Sub PopulateKategoriEkspo(kategoriValue As String, ddl As DropDownList, tbLain As TextBox, pnlLain As HtmlGenericControl)
+        If ddl Is Nothing Then Exit Sub
+
+        ddl.DataBind()
+
+        If String.IsNullOrWhiteSpace(kategoriValue) Then
+            ddl.SelectedIndex = 0
+            If tbLain IsNot Nothing Then tbLain.Text = ""
+            If pnlLain IsNot Nothing Then pnlLain.Style("display") = "none"
+            Exit Sub
+        End If
+
+        Dim matchedItem As ListItem = Nothing
+        Dim lainItem As ListItem = Nothing
+
+        For Each item As ListItem In ddl.Items
+            If String.Equals(item.Text.Trim(), kategoriValue.Trim(), StringComparison.OrdinalIgnoreCase) Then
+                matchedItem = item
+                Exit For
+            End If
+            If item.Text.Trim().ToUpper() = "LAIN-LAIN" Then
+                lainItem = item
+            End If
+        Next
+
+        If matchedItem IsNot Nothing Then
+            ddl.ClearSelection()
+            matchedItem.Selected = True
+            If tbLain IsNot Nothing Then tbLain.Text = ""
+            If pnlLain IsNot Nothing Then pnlLain.Style("display") = "none"
+        ElseIf lainItem IsNot Nothing Then
+            ddl.ClearSelection()
+            lainItem.Selected = True
+            If tbLain IsNot Nothing Then tbLain.Text = kategoriValue.Trim()
+            If pnlLain IsNot Nothing Then pnlLain.Style("display") = "block"
+        Else
+            ddl.SelectedIndex = 0
+            If tbLain IsNot Nothing Then tbLain.Text = kategoriValue.Trim()
+            If pnlLain IsNot Nothing Then pnlLain.Style("display") = "block"
+        End If
+    End Sub
+
+    Private Function GetKategoriEkspoValue(ddl As DropDownList, tbLain As TextBox) As Object
+        If ddl Is Nothing OrElse ddl.SelectedItem Is Nothing Then
+            Return DBNull.Value
+        End If
+
+        If String.IsNullOrWhiteSpace(ddl.SelectedValue) Then
+            Return DBNull.Value
+        End If
+
+        Dim selText As String = ddl.SelectedItem.Text.Trim()
+        If selText.ToUpper() = "LAIN-LAIN" Then
+            If tbLain IsNot Nothing AndAlso Not String.IsNullOrWhiteSpace(tbLain.Text) Then
+                Return tbLain.Text.Trim()
+            Else
+                Return selText
+            End If
+        ElseIf selText <> "-- Sila Pilih --" Then
+            Return selText
+        End If
+
+        Return DBNull.Value
+    End Function
 
 End Class

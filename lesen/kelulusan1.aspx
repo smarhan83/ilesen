@@ -2968,7 +2968,23 @@ ORDER BY
                                 <asp:Panel ID="pnlesen5" runat="server" Visible="False">
                                     <div class="form-section-header">
                                         <i class="bi bi-calendar-event"></i>
-                                        <span>Maklumat Ekspo / Program</span>
+                                        <span>Maklumat Acara / Program</span>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="form-label-custom">Kategori Acara</label>
+                                                <asp:DropDownList ID="DDL_KategoriEkspo" CssClass="form-control select2" style="width: 100%;" runat="server"
+                                                    DataSourceID="SqlDataSourceKategoriEkspo" DataTextField="name" DataValueField="id">
+                                                </asp:DropDownList>
+                                                <asp:SqlDataSource runat="server" ID="SqlDataSourceKategoriEkspo" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
+                                                    SelectCommand="SELECT NULL AS id, '-- Sila Pilih --' AS name UNION ALL SELECT id, name FROM TBL_LOOKUPS WHERE lookupgrp_id = 10006 AND status = 1"></asp:SqlDataSource>
+                                                <div id="pnlKategoriEkspoLain" runat="server" class="mt-2 pnl-kategori-ekspo-lain" style="display:none;">
+                                                    <asp:TextBox ID="TB_KategoriEkspoLain" runat="server" CssClass="form-control" placeholder="Nyatakan Kategori Acara" MaxLength="100"></asp:TextBox>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
 
                                     <div class="row">
@@ -4518,6 +4534,7 @@ ORDER BY
     </style>
 
 <script>
+
     function closeModalKembaliIK() {
         document.getElementById('modalKembaliIK').classList.remove('show');
     }
@@ -4533,6 +4550,35 @@ ORDER BY
 </script>
 
     <script>
+
+function initKategoriEkspoLain() {
+    function checkKategori($ddl) {
+        if (!$ddl || !$ddl.length) return;
+        var text = ($ddl.find('option:selected').text() || '').trim().toUpperCase();
+        var $pnl = $ddl.closest('.form-group').find('.pnl-kategori-ekspo-lain');
+        if (text === 'LAIN-LAIN') {
+            $pnl.slideDown(150);
+        } else {
+            $pnl.hide();
+        }
+    }
+
+    $('select[id$="DDL_KategoriEkspo"]').each(function() {
+        var $ddl = $(this);
+        checkKategori($ddl);
+
+        $ddl.off('change.kategoriEkspo select2:select.kategoriEkspo select2:clear.kategoriEkspo')
+            .on('change.kategoriEkspo select2:select.kategoriEkspo select2:clear.kategoriEkspo', function() {
+                checkKategori($(this));
+            });
+    });
+
+    $(document).off('change.kategoriEkspoDoc select2:select.kategoriEkspoDoc', 'select[id$="DDL_KategoriEkspo"]')
+        .on('change.kategoriEkspoDoc select2:select.kategoriEkspoDoc', 'select[id$="DDL_KategoriEkspo"]', function() {
+            checkKategori($(this));
+        });
+}
+
 
 function initBakaLain() {
     function checkBaka($ddl) {
@@ -4581,10 +4627,12 @@ function initBakaLain() {
 }
 
 $(document).ready(function() {
+    initKategoriEkspoLain();
     initBakaLain();
 });
 
 function pageLoad() {
+    initKategoriEkspoLain();
     initBakaLain();
 
     $("#ctl00_ContentPlaceHolder1_LabelAttributes1_TabContainer1").css({ 'width': 400, 'height': 400 });

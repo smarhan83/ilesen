@@ -1,4 +1,4 @@
-﻿Imports System
+Imports System
 Imports System.Collections.Generic
 Imports System.Configuration
 Imports System.Data
@@ -221,6 +221,8 @@ Partial Class appregister2
             Next
 
             Dim pnlTarikh As Panel = TryCast(FormView1.FindControl("pnlbatalTarikh"), Panel)
+            Dim pnlKategori As HtmlGenericControl = TryCast(FormView1.FindControl("pnlKategoriEkspoLain"), HtmlGenericControl)
+            If pnlKategori IsNot Nothing Then pnlKategori.Style("display") = "none"
             If pnlTarikh IsNot Nothing Then pnlTarikh.Style("display") = "none"
 
             ' Reset bound child controls
@@ -334,6 +336,9 @@ Partial Class appregister2
         If Not isTargetSebab Then
             e.NewValues("TarikhSebabBatal") = DBNull.Value
         End If
+        Dim ddlKategori As DropDownList = TryCast(FormView1.FindControl("DDL_KategoriEkspo"), DropDownList)
+        Dim tbKategoriLain As TextBox = TryCast(FormView1.FindControl("TB_KategoriEkspoLain"), TextBox)
+        e.NewValues("KategoriEkspo") = GetKategoriEkspoValue(ddlKategori, tbKategoriLain)
     End Sub
 
     Private Sub FormView1_ItemInserting(sender As Object, e As FormViewInsertEventArgs) Handles FormView1.ItemInserting
@@ -351,6 +356,9 @@ Partial Class appregister2
         If Not isTargetSebab Then
             e.Values("TarikhSebabBatal") = DBNull.Value
         End If
+        Dim ddlKategori As DropDownList = TryCast(FormView1.FindControl("DDL_KategoriEkspo"), DropDownList) 
+        Dim tbKategoriLain As TextBox = TryCast(FormView1.FindControl("TB_KategoriEkspoLain"), TextBox)
+        e.Values("KategoriEkspo") = GetKategoriEkspoValue(ddlKategori, tbKategoriLain)
     End Sub
 
     Private Sub FormView1_ItemUpdated(sender As Object, e As FormViewUpdatedEventArgs) Handles FormView1.ItemUpdated
@@ -419,6 +427,21 @@ Partial Class appregister2
         End If
 
         Try
+            Dim HF_KategoriEkspo As HiddenField = TryCast(FormView1.FindControl("HF_KategoriEkspo"), HiddenField)
+            Dim DDL_KategoriEkspo As DropDownList = TryCast(FormView1.FindControl("DDL_KategoriEkspo"), DropDownList)
+            Dim TB_KategoriEkspoLain As TextBox = TryCast(FormView1.FindControl("TB_KategoriEkspoLain"), TextBox)
+            Dim pnlKategoriEkspoLain As HtmlGenericControl = TryCast(FormView1.FindControl("pnlKategoriEkspoLain"), HtmlGenericControl)
+
+            Dim savedKategori As String = ""
+            If HF_KategoriEkspo IsNot Nothing Then
+                savedKategori = HF_KategoriEkspo.Value
+            Else
+                Dim drv As DataRowView = TryCast(FormView1.DataItem, DataRowView)
+                If drv IsNot Nothing AndAlso drv.DataView.Table.Columns.Contains("KategoriEkspo") AndAlso Not IsDBNull(drv("KategoriEkspo")) Then
+                    savedKategori = drv("KategoriEkspo").ToString()
+                End If
+            End If
+            PopulateKategoriEkspo(savedKategori, DDL_KategoriEkspo, TB_KategoriEkspoLain, pnlKategoriEkspoLain)
             ' 1. Load Multi-Licence Tags into ViewState & Repeater
             LoadSelectedLicencesFromHiddenFields()
 
@@ -1500,5 +1523,71 @@ Partial Class appregister2
     End Sub
 
 #End Region
+
+    ' --- Kategori Ekspo Helpers ---
+    Private Sub PopulateKategoriEkspo(kategoriValue As String, ddl As DropDownList, tbLain As TextBox, pnlLain As HtmlGenericControl)
+        If ddl Is Nothing Then Exit Sub
+
+        ddl.DataBind()
+
+        If String.IsNullOrWhiteSpace(kategoriValue) Then
+            ddl.SelectedIndex = 0
+            If tbLain IsNot Nothing Then tbLain.Text = ""
+            If pnlLain IsNot Nothing Then pnlLain.Style("display") = "none"
+            Exit Sub
+        End If
+
+        Dim matchedItem As ListItem = Nothing
+        Dim lainItem As ListItem = Nothing
+
+        For Each item As ListItem In ddl.Items
+            If String.Equals(item.Text.Trim(), kategoriValue.Trim(), StringComparison.OrdinalIgnoreCase) Then
+                matchedItem = item
+                Exit For
+            End If
+            If item.Text.Trim().ToUpper() = "LAIN-LAIN" Then
+                lainItem = item
+            End If
+        Next
+
+        If matchedItem IsNot Nothing Then
+            ddl.ClearSelection()
+            matchedItem.Selected = True
+            If tbLain IsNot Nothing Then tbLain.Text = ""
+            If pnlLain IsNot Nothing Then pnlLain.Style("display") = "none"
+        ElseIf lainItem IsNot Nothing Then
+            ddl.ClearSelection()
+            lainItem.Selected = True
+            If tbLain IsNot Nothing Then tbLain.Text = kategoriValue.Trim()
+            If pnlLain IsNot Nothing Then pnlLain.Style("display") = "block"
+        Else
+            ddl.SelectedIndex = 0
+            If tbLain IsNot Nothing Then tbLain.Text = kategoriValue.Trim()
+            If pnlLain IsNot Nothing Then pnlLain.Style("display") = "block"
+        End If
+    End Sub
+
+    Private Function GetKategoriEkspoValue(ddl As DropDownList, tbLain As TextBox) As Object
+        If ddl Is Nothing OrElse ddl.SelectedItem Is Nothing Then
+            Return DBNull.Value
+        End If
+
+        If String.IsNullOrWhiteSpace(ddl.SelectedValue) Then
+            Return DBNull.Value
+        End If
+
+        Dim selText As String = ddl.SelectedItem.Text.Trim()
+        If selText.ToUpper() = "LAIN-LAIN" Then
+            If tbLain IsNot Nothing AndAlso Not String.IsNullOrWhiteSpace(tbLain.Text) Then
+                Return tbLain.Text.Trim()
+            Else
+                Return selText
+            End If
+        ElseIf selText <> "-- Sila Pilih --" Then
+            Return selText
+        End If
+
+        Return DBNull.Value
+    End Function
 
 End Class

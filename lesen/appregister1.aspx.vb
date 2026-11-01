@@ -1032,6 +1032,8 @@ Partial Class appregister1
                 If pnl IsNot Nothing Then pnl.Visible = False
             Next
 
+            Dim pnlKategori As HtmlGenericControl = TryCast(FormView1.FindControl("pnlKategoriEkspoLain"), HtmlGenericControl)
+            If pnlKategori IsNot Nothing Then pnlKategori.Style("display") = "none"
             Dim pnlTarikh As Panel = TryCast(FormView1.FindControl("pnlbatalTarikh"), Panel)
             If pnlTarikh IsNot Nothing Then pnlTarikh.Style("display") = "none"
 
@@ -1135,6 +1137,9 @@ Partial Class appregister1
         Dim cbSementara As CheckBox = TryCast(FormView1.FindControl("CB_KelulusanSementara"), CheckBox)
         Dim isSementara As Boolean = (IsBorangLesenPerniagaan() AndAlso (cb24h Is Nothing OrElse Not cb24h.Checked) AndAlso cbSementara IsNot Nothing AndAlso cbSementara.Checked)
         e.Values("IsKelulusanSementara") = isSementara
+        Dim ddlKategori As DropDownList = TryCast(FormView1.FindControl("DDL_KategoriEkspo"), DropDownList)
+        Dim tbKategoriLain As TextBox = TryCast(FormView1.FindControl("TB_KategoriEkspoLain"), TextBox)
+        e.Values("KategoriEkspo") = GetKategoriEkspoValue(ddlKategori, tbKategoriLain)
     End Sub
 
     Private Sub FormView1_ItemInserted(sender As Object, e As FormViewInsertedEventArgs) Handles FormView1.ItemInserted
@@ -1168,6 +1173,9 @@ Partial Class appregister1
         Dim cbSementara As CheckBox = TryCast(FormView1.FindControl("CB_KelulusanSementara"), CheckBox)
         Dim isSementara As Boolean = (IsBorangLesenPerniagaan() AndAlso (cb24h Is Nothing OrElse Not cb24h.Checked) AndAlso cbSementara IsNot Nothing AndAlso cbSementara.Checked)
         e.NewValues("IsKelulusanSementara") = isSementara
+        Dim ddlKategori As DropDownList = TryCast(FormView1.FindControl("DDL_KategoriEkspo"), DropDownList)
+        Dim tbKategoriLain As TextBox = TryCast(FormView1.FindControl("TB_KategoriEkspoLain"), TextBox)
+        e.NewValues("KategoriEkspo") = GetKategoriEkspoValue(ddlKategori, tbKategoriLain)
 
         SavePemohonEmail()
     End Sub
@@ -1242,6 +1250,22 @@ Partial Class appregister1
 
         Try
             If FormView1.CurrentMode = FormViewMode.Edit Then
+                Dim HF_KategoriEkspo As HiddenField = TryCast(FormView1.FindControl("HF_KategoriEkspo"), HiddenField)
+                Dim DDL_KategoriEkspo As DropDownList = TryCast(FormView1.FindControl("DDL_KategoriEkspo"), DropDownList)
+                Dim TB_KategoriEkspoLain As TextBox = TryCast(FormView1.FindControl("TB_KategoriEkspoLain"), TextBox)
+                Dim pnlKategoriEkspoLain As HtmlGenericControl = TryCast(FormView1.FindControl("pnlKategoriEkspoLain"), HtmlGenericControl)
+
+                Dim savedKategori As String = ""
+                If HF_KategoriEkspo IsNot Nothing Then
+                    savedKategori = HF_KategoriEkspo.Value
+                Else
+                    Dim drv As DataRowView = TryCast(FormView1.DataItem, DataRowView)
+                    If drv IsNot Nothing AndAlso drv.DataView.Table.Columns.Contains("KategoriEkspo") AndAlso Not IsDBNull(drv("KategoriEkspo")) Then
+                        savedKategori = drv("KategoriEkspo").ToString()
+                    End If
+                End If
+                PopulateKategoriEkspo(savedKategori, DDL_KategoriEkspo, TB_KategoriEkspoLain, pnlKategoriEkspoLain)
+
                 Dim myList As List(Of SelectedItem) = DirectCast(ViewState("SelectedList"), List(Of SelectedItem))
                 If myList Is Nothing Then
                     myList = New List(Of SelectedItem)()
@@ -3359,7 +3383,7 @@ Partial Class appregister1
                 "a.NoPendaftaran, a.NoAkaun, a.AlamatPremis, a.JenisPerniagaan, a.PemilikBaru, a.AlamatBaru, " &
                 "a.JenisPerniagaanBaru, a.NamaBaruSyarikat, a.BillboardLokasi, a.LokasiPasar1, a.LokasiPasar2, " &
                 "a.LokasiPasar3, a.JenisPasar, a.JenisPerniagaanPasar, a.JumlahPetak, a.AnjingAlamat, a.AnjingJenisMohon, " &
-                "a.AnjingJenisPremis, a.AlamatPenjajaan, a.JenisPerniagaanPenjaja, a.TarikhBatal, a.PenganjurEkspo, " &
+                "a.AnjingJenisPremis, a.AlamatPenjajaan, a.JenisPerniagaanPenjaja, a.TarikhBatal, a.PenganjurEkspo, a.KategoriEkspo, " &
                 "a.NamaEkspo, a.LokasiEkspo, a.NoTelEkspo, a.TarikhEkspo1, a.TarikhEkspo2, a.MasaEkspo1, a.MasaEkspo2, " &
                 "a.Rujukan, a.NoAkaunCukai, a.IsBatal, a.JenisLesenDescList, a.JenisLesenIdList, a.SaizIklanList, " &
                 "a.CahayaIklanList, a.UnitIklanList, a.BakaAnjingList, a.AnjingJantanList, a.AnjingBetinaList, " &
@@ -3445,7 +3469,7 @@ Partial Class appregister1
                 "a.NoPendaftaran, a.NoAkaun, a.AlamatPremis, a.JenisPerniagaan, a.PemilikBaru, a.AlamatBaru, " &
                 "a.JenisPerniagaanBaru, a.NamaBaruSyarikat, a.BillboardLokasi, a.LokasiPasar1, a.LokasiPasar2, " &
                 "a.LokasiPasar3, a.JenisPasar, a.JenisPerniagaanPasar, a.JumlahPetak, a.AnjingAlamat, a.AnjingJenisMohon, " &
-                "a.AnjingJenisPremis, a.AlamatPenjajaan, a.JenisPerniagaanPenjaja, a.TarikhBatal, a.PenganjurEkspo, " &
+                "a.AnjingJenisPremis, a.AlamatPenjajaan, a.JenisPerniagaanPenjaja, a.TarikhBatal, a.PenganjurEkspo, a.KategoriEkspo, " &
                 "a.NamaEkspo, a.LokasiEkspo, a.NoTelEkspo, a.TarikhEkspo1, a.TarikhEkspo2, a.MasaEkspo1, a.MasaEkspo2, " &
                 "a.Rujukan, a.NoAkaunCukai, a.IsBatal, a.JenisLesenDescList, a.JenisLesenIdList, a.SaizIklanList, " &
                 "a.CahayaIklanList, a.UnitIklanList, a.BakaAnjingList, a.AnjingJantanList, a.AnjingBetinaList, " &
@@ -3505,7 +3529,7 @@ Partial Class appregister1
     Private Sub ViewSuratMohonAuto(permohonanAgensiID As String, jabatanAgensiID As Integer, jenislesenIdList As String, isBatal As Boolean)
         Dim strBatal As String = If(isBatal, "Batal", "")
         Dim sql As String = ""
-        Dim jenisLesenDesc = {"mpk_suratmohonulasan", "mpk_suratmohonulasan_psr", "mpk_suratmohonulasan_anj", "mpk_suratmohonulasan_pjj", "mpk_suratmohonulasan_bb", "mpk_suratmohonulasan_ep"}
+        'Dim jenisLesenDesc = {"mpk_suratmohonulasan", "mpk_suratmohonulasan_psr", "mpk_suratmohonulasan_anj", "mpk_suratmohonulasan_pjj", "mpk_suratmohonulasan_bb", "mpk_suratmohonulasan_ep"}
         Dim jenisLesenDescLuar = {"mpk_suratmohonulasan_l", "mpk_suratmohonulasan_psr_l", "mpk_suratmohonulasan_anj_l", "mpk_suratmohonulasan_pjj_l", "mpk_suratmohonulasan_bb_l", "mpk_suratmohonulasan_ep_l"}
 
         Try
@@ -4013,7 +4037,7 @@ Partial Class appregister1
                 "    PemilikBaru, AlamatBaru, JenisPerniagaanBaru, NamaBaruSyarikat, BillboardLokasi, LokasiPasar1, LokasiPasar2, LokasiPasar3, JenisPasar, " &
                 "    JenisPerniagaanPasar, JumlahPetak, AnjingAlamat, AnjingJenisPremis, JenisPenjaja, StatusTanahPenjaja, AlamatPenjajaan, JenisPerniagaanPenjaja, MasaPenjaja1, MasaPenjaja2, " &
                 "    JenisKenderaanPenjaja, NoKenderaanPenjaja, TarikhBatal, PenganjurEkspo, AlamatPenganjurEkspo, PicEkspo, NoTelEkspo, NamaEkspo, LokasiEkspo, TarikhEkspo1, TarikhEkspo2, " &
-                "    MasaEkspo1, MasaEkspo2, TentatifEkspo, JemputanEkspo, PembersihanEkspo, TarikhKhemahEkspo1, TarikhKhemahEkspo2, " &
+                "    MasaEkspo1, MasaEkspo2, TentatifEkspo, JemputanEkspo, PembersihanEkspo, TarikhKhemahEkspo1, TarikhKhemahEkspo2, KategoriEkspo, " &
                 "    KontraktorIklan, NoTelKontraktor, UkuranBanting, BilBanting, TarikhBanting1, TarikhBanting2, NoResitBanting, NoSiriStiker, TarikhBanting3, " &
                 "    CreatorID, CreatedDt, LastModID, LastModDt) " &
                 "SELECT Permohonan_ID, SaizIklanList, CahayaIklanList, UnitIklanList, LokasiList, " &
@@ -4022,7 +4046,7 @@ Partial Class appregister1
                 "    PemilikBaru, AlamatBaru, JenisPerniagaanBaru, NamaBaruSyarikat, BillboardLokasi, LokasiPasar1, LokasiPasar2, LokasiPasar3, JenisPasar, " &
                 "    JenisPerniagaanPasar, JumlahPetak, AnjingAlamat, AnjingJenisPremis, JenisPenjaja, StatusTanahPenjaja, AlamatPenjajaan, JenisPerniagaanPenjaja, MasaPenjaja1, MasaPenjaja2, " &
                 "    JenisKenderaanPenjaja, NoKenderaanPenjaja, TarikhBatal, PenganjurEkspo, AlamatPenganjurEkspo, PicEkspo, NoTelEkspo, NamaEkspo, LokasiEkspo, TarikhEkspo1, TarikhEkspo2, " &
-                "    MasaEkspo1, MasaEkspo2, TentatifEkspo, JemputanEkspo, PembersihanEkspo, TarikhKhemahEkspo1, TarikhKhemahEkspo2, " &
+                "    MasaEkspo1, MasaEkspo2, TentatifEkspo, JemputanEkspo, PembersihanEkspo, TarikhKhemahEkspo1, TarikhKhemahEkspo2, KategoriEkspo, " &
                 "    KontraktorIklan, NoTelKontraktor, UkuranBanting, BilBanting, TarikhBanting1, TarikhBanting2, NoResitBanting, NoSiriStiker, TarikhBanting3, " &
                 "    CreatorID, CreatedDt, LastModID, LastModDt FROM LESEN_Permohonan " &
                 "WHERE LESEN_Permohonan.Permohonan_ID = @Permohonan_ID " &
@@ -4110,6 +4134,11 @@ Partial Class appregister1
 
                         If Not IsDBNull(myReader.Item("TarikhKhemahEkspo1")) Then TB_TarikhKhemahEkspo1_ins.Text = CDate(myReader.Item("TarikhKhemahEkspo1")).ToString("yyyy-MM-dd")
                         If Not IsDBNull(myReader.Item("TarikhKhemahEkspo2")) Then TB_TarikhKhemahEkspo2_ins.Text = CDate(myReader.Item("TarikhKhemahEkspo2")).ToString("yyyy-MM-dd")
+                        If Not IsDBNull(myReader.Item("KategoriEkspo")) Then
+                            PopulateKategoriEkspo(myReader.Item("KategoriEkspo").ToString(), DDL_KategoriEkspo_ins, TB_KategoriEkspoLain_ins, pnlKategoriEkspoLain_ins)
+                        Else
+                            PopulateKategoriEkspo("", DDL_KategoriEkspo_ins, TB_KategoriEkspoLain_ins, pnlKategoriEkspoLain_ins)
+                        End If
                     End If
                 End Using
             End Using
@@ -4213,7 +4242,7 @@ Partial Class appregister1
                         "MasaPenjaja1 = @MasaPenjaja1, MasaPenjaja2 = @MasaPenjaja2, JenisKenderaanPenjaja = @JenisKenderaanPenjaja, NoKenderaanPenjaja = @NoKenderaanPenjaja, " &
                         "PenganjurEkspo = @PenganjurEkspo, AlamatPenganjurEkspo = @AlamatPenganjurEkspo, PicEkspo = @PicEkspo, NoTelEkspo = @NoTelEkspo,  NamaEkspo = @NamaEkspo, LokasiEkspo = @LokasiEkspo, " &
                         "TarikhEkspo1 = @TarikhEkspo1, TarikhEkspo2 = @TarikhEkspo2, MasaEkspo1 = @MasaEkspo1, MasaEkspo2 = @MasaEkspo2, TentatifEkspo = @TentatifEkspo, JemputanEkspo = @JemputanEkspo, " &
-                        "PembersihanEkspo = @PembersihanEkspo, TarikhKhemahEkspo1 = @TarikhKhemahEkspo1, TarikhKhemahEkspo2 = @TarikhKhemahEkspo2, " &
+                        "PembersihanEkspo = @PembersihanEkspo, TarikhKhemahEkspo1 = @TarikhKhemahEkspo1, TarikhKhemahEkspo2 = @TarikhKhemahEkspo2, KategoriEkspo = @KategoriEkspo, " &
                         "LastModDt = GETDATE() " &
                         "WHERE Permohonan_ID = @Permohonan_ID"
 
@@ -4268,6 +4297,7 @@ Partial Class appregister1
                 myCommandSelect.Parameters.AddWithValue("@PembersihanEkspo", TB_PembersihanEkspo_ins.Text)
                 myCommandSelect.Parameters.AddWithValue("@TarikhKhemahEkspo1", TB_TarikhKhemahEkspo1_ins.Text)
                 myCommandSelect.Parameters.AddWithValue("@TarikhKhemahEkspo2", TB_TarikhKhemahEkspo2_ins.Text)
+                myCommandSelect.Parameters.AddWithValue("@KategoriEkspo", GetKategoriEkspoValue(DDL_KategoriEkspo_ins, TB_KategoriEkspoLain_ins))
 
                 Try
                     myCommandSelect.ExecuteNonQuery()
@@ -4278,6 +4308,72 @@ Partial Class appregister1
             End Using
         End Using
     End Sub
+    ' --- Kategori Ekspo Helpers ---
+    Private Sub PopulateKategoriEkspo(kategoriValue As String, ddl As DropDownList, tbLain As TextBox, pnlLain As HtmlGenericControl)
+        If ddl Is Nothing Then Exit Sub
+
+        ddl.DataBind()
+
+        If String.IsNullOrWhiteSpace(kategoriValue) Then
+            ddl.SelectedIndex = 0
+            If tbLain IsNot Nothing Then tbLain.Text = ""
+            If pnlLain IsNot Nothing Then pnlLain.Style("display") = "none"
+            Exit Sub
+        End If
+
+        Dim matchedItem As ListItem = Nothing
+        Dim lainItem As ListItem = Nothing
+
+        For Each item As ListItem In ddl.Items
+            If String.Equals(item.Text.Trim(), kategoriValue.Trim(), StringComparison.OrdinalIgnoreCase) Then
+                matchedItem = item
+                Exit For
+            End If
+            If item.Text.Trim().ToUpper() = "LAIN-LAIN" Then
+                lainItem = item
+            End If
+        Next
+
+        If matchedItem IsNot Nothing Then
+            ddl.ClearSelection()
+            matchedItem.Selected = True
+            If tbLain IsNot Nothing Then tbLain.Text = ""
+            If pnlLain IsNot Nothing Then pnlLain.Style("display") = "none"
+        ElseIf lainItem IsNot Nothing Then
+            ddl.ClearSelection()
+            lainItem.Selected = True
+            If tbLain IsNot Nothing Then tbLain.Text = kategoriValue.Trim()
+            If pnlLain IsNot Nothing Then pnlLain.Style("display") = "block"
+        Else
+            ddl.SelectedIndex = 0
+            If tbLain IsNot Nothing Then tbLain.Text = kategoriValue.Trim()
+            If pnlLain IsNot Nothing Then pnlLain.Style("display") = "block"
+        End If
+    End Sub
+
+    Private Function GetKategoriEkspoValue(ddl As DropDownList, tbLain As TextBox) As Object
+        If ddl Is Nothing OrElse ddl.SelectedItem Is Nothing Then
+            Return DBNull.Value
+        End If
+
+        If String.IsNullOrWhiteSpace(ddl.SelectedValue) Then
+            Return DBNull.Value
+        End If
+
+        Dim selText As String = ddl.SelectedItem.Text.Trim()
+        If selText.ToUpper() = "LAIN-LAIN" Then
+            If tbLain IsNot Nothing AndAlso Not String.IsNullOrWhiteSpace(tbLain.Text) Then
+                Return tbLain.Text.Trim()
+            Else
+                Return selText
+            End If
+        ElseIf selText <> "-- Sila Pilih --" Then
+            Return selText
+        End If
+
+        Return DBNull.Value
+    End Function
+
 
     ' --- Kadar Bayaran ---
     Private Sub insertKadarBayaran(jid As String, pid As Integer)

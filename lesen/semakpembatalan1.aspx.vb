@@ -518,9 +518,17 @@ Partial Class semakpembatalan1
                             End If
 
                             ' 9. Ekspo / Program
-                            Dim showEkspo As Boolean = idList.Any(Function(x) (x >= 10 AndAlso x <= 24)) OrElse (dr("NamaEkspo") IsNot DBNull.Value AndAlso Not String.IsNullOrWhiteSpace(dr("NamaEkspo").ToString()))
+                            Dim hasKategoriEkspo As Boolean = False
+                            Try
+                                If dr("KategoriEkspo") IsNot DBNull.Value AndAlso Not String.IsNullOrWhiteSpace(dr("KategoriEkspo").ToString()) Then
+                                    hasKategoriEkspo = True
+                                End If
+                            Catch ex As Exception
+                            End Try
+                            Dim showEkspo As Boolean = idList.Any(Function(x) (x >= 10 AndAlso x <= 24)) OrElse (dr("NamaEkspo") IsNot DBNull.Value AndAlso Not String.IsNullOrWhiteSpace(dr("NamaEkspo").ToString())) OrElse hasKategoriEkspo
                             pnlModalEkspo.Visible = showEkspo
                             If showEkspo Then
+                                lblModalKategoriEkspo.Text = If(hasKategoriEkspo, dr("KategoriEkspo").ToString(), "-")
                                 lblModalPenganjurEkspo.Text = If(dr("PenganjurEkspo") Is DBNull.Value, "-", dr("PenganjurEkspo").ToString())
                                 lblModalAlamatPenganjurEkspo.Text = If(dr("AlamatPenganjurEkspo") Is DBNull.Value, "-", dr("AlamatPenganjurEkspo").ToString())
                                 lblModalPicEkspo.Text = If(dr("PicEkspo") Is DBNull.Value, "-", dr("PicEkspo").ToString())
@@ -1404,50 +1412,44 @@ Partial Class semakpembatalan1
     End Sub
 
     Private Sub ViewSuratPembatalanAuto(permohonanID As String, isPDF As Boolean)
-        Dim jenisLesenDesc = {"", "sb_perniagaan", "sb_pasar", "sb_anjing", "sb_penjaja", "sb_billboard", "sb_tukaralamat", "sb_tambahpremis", "sb_tambahjenis",
-            "sb_tukarpemilik", "sb_tukariklan", "sb_tukarnama", "sb_kurangiklan", "sb_kakilima", "null", "null", "sb_tambahiklan", "sb_tepikedai", "sb_lebuhawam",
-            "sb_tukaralamatnamaiklan", "sb_tukarpemilikalamatiklan", "null", "null", "sb_tukarnamaiklan"}
-
-        Dim jenisLesenIdList As String = ""
-        If FormView1.DataKey("JenisLesenIdList") IsNot Nothing Then
-            jenisLesenIdList = FormView1.DataKey("JenisLesenIdList").ToString()
-        End If
-
-        Dim primaryJid As Integer = 1
-        If Not String.IsNullOrEmpty(jenisLesenIdList) Then
-            Dim parts() As String = jenisLesenIdList.Split(","c)
-            If parts.Length > 0 AndAlso IsNumeric(parts(0).Trim()) Then
-                primaryJid = CInt(parts(0).Trim())
-            End If
-        End If
-
-        Dim reportName As String = "sb_perniagaan"
-        If primaryJid < jenisLesenDesc.Length AndAlso Not String.IsNullOrEmpty(jenisLesenDesc(primaryJid)) AndAlso jenisLesenDesc(primaryJid) <> "null" Then
-            reportName = jenisLesenDesc(primaryJid)
-        End If
-
+        Dim sql As String = ""
         Try
-            Dim sql As String = "SELECT b.*, c.Pemohon_Name, c.Pemohon_Address, c.Pemohon_ICNo, c.Pemohon_MobileNo, c.Pemohon_TelNo, d.Users_Fullname, d.Users_Signature, e.name AS AnjingJenisPremisDesc " &
-                                "FROM LESEN_Permohonan b " &
-                                "INNER JOIN LESEN_Pemohon c ON b.Permohonan_PemohonID = c.Pemohon_ID " &
-                                "LEFT JOIN TBL_USERS d ON b.TandatanganKelulusanId = d.Users_Id " &
-                                "LEFT JOIN TBL_LOOKUPS e ON e.id = b.AnjingJenisPremis " &
-                                "WHERE b.Permohonan_ID = " & permohonanID
+            sql = "SELECT a.Permohonan_ID, a.TarikhSuratKelulusan, a.CreatedDt, CAST(a.NamaSyarikat AS varchar(200)) AS NamaSyarikat, " &
+                  "a.NoPendaftaran, a.NoAkaun, a.AlamatPremis, a.JenisPerniagaan, a.PemilikBaru, a.AlamatBaru, " &
+                  "a.JenisPerniagaanBaru, a.NamaBaruSyarikat, a.BillboardLokasi, a.LokasiPasar1, a.LokasiPasar2, " &
+                  "a.LokasiPasar3, a.JenisPasar, a.JenisPerniagaanPasar, a.JumlahPetak, a.AnjingAlamat, a.AnjingJenisMohon, " &
+                  "a.AnjingJenisPremis, a.AlamatPenjajaan, a.JenisPerniagaanPenjaja, a.TarikhBatal, a.PenganjurEkspo, " &
+                  "a.NamaEkspo, a.LokasiEkspo, a.NoTelEkspo, a.TarikhEkspo1, a.TarikhEkspo2, a.MasaEkspo1, a.MasaEkspo2, " &
+                  "a.Rujukan, a.NoAkaunCukai, a.IsBatal, a.JenisLesenDescList, a.JenisLesenIdList, a.SaizIklanList, " &
+                  "a.CahayaIklanList, a.UnitIklanList, a.BakaAnjingList, a.AnjingJantanList, a.AnjingBetinaList, " &
+                  "a.AnjingJantanMandulList, a.AnjingBetinaMandulList, " &
+                  "b.Pemohon_Name, b.Pemohon_Address, b.Pemohon_ICNo, b.Pemohon_MobileNo, b.Pemohon_TelNo, " &
+                  "c.Users_Fullname, c.Users_Signature, d.P1, d.P2, d.P3, d.IsiKandungan " &
+                  "FROM LESEN_Permohonan a " &
+                  "INNER JOIN LESEN_Pemohon b ON b.Pemohon_ID=a.Permohonan_PemohonID " &
+                  "LEFT JOIN TBL_USERS c ON a.TandatanganKelulusanId=c.Users_Id " &
+                  "LEFT JOIN LESEN_PermohonanSurat d ON d.Permohonan_ID=a.Permohonan_ID AND d.JenisReport LIKE 'SK%' " &
+                  "WHERE a.Permohonan_ID=@permohonanID ORDER BY d.P1, d.P2, d.P3"
 
-            Dim pobjData(0, 1) As Object
-            Dim lStrReportName As String = reportName & ".rpt"
+            sql = sql.Replace("@permohonanID", permohonanID)
+
+            Dim ReportVar As String = "suratkelulusan_v2"
+            Dim pobjData(1, 1) As Object
+            Dim lStrReportName As String = ReportVar & ".rpt"
 
             pobjData(0, 0) = "paraSQL" : pobjData(0, 1) = sql
+            pobjData(1, 0) = "isDigitalSign" : pobjData(1, 1) = isPDF
 
-            Session.Item("ReportName" & reportName) = lStrReportName
-            Session.Item("pobjData" & reportName) = pobjData
-            Session.Item("pathUrl" & reportName) = "~/lesen/report/kelulusan"
+            Session.Item("ReportName" & ReportVar) = lStrReportName
+            Session.Item("pobjData" & ReportVar) = pobjData
+            Session.Item("pathUrl" & ReportVar) = "~/lesen/report/kelulusan"
 
             If isPDF Then
                 Session.Item("reportPrintType") = "pdf"
             End If
 
-            ScriptManager.RegisterClientScriptBlock(Me.Page, Me.GetType(), reportName, "window.open('../ReportViewer.aspx?name=" & reportName & "', '_blank', '');", True)
+            ScriptManager.RegisterClientScriptBlock(Me.Page, Me.GetType(), ReportVar, "window.open('../ReportViewer.aspx?name=" & ReportVar & "', '_blank', '');", True)
+
         Catch ex As Exception
             MessageBox(ex.Message, Me)
         End Try
@@ -1529,7 +1531,7 @@ Partial Class semakpembatalan1
         End If
 
         Dim sql As String = ""
-        Dim jenisLesenDesc = {"mpk_suratmohonulasan", "mpk_suratmohonulasan_psr", "mpk_suratmohonulasan_anj", "mpk_suratmohonulasan_pjj", "mpk_suratmohonulasan_bb", "mpk_suratmohonulasan_ep"}
+        'Dim jenisLesenDesc = {"mpk_suratmohonulasan", "mpk_suratmohonulasan_psr", "mpk_suratmohonulasan_anj", "mpk_suratmohonulasan_pjj", "mpk_suratmohonulasan_bb", "mpk_suratmohonulasan_ep"}
         Dim jenisLesenDescLuar = {"mpk_suratmohonulasan_l", "mpk_suratmohonulasan_psr_l", "mpk_suratmohonulasan_anj_l", "mpk_suratmohonulasan_pjj_l", "mpk_suratmohonulasan_bb_l", "mpk_suratmohonulasan_ep_l"}
 
         Try
