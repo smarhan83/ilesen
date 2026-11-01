@@ -1055,7 +1055,7 @@
                                                     DataSourceID="SqlDataSourceKategoriEkspo" DataTextField="name" DataValueField="id">
                                                 </asp:DropDownList>
                                                 <asp:SqlDataSource runat="server" ID="SqlDataSourceKategoriEkspo" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
-                                                    SelectCommand="SELECT NULL AS id, '-- Sila Pilih --' AS name UNION ALL SELECT id, name FROM TBL_LOOKUPS WHERE lookupgrp_id = 10006 AND status = 1"></asp:SqlDataSource>
+                                                    SelectCommand="SELECT NULL AS id, '-- Sila Pilih --' AS name UNION ALL SELECT id, name FROM TBL_LOOKUPS WHERE lookupgrp_id = 10009 AND status = 1"></asp:SqlDataSource>
                                                 <div id="pnlKategoriEkspoLain" runat="server" class="mt-2 pnl-kategori-ekspo-lain" style="display:none;">
                                                     <asp:TextBox ID="TB_KategoriEkspoLain" runat="server" CssClass="form-control" placeholder="Nyatakan Kategori Acara" MaxLength="100"></asp:TextBox>
                                                 </div>
@@ -2073,7 +2073,7 @@
                                                     DataSourceID="SqlDataSourceKategoriEkspo" DataTextField="name" DataValueField="id">
                                                 </asp:DropDownList>
                                                 <asp:SqlDataSource runat="server" ID="SqlDataSourceKategoriEkspo" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
-                                                    SelectCommand="SELECT NULL AS id, '-- Sila Pilih --' AS name UNION ALL SELECT id, name FROM TBL_LOOKUPS WHERE lookupgrp_id = 10006 AND status = 1"></asp:SqlDataSource>
+                                                    SelectCommand="SELECT NULL AS id, '-- Sila Pilih --' AS name UNION ALL SELECT id, name FROM TBL_LOOKUPS WHERE lookupgrp_id = 10009 AND status = 1"></asp:SqlDataSource>
                                                 <div id="pnlKategoriEkspoLain" runat="server" class="mt-2 pnl-kategori-ekspo-lain" style="display:none;">
                                                     <asp:TextBox ID="TB_KategoriEkspoLain" runat="server" CssClass="form-control" placeholder="Nyatakan Kategori Acara" MaxLength="100"></asp:TextBox>
                                                 </div>
