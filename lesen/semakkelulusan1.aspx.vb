@@ -530,9 +530,17 @@ Partial Class semakkelulusan1
                             End If
 
                             ' 9. Ekspo / Program
-                            Dim showEkspo As Boolean = idList.Any(Function(x) (x >= 10 AndAlso x <= 24)) OrElse (dr("NamaEkspo") IsNot DBNull.Value AndAlso Not String.IsNullOrWhiteSpace(dr("NamaEkspo").ToString()))
+                            Dim hasKategoriEkspo As Boolean = False
+                            Try
+                                If dr("KategoriEkspo") IsNot DBNull.Value AndAlso Not String.IsNullOrWhiteSpace(dr("KategoriEkspo").ToString()) Then
+                                    hasKategoriEkspo = True
+                                End If
+                            Catch ex As Exception
+                            End Try
+                            Dim showEkspo As Boolean = idList.Any(Function(x) (x >= 10 AndAlso x <= 24)) OrElse (dr("NamaEkspo") IsNot DBNull.Value AndAlso Not String.IsNullOrWhiteSpace(dr("NamaEkspo").ToString())) OrElse hasKategoriEkspo
                             pnlModalEkspo.Visible = showEkspo
                             If showEkspo Then
+                                lblModalKategoriEkspo.Text = If(hasKategoriEkspo, dr("KategoriEkspo").ToString(), "-")
                                 lblModalPenganjurEkspo.Text = If(dr("PenganjurEkspo") Is DBNull.Value, "-", dr("PenganjurEkspo").ToString())
                                 lblModalAlamatPenganjurEkspo.Text = If(dr("AlamatPenganjurEkspo") Is DBNull.Value, "-", dr("AlamatPenganjurEkspo").ToString())
                                 lblModalPicEkspo.Text = If(dr("PicEkspo") Is DBNull.Value, "-", dr("PicEkspo").ToString())
@@ -1484,7 +1492,7 @@ Partial Class semakkelulusan1
         Dim agensiID As Integer = CInt(Session.Item("sessionEstateID"))
 
         Dim sql As String = ""
-        Dim jenisLesenDesc = {"mpk_suratmohonulasan_l", "mpk_suratmohonulasan_psr", "mpk_suratmohonulasan_anj", "mpk_suratmohonulasan_pjj", "mpk_suratmohonulasan_bb", "mpk_suratmohonulasan_ep"}
+        'Dim jenisLesenDesc = {"mpk_suratmohonulasan_l", "mpk_suratmohonulasan_psr", "mpk_suratmohonulasan_anj", "mpk_suratmohonulasan_pjj", "mpk_suratmohonulasan_bb", "mpk_suratmohonulasan_ep"}
         Dim jenisLesenDescLuar = {"mpk_suratmohonulasan_l", "mpk_suratmohonulasan_psr_l", "mpk_suratmohonulasan_anj_l", "mpk_suratmohonulasan_pjj_l", "mpk_suratmohonulasan_bb_l", "mpk_suratmohonulasan_ep_l"}
 
         Try

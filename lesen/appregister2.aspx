@@ -471,6 +471,7 @@
                             <asp:HiddenField ID="HF_AnjingBetinaList" Value='<%# Bind("AnjingBetinaList") %>' runat="server" />
                             <asp:HiddenField ID="HF_AnjingJantanMandulList" Value='<%# Bind("AnjingJantanMandulList") %>' runat="server" />
                             <asp:HiddenField ID="HF_AnjingBetinaMandulList" Value='<%# Bind("AnjingBetinaMandulList") %>' runat="server" />
+                            <asp:HiddenField ID="HF_KategoriEkspo" Value='<%# Bind("KategoriEkspo") %>' runat="server" />
 
                             <!-- --------------------------------------------------------------- -->
                             <!-- [EDIT] Panel Search Pemohon (Draf / Status = 0 Sahaja)         -->
@@ -1047,6 +1048,22 @@
                                     </div>
 
                                     <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="form-label-custom">Kategori Acara</label>
+                                                <asp:DropDownList ID="DDL_KategoriEkspo" CssClass="form-control select2" style="width: 100%;" runat="server"
+                                                    DataSourceID="SqlDataSourceKategoriEkspo" DataTextField="name" DataValueField="id">
+                                                </asp:DropDownList>
+                                                <asp:SqlDataSource runat="server" ID="SqlDataSourceKategoriEkspo" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
+                                                    SelectCommand="SELECT NULL AS id, '-- Sila Pilih --' AS name UNION ALL SELECT id, name FROM TBL_LOOKUPS WHERE lookupgrp_id = 10006 AND status = 1"></asp:SqlDataSource>
+                                                <div id="pnlKategoriEkspoLain" runat="server" class="mt-2 pnl-kategori-ekspo-lain" style="display:none;">
+                                                    <asp:TextBox ID="TB_KategoriEkspoLain" runat="server" CssClass="form-control" placeholder="Nyatakan Kategori Acara" MaxLength="100"></asp:TextBox>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
                                         <div class="col-md-5">
                                             <div class="form-group">
                                                 <label class="form-label-custom">Nama Penganjur</label>
@@ -1412,6 +1429,7 @@
                             <asp:HiddenField ID="HF_AnjingBetinaList" Value='<%# Bind("AnjingBetinaList") %>' runat="server" />
                             <asp:HiddenField ID="HF_AnjingJantanMandulList" Value='<%# Bind("AnjingJantanMandulList") %>' runat="server" />
                             <asp:HiddenField ID="HF_AnjingBetinaMandulList" Value='<%# Bind("AnjingBetinaMandulList") %>' runat="server" />
+                            <asp:HiddenField ID="HF_KategoriEkspo" Value='<%# Bind("KategoriEkspo") %>' runat="server" />
 
                             <!-- Section: Carian / Pemilihan Pemohon -->
                             <div class="form-section-header">
@@ -2047,6 +2065,22 @@
                                     <span>Maklumat Ekspo / Program</span>
                                 </div>
 
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="form-label-custom">Kategori Acara</label>
+                                                <asp:DropDownList ID="DDL_KategoriEkspo" CssClass="form-control select2" style="width: 100%;" runat="server"
+                                                    DataSourceID="SqlDataSourceKategoriEkspo" DataTextField="name" DataValueField="id">
+                                                </asp:DropDownList>
+                                                <asp:SqlDataSource runat="server" ID="SqlDataSourceKategoriEkspo" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
+                                                    SelectCommand="SELECT NULL AS id, '-- Sila Pilih --' AS name UNION ALL SELECT id, name FROM TBL_LOOKUPS WHERE lookupgrp_id = 10006 AND status = 1"></asp:SqlDataSource>
+                                                <div id="pnlKategoriEkspoLain" runat="server" class="mt-2 pnl-kategori-ekspo-lain" style="display:none;">
+                                                    <asp:TextBox ID="TB_KategoriEkspoLain" runat="server" CssClass="form-control" placeholder="Nyatakan Kategori Acara" MaxLength="100"></asp:TextBox>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                 <div class="row">
                                     <div class="col-md-5">
                                         <div class="form-group">
@@ -2424,7 +2458,7 @@
                         PemilikBaru, AlamatBaru, JenisPerniagaanBaru, NamaBaruSyarikat, BillboardLokasi, LokasiPasar1, LokasiPasar2, LokasiPasar3, JenisPasar,
                         JenisPerniagaanPasar, JumlahPetak, AnjingAlamat, AnjingJenisPremis, JenisPenjaja, StatusTanahPenjaja, AlamatPenjajaan, JenisPerniagaanPenjaja, MasaPenjaja1, MasaPenjaja2,
                         JenisKenderaanPenjaja, NoKenderaanPenjaja, TarikhBatal, PenganjurEkspo, AlamatPenganjurEkspo, PicEkspo, NoTelEkspo, NamaEkspo, LokasiEkspo, TarikhEkspo1, TarikhEkspo2, MasaEkspo1, MasaEkspo2, 
-                        TentatifEkspo, JemputanEkspo, PembersihanEkspo, TarikhKhemahEkspo1, TarikhKhemahEkspo2, 
+                        TentatifEkspo, JemputanEkspo, PembersihanEkspo, TarikhKhemahEkspo1, TarikhKhemahEkspo2, KategoriEkspo, 
                         Rujukan, NoAkaunCukai, DepositAmount, DepositDate, DepositResitNo, DepositPulangAmount, 
                         Is24jam, IsBatal, JenisBatal, SebabBatalPerm, SebabBatalTanpaPerm, TarikhSebabBatal, RemarksBatal, TindakanBatal, IsPulang, IsSuratKelulusanFail, IsSuratPembatalanFail, IsSuratPemeriksaanFail, IsRekodLama, RemarksFail, CreatorID, CreatedDt, LastModID, LastModDt) 
                         VALUES (@JenisLesenDescList, @JenisLesenIdList, @SaizIklanList, @CahayaIklanList, @UnitIklanList, 
@@ -2432,7 +2466,7 @@
                         @JenisPerniagaanBaru, @NamaBaruSyarikat, @BillboardLokasi, @LokasiPasar1, @LokasiPasar2, @LokasiPasar3, @JenisPasar, @JenisPerniagaanPasar,
                         @JumlahPetak, @AnjingAlamat, @AnjingJenisPremis, @JenisPenjaja, @StatusTanahPenjaja, @AlamatPenjajaan, @JenisPerniagaanPenjaja, @MasaPenjaja1, @MasaPenjaja2, @JenisKenderaanPenjaja, @NoKenderaanPenjaja,
                         @TarikhBatal, @PenganjurEkspo, @AlamatPenganjurEkspo, @PicEkspo, @NoTelEkspo, @NamaEkspo, @LokasiEkspo, @TarikhEkspo1, @TarikhEkspo2, @MasaEkspo1, @MasaEkspo2, 
-                        @TentatifEkspo, @JemputanEkspo, @PembersihanEkspo, @TarikhKhemahEkspo1, @TarikhKhemahEkspo2, 
+                        @TentatifEkspo, @JemputanEkspo, @PembersihanEkspo, @TarikhKhemahEkspo1, @TarikhKhemahEkspo2, @KategoriEkspo, 
                         @Rujukan, @NoAkaunCukai, @DepositAmount, @DepositDate, @DepositResitNo, @DepositPulangAmount, 
                         @Is24jam, @IsBatal, @JenisBatal, @SebabBatalPerm, @SebabBatalTanpaPerm, @TarikhSebabBatal, @RemarksBatal, @TindakanBatal, 0, 0, 0, 0, 1, @RemarksFail, @CreatorId, GETDATE(), @CreatorId, GETDATE()); SELECT @Permohonan_ID = SCOPE_IDENTITY();"
                 SelectCommand="SELECT * FROM LESEN_Permohonan WHERE Permohonan_ID = @Permohonan_ID"
@@ -2444,7 +2478,7 @@
                         AlamatPenjajaan = @AlamatPenjajaan, JenisPerniagaanPenjaja = @JenisPerniagaanPenjaja, MasaPenjaja1 = @MasaPenjaja1, MasaPenjaja2 = @MasaPenjaja2, JenisKenderaanPenjaja = @JenisKenderaanPenjaja, NoKenderaanPenjaja = @NoKenderaanPenjaja,
                         TarikhBatal = @TarikhBatal, PenganjurEkspo = @PenganjurEkspo, AlamatPenganjurEkspo = @AlamatPenganjurEkspo, PicEkspo = @PicEkspo, NoTelEkspo = @NoTelEkspo, NamaEkspo = @NamaEkspo, LokasiEkspo = @LokasiEkspo, 
                         TarikhEkspo1 = @TarikhEkspo1, TarikhEkspo2 = @TarikhEkspo2, MasaEkspo1 = @MasaEkspo1, MasaEkspo2 = @MasaEkspo2, TentatifEkspo = @TentatifEkspo, JemputanEkspo = @JemputanEkspo, PembersihanEkspo = @PembersihanEkspo, 
-                        TarikhKhemahEkspo1 = @TarikhKhemahEkspo1, TarikhKhemahEkspo2 = @TarikhKhemahEkspo2, 
+                        TarikhKhemahEkspo1 = @TarikhKhemahEkspo1, TarikhKhemahEkspo2 = @TarikhKhemahEkspo2, KategoriEkspo = @KategoriEkspo, 
                         Rujukan = @Rujukan, NoAkaunCukai = @NoAkaunCukai, DepositAmount = @DepositAmount, 
                         DepositDate = @DepositDate, DepositResitNo = @DepositResitNo, DepositPulangAmount = @DepositPulangAmount, Is24jam = @Is24jam, IsBatal = @IsBatal, JenisBatal = @JenisBatal, SebabBatalPerm = @SebabBatalPerm, 
                         SebabBatalTanpaPerm = @SebabBatalTanpaPerm, TarikhSebabBatal = @TarikhSebabBatal, RemarksBatal = @RemarksBatal, TindakanBatal = @TindakanBatal, RemarksFail = @RemarksFail, LastModId = @LastModId, LastModDt = GETDATE() 
@@ -2499,6 +2533,7 @@
                     <asp:Parameter Name="PembersihanEkspo"></asp:Parameter>
                     <asp:Parameter Name="TarikhKhemahEkspo1"></asp:Parameter>
                     <asp:Parameter Name="TarikhKhemahEkspo2"></asp:Parameter>
+                    <asp:Parameter Name="KategoriEkspo"></asp:Parameter>
                     <asp:Parameter Name="Rujukan"></asp:Parameter>
                     <asp:Parameter Name="NoAkaunCukai"></asp:Parameter>
                     <asp:Parameter Name="DepositAmount"></asp:Parameter>
@@ -2571,6 +2606,7 @@
                     <asp:Parameter Name="PembersihanEkspo"></asp:Parameter>
                     <asp:Parameter Name="TarikhKhemahEkspo1"></asp:Parameter>
                     <asp:Parameter Name="TarikhKhemahEkspo2"></asp:Parameter>
+                    <asp:Parameter Name="KategoriEkspo"></asp:Parameter>
                     <asp:Parameter Name="Rujukan"></asp:Parameter>
                     <asp:Parameter Name="NoAkaunCukai"></asp:Parameter>
                     <asp:Parameter Name="DepositAmount"></asp:Parameter>
@@ -3598,6 +3634,33 @@
             checkVisibility(false);
         }
 
+        function initKategoriEkspoLain() {
+            function checkKategori($ddl) {
+                if (!$ddl || !$ddl.length) return;
+                var text = ($ddl.find('option:selected').text() || '').trim().toUpperCase();
+                var $pnl = $ddl.closest('.form-group').find('.pnl-kategori-ekspo-lain');
+                if (text === 'LAIN-LAIN') {
+                    $pnl.slideDown(150);
+                } else {
+                    $pnl.hide();
+                }
+            }
+
+            $('select[id$="DDL_KategoriEkspo"]').each(function () {
+                var $ddl = $(this);
+                checkKategori($ddl);
+
+                $ddl.off('change.kategoriEkspo select2:select.kategoriEkspo select2:clear.kategoriEkspo')
+                    .on('change.kategoriEkspo select2:select.kategoriEkspo select2:clear.kategoriEkspo', function () {
+                        checkKategori($(this));
+                    });
+            });
+
+            $(document).off('change.kategoriEkspoDoc select2:select.kategoriEkspoDoc', 'select[id$="DDL_KategoriEkspo"]')
+                       .on('change.kategoriEkspoDoc select2:select.kategoriEkspoDoc', 'select[id$="DDL_KategoriEkspo"]', function () {
+                        checkKategori($(this));
+                       });
+        }
         function initBakaLain() {
             function checkBaka($ddl) {
                 if (!$ddl || !$ddl.length) return;
