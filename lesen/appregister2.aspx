@@ -1,4 +1,4 @@
-<%@ Page MaintainScrollPositionOnPostback="true" Title="" Language="VB" MasterPageFile="~/MasterMenu.master" AutoEventWireup="false" CodeFile="appregister2.aspx.vb" Inherits="appregister2" %>
+﻿<%@ Page MaintainScrollPositionOnPostback="true" Title="" Language="VB" MasterPageFile="~/MasterMenu.master" AutoEventWireup="false" CodeFile="appregister2.aspx.vb" Inherits="appregister2" %>
 
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="asp" %>
 
@@ -1206,7 +1206,7 @@
                                     </div>
 
                                     <div class="row">
-                                        <div class="col-md-3">
+                                        <div class="col-md-4">
                                             <div class="form-group">
                                                 <label class="form-label-custom">No Rujukan</label>
                                                 <asp:TextBox ID="TB_Rujukan" runat="server"
@@ -1214,7 +1214,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-md-3">
+                                        <div class="col-md-4">
                                             <div class="form-group">
                                                 <label class="form-label-custom">No Akaun Cukai</label>
                                                 <asp:TextBox ID="TB_NoAkaunCukai" runat="server"
@@ -1222,35 +1222,37 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-md-3">
+                                        <div class="col-md-4">
                                             <div class="form-group">
                                                 <label class="form-label-custom">Lokasi Fail</label>
                                                 <asp:TextBox ID="TB_Remarks1" runat="server"
                                                     Text='<%# Bind("RemarksFail") %>' CssClass="form-control" />
                                             </div>
                                         </div>
+                                    </div>
 
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label class="form-label-custom">&nbsp;</label>
-                                                <div class="checkbox-box">
-                                                    <asp:CheckBox ID="CB_24h" Checked='<%# Bind("Is24jam") %>' runat="server" />
-                                                    <span class="text-danger fw-bold">Kelulusan 24 jam?</span>
-                                                </div>
+                                    <div class="row my-2 g-3">
+                                        <div class="col-md-6 col-lg-3">
+                                            <div class="checkbox-box">
+                                                <asp:CheckBox ID="CB_24h" Checked='<%# Bind("Is24jam") %>' runat="server" />
+                                                <span class="text-danger fw-bold">Kelulusan 24 jam?</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-lg-3">
+                                            <div class="checkbox-box">
+                                                <asp:CheckBox ID="CB_Berisiko" runat="server" Checked='<%# If(Eval("Berisiko") IsNot DBNull.Value AndAlso Eval("Berisiko").ToString() = "R", True, False) %>' OnCheckedChanged="CB_Berisiko_CheckedChanged" AutoPostBack="true" CausesValidation="false" />
+                                                <span class="text-danger fw-bold">Lesen Berisiko?</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-lg-3">
+                                            <div class="checkbox-box">
+                                                <asp:CheckBox ID="CB_Deposit" runat="server" Checked='<%# If(Eval("DepositAmount") Is DBNull.Value, False, True) %>' OnCheckedChanged="CB_Deposit_CheckedChanged" AutoPostBack="true" CausesValidation="false" />
+                                                <span class="fw-bold text-dark">Ada Deposit?</span>
                                             </div>
                                         </div>
                                     </div>
                                 </asp:Panel>
                             </asp:Panel>
-
-                            <div class="row my-2">
-                                <div class="col-md-4 col-lg-3">
-                                    <div class="checkbox-box">
-                                        <asp:CheckBox ID="CB_Deposit" runat="server" Checked='<%# If(Eval("DepositAmount") Is DBNull.Value, False, True) %>' OnCheckedChanged="CB_Deposit_CheckedChanged" AutoPostBack="true" CausesValidation="false" />
-                                        <span class="fw-bold text-dark">Ada Deposit?</span>
-                                    </div>
-                                </div>
-                            </div>
 
                             <asp:Panel ID="pnldeposit" runat="server" Visible='<%# If(Eval("DepositAmount") Is DBNull.Value, False, True) %>'>
                                 <div class="row">
@@ -2234,7 +2236,7 @@
                                 </div>
 
                                 <div class="row">
-                                    <div class="col-md-3">
+                                    <div class="col-md-4">
                                         <div class="form-group">
                                             <label class="form-label-custom">No Rujukan <span class="text-danger">*</span></label>
                                             <asp:TextBox ID="TB_Rujukan" runat="server"
@@ -2244,7 +2246,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-md-3">
+                                    <div class="col-md-4">
                                         <div class="form-group">
                                             <label class="form-label-custom">No Akaun Cukai <span class="text-danger">*</span></label>
                                             <asp:TextBox ID="TB_NoAkaunCukai" runat="server"
@@ -2254,27 +2256,29 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-md-3">
+                                    <div class="col-md-4">
                                         <div class="form-group">
                                             <label class="form-label-custom">Lokasi Fail</label>
                                             <asp:TextBox ID="TB_Remarks1" runat="server"
                                                 Text='<%# Bind("RemarksFail") %>' CssClass="form-control" />
                                         </div>
                                     </div>
-
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label class="form-label-custom">&nbsp;</label>
-                                            <div class="checkbox-box">
-                                                <asp:CheckBox ID="CB_24h" Checked='<%# Bind("Is24jam") %>' runat="server" />
-                                                <span class="text-danger fw-bold">Kelulusan 24 jam?</span>
-                                            </div>
-                                        </div>
-                                    </div>
                                 </div>
 
-                                <div class="row my-2">
-                                    <div class="col-md-4 col-lg-3">
+                                <div class="row my-2 g-3">
+                                    <div class="col-md-6 col-lg-3">
+                                        <div class="checkbox-box">
+                                            <asp:CheckBox ID="CB_24h" Checked='<%# Bind("Is24jam") %>' runat="server" />
+                                            <span class="text-danger fw-bold">Kelulusan 24 jam?</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-lg-3">
+                                        <div class="checkbox-box">
+                                            <asp:CheckBox ID="CB_Berisiko" runat="server" OnCheckedChanged="CB_Berisiko_CheckedChanged" AutoPostBack="true" CausesValidation="false" />
+                                            <span class="text-danger fw-bold">Lesen Berisiko?</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-lg-3">
                                         <div class="checkbox-box">
                                             <asp:CheckBox ID="CB_Deposit" runat="server" OnCheckedChanged="CB_Deposit_CheckedChanged" AutoPostBack="true" CausesValidation="false" />
                                             <span class="fw-bold text-dark">Ada Deposit?</span>
@@ -2460,7 +2464,7 @@
                         JenisKenderaanPenjaja, NoKenderaanPenjaja, TarikhBatal, PenganjurEkspo, AlamatPenganjurEkspo, PicEkspo, NoTelEkspo, NamaEkspo, LokasiEkspo, TarikhEkspo1, TarikhEkspo2, MasaEkspo1, MasaEkspo2, 
                         TentatifEkspo, JemputanEkspo, PembersihanEkspo, TarikhKhemahEkspo1, TarikhKhemahEkspo2, KategoriEkspo, 
                         Rujukan, NoAkaunCukai, DepositAmount, DepositDate, DepositResitNo, DepositPulangAmount, 
-                        Is24jam, IsBatal, JenisBatal, SebabBatalPerm, SebabBatalTanpaPerm, TarikhSebabBatal, RemarksBatal, TindakanBatal, IsPulang, IsSuratKelulusanFail, IsSuratPembatalanFail, IsSuratPemeriksaanFail, IsRekodLama, RemarksFail, CreatorID, CreatedDt, LastModID, LastModDt) 
+                        Is24jam, Berisiko, IsBatal, JenisBatal, SebabBatalPerm, SebabBatalTanpaPerm, TarikhSebabBatal, RemarksBatal, TindakanBatal, IsPulang, IsSuratKelulusanFail, IsSuratPembatalanFail, IsSuratPemeriksaanFail, IsRekodLama, RemarksFail, CreatorID, CreatedDt, LastModID, LastModDt) 
                         VALUES (@JenisLesenDescList, @JenisLesenIdList, @SaizIklanList, @CahayaIklanList, @UnitIklanList, 
                         @Permohonan_PemohonID, @TarikhMohon, 0, 10, @NamaSyarikat, @NoPendaftaran, @NoAkaun, @AlamatPremis, @JenisPerniagaan, @PemilikBaru, @AlamatBaru,
                         @JenisPerniagaanBaru, @NamaBaruSyarikat, @BillboardLokasi, @LokasiPasar1, @LokasiPasar2, @LokasiPasar3, @JenisPasar, @JenisPerniagaanPasar,
@@ -2468,7 +2472,7 @@
                         @TarikhBatal, @PenganjurEkspo, @AlamatPenganjurEkspo, @PicEkspo, @NoTelEkspo, @NamaEkspo, @LokasiEkspo, @TarikhEkspo1, @TarikhEkspo2, @MasaEkspo1, @MasaEkspo2, 
                         @TentatifEkspo, @JemputanEkspo, @PembersihanEkspo, @TarikhKhemahEkspo1, @TarikhKhemahEkspo2, @KategoriEkspo, 
                         @Rujukan, @NoAkaunCukai, @DepositAmount, @DepositDate, @DepositResitNo, @DepositPulangAmount, 
-                        @Is24jam, @IsBatal, @JenisBatal, @SebabBatalPerm, @SebabBatalTanpaPerm, @TarikhSebabBatal, @RemarksBatal, @TindakanBatal, 0, 0, 0, 0, 1, @RemarksFail, @CreatorId, GETDATE(), @CreatorId, GETDATE()); SELECT @Permohonan_ID = SCOPE_IDENTITY();"
+                        @Is24jam, @Berisiko, @IsBatal, @JenisBatal, @SebabBatalPerm, @SebabBatalTanpaPerm, @TarikhSebabBatal, @RemarksBatal, @TindakanBatal, 0, 0, 0, 0, 1, @RemarksFail, @CreatorId, GETDATE(), @CreatorId, GETDATE()); SELECT @Permohonan_ID = SCOPE_IDENTITY();"
                 SelectCommand="SELECT * FROM LESEN_Permohonan WHERE Permohonan_ID = @Permohonan_ID"
                 UpdateCommand="UPDATE LESEN_Permohonan SET JenisLesenDescList = @JenisLesenDescList, JenisLesenIdList = @JenisLesenIdList, SaizIklanList = @SaizIklanList, CahayaIklanList = @CahayaIklanList, UnitIklanList = @UnitIklanList, LokasiList = @LokasiList, 
                         Permohonan_PemohonID = @Permohonan_PemohonID, TarikhMohon = @TarikhMohon, StatusID = @StatusID, NamaSyarikat = @NamaSyarikat, NoPendaftaran = @NoPendaftaran, NoAkaun = @NoAkaun, AlamatPremis = @AlamatPremis, 
@@ -2480,7 +2484,7 @@
                         TarikhEkspo1 = @TarikhEkspo1, TarikhEkspo2 = @TarikhEkspo2, MasaEkspo1 = @MasaEkspo1, MasaEkspo2 = @MasaEkspo2, TentatifEkspo = @TentatifEkspo, JemputanEkspo = @JemputanEkspo, PembersihanEkspo = @PembersihanEkspo, 
                         TarikhKhemahEkspo1 = @TarikhKhemahEkspo1, TarikhKhemahEkspo2 = @TarikhKhemahEkspo2, KategoriEkspo = @KategoriEkspo, 
                         Rujukan = @Rujukan, NoAkaunCukai = @NoAkaunCukai, DepositAmount = @DepositAmount, 
-                        DepositDate = @DepositDate, DepositResitNo = @DepositResitNo, DepositPulangAmount = @DepositPulangAmount, Is24jam = @Is24jam, IsBatal = @IsBatal, JenisBatal = @JenisBatal, SebabBatalPerm = @SebabBatalPerm, 
+                        DepositDate = @DepositDate, DepositResitNo = @DepositResitNo, DepositPulangAmount = @DepositPulangAmount, Is24jam = @Is24jam, Berisiko = @Berisiko, IsBatal = @IsBatal, JenisBatal = @JenisBatal, SebabBatalPerm = @SebabBatalPerm, 
                         SebabBatalTanpaPerm = @SebabBatalTanpaPerm, TarikhSebabBatal = @TarikhSebabBatal, RemarksBatal = @RemarksBatal, TindakanBatal = @TindakanBatal, RemarksFail = @RemarksFail, LastModId = @LastModId, LastModDt = GETDATE() 
                         WHERE (Permohonan_ID = @Permohonan_ID)">
                 <InsertParameters>
@@ -2541,6 +2545,7 @@
                     <asp:Parameter Name="DepositResitNo"></asp:Parameter>
                     <asp:Parameter Name="DepositPulangAmount"></asp:Parameter>
                     <asp:Parameter Name="Is24jam"></asp:Parameter>
+                    <asp:Parameter Name="Berisiko" Type="String" DefaultValue="T"></asp:Parameter>
                     <asp:Parameter Name="RemarksFail"></asp:Parameter>
                     <asp:Parameter Name="IsBatal"></asp:Parameter>
                     <asp:Parameter Name="JenisBatal"></asp:Parameter>
@@ -2614,6 +2619,7 @@
                     <asp:Parameter Name="DepositResitNo"></asp:Parameter>
                     <asp:Parameter Name="DepositPulangAmount"></asp:Parameter>
                     <asp:Parameter Name="Is24jam"></asp:Parameter>
+                    <asp:Parameter Name="Berisiko" Type="String" DefaultValue="T"></asp:Parameter>
                     <asp:Parameter Name="RemarksFail"></asp:Parameter>
                     <asp:Parameter Name="IsBatal"></asp:Parameter>
                     <asp:Parameter Name="JenisBatal"></asp:Parameter>
@@ -2904,7 +2910,7 @@
                             <div class="table-responsive mt-3">
                                 <asp:GridView ID="GridView1" CssClass="table table-hover table-bordered custom-gridview align-middle" AllowPaging="True" PageSize="20"
                                     ShowHeaderWhenEmpty="True" EmptyDataText="Tiada Rekod Dijumpai" AllowSorting="True" runat="server" AutoGenerateColumns="False"
-                                    DataKeyNames="Permohonan_ID, StatusID, IsBatal, JenisLesen_ID, IsPublish, Is24Jam, JenisLesenIdList" DataSourceID="SqlDataSourceGrid">
+                                    DataKeyNames="Permohonan_ID, StatusID, IsBatal, JenisLesen_ID, IsPublish, Is24Jam, JenisLesenIdList, Berisiko" DataSourceID="SqlDataSourceGrid">
                                     <PagerStyle CssClass="pagination-custom" HorizontalAlign="Right" />
                                     <Columns>
                                         <asp:BoundField DataField="Permohonan_ID" HeaderText="ID" SortExpression="Permohonan_ID" Visible="false"></asp:BoundField>
@@ -2923,10 +2929,10 @@
                                                     Text='<%# Eval("DisplayAlamat") %>'></asp:Label></div>
                                             </ItemTemplate>
                                         </asp:TemplateField>
-                                        <asp:TemplateField ShowHeader="True" HeaderText="Berisiko" SortExpression="IsNotRisk">
+                                        <asp:TemplateField ShowHeader="True" HeaderText="Berisiko" SortExpression="Berisiko">
                                             <ItemTemplate>
-                                                <span runat="server" class="badge badge-success" visible='<%# If(Eval("IsNotRisk") = False, True, False) %>'>Ya</span>
-                                                <span runat="server" class="badge badge-secondary" visible='<%# If(Eval("IsNotRisk"), True, False) %>'>Tidak</span>
+                                                <span runat="server" class="badge badge-success" visible='<%# If(Eval("Berisiko") IsNot DBNull.Value AndAlso Eval("Berisiko").ToString() = "R", True, False) %>'>Ya</span>
+                                                <span runat="server" class="badge badge-secondary" visible='<%# If(Eval("Berisiko") Is DBNull.Value OrElse Eval("Berisiko").ToString() <> "R", True, False) %>'>Tidak</span>
                                             </ItemTemplate>
                                         </asp:TemplateField>
                                         <asp:TemplateField ShowHeader="True" HeaderText="Pembatalan" SortExpression="IsBatal">
@@ -2961,9 +2967,7 @@
                                 SelectCommand="SELECT ROW_NUMBER() OVER(ORDER BY a.TarikhMohon desc) as RowNo, a.*, c.Pemohon_Name, 
                                         ISNULL(a.AlamatBaru,ISNULL(a.AlamatPremis,ISNULL(a.AlamatPenjajaan,ISNULL(a.AnjingAlamat,isnull(a.LokasiPasar1,ISNULL(a.LokasiPasar2,ISNULL(a.LokasiPasar3,''))))))) as DisplayAlamat, 
                                         d.Description AS Description, 
-                                        CASE WHEN a.IsBatal = 0 then a.Is24Jam 
-                                        WHEN a.IsBatal = 1 then 1 END 
-										AS IsNotRisk  
+                                        CASE WHEN a.Berisiko = 'R' THEN 0 ELSE 1 END AS IsNotRisk  
                                         FROM LESEN_Permohonan a 
                                         INNER JOIN LESEN_Pemohon c ON a.Permohonan_PemohonID = c.Pemohon_ID 
                                         LEFT JOIN ApprovalStatus d ON a.StatusID = d.ApprStatusID
@@ -2978,7 +2982,11 @@
                                         AND a.Permohonan_PemohonID = CASE WHEN @pemohonID = 0 THEN a.Permohonan_PemohonID ELSE @pemohonID END 
                                         AND (@namaSyarikat IS NULL OR @namaSyarikat = '' OR @namaSyarikat = '%%' OR ISNULL(a.NamaSyarikat,'') LIKE '%'+@namaSyarikat+'%' OR ISNULL(a.NamaBaruSyarikat,'') LIKE '%'+@namaSyarikat+'%')
                                         AND a.IsBatal = CASE WHEN @batalID = 2 THEN a.IsBatal ELSE @batalID END 
-                                        AND a.Is24Jam = CASE WHEN @risikoID = 2 THEN a.Is24Jam ELSE @risikoID END 
+                                        AND (
+                                            @risikoID = 2 
+                                            OR (@risikoID = 0 AND (a.Berisiko = 'R' OR (a.Berisiko IS NULL AND a.Is24Jam = 0)))
+                                            OR (@risikoID = 1 AND (a.Berisiko = 'T' OR (a.Berisiko IS NULL AND a.Is24Jam = 1)))
+                                        ) 
                                         AND a.CreatorID = CASE WHEN @creatorID = '0' THEN a.CreatorID ELSE @creatorID END 
                                         AND (ISNULL(a.AlamatPremis,'') LIKE CASE WHEN @Alamat='' THEN ISNULL(a.AlamatPremis,'') ELSE '%'+@Alamat+'%' END
                                         OR ISNULL(a.AlamatBaru,'') LIKE CASE WHEN @Alamat='' THEN ISNULL(a.AlamatBaru,'') ELSE '%'+@Alamat+'%' END

@@ -1,4 +1,4 @@
-Imports System
+﻿Imports System
 Imports System.Collections.Generic
 Imports System.Configuration
 Imports System.Data
@@ -257,6 +257,11 @@ Partial Class appregister2
             ViewState("LokasiTable") = Nothing
             Session.Item("isInserted") = False
 
+            Dim cbBerisiko As CheckBox = TryCast(FormView1.FindControl("CB_Berisiko"), CheckBox)
+            If cbBerisiko IsNot Nothing Then
+                cbBerisiko.Checked = False
+            End If
+
         Catch ex As Exception
             ' Safe fallback
         End Try
@@ -339,6 +344,13 @@ Partial Class appregister2
         Dim ddlKategori As DropDownList = TryCast(FormView1.FindControl("DDL_KategoriEkspo"), DropDownList)
         Dim tbKategoriLain As TextBox = TryCast(FormView1.FindControl("TB_KategoriEkspoLain"), TextBox)
         e.NewValues("KategoriEkspo") = GetKategoriEkspoValue(ddlKategori, tbKategoriLain)
+
+        Dim cbBerisiko As CheckBox = TryCast(FormView1.FindControl("CB_Berisiko"), CheckBox)
+        If cbBerisiko IsNot Nothing Then
+            e.NewValues("Berisiko") = If(cbBerisiko.Checked, "R", "T")
+        Else
+            e.NewValues("Berisiko") = "T"
+        End If
     End Sub
 
     Private Sub FormView1_ItemInserting(sender As Object, e As FormViewInsertEventArgs) Handles FormView1.ItemInserting
@@ -359,6 +371,13 @@ Partial Class appregister2
         Dim ddlKategori As DropDownList = TryCast(FormView1.FindControl("DDL_KategoriEkspo"), DropDownList) 
         Dim tbKategoriLain As TextBox = TryCast(FormView1.FindControl("TB_KategoriEkspoLain"), TextBox)
         e.Values("KategoriEkspo") = GetKategoriEkspoValue(ddlKategori, tbKategoriLain)
+
+        Dim cbBerisiko As CheckBox = TryCast(FormView1.FindControl("CB_Berisiko"), CheckBox)
+        If cbBerisiko IsNot Nothing Then
+            e.Values("Berisiko") = If(cbBerisiko.Checked, "R", "T")
+        Else
+            e.Values("Berisiko") = "T"
+        End If
     End Sub
 
     Private Sub FormView1_ItemUpdated(sender As Object, e As FormViewUpdatedEventArgs) Handles FormView1.ItemUpdated
@@ -444,6 +463,21 @@ Partial Class appregister2
             PopulateKategoriEkspo(savedKategori, DDL_KategoriEkspo, TB_KategoriEkspoLain, pnlKategoriEkspoLain)
             ' 1. Load Multi-Licence Tags into ViewState & Repeater
             LoadSelectedLicencesFromHiddenFields()
+
+            Dim cbBerisiko As CheckBox = TryCast(FormView1.FindControl("CB_Berisiko"), CheckBox)
+            If cbBerisiko IsNot Nothing Then
+                Dim drv As DataRowView = TryCast(FormView1.DataItem, DataRowView)
+                If drv IsNot Nothing AndAlso drv.DataView.Table.Columns.Contains("Berisiko") AndAlso Not IsDBNull(drv("Berisiko")) Then
+                    Dim valBerisiko As String = drv("Berisiko").ToString().Trim()
+                    If Not String.IsNullOrEmpty(valBerisiko) Then
+                        cbBerisiko.Checked = (valBerisiko = "R")
+                    Else
+                        UpdateBerisikoCheckbox()
+                    End If
+                Else
+                    UpdateBerisikoCheckbox()
+                End If
+            End If
 
             ' 2. Handle Cancellation panels visibility
             Dim ddlJenisBatal As DropDownList = DirectCast(FormView1.FindControl("DDL_JenisBatal"), DropDownList)
@@ -675,6 +709,8 @@ Partial Class appregister2
             BindRepeater()
             updateJenisLesenList(newItem.ItemValue, newItem.ItemText)
             PanelAccess(CInt(ddlItems.SelectedValue), False)
+
+            UpdateBerisikoCheckbox()
         End If
 
         ddlItems.SelectedIndex = 0
@@ -703,6 +739,8 @@ Partial Class appregister2
                 updateJenisLesenList(item.ItemValue, item.ItemText)
                 PanelAccess(CInt(item.ItemValue), False)
             Next
+
+            UpdateBerisikoCheckbox()
         End If
     End Sub
 
@@ -1589,5 +1627,83 @@ Partial Class appregister2
 
         Return DBNull.Value
     End Function
+
+    ''' <summary>
+    ''' Updates CB_Berisiko based on the selected Jenis Lesen items in ViewState("SelectedList").
+    ''' If any selected item has JenisLesen_Category = 'R', check the checkbox (value 'R'),
+    ''' prioritizing 'R' when multiple items are chosen, else uncheck (value 'T').
+    ''' </summary>
+    Private Sub UpdateBerisikoCheckbox()
+        Dim cbBerisiko As CheckBox = TryCast(FormView1.FindControl("CB_Berisiko"), CheckBox)
+        If cbBerisiko Is Nothing Then Return
+
+        Dim myList As List(Of SelectedItem) = DirectCast(ViewState("SelectedList"), List(Of SelectedItem))
+        If myList Is Nothing OrElse myList.Count = 0 Then
+            cbBerisiko.Checked = False
+            Return
+        End If
+
+        Dim selectedIds As New List(Of Integer)()
+        For Each item In myList
+            Dim idVal As Integer
+            If Integer.TryParse(item.ItemValue, idVal) Then
+                selectedIds.Add(idVal)
+            End If
+        Next
+
+        If selectedIds.Count = 0 Then
+            cbBerisiko.Checked = False
+            Return
+        End If
+
+        Dim isBerisiko As Boolean = False
+        Using myConnection As New SqlConnection(CS)
+            myConnection.Open()
+            Dim inClause As String = String.Join(",", selectedIds)
+            Dim sql As String = "SELECT COUNT(1) FROM LESEN_JenisLesen WHERE JenisLesen_ID IN (" & inClause & ") AND JenisLesen_Category = 'R'"
+            Using cmd As New SqlCommand(sql, myConnection)
+                Dim count As Integer = Convert.ToInt32(cmd.ExecuteScalar())
+                If count > 0 Then
+                    isBerisiko = True
+                End If
+            End Using
+        End Using
+
+        cbBerisiko.Checked = isBerisiko
+    End Sub
+
+    Private Function GetCurrentPermohonanID() As Integer
+        If FormView1.CurrentMode = FormViewMode.Edit Then
+            If GridView1.SelectedDataKey IsNot Nothing AndAlso GridView1.SelectedDataKey.Values("Permohonan_ID") IsNot Nothing Then
+                Return CInt(GridView1.SelectedDataKey.Values("Permohonan_ID"))
+            End If
+        End If
+        Return 0
+    End Function
+
+    Protected Sub CB_Berisiko_CheckedChanged(sender As Object, e As EventArgs)
+        Dim cbBerisiko As CheckBox = TryCast(FormView1.FindControl("CB_Berisiko"), CheckBox)
+        If cbBerisiko Is Nothing Then Return
+
+        If FormView1.CurrentMode = FormViewMode.Edit Then
+            Dim pid As Integer = GetCurrentPermohonanID()
+            If pid > 0 Then
+                Try
+                    Using conn As New SqlConnection(CS)
+                        conn.Open()
+                        Dim sql As String = "UPDATE dbo.LESEN_Permohonan SET Berisiko = @Berisiko, LastModDt = GETDATE(), LastModID = @LastModID WHERE Permohonan_ID = @Permohonan_ID"
+                        Using cmd As New SqlCommand(sql, conn)
+                            cmd.Parameters.AddWithValue("@Berisiko", If(cbBerisiko.Checked, "R", "T"))
+                            cmd.Parameters.AddWithValue("@LastModID", If(Session("sessionUserName"), ""))
+                            cmd.Parameters.AddWithValue("@Permohonan_ID", pid)
+                            cmd.ExecuteNonQuery()
+                        End Using
+                    End Using
+                    GridView1.DataBind()
+                Catch ex As Exception
+                End Try
+            End If
+        End If
+    End Sub
 
 End Class
