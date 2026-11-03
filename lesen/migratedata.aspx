@@ -396,7 +396,10 @@
                             <label for="chkIncludeFormat">1. Kemaskini Format Data Jadual MS SQL</label>
                             <div class="option-desc">
                                 Kemaskini <code>JenisLesenIdList</code>, <code>JenisLesenDescList</code>, <code>SaizIklanList</code>, <code>CahayaIklanList</code>, <code>UnitIklanList</code>,
-                                <code>BakaAnjingList</code>, <code>Anjing*List</code> dalam <code>LESEN_Permohonan</code> &amp; <code>LESEN_PermohonanPembetulan</code>.
+                                <code>BakaAnjingList</code>, <code>Anjing*List</code> dalam <code>LESEN_Permohonan</code> &amp; <code>LESEN_PermohonanPembetulan</code>
+                                (rekod lama sahaja, <code>JenisLesen_ID &gt; 0</code>).
+                                Teks <code>SaizIklan</code> lama dipecahkan kepada senarai iklan, cth. <code>20X4 (BERCAHAYA), 3X3 (TB)</code>
+                                &rarr; <code>20X4,3X3</code> / <code>Bercahaya,Tidak Bercahaya</code> / <code>1,1</code>.
                             </div>
                         </div>
                     </div>
