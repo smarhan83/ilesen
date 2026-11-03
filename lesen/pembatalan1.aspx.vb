@@ -1011,7 +1011,9 @@ Partial Class pembatalan1
                 If updateUploadFile(FU_Lampiran1, SaveLocation) Then
                     Using myConnection As New SqlConnection(CS)
                         myConnection.Open()
-                        Dim SQL As String = "INSERT INTO LESEN_PermohonanFail (PermohonanFail_PermohonanID, PermohonanFail_ContentType, PermohonanFail_FileName, PermohonanFail_FilePath, PermohonanFail_JenisLampiran) " &
+                        ' Replace the previous file (if any) so there is only one 'SP' file per permohonan
+                        Dim SQL As String = "DELETE FROM LESEN_PermohonanFail WHERE PermohonanFail_JenisLampiran = 'SP' AND PermohonanFail_PermohonanID = @Permohonan_ID; " &
+                                            "INSERT INTO LESEN_PermohonanFail (PermohonanFail_PermohonanID, PermohonanFail_ContentType, PermohonanFail_FileName, PermohonanFail_FilePath, PermohonanFail_JenisLampiran) " &
                                             "VALUES (@Permohonan_ID, @ContentType, @FileName, @FilePath, 'SP')"
 
                         Dim myCommandSelect As New SqlCommand(SQL, myConnection)
@@ -1033,9 +1035,35 @@ Partial Class pembatalan1
         End If
 
         If isSuccess Then
+            isSuccess = SaveIsSuratFail(PermohonanID, CB_SuratFail.Checked)
+        End If
+
+        If isSuccess Then
             ShowAlert("success", "", "Surat pemeriksaan telah dikemaskini.")
         End If
     End Sub
+
+    ''' <summary>
+    ''' Saves the "muat naik surat manual" choice (CB_SuratFail) into IsSuratPemeriksaanFail,
+    ''' so Lihat Laporan opens the uploaded file (1) or the generated report (0).
+    ''' </summary>
+    Private Function SaveIsSuratFail(pid As Integer, isFail As Boolean) As Boolean
+        Using myConnection As New SqlConnection(CS)
+            myConnection.Open()
+            Dim SQL As String = "UPDATE LESEN_Permohonan SET IsSuratPemeriksaanFail = @IsSuratFail WHERE Permohonan_ID = @Permohonan_ID"
+            Using myCommand As New SqlCommand(SQL, myConnection)
+                myCommand.Parameters.AddWithValue("@Permohonan_ID", pid)
+                myCommand.Parameters.AddWithValue("@IsSuratFail", isFail)
+                Try
+                    myCommand.ExecuteNonQuery()
+                    Return True
+                Catch ex As Exception
+                    MessageBox("ERROR", Me)
+                    Return False
+                End Try
+            End Using
+        End Using
+    End Function
 
     Private Sub GetSuratFail(pid As Integer)
         BT_Cancel1.Visible = False
@@ -1079,6 +1107,9 @@ Partial Class pembatalan1
             Try
                 Dim result As Integer = myCommandSelect.ExecuteNonQuery()
                 If result > 0 Then
+                    ' No uploaded file any more, so Lihat Laporan should use the generated report
+                    SaveIsSuratFail(pid, False)
+
                     FU_Lampiran1.Visible = True
                     BT_Cancel1.Visible = False
                     HL_Lampiran1.Visible = False

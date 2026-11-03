@@ -865,7 +865,9 @@ Partial Class semakpembatalan1
                 If updateUploadFile(FU_Lampiran3, SaveLocation) Then
                     Using myConnection As New SqlConnection(CS)
                         myConnection.Open()
-                        Dim SQL As String = "INSERT INTO LESEN_PermohonanFail (PermohonanFail_PermohonanID, PermohonanFail_ContentType, PermohonanFail_FileName, PermohonanFail_FilePath, PermohonanFail_JenisLampiran) " &
+                        ' Replace the previous file (if any) so there is only one 'SB' file per permohonan
+                        Dim SQL As String = "DELETE FROM LESEN_PermohonanFail WHERE PermohonanFail_JenisLampiran = 'SB' AND PermohonanFail_PermohonanID = @Permohonan_ID; " &
+                                            "INSERT INTO LESEN_PermohonanFail (PermohonanFail_PermohonanID, PermohonanFail_ContentType, PermohonanFail_FileName, PermohonanFail_FilePath, PermohonanFail_JenisLampiran) " &
                                             "VALUES (@Permohonan_ID, @ContentType, @FileName, @FilePath, 'SB')"
                         Dim myCommandSelect As New SqlCommand(SQL, myConnection)
                         myCommandSelect.Parameters.AddWithValue("@Permohonan_ID", PermohonanID)
@@ -886,9 +888,35 @@ Partial Class semakpembatalan1
         End If
 
         If isSuccess Then
+            isSuccess = SaveIsSuratFail(PermohonanID, CB_SuratFail.Checked)
+        End If
+
+        If isSuccess Then
             ShowAlert("success", "", "Surat pembatalan telah dikemaskini.")
         End If
     End Sub
+
+    ''' <summary>
+    ''' Saves the "muat naik surat manual" choice (CB_SuratFail) into IsSuratPembatalanFail,
+    ''' so Lihat Surat opens the uploaded file (1) or the generated letter (0).
+    ''' </summary>
+    Private Function SaveIsSuratFail(pid As Integer, isFail As Boolean) As Boolean
+        Using myConnection As New SqlConnection(CS)
+            myConnection.Open()
+            Dim SQL As String = "UPDATE LESEN_Permohonan SET IsSuratPembatalanFail = @IsSuratFail WHERE Permohonan_ID = @Permohonan_ID"
+            Using myCommand As New SqlCommand(SQL, myConnection)
+                myCommand.Parameters.AddWithValue("@Permohonan_ID", pid)
+                myCommand.Parameters.AddWithValue("@IsSuratFail", isFail)
+                Try
+                    myCommand.ExecuteNonQuery()
+                    Return True
+                Catch ex As Exception
+                    MessageBox(ex.Message, Me)
+                    Return False
+                End Try
+            End Using
+        End Using
+    End Function
 
     Private Sub GetSuratFail(pid As Integer)
         BT_Cancel3.Visible = False
@@ -1117,6 +1145,9 @@ Partial Class semakpembatalan1
                     BT_Delete2.Visible = False
 
                 ElseIf result > 0 AndAlso lampiran = "SB" Then
+                    ' No uploaded letter any more, so Lihat Surat should use the generated letter
+                    SaveIsSuratFail(pid, False)
+
                     FU_Lampiran3.Visible = True
                     BT_Cancel3.Visible = False
                     HL_Lampiran3.Visible = False

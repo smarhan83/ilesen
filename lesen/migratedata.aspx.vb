@@ -223,7 +223,6 @@ Partial Class lesen_migratedata
                 For Each item As QueueItem In items
                     Dim pid As Integer = item.PermohonanID
                     Dim jenisLesenID As Integer = item.JenisLesenID
-                    Dim rujukan As String = If(String.IsNullOrEmpty(item.Rujukan), "-", item.Rujukan)
 
                     ' 1. Update SQL data format (LESEN_Permohonan & LESEN_PermohonanPembetulan)
                     If item.NeedFormat AndAlso RunStep(res, item, "Format Data SQL",
@@ -238,21 +237,21 @@ Partial Class lesen_migratedata
                     ' 2. Laporan / Surat Pemeriksaan (SP)
                     If item.NeedSP AndAlso RunStep(res, item, "PDF Laporan Pemeriksaan (SP)",
                             "Berjaya simpan PDF Laporan Pemeriksaan & kemaskini IsSuratPemeriksaanFail = 1.",
-                            Function() GenerateSuratPemeriksaanPdf(conn, pid, jenisLesenID, rujukan, docFolderPhysical)) Then
+                            Function() GenerateSuratPemeriksaanPdf(conn, pid, jenisLesenID, docFolderPhysical)) Then
                         res.SPGeneratedCount += 1
                     End If
 
                     ' 3. Surat Kelulusan (SK)
                     If item.NeedSK AndAlso RunStep(res, item, "PDF Surat Kelulusan (SK)",
                             "Berjaya simpan PDF Surat Kelulusan & kemaskini IsSuratKelulusanFail = 1.",
-                            Function() GenerateSuratKelulusanPdf(conn, pid, jenisLesenID, rujukan, docFolderPhysical)) Then
+                            Function() GenerateSuratKelulusanPdf(conn, pid, jenisLesenID, docFolderPhysical)) Then
                         res.SKGeneratedCount += 1
                     End If
 
                     ' 4. Surat Pembatalan (SB)
                     If item.NeedSB AndAlso RunStep(res, item, "PDF Surat Pembatalan (SB)",
                             "Berjaya simpan PDF Surat Pembatalan & kemaskini IsSuratPembatalanFail = 1.",
-                            Function() GenerateSuratPembatalanPdf(conn, pid, jenisLesenID, rujukan, docFolderPhysical)) Then
+                            Function() GenerateSuratPembatalanPdf(conn, pid, jenisLesenID, docFolderPhysical)) Then
                         res.SBGeneratedCount += 1
                     End If
 
@@ -326,7 +325,11 @@ Partial Class lesen_migratedata
                     PermohonanFail_PermohonanID AS Permohonan_ID,
                     MAX(CASE WHEN PermohonanFail_JenisLampiran = 'SP' THEN 1 ELSE 0 END) AS HasSPFile,
                     MAX(CASE WHEN PermohonanFail_JenisLampiran = 'SK' THEN 1 ELSE 0 END) AS HasSKFile,
-                    MAX(CASE WHEN PermohonanFail_JenisLampiran = 'SB' THEN 1 ELSE 0 END) AS HasSBFile
+                    MAX(CASE WHEN PermohonanFail_JenisLampiran = 'SB' THEN 1 ELSE 0 END) AS HasSBFile,
+                    -- Letters uploaded by users (not created by this page) must never be replaced
+                    MAX(CASE WHEN " & UploadedLetterSql("SP", SP_FILE_PREFIX) & " THEN 1 ELSE 0 END) AS HasSPUpload,
+                    MAX(CASE WHEN " & UploadedLetterSql("SK", SK_FILE_PREFIX) & " THEN 1 ELSE 0 END) AS HasSKUpload,
+                    MAX(CASE WHEN " & UploadedLetterSql("SB", SB_FILE_PREFIX) & " THEN 1 ELSE 0 END) AS HasSBUpload
                 FROM LESEN_PermohonanFail
                 WHERE PermohonanFail_JenisLampiran IN ('SP', 'SK', 'SB')
                 GROUP BY PermohonanFail_PermohonanID
@@ -338,7 +341,7 @@ Partial Class lesen_migratedata
                     ISNULL(a.JenisLesen_ID, 0) AS JenisLesen_ID,
                     CASE WHEN ISNULL(a.JenisLesen_ID, 0) > 0 THEN 1 ELSE 0 END AS IsOldRecord,
                     CASE WHEN ISNULL(a.StatusID, 0) > 0 AND p.Permohonan_ID IS NULL THEN 1 ELSE 0 END AS MissingPembetulan,
-                    CASE WHEN ISNULL(LTRIM(RTRIM(a.JenisLesenIdList)), '') = '' THEN 1 ELSE 0 END AS MissingJenisLesenList,
+                    CASE WHEN " & JenisLesenPendingSql() & " THEN 1 ELSE 0 END AS MissingJenisLesenList,
                     CASE WHEN " & IklanPendingSql("a") & "
                            OR (p.Permohonan_ID IS NOT NULL AND " & IklanPendingSql("p") & ")
                          THEN 1 ELSE 0 END AS IklanPending,
@@ -359,7 +362,10 @@ Partial Class lesen_migratedata
                     CAST(ISNULL(a.IsSuratPembatalanFail, 0) AS INT) AS IsSBDone,
                     ISNULL(f.HasSPFile, 0) AS HasSPFile,
                     ISNULL(f.HasSKFile, 0) AS HasSKFile,
-                    ISNULL(f.HasSBFile, 0) AS HasSBFile
+                    ISNULL(f.HasSBFile, 0) AS HasSBFile,
+                    ISNULL(f.HasSPUpload, 0) AS HasSPUpload,
+                    ISNULL(f.HasSKUpload, 0) AS HasSKUpload,
+                    ISNULL(f.HasSBUpload, 0) AS HasSBUpload
                 FROM LESEN_Permohonan a
                 LEFT JOIN LESEN_PermohonanPembetulan p ON p.Permohonan_ID = a.Permohonan_ID
                 LEFT JOIN PdfFiles f ON f.Permohonan_ID = a.Permohonan_ID
@@ -376,12 +382,21 @@ Partial Class lesen_migratedata
                         CASE WHEN s.IsOldRecord = 1 AND s.IklanPending = 1 THEN 1 ELSE 0 END AS NeedIklanList,
                         CASE WHEN s.IsOldRecord = 1 AND s.AnjingPending = 1 THEN 1 ELSE 0 END AS NeedAnjingList,
                         CASE WHEN s.IsOldRecord = 1 AND s.MissingPembetulan = 1 THEN 1 ELSE 0 END AS NeedPembetulan,
-                        -- A PDF is needed when the letter has text and the PDF was not saved yet (or a regenerate is forced)
-                        CASE WHEN s.HasSPText = 1 AND (@ForcePdf = 1 OR s.IsSPDone = 0 OR s.HasSPFile = 0) THEN 1 ELSE 0 END AS NeedSP,
-                        CASE WHEN s.HasSKText = 1 AND (@ForcePdf = 1 OR s.IsSKDone = 0 OR s.HasSKFile = 0) THEN 1 ELSE 0 END AS NeedSK,
-                        CASE WHEN s.HasSBText = 1 AND (@ForcePdf = 1 OR s.IsSBDone = 0 OR s.HasSBFile = 0) THEN 1 ELSE 0 END AS NeedSB
+                        -- A PDF is needed when the letter has text, no user upload exists,
+                        -- and the PDF was not saved yet (or a regenerate is forced)
+                        CASE WHEN s.HasSPText = 1 AND s.HasSPUpload = 0 AND (@ForcePdf = 1 OR s.IsSPDone = 0 OR s.HasSPFile = 0) THEN 1 ELSE 0 END AS NeedSP,
+                        CASE WHEN s.HasSKText = 1 AND s.HasSKUpload = 0 AND (@ForcePdf = 1 OR s.IsSKDone = 0 OR s.HasSKFile = 0) THEN 1 ELSE 0 END AS NeedSK,
+                        CASE WHEN s.HasSBText = 1 AND s.HasSBUpload = 0 AND (@ForcePdf = 1 OR s.IsSBDone = 0 OR s.HasSBFile = 0) THEN 1 ELSE 0 END AS NeedSB
                 ) n
             )"
+    End Function
+
+    ''' <summary>
+    ''' SQL condition on a LESEN_PermohonanFail row: it is a letter of this type that a user uploaded,
+    ''' i.e. not a PDF created by this page (those are named "{filePrefix}_{Permohonan_ID}.pdf").
+    ''' </summary>
+    Private Shared Function UploadedLetterSql(ByVal jenisLampiran As String, ByVal filePrefix As String) As String
+        Return "(PermohonanFail_JenisLampiran = '" & jenisLampiran & "' AND ISNULL(PermohonanFail_FileName, '') NOT LIKE '" & filePrefix & "[_]%')"
     End Function
 
     ''' <summary>SQL condition: the text/ntext column has non-blank content.</summary>
@@ -400,6 +415,17 @@ Partial Class lesen_migratedata
                "      OR (" & t & "SaizIklanList = REPLACE(LTRIM(RTRIM(" & t & "SaizIklan)), ',', ';') AND " & t & "CahayaIklanList = '" & CAHAYA_YA & "')))"
     End Function
 
+    ''' <summary>
+    ''' SQL condition: JenisLesenIdList / JenisLesenDescList of LESEN_Permohonan (alias "a") still need to be built.
+    ''' Must stay in sync with <see cref="NeedsJenisLesenMigration"/>.
+    ''' </summary>
+    Private Shared Function JenisLesenPendingSql() As String
+        Dim combinedIds As String = String.Join(", ", COMBINED_JENIS_LESEN.Keys)
+        Return "(ISNULL(LTRIM(RTRIM(a.JenisLesenIdList)), '') = ''" &
+               " OR ISNULL(LTRIM(RTRIM(a.JenisLesenDescList)), '') = ''" &
+               " OR (a.JenisLesen_ID IN (" & combinedIds & ") AND LTRIM(RTRIM(a.JenisLesenIdList)) = CAST(a.JenisLesen_ID AS VARCHAR(10))))"
+    End Function
+
     ''' <summary>SQL condition: the anjing lists of this row (alias "a" or "p") still need to be built.</summary>
     Private Shared Function AnjingPendingSql(ByVal tableAlias As String) As String
         Dim t As String = tableAlias & "."
@@ -413,27 +439,19 @@ Partial Class lesen_migratedata
 
     ''' <summary>
     ''' Converts one old record to the new table format:
-    '''   1. LESEN_Permohonan: JenisLesenIdList / JenisLesenDescList, anjing lists and default boolean flags.
+    '''   1. LESEN_Permohonan: anjing lists and default boolean flags, then JenisLesenIdList / JenisLesenDescList
+    '''      (see "Jenis Lesen Migration Logic").
     '''   2. LESEN_Permohonan: iklan lists (parsed from the old free-text SaizIklan, see "Iklan Migration Logic").
     '''   3. Create LESEN_PermohonanPembetulan if a submitted record (StatusID > 0) does not have one.
     '''   4. LESEN_PermohonanPembetulan: anjing lists and iklan lists from its own old columns.
     ''' Every list is only written when it is still empty, so running this twice is safe.
     ''' </summary>
     Private Shared Sub UpdateRecordDataFormat(ByVal conn As SqlConnection, ByVal permohonanID As Integer)
-        ' 1. LESEN_Permohonan: JenisLesen, anjing & flags
+        ' 1. LESEN_Permohonan: anjing & flags.
+        '    A letter flag is set to 1 when a user-uploaded letter exists, so the new pages open that file.
         Dim sqlUpdatePermohonan As String = "
             UPDATE a
             SET
-                a.JenisLesenIdList = CASE
-                    WHEN ISNULL(LTRIM(RTRIM(a.JenisLesenIdList)), '') = '' AND ISNULL(a.JenisLesen_ID, 0) > 0
-                    THEN CAST(a.JenisLesen_ID AS VARCHAR(50))
-                    ELSE a.JenisLesenIdList
-                END,
-                a.JenisLesenDescList = CASE
-                    WHEN ISNULL(LTRIM(RTRIM(a.JenisLesenDescList)), '') = '' AND ISNULL(a.JenisLesen_ID, 0) > 0
-                    THEN ISNULL(jl.JenisLesen_Description, CAST(a.JenisLesen_ID AS VARCHAR(50)))
-                    ELSE a.JenisLesenDescList
-                END,
                 a.BakaAnjingList = CASE
                     WHEN ISNULL(LTRIM(RTRIM(a.BakaAnjingList)), '') = '' AND ISNULL(LTRIM(RTRIM(CAST(a.AnjingBaka AS VARCHAR(50)))), '') NOT IN ('', '0')
                     THEN ISNULL(lk.name, LTRIM(RTRIM(CAST(a.AnjingBaka AS VARCHAR(50)))))
@@ -460,17 +478,19 @@ Partial Class lesen_migratedata
                     ELSE a.AnjingBetinaMandulList
                 END,
                 a.IsRekodLama = ISNULL(a.IsRekodLama, 0),
-                a.IsSuratPemeriksaanFail = ISNULL(a.IsSuratPemeriksaanFail, 0),
-                a.IsSuratKelulusanFail = ISNULL(a.IsSuratKelulusanFail, 0),
-                a.IsSuratPembatalanFail = ISNULL(a.IsSuratPembatalanFail, 0),
+                a.IsSuratPemeriksaanFail = CASE WHEN EXISTS (SELECT 1 FROM LESEN_PermohonanFail WHERE PermohonanFail_PermohonanID = a.Permohonan_ID AND " & UploadedLetterSql("SP", SP_FILE_PREFIX) & ") THEN 1 ELSE ISNULL(a.IsSuratPemeriksaanFail, 0) END,
+                a.IsSuratKelulusanFail = CASE WHEN EXISTS (SELECT 1 FROM LESEN_PermohonanFail WHERE PermohonanFail_PermohonanID = a.Permohonan_ID AND " & UploadedLetterSql("SK", SK_FILE_PREFIX) & ") THEN 1 ELSE ISNULL(a.IsSuratKelulusanFail, 0) END,
+                a.IsSuratPembatalanFail = CASE WHEN EXISTS (SELECT 1 FROM LESEN_PermohonanFail WHERE PermohonanFail_PermohonanID = a.Permohonan_ID AND " & UploadedLetterSql("SB", SB_FILE_PREFIX) & ") THEN 1 ELSE ISNULL(a.IsSuratPembatalanFail, 0) END,
                 a.IsBatal = ISNULL(a.IsBatal, 0),
                 a.Is24jam = ISNULL(a.Is24jam, 0),
                 a.IsPulang = ISNULL(a.IsPulang, 0)
             FROM LESEN_Permohonan a
-            LEFT JOIN LESEN_JenisLesen jl ON a.JenisLesen_ID = jl.JenisLesen_ID
             LEFT JOIN TBL_LOOKUPS lk ON lk.lookupgrp_id = 10004 AND CAST(lk.id AS VARCHAR(50)) = LTRIM(RTRIM(CAST(a.AnjingBaka AS VARCHAR(50))))
             WHERE a.Permohonan_ID = @PermohonanID"
         ExecuteForPermohonan(conn, sqlUpdatePermohonan, permohonanID)
+
+        ' 1b. LESEN_Permohonan: jenis lesen
+        MigrateJenisLesenList(conn, permohonanID)
 
         ' 2. LESEN_Permohonan: iklan
         MigrateIklanList(conn, "LESEN_Permohonan", permohonanID)
@@ -564,6 +584,84 @@ Partial Class lesen_migratedata
             cmd.ExecuteNonQuery()
         End Using
     End Sub
+
+#End Region
+
+#Region "Jenis Lesen Migration Logic"
+
+    ' OLD format: one JenisLesen_ID per record. Some IDs were a combination of several licence types
+    ' (their LESEN_JenisLesen description contains commas and they are inactive in the new version).
+    ' NEW format: JenisLesenIdList / JenisLesenDescList are comma-separated lists with the same number of items,
+    ' e.g. "6,11,10" / "LESEN PERTUKARAN ALAMAT PERNIAGAAN,PERTUKARAN NAMA SYARIKAT,PERTUKARAN VISUAL IKLAN".
+
+    ' Old combined JenisLesen_ID -> licence types used by the new version
+    Private Shared ReadOnly COMBINED_JENIS_LESEN As New Dictionary(Of Integer, Integer()) From {
+        {19, {6, 11, 10}},   ' PERTUKARAN ALAMAT, NAMA SYARIKAT, VISUAL IKLAN
+        {20, {9, 6, 10}},    ' PERTUKARAN PEMILIK, ALAMAT, VISUAL IKLAN
+        {23, {11, 10}},      ' PERTUKARAN NAMA SYARIKAT, VISUAL IKLAN
+        {24, {9, 10}},       ' PERTUKARAN PEMILIK, VISUAL IKLAN
+        {26, {11, 7}}        ' PERTUKARAN NAMA SYARIKAT, TAMBAH PREMIS
+    }
+
+    ''' <summary>Builds JenisLesenIdList / JenisLesenDescList of one LESEN_Permohonan row from its old JenisLesen_ID.</summary>
+    Private Shared Sub MigrateJenisLesenList(ByVal conn As SqlConnection, ByVal permohonanID As Integer)
+        Dim jenisLesenID As Integer = 0
+        Dim idList As String = ""
+        Dim descList As String = ""
+
+        Using cmd As New SqlCommand("SELECT ISNULL(JenisLesen_ID, 0) AS JenisLesen_ID, JenisLesenIdList, JenisLesenDescList FROM LESEN_Permohonan WHERE Permohonan_ID = @PermohonanID", conn)
+            cmd.Parameters.AddWithValue("@PermohonanID", permohonanID)
+            Using rdr As SqlDataReader = cmd.ExecuteReader()
+                If Not rdr.Read() Then Return
+                jenisLesenID = Convert.ToInt32(rdr("JenisLesen_ID"))
+                idList = Convert.ToString(rdr("JenisLesenIdList"))
+                descList = Convert.ToString(rdr("JenisLesenDescList"))
+            End Using
+        End Using
+
+        If Not NeedsJenisLesenMigration(jenisLesenID, idList, descList) Then Return
+
+        Dim newIds As Integer() = NewJenisLesenIds(jenisLesenID)
+        Dim descriptions As Dictionary(Of Integer, String) = ReadJenisLesenDescriptions(conn, newIds)
+
+        Dim sqlUpdate As String = "UPDATE LESEN_Permohonan SET JenisLesenIdList = @IdList, JenisLesenDescList = @DescList WHERE Permohonan_ID = @PermohonanID"
+        Using cmd As New SqlCommand(sqlUpdate, conn)
+            cmd.Parameters.AddWithValue("@PermohonanID", permohonanID)
+            cmd.Parameters.AddWithValue("@IdList", String.Join(",", newIds))
+            cmd.Parameters.AddWithValue("@DescList", String.Join(",", newIds.Select(Function(id) If(descriptions.ContainsKey(id), descriptions(id), id.ToString()))))
+            cmd.ExecuteNonQuery()
+        End Using
+    End Sub
+
+    ''' <summary>
+    ''' True for an old record whose lists are empty, or that still holds a combined ID on its own
+    ''' (written by the first version of this page). Must stay in sync with <see cref="JenisLesenPendingSql"/>.
+    ''' </summary>
+    Private Shared Function NeedsJenisLesenMigration(ByVal jenisLesenID As Integer, ByVal idList As String, ByVal descList As String) As Boolean
+        If jenisLesenID <= 0 Then Return False
+        If String.IsNullOrWhiteSpace(idList) OrElse String.IsNullOrWhiteSpace(descList) Then Return True
+        Return COMBINED_JENIS_LESEN.ContainsKey(jenisLesenID) AndAlso idList.Trim() = jenisLesenID.ToString()
+    End Function
+
+    ''' <summary>Licence types for the new version: the split list for a combined ID, otherwise the ID itself.</summary>
+    Private Shared Function NewJenisLesenIds(ByVal jenisLesenID As Integer) As Integer()
+        If COMBINED_JENIS_LESEN.ContainsKey(jenisLesenID) Then Return COMBINED_JENIS_LESEN(jenisLesenID)
+        Return {jenisLesenID}
+    End Function
+
+    Private Shared Function ReadJenisLesenDescriptions(ByVal conn As SqlConnection, ByVal ids As Integer()) As Dictionary(Of Integer, String)
+        Dim result As New Dictionary(Of Integer, String)()
+        ' ids are integers, so they are safe to put in the IN list
+        Dim sql As String = "SELECT JenisLesen_ID, JenisLesen_Description FROM LESEN_JenisLesen WHERE JenisLesen_ID IN (" & String.Join(",", ids) & ")"
+        Using cmd As New SqlCommand(sql, conn)
+            Using rdr As SqlDataReader = cmd.ExecuteReader()
+                While rdr.Read()
+                    result(Convert.ToInt32(rdr("JenisLesen_ID"))) = Convert.ToString(rdr("JenisLesen_Description")).Trim()
+                End While
+            End Using
+        End Using
+        Return result
+    End Function
 
 #End Region
 
@@ -778,6 +876,12 @@ Partial Class lesen_migratedata
 
 #Region "PDF Generation & File Attachment Logic (SP, SK, SB)"
 
+    ' PDFs created by this page are named "{prefix}_{Permohonan_ID}.pdf" (PermohonanFail_FileName).
+    ' Any other file of the same JenisLampiran was uploaded by a user and is never replaced.
+    Private Const SP_FILE_PREFIX As String = "LaporanPemeriksaan"
+    Private Const SK_FILE_PREFIX As String = "SuratKelulusan"
+    Private Const SB_FILE_PREFIX As String = "SuratPembatalan"
+
     ' Report templates by JenisLesen_ID (index), as used by the old appregister / kelulusan / pembatalan pages
     Private Shared ReadOnly SP_REPORT_NAMES As String() = {
         "", "sp_perniagaan", "sp_pasar", "sp_anjing", "sp_penjaja", "sp_billboard",
@@ -803,109 +907,87 @@ Partial Class lesen_migratedata
         "", "", "sb_tukarnamaiklan", "sb_tukarpemilikiklan", "sb_pasartambahpetak", "sb_tukarnamatambahpremis"
     }
 
-    ''' <summary>Text of an old letter (stored in LESEN_Permohonan columns) and its date.</summary>
-    Private Class LetterText
-        Public Property Sections As String()
-        Public Property TarikhSurat As String
-    End Class
+    ' The old .rpt templates run their own SQL command: the query is passed in the "paraSQL" report parameter and
+    ' Crystal connects to the database itself (same as ReportViewer.aspx). The SQL below is copied from the old pages.
+    ' Permohonan_ID is an Integer, so it is safe to put directly into the query text.
 
-    Private Shared Function GenerateSuratPemeriksaanPdf(ByVal conn As SqlConnection, ByVal permohonanID As Integer, ByVal jenisLesenID As Integer, ByVal rujukan As String, ByVal docFolderPhysical As String) As String
-        Dim letter As LetterText = ReadLetterText(conn, permohonanID, {"SuratPemeriksaan1", "SuratPemeriksaan2"}, "TarikhSuratPemeriksaan")
-        If letter Is Nothing Then Return Nothing
+    Private Shared Function GenerateSuratPemeriksaanPdf(ByVal conn As SqlConnection, ByVal permohonanID As Integer, ByVal jenisLesenID As Integer, ByVal docFolderPhysical As String) As String
+        If Not HasLetterText(conn, permohonanID, {"SuratPemeriksaan1", "SuratPemeriksaan2"}) Then Return Nothing
 
         Dim rptPath As String = FindReportTemplate("~/lesen/report/pemeriksaan/", SP_REPORT_NAMES, jenisLesenID, "sp_perniagaan", "mpk_suratpemeriksaan", "sp_perniagaan")
 
-        Dim sqlData As String
+        Dim reportSql As String
         If jenisLesenID = 4 Then
-            sqlData = "SELECT b.UlasanDesc, f.*, a.IsBatal, a.Rujukan, a.RujukanInspektorat, a.TarikhPemeriksaan, a.TarikhSuratPemeriksaan, a.SuratPemeriksaan1, a.SuratPemeriksaan2, " &
-                      "c.Pemohon_Name, c.Pemohon_Address, c.Pemohon_ICNo, c.Pemohon_MobileNo, c.Pemohon_TelNo, d.Users_Fullname, d.Users_Signature " &
-                      "FROM LESEN_Permohonan a " &
-                      "LEFT JOIN LESEN_PermohonanPembetulan f ON a.Permohonan_ID = f.Permohonan_ID " &
-                      "LEFT JOIN LESEN_PenjajaUlasan b ON b.PermohonanID = a.Permohonan_ID " &
-                      "LEFT JOIN LESEN_Pemohon c ON a.Permohonan_PemohonID = c.Pemohon_ID " &
-                      "LEFT JOIN TBL_USERS d ON a.TandatanganPemeriksaanId = d.Users_Id " &
-                      "WHERE a.Permohonan_ID = @PermohonanID"
+            reportSql = "SELECT b.UlasanDesc, f.*, a.IsBatal, a.Rujukan, a.RujukanInspektorat, a.TarikhPemeriksaan, a.TarikhSuratPemeriksaan, a.SuratPemeriksaan1, a.SuratPemeriksaan2, " &
+                        "c.Pemohon_Name, c.Pemohon_Address, c.Pemohon_ICNo, c.Pemohon_MobileNo, c.Pemohon_TelNo, d.Users_Fullname, d.Users_Signature " &
+                        "FROM LESEN_Permohonan a " &
+                        "LEFT JOIN LESEN_PermohonanPembetulan f ON a.Permohonan_ID = f.Permohonan_ID " &
+                        "LEFT JOIN LESEN_PenjajaUlasan b ON b.PermohonanID = a.Permohonan_ID " &
+                        "LEFT JOIN LESEN_Pemohon c ON a.Permohonan_PemohonID = c.Pemohon_ID " &
+                        "LEFT JOIN TBL_USERS d ON a.TandatanganPemeriksaanId = d.Users_Id " &
+                        "WHERE a.Permohonan_ID = " & permohonanID
         Else
-            sqlData = "SELECT b.KadarBayaran_Desc, b.KadarBayaran_Amount, f.*, a.IsBatal, a.Rujukan, a.RujukanInspektorat, a.TarikhPemeriksaan, a.TarikhSuratPemeriksaan, a.SuratPemeriksaan1, a.SuratPemeriksaan2, " &
-                      "c.Pemohon_Name, c.Pemohon_Address, c.Pemohon_ICNo, c.Pemohon_MobileNo, c.Pemohon_TelNo, d.Users_Fullname, d.Users_Signature, e.name AS AnjingJenisPremisDesc " &
-                      "FROM LESEN_Permohonan a " &
-                      "LEFT JOIN LESEN_PermohonanPembetulan f ON a.Permohonan_ID = f.Permohonan_ID " &
-                      "LEFT JOIN LESEN_KadarBayaran b ON b.KadarBayaran_PermohonanID = a.Permohonan_ID AND b.KadarBayaran_PermohonanAgensiID = 3 " &
-                      "LEFT JOIN LESEN_Pemohon c ON a.Permohonan_PemohonID = c.Pemohon_ID " &
-                      "LEFT JOIN TBL_USERS d ON a.TandatanganPemeriksaanId = d.Users_Id " &
-                      "LEFT JOIN TBL_LOOKUPS e ON e.id = a.AnjingJenisPremis " &
-                      "WHERE a.Permohonan_ID = @PermohonanID"
+            reportSql = "SELECT b.KadarBayaran_Desc, b.KadarBayaran_Amount, f.*, a.IsBatal, a.Rujukan, a.RujukanInspektorat, a.TarikhPemeriksaan, a.TarikhSuratPemeriksaan, a.SuratPemeriksaan1, a.SuratPemeriksaan2, " &
+                        "c.Pemohon_Name, c.Pemohon_Address, c.Pemohon_ICNo, c.Pemohon_MobileNo, c.Pemohon_TelNo, d.Users_Fullname, d.Users_Signature, e.name AS AnjingJenisPremisDesc " &
+                        "FROM LESEN_Permohonan a " &
+                        "LEFT JOIN LESEN_PermohonanPembetulan f ON a.Permohonan_ID = f.Permohonan_ID " &
+                        "LEFT JOIN LESEN_KadarBayaran b ON b.KadarBayaran_PermohonanID = a.Permohonan_ID AND b.KadarBayaran_PermohonanAgensiID = 3 " &
+                        "LEFT JOIN LESEN_Pemohon c ON a.Permohonan_PemohonID = c.Pemohon_ID " &
+                        "LEFT JOIN TBL_USERS d ON a.TandatanganPemeriksaanId = d.Users_Id " &
+                        "LEFT JOIN TBL_LOOKUPS e ON e.id = a.AnjingJenisPremis " &
+                        "WHERE a.Permohonan_ID = " & permohonanID
         End If
 
-        Return ExportAndAttachPdf(conn, permohonanID, rptPath, sqlData, letter, rujukan, docFolderPhysical,
-                                  "LaporanPemeriksaan", "LAPORAN PEMERIKSAAN", "SP", "IsSuratPemeriksaanFail")
+        Return ExportAndAttachPdf(conn, permohonanID, rptPath, reportSql, docFolderPhysical, SP_FILE_PREFIX, "SP", "IsSuratPemeriksaanFail")
     End Function
 
-    Private Shared Function GenerateSuratKelulusanPdf(ByVal conn As SqlConnection, ByVal permohonanID As Integer, ByVal jenisLesenID As Integer, ByVal rujukan As String, ByVal docFolderPhysical As String) As String
-        Dim letter As LetterText = ReadLetterText(conn, permohonanID, {"SuratKelulusan1", "SuratKelulusan2", "SuratKelulusan3", "SuratKelulusan4"}, "TarikhSuratKelulusan")
-        If letter Is Nothing Then Return Nothing
+    Private Shared Function GenerateSuratKelulusanPdf(ByVal conn As SqlConnection, ByVal permohonanID As Integer, ByVal jenisLesenID As Integer, ByVal docFolderPhysical As String) As String
+        If Not HasLetterText(conn, permohonanID, {"SuratKelulusan1", "SuratKelulusan2", "SuratKelulusan3", "SuratKelulusan4"}) Then Return Nothing
 
         Dim rptPath As String = FindReportTemplate("~/lesen/report/kelulusan/", SK_REPORT_NAMES, jenisLesenID, "sk_perniagaanb", "sk_perniagaanb")
 
-        Dim sqlData As String = "SELECT a.KadarBayaran_Desc, a.KadarBayaran_Amount, b.*, c.Pemohon_Name, c.Pemohon_Address, c.Pemohon_ICNo, c.Pemohon_MobileNo, c.Pemohon_TelNo, " &
-                                "d.Users_Fullname, d.Users_Signature, e.name AS AnjingJenisPremisDesc " &
-                                "FROM LESEN_Permohonan b " &
-                                "LEFT JOIN LESEN_KadarBayaran a ON a.KadarBayaran_PermohonanID = b.Permohonan_ID AND a.IsSelect = 1 " &
-                                "LEFT JOIN LESEN_Pemohon c ON b.Permohonan_PemohonID = c.Pemohon_ID " &
-                                "LEFT JOIN TBL_USERS d ON b.TandatanganKelulusanId = d.Users_Id " &
-                                "LEFT JOIN TBL_LOOKUPS e ON e.id = b.AnjingJenisPremis " &
-                                "WHERE b.Permohonan_ID = @PermohonanID ORDER BY a.SeqNo ASC"
+        Dim reportSql As String = "SELECT a.KadarBayaran_Desc, a.KadarBayaran_Amount, b.*, c.Pemohon_Name, c.Pemohon_Address, c.Pemohon_ICNo, c.Pemohon_MobileNo, c.Pemohon_TelNo, " &
+                                  "d.Users_Fullname, d.Users_Signature, e.name AS AnjingJenisPremisDesc " &
+                                  "FROM LESEN_Permohonan b " &
+                                  "LEFT JOIN LESEN_KadarBayaran a ON a.KadarBayaran_PermohonanID = b.Permohonan_ID AND a.IsSelect = 1 " &
+                                  "LEFT JOIN LESEN_Pemohon c ON b.Permohonan_PemohonID = c.Pemohon_ID " &
+                                  "LEFT JOIN TBL_USERS d ON b.TandatanganKelulusanId = d.Users_Id " &
+                                  "LEFT JOIN TBL_LOOKUPS e ON e.id = b.AnjingJenisPremis " &
+                                  "WHERE b.Permohonan_ID = " & permohonanID & " ORDER BY a.SeqNo ASC"
 
-        Return ExportAndAttachPdf(conn, permohonanID, rptPath, sqlData, letter, rujukan, docFolderPhysical,
-                                  "SuratKelulusan", "SURAT KELULUSAN", "SK", "IsSuratKelulusanFail")
+        Return ExportAndAttachPdf(conn, permohonanID, rptPath, reportSql, docFolderPhysical, SK_FILE_PREFIX, "SK", "IsSuratKelulusanFail")
     End Function
 
-    Private Shared Function GenerateSuratPembatalanPdf(ByVal conn As SqlConnection, ByVal permohonanID As Integer, ByVal jenisLesenID As Integer, ByVal rujukan As String, ByVal docFolderPhysical As String) As String
-        ' Old pembatalan pages print TarikhSuratKelulusan as the letter date
-        Dim letter As LetterText = ReadLetterText(conn, permohonanID, {"SuratPembatalan1", "SuratPembatalan2"}, "TarikhSuratKelulusan")
-        If letter Is Nothing Then Return Nothing
+    Private Shared Function GenerateSuratPembatalanPdf(ByVal conn As SqlConnection, ByVal permohonanID As Integer, ByVal jenisLesenID As Integer, ByVal docFolderPhysical As String) As String
+        If Not HasLetterText(conn, permohonanID, {"SuratPembatalan1", "SuratPembatalan2"}) Then Return Nothing
 
         Dim rptPath As String = FindReportTemplate("~/lesen/report/kelulusan/", SB_REPORT_NAMES, jenisLesenID, "sb_perniagaan", "sb_perniagaan")
 
-        Dim sqlData As String = "SELECT b.*, c.Pemohon_Name, c.Pemohon_Address, c.Pemohon_ICNo, c.Pemohon_MobileNo, c.Pemohon_TelNo, " &
-                                "d.Users_Fullname, d.Users_Signature, e.name AS AnjingJenisPremisDesc " &
-                                "FROM LESEN_Permohonan b " &
-                                "LEFT JOIN LESEN_Pemohon c ON b.Permohonan_PemohonID = c.Pemohon_ID " &
-                                "LEFT JOIN TBL_USERS d ON b.TandatanganKelulusanId = d.Users_Id " &
-                                "LEFT JOIN TBL_LOOKUPS e ON e.id = b.AnjingJenisPremis " &
-                                "WHERE b.Permohonan_ID = @PermohonanID"
+        Dim reportSql As String = "SELECT b.*, c.Pemohon_Name, c.Pemohon_Address, c.Pemohon_ICNo, c.Pemohon_MobileNo, c.Pemohon_TelNo, " &
+                                  "d.Users_Fullname, d.Users_Signature, e.name AS AnjingJenisPremisDesc " &
+                                  "FROM LESEN_Permohonan b " &
+                                  "LEFT JOIN LESEN_Pemohon c ON b.Permohonan_PemohonID = c.Pemohon_ID " &
+                                  "LEFT JOIN TBL_USERS d ON b.TandatanganKelulusanId = d.Users_Id " &
+                                  "LEFT JOIN TBL_LOOKUPS e ON e.id = b.AnjingJenisPremis " &
+                                  "WHERE b.Permohonan_ID = " & permohonanID
 
-        Return ExportAndAttachPdf(conn, permohonanID, rptPath, sqlData, letter, rujukan, docFolderPhysical,
-                                  "SuratPembatalan", "SURAT PEMBATALAN", "SB", "IsSuratPembatalanFail")
+        Return ExportAndAttachPdf(conn, permohonanID, rptPath, reportSql, docFolderPhysical, SB_FILE_PREFIX, "SB", "IsSuratPembatalanFail")
     End Function
 
-    ''' <summary>Reads the letter text columns. Returns Nothing when all of them are empty.</summary>
-    Private Shared Function ReadLetterText(ByVal conn As SqlConnection, ByVal permohonanID As Integer, ByVal textColumns As String(), ByVal dateColumn As String) As LetterText
+    ''' <summary>True when at least one of the letter text columns has content.</summary>
+    Private Shared Function HasLetterText(ByVal conn As SqlConnection, ByVal permohonanID As Integer, ByVal textColumns As String()) As Boolean
         ' Column names are constants from this class (never user input)
-        Dim selectCols As String = String.Join(", ", textColumns.Select(Function(c) "ISNULL(CAST(" & c & " AS NVARCHAR(MAX)), '') AS [" & c & "]"))
-        Dim sql As String = "SELECT " & selectCols & ", ISNULL(CONVERT(VARCHAR(20), " & dateColumn & ", 103), '') AS TarikhSurat " &
-                            "FROM LESEN_Permohonan WHERE Permohonan_ID = @PermohonanID"
-
-        Dim letter As New LetterText With {.Sections = New String(textColumns.Length - 1) {}, .TarikhSurat = ""}
+        Dim conditions As String = String.Join(" OR ", textColumns.Select(Function(c) NotBlankSql(c)))
+        Dim sql As String = "SELECT CASE WHEN " & conditions & " THEN 1 ELSE 0 END FROM LESEN_Permohonan WHERE Permohonan_ID = @PermohonanID"
         Using cmd As New SqlCommand(sql, conn)
             cmd.Parameters.AddWithValue("@PermohonanID", permohonanID)
-            Using rdr As SqlDataReader = cmd.ExecuteReader()
-                If Not rdr.Read() Then Return Nothing
-                For i As Integer = 0 To textColumns.Length - 1
-                    letter.Sections(i) = Convert.ToString(rdr(textColumns(i))).Trim()
-                Next
-                letter.TarikhSurat = Convert.ToString(rdr("TarikhSurat")).Trim()
-            End Using
+            Return Convert.ToInt32(cmd.ExecuteScalar()) = 1
         End Using
-
-        If letter.Sections.All(Function(s) s = "") Then Return Nothing
-        Return letter
     End Function
 
     ''' <summary>
     ''' Finds the .rpt file for this JenisLesen_ID. Tries the mapped name, the same name with a space before
     ''' ".rpt" (some files on disk are named like that), then the fallback names in order.
-    ''' Returns the first existing file, or the mapped path when none exist (the native PDF writer is then used).
     ''' </summary>
     Private Shared Function FindReportTemplate(ByVal folder As String, ByVal reportNames As String(), ByVal jenisLesenID As Integer, ByVal defaultName As String, ByVal ParamArray fallbackNames As String()) As String
         Dim baseName As String = defaultName
@@ -920,67 +1002,124 @@ Partial Class lesen_migratedata
             Dim physicalPath As String = HttpContext.Current.Server.MapPath(folder & fileName)
             If File.Exists(physicalPath) Then Return physicalPath
         Next
-        Return HttpContext.Current.Server.MapPath(folder & baseName & ".rpt")
+        Throw New FileNotFoundException("Templat laporan tidak dijumpai: " & folder & baseName & ".rpt")
     End Function
 
     ''' <summary>
-    ''' Exports the letter to ~/doc/{guid}_{filePrefix}_{id}.pdf, saves it in LESEN_PermohonanFail and sets the flag column.
-    ''' Returns the browser URL of the PDF.
+    ''' Exports the Crystal report to ~/doc/{guid}_{filePrefix}_{id}.pdf, saves it in LESEN_PermohonanFail and sets the flag column.
+    ''' Returns the browser URL of the PDF. Any Crystal error is thrown, so nothing is saved for that letter.
     ''' </summary>
-    Private Shared Function ExportAndAttachPdf(ByVal conn As SqlConnection, ByVal permohonanID As Integer, ByVal rptPhysicalPath As String, ByVal sqlData As String,
-                                               ByVal letter As LetterText, ByVal rujukan As String, ByVal docFolderPhysical As String,
-                                               ByVal filePrefix As String, ByVal docTitle As String, ByVal jenisLampiran As String, ByVal flagColumnName As String) As String
+    Private Shared Function ExportAndAttachPdf(ByVal conn As SqlConnection, ByVal permohonanID As Integer, ByVal rptPhysicalPath As String, ByVal reportSql As String,
+                                               ByVal docFolderPhysical As String, ByVal filePrefix As String, ByVal jenisLampiran As String, ByVal flagColumnName As String) As String
         Dim fileName As String = filePrefix & "_" & permohonanID & ".pdf"
         Dim uniqueFileName As String = Guid.NewGuid().ToString() & "_" & fileName
         Dim fullPdfPath As String = Path.Combine(docFolderPhysical, uniqueFileName)
         Dim virtualPdfPath As String = "~/doc/" & uniqueFileName
 
-        ExportReportOrFallbackToPdf(conn, permohonanID, rptPhysicalPath, sqlData, fullPdfPath, docTitle, rujukan, letter.TarikhSurat, letter.Sections)
+        If HasUploadedLetter(conn, permohonanID, jenisLampiran, filePrefix) Then
+            Throw New InvalidOperationException("Surat '" & jenisLampiran & "' yang dimuat naik oleh pengguna telah wujud dan tidak diganti.")
+        End If
+
+        ExportCrystalReportToPdf(rptPhysicalPath, reportSql, fullPdfPath)
         SavePermohonanFailAndFlag(conn, permohonanID, fileName, virtualPdfPath, jenisLampiran, flagColumnName)
         Return ResolveVirtualUrl(virtualPdfPath)
     End Function
 
-    Private Shared Sub ExportReportOrFallbackToPdf(ByVal conn As SqlConnection, ByVal permohonanID As Integer, ByVal rptPhysicalPath As String, ByVal sqlQuery As String, ByVal outputPdfPath As String, ByVal docTitle As String, ByVal rujukan As String, ByVal tarikhSurat As String, ByVal sections As String())
-        Dim dt As New DataTable()
-        Using da As New SqlDataAdapter(sqlQuery, conn)
-            da.SelectCommand.Parameters.AddWithValue("@PermohonanID", permohonanID)
-            da.Fill(dt)
-        End Using
+    ''' <summary>
+    ''' Loads the .rpt, logs it (and its subreports) on to the database, passes the SQL in "paraSQL" and exports to PDF.
+    ''' Subreport parameters that are linked to the main report are filled in by Crystal itself.
+    ''' </summary>
+    Private Shared Sub ExportCrystalReportToPdf(ByVal rptPhysicalPath As String, ByVal reportSql As String, ByVal outputPdfPath As String)
+        Dim report As New ReportDocument()
+        Try
+            report.Load(rptPhysicalPath, OpenReportMethod.OpenReportByDefault)
 
-        Dim exportedViaCrystal As Boolean = False
-        If File.Exists(rptPhysicalPath) AndAlso dt.Rows.Count > 0 Then
-            Dim crRep As New ReportDocument()
-            Try
-                crRep.Load(rptPhysicalPath)
-                crRep.SetDataSource(dt)
-                crRep.ExportToDisk(ExportFormatType.PortableDocFormat, outputPdfPath)
-                exportedViaCrystal = File.Exists(outputPdfPath)
-            Catch exCr As Exception
-                ' If Crystal Reports runtime throws an error on a specific legacy template/subreport,
-                ' fallback to our clean native PDF generator so the letter/report content is still preserved as PDF
-                exportedViaCrystal = False
-            Finally
-                Try
-                    crRep.Close()
-                Catch
-                End Try
-                Try
-                    crRep.Dispose()
-                Catch
-                End Try
-            End Try
-        End If
+            Dim connInfo As ConnectionInfo = CrystalConnectionInfo()
+            report.SetDatabaseLogon(connInfo.UserID, connInfo.Password, connInfo.ServerName, connInfo.DatabaseName, True)
+            ApplyLogOnToTables(report, connInfo)
+            For Each subreport As ReportDocument In report.Subreports
+                ApplyLogOnToTables(subreport, connInfo)
+            Next
 
-        If Not exportedViaCrystal Then
-            WriteFallbackPdfFile(outputPdfPath, docTitle, rujukan, tarikhSurat, sections)
-        End If
+            For Each param As ParameterFieldDefinition In report.DataDefinition.ParameterFields
+                If param.ReportName <> "" Then Continue For   ' subreport parameter, linked to the main report
+                Select Case param.Name.ToUpper()
+                    Case "PARASQL"
+                        report.SetParameterValue(param.Name, reportSql)
+                    Case "ISDIGITALSIGN"
+                        report.SetParameterValue(param.Name, True)   ' same as the old pages when printing to PDF
+                    Case Else
+                        Throw New InvalidOperationException("Parameter laporan tidak dikenali: " & param.Name & " (" & Path.GetFileName(rptPhysicalPath) & ")")
+                End Select
+            Next
+
+            report.ExportToDisk(ExportFormatType.PortableDocFormat, outputPdfPath)
+        Catch ex As Exception
+            If File.Exists(outputPdfPath) Then File.Delete(outputPdfPath)
+            Throw New Exception("Crystal Report (" & Path.GetFileName(rptPhysicalPath) & "): " & ex.Message, ex)
+        Finally
+            report.Close()
+            report.Dispose()
+        End Try
     End Sub
 
+    ''' <summary>Database logon for Crystal (OLE DB / SQLOLEDB), built from webcon_ConnectionStr exactly like ReportViewer.aspx.</summary>
+    Private Shared Function CrystalConnectionInfo() As ConnectionInfo
+        Dim builder As New SqlConnectionStringBuilder(ConnectionString())
+
+        Dim dbAttributes As New DbConnectionAttributes()
+        dbAttributes.Collection.Set("Auto Translate", "-1")
+        dbAttributes.Collection.Set("Connect Timeout", "15")
+        dbAttributes.Collection.Set("Data Source", builder.DataSource)
+        dbAttributes.Collection.Set("General Timeout", "0")
+        dbAttributes.Collection.Set("Initial Catalog", builder.InitialCatalog)
+        dbAttributes.Collection.Set("Integrated Security", False)
+        dbAttributes.Collection.Set("Locale Identifier", "5129")
+        dbAttributes.Collection.Set("OLE DB Services", "-5")
+        dbAttributes.Collection.Set("Provider", "SQLOLEDB")
+        dbAttributes.Collection.Set("Tag with column collation when possible", "0")
+        dbAttributes.Collection.Set("Use DSN Default Properties", False)
+        dbAttributes.Collection.Set("Use Encryption for Data", "0")
+
+        Dim connInfo As New ConnectionInfo With {
+            .ServerName = builder.DataSource,
+            .DatabaseName = builder.InitialCatalog,
+            .UserID = builder.UserID,
+            .Password = builder.Password
+        }
+        connInfo.Attributes.Collection.Set("Database DLL", "crdb_ado.dll")
+        connInfo.Attributes.Collection.Set("QE_DatabaseName", builder.InitialCatalog)
+        connInfo.Attributes.Collection.Set("QE_DatabaseType", "OLE DB (ADO)")
+        connInfo.Attributes.Collection.Set("QE_LogonProperties", dbAttributes)
+        connInfo.Attributes.Collection.Set("QE_ServerDescription", builder.DataSource)
+        connInfo.Attributes.Collection.Set("QE_SQLDB", True)
+        connInfo.Attributes.Collection.Set("SSO Enabled", False)
+        connInfo.LogonProperties = dbAttributes.Collection
+        Return connInfo
+    End Function
+
+    Private Shared Sub ApplyLogOnToTables(ByVal report As ReportDocument, ByVal connInfo As ConnectionInfo)
+        For Each table As CrystalDecisions.CrystalReports.Engine.Table In report.Database.Tables
+            Dim logOnInfo As TableLogOnInfo = table.LogOnInfo
+            logOnInfo.ConnectionInfo = connInfo
+            table.ApplyLogOnInfo(logOnInfo)
+        Next
+    End Sub
+
+    Private Shared Function HasUploadedLetter(ByVal conn As SqlConnection, ByVal permohonanID As Integer, ByVal jenisLampiran As String, ByVal filePrefix As String) As Boolean
+        Dim sql As String = "SELECT COUNT(1) FROM LESEN_PermohonanFail WHERE PermohonanFail_PermohonanID = @PermohonanID AND " & UploadedLetterSql(jenisLampiran, filePrefix)
+        Using cmd As New SqlCommand(sql, conn)
+            cmd.Parameters.AddWithValue("@PermohonanID", permohonanID)
+            Return Convert.ToInt32(cmd.ExecuteScalar()) > 0
+        End Using
+    End Function
+
     Private Shared Sub SavePermohonanFailAndFlag(ByVal conn As SqlConnection, ByVal permohonanID As Integer, ByVal fileName As String, ByVal virtualFilePath As String, ByVal jenisLampiran As String, ByVal flagColumnName As String)
-        ' Remove existing record for the same Permohonan_ID and JenisLampiran if any, then insert the new PDF record
+        ' Replace only the PDF this page created earlier (same file name), then insert the new PDF record
         Dim sqlFail As String = "
             DELETE FROM LESEN_PermohonanFail
-            WHERE PermohonanFail_PermohonanID = @PermohonanID AND PermohonanFail_JenisLampiran = @JenisLampiran;
+            WHERE PermohonanFail_PermohonanID = @PermohonanID AND PermohonanFail_JenisLampiran = @JenisLampiran
+              AND PermohonanFail_FileName = @FileName;
 
             INSERT INTO LESEN_PermohonanFail (
                 PermohonanFail_PermohonanID,
@@ -1020,191 +1159,6 @@ Partial Class lesen_migratedata
             Return appPath & virtualPath.Substring(2)
         End If
         Return virtualPath
-    End Function
-
-#End Region
-
-#Region "Native PDF Fallback Writer (When Crystal Runtime Is Unavailable or Fails)"
-
-    Private Shared Sub WriteFallbackPdfFile(ByVal outputPdfPath As String, ByVal docTitle As String, ByVal rujukan As String, ByVal tarikhSurat As String, ByVal sections As String())
-        ' Convert HTML / rich text sections into clean wrapped lines
-        Dim allLines As New List(Of String)()
-        allLines.Add("MAJLIS PERBANDARAN KLUANG")
-        allLines.Add(docTitle)
-        allLines.Add(New String("-"c, 75))
-        If Not String.IsNullOrEmpty(rujukan) AndAlso rujukan <> "-" Then
-            allLines.Add("Rujukan : " & rujukan)
-        End If
-        If Not String.IsNullOrEmpty(tarikhSurat) Then
-            allLines.Add("Tarikh  : " & tarikhSurat)
-        End If
-        allLines.Add("")
-
-        If sections IsNot Nothing Then
-            For Each rawSec As String In sections
-                If Not String.IsNullOrWhiteSpace(rawSec) Then
-                    Dim plain As String = StripHtmlToPlainText(rawSec)
-                    Dim paragraphs As String() = plain.Split(New String() {vbCrLf, vbLf, vbCr}, StringSplitOptions.None)
-                    For Each para As String In paragraphs
-                        Dim wrapped As List(Of String) = WrapTextLine(para.TrimEnd(), 85)
-                        For Each wline As String In wrapped
-                            allLines.Add(wline)
-                        Next
-                    Next
-                    allLines.Add("")
-                End If
-            Next
-        End If
-
-        ' Paginate lines (50 lines per A4 page)
-        Dim linesPerPage As Integer = 50
-        Dim pages As New List(Of List(Of String))()
-        Dim idx As Integer = 0
-        While idx < allLines.Count
-            Dim pageLines As New List(Of String)()
-            Dim count As Integer = Math.Min(linesPerPage, allLines.Count - idx)
-            For i As Integer = 0 To count - 1
-                pageLines.Add(allLines(idx + i))
-            Next
-            pages.Add(pageLines)
-            idx += count
-        End While
-        If pages.Count = 0 Then
-            pages.Add(New List(Of String) From {docTitle})
-        End If
-
-        ' Build valid PDF 1.4 document with Helvetica Type1 font
-        Using fs As New FileStream(outputPdfPath, FileMode.Create, FileAccess.Write)
-            Dim enc As Encoding = Encoding.ASCII
-            Dim offsets As New List(Of Long)()
-            Dim WriteAscii As Action(Of String) = Sub(s As String)
-                                                      Dim b As Byte() = enc.GetBytes(s)
-                                                      fs.Write(b, 0, b.Length)
-                                                  End Sub
-
-            WriteAscii("%PDF-1.4" & vbLf)
-
-            ' Object 1: Catalog
-            offsets.Add(fs.Position)
-            WriteAscii("1 0 obj" & vbLf & "<< /Type /Catalog /Pages 2 0 R >>" & vbLf & "endobj" & vbLf)
-
-            ' Object 2: Pages
-            Dim kidsSb As New StringBuilder()
-            For p As Integer = 0 To pages.Count - 1
-                Dim pageObjNum As Integer = 4 + (p * 2)
-                kidsSb.Append(pageObjNum & " 0 R ")
-            Next
-            offsets.Add(fs.Position)
-            WriteAscii("2 0 obj" & vbLf & "<< /Type /Pages /Kids [ " & kidsSb.ToString() & "] /Count " & pages.Count & " >>" & vbLf & "endobj" & vbLf)
-
-            ' Object 3: Font (Helvetica)
-            offsets.Add(fs.Position)
-            WriteAscii("3 0 obj" & vbLf & "<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>" & vbLf & "endobj" & vbLf)
-
-            ' Page & Content Objects
-            For p As Integer = 0 To pages.Count - 1
-                Dim pageObjNum As Integer = 4 + (p * 2)
-                Dim contentObjNum As Integer = pageObjNum + 1
-
-                Dim contentSb As New StringBuilder()
-                contentSb.AppendLine("BT")
-                contentSb.AppendLine("/F1 10 Tf")
-                contentSb.AppendLine("14 TL")
-                contentSb.AppendLine("50 790 Td")
-                For Each line As String In pages(p)
-                    contentSb.AppendLine("(" & EscapePdfString(line) & ") Tj")
-                    contentSb.AppendLine("T*")
-                Next
-                contentSb.AppendLine("ET")
-                Dim streamText As String = contentSb.ToString()
-                Dim streamLen As Integer = enc.GetByteCount(streamText)
-
-                ' Page object
-                offsets.Add(fs.Position)
-                WriteAscii(pageObjNum & " 0 obj" & vbLf &
-                           "<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents " & contentObjNum & " 0 R >>" & vbLf &
-                           "endobj" & vbLf)
-
-                ' Content stream object
-                offsets.Add(fs.Position)
-                WriteAscii(contentObjNum & " 0 obj" & vbLf &
-                           "<< /Length " & streamLen & " >>" & vbLf &
-                           "stream" & vbLf &
-                           streamText &
-                           "endstream" & vbLf &
-                           "endobj" & vbLf)
-            Next
-
-            ' XRef Table
-            Dim xrefPos As Long = fs.Position
-            Dim totalObjs As Integer = offsets.Count + 1
-            WriteAscii("xref" & vbLf & "0 " & totalObjs & vbLf)
-            WriteAscii("0000000000 65535 f " & vbLf)
-            For Each off As Long In offsets
-                WriteAscii(off.ToString("0000000000") & " 00000 n " & vbLf)
-            Next
-
-            WriteAscii("trailer" & vbLf &
-                       "<< /Size " & totalObjs & " /Root 1 0 R >>" & vbLf &
-                       "startxref" & vbLf &
-                       xrefPos.ToString() & vbLf &
-                       "%%EOF" & vbLf)
-        End Using
-    End Sub
-
-    Private Shared Function StripHtmlToPlainText(ByVal input As String) As String
-        If String.IsNullOrEmpty(input) Then Return ""
-        Dim s As String = input
-        s = Regex.Replace(s, "<br\s*/?>", vbCrLf, RegexOptions.IgnoreCase)
-        s = Regex.Replace(s, "</p\s*>", vbCrLf & vbCrLf, RegexOptions.IgnoreCase)
-        s = Regex.Replace(s, "</tr\s*>", vbCrLf, RegexOptions.IgnoreCase)
-        s = Regex.Replace(s, "</li\s*>", vbCrLf, RegexOptions.IgnoreCase)
-        s = Regex.Replace(s, "<li[^>]*>", "  - ", RegexOptions.IgnoreCase)
-        s = Regex.Replace(s, "<[^>]+>", "")
-        s = HttpUtility.HtmlDecode(s)
-        Return s
-    End Function
-
-    Private Shared Function WrapTextLine(ByVal text As String, ByVal maxCols As Integer) As List(Of String)
-        Dim res As New List(Of String)()
-        If String.IsNullOrEmpty(text) Then
-            res.Add("")
-            Return res
-        End If
-
-        Dim words As String() = text.Split(" "c)
-        Dim currentLine As New StringBuilder()
-        For Each w As String In words
-            If currentLine.Length = 0 Then
-                currentLine.Append(w)
-            ElseIf currentLine.Length + 1 + w.Length <= maxCols Then
-                currentLine.Append(" "c).Append(w)
-            Else
-                res.Add(currentLine.ToString())
-                currentLine.Clear()
-                currentLine.Append(w)
-            End If
-        Next
-        If currentLine.Length > 0 Then
-            res.Add(currentLine.ToString())
-        End If
-        Return res
-    End Function
-
-    Private Shared Function EscapePdfString(ByVal input As String) As String
-        If String.IsNullOrEmpty(input) Then Return ""
-        Dim sb As New StringBuilder()
-        For Each ch As Char In input
-            Dim code As Integer = AscW(ch)
-            If ch = "\"c OrElse ch = "("c OrElse ch = ")"c Then
-                sb.Append("\"c).Append(ch)
-            ElseIf code >= 32 AndAlso code <= 126 Then
-                sb.Append(ch)
-            Else
-                sb.Append(" "c)
-            End If
-        Next
-        Return sb.ToString()
     End Function
 
 #End Region
