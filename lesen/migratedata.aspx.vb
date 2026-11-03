@@ -338,7 +338,7 @@ Partial Class lesen_migratedata
                     ISNULL(a.JenisLesen_ID, 0) AS JenisLesen_ID,
                     CASE WHEN ISNULL(a.JenisLesen_ID, 0) > 0 THEN 1 ELSE 0 END AS IsOldRecord,
                     CASE WHEN ISNULL(a.StatusID, 0) > 0 AND p.Permohonan_ID IS NULL THEN 1 ELSE 0 END AS MissingPembetulan,
-                    CASE WHEN ISNULL(LTRIM(RTRIM(a.JenisLesenIdList)), '') = '' THEN 1 ELSE 0 END AS MissingJenisLesenList,
+                    CASE WHEN " & JenisLesenPendingSql() & " THEN 1 ELSE 0 END AS MissingJenisLesenList,
                     CASE WHEN " & IklanPendingSql("a") & "
                            OR (p.Permohonan_ID IS NOT NULL AND " & IklanPendingSql("p") & ")
                          THEN 1 ELSE 0 END AS IklanPending,
@@ -400,6 +400,17 @@ Partial Class lesen_migratedata
                "      OR (" & t & "SaizIklanList = REPLACE(LTRIM(RTRIM(" & t & "SaizIklan)), ',', ';') AND " & t & "CahayaIklanList = '" & CAHAYA_YA & "')))"
     End Function
 
+    ''' <summary>
+    ''' SQL condition: JenisLesenIdList / JenisLesenDescList of LESEN_Permohonan (alias "a") still need to be built.
+    ''' Must stay in sync with <see cref="NeedsJenisLesenMigration"/>.
+    ''' </summary>
+    Private Shared Function JenisLesenPendingSql() As String
+        Dim combinedIds As String = String.Join(", ", COMBINED_JENIS_LESEN.Keys)
+        Return "(ISNULL(LTRIM(RTRIM(a.JenisLesenIdList)), '') = ''" &
+               " OR ISNULL(LTRIM(RTRIM(a.JenisLesenDescList)), '') = ''" &
+               " OR (a.JenisLesen_ID IN (" & combinedIds & ") AND LTRIM(RTRIM(a.JenisLesenIdList)) = CAST(a.JenisLesen_ID AS VARCHAR(10))))"
+    End Function
+
     ''' <summary>SQL condition: the anjing lists of this row (alias "a" or "p") still need to be built.</summary>
     Private Shared Function AnjingPendingSql(ByVal tableAlias As String) As String
         Dim t As String = tableAlias & "."
@@ -413,27 +424,18 @@ Partial Class lesen_migratedata
 
     ''' <summary>
     ''' Converts one old record to the new table format:
-    '''   1. LESEN_Permohonan: JenisLesenIdList / JenisLesenDescList, anjing lists and default boolean flags.
+    '''   1. LESEN_Permohonan: anjing lists and default boolean flags, then JenisLesenIdList / JenisLesenDescList
+    '''      (see "Jenis Lesen Migration Logic").
     '''   2. LESEN_Permohonan: iklan lists (parsed from the old free-text SaizIklan, see "Iklan Migration Logic").
     '''   3. Create LESEN_PermohonanPembetulan if a submitted record (StatusID > 0) does not have one.
     '''   4. LESEN_PermohonanPembetulan: anjing lists and iklan lists from its own old columns.
     ''' Every list is only written when it is still empty, so running this twice is safe.
     ''' </summary>
     Private Shared Sub UpdateRecordDataFormat(ByVal conn As SqlConnection, ByVal permohonanID As Integer)
-        ' 1. LESEN_Permohonan: JenisLesen, anjing & flags
+        ' 1. LESEN_Permohonan: anjing & flags
         Dim sqlUpdatePermohonan As String = "
             UPDATE a
             SET
-                a.JenisLesenIdList = CASE
-                    WHEN ISNULL(LTRIM(RTRIM(a.JenisLesenIdList)), '') = '' AND ISNULL(a.JenisLesen_ID, 0) > 0
-                    THEN CAST(a.JenisLesen_ID AS VARCHAR(50))
-                    ELSE a.JenisLesenIdList
-                END,
-                a.JenisLesenDescList = CASE
-                    WHEN ISNULL(LTRIM(RTRIM(a.JenisLesenDescList)), '') = '' AND ISNULL(a.JenisLesen_ID, 0) > 0
-                    THEN ISNULL(jl.JenisLesen_Description, CAST(a.JenisLesen_ID AS VARCHAR(50)))
-                    ELSE a.JenisLesenDescList
-                END,
                 a.BakaAnjingList = CASE
                     WHEN ISNULL(LTRIM(RTRIM(a.BakaAnjingList)), '') = '' AND ISNULL(LTRIM(RTRIM(CAST(a.AnjingBaka AS VARCHAR(50)))), '') NOT IN ('', '0')
                     THEN ISNULL(lk.name, LTRIM(RTRIM(CAST(a.AnjingBaka AS VARCHAR(50)))))
@@ -467,10 +469,12 @@ Partial Class lesen_migratedata
                 a.Is24jam = ISNULL(a.Is24jam, 0),
                 a.IsPulang = ISNULL(a.IsPulang, 0)
             FROM LESEN_Permohonan a
-            LEFT JOIN LESEN_JenisLesen jl ON a.JenisLesen_ID = jl.JenisLesen_ID
             LEFT JOIN TBL_LOOKUPS lk ON lk.lookupgrp_id = 10004 AND CAST(lk.id AS VARCHAR(50)) = LTRIM(RTRIM(CAST(a.AnjingBaka AS VARCHAR(50))))
             WHERE a.Permohonan_ID = @PermohonanID"
         ExecuteForPermohonan(conn, sqlUpdatePermohonan, permohonanID)
+
+        ' 1b. LESEN_Permohonan: jenis lesen
+        MigrateJenisLesenList(conn, permohonanID)
 
         ' 2. LESEN_Permohonan: iklan
         MigrateIklanList(conn, "LESEN_Permohonan", permohonanID)
@@ -564,6 +568,84 @@ Partial Class lesen_migratedata
             cmd.ExecuteNonQuery()
         End Using
     End Sub
+
+#End Region
+
+#Region "Jenis Lesen Migration Logic"
+
+    ' OLD format: one JenisLesen_ID per record. Some IDs were a combination of several licence types
+    ' (their LESEN_JenisLesen description contains commas and they are inactive in the new version).
+    ' NEW format: JenisLesenIdList / JenisLesenDescList are comma-separated lists with the same number of items,
+    ' e.g. "6,11,10" / "LESEN PERTUKARAN ALAMAT PERNIAGAAN,PERTUKARAN NAMA SYARIKAT,PERTUKARAN VISUAL IKLAN".
+
+    ' Old combined JenisLesen_ID -> licence types used by the new version
+    Private Shared ReadOnly COMBINED_JENIS_LESEN As New Dictionary(Of Integer, Integer()) From {
+        {19, {6, 11, 10}},   ' PERTUKARAN ALAMAT, NAMA SYARIKAT, VISUAL IKLAN
+        {20, {9, 6, 10}},    ' PERTUKARAN PEMILIK, ALAMAT, VISUAL IKLAN
+        {23, {11, 10}},      ' PERTUKARAN NAMA SYARIKAT, VISUAL IKLAN
+        {24, {9, 10}},       ' PERTUKARAN PEMILIK, VISUAL IKLAN
+        {26, {11, 7}}        ' PERTUKARAN NAMA SYARIKAT, TAMBAH PREMIS
+    }
+
+    ''' <summary>Builds JenisLesenIdList / JenisLesenDescList of one LESEN_Permohonan row from its old JenisLesen_ID.</summary>
+    Private Shared Sub MigrateJenisLesenList(ByVal conn As SqlConnection, ByVal permohonanID As Integer)
+        Dim jenisLesenID As Integer = 0
+        Dim idList As String = ""
+        Dim descList As String = ""
+
+        Using cmd As New SqlCommand("SELECT ISNULL(JenisLesen_ID, 0) AS JenisLesen_ID, JenisLesenIdList, JenisLesenDescList FROM LESEN_Permohonan WHERE Permohonan_ID = @PermohonanID", conn)
+            cmd.Parameters.AddWithValue("@PermohonanID", permohonanID)
+            Using rdr As SqlDataReader = cmd.ExecuteReader()
+                If Not rdr.Read() Then Return
+                jenisLesenID = Convert.ToInt32(rdr("JenisLesen_ID"))
+                idList = Convert.ToString(rdr("JenisLesenIdList"))
+                descList = Convert.ToString(rdr("JenisLesenDescList"))
+            End Using
+        End Using
+
+        If Not NeedsJenisLesenMigration(jenisLesenID, idList, descList) Then Return
+
+        Dim newIds As Integer() = NewJenisLesenIds(jenisLesenID)
+        Dim descriptions As Dictionary(Of Integer, String) = ReadJenisLesenDescriptions(conn, newIds)
+
+        Dim sqlUpdate As String = "UPDATE LESEN_Permohonan SET JenisLesenIdList = @IdList, JenisLesenDescList = @DescList WHERE Permohonan_ID = @PermohonanID"
+        Using cmd As New SqlCommand(sqlUpdate, conn)
+            cmd.Parameters.AddWithValue("@PermohonanID", permohonanID)
+            cmd.Parameters.AddWithValue("@IdList", String.Join(",", newIds))
+            cmd.Parameters.AddWithValue("@DescList", String.Join(",", newIds.Select(Function(id) If(descriptions.ContainsKey(id), descriptions(id), id.ToString()))))
+            cmd.ExecuteNonQuery()
+        End Using
+    End Sub
+
+    ''' <summary>
+    ''' True for an old record whose lists are empty, or that still holds a combined ID on its own
+    ''' (written by the first version of this page). Must stay in sync with <see cref="JenisLesenPendingSql"/>.
+    ''' </summary>
+    Private Shared Function NeedsJenisLesenMigration(ByVal jenisLesenID As Integer, ByVal idList As String, ByVal descList As String) As Boolean
+        If jenisLesenID <= 0 Then Return False
+        If String.IsNullOrWhiteSpace(idList) OrElse String.IsNullOrWhiteSpace(descList) Then Return True
+        Return COMBINED_JENIS_LESEN.ContainsKey(jenisLesenID) AndAlso idList.Trim() = jenisLesenID.ToString()
+    End Function
+
+    ''' <summary>Licence types for the new version: the split list for a combined ID, otherwise the ID itself.</summary>
+    Private Shared Function NewJenisLesenIds(ByVal jenisLesenID As Integer) As Integer()
+        If COMBINED_JENIS_LESEN.ContainsKey(jenisLesenID) Then Return COMBINED_JENIS_LESEN(jenisLesenID)
+        Return {jenisLesenID}
+    End Function
+
+    Private Shared Function ReadJenisLesenDescriptions(ByVal conn As SqlConnection, ByVal ids As Integer()) As Dictionary(Of Integer, String)
+        Dim result As New Dictionary(Of Integer, String)()
+        ' ids are integers, so they are safe to put in the IN list
+        Dim sql As String = "SELECT JenisLesen_ID, JenisLesen_Description FROM LESEN_JenisLesen WHERE JenisLesen_ID IN (" & String.Join(",", ids) & ")"
+        Using cmd As New SqlCommand(sql, conn)
+            Using rdr As SqlDataReader = cmd.ExecuteReader()
+                While rdr.Read()
+                    result(Convert.ToInt32(rdr("JenisLesen_ID"))) = Convert.ToString(rdr("JenisLesen_Description")).Trim()
+                End While
+            End Using
+        End Using
+        Return result
+    End Function
 
 #End Region
 
