@@ -325,7 +325,11 @@ Partial Class lesen_migratedata
                     PermohonanFail_PermohonanID AS Permohonan_ID,
                     MAX(CASE WHEN PermohonanFail_JenisLampiran = 'SP' THEN 1 ELSE 0 END) AS HasSPFile,
                     MAX(CASE WHEN PermohonanFail_JenisLampiran = 'SK' THEN 1 ELSE 0 END) AS HasSKFile,
-                    MAX(CASE WHEN PermohonanFail_JenisLampiran = 'SB' THEN 1 ELSE 0 END) AS HasSBFile
+                    MAX(CASE WHEN PermohonanFail_JenisLampiran = 'SB' THEN 1 ELSE 0 END) AS HasSBFile,
+                    -- Letters uploaded by users (not created by this page) must never be replaced
+                    MAX(CASE WHEN " & UploadedLetterSql("SP", SP_FILE_PREFIX) & " THEN 1 ELSE 0 END) AS HasSPUpload,
+                    MAX(CASE WHEN " & UploadedLetterSql("SK", SK_FILE_PREFIX) & " THEN 1 ELSE 0 END) AS HasSKUpload,
+                    MAX(CASE WHEN " & UploadedLetterSql("SB", SB_FILE_PREFIX) & " THEN 1 ELSE 0 END) AS HasSBUpload
                 FROM LESEN_PermohonanFail
                 WHERE PermohonanFail_JenisLampiran IN ('SP', 'SK', 'SB')
                 GROUP BY PermohonanFail_PermohonanID
@@ -358,7 +362,10 @@ Partial Class lesen_migratedata
                     CAST(ISNULL(a.IsSuratPembatalanFail, 0) AS INT) AS IsSBDone,
                     ISNULL(f.HasSPFile, 0) AS HasSPFile,
                     ISNULL(f.HasSKFile, 0) AS HasSKFile,
-                    ISNULL(f.HasSBFile, 0) AS HasSBFile
+                    ISNULL(f.HasSBFile, 0) AS HasSBFile,
+                    ISNULL(f.HasSPUpload, 0) AS HasSPUpload,
+                    ISNULL(f.HasSKUpload, 0) AS HasSKUpload,
+                    ISNULL(f.HasSBUpload, 0) AS HasSBUpload
                 FROM LESEN_Permohonan a
                 LEFT JOIN LESEN_PermohonanPembetulan p ON p.Permohonan_ID = a.Permohonan_ID
                 LEFT JOIN PdfFiles f ON f.Permohonan_ID = a.Permohonan_ID
@@ -375,12 +382,21 @@ Partial Class lesen_migratedata
                         CASE WHEN s.IsOldRecord = 1 AND s.IklanPending = 1 THEN 1 ELSE 0 END AS NeedIklanList,
                         CASE WHEN s.IsOldRecord = 1 AND s.AnjingPending = 1 THEN 1 ELSE 0 END AS NeedAnjingList,
                         CASE WHEN s.IsOldRecord = 1 AND s.MissingPembetulan = 1 THEN 1 ELSE 0 END AS NeedPembetulan,
-                        -- A PDF is needed when the letter has text and the PDF was not saved yet (or a regenerate is forced)
-                        CASE WHEN s.HasSPText = 1 AND (@ForcePdf = 1 OR s.IsSPDone = 0 OR s.HasSPFile = 0) THEN 1 ELSE 0 END AS NeedSP,
-                        CASE WHEN s.HasSKText = 1 AND (@ForcePdf = 1 OR s.IsSKDone = 0 OR s.HasSKFile = 0) THEN 1 ELSE 0 END AS NeedSK,
-                        CASE WHEN s.HasSBText = 1 AND (@ForcePdf = 1 OR s.IsSBDone = 0 OR s.HasSBFile = 0) THEN 1 ELSE 0 END AS NeedSB
+                        -- A PDF is needed when the letter has text, no user upload exists,
+                        -- and the PDF was not saved yet (or a regenerate is forced)
+                        CASE WHEN s.HasSPText = 1 AND s.HasSPUpload = 0 AND (@ForcePdf = 1 OR s.IsSPDone = 0 OR s.HasSPFile = 0) THEN 1 ELSE 0 END AS NeedSP,
+                        CASE WHEN s.HasSKText = 1 AND s.HasSKUpload = 0 AND (@ForcePdf = 1 OR s.IsSKDone = 0 OR s.HasSKFile = 0) THEN 1 ELSE 0 END AS NeedSK,
+                        CASE WHEN s.HasSBText = 1 AND s.HasSBUpload = 0 AND (@ForcePdf = 1 OR s.IsSBDone = 0 OR s.HasSBFile = 0) THEN 1 ELSE 0 END AS NeedSB
                 ) n
             )"
+    End Function
+
+    ''' <summary>
+    ''' SQL condition on a LESEN_PermohonanFail row: it is a letter of this type that a user uploaded,
+    ''' i.e. not a PDF created by this page (those are named "{filePrefix}_{Permohonan_ID}.pdf").
+    ''' </summary>
+    Private Shared Function UploadedLetterSql(ByVal jenisLampiran As String, ByVal filePrefix As String) As String
+        Return "(PermohonanFail_JenisLampiran = '" & jenisLampiran & "' AND ISNULL(PermohonanFail_FileName, '') NOT LIKE '" & filePrefix & "[_]%')"
     End Function
 
     ''' <summary>SQL condition: the text/ntext column has non-blank content.</summary>
@@ -431,7 +447,8 @@ Partial Class lesen_migratedata
     ''' Every list is only written when it is still empty, so running this twice is safe.
     ''' </summary>
     Private Shared Sub UpdateRecordDataFormat(ByVal conn As SqlConnection, ByVal permohonanID As Integer)
-        ' 1. LESEN_Permohonan: anjing & flags
+        ' 1. LESEN_Permohonan: anjing & flags.
+        '    A letter flag is set to 1 when a user-uploaded letter exists, so the new pages open that file.
         Dim sqlUpdatePermohonan As String = "
             UPDATE a
             SET
@@ -461,9 +478,9 @@ Partial Class lesen_migratedata
                     ELSE a.AnjingBetinaMandulList
                 END,
                 a.IsRekodLama = ISNULL(a.IsRekodLama, 0),
-                a.IsSuratPemeriksaanFail = ISNULL(a.IsSuratPemeriksaanFail, 0),
-                a.IsSuratKelulusanFail = ISNULL(a.IsSuratKelulusanFail, 0),
-                a.IsSuratPembatalanFail = ISNULL(a.IsSuratPembatalanFail, 0),
+                a.IsSuratPemeriksaanFail = CASE WHEN EXISTS (SELECT 1 FROM LESEN_PermohonanFail WHERE PermohonanFail_PermohonanID = a.Permohonan_ID AND " & UploadedLetterSql("SP", SP_FILE_PREFIX) & ") THEN 1 ELSE ISNULL(a.IsSuratPemeriksaanFail, 0) END,
+                a.IsSuratKelulusanFail = CASE WHEN EXISTS (SELECT 1 FROM LESEN_PermohonanFail WHERE PermohonanFail_PermohonanID = a.Permohonan_ID AND " & UploadedLetterSql("SK", SK_FILE_PREFIX) & ") THEN 1 ELSE ISNULL(a.IsSuratKelulusanFail, 0) END,
+                a.IsSuratPembatalanFail = CASE WHEN EXISTS (SELECT 1 FROM LESEN_PermohonanFail WHERE PermohonanFail_PermohonanID = a.Permohonan_ID AND " & UploadedLetterSql("SB", SB_FILE_PREFIX) & ") THEN 1 ELSE ISNULL(a.IsSuratPembatalanFail, 0) END,
                 a.IsBatal = ISNULL(a.IsBatal, 0),
                 a.Is24jam = ISNULL(a.Is24jam, 0),
                 a.IsPulang = ISNULL(a.IsPulang, 0)
@@ -859,6 +876,12 @@ Partial Class lesen_migratedata
 
 #Region "PDF Generation & File Attachment Logic (SP, SK, SB)"
 
+    ' PDFs created by this page are named "{prefix}_{Permohonan_ID}.pdf" (PermohonanFail_FileName).
+    ' Any other file of the same JenisLampiran was uploaded by a user and is never replaced.
+    Private Const SP_FILE_PREFIX As String = "LaporanPemeriksaan"
+    Private Const SK_FILE_PREFIX As String = "SuratKelulusan"
+    Private Const SB_FILE_PREFIX As String = "SuratPembatalan"
+
     ' Report templates by JenisLesen_ID (index), as used by the old appregister / kelulusan / pembatalan pages
     Private Shared ReadOnly SP_REPORT_NAMES As String() = {
         "", "sp_perniagaan", "sp_pasar", "sp_anjing", "sp_penjaja", "sp_billboard",
@@ -915,7 +938,7 @@ Partial Class lesen_migratedata
                         "WHERE a.Permohonan_ID = " & permohonanID
         End If
 
-        Return ExportAndAttachPdf(conn, permohonanID, rptPath, reportSql, docFolderPhysical, "LaporanPemeriksaan", "SP", "IsSuratPemeriksaanFail")
+        Return ExportAndAttachPdf(conn, permohonanID, rptPath, reportSql, docFolderPhysical, SP_FILE_PREFIX, "SP", "IsSuratPemeriksaanFail")
     End Function
 
     Private Shared Function GenerateSuratKelulusanPdf(ByVal conn As SqlConnection, ByVal permohonanID As Integer, ByVal jenisLesenID As Integer, ByVal docFolderPhysical As String) As String
@@ -932,7 +955,7 @@ Partial Class lesen_migratedata
                                   "LEFT JOIN TBL_LOOKUPS e ON e.id = b.AnjingJenisPremis " &
                                   "WHERE b.Permohonan_ID = " & permohonanID & " ORDER BY a.SeqNo ASC"
 
-        Return ExportAndAttachPdf(conn, permohonanID, rptPath, reportSql, docFolderPhysical, "SuratKelulusan", "SK", "IsSuratKelulusanFail")
+        Return ExportAndAttachPdf(conn, permohonanID, rptPath, reportSql, docFolderPhysical, SK_FILE_PREFIX, "SK", "IsSuratKelulusanFail")
     End Function
 
     Private Shared Function GenerateSuratPembatalanPdf(ByVal conn As SqlConnection, ByVal permohonanID As Integer, ByVal jenisLesenID As Integer, ByVal docFolderPhysical As String) As String
@@ -948,7 +971,7 @@ Partial Class lesen_migratedata
                                   "LEFT JOIN TBL_LOOKUPS e ON e.id = b.AnjingJenisPremis " &
                                   "WHERE b.Permohonan_ID = " & permohonanID
 
-        Return ExportAndAttachPdf(conn, permohonanID, rptPath, reportSql, docFolderPhysical, "SuratPembatalan", "SB", "IsSuratPembatalanFail")
+        Return ExportAndAttachPdf(conn, permohonanID, rptPath, reportSql, docFolderPhysical, SB_FILE_PREFIX, "SB", "IsSuratPembatalanFail")
     End Function
 
     ''' <summary>True when at least one of the letter text columns has content.</summary>
@@ -992,6 +1015,10 @@ Partial Class lesen_migratedata
         Dim uniqueFileName As String = Guid.NewGuid().ToString() & "_" & fileName
         Dim fullPdfPath As String = Path.Combine(docFolderPhysical, uniqueFileName)
         Dim virtualPdfPath As String = "~/doc/" & uniqueFileName
+
+        If HasUploadedLetter(conn, permohonanID, jenisLampiran, filePrefix) Then
+            Throw New InvalidOperationException("Surat '" & jenisLampiran & "' yang dimuat naik oleh pengguna telah wujud dan tidak diganti.")
+        End If
 
         ExportCrystalReportToPdf(rptPhysicalPath, reportSql, fullPdfPath)
         SavePermohonanFailAndFlag(conn, permohonanID, fileName, virtualPdfPath, jenisLampiran, flagColumnName)
@@ -1079,11 +1106,20 @@ Partial Class lesen_migratedata
         Next
     End Sub
 
+    Private Shared Function HasUploadedLetter(ByVal conn As SqlConnection, ByVal permohonanID As Integer, ByVal jenisLampiran As String, ByVal filePrefix As String) As Boolean
+        Dim sql As String = "SELECT COUNT(1) FROM LESEN_PermohonanFail WHERE PermohonanFail_PermohonanID = @PermohonanID AND " & UploadedLetterSql(jenisLampiran, filePrefix)
+        Using cmd As New SqlCommand(sql, conn)
+            cmd.Parameters.AddWithValue("@PermohonanID", permohonanID)
+            Return Convert.ToInt32(cmd.ExecuteScalar()) > 0
+        End Using
+    End Function
+
     Private Shared Sub SavePermohonanFailAndFlag(ByVal conn As SqlConnection, ByVal permohonanID As Integer, ByVal fileName As String, ByVal virtualFilePath As String, ByVal jenisLampiran As String, ByVal flagColumnName As String)
-        ' Remove existing record for the same Permohonan_ID and JenisLampiran if any, then insert the new PDF record
+        ' Replace only the PDF this page created earlier (same file name), then insert the new PDF record
         Dim sqlFail As String = "
             DELETE FROM LESEN_PermohonanFail
-            WHERE PermohonanFail_PermohonanID = @PermohonanID AND PermohonanFail_JenisLampiran = @JenisLampiran;
+            WHERE PermohonanFail_PermohonanID = @PermohonanID AND PermohonanFail_JenisLampiran = @JenisLampiran
+              AND PermohonanFail_FileName = @FileName;
 
             INSERT INTO LESEN_PermohonanFail (
                 PermohonanFail_PermohonanID,
