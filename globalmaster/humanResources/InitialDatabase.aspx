@@ -171,6 +171,7 @@
                     <asp:LinkButton ID="btnSaveScript" runat="server" CssClass="btn btn-primary btn-sm" OnClientClick="return confirm('Simpan skrip ini ke TBL_InitDbApi? Skrip semasa akan diganti.');">
                         <i class="bi bi-save me-1"></i>Simpan ke TBL_InitDbApi
                     </asp:LinkButton>
+                    <button type="button" class="btn btn-default btn-sm" onclick="idbDataPreview('baru')"><i class="bi bi-table me-1"></i>Lihat perubahan data</button>
                     <asp:LinkButton ID="btnCancelPreview" runat="server" CssClass="btn btn-default btn-sm">Batal</asp:LinkButton>
                     <span class="small text-muted ms-auto">Simpan akan menggantikan SQL Analysis &amp; Run dalam TBL_InitDbApi.</span>
                 </div>
@@ -221,6 +222,7 @@
                         </div>
                         <div class="acts" runat="server" id="divRunBtn">
                             <% If StepCount > 0 AndAlso (CntMissing + CntDifferent) > 0 Then %>
+                                <button type="button" class="btn btn-default btn-sm" onclick="idbDataPreview('simpan')" title="Rekod data (page, kebenaran, templat, jenis lesen, lookup) yang akan ditambah / dikemas kini"><i class="bi bi-table me-1"></i>Perubahan data</button>
                                 <button type="button" class="btn btn-primary btn-sm" onclick="idbOpenConfirm()"><i class="bi bi-play-fill me-1"></i>Run script</button>
                             <% ElseIf StepCount > 0 Then %>
                                 <button type="button" class="btn btn-outline-success btn-sm" onclick="Swal.fire('DB sudah terkini', 'Semua langkah dalam skrip sudah dikenakan pada DB sasaran. Tiada apa perlu dijalankan.', 'info')"><i class="bi bi-check2-circle me-1"></i>Terkini</button>
@@ -333,7 +335,7 @@
                                         </tbody>
                                     </table>
                                 </div>
-                                <div class="idb-foot mt-2">Object yang sudah ada dan sama akan di-skip. Function / view / proc / trigger yang berbeza akan di-drop &amp; create semula. Data page &amp; kebenaran: rekod tiada ditambah, rekod berbeza dikemas kini. Table, kolum dan rekod tidak pernah di-drop / dipadam.</div>
+                                <div class="idb-foot mt-2">Object yang sudah ada dan sama akan di-skip. Function / view / proc / trigger yang berbeza akan di-drop &amp; create semula. Data jenis lesen, kumpulan, page, kebenaran &amp; ahli: rekod tiada ditambah sahaja (rekod sedia ada dikekalkan). Data templat &amp; lookup: rekod tiada ditambah, rekod berbeza dikemas kini ikut working. Table, kolum dan rekod tidak pernah di-drop / dipadam.</div>
                             </div>
                         </div>
                     </div>
@@ -353,8 +355,9 @@
                             <p class="small mb-2">Skrip akan dijalankan pada DB sasaran <b id="idbCfDb"></b>: <b id="idbCfCount"></b> langkah
                                 (<span id="idbCfCreate"></span> cipta, <span id="idbCfReplace"></span> ganti). Setiap langkah dijalankan dalam transaksi sendiri dan direkod dalam <code>tbl_sys_InitDbLog</code>.</p>
                             <div class="alert alert-warning py-2 small" id="idbCfReplaceBox">
-                                <label class="d-flex gap-2 align-items-start mb-0"><input type="checkbox" id="idbCfReplaceChk" /> <span>Saya faham <b id="idbCfReplace2"></b> langkah akan mengubah object sedia ada: function / view / proc / trigger di-drop &amp; create semula, dan rekod data (page / kebenaran) yang berbeza dikemas kini.</span></label>
+                                <label class="d-flex gap-2 align-items-start mb-0"><input type="checkbox" id="idbCfReplaceChk" /> <span>Saya faham <b id="idbCfReplace2"></b> langkah akan mengubah object sedia ada: function / view / proc / trigger di-drop &amp; create semula, dan rekod data templat / lookup yang berbeza dikemas kini ikut working.</span></label>
                             </div>
+                            <div class="small mb-2"><a href="javascript:void(0)" onclick="idbDataPreview('simpan')"><i class="bi bi-table me-1"></i>Lihat perubahan data yang akan dibuat</a></div>
                             <label class="d-flex gap-2 align-items-center small mb-2"><input type="checkbox" id="idbCfStop" checked /> Henti bila ada ralat</label>
                             <label class="small mb-1">Taip nama DB sasaran untuk sahkan:</label>
                             <input type="text" class="form-control" id="idbCfText" autocomplete="off" />
@@ -362,6 +365,25 @@
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default btn-sm" data-bs-dismiss="modal">Batal</button>
                             <button type="button" class="btn btn-primary btn-sm" id="idbCfGo" disabled onclick="idbRun()"><i class="bi bi-play-fill me-1"></i>Jalankan</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <%-- ================= MODAL PRATONTON PERUBAHAN DATA ================= --%>
+            <div class="modal fade" id="idbDataModal" tabindex="-1">
+                <div class="modal-dialog modal-xl modal-dialog-scrollable">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title"><i class="bi bi-table me-2"></i>Perubahan data <span class="small text-muted fw-normal" id="idbDvSrc"></span></h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body" style="padding:16px 20px !important">
+                            <div id="idbDvBody" class="small">Memuatkan...</div>
+                        </div>
+                        <div class="modal-footer">
+                            <span class="small text-muted me-auto">Pratonton sahaja - tiada perubahan dibuat. Rekod di DB sasaran tidak pernah dipadam.</span>
+                            <button type="button" class="btn btn-default btn-sm" data-bs-dismiss="modal">Tutup</button>
                         </div>
                     </div>
                 </div>
@@ -520,6 +542,102 @@
             }
         }
         next(0);
+    }
+
+    // ---------- pratonton perubahan data seed
+    function idbEsc(s) { return s == null ? '' : String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+
+    function idbDataPreview(sumber) {
+        var cf = document.getElementById('idbConfirm'), reopen = cf.classList.contains('show');
+        var dm = document.getElementById('idbDataModal');
+        var show = function () {
+            document.getElementById('idbDvSrc').textContent = sumber === 'baru' ? '(skrip baru - belum disimpan)' : '(skrip dalam TBL_InitDbApi)';
+            document.getElementById('idbDvBody').innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span>Membandingkan data dengan DB sasaran...';
+            dm.addEventListener('hidden.bs.modal', function h() {
+                dm.removeEventListener('hidden.bs.modal', h);
+                if (reopen) bootstrap.Modal.getOrCreateInstance(cf).show();
+            });
+            bootstrap.Modal.getOrCreateInstance(dm).show();
+            $.ajax({ type: 'POST', url: idbRunUrl.replace(/\/RunStep$/, '/PratontonData'), contentType: 'application/json; charset=utf-8', dataType: 'json',
+                     data: JSON.stringify({ sumber: sumber }) })
+             .done(function (r) { idbDataRender(r && r.d ? r.d : { ok: false, message: 'Tiada respons.' }); })
+             .fail(function (x) { idbDataRender({ ok: false, message: 'HTTP ' + x.status + ' ' + (x.responseJSON && x.responseJSON.Message ? x.responseJSON.Message : x.statusText) }); });
+        };
+        if (reopen) {
+            cf.addEventListener('hidden.bs.modal', function h() { cf.removeEventListener('hidden.bs.modal', h); show(); });
+            bootstrap.Modal.getOrCreateInstance(cf).hide();
+        } else { show(); }
+    }
+
+    function idbDataRender(r) {
+        var body = document.getElementById('idbDvBody');
+        if (!r.ok) { body.innerHTML = '<div class="alert alert-danger py-2 mb-0">' + idbEsc(r.message) + '</div>'; return; }
+        // kumpul ikut table -> { add: [], upd: {rowKey: {label, cols: []}}, skip: [] }
+        var tbls = {}, order = [];
+        (r.rows || []).forEach(function (a) {
+            var t = a[0];
+            if (!tbls[t]) { tbls[t] = { add: [], upd: {}, updOrder: [], keep: {}, keepOrder: [], skip: [] }; order.push(t); }
+            var g = tbls[t];
+            if (a[1] === 'ADD') g.add.push(a);
+            else if (a[1] === 'SKIP') g.skip.push(a);
+            else {
+                var m = a[1] === 'KEEP' ? g.keep : g.upd, o = a[1] === 'KEEP' ? g.keepOrder : g.updOrder;
+                if (!m[a[2]]) { m[a[2]] = { label: a[3], cols: [] }; o.push(a[2]); }
+                m[a[2]].cols.push(a);
+            }
+        });
+        function diffTable(map, keys, oldTitle, newTitle) {
+            var s = '<table class="table table-sm table-bordered mb-3"><thead><tr><th style="width:22%">Kunci</th><th style="width:16%">Kolum</th><th>' + oldTitle + '</th><th>' + newTitle + '</th></tr></thead><tbody>';
+            keys.forEach(function (k) {
+                var u = map[k];
+                u.cols.forEach(function (a, ci) {
+                    s += '<tr>' + (ci === 0 ? '<td rowspan="' + u.cols.length + '"><code>' + idbEsc(k) + '</code>' + (u.label ? '<div class="text-muted">' + idbEsc(u.label) + '</div>' : '') + '</td>' : '') +
+                         '<td>' + idbEsc(a[4]) + '</td><td class="text-danger" style="white-space:pre-wrap;word-break:break-word">' + (a[5] == null ? '<i>NULL</i>' : idbEsc(a[5])) + '</td>' +
+                         '<td class="text-success" style="white-space:pre-wrap;word-break:break-word">' + (a[6] == null ? '<i>NULL</i>' : idbEsc(a[6])) + '</td></tr>';
+                });
+            });
+            return s + '</tbody></table>';
+        }
+        if (!order.length) {
+            body.innerHTML = '<div class="idb-status ok mb-0"><div class="ic"><i class="bi bi-check2-all"></i></div><div><div class="ttl">Tiada perubahan data</div><div class="txt">Semua rekod data seed sudah sama dengan DB sasaran <b>' + idbEsc(r.db) + '</b>.</div></div></div>';
+            return;
+        }
+        var nA = 0, nU = 0, nS = 0;
+        order.forEach(function (t) { nA += tbls[t].add.length; nU += tbls[t].updOrder.length; nS += tbls[t].skip.length; });
+        var h = '<div class="mb-2">DB sasaran <b>' + idbEsc(r.db) + '</b>: <span class="idb-chg Baru">' + nA + ' rekod ditambah</span> <span class="idb-chg Berubah">' + nU + ' rekod dikemas kini</span>' +
+                (nS ? ' <span class="idb-chg Dibuang">' + nS + ' dilangkau</span>' : '') + '</div>';
+        h += '<div class="accordion" id="idbDvAcc">';
+        order.forEach(function (t, ti) {
+            var g = tbls[t], id = 'idbDv' + ti;
+            h += '<div class="accordion-item"><h2 class="accordion-header"><button class="accordion-button collapsed py-2" type="button" data-bs-toggle="collapse" data-bs-target="#' + id + '">' +
+                 '<b class="me-2">' + idbEsc(t) + '</b>' +
+                 (g.add.length ? '<span class="idb-chg Baru me-1">' + g.add.length + ' tambah</span>' : '') +
+                 (g.updOrder.length ? '<span class="idb-chg Berubah me-1">' + g.updOrder.length + ' kemas kini</span>' : '') +
+                 (g.keepOrder.length ? '<span class="idb-chg me-1" style="background:#eef2f7;color:#475569">' + g.keepOrder.length + ' berbeza, dikekalkan</span>' : '') +
+                 (g.skip.length ? '<span class="idb-chg Dibuang">' + g.skip.length + ' dilangkau</span>' : '') +
+                 '</button></h2><div id="' + id + '" class="accordion-collapse collapse"><div class="accordion-body p-2">';
+            if (g.add.length) {
+                h += '<div class="fw-bold mb-1">Rekod baru</div><table class="table table-sm table-bordered mb-3"><thead><tr><th style="width:35%">Kunci</th><th>Keterangan</th></tr></thead><tbody>';
+                g.add.forEach(function (a) { h += '<tr><td><code>' + idbEsc(a[2]) + '</code></td><td>' + idbEsc(a[3]) + '</td></tr>'; });
+                h += '</tbody></table>';
+            }
+            if (g.updOrder.length) {
+                h += '<div class="fw-bold mb-1">Rekod dikemas kini</div>' + diffTable(g.upd, g.updOrder, 'Nilai semasa (sasaran)', 'Nilai baru (working)');
+            }
+            if (g.keepOrder.length) {
+                h += '<div class="fw-bold mb-1">Rekod berbeza - dikekalkan (tambah sahaja, nilai sasaran tidak diubah)</div>' +
+                     '<div class="text-muted mb-1">Kunci sama tetapi nilai berbeza. Jika kunci ini merujuk rekod lain di sistem baru (ID bertindih), rekod working tersebut TIDAK akan dibawa.</div>' +
+                     diffTable(g.keep, g.keepOrder, 'Nilai sasaran (dikekalkan)', 'Nilai working (tidak dibawa)');
+            }
+            if (g.skip.length) {
+                h += '<div class="fw-bold mb-1">Dilangkau</div><table class="table table-sm table-bordered mb-0"><thead><tr><th style="width:35%">Kunci</th><th>Rujukan</th><th>Sebab</th></tr></thead><tbody>';
+                g.skip.forEach(function (a) { h += '<tr><td><code>' + idbEsc(a[2]) + '</code></td><td>' + idbEsc(a[3]) + '</td><td>' + idbEsc(a[4]) + '</td></tr>'; });
+                h += '</tbody></table>';
+            }
+            h += '</div></div></div>';
+        });
+        h += '</div><div class="text-muted mt-2">Nilai panjang dipaparkan 400 aksara pertama.</div>';
+        body.innerHTML = h;
     }
 
     window.addEventListener('beforeunload', function (e) { if (idbRunning) { e.preventDefault(); e.returnValue = ''; } });
