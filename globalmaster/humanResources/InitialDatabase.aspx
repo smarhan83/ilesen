@@ -335,7 +335,7 @@
                                         </tbody>
                                     </table>
                                 </div>
-                                <div class="idb-foot mt-2">Object yang sudah ada dan sama akan di-skip. Function / view / proc / trigger yang berbeza akan di-drop &amp; create semula. Data jenis lesen, kumpulan, page, kebenaran &amp; ahli: rekod tiada ditambah sahaja (rekod sedia ada dikekalkan). Data templat &amp; lookup: rekod tiada ditambah, rekod berbeza dikemas kini ikut working. Table, kolum dan rekod tidak pernah di-drop / dipadam.</div>
+                                <div class="idb-foot mt-2">Object yang sudah ada dan sama akan di-skip. Function / view / proc / trigger yang berbeza akan di-drop &amp; create semula. Data jenis lesen, kumpulan, kebenaran &amp; ahli: rekod tiada ditambah sahaja (rekod sedia ada dikekalkan). Data page / menu, templat &amp; lookup: rekod tiada ditambah, rekod berbeza dikemas kini ikut working. Table, kolum dan rekod tidak pernah di-drop / dipadam.</div>
                             </div>
                         </div>
                     </div>
@@ -355,7 +355,7 @@
                             <p class="small mb-2">Skrip akan dijalankan pada DB sasaran <b id="idbCfDb"></b>: <b id="idbCfCount"></b> langkah
                                 (<span id="idbCfCreate"></span> cipta, <span id="idbCfReplace"></span> ganti). Setiap langkah dijalankan dalam transaksi sendiri dan direkod dalam <code>tbl_sys_InitDbLog</code>.</p>
                             <div class="alert alert-warning py-2 small" id="idbCfReplaceBox">
-                                <label class="d-flex gap-2 align-items-start mb-0"><input type="checkbox" id="idbCfReplaceChk" /> <span>Saya faham <b id="idbCfReplace2"></b> langkah akan mengubah object sedia ada: function / view / proc / trigger di-drop &amp; create semula, dan rekod data templat / lookup yang berbeza dikemas kini ikut working.</span></label>
+                                <label class="d-flex gap-2 align-items-start mb-0"><input type="checkbox" id="idbCfReplaceChk" /> <span>Saya faham <b id="idbCfReplace2"></b> langkah akan mengubah object sedia ada: function / view / proc / trigger di-drop &amp; create semula, dan rekod data page / menu, templat / lookup yang berbeza dikemas kini ikut working.</span></label>
                             </div>
                             <div class="small mb-2"><a href="javascript:void(0)" onclick="idbDataPreview('simpan')"><i class="bi bi-table me-1"></i>Lihat perubahan data yang akan dibuat</a></div>
                             <label class="d-flex gap-2 align-items-center small mb-2"><input type="checkbox" id="idbCfStop" checked /> Henti bila ada ralat</label>

@@ -47,7 +47,7 @@ Public Class InitDbGenerator
     ' Lain-lain: DB working ialah data baru sistem - rekod berbeza dikemas kini ikut working.
     Public Shared ReadOnly Seeds As SeedDef() = {
         New SeedDef With {.Table = "dbo.TBL_USER_GROUPNAME", .KeyCols = {"UGN_Id"}, .PreserveIdentity = True, .InsertOnly = True, .Note = "Kumpulan pengguna"},
-        New SeedDef With {.Table = "dbo.TBL_USER_GROUPMODULE", .KeyCols = {"UGM_Id"}, .PreserveIdentity = True, .InsertOnly = True, .Note = "Page / menu (ID dikekalkan - dirujuk oleh m_Id & UGM_ParentId)"},
+        New SeedDef With {.Table = "dbo.TBL_USER_GROUPMODULE", .KeyCols = {"UGM_Id"}, .PreserveIdentity = True, .Note = "Page / menu (ID dikekalkan - dirujuk oleh m_Id & UGM_ParentId)"},
         New SeedDef With {.Table = "dbo.TBL_USER_GROUPROLE", .KeyCols = {"UGR_UGN_Id", "UGR_UGM_Id"}, .PreserveIdentity = False, .InsertOnly = True, .Note = "Kebenaran page bagi setiap kumpulan"},
         New SeedDef With {.Table = "dbo.TBL_USER_GROUPLIST", .KeyCols = {"UGL_UGN_Id", "UGL_Users_Id"}, .PreserveIdentity = False, .InsertOnly = True, .Note = "Ahli kumpulan (pengguna dipadankan ikut Users_Name)",
                           .Lookups = New List(Of SeedLookup) From {New SeedLookup With {.Col = "UGL_Users_Id", .RefTable = "dbo.TBL_USERS", .RefKey = "Users_Name", .RefId = "Users_Id"}}},
