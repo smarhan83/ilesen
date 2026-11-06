@@ -1370,6 +1370,19 @@ Partial Class MasterMenu
         End If
     End Sub
 
+    ' Cetak Surat: hanya bila Diluluskan / Ditolak. Rekod sistem lama (JenisLesen_ID > 0) tiada surat janaan
+    ' format baru, jadi butang hanya dipaparkan jika ada fail PDF surat (IsSuratKelulusanFail = 1).
+    Protected Function BolehCetakSurat(ByVal status As Object, ByVal jenisLesenId As Object, ByVal isSuratFail As Object) As Boolean
+        Dim s As String = Convert.ToString(status).Trim()
+        If s <> "Diluluskan" AndAlso s <> "Ditolak" Then Return False
+
+        Dim jid As Integer = 0
+        If jenisLesenId IsNot Nothing AndAlso Not IsDBNull(jenisLesenId) Then jid = CInt(jenisLesenId)
+        If jid = 0 Then Return True
+
+        Return isSuratFail IsNot Nothing AndAlso Not IsDBNull(isSuratFail) AndAlso CBool(isSuratFail)
+    End Function
+
     Protected Function GetButtonClass(ByVal status As Object) As String
 
         Select Case status.ToString().Trim()

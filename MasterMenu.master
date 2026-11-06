@@ -1705,7 +1705,7 @@ h1{
                                                     runat="server"
                                                     CssClass='<%# GetButtonClass(Eval("StatusDesc")) %>'
                                                     CommandArgument='<%# CType(Container, GridViewRow).RowIndex %>'
-                                                    Visible='<%# Eval("StatusDesc").ToString() = "Diluluskan" Or Eval("StatusDesc").ToString() = "Ditolak" %>'
+                                                    Visible='<%# BolehCetakSurat(Eval("StatusDesc"), Eval("JenisLesen_ID"), Eval("IsSuratKelulusanFail")) %>'
                                                     OnClick="lnkCetak_Click"><i class="bi bi-printer me-1"></i>Cetak Surat</asp:LinkButton>
 
                                                 <%-- QR sepanduk/banting: hanya bila lulus & ada kod QR --%>
@@ -1794,7 +1794,7 @@ h1{
                                     inner join LESEN_Pemohon f on f.Pemohon_ID = g.Permohonan_PemohonID
                                     WHERE g.StatusID &gt; 0
                                     and g.IsBatal = 0
-                                    and g.JenisLesen_ID = 0
+                                    /* Rekod lama (JenisLesen_ID &gt; 0) turut dipaparkan; Cetak Surat hanya jika ada fail PDF (BolehCetakSurat) */
                                     and (
                                         REPLACE(REPLACE(REPLACE(f.Pemohon_ICNo, '-', ''), ' ', ''), CHAR(9), '') =
                                         REPLACE(REPLACE(REPLACE(@Pemohon_ICNo, '-', ''), ' ', ''), CHAR(9), '')
