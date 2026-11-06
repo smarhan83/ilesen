@@ -210,11 +210,13 @@ Partial Class kelulusan1
 
                 If isFail Then
                     CB_SuratFail.Checked = True
+                    btnSaveLetter.Visible = False
                     pnlSuratAuto.Visible = False
                     pnlSuratFail.Visible = True
                     BT_Generate.Visible = False
                 Else
                     CB_SuratFail.Checked = False
+                    btnSaveLetter.Visible = True
                     pnlSuratAuto.Visible = True
                     pnlSuratFail.Visible = False
                     BT_Generate.Visible = True
@@ -225,6 +227,14 @@ Partial Class kelulusan1
                 End If
 
                 GetSuratFail(permohonanId)
+
+                If isOCS3 Then
+                    CB_SuratFail.Visible = Not isPenilai
+                    btnSaveLetter.Visible = Not isPenilai
+                    pnlSuratAuto.Visible = Not isPenilai
+                    pnlSuratFail.Visible = Not isPenilai
+                    BT_Generate.Visible = Not isPenilai
+                End If
             Else
                 divtemplatsurat.Visible = False
                 BT_Generate.Visible = False
