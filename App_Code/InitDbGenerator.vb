@@ -54,7 +54,8 @@ Public Class InitDbGenerator
                           .CascadeDelete = {New String() {"dbo.TBL_USER_GROUPROLE", "UGR_UGM_Id"}},
                           .Note = "Page / menu - salinan penuh DB working (ID dikekalkan - dirujuk oleh m_Id & UGM_ParentId)"},
         New SeedDef With {.Table = "dbo.TBL_USER_GROUPROLE", .KeyCols = {"UGR_UGN_Id", "UGR_UGM_Id"}, .PreserveIdentity = False, .InsertOnly = True, .Note = "Kebenaran page bagi setiap kumpulan"},
-        New SeedDef With {.Table = "dbo.TBL_USER_GROUPLIST", .KeyCols = {"UGL_UGN_Id", "UGL_Users_Id"}, .PreserveIdentity = False, .InsertOnly = True, .Note = "Ahli kumpulan (pengguna dipadankan ikut Users_Name)",
+        New SeedDef With {.Table = "dbo.TBL_USER_GROUPLIST", .KeyCols = {"UGL_UGN_Id", "UGL_Users_Id"}, .PreserveIdentity = False, .DeleteMissing = True,
+                          .Note = "Ahli kumpulan - salinan penuh DB working (pengguna dipadankan ikut Users_Name)",
                           .Lookups = New List(Of SeedLookup) From {New SeedLookup With {.Col = "UGL_Users_Id", .RefTable = "dbo.TBL_USERS", .RefKey = "Users_Name", .RefId = "Users_Id"}}},
         New SeedDef With {.Table = "dbo.LESEN_ReportTemplate", .KeyCols = {"RTID"}, .PreserveIdentity = True, .Note = "Templat laporan (surat)"},
         New SeedDef With {.Table = "dbo.LESEN_UlasanIKTemplate", .KeyCols = {"UTID"}, .PreserveIdentity = True, .Note = "Templat ulasan IK"},
@@ -634,7 +635,16 @@ Public Class InitDbGenerator
         Next
         If sd.DeleteMissing Then
             Dim keyExprT = keyExpr.Replace("s.[", "t.[")
-            Dim lblExprT = If(sd.Lookups.Count > 0 OrElse lblCol Is Nothing, "CAST(NULL AS nvarchar(400))", lblExpr.Replace("s.[", "t.["))
+            ' label rekod sasaran: lookup -> nama rujukan (cth. Users_Name) daripada DB sasaran
+            Dim lblExprT As String
+            If sd.Lookups.Count > 0 Then
+                Dim lk0 = sd.Lookups(0)
+                lblExprT = "(SELECT TOP 1 CAST(r." & Q(lk0.RefKey) & " AS nvarchar(400)) FROM " & QK(lk0.RefTable) & " r WHERE r." & Q(lk0.RefId) & " = t." & Q(lk0.Col) & ")"
+            ElseIf lblCol Is Nothing Then
+                lblExprT = "CAST(NULL AS nvarchar(400))"
+            Else
+                lblExprT = lblExpr.Replace("s.[", "t.[")
+            End If
             pv.AppendLine("    " & pvIns & "SELECT " & tblLit & ", 'DEL', " & keyExprT & ", " & lblExprT & ", NULL, NULL, NULL FROM " & tq & " t WHERE " & notInWorking & ";")
             For Each cd In sd.CascadeDelete
                 pv.AppendLine("    IF OBJECT_ID(" & NLit(cd(0)) & ", 'U') IS NOT NULL")
