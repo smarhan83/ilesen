@@ -229,7 +229,7 @@ Partial Class lesen_migratedata
                             "Berjaya kemaskini format jadual baharu (JenisLesenIdList / IklanList / AnjingList / Pembetulan).",
                             Function()
                                 UpdateRecordDataFormat(conn, pid)
-                                Return ""
+                                Return New StepOutcome()
                             End Function) Then
                         res.FormatUpdatedCount += 1
                     End If
@@ -237,21 +237,21 @@ Partial Class lesen_migratedata
                     ' 2. Laporan / Surat Pemeriksaan (SP)
                     If item.NeedSP AndAlso RunStep(res, item, "PDF Laporan Pemeriksaan (SP)",
                             "Berjaya simpan PDF Laporan Pemeriksaan & kemaskini IsSuratPemeriksaanFail = 1.",
-                            Function() GenerateSuratPemeriksaanPdf(conn, pid, jenisLesenID, docFolderPhysical)) Then
+                            Function() GenerateSuratPemeriksaanPdf(conn, pid, jenisLesenID, docFolderPhysical, forceRegeneratePdf)) Then
                         res.SPGeneratedCount += 1
                     End If
 
                     ' 3. Surat Kelulusan (SK)
                     If item.NeedSK AndAlso RunStep(res, item, "PDF Surat Kelulusan (SK)",
                             "Berjaya simpan PDF Surat Kelulusan & kemaskini IsSuratKelulusanFail = 1.",
-                            Function() GenerateSuratKelulusanPdf(conn, pid, jenisLesenID, docFolderPhysical)) Then
+                            Function() GenerateSuratKelulusanPdf(conn, pid, jenisLesenID, docFolderPhysical, forceRegeneratePdf)) Then
                         res.SKGeneratedCount += 1
                     End If
 
                     ' 4. Surat Pembatalan (SB)
                     If item.NeedSB AndAlso RunStep(res, item, "PDF Surat Pembatalan (SB)",
                             "Berjaya simpan PDF Surat Pembatalan & kemaskini IsSuratPembatalanFail = 1.",
-                            Function() GenerateSuratPembatalanPdf(conn, pid, jenisLesenID, docFolderPhysical)) Then
+                            Function() GenerateSuratPembatalanPdf(conn, pid, jenisLesenID, docFolderPhysical, forceRegeneratePdf)) Then
                         res.SBGeneratedCount += 1
                     End If
 
@@ -273,22 +273,29 @@ Partial Class lesen_migratedata
         Return res
     End Function
 
+    ''' <summary>Result of one step: the URL of the PDF ("" when the step creates no file) and an optional message.</summary>
+    Private Class StepOutcome
+        Public Property FileUrl As String = ""
+        Public Property Message As String = ""   ' replaces the default success message when set
+    End Class
+
     ''' <summary>
     ''' Runs one migration step for one record and writes the outcome to the activity / error log.
-    ''' The step returns the URL of the generated PDF ("" when the step creates no file),
-    ''' or Nothing when there was nothing to do (e.g. the letter is empty).
+    ''' The step returns Nothing when there was nothing to do (e.g. the letter is empty).
     ''' Returns True when the step completed successfully.
     ''' </summary>
-    Private Shared Function RunStep(ByVal res As BatchResult, ByVal item As QueueItem, ByVal category As String, ByVal successMessage As String, ByVal stepWork As Func(Of String)) As Boolean
+    Private Shared Function RunStep(ByVal res As BatchResult, ByVal item As QueueItem, ByVal category As String, ByVal successMessage As String, ByVal stepWork As Func(Of StepOutcome)) As Boolean
         Dim rujukan As String = If(String.IsNullOrEmpty(item.Rujukan), "-", item.Rujukan)
         Dim timestamp As String = DateTime.Now.ToString("HH:mm:ss")
         Try
-            Dim fileUrl As String = stepWork()
-            If fileUrl Is Nothing Then Return False
+            Dim outcome As StepOutcome = stepWork()
+            If outcome Is Nothing Then Return False
 
             res.Activities.Add(New ActivityLogEntry With {
                 .Timestamp = timestamp, .PermohonanID = item.PermohonanID, .Rujukan = rujukan,
-                .Category = category, .Status = "SUCCESS", .Message = successMessage, .FileUrl = fileUrl
+                .Category = category, .Status = "SUCCESS",
+                .Message = If(String.IsNullOrEmpty(outcome.Message), successMessage, outcome.Message),
+                .FileUrl = outcome.FileUrl
             })
             Return True
         Catch ex As Exception
@@ -911,7 +918,7 @@ Partial Class lesen_migratedata
     ' Crystal connects to the database itself (same as ReportViewer.aspx). The SQL below is copied from the old pages.
     ' Permohonan_ID is an Integer, so it is safe to put directly into the query text.
 
-    Private Shared Function GenerateSuratPemeriksaanPdf(ByVal conn As SqlConnection, ByVal permohonanID As Integer, ByVal jenisLesenID As Integer, ByVal docFolderPhysical As String) As String
+    Private Shared Function GenerateSuratPemeriksaanPdf(ByVal conn As SqlConnection, ByVal permohonanID As Integer, ByVal jenisLesenID As Integer, ByVal docFolderPhysical As String, ByVal forceRegenerate As Boolean) As StepOutcome
         If Not HasLetterText(conn, permohonanID, {"SuratPemeriksaan1", "SuratPemeriksaan2"}) Then Return Nothing
 
         Dim rptPath As String = FindReportTemplate("~/lesen/report/pemeriksaan/", SP_REPORT_NAMES, jenisLesenID, "sp_perniagaan", "mpk_suratpemeriksaan", "sp_perniagaan")
@@ -938,10 +945,10 @@ Partial Class lesen_migratedata
                         "WHERE a.Permohonan_ID = " & permohonanID
         End If
 
-        Return ExportAndAttachPdf(conn, permohonanID, rptPath, reportSql, docFolderPhysical, SP_FILE_PREFIX, "SP", "IsSuratPemeriksaanFail")
+        Return ExportAndAttachPdf(conn, permohonanID, rptPath, reportSql, docFolderPhysical, SP_FILE_PREFIX, "SP", "IsSuratPemeriksaanFail", forceRegenerate)
     End Function
 
-    Private Shared Function GenerateSuratKelulusanPdf(ByVal conn As SqlConnection, ByVal permohonanID As Integer, ByVal jenisLesenID As Integer, ByVal docFolderPhysical As String) As String
+    Private Shared Function GenerateSuratKelulusanPdf(ByVal conn As SqlConnection, ByVal permohonanID As Integer, ByVal jenisLesenID As Integer, ByVal docFolderPhysical As String, ByVal forceRegenerate As Boolean) As StepOutcome
         If Not HasLetterText(conn, permohonanID, {"SuratKelulusan1", "SuratKelulusan2", "SuratKelulusan3", "SuratKelulusan4"}) Then Return Nothing
 
         Dim rptPath As String = FindReportTemplate("~/lesen/report/kelulusan/", SK_REPORT_NAMES, jenisLesenID, "sk_perniagaanb", "sk_perniagaanb")
@@ -955,10 +962,10 @@ Partial Class lesen_migratedata
                                   "LEFT JOIN TBL_LOOKUPS e ON e.id = b.AnjingJenisPremis " &
                                   "WHERE b.Permohonan_ID = " & permohonanID & " ORDER BY a.SeqNo ASC"
 
-        Return ExportAndAttachPdf(conn, permohonanID, rptPath, reportSql, docFolderPhysical, SK_FILE_PREFIX, "SK", "IsSuratKelulusanFail")
+        Return ExportAndAttachPdf(conn, permohonanID, rptPath, reportSql, docFolderPhysical, SK_FILE_PREFIX, "SK", "IsSuratKelulusanFail", forceRegenerate)
     End Function
 
-    Private Shared Function GenerateSuratPembatalanPdf(ByVal conn As SqlConnection, ByVal permohonanID As Integer, ByVal jenisLesenID As Integer, ByVal docFolderPhysical As String) As String
+    Private Shared Function GenerateSuratPembatalanPdf(ByVal conn As SqlConnection, ByVal permohonanID As Integer, ByVal jenisLesenID As Integer, ByVal docFolderPhysical As String, ByVal forceRegenerate As Boolean) As StepOutcome
         If Not HasLetterText(conn, permohonanID, {"SuratPembatalan1", "SuratPembatalan2"}) Then Return Nothing
 
         Dim rptPath As String = FindReportTemplate("~/lesen/report/kelulusan/", SB_REPORT_NAMES, jenisLesenID, "sb_perniagaan", "sb_perniagaan")
@@ -971,7 +978,7 @@ Partial Class lesen_migratedata
                                   "LEFT JOIN TBL_LOOKUPS e ON e.id = b.AnjingJenisPremis " &
                                   "WHERE b.Permohonan_ID = " & permohonanID
 
-        Return ExportAndAttachPdf(conn, permohonanID, rptPath, reportSql, docFolderPhysical, SB_FILE_PREFIX, "SB", "IsSuratPembatalanFail")
+        Return ExportAndAttachPdf(conn, permohonanID, rptPath, reportSql, docFolderPhysical, SB_FILE_PREFIX, "SB", "IsSuratPembatalanFail", forceRegenerate)
     End Function
 
     ''' <summary>True when at least one of the letter text columns has content.</summary>
@@ -1006,23 +1013,121 @@ Partial Class lesen_migratedata
     End Function
 
     ''' <summary>
-    ''' Exports the Crystal report to ~/doc/{guid}_{filePrefix}_{id}.pdf, saves it in LESEN_PermohonanFail and sets the flag column.
-    ''' Returns the browser URL of the PDF. Any Crystal error is thrown, so nothing is saved for that letter.
+    ''' Saves the letter PDF ~/doc/{guid}_{filePrefix}_{id}.pdf in LESEN_PermohonanFail and sets the flag column.
+    ''' When a PDF of this letter created by an earlier run is already in ~/doc/ (e.g. the database was restored),
+    ''' that file is reused and only the database is updated, unless forceRegenerate is set.
+    ''' Older copies of the same letter that no row refers to any more are deleted afterwards.
+    ''' Any Crystal error is thrown, so nothing is saved for that letter.
     ''' </summary>
     Private Shared Function ExportAndAttachPdf(ByVal conn As SqlConnection, ByVal permohonanID As Integer, ByVal rptPhysicalPath As String, ByVal reportSql As String,
-                                               ByVal docFolderPhysical As String, ByVal filePrefix As String, ByVal jenisLampiran As String, ByVal flagColumnName As String) As String
+                                               ByVal docFolderPhysical As String, ByVal filePrefix As String, ByVal jenisLampiran As String, ByVal flagColumnName As String,
+                                               ByVal forceRegenerate As Boolean) As StepOutcome
         Dim fileName As String = filePrefix & "_" & permohonanID & ".pdf"
-        Dim uniqueFileName As String = Guid.NewGuid().ToString() & "_" & fileName
-        Dim fullPdfPath As String = Path.Combine(docFolderPhysical, uniqueFileName)
-        Dim virtualPdfPath As String = "~/doc/" & uniqueFileName
 
         If HasUploadedLetter(conn, permohonanID, jenisLampiran, filePrefix) Then
             Throw New InvalidOperationException("Surat '" & jenisLampiran & "' yang dimuat naik oleh pengguna telah wujud dan tidak diganti.")
         End If
 
-        ExportCrystalReportToPdf(rptPhysicalPath, reportSql, fullPdfPath)
+        Dim existingFiles As List(Of String) = FindGeneratedPdfs(docFolderPhysical, fileName)
+        Dim uniqueFileName As String
+        Dim message As String = ""
+
+        If Not forceRegenerate AndAlso existingFiles.Count > 0 Then
+            ' Reuse: prefer the file the database already points to, otherwise the newest copy
+            uniqueFileName = PickExistingPdf(conn, permohonanID, jenisLampiran, existingFiles)
+            message = "Fail PDF sedia ada digunakan semula (tidak dijana semula): " & uniqueFileName & "."
+        Else
+            uniqueFileName = Guid.NewGuid().ToString() & "_" & fileName
+            ExportCrystalReportToPdf(rptPhysicalPath, reportSql, Path.Combine(docFolderPhysical, uniqueFileName))
+        End If
+
+        Dim virtualPdfPath As String = "~/doc/" & uniqueFileName
         SavePermohonanFailAndFlag(conn, permohonanID, fileName, virtualPdfPath, jenisLampiran, flagColumnName)
-        Return ResolveVirtualUrl(virtualPdfPath)
+
+        Dim removed As Integer = DeleteUnusedCopies(conn, docFolderPhysical, existingFiles, uniqueFileName)
+        If removed > 0 Then
+            If message = "" Then message = "Berjaya simpan PDF & kemaskini " & flagColumnName & " = 1."
+            message &= " " & removed & " salinan PDF lama dipadam."
+        End If
+
+        Return New StepOutcome With {.FileUrl = ResolveVirtualUrl(virtualPdfPath), .Message = message}
+    End Function
+
+    ' Names created by this page: "{guid}_{filePrefix}_{Permohonan_ID}.pdf"
+    Private Shared ReadOnly RxGeneratedPdfGuid As New Regex("^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}_", RegexOptions.IgnoreCase)
+
+    ''' <summary>
+    ''' File names (not paths) in ~/doc/ of PDFs this page created for this letter, newest first.
+    ''' Empty or broken files are ignored.
+    ''' </summary>
+    Private Shared Function FindGeneratedPdfs(ByVal docFolderPhysical As String, ByVal fileName As String) As List(Of String)
+        Dim result As New List(Of String)()
+        If Not Directory.Exists(docFolderPhysical) Then Return result
+
+        Return New DirectoryInfo(docFolderPhysical).GetFiles("*_" & fileName) _
+            .Where(Function(f) f.Name.Length = 37 + fileName.Length _
+                               AndAlso f.Name.EndsWith("_" & fileName, StringComparison.OrdinalIgnoreCase) _
+                               AndAlso RxGeneratedPdfGuid.IsMatch(f.Name) _
+                               AndAlso IsValidPdf(f)) _
+            .OrderByDescending(Function(f) f.LastWriteTimeUtc) _
+            .Select(Function(f) f.Name) _
+            .ToList()
+    End Function
+
+    ''' <summary>True when the file is not empty and starts with the PDF header "%PDF".</summary>
+    Private Shared Function IsValidPdf(ByVal file As FileInfo) As Boolean
+        If file.Length < 5 Then Return False
+        Try
+            Using fs As FileStream = file.OpenRead()
+                Dim header(3) As Byte
+                If fs.Read(header, 0, 4) <> 4 Then Return False
+                Return Encoding.ASCII.GetString(header) = "%PDF"
+            End Using
+        Catch
+            Return False
+        End Try
+    End Function
+
+    ''' <summary>The candidate that LESEN_PermohonanFail already refers to for this letter, otherwise the first (newest).</summary>
+    Private Shared Function PickExistingPdf(ByVal conn As SqlConnection, ByVal permohonanID As Integer, ByVal jenisLampiran As String, ByVal candidates As List(Of String)) As String
+        Dim sql As String = "SELECT PermohonanFail_FilePath FROM LESEN_PermohonanFail WHERE PermohonanFail_PermohonanID = @PermohonanID AND PermohonanFail_JenisLampiran = @JenisLampiran"
+        Using cmd As New SqlCommand(sql, conn)
+            cmd.Parameters.AddWithValue("@PermohonanID", permohonanID)
+            cmd.Parameters.AddWithValue("@JenisLampiran", jenisLampiran)
+            Using rdr As SqlDataReader = cmd.ExecuteReader()
+                While rdr.Read()
+                    Dim referenced As String = Path.GetFileName(Convert.ToString(rdr(0)).Replace("~/", "").Replace("/", "\"))
+                    Dim match As String = candidates.FirstOrDefault(Function(c) String.Equals(c, referenced, StringComparison.OrdinalIgnoreCase))
+                    If match IsNot Nothing Then Return match
+                End While
+            End Using
+        End Using
+        Return candidates(0)
+    End Function
+
+    ''' <summary>
+    ''' Deletes the other copies of this letter from ~/doc/ (keepFileName stays), but only when no
+    ''' LESEN_PermohonanFail row refers to that file. A file that cannot be deleted is left in place.
+    ''' Returns the number of files deleted.
+    ''' </summary>
+    Private Shared Function DeleteUnusedCopies(ByVal conn As SqlConnection, ByVal docFolderPhysical As String, ByVal copies As List(Of String), ByVal keepFileName As String) As Integer
+        Dim removed As Integer = 0
+        For Each copyName As String In copies
+            If String.Equals(copyName, keepFileName, StringComparison.OrdinalIgnoreCase) Then Continue For
+
+            Using cmd As New SqlCommand("SELECT COUNT(1) FROM LESEN_PermohonanFail WHERE PermohonanFail_FilePath LIKE @Pattern", conn)
+                cmd.Parameters.AddWithValue("@Pattern", "%" & copyName.Replace("[", "[[]").Replace("_", "[_]").Replace("%", "[%]"))
+                If Convert.ToInt32(cmd.ExecuteScalar()) > 0 Then Continue For
+            End Using
+
+            Try
+                File.Delete(Path.Combine(docFolderPhysical, copyName))
+                removed += 1
+            Catch
+                ' File in use or no permission: leave it, the orphan scan in migratefile.aspx can clean it later
+            End Try
+        Next
+        Return removed
     End Function
 
     ''' <summary>
