@@ -23,6 +23,7 @@ Public Class InitDbGenerator
     Public Const ApiAnalysis As String = "INITDB_ANALYSIS"
     Public Const ApiRun As String = "INITDB_RUN"
     Public Const ApiWarning As String = "INITDB_WARNING"
+    Public Const ApiDataPreview As String = "INITDB_DATAPREVIEW"
     Public Const StepMarker As String = "/*@@STEP "
 
     Public Shared ReadOnly KindOrder As String() = {"TABLE", "COLUMN", "INDEX", "FK", "DATA", "FUNCTION", "VIEW", "PROC", "TRIGGER"}
@@ -36,19 +37,25 @@ Public Class InitDbGenerator
         Public Table As String                             ' schema.name
         Public KeyCols As String()                         ' kunci padanan rekod
         Public PreserveIdentity As Boolean                 ' True = ID dikekalkan (IDENTITY_INSERT)
+        Public InsertOnly As Boolean                       ' True = tambah rekod tiada sahaja; rekod sedia ada di sasaran tidak diubah (data dipakai sistem lama & baru)
         Public Lookups As New List(Of SeedLookup)
         Public Note As String
     End Class
 
     ' Susunan penting: group & module dahulu (ID dikekalkan), kemudian role & ahli group yang merujuknya
+    ' InsertOnly: data dipakai sistem lama & baru - rekod sasaran dikekalkan, hanya rekod baru dari working ditambah.
+    ' Lain-lain: DB working ialah data baru sistem - rekod berbeza dikemas kini ikut working.
     Public Shared ReadOnly Seeds As SeedDef() = {
-        New SeedDef With {.Table = "dbo.TBL_USER_GROUPNAME", .KeyCols = {"UGN_Id"}, .PreserveIdentity = True, .Note = "Kumpulan pengguna"},
-        New SeedDef With {.Table = "dbo.TBL_USER_GROUPMODULE", .KeyCols = {"UGM_Id"}, .PreserveIdentity = True, .Note = "Page / menu (ID dikekalkan - dirujuk oleh m_Id & UGM_ParentId)"},
-        New SeedDef With {.Table = "dbo.TBL_USER_GROUPROLE", .KeyCols = {"UGR_UGN_Id", "UGR_UGM_Id"}, .PreserveIdentity = False, .Note = "Kebenaran page bagi setiap kumpulan"},
-        New SeedDef With {.Table = "dbo.TBL_USER_GROUPLIST", .KeyCols = {"UGL_UGN_Id", "UGL_Users_Id"}, .PreserveIdentity = False, .Note = "Ahli kumpulan (pengguna dipadankan ikut Users_Name)",
+        New SeedDef With {.Table = "dbo.TBL_USER_GROUPNAME", .KeyCols = {"UGN_Id"}, .PreserveIdentity = True, .InsertOnly = True, .Note = "Kumpulan pengguna"},
+        New SeedDef With {.Table = "dbo.TBL_USER_GROUPMODULE", .KeyCols = {"UGM_Id"}, .PreserveIdentity = True, .InsertOnly = True, .Note = "Page / menu (ID dikekalkan - dirujuk oleh m_Id & UGM_ParentId)"},
+        New SeedDef With {.Table = "dbo.TBL_USER_GROUPROLE", .KeyCols = {"UGR_UGN_Id", "UGR_UGM_Id"}, .PreserveIdentity = False, .InsertOnly = True, .Note = "Kebenaran page bagi setiap kumpulan"},
+        New SeedDef With {.Table = "dbo.TBL_USER_GROUPLIST", .KeyCols = {"UGL_UGN_Id", "UGL_Users_Id"}, .PreserveIdentity = False, .InsertOnly = True, .Note = "Ahli kumpulan (pengguna dipadankan ikut Users_Name)",
                           .Lookups = New List(Of SeedLookup) From {New SeedLookup With {.Col = "UGL_Users_Id", .RefTable = "dbo.TBL_USERS", .RefKey = "Users_Name", .RefId = "Users_Id"}}},
         New SeedDef With {.Table = "dbo.LESEN_ReportTemplate", .KeyCols = {"RTID"}, .PreserveIdentity = True, .Note = "Templat laporan (surat)"},
-        New SeedDef With {.Table = "dbo.LESEN_UlasanIKTemplate", .KeyCols = {"UTID"}, .PreserveIdentity = True, .Note = "Templat ulasan IK"}
+        New SeedDef With {.Table = "dbo.LESEN_UlasanIKTemplate", .KeyCols = {"UTID"}, .PreserveIdentity = True, .Note = "Templat ulasan IK"},
+        New SeedDef With {.Table = "dbo.LESEN_JenisLesen", .KeyCols = {"JenisLesen_ID"}, .PreserveIdentity = True, .InsertOnly = True, .Note = "Jenis lesen & templat surat (ID dikekalkan - dirujuk oleh permohonan)"},
+        New SeedDef With {.Table = "dbo.TBL_LOOKUPGRPS", .KeyCols = {"id"}, .PreserveIdentity = True, .Note = "Kumpulan lookup (ID dikekalkan - dirujuk oleh TBL_LOOKUPS)"},
+        New SeedDef With {.Table = "dbo.TBL_LOOKUPS", .KeyCols = {"lookupgrp_id", "name"}, .PreserveIdentity = False, .Note = "Nilai lookup (dipadankan ikut kumpulan + nama; ID sasaran dikekalkan kerana ID working bertindih)"}
     }
 
     ' Table dalaman page ini - tidak dibanding / tidak di-script
@@ -108,6 +115,7 @@ Public Class InitDbGenerator
         Public Code, Kind, Name, Descr, CheckSql, RunSql As String
         Public AnalysisPrep As String = ""     ' SQL disediakan sebelum SELECT analisis (cth. table variable data)
         Public DescrSql As String = ""         ' ungkapan SQL untuk keterangan dinamik (ganti Descr)
+        Public PreviewSql As String = ""       ' data seed: SQL yang mengisi #idbPv dengan perubahan rekod (pratonton)
         Public ColsExpected As Integer = -1
         Public ReadOnly Property DiffKey As String
             Get
@@ -119,7 +127,7 @@ Public Class InitDbGenerator
     Public Class GenerateResult
         Public Steps As New List(Of InitStep)
         Public Warnings As New List(Of String)
-        Public AnalysisSql, RunSql, Note As String
+        Public AnalysisSql, RunSql, PreviewSql, Note As String
     End Class
 
     ' ------------------------------------------------------------------ baca schema
@@ -382,7 +390,26 @@ Public Class InitDbGenerator
                    " vs baseline " & baseline.Server & "/" & baseline.Database & " | " & all.Count & " langkah"
         res.AnalysisSql = BuildAnalysisSql(all, res.Note)
         res.RunSql = BuildRunSql(all, res.Note)
+        res.PreviewSql = BuildPreviewSql(all, res.Note)
         Return res
+    End Function
+
+    ' Pratonton data seed: satu result set (Tbl, Act, RowKey, Label, Col, OldVal, NewVal)
+    '   Act = ADD (rekod baru) / UPD (satu baris bagi setiap kolum berubah) / SKIP (rujukan tiada dalam DB sasaran)
+    Private Shared Function BuildPreviewSql(steps As List(Of InitStep), note As String) As String
+        Dim data = steps.Where(Function(s) s.PreviewSql <> "").ToList()
+        If data.Count = 0 Then Return ""
+        Dim sb As New StringBuilder()
+        sb.AppendLine("/* Initial Database - Pratonton data. " & note & " */")
+        sb.AppendLine("SET NOCOUNT ON;")
+        sb.AppendLine("IF OBJECT_ID('tempdb..#idbPv') IS NOT NULL DROP TABLE #idbPv;")
+        sb.AppendLine("CREATE TABLE #idbPv (Seq int IDENTITY(1,1), Tbl nvarchar(300), Act varchar(10), RowKey nvarchar(1000), Label nvarchar(400), Col nvarchar(200), OldVal nvarchar(max), NewVal nvarchar(max));")
+        For Each st In data
+            sb.AppendLine(st.PreviewSql)
+        Next
+        sb.AppendLine("SELECT Tbl, Act, RowKey, Label, Col, OldVal, NewVal FROM #idbPv ORDER BY Seq;")
+        sb.AppendLine("DROP TABLE #idbPv;")
+        Return sb.ToString()
     End Function
 
     ' ------------------------------------------------------------------ SQL Analysis / Run
@@ -507,7 +534,9 @@ Public Class InitDbGenerator
     Private Shared Function SeedStep(sd As SeedDef, t As TableInfo, rows As DataTable, v As String) As InitStep
         Dim cols = SeedCols(sd, t)
         Dim keySet As New HashSet(Of String)(sd.KeyCols, StringComparer.OrdinalIgnoreCase)
-        Dim cmp = cols.Where(Function(c) Not keySet.Contains(c.Name) AndAlso Not c.Identity).ToList()
+        Dim cmpAll = cols.Where(Function(c) Not keySet.Contains(c.Name) AndAlso Not c.Identity).ToList()
+        ' InsertOnly: tiada kemas kini - rekod sedia ada dianggap sama (pratonton masih tunjuk beza sebagai KEEP)
+        Dim cmp = If(sd.InsertOnly, New List(Of ColInfo), cmpAll)
         Dim tq = QK(sd.Table)
 
         ' --- table variable + data
@@ -534,9 +563,21 @@ Public Class InitDbGenerator
             prep.AppendLine(String.Join("," & vbCrLf, lines) & ";")
         Next
         ' padan rujukan ikut kunci perniagaan (cth. Users_Name) dalam DB sasaran; buang jika tiada
+        Dim tblLit = NLit(sd.Table)
+        Dim keyExpr = String.Join(" + N', ' + ", sd.KeyCols.Select(Function(k) NLit(k & "=") & " + ISNULL(CAST(s." & Q(k) & " AS nvarchar(200)), N'NULL')"))
+        Dim lblCol = cols.FirstOrDefault(Function(c) Not keySet.Contains(c.Name) AndAlso
+                                             System.Text.RegularExpressions.Regex.IsMatch(c.Name, "desc|name|nama|title|tajuk|keterangan", System.Text.RegularExpressions.RegexOptions.IgnoreCase))
+        Dim lblExpr = If(sd.Lookups.Count > 0, "CAST(s." & Q(LkCol(sd.Lookups(0))) & " AS nvarchar(400))",
+                         If(lblCol Is Nothing, "CAST(NULL AS nvarchar(400))", "LEFT(" & PvStr("s." & Q(lblCol.Name), lblCol) & ", 400)"))
+        Dim prepPv As New StringBuilder(prep.ToString())
         For Each lk In sd.Lookups
-            prep.AppendLine("UPDATE s SET s." & Q(lk.Col) & " = (SELECT TOP 1 r." & Q(lk.RefId) & " FROM " & QK(lk.RefTable) & " r WHERE r." & Q(lk.RefKey) & " = s." & Q(LkCol(lk)) & ") FROM " & v & " s;")
-            prep.AppendLine("DELETE FROM " & v & " WHERE " & Q(lk.Col) & " IS NULL;")
+            Dim upd = "UPDATE s SET s." & Q(lk.Col) & " = (SELECT TOP 1 r." & Q(lk.RefId) & " FROM " & QK(lk.RefTable) & " r WHERE r." & Q(lk.RefKey) & " = s." & Q(LkCol(lk)) & ") FROM " & v & " s;"
+            Dim del = "DELETE FROM " & v & " WHERE " & Q(lk.Col) & " IS NULL;"
+            prep.AppendLine(upd) : prep.AppendLine(del)
+            prepPv.AppendLine(upd)
+            prepPv.AppendLine("INSERT INTO #idbPv (Tbl, Act, RowKey, Label, Col) SELECT " & tblLit & ", 'SKIP', " & keyExpr & ", " & lblExpr & ", " &
+                              NLit(lk.RefKey & " tiada dalam " & lk.RefTable) & " FROM " & v & " s WHERE s." & Q(lk.Col) & " IS NULL;")
+            prepPv.AppendLine(del)
         Next
 
         Dim keyMatch = String.Join(" AND ", sd.KeyCols.Select(Function(k) "t." & Q(k) & " = s." & Q(k)))
@@ -555,6 +596,21 @@ Public Class InitDbGenerator
         anPrep.AppendLine("    SELECT " & mv & " = COUNT(*), " & dv & " = 0 FROM " & v & ";")
         anPrep.AppendLine("ELSE")
         anPrep.AppendLine("    SELECT " & mv & " = " & missCnt & ", " & dv & " = " & diffCnt & ";")
+
+        ' --- pratonton: rekod baru + setiap kolum yang berubah (nilai lama -> baru)
+        Dim pvIns = "INSERT INTO #idbPv (Tbl, Act, RowKey, Label, Col, OldVal, NewVal) "
+        Dim pv As New StringBuilder()
+        pv.Append(prepPv.ToString())
+        pv.AppendLine("IF OBJECT_ID(" & NLit(tq) & ", 'U') IS NULL")
+        pv.AppendLine("    " & pvIns & "SELECT " & tblLit & ", 'ADD', " & keyExpr & ", " & lblExpr & ", NULL, NULL, NULL FROM " & v & " s;")
+        pv.AppendLine("ELSE")
+        pv.AppendLine("BEGIN")
+        pv.AppendLine("    " & pvIns & "SELECT " & tblLit & ", 'ADD', " & keyExpr & ", " & lblExpr & ", NULL, NULL, NULL FROM " & v & " s WHERE NOT EXISTS (SELECT 1 FROM " & tq & " t WHERE " & keyMatch & ");")
+        For Each c In cmpAll
+            pv.AppendLine("    " & pvIns & "SELECT " & tblLit & ", " & If(sd.InsertOnly, "'KEEP'", "'UPD'") & ", " & keyExpr & ", " & lblExpr & ", " & NLit(c.Name) & ", LEFT(" & PvStr(TargetExpr(c), c) & ", 400), LEFT(" & PvStr("s." & Q(c.Name), c) & ", 400)" &
+                          " FROM " & v & " s JOIN " & tq & " t ON " & keyMatch & " WHERE NOT EXISTS (SELECT s." & Q(c.Name) & " INTERSECT SELECT " & TargetExpr(c) & ");")
+        Next
+        pv.AppendLine("END")
 
         ' --- run: kemas kini yang berbeza, tambah yang tiada (tiada padam)
         Dim run As New StringBuilder()
@@ -575,8 +631,23 @@ Public Class InitDbGenerator
             .Kind = "DATA", .Name = sd.Table, .Descr = sd.Note,
             .AnalysisPrep = anPrep.ToString(),
             .CheckSql = "CASE WHEN " & mv & " > 0 THEN 'MISSING' WHEN " & dv & " > 0 THEN 'DIFFERENT' ELSE 'SAME' END",
-            .DescrSql = "CAST(" & mv & " AS varchar(10)) + ' tambah, ' + CAST(" & dv & " AS varchar(10)) + ' kemas kini (" & rows.Rows.Count & " rekod sumber)'",
-            .RunSql = run.ToString().TrimEnd()}
+            .DescrSql = If(sd.InsertOnly,
+                           "CAST(" & mv & " AS varchar(10)) + ' tambah - tambah sahaja, rekod sedia ada dikekalkan (" & rows.Rows.Count & " rekod sumber)'",
+                           "CAST(" & mv & " AS varchar(10)) + ' tambah, ' + CAST(" & dv & " AS varchar(10)) + ' kemas kini (" & rows.Rows.Count & " rekod sumber)'"),
+            .RunSql = run.ToString().TrimEnd(),
+            .PreviewSql = pv.ToString().TrimEnd()}
+    End Function
+
+    ' Nilai kolum sebagai teks untuk pratonton
+    Private Shared Function PvStr(expr As String, c As ColInfo) As String
+        Select Case c.TypeName.ToLowerInvariant()
+            Case "datetime", "smalldatetime", "datetime2", "date", "time", "datetimeoffset"
+                Return "CONVERT(nvarchar(40), " & expr & ", 121)"
+            Case "binary", "varbinary", "image", "timestamp", "rowversion"
+                Return "CONVERT(nvarchar(max), CAST(" & expr & " AS varbinary(max)), 1)"
+            Case Else
+                Return "CAST(" & expr & " AS nvarchar(max))"
+        End Select
     End Function
 
     ' ------------------------------------------------------------------ helper SQL

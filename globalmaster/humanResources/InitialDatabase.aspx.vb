@@ -311,6 +311,7 @@ Partial Class humanResources_InitialDatabase
                     SaveApi(conn, tx, InitDbGenerator.ApiAnalysis, "Initial Database - Analysis", result.AnalysisSql, result.Note, user)
                     SaveApi(conn, tx, InitDbGenerator.ApiRun, "Initial Database - Run step", result.RunSql, result.Note, user)
                     SaveApi(conn, tx, InitDbGenerator.ApiWarning, "Initial Database - Amaran", String.Join(vbCrLf, result.Warnings), result.Note, user)
+                    SaveApi(conn, tx, InitDbGenerator.ApiDataPreview, "Initial Database - Pratonton data", If(result.PreviewSql, ""), result.Note, user)
                     tx.Commit()
                 End Using
             End Using
@@ -407,6 +408,66 @@ Partial Class humanResources_InitialDatabase
                 End Using
             End Using
         Catch
+        End Try
+        Return res
+    End Function
+
+    ' ================================================================ pratonton perubahan data seed (AJAX, baca sahaja)
+    '   sumber = "baru"   : skrip yang baru dijana (belum disimpan, dalam sesi)
+    '   sumber = "simpan" : skrip dalam TBL_InitDbApi (yang akan dijalankan oleh Run script)
+    <System.Web.Services.WebMethod(EnableSession:=True)>
+    Public Shared Function PratontonData(sumber As String) As Dictionary(Of String, Object)
+        Dim res As New Dictionary(Of String, Object)
+        res("ok") = False : res("message") = ""
+        Dim ctx = HttpContext.Current
+        If ctx.Session Is Nothing OrElse CInt(If(ctx.Session("sessionUsersId"), 0)) <= 0 Then
+            res("message") = "Sesi tamat. Sila log masuk semula."
+            Return res
+        End If
+
+        Dim sql As String = ""
+        If sumber = "baru" Then
+            Dim gen = TryCast(ctx.Session(SESS_PREVIEW), InitDbGenerator.GenerateResult)
+            If gen Is Nothing Then res("message") = "Tiada skrip baru dalam sesi. Tekan Analisis struktur baru semula." : Return res
+            sql = If(gen.PreviewSql, "")
+        Else
+            Using conn As New SqlConnection(TargetConn())
+                conn.Open()
+                Using cmd As New SqlCommand("SELECT apiSQL FROM dbo.TBL_InitDbApi WHERE apiID = @id AND apiStatus = 1", conn)
+                    cmd.Parameters.AddWithValue("@id", InitDbGenerator.ApiDataPreview)
+                    sql = Convert.ToString(cmd.ExecuteScalar())
+                End Using
+            End Using
+            If sql = "" Then res("message") = "Skrip pratonton data belum ada dalam TBL_InitDbApi. Tekan Analisis struktur baru dan simpan semula." : Return res
+        End If
+        If sql = "" Then res("message") = "Tiada data seed dalam skrip." : Return res
+
+        Try
+            Dim rows As New List(Of Object())
+            Using conn As New SqlConnection(TargetConn())
+                conn.Open()
+                ' baca sahaja: semua perubahan dalam transaksi yang di-rollback
+                Using tx = conn.BeginTransaction()
+                    Using cmd As New SqlCommand(sql, conn, tx)
+                        cmd.CommandTimeout = 300
+                        Using r = cmd.ExecuteReader()
+                            While r.Read()
+                                Dim a(6) As Object
+                                For i = 0 To 6
+                                    a(i) = If(r.IsDBNull(i), Nothing, r.GetValue(i).ToString())
+                                Next
+                                rows.Add(a)
+                            End While
+                        End Using
+                    End Using
+                    tx.Rollback()
+                End Using
+            End Using
+            res("rows") = rows
+            res("db") = DbNameOf(TargetConn())
+            res("ok") = True
+        Catch ex As Exception
+            res("message") = ex.Message
         End Try
         Return res
     End Function
