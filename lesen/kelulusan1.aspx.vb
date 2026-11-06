@@ -227,14 +227,6 @@ Partial Class kelulusan1
                 End If
 
                 GetSuratFail(permohonanId)
-
-                If isOCS3 Then
-                    CB_SuratFail.Visible = Not isPenilai
-                    btnSaveLetter.Visible = Not isPenilai
-                    pnlSuratAuto.Visible = Not isPenilai
-                    pnlSuratFail.Visible = Not isPenilai
-                    BT_Generate.Visible = Not isPenilai
-                End If
             Else
                 divtemplatsurat.Visible = False
                 BT_Generate.Visible = False
@@ -254,9 +246,14 @@ Partial Class kelulusan1
             divtemplatsurat.Visible = False
             BT_Generate.Visible = False
             divCbSuratFail.Visible = False
+            pnlSuratFail.Visible = False
             pnlSuratContentAuto.Visible = False
             TB_TarikhPeriksa.ReadOnly = True
             TB_NoRujukan.ReadOnly = True
+
+            If isFail Then
+                btnSaveLetter.Visible = False
+            End If
 
             ' Sembunyikan lajur tindakan (edit / hapus) dalam semua GridView berkaitan
             SetGridColumnsVisible(gvTabUlasan, False, 5, 6)
