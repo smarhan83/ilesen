@@ -40,6 +40,7 @@ Public Class InitDbGenerator
         Public InsertOnly As Boolean                       ' True = tambah rekod tiada sahaja; rekod sedia ada di sasaran tidak diubah (data dipakai sistem lama & baru)
         Public DeleteMissing As Boolean                    ' True = salinan penuh working: rekod sasaran yang tiada di working DIPADAM
         Public CascadeDelete As String()() = {}            ' {table, kolum} yang merujuk kunci (satu kolum) rekod yang dipadam - turut dipadam
+        Public LabelSqlT As String = ""                    ' ungkapan label pratonton bagi rekod sasaran (alias t), cth. nama page / kumpulan
         Public Lookups As New List(Of SeedLookup)
         Public Note As String
     End Class
@@ -51,11 +52,13 @@ Public Class InitDbGenerator
     Public Shared ReadOnly Seeds As SeedDef() = {
         New SeedDef With {.Table = "dbo.TBL_USER_GROUPNAME", .KeyCols = {"UGN_Id"}, .PreserveIdentity = True, .InsertOnly = True, .Note = "Kumpulan pengguna"},
         New SeedDef With {.Table = "dbo.TBL_USER_GROUPMODULE", .KeyCols = {"UGM_Id"}, .PreserveIdentity = True, .DeleteMissing = True,
-                          .CascadeDelete = {New String() {"dbo.TBL_USER_GROUPROLE", "UGR_UGM_Id"}},
                           .Note = "Page / menu - salinan penuh DB working (ID dikekalkan - dirujuk oleh m_Id & UGM_ParentId)"},
-        New SeedDef With {.Table = "dbo.TBL_USER_GROUPROLE", .KeyCols = {"UGR_UGN_Id", "UGR_UGM_Id"}, .PreserveIdentity = False, .InsertOnly = True, .Note = "Kebenaran page bagi setiap kumpulan"},
-        New SeedDef With {.Table = "dbo.TBL_USER_GROUPLIST", .KeyCols = {"UGL_UGN_Id", "UGL_Users_Id"}, .PreserveIdentity = False, .DeleteMissing = True,
-                          .Note = "Ahli kumpulan - salinan penuh DB working (pengguna dipadankan ikut Users_Name)",
+        New SeedDef With {.Table = "dbo.TBL_USER_GROUPROLE", .KeyCols = {"UGR_UGN_Id", "UGR_UGM_Id"}, .PreserveIdentity = False, .DeleteMissing = True,
+                          .LabelSqlT = "ISNULL((SELECT TOP 1 CAST(n.UGN_Name AS nvarchar(200)) FROM dbo.TBL_USER_GROUPNAME n WHERE n.UGN_Id = t.UGR_UGN_Id), N'?') + N' / ' + " &
+                                       "ISNULL((SELECT TOP 1 CAST(m.UGM_Name AS nvarchar(200)) FROM dbo.TBL_USER_GROUPMODULE m WHERE m.UGM_Id = t.UGR_UGM_Id), N'(page tiada)')",
+                          .Note = "Kebenaran page bagi setiap kumpulan - salinan penuh DB working"},
+        New SeedDef With {.Table = "dbo.TBL_USER_GROUPLIST", .KeyCols = {"UGL_UGN_Id", "UGL_Users_Id"}, .PreserveIdentity = False, .InsertOnly = True,
+                          .Note = "Ahli kumpulan (pengguna dipadankan ikut Users_Name)",
                           .Lookups = New List(Of SeedLookup) From {New SeedLookup With {.Col = "UGL_Users_Id", .RefTable = "dbo.TBL_USERS", .RefKey = "Users_Name", .RefId = "Users_Id"}}},
         New SeedDef With {.Table = "dbo.LESEN_ReportTemplate", .KeyCols = {"RTID"}, .PreserveIdentity = True, .Note = "Templat laporan (surat)"},
         New SeedDef With {.Table = "dbo.LESEN_UlasanIKTemplate", .KeyCols = {"UTID"}, .PreserveIdentity = True, .Note = "Templat ulasan IK"},
@@ -637,7 +640,9 @@ Public Class InitDbGenerator
             Dim keyExprT = keyExpr.Replace("s.[", "t.[")
             ' label rekod sasaran: lookup -> nama rujukan (cth. Users_Name) daripada DB sasaran
             Dim lblExprT As String
-            If sd.Lookups.Count > 0 Then
+            If sd.LabelSqlT <> "" Then
+                lblExprT = "LEFT(" & sd.LabelSqlT & ", 400)"
+            ElseIf sd.Lookups.Count > 0 Then
                 Dim lk0 = sd.Lookups(0)
                 lblExprT = "(SELECT TOP 1 CAST(r." & Q(lk0.RefKey) & " AS nvarchar(400)) FROM " & QK(lk0.RefTable) & " r WHERE r." & Q(lk0.RefId) & " = t." & Q(lk0.Col) & ")"
             ElseIf lblCol Is Nothing Then
