@@ -89,6 +89,7 @@ Partial Class kelulusan1
         btnApprove.Visible = False
         btnReject.Visible = False
         idNotaKelulusan.Visible = False
+        btnSaveLetter.Visible = True
 
         ' Muat semula rekod senarai kembali ke IK
         GridView3.DataBind()
@@ -998,7 +999,6 @@ Partial Class kelulusan1
     Private Sub FormView1_DataBound(sender As Object, e As EventArgs) Handles FormView1.DataBound
         '// page name initial
         initPageName()
-        btnSaveLetter.Visible = "true"
         '//check all ulasan
         Try
             Dim isViewOnly As Boolean = False
