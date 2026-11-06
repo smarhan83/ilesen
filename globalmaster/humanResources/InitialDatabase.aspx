@@ -335,7 +335,7 @@
                                         </tbody>
                                     </table>
                                 </div>
-                                <div class="idb-foot mt-2">Object yang sudah ada dan sama akan di-skip. Function / view / proc / trigger yang berbeza akan di-drop &amp; create semula. Data jenis lesen, kumpulan, kebenaran &amp; ahli: rekod tiada ditambah sahaja (rekod sedia ada dikekalkan). Data page / menu, templat &amp; lookup: rekod tiada ditambah, rekod berbeza dikemas kini ikut working. Table, kolum dan rekod tidak pernah di-drop / dipadam.</div>
+                                <div class="idb-foot mt-2">Object yang sudah ada dan sama akan di-skip. Function / view / proc / trigger yang berbeza akan di-drop &amp; create semula. Data jenis lesen, kumpulan, kebenaran &amp; ahli: rekod tiada ditambah sahaja (rekod sedia ada dikekalkan). Data templat &amp; lookup: rekod tiada ditambah, rekod berbeza dikemas kini ikut working. Data page / menu: salinan penuh working - menu yang tiada di working (berserta kebenarannya) <b>dipadam</b>. Table dan kolum tidak pernah di-drop.</div>
                             </div>
                         </div>
                     </div>
@@ -355,7 +355,7 @@
                             <p class="small mb-2">Skrip akan dijalankan pada DB sasaran <b id="idbCfDb"></b>: <b id="idbCfCount"></b> langkah
                                 (<span id="idbCfCreate"></span> cipta, <span id="idbCfReplace"></span> ganti). Setiap langkah dijalankan dalam transaksi sendiri dan direkod dalam <code>tbl_sys_InitDbLog</code>.</p>
                             <div class="alert alert-warning py-2 small" id="idbCfReplaceBox">
-                                <label class="d-flex gap-2 align-items-start mb-0"><input type="checkbox" id="idbCfReplaceChk" /> <span>Saya faham <b id="idbCfReplace2"></b> langkah akan mengubah object sedia ada: function / view / proc / trigger di-drop &amp; create semula, dan rekod data page / menu, templat / lookup yang berbeza dikemas kini ikut working.</span></label>
+                                <label class="d-flex gap-2 align-items-start mb-0"><input type="checkbox" id="idbCfReplaceChk" /> <span>Saya faham <b id="idbCfReplace2"></b> langkah akan mengubah object sedia ada: function / view / proc / trigger di-drop &amp; create semula, rekod data page / menu, templat / lookup yang berbeza dikemas kini ikut working, dan page / menu yang tiada di working dipadam.</span></label>
                             </div>
                             <div class="small mb-2"><a href="javascript:void(0)" onclick="idbDataPreview('simpan')"><i class="bi bi-table me-1"></i>Lihat perubahan data yang akan dibuat</a></div>
                             <label class="d-flex gap-2 align-items-center small mb-2"><input type="checkbox" id="idbCfStop" checked /> Henti bila ada ralat</label>
@@ -382,7 +382,7 @@
                             <div id="idbDvBody" class="small">Memuatkan...</div>
                         </div>
                         <div class="modal-footer">
-                            <span class="small text-muted me-auto">Pratonton sahaja - tiada perubahan dibuat. Rekod di DB sasaran tidak pernah dipadam.</span>
+                            <span class="small text-muted me-auto">Pratonton sahaja - tiada perubahan dibuat. Hanya page / menu (dan kebenarannya) yang tiada di working akan dipadam.</span>
                             <button type="button" class="btn btn-default btn-sm" data-bs-dismiss="modal">Tutup</button>
                         </div>
                     </div>
@@ -576,9 +576,10 @@
         var tbls = {}, order = [];
         (r.rows || []).forEach(function (a) {
             var t = a[0];
-            if (!tbls[t]) { tbls[t] = { add: [], upd: {}, updOrder: [], keep: {}, keepOrder: [], skip: [] }; order.push(t); }
+            if (!tbls[t]) { tbls[t] = { add: [], upd: {}, updOrder: [], keep: {}, keepOrder: [], skip: [], del: [] }; order.push(t); }
             var g = tbls[t];
             if (a[1] === 'ADD') g.add.push(a);
+            else if (a[1] === 'DEL') g.del.push(a);
             else if (a[1] === 'SKIP') g.skip.push(a);
             else {
                 var m = a[1] === 'KEEP' ? g.keep : g.upd, o = a[1] === 'KEEP' ? g.keepOrder : g.updOrder;
@@ -602,9 +603,10 @@
             body.innerHTML = '<div class="idb-status ok mb-0"><div class="ic"><i class="bi bi-check2-all"></i></div><div><div class="ttl">Tiada perubahan data</div><div class="txt">Semua rekod data seed sudah sama dengan DB sasaran <b>' + idbEsc(r.db) + '</b>.</div></div></div>';
             return;
         }
-        var nA = 0, nU = 0, nS = 0;
-        order.forEach(function (t) { nA += tbls[t].add.length; nU += tbls[t].updOrder.length; nS += tbls[t].skip.length; });
+        var nA = 0, nU = 0, nS = 0, nD = 0;
+        order.forEach(function (t) { nA += tbls[t].add.length; nU += tbls[t].updOrder.length; nS += tbls[t].skip.length; nD += tbls[t].del.length; });
         var h = '<div class="mb-2">DB sasaran <b>' + idbEsc(r.db) + '</b>: <span class="idb-chg Baru">' + nA + ' rekod ditambah</span> <span class="idb-chg Berubah">' + nU + ' rekod dikemas kini</span>' +
+                (nD ? ' <span class="idb-chg Dibuang" style="background:#fee2e2;color:#b91c1c">' + nD + ' DIPADAM</span>' : '') +
                 (nS ? ' <span class="idb-chg Dibuang">' + nS + ' dilangkau</span>' : '') + '</div>';
         h += '<div class="accordion" id="idbDvAcc">';
         order.forEach(function (t, ti) {
@@ -614,6 +616,7 @@
                  (g.add.length ? '<span class="idb-chg Baru me-1">' + g.add.length + ' tambah</span>' : '') +
                  (g.updOrder.length ? '<span class="idb-chg Berubah me-1">' + g.updOrder.length + ' kemas kini</span>' : '') +
                  (g.keepOrder.length ? '<span class="idb-chg me-1" style="background:#eef2f7;color:#475569">' + g.keepOrder.length + ' berbeza, dikekalkan</span>' : '') +
+                 (g.del.length ? '<span class="idb-chg me-1" style="background:#fee2e2;color:#b91c1c">' + g.del.length + ' dipadam</span>' : '') +
                  (g.skip.length ? '<span class="idb-chg Dibuang">' + g.skip.length + ' dilangkau</span>' : '') +
                  '</button></h2><div id="' + id + '" class="accordion-collapse collapse"><div class="accordion-body p-2">';
             if (g.add.length) {
@@ -628,6 +631,11 @@
                 h += '<div class="fw-bold mb-1">Rekod berbeza - dikekalkan (tambah sahaja, nilai sasaran tidak diubah)</div>' +
                      '<div class="text-muted mb-1">Kunci sama tetapi nilai berbeza. Jika kunci ini merujuk rekod lain di sistem baru (ID bertindih), rekod working tersebut TIDAK akan dibawa.</div>' +
                      diffTable(g.keep, g.keepOrder, 'Nilai sasaran (dikekalkan)', 'Nilai working (tidak dibawa)');
+            }
+            if (g.del.length) {
+                h += '<div class="fw-bold mb-1 text-danger">Rekod DIPADAM (ada di sasaran, tiada di working)</div><table class="table table-sm table-bordered mb-3"><thead><tr><th style="width:35%">Kunci</th><th>Keterangan</th></tr></thead><tbody>';
+                g.del.forEach(function (a) { h += '<tr><td><code>' + idbEsc(a[2]) + '</code></td><td>' + idbEsc(a[3]) + '</td></tr>'; });
+                h += '</tbody></table>';
             }
             if (g.skip.length) {
                 h += '<div class="fw-bold mb-1">Dilangkau</div><table class="table table-sm table-bordered mb-0"><thead><tr><th style="width:35%">Kunci</th><th>Rujukan</th><th>Sebab</th></tr></thead><tbody>';
