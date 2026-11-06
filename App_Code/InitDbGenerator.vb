@@ -38,6 +38,8 @@ Public Class InitDbGenerator
         Public KeyCols As String()                         ' kunci padanan rekod
         Public PreserveIdentity As Boolean                 ' True = ID dikekalkan (IDENTITY_INSERT)
         Public InsertOnly As Boolean                       ' True = tambah rekod tiada sahaja; rekod sedia ada di sasaran tidak diubah (data dipakai sistem lama & baru)
+        Public DeleteMissing As Boolean                    ' True = salinan penuh working: rekod sasaran yang tiada di working DIPADAM
+        Public CascadeDelete As String()() = {}            ' {table, kolum} yang merujuk kunci (satu kolum) rekod yang dipadam - turut dipadam
         Public Lookups As New List(Of SeedLookup)
         Public Note As String
     End Class
@@ -45,9 +47,12 @@ Public Class InitDbGenerator
     ' Susunan penting: group & module dahulu (ID dikekalkan), kemudian role & ahli group yang merujuknya
     ' InsertOnly: data dipakai sistem lama & baru - rekod sasaran dikekalkan, hanya rekod baru dari working ditambah.
     ' Lain-lain: DB working ialah data baru sistem - rekod berbeza dikemas kini ikut working.
+    ' DeleteMissing: salinan penuh working - rekod sasaran yang tiada di working dipadam.
     Public Shared ReadOnly Seeds As SeedDef() = {
         New SeedDef With {.Table = "dbo.TBL_USER_GROUPNAME", .KeyCols = {"UGN_Id"}, .PreserveIdentity = True, .InsertOnly = True, .Note = "Kumpulan pengguna"},
-        New SeedDef With {.Table = "dbo.TBL_USER_GROUPMODULE", .KeyCols = {"UGM_Id"}, .PreserveIdentity = True, .InsertOnly = True, .Note = "Page / menu (ID dikekalkan - dirujuk oleh m_Id & UGM_ParentId)"},
+        New SeedDef With {.Table = "dbo.TBL_USER_GROUPMODULE", .KeyCols = {"UGM_Id"}, .PreserveIdentity = True, .DeleteMissing = True,
+                          .CascadeDelete = {New String() {"dbo.TBL_USER_GROUPROLE", "UGR_UGM_Id"}},
+                          .Note = "Page / menu - salinan penuh DB working (ID dikekalkan - dirujuk oleh m_Id & UGM_ParentId)"},
         New SeedDef With {.Table = "dbo.TBL_USER_GROUPROLE", .KeyCols = {"UGR_UGN_Id", "UGR_UGM_Id"}, .PreserveIdentity = False, .InsertOnly = True, .Note = "Kebenaran page bagi setiap kumpulan"},
         New SeedDef With {.Table = "dbo.TBL_USER_GROUPLIST", .KeyCols = {"UGL_UGN_Id", "UGL_Users_Id"}, .PreserveIdentity = False, .InsertOnly = True, .Note = "Ahli kumpulan (pengguna dipadankan ikut Users_Name)",
                           .Lookups = New List(Of SeedLookup) From {New SeedLookup With {.Col = "UGL_Users_Id", .RefTable = "dbo.TBL_USERS", .RefKey = "Users_Name", .RefId = "Users_Id"}}},
@@ -592,15 +597,20 @@ Public Class InitDbGenerator
                        " WHERE s." & Q(c.Name) & " IS NOT NULL) ELSE 0 END"
         Next
 
+        ' DeleteMissing: rekod sasaran yang tiada di working (kunci satu kolum untuk cascade)
+        Dim notInWorking = "NOT EXISTS (SELECT 1 FROM " & v & " s WHERE " & keyMatch & ")"
+        Dim delCnt = If(sd.DeleteMissing, "(SELECT COUNT(*) FROM " & tq & " t WHERE " & notInWorking & ")", "0")
+        Dim delKeys = "SELECT t." & Q(sd.KeyCols(0)) & " FROM " & tq & " t WHERE " & notInWorking
+
         ' --- analisis: table sasaran mungkin belum wujud (table baru). Kiraan dalam cabang IF/ELSE kerana
         '     deferred name resolution membenarkan cabang yang tidak dijalankan merujuk table yang tiada.
-        Dim mv = v & "_miss", dv = v & "_diff"
+        Dim mv = v & "_miss", dv = v & "_diff", xv = v & "_del"
         Dim anPrep As New StringBuilder(prep.ToString())
-        anPrep.AppendLine("DECLARE " & mv & " int, " & dv & " int;")
+        anPrep.AppendLine("DECLARE " & mv & " int, " & dv & " int, " & xv & " int;")
         anPrep.AppendLine("IF OBJECT_ID(" & NLit(tq) & ", 'U') IS NULL")
-        anPrep.AppendLine("    SELECT " & mv & " = COUNT(*), " & dv & " = 0 FROM " & v & ";")
+        anPrep.AppendLine("    SELECT " & mv & " = COUNT(*), " & dv & " = 0, " & xv & " = 0 FROM " & v & ";")
         anPrep.AppendLine("ELSE")
-        anPrep.AppendLine("    SELECT " & mv & " = " & missCnt & ", " & dv & " = " & diffCnt & ";")
+        anPrep.AppendLine("    SELECT " & mv & " = " & missCnt & ", " & dv & " = " & diffCnt & ", " & xv & " = " & delCnt & ";")
 
         ' --- pratonton: rekod baru + setiap kolum yang berubah (nilai lama -> baru)
         Dim pvIns = "INSERT INTO #idbPv (Tbl, Act, RowKey, Label, Col, OldVal, NewVal) "
@@ -622,12 +632,28 @@ Public Class InitDbGenerator
             pv.AppendLine("    " & pvIns & "SELECT " & tblLit & ", " & If(sd.InsertOnly, "'KEEP'", "'UPD'") & ", " & keyExpr & ", " & lblExpr & ", " & NLit(c.Name) & ", LEFT(" & PvStr(TargetExpr(c), c) & ", 400), LEFT(" & PvStr("s." & Q(c.Name), c) & ", 400)" &
                           " FROM " & v & " s JOIN " & tq & " t ON " & keyMatch & " WHERE NOT EXISTS (SELECT s." & Q(c.Name) & " INTERSECT SELECT " & TargetExpr(c) & ");")
         Next
+        If sd.DeleteMissing Then
+            Dim keyExprT = keyExpr.Replace("s.[", "t.[")
+            Dim lblExprT = If(sd.Lookups.Count > 0 OrElse lblCol Is Nothing, "CAST(NULL AS nvarchar(400))", lblExpr.Replace("s.[", "t.["))
+            pv.AppendLine("    " & pvIns & "SELECT " & tblLit & ", 'DEL', " & keyExprT & ", " & lblExprT & ", NULL, NULL, NULL FROM " & tq & " t WHERE " & notInWorking & ";")
+            For Each cd In sd.CascadeDelete
+                pv.AppendLine("    IF OBJECT_ID(" & NLit(cd(0)) & ", 'U') IS NOT NULL")
+                pv.AppendLine("        " & pvIns & "SELECT " & NLit(cd(0)) & ", 'DEL', " & NLit(cd(1) & "=") & " + CAST(c." & Q(cd(1)) & " AS nvarchar(50)), CAST(COUNT(*) AS nvarchar(10)) + N' rekod (rujuk " & sd.Table & " yang dipadam)', NULL, NULL, NULL" &
+                              " FROM " & QK(cd(0)) & " c WHERE c." & Q(cd(1)) & " IN (" & delKeys & ") GROUP BY c." & Q(cd(1)) & ";")
+            Next
+        End If
         pv.AppendLine("END")
 
         ' --- run: kemas kini yang berbeza, tambah yang tiada (tiada padam)
         Dim run As New StringBuilder()
         run.AppendLine("SET NOCOUNT ON;")
         run.Append(prep.ToString())
+        If sd.DeleteMissing Then
+            For Each cd In sd.CascadeDelete
+                run.AppendLine("IF OBJECT_ID(" & NLit(cd(0)) & ", 'U') IS NOT NULL DELETE c FROM " & QK(cd(0)) & " c WHERE c." & Q(cd(1)) & " IN (" & delKeys & ");")
+            Next
+            run.AppendLine("DELETE t FROM " & tq & " t WHERE " & notInWorking & ";")
+        End If
         If cmp.Count > 0 Then
             run.AppendLine("UPDATE t SET " & String.Join(", ", cmp.Select(Function(c) "t." & Q(c.Name) & " = s." & Q(c.Name))) &
                            " FROM " & tq & " t JOIN " & v & " s ON " & keyMatch & " WHERE " & notSame & ";")
@@ -642,10 +668,11 @@ Public Class InitDbGenerator
         Return New InitStep With {
             .Kind = "DATA", .Name = sd.Table, .Descr = sd.Note,
             .AnalysisPrep = anPrep.ToString(),
-            .CheckSql = "CASE WHEN " & mv & " > 0 THEN 'MISSING' WHEN " & dv & " > 0 THEN 'DIFFERENT' ELSE 'SAME' END",
+            .CheckSql = "CASE WHEN " & mv & " > 0 THEN 'MISSING' WHEN " & dv & " > 0 OR " & xv & " > 0 THEN 'DIFFERENT' ELSE 'SAME' END",
             .DescrSql = If(sd.InsertOnly,
                            "CAST(" & mv & " AS varchar(10)) + ' tambah - tambah sahaja, rekod sedia ada dikekalkan (" & rows.Rows.Count & " rekod sumber)'",
-                           "CAST(" & mv & " AS varchar(10)) + ' tambah, ' + CAST(" & dv & " AS varchar(10)) + ' kemas kini (" & rows.Rows.Count & " rekod sumber)'"),
+                           "CAST(" & mv & " AS varchar(10)) + ' tambah, ' + CAST(" & dv & " AS varchar(10)) + ' kemas kini" &
+                           If(sd.DeleteMissing, ", ' + CAST(" & xv & " AS varchar(10)) + ' padam - salinan penuh working", "") & " (" & rows.Rows.Count & " rekod sumber)'"),
             .RunSql = run.ToString().TrimEnd(),
             .PreviewSql = pv.ToString().TrimEnd()}
     End Function
