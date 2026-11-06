@@ -317,21 +317,17 @@ Public Class InitDbGenerator
                     Continue For
                 End If
                 n += 1
-                ' hanya kolum yang ada dalam kedua-dua DB (SQL analisis dijalankan sebelum kolum baru dicipta)
+                ' kolum baru (tiada dalam baseline) tetap dibawa: langkah data dijalankan selepas langkah kolum.
+                ' SQL analisis / pratonton dijalankan sebelum kolum itu wujud, jadi ia tidak merujuk kolum baru pada table sasaran.
                 Dim bt As TableInfo = Nothing
-                Dim tUse As TableInfo = t
+                Dim newCols As New HashSet(Of String)(StringComparer.OrdinalIgnoreCase)
                 If baseline.Tables.TryGetValue(sd.Table, bt) Then
-                    tUse = New TableInfo With {.Schema = t.Schema, .Name = t.Name}
                     For Each c In t.Cols
                         Dim nm = c.Name
-                        If bt.Cols.Any(Function(x) String.Equals(x.Name, nm, StringComparison.OrdinalIgnoreCase)) Then
-                            tUse.Cols.Add(c)
-                        Else
-                            res.Warnings.Add("Data seed " & sd.Table & ": kolum baru " & c.Name & " tidak dibawa (tiada dalam baseline).")
-                        End If
+                        If Not bt.Cols.Any(Function(x) String.Equals(x.Name, nm, StringComparison.OrdinalIgnoreCase)) Then newCols.Add(nm)
                     Next
                 End If
-                datas.Add(SeedStep(sd, tUse, ReadSeedRows(workingConn, sd, tUse), "@seed" & n))
+                datas.Add(SeedStep(sd, t, ReadSeedRows(workingConn, sd, t), "@seed" & n, newCols))
             Next
         End If
 
@@ -531,7 +527,7 @@ Public Class InitDbGenerator
         Return NLit(v.ToString())
     End Function
 
-    Private Shared Function SeedStep(sd As SeedDef, t As TableInfo, rows As DataTable, v As String) As InitStep
+    Private Shared Function SeedStep(sd As SeedDef, t As TableInfo, rows As DataTable, v As String, newCols As HashSet(Of String)) As InitStep
         Dim cols = SeedCols(sd, t)
         Dim keySet As New HashSet(Of String)(sd.KeyCols, StringComparer.OrdinalIgnoreCase)
         Dim cmpAll = cols.Where(Function(c) Not keySet.Contains(c.Name) AndAlso Not c.Identity).ToList()
@@ -581,11 +577,20 @@ Public Class InitDbGenerator
         Next
 
         Dim keyMatch = String.Join(" AND ", sd.KeyCols.Select(Function(k) "t." & Q(k) & " = s." & Q(k)))
-        Dim notSame = If(cmp.Count = 0, "1 = 0",
-                         "NOT EXISTS (SELECT " & String.Join(", ", cmp.Select(Function(c) "s." & Q(c.Name))) &
-                         " INTERSECT SELECT " & String.Join(", ", cmp.Select(Function(c) TargetExpr(c))) & ")")
+        Dim notSameOf As Func(Of List(Of ColInfo), String) =
+            Function(lst) If(lst.Count = 0, "1 = 0",
+                             "NOT EXISTS (SELECT " & String.Join(", ", lst.Select(Function(c) "s." & Q(c.Name))) &
+                             " INTERSECT SELECT " & String.Join(", ", lst.Select(Function(c) TargetExpr(c))) & ")")
+        Dim notSame = notSameOf(cmp)                                                          ' run: semua kolum
+        Dim cmpOld = cmp.Where(Function(c) Not newCols.Contains(c.Name)).ToList()             ' analisis: kolum baru belum wujud di sasaran
+        Dim cmpNew = cmp.Where(Function(c) newCols.Contains(c.Name)).ToList()
         Dim missCnt = "(SELECT COUNT(*) FROM " & v & " s WHERE NOT EXISTS (SELECT 1 FROM " & tq & " t WHERE " & keyMatch & "))"
-        Dim diffCnt = "(SELECT COUNT(*) FROM " & v & " s JOIN " & tq & " t ON " & keyMatch & " WHERE " & notSame & ")"
+        Dim diffCnt = "(SELECT COUNT(*) FROM " & v & " s JOIN " & tq & " t ON " & keyMatch & " WHERE " & notSameOf(cmpOld) & ")"
+        ' kolum baru belum dicipta: rekod sedia ada yang ada nilai untuk kolum itu akan dikemas kini
+        For Each c In cmpNew
+            diffCnt &= " + CASE WHEN COL_LENGTH(" & NLit(tq) & ", " & NLit(c.Name) & ") IS NULL THEN (SELECT COUNT(*) FROM " & v & " s JOIN " & tq & " t ON " & keyMatch &
+                       " WHERE s." & Q(c.Name) & " IS NOT NULL) ELSE 0 END"
+        Next
 
         ' --- analisis: table sasaran mungkin belum wujud (table baru). Kiraan dalam cabang IF/ELSE kerana
         '     deferred name resolution membenarkan cabang yang tidak dijalankan merujuk table yang tiada.
@@ -607,6 +612,13 @@ Public Class InitDbGenerator
         pv.AppendLine("BEGIN")
         pv.AppendLine("    " & pvIns & "SELECT " & tblLit & ", 'ADD', " & keyExpr & ", " & lblExpr & ", NULL, NULL, NULL FROM " & v & " s WHERE NOT EXISTS (SELECT 1 FROM " & tq & " t WHERE " & keyMatch & ");")
         For Each c In cmpAll
+            If newCols.Contains(c.Name) Then
+                ' kolum baru: belum wujud di sasaran - jangan rujuk t.kolum
+                If sd.InsertOnly Then Continue For
+                pv.AppendLine("    " & pvIns & "SELECT " & tblLit & ", 'UPD', " & keyExpr & ", " & lblExpr & ", " & NLit(c.Name & " (kolum baru)") & ", NULL, LEFT(" & PvStr("s." & Q(c.Name), c) & ", 400)" &
+                              " FROM " & v & " s JOIN " & tq & " t ON " & keyMatch & " WHERE s." & Q(c.Name) & " IS NOT NULL;")
+                Continue For
+            End If
             pv.AppendLine("    " & pvIns & "SELECT " & tblLit & ", " & If(sd.InsertOnly, "'KEEP'", "'UPD'") & ", " & keyExpr & ", " & lblExpr & ", " & NLit(c.Name) & ", LEFT(" & PvStr(TargetExpr(c), c) & ", 400), LEFT(" & PvStr("s." & Q(c.Name), c) & ", 400)" &
                           " FROM " & v & " s JOIN " & tq & " t ON " & keyMatch & " WHERE NOT EXISTS (SELECT s." & Q(c.Name) & " INTERSECT SELECT " & TargetExpr(c) & ");")
         Next
