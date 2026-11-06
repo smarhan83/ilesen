@@ -1526,9 +1526,13 @@ Partial Class MasterMenu
             Try
                 If myReader.Read Then
 
-                    filepath = myReader.Item("PermohonanFail_FilePath")
-                    filepath = filepath.Remove(0, 1)
-                    ScriptManager.RegisterClientScriptBlock(Me.Page, Me.[GetType](), "", "window.open('.." + filepath + "', '_blank', '');", True)
+                    ' Path disimpan sebagai "~/doc/...". Guna ResolveUrl supaya nama aplikasi (cth. /prolesen-stage/)
+                    ' dikekalkan; "../doc/..." salah bila modal dibuka dari halaman di root aplikasi.
+                    filepath = Convert.ToString(myReader.Item("PermohonanFail_FilePath")).Trim()
+                    If filepath.StartsWith("/") Then filepath = "~" & filepath
+                    If Not filepath.StartsWith("~/") Then filepath = "~/" & filepath
+                    Dim url As String = ResolveUrl(filepath)
+                    ScriptManager.RegisterClientScriptBlock(Me.Page, Me.[GetType](), "", "window.open('" & HttpUtility.JavaScriptStringEncode(url) & "', '_blank', '');", True)
                 End If
 
             Catch ex As Exception
