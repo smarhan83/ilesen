@@ -3403,8 +3403,7 @@ Partial Class appregister1
 
         Using myConnection As New SqlConnection(CS)
             myConnection.Open()
-            Dim SQL As String = "SELECT CASE WHEN EXISTS (SELECT 1 FROM LESEN_PermohonanFail WHERE " &
-            "PermohonanFail_PermohonanID = @Permohonan_ID AND PermohonanFail_JenisLampiran = 'SK') THEN CAST(1 AS BIT) ELSE CAST(0 AS BIT) END AS DataExists"
+            Dim SQL As String = "SELECT ISNULL(IsSuratKelulusanFail, 0) FROM LESEN_Permohonan WHERE Permohonan_ID = @Permohonan_ID"
             Using myCommandSelect As New SqlCommand(SQL, myConnection)
                 myCommandSelect.Parameters.AddWithValue("@Permohonan_ID", pid)
                 Using myReader As SqlDataReader = myCommandSelect.ExecuteReader()
@@ -3429,15 +3428,26 @@ Partial Class appregister1
                 Using myReader As SqlDataReader = myCommandSelect.ExecuteReader()
                     If myReader.Read() Then
                         filepath = myReader.Item("PermohonanFail_FilePath").ToString()
-                        filepath = filepath.Remove(0, 1)
-                        ScriptManager.RegisterClientScriptBlock(Me.Page, Me.GetType(), "", "window.open('.." & filepath & "', '_blank', '');", True)
                     End If
                 End Using
             End Using
         End Using
+
+        If String.IsNullOrWhiteSpace(filepath) Then
+            ShowSuratBelumDisediakan("Surat Kelulusan")
+            Exit Sub
+        End If
+
+        filepath = filepath.Remove(0, 1)
+        ScriptManager.RegisterClientScriptBlock(Me.Page, Me.GetType(), "", "window.open('.." & filepath & "', '_blank', '');", True)
     End Sub
 
     Private Sub ViewSuratKelulusanAuto(permohonanID As String, isPDF As Boolean)
+        If Not HasPermohonanSurat(permohonanID, "SK") Then
+            ShowSuratBelumDisediakan("Surat Kelulusan")
+            Exit Sub
+        End If
+
         Dim totalid As Integer = 0
 
         ' Check if lampiran larangan merokok is needed
@@ -3506,8 +3516,7 @@ Partial Class appregister1
 
         Using myConnection As New SqlConnection(CS)
             myConnection.Open()
-            Dim SQL As String = "SELECT CASE WHEN EXISTS (SELECT 1 FROM LESEN_PermohonanFail WHERE " &
-            "PermohonanFail_PermohonanID = @Permohonan_ID AND PermohonanFail_JenisLampiran = 'SB') THEN CAST(1 AS BIT) ELSE CAST(0 AS BIT) END AS DataExists"
+            Dim SQL As String = "SELECT ISNULL(IsSuratPembatalanFail, 0) FROM LESEN_Permohonan WHERE Permohonan_ID = @Permohonan_ID"
             Using myCommandSelect As New SqlCommand(SQL, myConnection)
                 myCommandSelect.Parameters.AddWithValue("@Permohonan_ID", pid)
                 Using myReader As SqlDataReader = myCommandSelect.ExecuteReader()
@@ -3532,15 +3541,26 @@ Partial Class appregister1
                 Using myReader As SqlDataReader = myCommandSelect.ExecuteReader()
                     If myReader.Read() Then
                         filepath = myReader.Item("PermohonanFail_FilePath").ToString()
-                        filepath = filepath.Remove(0, 1)
-                        ScriptManager.RegisterClientScriptBlock(Me.Page, Me.GetType(), "", "window.open('.." & filepath & "', '_blank', '');", True)
                     End If
                 End Using
             End Using
         End Using
+
+        If String.IsNullOrWhiteSpace(filepath) Then
+            ShowSuratBelumDisediakan("Surat Pembatalan")
+            Exit Sub
+        End If
+
+        filepath = filepath.Remove(0, 1)
+        ScriptManager.RegisterClientScriptBlock(Me.Page, Me.GetType(), "", "window.open('.." & filepath & "', '_blank', '');", True)
     End Sub
 
     Private Sub ViewSuratPembatalanAuto(permohonanID As String, isPDF As Boolean)
+        If Not HasPermohonanSurat(permohonanID, "SB") Then
+            ShowSuratBelumDisediakan("Surat Pembatalan")
+            Exit Sub
+        End If
+
         Try
             Dim sql As String = "SELECT a.Permohonan_ID, a.TarikhSuratKelulusan, a.CreatedDt, CAST(a.NamaSyarikat AS varchar(200)) AS NamaSyarikat, " &
                 "a.NoPendaftaran, a.NoAkaun, a.AlamatPremis, a.JenisPerniagaan, a.PemilikBaru, a.AlamatBaru, " &
@@ -5014,6 +5034,26 @@ Partial Class appregister1
 
     Public Sub MessageBox(ByVal Msg As String, ByVal obj As System.Web.UI.Page)
         ScriptManager.RegisterClientScriptBlock(Me.Page, Me.GetType(), "Alert", "alert('" & Msg.Replace("'", "\'") & "');", True)
+    End Sub
+
+    ''' <summary>
+    ''' True if LESEN_PermohonanSurat has content for this application whose JenisReport starts with the given prefix ("SK" / "SB").
+    ''' </summary>
+    Private Function HasPermohonanSurat(permohonanID As String, jenisReportPrefix As String) As Boolean
+        Using myConnection As New SqlConnection(CS)
+            myConnection.Open()
+            Dim SQL As String = "SELECT CASE WHEN EXISTS (SELECT 1 FROM LESEN_PermohonanSurat WHERE Permohonan_ID = @permohonanID " &
+                "AND JenisReport LIKE @prefix) THEN CAST(1 AS BIT) ELSE CAST(0 AS BIT) END"
+            Using cmd As New SqlCommand(SQL, myConnection)
+                cmd.Parameters.AddWithValue("@permohonanID", permohonanID)
+                cmd.Parameters.AddWithValue("@prefix", jenisReportPrefix & "%")
+                Return CBool(cmd.ExecuteScalar())
+            End Using
+        End Using
+    End Function
+
+    Private Sub ShowSuratBelumDisediakan(jenisSurat As String)
+        ShowAlert("info", jenisSurat, jenisSurat & " belum disediakan.")
     End Sub
 
     Private Sub ShowAlert(statusMsg As String, titleMsg As String, strMsg As String)
