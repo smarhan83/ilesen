@@ -3,6 +3,32 @@ Imports System.Data.SqlClient
 Partial Class MasterMenu
     Inherits System.Web.UI.MasterPage
 
+    ' ===== Penanda persekitaran (header) =====
+    ' Production guna pangkalan data ilesen_v2. Pangkalan data lain dianggap staging dan
+    ' lencana "STAGING" dipaparkan di sebelah nama sistem (sebelum dan selepas log masuk).
+    Private Const PRODUCTION_DB As String = "ilesen_v2"
+    Private Shared ReadOnly _dbName As New Lazy(Of String)(
+        Function()
+            Try
+                Return New System.Data.SqlClient.SqlConnectionStringBuilder(
+                    ConfigurationManager.ConnectionStrings("webcon_ConnectionStr").ConnectionString).InitialCatalog
+            Catch
+                Return ""
+            End Try
+        End Function)
+
+    Protected ReadOnly Property DbName As String
+        Get
+            Return _dbName.Value
+        End Get
+    End Property
+
+    Protected ReadOnly Property IsStagingDb As Boolean
+        Get
+            Return Not String.Equals(DbName, PRODUCTION_DB, StringComparison.OrdinalIgnoreCase)
+        End Get
+    End Property
+
     Public Event myMasterPageListChanged As EventHandler
     'Public menuBar2 As String
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load

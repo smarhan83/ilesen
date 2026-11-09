@@ -164,6 +164,13 @@
       color: var(--muted);
       font-size: 12px;
     }
+    /* Penanda persekitaran: dipaparkan bila pangkalan data bukan production (ilesen_v2) */
+    .env-badge{
+      display:inline-block; vertical-align:middle;
+      margin-left:8px; padding:2px 8px; border-radius:999px;
+      background:#f59e0b; color:#fff;
+      font-size:10.5px; font-weight:700; letter-spacing:.6px; line-height:1.5;
+    }
 
     .nav-link{
       font-weight: 600;
@@ -789,9 +796,7 @@ h1{
     </style>
 <title>
 <%=
-    If(Request.Url.Host.ToLower() = "prolesen.mpkluang.gov.my",
-                    "PRO-LESEN MPK",
-                    "PRO-LESEN MPK (STAGING)")
+    If(IsStagingDb, "PRO-LESEN MPK (STAGING)", "PRO-LESEN MPK")
 %>
 </title>
    
@@ -866,7 +871,7 @@ h1{
 			    </div>
 
 			    <div class="brand-title">
-			        <strong>ProLesen</strong>
+			        <strong>ProLesen<% If IsStagingDb Then %><span class="env-badge" title='<%= HttpUtility.HtmlAttributeEncode("Pangkalan data: " & DbName) %>'>STAGING</span><% End If %></strong>
 			        <small>Majlis Perbandaran Kluang</small>
 			    </div>
 		        </div>
