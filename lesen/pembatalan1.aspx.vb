@@ -337,6 +337,11 @@ Partial Class pembatalan1
         idNotaKelulusan.Visible = False
         btnSaveLetter.Visible = True
 
+        ' Visible disimpan dalam ViewState: tetapkan semula untuk setiap rekod supaya kawalan
+        ' yang disembunyikan oleh rekod sebelumnya (cth. mod baca sahaja) tidak kekal tersembunyi
+        divtemplatsurat.Visible = True
+        divCbSuratFail.Visible = True
+
         ' Muat semula rekod senarai kembali ke IK
         GridView3.DataBind()
 
