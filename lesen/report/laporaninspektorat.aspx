@@ -41,6 +41,9 @@
         .li-muted { color: #6c757d; font-size: 12px; }
         .li-badge { display: inline-block; padding: 3px 8px; border-radius: 999px; font-size: 11px; font-weight: 700; line-height: 1.25; }
         .li-badge.ok { background: #D4EDDA; color: #1e7e34; } .li-badge.bad { background: #FCEAEA; color: #C0392B; } .li-badge.wait { background: #FDF1DC; color: #9A6408; }
+        .li-badge.baru { background: #E7ECFF; color: #2E3192; } .li-badge.batal { background: #FFE9E3; color: #B4441F; }
+        .li-jenis { margin-top: 3px; }
+        .li-stat .s { font-size: 11px; color: #64748b; margin-top: 2px; }
         .li-empty { text-align: center; padding: 40px 16px; color: #6c757d; }
         .li-note { padding: 10px 20px 14px; font-size: 12px; color: #6c757d; }
         .li-printhead { display: none; }
@@ -115,6 +118,33 @@
                                 ) as tbl1 order by case when JenisLesen_ID = 0 then 0 else 1 end, JenisLesen_Description"></asp:SqlDataSource>
                         </div>
                         <div class="li-f">
+                            <label class="li-label">Jenis Permohonan</label>
+                            <asp:DropDownList ID="ddlJenisPermohonan" runat="server" CssClass="form-control select2">
+                                <asp:ListItem Value="0">-- Semua --</asp:ListItem>
+                                <asp:ListItem Value="1">Permohonan Baru</asp:ListItem>
+                                <asp:ListItem Value="2">Permohonan Pembatalan</asp:ListItem>
+                            </asp:DropDownList>
+                        </div>
+                        <div class="li-f li-f-w">
+                            <label class="li-label">Nama IK</label>
+                            <asp:DropDownList ID="ddlIK" runat="server" CssClass="form-control select2"
+                                DataSourceID="sdsIK" DataTextField="Users_Fullname" DataValueField="Users_Id">
+                            </asp:DropDownList>
+                            <%-- Pegawai yang pernah ditetapkan untuk lawatan tapak Inspektorat (permohonan baru atau pembatalan) --%>
+                            <asp:SqlDataSource runat="server" ID="sdsIK" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
+                                SelectCommand="select Users_Id, Users_Fullname from
+                                (select 0 as Users_Id, '-- Semua Pegawai IK --' as Users_Fullname, 0 as Urutan
+                                 union all
+                                 select u.Users_Id, u.Users_Fullname, 1 from TBL_USERS u
+                                 where u.Users_Id in (
+                                     select s.PermohonanAgensiStaffID_UsersID from LESEN_PermohonanAgensiStaff s
+                                     inner join LESEN_PermohonanAgensi pa on pa.PermohonanAgensi_ID = s.PermohonanAgensi_ID and pa.JabatanAgensi_ID = 3
+                                     union
+                                     select s.PermohonanAgensiStaffID_UsersID from LESEN_PermohonanAgensiStaffBatal s
+                                     inner join LESEN_PermohonanAgensiBatal pa on pa.PermohonanAgensi_ID = s.PermohonanAgensi_ID and pa.JabatanAgensi_ID = 3)
+                                ) as tbl1 order by Urutan, Users_Fullname"></asp:SqlDataSource>
+                        </div>
+                        <div class="li-f">
                             <label class="li-label">Status KPI</label>
                             <asp:DropDownList ID="ddlKpi" runat="server" CssClass="form-control select2">
                                 <asp:ListItem Value="0">-- Semua --</asp:ListItem>
@@ -147,7 +177,7 @@
 
                 <%-- Ringkasan --%>
                 <div class="li-stats">
-                    <div class="li-stat info"><div class="k">Jumlah Permohonan</div><div class="v"><asp:Literal ID="litJumlah" runat="server" Text="0" /></div></div>
+                    <div class="li-stat info"><div class="k">Jumlah Permohonan</div><div class="v"><asp:Literal ID="litJumlah" runat="server" Text="0" /></div><div class="s"><asp:Literal ID="litPecahan" runat="server" /></div></div>
                     <div class="li-stat ok"><div class="k">Dalam KPI</div><div class="v"><asp:Literal ID="litDalam" runat="server" Text="0" /></div></div>
                     <div class="li-stat bad"><div class="k">Melebihi KPI</div><div class="v"><asp:Literal ID="litLebih" runat="server" Text="0" /></div></div>
                     <div class="li-stat wait"><div class="k">Belum Selesai</div><div class="v"><asp:Literal ID="litBelum" runat="server" Text="0" /></div></div>
@@ -158,7 +188,7 @@
                     <asp:Repeater ID="rptLaporan" runat="server">
                         <HeaderTemplate>
                             <table class="li-table table">
-                                <colgroup><col style="width:3.5%" /><col style="width:12%" /><col style="width:13%" /><col style="width:9%" /><col style="width:10%" /><col style="width:7.5%" /><col style="width:7.5%" /><col style="width:7.5%" /><col style="width:7.5%" /><col style="width:7.5%" /><col style="width:6.5%" /><col style="width:8.5%" /></colgroup>
+                                <colgroup><col style="width:3.5%" /><col style="width:11%" /><col style="width:11%" /><col style="width:8%" /><col style="width:9%" /><col style="width:9%" /><col style="width:6.8%" /><col style="width:6.8%" /><col style="width:6.8%" /><col style="width:6.8%" /><col style="width:6.8%" /><col style="width:6.5%" /><col style="width:8%" /></colgroup>
                                 <thead>
                                     <tr>
                                         <th>Bil</th>
@@ -166,6 +196,7 @@
                                         <th>Pemohon / Syarikat</th>
                                         <th>Jenis Lesen</th>
                                         <th>Jenis Perniagaan</th>
+                                        <th>Nama IK</th>
                                         <th>Tarikh Permohonan Diterima daripada KB Lesen (KB)</th>
                                         <th>Tarikh Penetapan Siasatan (PPKP)</th>
                                         <th>Tarikh Siasatan Tapak (PPKP)</th>
@@ -180,10 +211,12 @@
                         <ItemTemplate>
                             <tr>
                                 <td class="c"><%# Container.ItemIndex + 1 %></td>
-                                <td><span class="li-ref"><%# HttpUtility.HtmlEncode(Eval("Rujukan")) %></span></td>
+                                <td><span class="li-ref"><%# HttpUtility.HtmlEncode(Eval("Rujukan")) %></span>
+                                    <div class="li-jenis"><span class='li-badge <%# JenisCss(Eval("JenisPermohonan")) %>'><%# JenisTeks(Eval("JenisPermohonan")) %></span></div></td>
                                 <td><%# HttpUtility.HtmlEncode(Eval("Pemohon")) %></td>
                                 <td><%# HttpUtility.HtmlEncode(Eval("JenisLesen")) %></td>
                                 <td><%# HttpUtility.HtmlEncode(Eval("JenisPerniagaan")) %></td>
+                                <td><%# If(Convert.ToString(Eval("NamaIK")) = "", "-", HttpUtility.HtmlEncode(Eval("NamaIK"))) %></td>
                                 <td class="c"><%# Tgl(Eval("TarikhDiterima")) %></td>
                                 <td class="c"><%# Tgl(Eval("TarikhPenetapan")) %></td>
                                 <td class="c"><%# Tgl(Eval("TarikhSiasatan")) %></td>

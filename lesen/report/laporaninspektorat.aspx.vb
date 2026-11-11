@@ -10,6 +10,9 @@ Imports System.Text
 '   Tarikh Siasatan Tapak  : LESEN_ApprovalList ApprStatusID 3 (Lawatan Tapak) ApprovalDate
 '   Tarikh Ulasan Teknikal : ulasan pertama oleh pegawai Inspektorat - MIN(LESEN_UlasanFail.CreatedDt) bagi permohonan ini, pengguna dengan estate_id = agensi
 '   Tarikh Semakan & Hantar: LESEN_ApprovalList ApprStatusID 4 (Pengesah Jabatan/Agensi) ApprovalDate; jika tiada, LESEN_PermohonanAgensi.LastModDt bila StatusID = 3
+'   Nama IK                : pegawai lawatan tapak yang ditetapkan (LESEN_PermohonanAgensiStaff)
+' Permohonan Pembatalan (LESEN_Permohonan.IsBatal = 1) guna jadual setara berakhiran "Batal"
+' (LESEN_PermohonanAgensiBatal, LESEN_ApprovalListBatal, LESEN_UlasanFailBatal, LESEN_PermohonanAgensiStaffBatal).
 Partial Class laporaninspektorat
     Inherits System.Web.UI.Page
 
@@ -113,27 +116,17 @@ Partial Class laporaninspektorat
         Dim kpi As Integer = 0
         Integer.TryParse(ddlKpi.SelectedValue, kpi)
         Dim cari As String = Trim(txtCari.Text)
+        Dim jenisMohon As Integer = 0
+        Integer.TryParse(ddlJenisPermohonan.SelectedValue, jenisMohon)
+        Dim ikId As Long = 0
+        Long.TryParse(ddlIK.SelectedValue, ikId)
 
+        ' Permohonan Baru (IsBatal = 0) dan Permohonan Pembatalan (IsBatal = 1) melalui set jadual masing-masing
         Dim sql As String =
             "SELECT * FROM (" &
-            "  SELECT p.Permohonan_ID, ISNULL(p.Rujukan, '') AS Rujukan, " &
-            "         ISNULL(NULLIF(p.NamaBaruSyarikat, ''), ISNULL(NULLIF(p.NamaSyarikat, ''), ISNULL(e.Pemohon_Name, ''))) AS Pemohon, " &
-            "         ISNULL(NULLIF(p.JenisLesenDescList, ''), ISNULL(jl.JenisLesen_Description, '')) AS JenisLesen, " &
-            "         ISNULL(NULLIF(p.JenisPerniagaanBaru, ''), ISNULL(p.JenisPerniagaan, '')) AS JenisPerniagaan, " &
-            "         COALESCE(a2.CreatedDt, p.TarikhMohon) AS TarikhDiterima, " &
-            "         a2.ApprovalDate AS TarikhPenetapan, a3.ApprovalDate AS TarikhSiasatan, uf.TarikhUlasan, " &
-            "         COALESCE(a4.ApprovalDate, CASE WHEN pa.StatusID = 3 THEN pa.LastModDt END) AS TarikhHantar " &
-            "  FROM LESEN_Permohonan p " &
-            "  INNER JOIN LESEN_PermohonanAgensi pa ON pa.Permohonan_ID = p.Permohonan_ID AND pa.JabatanAgensi_ID = @Agensi " &
-            "  LEFT JOIN LESEN_Pemohon e ON e.Pemohon_ID = p.Permohonan_PemohonID " &
-            "  LEFT JOIN LESEN_JenisLesen jl ON jl.JenisLesen_ID = p.JenisLesen_ID " &
-            "  OUTER APPLY (SELECT TOP 1 CreatedDt, ApprovalDate FROM LESEN_ApprovalList WHERE Permohonan_ID = p.Permohonan_ID AND AgensiID = @Agensi AND ApprStatusID = 2 ORDER BY ApprovalID) a2 " &
-            "  OUTER APPLY (SELECT TOP 1 ApprovalDate FROM LESEN_ApprovalList WHERE Permohonan_ID = p.Permohonan_ID AND AgensiID = @Agensi AND ApprStatusID = 3 AND ApprovalDate IS NOT NULL ORDER BY ApprovalID) a3 " &
-            "  OUTER APPLY (SELECT TOP 1 ApprovalDate FROM LESEN_ApprovalList WHERE Permohonan_ID = p.Permohonan_ID AND AgensiID = @Agensi AND ApprStatusID = 4 AND ApprovalDate IS NOT NULL ORDER BY ApprovalID) a4 " &
-            "  OUTER APPLY (SELECT MIN(u.CreatedDt) AS TarikhUlasan FROM LESEN_UlasanFail u INNER JOIN TBL_USERS us ON us.Users_Id = u.UlasanFail_UserID WHERE u.UlasanFail_PermohonanID = p.Permohonan_ID AND us.estate_id = @Agensi) uf " &
-            "  WHERE p.StatusID > 0 AND ISNULL(p.IsBatal, 0) = 0 " &
-            "    AND (@JenisLesen = 0 OR p.JenisLesen_ID = @JenisLesen OR (',' + ISNULL(p.JenisLesenIdList, '') + ',') LIKE '%,' + CAST(@JenisLesen AS varchar(10)) + ',%') " &
-            "    AND (@Cari = '' OR p.Rujukan LIKE '%' + @Cari + '%' OR e.Pemohon_Name LIKE '%' + @Cari + '%' OR p.NamaSyarikat LIKE '%' + @Cari + '%' OR p.NamaBaruSyarikat LIKE '%' + @Cari + '%') " &
+            BahagianSql(False) &
+            "  UNION ALL " &
+            BahagianSql(True) &
             ") x " &
             "CROSS APPLY (SELECT CASE WHEN x.TarikhHantar IS NULL THEN 0 ELSE 1 END AS Selesai, " &
             "                    " & ExprTempoh() & " AS TempohHari) k " &
@@ -155,6 +148,8 @@ Partial Class laporaninspektorat
                 cmd.Parameters.AddWithValue("@Hingga", j.Item2)
                 cmd.Parameters.AddWithValue("@Kpi", kpi)
                 cmd.Parameters.AddWithValue("@KpiHari", KPI_HARI)
+                cmd.Parameters.AddWithValue("@JenisMohon", jenisMohon)
+                cmd.Parameters.AddWithValue("@IK", ikId)
                 Using da As New SqlDataAdapter(cmd)
                     da.Fill(dt)
                 End Using
@@ -163,13 +158,53 @@ Partial Class laporaninspektorat
         Return dt
     End Function
 
+    ''' <summary>
+    ''' Satu bahagian query laporan: permohonan baru (jadual LESEN_PermohonanAgensi, LESEN_ApprovalList,
+    ''' LESEN_UlasanFail, LESEN_PermohonanAgensiStaff) atau pembatalan (jadual ...Batal yang sama strukturnya).
+    ''' Nama IK = pegawai yang ditetapkan untuk lawatan tapak (LESEN_PermohonanAgensiStaff / ...StaffBatal).
+    ''' </summary>
+    Private Shared Function BahagianSql(ByVal batal As Boolean) As String
+        Dim sfx As String = If(batal, "Batal", "")
+        Dim jenis As String = If(batal, "'P'", "'B'")
+        Dim pilihan As String = If(batal, "2", "1")
+        ' Tarikh diterima pembatalan: jika tiada rekod status 2, guna tarikh agensi menerima / tarikh batal
+        Dim terima As String = If(batal, "COALESCE(a2.CreatedDt, pa.CreatedDt, p.TarikhBatal, p.TarikhMohon)", "COALESCE(a2.CreatedDt, p.TarikhMohon)")
+
+        Return "  SELECT " & jenis & " AS JenisPermohonan, p.Permohonan_ID, ISNULL(p.Rujukan, '') AS Rujukan, " &
+            "         ISNULL(NULLIF(p.NamaBaruSyarikat, ''), ISNULL(NULLIF(p.NamaSyarikat, ''), ISNULL(e.Pemohon_Name, ''))) AS Pemohon, " &
+            "         ISNULL(NULLIF(p.JenisLesenDescList, ''), ISNULL(jl.JenisLesen_Description, '')) AS JenisLesen, " &
+            "         ISNULL(NULLIF(p.JenisPerniagaanBaru, ''), ISNULL(p.JenisPerniagaan, '')) AS JenisPerniagaan, " &
+            "         ISNULL(ik.NamaIK, '') AS NamaIK, " &
+            "         " & terima & " AS TarikhDiterima, " &
+            "         a2.ApprovalDate AS TarikhPenetapan, a3.ApprovalDate AS TarikhSiasatan, uf.TarikhUlasan, " &
+            "         COALESCE(a4.ApprovalDate, CASE WHEN pa.StatusID = 3 THEN pa.LastModDt END) AS TarikhHantar " &
+            "  FROM LESEN_Permohonan p " &
+            "  INNER JOIN LESEN_PermohonanAgensi" & sfx & " pa ON pa.Permohonan_ID = p.Permohonan_ID AND pa.JabatanAgensi_ID = @Agensi " &
+            "  LEFT JOIN LESEN_Pemohon e ON e.Pemohon_ID = p.Permohonan_PemohonID " &
+            "  LEFT JOIN LESEN_JenisLesen jl ON jl.JenisLesen_ID = p.JenisLesen_ID " &
+            "  OUTER APPLY (SELECT TOP 1 CreatedDt, ApprovalDate FROM LESEN_ApprovalList" & sfx & " WHERE Permohonan_ID = p.Permohonan_ID AND AgensiID = @Agensi AND ApprStatusID = 2 ORDER BY ApprovalID) a2 " &
+            "  OUTER APPLY (SELECT TOP 1 ApprovalDate FROM LESEN_ApprovalList" & sfx & " WHERE Permohonan_ID = p.Permohonan_ID AND AgensiID = @Agensi AND ApprStatusID = 3 AND ApprovalDate IS NOT NULL ORDER BY ApprovalID) a3 " &
+            "  OUTER APPLY (SELECT TOP 1 ApprovalDate FROM LESEN_ApprovalList" & sfx & " WHERE Permohonan_ID = p.Permohonan_ID AND AgensiID = @Agensi AND ApprStatusID = 4 AND ApprovalDate IS NOT NULL ORDER BY ApprovalID) a4 " &
+            "  OUTER APPLY (SELECT MIN(u.CreatedDt) AS TarikhUlasan FROM LESEN_UlasanFail" & sfx & " u INNER JOIN TBL_USERS us ON us.Users_Id = u.UlasanFail_UserID WHERE u.UlasanFail_PermohonanID = p.Permohonan_ID AND us.estate_id = @Agensi) uf " &
+            "  OUTER APPLY (SELECT STRING_AGG(CAST(us.Users_Fullname AS nvarchar(max)), ', ') WITHIN GROUP (ORDER BY us.Users_Fullname) AS NamaIK " &
+            "               FROM LESEN_PermohonanAgensiStaff" & sfx & " s INNER JOIN TBL_USERS us ON us.Users_Id = s.PermohonanAgensiStaffID_UsersID " &
+            "               WHERE s.PermohonanAgensi_ID = pa.PermohonanAgensi_ID) ik " &
+            "  WHERE p.StatusID > 0 AND ISNULL(p.IsBatal, 0) = " & If(batal, "1", "0") & " " &
+            "    AND @JenisMohon IN (0, " & pilihan & ") " &
+            "    AND (@IK = 0 OR EXISTS (SELECT 1 FROM LESEN_PermohonanAgensiStaff" & sfx & " s WHERE s.PermohonanAgensi_ID = pa.PermohonanAgensi_ID AND s.PermohonanAgensiStaffID_UsersID = @IK)) " &
+            "    AND (@JenisLesen = 0 OR p.JenisLesen_ID = @JenisLesen OR (',' + ISNULL(p.JenisLesenIdList, '') + ',') LIKE '%,' + CAST(@JenisLesen AS varchar(10)) + ',%') " &
+            "    AND (@Cari = '' OR p.Rujukan LIKE '%' + @Cari + '%' OR e.Pemohon_Name LIKE '%' + @Cari + '%' OR p.NamaSyarikat LIKE '%' + @Cari + '%' OR p.NamaBaruSyarikat LIKE '%' + @Cari + '%') "
+    End Function
+
     Private Sub BindLaporan()
         Dim dt As DataTable = GetData()
         Dim j As Tuple(Of DateTime, DateTime) = Julat()
 
         Dim dalam As Integer = 0, lebih As Integer = 0, belum As Integer = 0
         Dim jumlahHari As Long = 0, bilSelesai As Integer = 0
+        Dim bilBaru As Integer = 0, bilBatal As Integer = 0
         For Each r As DataRow In dt.Rows
+            If Convert.ToString(r("JenisPermohonan")) = "P" Then bilBatal += 1 Else bilBaru += 1
             If CInt(r("Selesai")) = 0 Then
                 belum += 1
             Else
@@ -181,6 +216,7 @@ Partial Class laporaninspektorat
         Next
 
         litJumlah.Text = dt.Rows.Count.ToString()
+        litPecahan.Text = "Baru " & bilBaru & " &middot; Pembatalan " & bilBatal
         litDalam.Text = dalam.ToString()
         litLebih.Text = lebih.ToString()
         litBelum.Text = belum.ToString()
@@ -203,6 +239,14 @@ Partial Class laporaninspektorat
         Return Convert.ToDateTime(v).ToString("dd/MM/yyyy")
     End Function
 
+    Protected Shared Function JenisTeks(ByVal v As Object) As String
+        Return If(Convert.ToString(v) = "P", "Pembatalan", "Baru")
+    End Function
+
+    Protected Shared Function JenisCss(ByVal v As Object) As String
+        Return If(Convert.ToString(v) = "P", "batal", "baru")
+    End Function
+
     Protected Function Tempoh(ByVal hari As Object, ByVal selesai As Object) As String
         If hari Is Nothing OrElse IsDBNull(hari) Then Return "-"
         Dim t As String = CInt(hari).ToString()
@@ -220,7 +264,7 @@ Partial Class laporaninspektorat
     End Function
 
     '===================== EKSPORT EXCEL (.xlsx sebenar, tanpa pustaka luar - System.IO.Compression) =====================
-    Private Shared ReadOnly LebarLajur() As Double = {5, 20, 28, 20, 24, 17, 17, 17, 17, 19, 14, 14}
+    Private Shared ReadOnly LebarLajur() As Double = {5, 20, 13, 28, 20, 24, 26, 17, 17, 17, 17, 19, 14, 14}
 
     Private Function BinaXlsx(ByVal dt As DataTable) As Byte()
         Dim j As Tuple(Of DateTime, DateTime) = Julat()
@@ -314,7 +358,7 @@ Partial Class laporaninspektorat
         sb.Append("<row r=""3"">" & SelStr("A3", "Tarikh diterima: " & j.Item1.ToString("dd/MM/yyyy") & " hingga " & j.Item2.ToString("dd/MM/yyyy") &
                   " | KPI: kurang " & KPI_HARI & " hari | Dijana: " & DateTime.Now.ToString("dd/MM/yyyy HH:mm"), 2) & "</row>")
 
-        Dim tajuk() As String = {"Bil", "No. Rujukan", "Pemohon / Syarikat", "Jenis Lesen", "Jenis Perniagaan",
+        Dim tajuk() As String = {"Bil", "No. Rujukan", "Jenis Permohonan", "Pemohon / Syarikat", "Jenis Lesen", "Jenis Perniagaan", "Nama IK",
             "Tarikh Permohonan Diterima daripada KB Lesen (KB)", "Tarikh Penetapan Siasatan (PPKP)", "Tarikh Siasatan Tapak (PPKP)",
             "Tarikh Ulasan Teknikal (PPKP)", "Tarikh Semakan dan Hantar Laporan ke Lesen (KB)", "Tempoh Masa (hari bekerja)", "Status KPI"}
         sb.Append("<row r=""5"" ht=""45"" customHeight=""1"">")
@@ -331,16 +375,18 @@ Partial Class laporaninspektorat
             sb.Append("<row r=""" & baris & """>")
             sb.Append(SelNum(Ruj(0, baris), bil, 5))
             sb.Append(SelStr(Ruj(1, baris), Convert.ToString(r("Rujukan")), 4))
-            sb.Append(SelStr(Ruj(2, baris), Convert.ToString(r("Pemohon")), 4))
-            sb.Append(SelStr(Ruj(3, baris), Convert.ToString(r("JenisLesen")), 4))
-            sb.Append(SelStr(Ruj(4, baris), Convert.ToString(r("JenisPerniagaan")), 4))
-            sb.Append(SelTar(Ruj(5, baris), r("TarikhDiterima")))
-            sb.Append(SelTar(Ruj(6, baris), r("TarikhPenetapan")))
-            sb.Append(SelTar(Ruj(7, baris), r("TarikhSiasatan")))
-            sb.Append(SelTar(Ruj(8, baris), r("TarikhUlasan")))
-            sb.Append(SelTar(Ruj(9, baris), r("TarikhHantar")))
-            sb.Append(SelNum(Ruj(10, baris), CInt(r("TempohHari")), 5))
-            sb.Append(SelStr(Ruj(11, baris), KpiTeks(r("TempohHari"), r("Selesai")), 5))
+            sb.Append(SelStr(Ruj(2, baris), JenisTeks(r("JenisPermohonan")), 5))
+            sb.Append(SelStr(Ruj(3, baris), Convert.ToString(r("Pemohon")), 4))
+            sb.Append(SelStr(Ruj(4, baris), Convert.ToString(r("JenisLesen")), 4))
+            sb.Append(SelStr(Ruj(5, baris), Convert.ToString(r("JenisPerniagaan")), 4))
+            sb.Append(SelStr(Ruj(6, baris), Convert.ToString(r("NamaIK")), 4))
+            sb.Append(SelTar(Ruj(7, baris), r("TarikhDiterima")))
+            sb.Append(SelTar(Ruj(8, baris), r("TarikhPenetapan")))
+            sb.Append(SelTar(Ruj(9, baris), r("TarikhSiasatan")))
+            sb.Append(SelTar(Ruj(10, baris), r("TarikhUlasan")))
+            sb.Append(SelTar(Ruj(11, baris), r("TarikhHantar")))
+            sb.Append(SelNum(Ruj(12, baris), CInt(r("TempohHari")), 5))
+            sb.Append(SelStr(Ruj(13, baris), KpiTeks(r("TempohHari"), r("Selesai")), 5))
             sb.Append("</row>")
         Next
 
