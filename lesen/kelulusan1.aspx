@@ -1765,9 +1765,7 @@ Result AS (
 )
 SELECT * FROM Result
 WHERE NOT (StepGroup IN (6, 8) AND StepStatus <> 'done')
-ORDER BY 
-    CASE StepStatus WHEN 'done' THEN 1 WHEN 'current' THEN 2 ELSE 3 END,
-    SortOrder">
+ORDER BY SortOrder">
                         <SelectParameters>
                             <asp:ControlParameter ControlID="GridView1" PropertyName="SelectedValue" Name="Permohonan_ID"></asp:ControlParameter>
                         </SelectParameters>
