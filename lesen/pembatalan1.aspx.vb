@@ -145,7 +145,7 @@ Partial Class pembatalan1
         idListing.Visible = False
         idNotaKelulusan.Visible = False
 
-        showOtherControl(GridView1)
+        showFormControl(GridView1)
     End Sub
 
     Protected Sub GridView1_RowDeleting(ByVal sender As Object, ByVal e As System.Web.UI.WebControls.GridViewDeleteEventArgs) Handles GridView1.RowDeleting
@@ -237,177 +237,155 @@ Partial Class pembatalan1
         GridView1.DataBind()
     End Sub
 
-    Private Sub showOtherControl(gv1 As GridView)
-        Session.Item("isDisablePrintSession") = "Y"
-
-        Dim ApprStatusID As Integer = CInt(gv1.SelectedDataKey.Values(2))
-        Dim PermohonanID As Integer = CInt(gv1.SelectedDataKey.Values(0))
-        Dim IsFail As Boolean = CBool(gv1.SelectedDataKey.Values(5))
-        Dim IsPenilaianStatus As Integer = CInt(gv1.SelectedDataKey.Values(6))
-
-        ' Bind and check Kembali ke IK button
-        GridView3.DataBind()
-        btnKembaliIK.Visible = (Session("sessionEstateId")?.ToString() = "3" AndAlso
-                                Session("sessionIsPenilai")?.ToString() = "True" AndAlso
-                                ApprStatusID = 4)
-
-        Dim agensiType As String = "L"
-        Try
-            tabKadarBayaran.Visible = False
-            TabLampiran.Visible = False
-            agensiType = If(IsDBNull(gv1.SelectedDataKey.Values(3)), "J", CStr(gv1.SelectedDataKey.Values(3)))
-
-            If agensiType = "J" Then
-                tabKadarBayaran.Visible = True
-                TabLampiran.Visible = True
-
-                If CStr(Session.Item("sessionOCS")) = "3" Then
-                    tabSurat.Visible = True
-
-                    If IsPenilaianStatus <> 0 OrElse Session.Item("sessionIsPenilai") = "True" Then
-                        BT_ViewMail.Visible = True
-                        Session.Item("isDisablePrintSession") = "N"
-                    Else
-                        Session.Item("isDisablePrintSession") = "Y"
-                    End If
-
-                    divTarikhSurat.Visible = (Session.Item("sessionIsPenilai") = "True")
-                    GetSuratContent(PermohonanID)
-
-                    If Session.Item("sessionIsPenyedia") = "True" AndAlso Session.Item("sessionIsReadOnly") = "True" Then
-                        btnSubmit.Visible = False
-                        tabSurat.Visible = False
-                    End If
+    ''' <summary>
+    ''' Pembantu selamat untuk mengubah keterlihatan lajur GridView mengikut indeks.
+    ''' Memastikan tiada ralat (IndexOutOfRangeException) jika jumlah lajur kurang daripada indeks yang diminta.
+    ''' </summary>
+    Private Sub SetGridColumnsVisible(gv As GridView, isVisible As Boolean, ParamArray columnIndices() As Integer)
+        If gv IsNot Nothing AndAlso columnIndices IsNot Nothing Then
+            For Each colIdx As Integer In columnIndices
+                If colIdx >= 0 AndAlso gv.Columns.Count > colIdx Then
+                    gv.Columns(colIdx).Visible = isVisible
                 End If
-
-                If ApprStatusID = 3 OrElse ApprStatusID = 4 Then
-                    BT_Generate.Visible = True
-
-                    If Request.Browser.IsMobileDevice Then
-                        tabSurat.Visible = False
-                        tabKadarBayaran.Visible = False
-                    End If
-
-                    If IsFail Then
-                        CB_SuratFail.Checked = True
-                        pnlSuratAuto.Visible = False
-                        pnlSuratFail.Visible = True
-                        BT_Generate.Visible = False
-                    Else
-                        CB_SuratFail.Checked = False
-                        pnlSuratAuto.Visible = True
-                        pnlSuratFail.Visible = False
-                        BT_Generate.Visible = True
-                    End If
-
-                    GetSuratFail(PermohonanID)
-                Else
-                    BT_Generate.Visible = False
-                End If
-
-                ' Approval remarks handling
-                If ApprStatusID = 6 OrElse ApprStatusID = 7 OrElse ApprStatusID = 9 OrElse ApprStatusID = 10 Then
-                    If Session.Item("sessionIsPeraku") = "True" OrElse Session.Item("sessionIsPenilai") = "True" Then
-                        If getJabatanLesen(CInt(Session.Item("sessionEstateID"))) Then
-                            btnApprove.Visible = False
-                            btnReject.Visible = False
-                            idNotaKelulusan.Visible = True
-
-                            Dim divNotaKelulusanPeraku As HtmlGenericControl = DirectCast(fvNotaKelulusan.FindControl("divNotaKelulusanPeraku"), HtmlGenericControl)
-                            If divNotaKelulusanPeraku IsNot Nothing Then
-                                divNotaKelulusanPeraku.Visible = True
-                            End If
-                            fvNotaKelulusan.Enabled = False
-                        End If
-                    End If
-
-                ElseIf ApprStatusID = 5 OrElse ApprStatusID = 8 Then
-                    If Session.Item("sessionIsPeraku") = "True" OrElse Session.Item("sessionIsPenilai") = "True" Then
-                        If getJabatanLesen(CInt(Session.Item("sessionEstateID"))) Then
-                            If ApprStatusID = 8 AndAlso Session.Item("sessionIsPeraku") <> "True" Then
-                                btnApprove.Visible = False
-                                btnReject.Visible = False
-                            Else
-                                btnApprove.Visible = True
-                                btnReject.Visible = True
-                            End If
-                            idNotaKelulusan.Visible = True
-                            fvNotaKelulusan.Enabled = True
-                        End If
-                    End If
-                End If
-            End If
-        Catch ex As Exception
-        End Try
-
-        Try
-            ' Tetapan IK tab visibility
-            If ApprStatusID = 2 Then
-                If CInt(Session.Item("sessionOCS")) = 3 Then
-                    tabTetapan.Visible = True
-                    gvIK.Columns(1).Visible = "True"
-                End If
-            Else
-                tabTetapan.Visible = False
-                If CInt(Session.Item("sessionOCS")) = 3 Then
-                    tabTetapan.Visible = True
-                    gvIK.Columns(1).Visible = "false"
-                End If
-            End If
-        Catch ex As Exception
-        End Try
+            Next
+        End If
     End Sub
 
+    ''' <summary>
+    ''' Mengurus paparan dan keterlihatan kawalan borang, tab, dan butang tindakan
+    ''' berdasarkan status permohonan, peranan pengguna (sesi), dan jenis jabatan/agensi.
+    ''' </summary>
     Private Sub showFormControl(gv1 As GridView)
-        Dim ApprStatusID As Integer = CInt(gv1.SelectedDataKey.Values(2))
+        ' =========================================================================
+        ' 1. Ekstrak Data Rekod Terpilih
+        ' =========================================================================
+        Dim permohonanId As Integer = CInt(gv1.SelectedDataKey.Values(0))
+        Dim apprStatusId As Integer = CInt(gv1.SelectedDataKey.Values(2))
+        Dim agensiType As String = If(IsDBNull(gv1.SelectedDataKey.Values(3)), "J", CStr(gv1.SelectedDataKey.Values(3)))
+        Dim isFail As Boolean = CBool(gv1.SelectedDataKey.Values(5))
+        Dim isPenilaianStatus As Integer = CInt(gv1.SelectedDataKey.Values(6))
 
+        ' =========================================================================
+        ' 2. Ekstrak Maklumat Sesi Pengguna & Jabatan
+        ' =========================================================================
+        Dim estateId As Integer = If(IsNumeric(Session("sessionEstateID")), CInt(Session("sessionEstateID")), 0)
+        Dim isPenilai As Boolean = (Session("sessionIsPenilai")?.ToString() = "True")
+        Dim isPeraku As Boolean = (Session("sessionIsPeraku")?.ToString() = "True")
+        Dim isPenyedia As Boolean = (Session("sessionIsPenyedia")?.ToString() = "True")
+        Dim isReadOnly As Boolean = (Session("sessionIsReadOnly")?.ToString() = "True")
+        Dim isKeraniInspektorat As Boolean = (isPenyedia AndAlso isReadOnly)
+        Dim isOCS3 As Boolean = (Session("sessionOCS")?.ToString() = "3")
+        Dim isJabatanLesen As Boolean = getJabatanLesen(estateId)
+
+        ' =========================================================================
+        ' 3. Tetapan Asas & Butang Tindakan Aliran Kerja IK
+        ' =========================================================================
+        Session.Item("isDisablePrintSession") = "Y"
         btnSubmit.Visible = False
         btnApprove.Visible = False
         btnReject.Visible = False
         idNotaKelulusan.Visible = False
+        btnSaveLetter.Visible = True
 
-        If ApprStatusID = 2 OrElse ApprStatusID = 3 OrElse ApprStatusID = 4 Then
-            btnSubmit.Visible = True
-            btnSubmit.Text = If(ApprStatusID = 2, "Simpan", "Hantar Ulasan")
+        ' Muat semula rekod senarai kembali ke IK
+        GridView3.DataBind()
 
-            If Session.Item("sessionIsPenyedia") = "True" AndAlso Session.Item("sessionIsReadOnly") = "True" Then
-                btnSubmit.Visible = False
-            End If
+        ' Butang "Kembali ke IK" hanya aktif untuk KB Inspektorat (Estate 3, Penilai) semasa status 4 (Pengesah)
+        btnKembaliIK.Visible = (estateId = 3 AndAlso isPenilai AndAlso apprStatusId = 4)
 
-        ElseIf ApprStatusID = 5 OrElse ApprStatusID = 8 Then
-            If Session.Item("sessionIsPeraku") = "True" OrElse Session.Item("sessionIsPenilai") = "True" Then
-                If getJabatanLesen(CInt(Session.Item("sessionEstateID"))) Then
-                    If ApprStatusID = 8 AndAlso Session.Item("sessionIsPeraku") <> "True" Then
-                        btnApprove.Visible = False
-                        btnReject.Visible = False
-                    Else
-                        btnApprove.Visible = True
-                        btnReject.Visible = True
-                    End If
+        ' =========================================================================
+        ' 4. Butang Tindakan Utama (Submit, Approve, Reject, Nota Kelulusan)
+        ' =========================================================================
+        Select Case apprStatusId
+            Case 2, 3, 4
+                ' Status 2: Mohon ulasan | Status 3: Penilaian Jabatan/Agensi | Status 4: Peraku Jabatan/Agensi
+                If Not isKeraniInspektorat Then
+                    btnSubmit.Visible = True
+                    btnSubmit.Text = If(apprStatusId = 2, "Simpan", "Hantar Ulasan")
+                End If
+
+            Case 5, 8
+                ' Status 5: Penilaian Jabatan Lesen | Status 8: Peraku Jabatan Lesen
+                If (isPeraku OrElse isPenilai) AndAlso isJabatanLesen Then
                     idNotaKelulusan.Visible = True
                     fvNotaKelulusan.Enabled = True
-                End If
-            End If
 
-        ElseIf ApprStatusID = 6 OrElse ApprStatusID = 7 OrElse ApprStatusID = 9 OrElse ApprStatusID = 10 Then
-            If Session.Item("sessionIsPeraku") = "True" OrElse Session.Item("sessionIsPenilai") = "True" Then
-                If getJabatanLesen(CInt(Session.Item("sessionEstateID"))) Then
+                    ' Pada Status 8, pengguna bukan Peraku tidak boleh lulus atau tolak
+                    Dim canApproveReject As Boolean = Not (apprStatusId = 8 AndAlso Not isPeraku)
+                    btnApprove.Visible = canApproveReject
+                    btnReject.Visible = canApproveReject
+                End If
+
+            Case 6, 7, 9, 10
+                ' Status Selesai / Lulus / Tolak
+                If (isPeraku OrElse isPenilai) AndAlso isJabatanLesen Then
                     btnApprove.Visible = False
                     btnReject.Visible = False
                     idNotaKelulusan.Visible = True
+                    fvNotaKelulusan.Enabled = False
 
-                    Dim divNotaKelulusanPeraku As HtmlGenericControl = DirectCast(fvNotaKelulusan.FindControl("divNotaKelulusanPeraku"), HtmlGenericControl)
+                    Dim divNotaKelulusanPeraku As HtmlGenericControl = TryCast(fvNotaKelulusan.FindControl("divNotaKelulusanPeraku"), HtmlGenericControl)
                     If divNotaKelulusanPeraku IsNot Nothing Then
                         divNotaKelulusanPeraku.Visible = True
                     End If
-                    fvNotaKelulusan.Enabled = False
                 End If
+        End Select
+
+        ' =========================================================================
+        ' 5. Keterlihatan Tab Asas
+        ' =========================================================================
+        tabKadarBayaran.Visible = False
+        TabLampiran.Visible = False
+        tabSurat.Visible = False
+        tabTetapan.Visible = False
+
+        If apprStatusId = 2 Then
+            ' Status 2: Tab tetapan pegawai dibenarkan untuk pilihan IK
+            tabTetapan.Visible = True
+            SetGridColumnsVisible(gvIK, True, 1)
+        ElseIf isOCS3 Then
+            ' Tetapan agensi (gvIK) dipaparkan untuk semakan sahaja bagi sessionOCS = 3
+            tabTetapan.Visible = True
+            SetGridColumnsVisible(gvIK, False, 1)
+        End If
+
+        ' =========================================================================
+        ' 6. Pengurusan Tab Surat & Wang Amanah (Jabatan Dalaman)
+        ' =========================================================================
+        If agensiType = "J" Then
+            tabKadarBayaran.Visible = True
+            TabLampiran.Visible = True
+
+            ' Maklumat Surat Pemeriksaan untuk Inspektorat (sessionOCS = 3)
+            If isOCS3 Then
+                tabSurat.Visible = Not isKeraniInspektorat
+
+                If isPenilaianStatus <> 0 OrElse isPenilai Then
+                    BT_ViewMail.Visible = True
+                    Session.Item("isDisablePrintSession") = "N"
+                End If
+
+                divTarikhSurat.Visible = isPenilai
+                GetSuratContent(permohonanId)
+            End If
+
+            ' Penjanaan Surat Pemeriksaan (Status 3 & 4)
+            If apprStatusId = 3 OrElse apprStatusId = 4 Then
+                If Request.Browser.IsMobileDevice Then
+                    tabSurat.Visible = False
+                    tabKadarBayaran.Visible = False
+                End If
+
+                CB_SuratFail.Checked = isFail
+                pnlSuratAuto.Visible = Not isFail
+                pnlSuratFail.Visible = isFail
+                BT_Generate.Visible = Not isFail
+
+                GetSuratFail(permohonanId)
+            Else
+                BT_Generate.Visible = False
             End If
         End If
-    End Sub
-
-    Private Sub fvNotaKelulusan_DataBound(sender As Object, e As EventArgs) Handles fvNotaKelulusan.DataBound
-        showFormControl(GridView1)
     End Sub
 
     Protected Sub rblNotaKelulusanKJ_SelectedIndexChanged(sender As Object, e As EventArgs)
@@ -453,7 +431,9 @@ Partial Class pembatalan1
                     retval = False
                 End If
 
-                If TB_TarikhSurat.Text.Length = 0 OrElse TB_TarikhSurat.Text.Contains("1900") Then
+                ' Tarikh pengesahan hanya dipaparkan & diwajibkan untuk KB (Penilai)
+                If Session("sessionIsPenilai")?.ToString() = "True" AndAlso
+                   (TB_TarikhSurat.Text.Length = 0 OrElse TB_TarikhSurat.Text.Contains("1900")) Then
                     ShowAlert("error", "", "Sila pilih tarikh pengesahan dan tekan simpan surat.")
                     retval = False
                 End If
