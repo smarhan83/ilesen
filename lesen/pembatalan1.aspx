@@ -1214,6 +1214,11 @@
         gap: 8px;
     }
 
+    /* custom-admin.css jadikan ikon card-title putih (untuk header gelap); dalam tab ikut warna tajuk */
+    .tab-content-card .card-header .card-title i {
+        color: inherit;
+    }
+
     .tab-content-card .card-body {
         padding: 20px;
     }
@@ -2410,6 +2415,15 @@ ORDER BY SortOrder">
                                 </h3>
                             </div>
                             <div class="card-body">
+                                <!-- 0. Notis Mod Jana Surat Lewat (status 5 ke atas, surat masih kosong) -->
+                                <div class="info-notice" runat="server" id="divSuratLewatNotice" visible="false">
+                                    <div class="info-notice-icon"><i class="bi bi-info-lg"></i></div>
+                                    <div class="info-notice-content">
+                                        <div class="info-notice-title">Kandungan surat masih kosong</div>
+                                        <div class="info-notice-desc mb-0">Sila pilih templat dan jana surat supaya surat pemeriksaan boleh dicetak.</div>
+                                    </div>
+                                </div>
+
                                 <!-- 1. Pilihan Templat & Tindakan Jana / Lihat -->
                                 <div class="form-section-header mt-0">
                                     <i class="bi bi-file-earmark-ruled"></i>
@@ -2496,7 +2510,7 @@ ORDER BY SortOrder">
                                                 <asp:LinkButton ID="BT_Cancel1" runat="server" Text="Batal" CssClass="btn btn-light" OnClick="BT_Cancel1_Click">
                                                     <i class="bi bi-x-circle me-1"></i> Batal
                                                 </asp:LinkButton>
-                                                <asp:LinkButton ID="BT_Delete1" runat="server" Text="Padam" CssClass="btn btn-danger" OnClick="BT_Delete1_Click">
+                                                <asp:LinkButton ID="BT_Delete1" runat="server" Text="Padam" CssClass="btn btn-danger" OnClick="BT_Delete1_Click" OnClientClick="return confirm('Anda pasti untuk padam fail surat ini?');">
                                                     <i class="bi bi-trash me-1"></i> Padam
                                                 </asp:LinkButton>
                                             </div>
