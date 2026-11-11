@@ -156,6 +156,10 @@ Partial Class kelulusan1
         idNotaKelulusan.Visible = False
         btnSaveLetter.Visible = True
 
+        ' Visible disimpan dalam ViewState: tetapkan semula untuk setiap rekod supaya kawalan
+        ' yang disembunyikan oleh rekod sebelumnya tidak kekal tersembunyi
+        divtemplatsurat.Visible = True
+
         ' Muat semula rekod senarai kembali ke IK
         GridView3.DataBind()
 
@@ -283,6 +287,9 @@ Partial Class kelulusan1
                 Next
 
                 GetPermohonanPembetulan(permohonanId)
+
+                ' Templat surat hanya relevan untuk surat janaan sistem (sama seperti CB_SuratFail_CheckedChanged)
+                divtemplatsurat.Visible = Not isFail
 
                 If isFail Then
                     CB_SuratFail.Checked = True
