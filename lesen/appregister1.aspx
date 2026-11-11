@@ -2108,7 +2108,7 @@
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label class="form-label-custom">Lokasi Fail</label>
-                                                <asp:TextBox ID="TB_Remarks1" runat="server"
+                                                <asp:TextBox ID="TB_Remarks1" runat="server" TextMode="MultiLine" Rows="2"
                                                     Text='<%# Bind("RemarksFail") %>' CssClass="form-control" />
                                             </div>
                                         </div>
