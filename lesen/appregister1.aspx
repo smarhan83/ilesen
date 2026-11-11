@@ -6099,7 +6099,7 @@
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-12">
-                                        <asp:GridView ID="GridViewJabatanAgensiBatal" HeaderStyle-ForeColor="Black" CssClass="table table-bordered" AllowPaging="True" ShowHeaderWhenEmpty="True" EmptyDataText="No records Found" AllowSorting="True" runat="server" AutoGenerateColumns="False" DataKeyNames="PermohonanAgensi_ID, JenisLesenIdlist, JabatanAgensi_ID, IsMandatory" DataSourceID="SqlDataSourceGridJabatanAgensiBatal">
+                                        <asp:GridView ID="GridViewJabatanAgensiBatal" HeaderStyle-ForeColor="Black" CssClass="table table-bordered" AllowPaging="True" ShowHeaderWhenEmpty="True" EmptyDataText="No records Found" AllowSorting="True" runat="server" AutoGenerateColumns="False" DataKeyNames="PermohonanAgensi_ID, JenisLesenIdList, JabatanAgensi_ID, IsMandatory" DataSourceID="SqlDataSourceGridJabatanAgensiBatal">
                                             <Columns>
                                                 <asp:BoundField DataField="JabatanAgensi_Description" HeaderText="Jabatan Agensi" SortExpression="JabatanAgensi_Description"></asp:BoundField>
                                                 <asp:TemplateField HeaderText="ItemID" Visible="false">
