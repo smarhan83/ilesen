@@ -1097,7 +1097,9 @@ Partial Class kelulusan1
 
                 End If
 
-                If TB_TarikhSurat.Text.Length = 0 Or TB_TarikhSurat.Text.Contains("1900") = True Then
+                ' Tarikh pengesahan hanya dipaparkan & diwajibkan untuk KB (Penilai)
+                If Session("sessionIsPenilai")?.ToString() = "True" AndAlso
+                   (TB_TarikhSurat.Text.Length = 0 OrElse TB_TarikhSurat.Text.Contains("1900")) Then
 
                     ShowAlert("error", "", "Sila pilih tarikh pengesahan dan tekan simpan surat.")
                     retval = False
