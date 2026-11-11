@@ -211,6 +211,9 @@ Partial Class pembatalan1
                 idFooter.Visible = True
                 divBtnKembali.Visible = False
             End If
+
+            ' Rekod bukan giliran pengguna: kekalkan mod baca sahaja selepas peraturan footer di atas
+            If ModBukanGiliran Then TerapkanModBacaSahaja()
         Catch ex As Exception
         End Try
     End Sub
@@ -249,6 +252,53 @@ Partial Class pembatalan1
                 End If
             Next
         End If
+    End Sub
+
+    ''' <summary>True bila rekod yang dibuka berstatus 2-4 tetapi bukan giliran pengguna (dibuka melalui Lihat Semua Ulasan).</summary>
+    Private Property ModBukanGiliran As Boolean
+        Get
+            Return ViewState("ModBukanGiliran") IsNot Nothing AndAlso CBool(ViewState("ModBukanGiliran"))
+        End Get
+        Set(value As Boolean)
+            ViewState("ModBukanGiliran") = value
+        End Set
+    End Property
+
+    ''' <summary>
+    ''' Mod baca sahaja bagi rekod yang bukan giliran pengguna: semua butang tindakan dalam semua tab
+    ''' disembunyikan dan footer diganti dengan butang Kembali, sama seperti permohonan yang telah lulus.
+    ''' </summary>
+    Private Sub TerapkanModBacaSahaja()
+        btnSubmit.Visible = False
+        btnApprove.Visible = False
+        btnReject.Visible = False
+        btnKembaliIK.Visible = False
+
+        ' Tab Ulasan / IK
+        SetGridColumnsVisible(gvTabUlasan, False, 5, 6)
+        SetGridColumnsVisible(gvIK, False, 1)
+
+        ' Tab Surat
+        divtemplatsurat.Visible = False
+        BT_Generate.Visible = False
+        divCbSuratFail.Visible = False
+        btnSaveLetter.Visible = False
+        FU_Lampiran1.Visible = False
+        BT_Update1.Visible = False
+        BT_Cancel1.Visible = False
+        BT_Delete1.Visible = False
+
+        idFooter.Visible = False
+        divBtnKembali.Visible = True
+    End Sub
+
+    ''' <summary>Pulihkan lajur tindakan grid yang disembunyikan oleh mod baca sahaja (bila rekod lain dibuka).</summary>
+    Private Sub PulihkanModBacaSahaja()
+        SetGridColumnsVisible(gvTabUlasan, True, 6)
+        If Not Request.Browser.IsMobileDevice Then SetGridColumnsVisible(gvTabUlasan, True, 5)
+        SetGridColumnsVisible(gvIK, True, 1)
+        divBtnKembali.Visible = False
+        ModBukanGiliran = False
     End Sub
 
     ''' <summary>
@@ -294,12 +344,22 @@ Partial Class pembatalan1
         btnKembaliIK.Visible = (estateId = 3 AndAlso isPenilai AndAlso apprStatusId = 4)
 
         ' =========================================================================
+        ' 3b. Giliran Pengguna
+        ' =========================================================================
+        ' Status 2 dan 4 = giliran Penilai (KB), status 3 = giliran Penyedia (pegawai lawatan tapak),
+        ' sama seperti senarai lalai. Rekod status 2-4 yang dibuka melalui "Lihat Semua Ulasan" tetapi
+        ' bukan giliran pengguna dipaparkan dalam mod baca sahaja, seperti permohonan yang telah lulus.
+        Dim isGiliranPengguna As Boolean = If(apprStatusId = 3, isPenyedia, isPenilai)
+        If ModBukanGiliran Then PulihkanModBacaSahaja()
+        ModBukanGiliran = (apprStatusId >= 2 AndAlso apprStatusId <= 4) AndAlso Not isGiliranPengguna
+
+        ' =========================================================================
         ' 4. Butang Tindakan Utama (Submit, Approve, Reject, Nota Kelulusan)
         ' =========================================================================
         Select Case apprStatusId
             Case 2, 3, 4
                 ' Status 2: Mohon ulasan | Status 3: Penilaian Jabatan/Agensi | Status 4: Peraku Jabatan/Agensi
-                If Not isKeraniInspektorat Then
+                If isGiliranPengguna AndAlso Not isKeraniInspektorat Then
                     btnSubmit.Visible = True
                     btnSubmit.Text = If(apprStatusId = 2, "Simpan", "Hantar Ulasan")
                 End If
@@ -386,6 +446,9 @@ Partial Class pembatalan1
                 BT_Generate.Visible = False
             End If
         End If
+
+        ' Rekod bukan giliran pengguna: baca sahaja (seperti permohonan lulus)
+        If ModBukanGiliran Then TerapkanModBacaSahaja()
     End Sub
 
     Protected Sub rblNotaKelulusanKJ_SelectedIndexChanged(sender As Object, e As EventArgs)
