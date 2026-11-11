@@ -1513,8 +1513,7 @@
     <ItemTemplate>
         <div class="status-step <%# Eval("StepStatus") %>">
             <div class="status-step-icon">
-                <%# If(Eval("StepStatus").ToString() = "done", "<i class=""bi bi-check-lg""></i>",
-                     If(Eval("StepStatus").ToString() = "current", "<i class=""bi bi-circle-fill"" style=""font-size:8px;""></i>", "")) %>
+                <%# StatusProses.StepIcon(Eval("StepGroup"), Eval("ApprStatusID"), Eval("StepStatus")) %>
             </div>
             <div class="status-step-title"><%# Eval("Description") %></div>
 
