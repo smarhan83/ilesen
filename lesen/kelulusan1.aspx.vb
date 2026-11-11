@@ -60,6 +60,56 @@ Partial Class kelulusan1
     End Property
 
     ''' <summary>
+    ''' True bila rekod status 5 ke atas dibuka oleh pegawai IK yang dilantik, tetapi kandungan surat
+    ''' pemeriksaan masih kosong dan tiada fail surat dimuat naik (data lama). Pegawai IK dibenarkan
+    ''' menjana surat sahaja; aliran kerja dan status tidak berubah.
+    ''' </summary>
+    Private Property ModJanaSuratLewat As Boolean
+        Get
+            Return ViewState("ModJanaSuratLewat") IsNot Nothing AndAlso CBool(ViewState("ModJanaSuratLewat"))
+        End Get
+        Set(value As Boolean)
+            ViewState("ModJanaSuratLewat") = value
+        End Set
+    End Property
+
+    ''' <summary>True jika pengguna adalah pegawai IK yang dilantik untuk permohonan ini (LESEN_PermohonanAgensiStaff).</summary>
+    Private Function IsAppointedIK(permohonanId As Integer, agensiId As Integer) As Boolean
+        Dim usersId As Integer = If(IsNumeric(Session("sessionUsersId")), CInt(Session("sessionUsersId")), 0)
+        If usersId = 0 Then Return False
+
+        Using myConnection As New SqlConnection(ConfigurationManager.ConnectionStrings("webcon_ConnectionStr").ConnectionString)
+            Dim sql As String = "SELECT COUNT(*) FROM LESEN_PermohonanAgensiStaff x " &
+                                "INNER JOIN LESEN_PermohonanAgensi x2 ON x2.PermohonanAgensi_ID = x.PermohonanAgensi_ID " &
+                                "WHERE x2.Permohonan_ID = @Permohonan_ID AND x2.JabatanAgensi_ID = @AgensiID " &
+                                "AND x.PermohonanAgensiStaffID_UsersID = @UsersID"
+            Using myCommand As New SqlCommand(sql, myConnection)
+                myCommand.Parameters.AddWithValue("@Permohonan_ID", permohonanId)
+                myCommand.Parameters.AddWithValue("@AgensiID", agensiId)
+                myCommand.Parameters.AddWithValue("@UsersID", usersId)
+                myConnection.Open()
+                Return CInt(myCommand.ExecuteScalar()) > 0
+            End Using
+        End Using
+    End Function
+
+    ''' <summary>Semak syarat mod jana surat lewat (lihat ModJanaSuratLewat).</summary>
+    Private Function CheckModJanaSuratLewat(permohonanId As Integer, apprStatusId As Integer, agensiType As String) As Boolean
+        Dim estateId As Integer = If(IsNumeric(Session("sessionEstateID")), CInt(Session("sessionEstateID")), 0)
+        Dim isPenyedia As Boolean = (Session("sessionIsPenyedia")?.ToString() = "True")
+        Dim isReadOnly As Boolean = (Session("sessionIsReadOnly")?.ToString() = "True")
+        Dim isOCS3 As Boolean = (Session("sessionOCS")?.ToString() = "3")
+
+        If apprStatusId < 5 OrElse agensiType <> "J" OrElse Not isOCS3 OrElse Not isPenyedia OrElse isReadOnly Then
+            Return False
+        End If
+
+        Return IsAppointedIK(permohonanId, estateId) AndAlso
+               Not GetIsSuratFail(permohonanId) AndAlso
+               Not HasSuratContent(permohonanId, "LIK")
+    End Function
+
+    ''' <summary>
     ''' Mod baca sahaja bagi rekod yang bukan giliran pengguna: semua butang tindakan dalam semua tab
     ''' disembunyikan dan footer diganti dengan butang Kembali, sama seperti permohonan yang telah lulus.
     ''' </summary>
@@ -293,7 +343,8 @@ Partial Class kelulusan1
 
                 If isFail Then
                     CB_SuratFail.Checked = True
-                    btnSaveLetter.Visible = False
+                    ' Simpan kekal dipaparkan: ia satu-satunya butang untuk menyimpan fail baharu (Ubah) atau tukar ke surat janaan sistem
+                    btnSaveLetter.Visible = True
                     pnlSuratAuto.Visible = False
                     pnlSuratFail.Visible = True
                     BT_Generate.Visible = False
@@ -313,6 +364,13 @@ Partial Class kelulusan1
             Else
                 divtemplatsurat.Visible = False
                 BT_Generate.Visible = False
+
+                ' Status lain: suis muat naik tidak dipaparkan (lihat seksyen 7); papar panel ikut jenis surat rekod ini
+                ' supaya keadaan rekod sebelumnya (ViewState) tidak terbawa
+                CB_SuratFail.Checked = isFail
+                pnlSuratFail.Visible = False
+                pnlSuratAuto.Visible = Not isFail
+                If isFail Then btnSaveLetter.Visible = False
             End If
         End If
 
@@ -354,8 +412,10 @@ Partial Class kelulusan1
             btnAddIklan.Visible = False
             btnAddAnjing.Visible = False
         Else
-            divCbSuratFail.Visible = True
-            pnlSuratContentAuto.Visible = True
+            ' Suis muat naik hanya pada status 3 & 4 (di mana panel surat & fail disediakan untuk rekod ini)
+            divCbSuratFail.Visible = (apprStatusId = 3 OrElse apprStatusId = 4)
+            ' Kandungan perenggan hanya untuk surat janaan sistem (sama seperti CB_SuratFail_CheckedChanged)
+            pnlSuratContentAuto.Visible = Not (agensiType = "J" AndAlso isFail)
             TB_TarikhPeriksa.ReadOnly = False
             TB_NoRujukan.ReadOnly = False
 
@@ -387,6 +447,28 @@ Partial Class kelulusan1
             pnlSuratAuto.Visible = False
             btnSaveLetter.Visible = False
             pnlSuratContentAuto.Visible = False
+        End If
+
+        ' =========================================================================
+        ' 9. Mod Jana Surat Lewat (status 5 ke atas, surat masih kosong)
+        ' =========================================================================
+        ' Pegawai IK yang dilantik boleh menjana surat pemeriksaan bagi data lama yang telah
+        ' dihantar tanpa kandungan surat. Hanya surat janaan sistem; suis muat naik disembunyikan.
+        ModJanaSuratLewat = CheckModJanaSuratLewat(permohonanId, apprStatusId, agensiType)
+        divSuratLewatNotice.Visible = ModJanaSuratLewat
+
+        If ModJanaSuratLewat Then
+            tabSurat.Visible = True
+            divtemplatsurat.Visible = True
+            BT_Generate.Visible = True
+            divCbSuratFail.Visible = False
+            CB_SuratFail.Checked = False
+            pnlSuratFail.Visible = False
+            pnlSuratAuto.Visible = True
+            btnSaveLetter.Visible = True
+            pnlSuratContentAuto.Visible = True
+            TB_TarikhPeriksa.ReadOnly = False
+            TB_NoRujukan.ReadOnly = False
         End If
 
         ' Rekod bukan giliran pengguna: baca sahaja (seperti permohonan lulus)
@@ -1165,6 +1247,14 @@ Partial Class kelulusan1
 
         Dim retval As Boolean = True
 
+        ' Status 3 (Lawatan Tapak): pegawai IK Inspektorat mesti menjana kandungan surat sebelum hantar ulasan
+        If ApprStatusID = 3 AndAlso Session("sessionOCS")?.ToString() = "3" AndAlso Not CB_SuratFail.Checked Then
+            If Not HasSuratContent(CInt(GridView1.SelectedDataKey.Values(0)), "LIK") Then
+                ShowAlert("error", "", "Kandungan surat masih kosong. Sila jana laporan sebelum hantar ulasan.")
+                retval = False
+            End If
+        End If
+
         If ApprStatusID = 4 Then
 
             If CB_SuratFail.Checked And ((FU_Lampiran1.Visible = True And FU_Lampiran1.HasFile = False) Or
@@ -1213,6 +1303,21 @@ Partial Class kelulusan1
         End If
 
         Return retval
+    End Function
+
+    ''' <summary>True jika permohonan mempunyai sekurang-kurangnya satu perenggan surat (LESEN_PermohonanSurat) bagi jenis laporan yang diberi.</summary>
+    Private Function HasSuratContent(permohonanId As Integer, jenisReportPrefix As String) As Boolean
+        Using myConnection As New SqlConnection(ConfigurationManager.ConnectionStrings("webcon_ConnectionStr").ConnectionString)
+            Dim sql As String = "SELECT COUNT(*) FROM LESEN_PermohonanSurat " &
+                                "WHERE Permohonan_ID = @Permohonan_ID AND JenisReport LIKE @JenisReport " &
+                                "AND LEN(LTRIM(RTRIM(ISNULL(CAST(IsiKandungan AS NVARCHAR(MAX)), '')))) > 0"
+            Using myCommand As New SqlCommand(sql, myConnection)
+                myCommand.Parameters.AddWithValue("@Permohonan_ID", permohonanId)
+                myCommand.Parameters.AddWithValue("@JenisReport", jenisReportPrefix & "%")
+                myConnection.Open()
+                Return CInt(myCommand.ExecuteScalar()) > 0
+            End Using
+        End Using
     End Function
 
     Protected Sub btnSubmit_Click(sender As Object, e As EventArgs)
@@ -2190,6 +2295,12 @@ Partial Class kelulusan1
 
     Protected Sub BT_Generate_Command(sender As Object, e As CommandEventArgs)
 
+        ' Status 5 ke atas: jana laporan hanya dibenarkan dalam mod jana surat lewat
+        If CInt(GridView1.SelectedDataKey.Values(2)) >= 5 AndAlso Not ModJanaSuratLewat Then
+            ShowAlert("error", "", "Laporan tidak boleh dijana pada status ini.")
+            Return
+        End If
+
         If TB_TarikhPeriksa.Text.Length = 0 Then
 
             ShowAlert("error", "", "Sila pilih tarikh pemeriksaan.")
@@ -2625,6 +2736,8 @@ Partial Class kelulusan1
 
     Private Sub GetSuratFail(pid As Integer)
 
+        ' Tiada fail: papar kotak muat naik (jangan kekalkan keadaan tersembunyi dari rekod sebelumnya)
+        FU_Lampiran1.Visible = True
         BT_Cancel1.Visible = False
         HL_Lampiran1.Visible = False
         BT_Update1.Visible = False
@@ -3139,6 +3252,8 @@ Partial Class kelulusan1
                     BT_Update1.Visible = False
                     BT_Delete1.Visible = False
 
+                    ShowAlert("success", "", "Fail surat telah dipadam.")
+
                 End If
 
             Catch ex As Exception
@@ -3177,20 +3292,20 @@ Partial Class kelulusan1
 
     Protected Sub CB_SuratFail_CheckedChanged(sender As Object, e As EventArgs)
 
-        If CB_SuratFail.Checked Then
-            divtemplatsurat.Visible = False
-            BT_Generate.Visible = False
-            'BT_Generate1.Visible = False
-            pnlSuratFail.Visible = True
-            pnlSuratAuto.Visible = False
-            pnlSuratContentAuto.Visible = False
-        Else
-            divtemplatsurat.Visible = True
-            BT_Generate.Visible = True
-            'BT_Generate1.Visible = True
-            pnlSuratFail.Visible = False
-            pnlSuratAuto.Visible = True
-            pnlSuratContentAuto.Visible = True
+        Dim isFail As Boolean = CB_SuratFail.Checked
+
+        divtemplatsurat.Visible = Not isFail
+        BT_Generate.Visible = Not isFail
+        pnlSuratFail.Visible = isFail
+        pnlSuratAuto.Visible = Not isFail
+        pnlSuratContentAuto.Visible = Not isFail
+
+        ' Simpan diperlukan dalam kedua-dua mod: simpan fail muat naik atau maklumat surat janaan sistem
+        btnSaveLetter.Visible = True
+
+        ' Muat semula kawalan fail (pautan / Ubah / Padam atau kotak muat naik) mengikut fail sedia ada
+        If isFail Then
+            GetSuratFail(CInt(GridView1.SelectedDataKey.Values(0)))
         End If
 
     End Sub
