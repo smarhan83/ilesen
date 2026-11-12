@@ -6024,7 +6024,7 @@
                                                         <asp:CheckBox ID="cbman" runat="server" Enabled='<%# If(Eval("StatusID") < 1, True, False) %>' Checked='<%# Eval("IsMandatory") %>' OnCheckedChanged="cbman_CheckedChanged" AutoPostBack="true" />
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
-                                                <asp:TemplateField HeaderText="Status Dihantar Untuk Semakan" SortExpression="SendStatus">
+                                                <asp:TemplateField HeaderText="Status Dihantar" SortExpression="SendStatus">
                                                     <ItemTemplate>
                                                         <span class='<%# If(Eval("SendStatus") = "Dihantar", "status-pill status-pill-sent", If(Eval("SendStatus") = "Belum Dihantar", "status-pill status-pill-pending", "status-pill status-pill-notrequired")) %>'>
                                                             <i class='<%# If(Eval("SendStatus") = "Dihantar", "bi bi-check-circle-fill status-pill-icon", If(Eval("SendStatus") = "Belum Dihantar", "bi bi-clock-fill status-pill-icon", "bi bi-info-circle-fill status-pill-icon")) %>' aria-hidden="true"></i>
@@ -6035,7 +6035,7 @@
                                                         </span>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
-                                                <asp:BoundField DataField="ViewStatus" HeaderText="Status Dibaca Agensi Luar" SortExpression="ViewStatus"></asp:BoundField>
+                                                <asp:BoundField DataField="ViewStatus" HeaderText="Status Dibaca" SortExpression="ViewStatus"></asp:BoundField>
                                                 <asp:TemplateField ShowHeader="False">
                                                     <EditItemTemplate>
                                                     </EditItemTemplate>
@@ -6114,7 +6114,7 @@
                                                         <asp:CheckBox ID="cbman" runat="server" Enabled='<%# If(Eval("StatusID") < 1, True, False) %>' Checked='<%# Eval("IsMandatory") %>' OnCheckedChanged="cbman_CheckedChanged2" AutoPostBack="true" />
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
-                                                <asp:TemplateField HeaderText="Status Dihantar Untuk Semakan" SortExpression="SendStatus">
+                                                <asp:TemplateField HeaderText="Status Dihantar" SortExpression="SendStatus">
                                                     <ItemTemplate>
                                                         <span class='<%# If(Eval("SendStatus") = "Dihantar", "status-pill status-pill-sent", If(Eval("SendStatus") = "Belum Dihantar", "status-pill status-pill-pending", "status-pill status-pill-notrequired")) %>'>
                                                             <i class='<%# If(Eval("SendStatus") = "Dihantar", "bi bi-check-circle-fill status-pill-icon", If(Eval("SendStatus") = "BELUM Dihantar", "bi bi-clock-fill status-pill-icon", "bi bi-info-circle-fill status-pill-icon")) %>' aria-hidden="true"></i>
@@ -6125,7 +6125,7 @@
                                                         </span>
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
-                                                <asp:BoundField DataField="ViewStatus" HeaderText="Status Dibaca Agensi Luar" SortExpression="ViewStatus"></asp:BoundField>
+                                                <asp:BoundField DataField="ViewStatus" HeaderText="Status Dibaca" SortExpression="ViewStatus"></asp:BoundField>
                                                 <asp:TemplateField ShowHeader="False">
                                                     <EditItemTemplate>
                                                     </EditItemTemplate>
