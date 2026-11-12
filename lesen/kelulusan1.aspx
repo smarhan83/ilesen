@@ -1775,9 +1775,9 @@ ORDER BY SortOrder">
                         </SelectParameters>
                     </asp:SqlDataSource>
 
-                    <!-- Lampiran Permohonan -->
+                    <!-- Lampiran (lampiran permohonan untuk semua + lampiran MPK untuk agensi dalaman sahaja) -->
                         <div class="lampiran-card">
-                            <div class="section-title">Lampiran MPK</div>
+                            <div class="section-title">Lampiran</div>
 
                             <asp:GridView ID="GridView2" runat="server"
                                 ShowHeaderWhenEmpty="False"
@@ -1825,14 +1825,18 @@ ORDER BY SortOrder">
 						<asp:SqlDataSource ID="SqlDataSourceTabLampiran" runat="server"
 							ConnectionString="<%$ ConnectionStrings:webcon_ConnectionStr %>"
 							SelectCommand=" SELECT a.*, b.StatusID FROM LESEN_PermohonanFail a INNER JOIN LESEN_Permohonan b ON a.PermohonanFail_PermohonanID = b.Permohonan_ID 
-							WHERE a.PermohonanFail_JenisLampiran = 'U' AND a.PermohonanFail_PermohonanID = @Permohonan_ID"
+							WHERE a.PermohonanFail_PermohonanID = @Permohonan_ID
+							AND (a.PermohonanFail_JenisLampiran = 'LA' OR (a.PermohonanFail_JenisLampiran = 'U' AND @IsAgensiDalaman = 1))
+							ORDER BY CASE WHEN a.PermohonanFail_JenisLampiran = 'LA' THEN 0 ELSE 1 END, a.PermohonanFail_ID"
 							DeleteCommand=""
 							UpdateCommand="">
 							<DeleteParameters>
-								
+
 							</DeleteParameters>
 							<SelectParameters>
 								<asp:ControlParameter ControlID="GridView1" Name="Permohonan_ID" PropertyName="SelectedDataKey.Values[0]"></asp:ControlParameter>
+								<%-- Ditetapkan dalam SqlDataSourceTabLampiran_Selecting --%>
+								<asp:Parameter Name="IsAgensiDalaman" Type="Int32" DefaultValue="0" />
 							</SelectParameters>
 							<UpdateParameters>
 				   
@@ -3116,120 +3120,6 @@ ORDER BY SortOrder">
                                 </asp:LinkButton>
                             </div>
                         </div>
-                    </ContentTemplate>
-                </asp:TabPanel>
-
-                <asp:TabPanel runat="server" ID="tabPublicAttach" HeaderText="Lampiran Permohonan">
-                    <HeaderTemplate>Lampiran Permohonan</HeaderTemplate>
-                    <ContentTemplate>
-
-                        <asp:GridView ID="gvTabPublicAttach" runat="server" ShowHeaderWhenEmpty="True"
-                            AllowSorting="True" AutoGenerateColumns="False" DataKeyNames="PermohonanFail_ID"
-                            DataSourceID="SqlDataSourceTabPublicAttach"
-                            CssClass="table table-bordered" Width="100%">
-                            <AlternatingRowStyle CssClass="alt" />
-                            <Columns>
-
-                                <asp:TemplateField HeaderText="ID" SortExpression="PermohonanFail_ID">
-                                    <EditItemTemplate>
-                                        <asp:Label ID="Label1" runat="server" Text='<%# Eval("PermohonanFail_ID") %>'></asp:Label>
-                                    </EditItemTemplate>
-                                    <ItemTemplate>
-                                        <asp:Label ID="Label1" runat="server" Text='<%# Bind("PermohonanFail_ID") %>'></asp:Label>
-                                    </ItemTemplate>
-                                    <HeaderStyle CssClass="styleDisplayNone" />
-                                    <ItemStyle CssClass="styleDisplayNone" />
-                                </asp:TemplateField>
-
-
-                                <asp:TemplateField HeaderText="No.">
-                                    <ItemTemplate>
-                                        <%# Container.DataItemIndex + 1 %>
-                                    </ItemTemplate>
-                                    <EditItemTemplate>
-                                        <%# Container.DataItemIndex + 1 %>
-                                    </EditItemTemplate>
-                                    <HeaderStyle Width="5%" />
-                                </asp:TemplateField>
-
-                                <asp:TemplateField HeaderText="Lampiran">
-                                    <ItemTemplate>
-                                        <%--<asp:Label ID="lblPermohonanFail_Remarks" runat="server" Text='<%# Eval("PermohonanFail_Remarks") %>'></asp:Label>--%>
-                                        <asp:TextBox ID="txtPermohonanFail_Remarks" runat="server" Text='<%# Bind("PermohonanFail_Remarks") %>' CssClass="form-control" TextMode="MultiLine" Rows="2" ReadOnly="True" BorderStyle="None"></asp:TextBox>
-                                    </ItemTemplate>
-                                    <EditItemTemplate>
-                                        <asp:TextBox ID="txtPermohonanFail_Remarks" runat="server" Text='<%# Bind("PermohonanFail_Remarks") %>' CssClass="form-control" TextMode="MultiLine" Rows="2"></asp:TextBox>
-                                        <asp:RequiredFieldValidator ID="rvPermohonanFail_Remarks" runat="server" CssClass="cssRequiredField"
-                                            ControlToValidate="txtPermohonanFail_Remarks" ErrorMessage="Sila Isi" ValidationGroup="frmEdit" Display="Dynamic"></asp:RequiredFieldValidator>
-                                    </EditItemTemplate>
-                                    <HeaderStyle Width="55%" HorizontalAlign="Left" />
-                                    <ItemStyle HorizontalAlign="Left" />
-                                </asp:TemplateField>
-
-                                <asp:TemplateField>
-                                    <ItemTemplate>
-                                        <%--<asp:Label ID="PermohonanFail_FileName" runat="server" Text='<%# Eval("PermohonanFail_FileName") %>'></asp:Label>--%>
-                                    Fail :
-                                        <asp:HyperLink ID="hpFile" runat="server" NavigateUrl='<%# Eval("PermohonanFail_FilePath") %>' Target="_blank"><%#Eval("PermohonanFail_FileName") %></asp:HyperLink>
-
-                                        <asp:HiddenField ID="hdnFldPermohonanFail_FileName" Value='<%# Bind("PermohonanFail_FileName") %>' runat="server" />
-                                        <asp:HiddenField ID="hdnFldPermohonanFail_ContentType" Value='<%# Bind("PermohonanFail_ContentType") %>' runat="server" />
-                                        <asp:HiddenField ID="hdnFldPermohonanFail_FilePath" Value='<%# Bind("PermohonanFail_FilePath") %>' runat="server" />
-                                    </ItemTemplate>
-                                    <EditItemTemplate>
-
-                                    </EditItemTemplate>
-                                    <HeaderStyle Width="25%" />
-                                </asp:TemplateField>
-
-                                <asp:TemplateField HeaderText="Maklumat Lampiran"
-                                    HeaderStyle-Font-Size="10pt" HeaderStyle-Width="90%" ItemStyle-Width="90%">
-                                    <ItemTemplate>
-                                        <asp:Label ID="Label15" runat="server" Text="Lampiran :" Font-Bold="True" Font-Size="10pt"></asp:Label><br />
-                                        <asp:Label ID="Label16" runat="server" Text='<%# If(Len(Eval("PermohonanFail_Remarks").ToString()) > 0, (Eval("PermohonanFail_Remarks")).Replace(vbCr, "").Replace(vbLf, vbCrLf).Replace(Environment.NewLine, "<br />"), Eval("PermohonanFail_Remarks")) %>' Font-Size="10pt"></asp:Label><br />
-                                        <asp:Label ID="Label9" runat="server" Text="Fail :" Font-Bold="True" Font-Size="10pt"></asp:Label><br />
-                                        <asp:HyperLink ID="hpFileMobile" CssClass="paraGraphtext" runat="server" NavigateUrl='<%# Eval("PermohonanFail_FilePath") %>' Target="_blank" Font-Bold="True" Font-Size="10pt"><%#If(Len(Eval("PermohonanFail_FileName").ToString()) > 0, Eval("PermohonanFail_FileName").ToString.Substring(If(Len(Eval("PermohonanFail_FileName").ToString()) > 25, Len(Eval("PermohonanFail_FileName").ToString()) - 25, 0)), Eval("PermohonanFail_FileName")) %></asp:HyperLink><br />
-                                        <%--<br />
-                                        <asp:LinkButton ID="lbEditMobile" runat="server" CausesValidation="False" CommandName="Edit" Text="Kemaskini" CssClass="btn btn-warning btn-sm"></asp:LinkButton>
-                                    --%></ItemTemplate>
-                                    <EditItemTemplate>
-
-                                    </EditItemTemplate>
-                                    <ItemStyle HorizontalAlign="Left" />
-                                </asp:TemplateField>
-
-                            </Columns>
-
-                            <PagerStyle CssClass="pgr" />
-                        </asp:GridView>
-
-                        <asp:SqlDataSource ID="SqlDataSourceTabPublicAttach" runat="server"
-                            ConnectionString="<%$ ConnectionStrings:webcon_ConnectionStr %>"
-                            SelectCommand=" SELECT a.*, b.StatusID FROM LESEN_PermohonanFail a INNER JOIN LESEN_Permohonan b ON a.PermohonanFail_PermohonanID = b.Permohonan_ID 
-                                WHERE a.PermohonanFail_JenisLampiran = 'LA' AND a.PermohonanFail_PermohonanID = @Permohonan_ID"
-                            DeleteCommand="DELETE FROM LESEN_PermohonanFail WHERE PermohonanFail_ID = @PermohonanFail_ID "
-                            UpdateCommand="UPDATE LESEN_PermohonanFail SET PermohonanFail_Remarks = @PermohonanFail_Remarks, 
-                                PermohonanFail_FileName = @PermohonanFail_FileName,
-                                PermohonanFail_ContentType = @PermohonanFail_ContentType,
-                                PermohonanFail_FilePath = @PermohonanFail_FilePath,
-                                LastModID = @LastModID, LastModDt = GETDATE()
-                                WHERE (PermohonanFail_ID = @PermohonanFail_ID)">
-                            <DeleteParameters>
-                                <asp:ControlParameter ControlID="gvTabPublicAttach" DefaultValue="" Name="PermohonanFail_ID" PropertyName="SelectedValue" />
-                            </DeleteParameters>
-                            <SelectParameters>
-                                <asp:ControlParameter ControlID="GridView1" PropertyName="SelectedDataKey.Values[0]" Name="Permohonan_ID"></asp:ControlParameter>
-                            </SelectParameters>
-                            <UpdateParameters>
-                                <asp:Parameter Name="PermohonanFail_Remarks" />
-                                <asp:Parameter Name="PermohonanFail_FileName" />
-                                <asp:Parameter Name="PermohonanFail_ContentType" />
-                                <asp:Parameter Name="PermohonanFail_FilePath" />
-                                <asp:SessionParameter Name="LastModID" SessionField="sessionUserName" />
-                                <asp:Parameter Name="PermohonanFail_ID" />
-                            </UpdateParameters>
-                        </asp:SqlDataSource>
-
                     </ContentTemplate>
                 </asp:TabPanel>
 
