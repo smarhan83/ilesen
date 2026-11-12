@@ -1674,7 +1674,7 @@
                                             <HeaderStyle Width="6%" CssClass="text-center" />
                                             <ItemStyle CssClass="text-center" />
                                         </asp:TemplateField>
-                                        <asp:BoundField DataField="SaizIklan" HeaderText="Saiz Iklan (cm)" />
+                                        <asp:BoundField DataField="SaizIklan" HeaderText="Saiz Iklan (kaki)" />
                                         <asp:BoundField DataField="Bercahaya" HeaderText="Bercahaya" HeaderStyle-CssClass="text-center" ItemStyle-CssClass="text-center" />
                                         <asp:BoundField DataField="Unit" HeaderText="Bilangan Unit" HeaderStyle-CssClass="text-center" ItemStyle-CssClass="text-center" />
                                     </Columns>
