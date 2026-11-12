@@ -3560,7 +3560,7 @@ ORDER BY SortOrder">
                                                 </InsertItemTemplate>
                                             </asp:FormView>
                                             <asp:SqlDataSource runat="server" ID="SqlDataSourceReport" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
-                                                InsertCommand="INSERT INTO LESEN_PermohonanSurat (Permohonan_ID, JenisReport, P1, P2, P3, IsiKandungan, CreatedDt, ModDt) VALUES 'LIK', @P1, @P2, @P3, @IsiKandungan, GETDATE(), GETDATE()); "
+                                                InsertCommand="INSERT INTO LESEN_PermohonanSurat (Permohonan_ID, JenisReport, P1, P2, P3, IsiKandungan, CreatedDt, ModDt) VALUES (@Permohonan_ID, ISNULL((SELECT TOP 1 JenisReport FROM LESEN_PermohonanSurat WHERE Permohonan_ID=@Permohonan_ID AND JenisReport LIKE 'LIK%' ORDER BY PSID), 'LIK'), @P1, @P2, @P3, @IsiKandungan, GETDATE(), GETDATE()); "
                                                 UpdateCommand="UPDATE LESEN_PermohonanSurat SET P1=@P1, P2=@P2, P3=@P3, IsiKandungan=@IsiKandungan WHERE PSID=@PSID"
                                                 SelectCommand="SELECT * FROM LESEN_PermohonanSurat WHERE PSID=@PSID">
                                                 <InsertParameters>
@@ -3606,7 +3606,7 @@ ORDER BY SortOrder">
                                                     </asp:GridView>
                                                     <asp:SqlDataSource runat="server" ID="SqlDataSourceGridReport" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
                                                         DeleteCommand="DELETE FROM LESEN_PermohonanSurat WHERE PSID=@PSID"
-                                                        SelectCommand="SELECT * FROM LESEN_PermohonanSurat WHERE Permohonan_ID=@Permohonan_ID AND (JenisReport='LIKB' OR JenisReport='LIKL') 
+                                                        SelectCommand="SELECT * FROM LESEN_PermohonanSurat WHERE Permohonan_ID=@Permohonan_ID AND JenisReport LIKE 'LIK%'
                                                         ORDER BY P1, P2, P3">
                                                         <DeleteParameters>
                                                             <asp:Parameter Name="PSID"></asp:Parameter>
