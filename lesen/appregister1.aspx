@@ -4629,8 +4629,8 @@
             <asp:TabContainer ID="TabContainer1" runat="server" ActiveTabIndex="0" Visible="false" CssClass="MyTabStyle">
 
                 <%-- --- Tab 1: Lampiran Awam --- --%>
-                <asp:TabPanel runat="server" ID="tabPublicAttach" HeaderText="Lampiran Awam">
-                    <HeaderTemplate>Lampiran Awam</HeaderTemplate>
+                <asp:TabPanel runat="server" ID="tabPublicAttach" HeaderText="Lampiran (Untuk Semua Agensi)">
+                    <HeaderTemplate>Lampiran (Untuk Semua Agensi)</HeaderTemplate>
                     <ContentTemplate>
 
                         <asp:GridView ID="gvTabPublicAttach" runat="server" ShowHeaderWhenEmpty="True"
@@ -4762,7 +4762,7 @@
 
                 <%-- --- Tab 2: Ulasan (Lampiran MPK) --- --%>
                 <asp:TabPanel runat="server" ID="tabUlasan" HeaderText="Ulasan">
-                    <HeaderTemplate>Lampiran MPK</HeaderTemplate>
+                    <HeaderTemplate>Lampiran (Untuk Agensi Dalaman)</HeaderTemplate>
                     <ContentTemplate>
 
                         <asp:GridView ID="gvTabUlasan" runat="server" ShowHeaderWhenEmpty="True"

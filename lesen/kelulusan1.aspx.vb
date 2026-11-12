@@ -516,17 +516,9 @@ Partial Class kelulusan1
                     gvTabUlasan.Columns(3).Visible = "false"
                     gvTabUlasan.Columns(5).Visible = "false"
                     gvTabUlasan.Columns(4).Visible = "true"
-
-                    gvTabPublicAttach.Columns(2).Visible = "false"
-                    gvTabPublicAttach.Columns(3).Visible = "false"
-                    If gvTabPublicAttach.Columns.Count > 5 Then
-                        gvTabPublicAttach.Columns(5).Visible = "false"
-                    End If
-                    gvTabPublicAttach.Columns(4).Visible = "true"
                 Else
 
                     gvTabUlasan.Columns(4).Visible = "false"
-                    gvTabPublicAttach.Columns(4).Visible = "false"
                 End If
             End If
 
@@ -2020,16 +2012,11 @@ Partial Class kelulusan1
 
     End Sub
 
-    Private Sub gvTabPublicAttach_RowDataBound(sender As Object, e As GridViewRowEventArgs) Handles gvTabPublicAttach.RowDataBound
-
-    End Sub
-
-    Private Sub gvTabPublicAttach_RowDeleting(sender As Object, e As GridViewDeleteEventArgs) Handles gvTabPublicAttach.RowDeleting
-
-    End Sub
-
-    Private Sub gvTabPublicAttach_DataBound(sender As Object, e As EventArgs) Handles gvTabPublicAttach.DataBound
-
+    ' Seksyen Lampiran: lampiran permohonan ('LA') untuk semua; lampiran MPK ('U') hanya untuk agensi dalaman (Jabatan Lesen / jabatan dalaman)
+    Private Sub SqlDataSourceTabLampiran_Selecting(sender As Object, e As SqlDataSourceSelectingEventArgs) Handles SqlDataSourceTabLampiran.Selecting
+        Dim estateId As Integer = If(IsNumeric(Session("sessionEstateID")), CInt(Session("sessionEstateID")), 0)
+        Dim isAgensiDalaman As Boolean = getJabatanLesen(estateId) OrElse getJabatanDalaman(estateId)
+        e.Command.Parameters("@IsAgensiDalaman").Value = If(isAgensiDalaman, 1, 0)
     End Sub
 
     Protected Sub GridViewReport_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles GridViewReport.SelectedIndexChanged
