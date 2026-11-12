@@ -1763,6 +1763,28 @@ Partial Class pembatalan1
 
 #End Region
 
+#Region "Isi Surat (FormViewReport / GridViewReport)"
+
+    Protected Sub GridViewReport_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles GridViewReport.SelectedIndexChanged
+        FormViewReport.ChangeMode(FormViewMode.Edit)
+    End Sub
+
+    Private Sub FormViewReport_ItemInserted(sender As Object, e As FormViewInsertedEventArgs) Handles FormViewReport.ItemInserted
+        GridViewReport.DataBind()
+    End Sub
+
+    Private Sub FormViewReport_ItemUpdated(sender As Object, e As FormViewUpdatedEventArgs) Handles FormViewReport.ItemUpdated
+        ShowAlert("success", "", "Rekod berjaya dikemaskini")
+        GridViewReport.DataBind()
+    End Sub
+
+    Private Sub GridViewReport_RowDeleted(sender As Object, e As GridViewDeletedEventArgs) Handles GridViewReport.RowDeleted
+        ShowAlert("success", "", "Rekod berjaya dikemaskini")
+        GridViewReport.DataBind()
+    End Sub
+
+#End Region
+
 #Region "Alert & Dialog Helpers"
 
     Public Sub MessageBox(ByVal Msg As String, ByVal obj As System.Web.UI.Page)
