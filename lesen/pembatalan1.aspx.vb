@@ -1645,7 +1645,7 @@ Partial Class pembatalan1
     Private Function UpdateTotalViews(permohonanID As String, agensiID As String) As Boolean
         Try
             Using myConnection As New SqlConnection(CS)
-                Dim SQL As String = "UPDATE LESEN_PermohonanAgensi SET totalViews = totalViews + 1 WHERE Permohonan_ID = @Permohonan_ID AND JabatanAgensi_ID = @AgensiId"
+                Dim SQL As String = "UPDATE LESEN_PermohonanAgensiBatal SET totalViews = ISNULL(totalViews, 0) + 1 WHERE Permohonan_ID = @Permohonan_ID AND JabatanAgensi_ID = @AgensiId"
                 Dim myCommand As New SqlCommand(SQL, myConnection)
                 myCommand.Parameters.AddWithValue("@Permohonan_ID", permohonanID)
                 myCommand.Parameters.AddWithValue("@AgensiId", agensiID)
