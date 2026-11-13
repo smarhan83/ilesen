@@ -2052,47 +2052,125 @@ AND (HD_Ticket.ticketId IN (SELECT ticketId FROM HD_Support WHERE (EmpID = @sess
         Return retval
     End Function
 
+    '===================== AUDIT TRAIL =====================
+    ' Nama tindakan baku (TBL_AUDITTRAIL.AT_Action). Panggilan lama yang guna nama lain
+    ' (Insert / Update / Delete / Maklumat / Kunci Masuk ...) diseragamkan oleh NormalizeAuditAction.
+    Public Const AUDIT_LOGIN As String = "Login"
+    Public Const AUDIT_LOGOUT As String = "Logout"
+    Public Const AUDIT_LOGIN_GAGAL As String = "Login Gagal"
+    Public Const AUDIT_AKSES_DITOLAK As String = "Akses Ditolak"
+    Public Const AUDIT_TAMBAH As String = "Tambah"
+    Public Const AUDIT_KEMASKINI As String = "Kemaskini"
+    Public Const AUDIT_PADAM As String = "Padam"
+    Public Const AUDIT_NYAH_AKTIF As String = "Nyah Aktif"
+    Public Const AUDIT_HANTAR As String = "Hantar"
+    Public Const AUDIT_EXPORT As String = "Export"
+
+    ''' <summary>Rekod audit oleh pengguna sesi semasa (bentuk asal, tanpa rujukan / butiran).</summary>
     Public Shared Function auditTrail(ByVal paraModuleName As String, ByVal paraTitle As String, ByVal paraAction As String) As Boolean
+        Return auditTrail(paraModuleName, paraTitle, paraAction, "", "")
+    End Function
 
-        Dim retval As Boolean = True
-        Dim AT_UserId As Integer = HttpContext.Current.Session.Item("sessionUsersId")
-        Dim AT_UserName As String = HttpContext.Current.Session.Item("sessionUserName")
-        'Dim AT_IP As String = ""
+    ''' <summary>
+    ''' Rekod audit oleh pengguna sesi semasa.
+    ''' paraRef = rujukan rekod (cth. No. Rujukan permohonan); paraDetail = butiran (cth. status lama -> baru).
+    ''' </summary>
+    Public Shared Function auditTrail(ByVal paraModuleName As String, ByVal paraTitle As String, ByVal paraAction As String,
+                                      ByVal paraRef As String, ByVal paraDetail As String) As Boolean
+        Dim ctx As HttpContext = HttpContext.Current
+        Dim userId As Integer = 0
+        Dim userName As String = ""
+        If ctx IsNot Nothing AndAlso ctx.Session IsNot Nothing Then
+            Integer.TryParse(Convert.ToString(ctx.Session.Item("sessionUsersId")), userId)
+            userName = Convert.ToString(ctx.Session.Item("sessionUserName"))
+        End If
+        Return auditTrailUser(userId, userName, paraModuleName, paraTitle, paraAction, paraRef, paraDetail)
+    End Function
 
-        Dim AT_IP As String = HttpContext.Current.Request.UserHostAddress
+    ''' <summary>
+    ''' Rekod audit bagi pengguna tertentu (cth. login gagal, sebelum sesi wujud).
+    ''' Ralat semasa menulis log tidak dibawa ke atas supaya tindakan pengguna tidak terganggu.
+    ''' </summary>
+    Public Shared Function auditTrailUser(ByVal userId As Integer, ByVal userName As String, ByVal paraModuleName As String,
+                                          ByVal paraTitle As String, ByVal paraAction As String,
+                                          Optional ByVal paraRef As String = "", Optional ByVal paraDetail As String = "") As Boolean
+        Try
+            Dim ctx As HttpContext = HttpContext.Current
+            Dim ip As String = If(ctx IsNot Nothing AndAlso ctx.Request IsNot Nothing, ctx.Request.UserHostAddress, "")
+            Dim action As String = NormalizeAuditAction(paraAction)
+            Dim adaKolum As Boolean = AuditAdaKolumTambahan()
 
-        'Dim host As IPHostEntry = Dns.GetHostByName(Dns.GetHostName)
+            Dim sql As String = If(adaKolum,
+                "INSERT INTO [TBL_AUDITTRAIL] (AT_UserId,AT_UserName,AT_IP,AT_Action,AT_Module,AT_Title,AT_datetime,AT_Ref,AT_Detail) VALUES " &
+                "(@AT_UserId,@AT_UserName,@AT_IP,@AT_Action,@AT_Module,@AT_Title,getdate(),@AT_Ref,@AT_Detail)",
+                "INSERT INTO [TBL_AUDITTRAIL] (AT_UserId,AT_UserName,AT_IP,AT_Action,AT_Module,AT_Title,AT_datetime) VALUES " &
+                "(@AT_UserId,@AT_UserName,@AT_IP,@AT_Action,@AT_Module,@AT_Title,getdate())")
 
-        'If host.AddressList.Length > 0 Then
-        '    AT_IP = host.AddressList(0).ToString
-        'End If
+            Using conn As New SqlConnection(ConfigurationManager.ConnectionStrings("webcon_ConnectionStr").ConnectionString)
+                Using cmd As New SqlCommand(sql, conn)
+                    cmd.Parameters.AddWithValue("@AT_UserId", userId)
+                    cmd.Parameters.AddWithValue("@AT_UserName", Potong(userName, 225))
+                    cmd.Parameters.AddWithValue("@AT_IP", Potong(ip, 100))
+                    cmd.Parameters.AddWithValue("@AT_Action", Potong(action, 100))
+                    cmd.Parameters.AddWithValue("@AT_Module", Potong(paraModuleName, 100))
+                    cmd.Parameters.AddWithValue("@AT_Title", If(paraTitle, ""))
+                    If adaKolum Then
+                        cmd.Parameters.AddWithValue("@AT_Ref", If(String.IsNullOrWhiteSpace(paraRef), CObj(DBNull.Value), Potong(paraRef.Trim(), 100)))
+                        cmd.Parameters.AddWithValue("@AT_Detail", If(String.IsNullOrWhiteSpace(paraDetail), CObj(DBNull.Value), paraDetail))
+                    End If
+                    conn.Open()
+                    cmd.ExecuteNonQuery()
+                End Using
+            End Using
+            Return True
+        Catch ex As Exception
+            System.Diagnostics.Trace.TraceError("auditTrail: " & ex.Message)
+            Return False
+        End Try
+    End Function
 
+    ''' <summary>Seragamkan nama tindakan lama (campuran BM / EN) kepada nama baku.</summary>
+    Public Shared Function NormalizeAuditAction(ByVal action As String) As String
+        Dim a As String = If(action, "").Trim()
+        Select Case a.ToLowerInvariant()
+            Case "insert", "add", "maklumat", "kunci masuk" : Return AUDIT_TAMBAH
+            Case "update", "edit" : Return AUDIT_KEMASKINI
+            Case "delete", "remove" : Return AUDIT_PADAM
+            Case "add user permission" : Return "Tambah Kebenaran"
+            Case "remove user permission" : Return "Buang Kebenaran"
+            Case "update permission" : Return "Kemaskini Kebenaran"
+            Case Else : Return a
+        End Select
+    End Function
 
-        Using myConnection As New SqlConnection(ConfigurationManager.ConnectionStrings("webcon_ConnectionStr").ConnectionString)
+    Private Shared Function Potong(ByVal s As String, ByVal maks As Integer) As String
+        If s Is Nothing Then Return ""
+        Return If(s.Length > maks, s.Substring(0, maks), s)
+    End Function
 
-            Const SQL As String = "INSERT INTO [TBL_AUDITTRAIL] (AT_UserId,AT_UserName,AT_IP,AT_Action,AT_Module,AT_Title,AT_datetime) VALUES " &
-                "(@AT_UserId,@AT_UserName,@AT_IP,@AT_Action,@AT_Module,@AT_Title,getdate())"
+    ' Kolum AT_Ref / AT_Detail (sql/2026-11-14_audittrail_ref_detail.sql) mungkin belum wujud di pelayan.
+    ' Hasil disimpan; jika belum wujud, disemak semula setiap 10 minit supaya tidak perlu restart selepas skrip dijalankan.
+    Private Shared _auditKolumAda As Boolean = False
+    Private Shared _auditKolumSemakPada As DateTime = DateTime.MinValue
+    Private Shared ReadOnly _auditKolumKunci As New Object()
 
-            Dim myCommand As New SqlCommand(SQL, myConnection)
-
-            myCommand.Parameters.AddWithValue("@AT_UserId", AT_UserId)
-            myCommand.Parameters.AddWithValue("@AT_UserName", AT_UserName)
-            myCommand.Parameters.AddWithValue("@AT_IP", AT_IP)
-            myCommand.Parameters.AddWithValue("@AT_Action", paraAction)
-            myCommand.Parameters.AddWithValue("@AT_Module", paraModuleName)
-            myCommand.Parameters.AddWithValue("@AT_Title", paraTitle)
-
-            myConnection.Open()
-
-            Dim recordset As Integer = myCommand.ExecuteNonQuery()
-
-            '//start insert audit trail
-
-            myConnection.Close()
-
-        End Using
-
-        Return retval
+    Public Shared Function AuditAdaKolumTambahan() As Boolean
+        If _auditKolumAda Then Return True
+        SyncLock _auditKolumKunci
+            If _auditKolumAda OrElse DateTime.UtcNow < _auditKolumSemakPada.AddMinutes(10) Then Return _auditKolumAda
+            Try
+                Using conn As New SqlConnection(ConfigurationManager.ConnectionStrings("webcon_ConnectionStr").ConnectionString)
+                    Using cmd As New SqlCommand("SELECT CASE WHEN COL_LENGTH('dbo.TBL_AUDITTRAIL','AT_Ref') IS NOT NULL AND COL_LENGTH('dbo.TBL_AUDITTRAIL','AT_Detail') IS NOT NULL THEN 1 ELSE 0 END", conn)
+                        conn.Open()
+                        _auditKolumAda = (Convert.ToInt32(cmd.ExecuteScalar()) = 1)
+                    End Using
+                End Using
+            Catch ex As Exception
+                _auditKolumAda = False
+            End Try
+            _auditKolumSemakPada = DateTime.UtcNow
+            Return _auditKolumAda
+        End SyncLock
     End Function
 
 

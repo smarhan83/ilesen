@@ -11,14 +11,30 @@ Imports PdfX = iTextSharp.text.pdf
 Partial Class html_administration_audittrail
     Inherits System.Web.UI.Page
 
-    ' Kategori tindakan (nilai AT_Action dalam pangkalan data bercampur Bahasa Melayu dan Inggeris)
+    ' Kategori tindakan. Nama baku (GlobalClass.NormalizeAuditAction) dan nama lama dalam rekod sedia ada
+    ' (Insert / Update / Delete / Maklumat / Kunci Masuk = tambah rekod, bukan log masuk).
     Private Const KAT_SQL As String =
         "CASE " &
-        " WHEN a.AT_Action IN ('Login','Logout','Kunci Masuk','Log Keluar') THEN 'log' " &
-        " WHEN a.AT_Action IN ('Delete','Nyah Aktif','Padam') OR a.AT_Action LIKE 'Delete%' OR a.AT_Action LIKE 'Remove%' OR a.AT_Action LIKE 'Padam%' THEN 'del' " &
-        " WHEN a.AT_Action IN ('Insert','Tambah','Daftar') OR a.AT_Action LIKE 'Add%' OR a.AT_Action LIKE 'Insert%' OR a.AT_Action LIKE 'Tambah%' THEN 'add' " &
+        " WHEN a.AT_Action IN ('Login Gagal','Akses Ditolak') THEN 'fail' " &
+        " WHEN a.AT_Action IN ('Login','Logout','Log Keluar') THEN 'log' " &
+        " WHEN a.AT_Action IN ('Delete','Nyah Aktif','Padam','Buang Kebenaran') OR a.AT_Action LIKE 'Delete%' OR a.AT_Action LIKE 'Remove%' OR a.AT_Action LIKE 'Padam%' THEN 'del' " &
+        " WHEN a.AT_Action IN ('Insert','Tambah','Daftar','Maklumat','Kunci Masuk') OR a.AT_Action LIKE 'Add%' OR a.AT_Action LIKE 'Insert%' OR a.AT_Action LIKE 'Tambah%' THEN 'add' " &
         " WHEN a.AT_Action IN ('Update','Kemaskini') OR a.AT_Action LIKE 'Update%' OR a.AT_Action LIKE 'Kemaskini%' THEN 'upd' " &
         " ELSE 'oth' END"
+
+    ' AT_Ref / AT_Detail hanya wujud selepas sql/2026-11-14_audittrail_ref_detail.sql dijalankan
+    Private ReadOnly Property AdaRef As Boolean
+        Get
+            Return GlobalClass.AuditAdaKolumTambahan()
+        End Get
+    End Property
+
+    Private ReadOnly Property RefCols As String
+        Get
+            Return If(AdaRef, "ISNULL(a.AT_Ref, '') AS AT_Ref, ISNULL(a.AT_Detail, '') AS AT_Detail",
+                              "CAST('' AS nvarchar(100)) AS AT_Ref, CAST('' AS nvarchar(max)) AS AT_Detail")
+        End Get
+    End Property
 
     Private Property PageIndex As Integer
         Get
@@ -147,12 +163,17 @@ Partial Class html_administration_audittrail
         Return Tuple.Create(dari, hingga)
     End Function
 
-    Private Const WHERE_SQL As String =
-        " WHERE a.AT_datetime >= @Dari AND a.AT_datetime < @HinggaPlus1 " &
-        "   AND (@Module = '' OR a.AT_Module = @Module) " &
-        "   AND (@Action = '' OR a.AT_Action = @Action) " &
-        "   AND (@User = '' OR a.AT_UserName = @User) " &
-        "   AND (@Title = '' OR a.AT_Title LIKE '%' + @Title + '%') "
+    ' Kata kunci dicari dalam Title, dan juga Rujukan / Butiran jika kolum tersebut wujud
+    Private ReadOnly Property WHERE_SQL As String
+        Get
+            Return " WHERE a.AT_datetime >= @Dari AND a.AT_datetime < @HinggaPlus1 " &
+                   "   AND (@Module = '' OR a.AT_Module = @Module) " &
+                   "   AND (@Action = '' OR a.AT_Action = @Action) " &
+                   "   AND (@User = '' OR a.AT_UserName = @User) " &
+                   "   AND (@Title = '' OR a.AT_Title LIKE '%' + @Title + '%'" &
+                   If(AdaRef, " OR a.AT_Ref LIKE '%' + @Title + '%' OR a.AT_Detail LIKE '%' + @Title + '%'", "") & ") "
+        End Get
+    End Property
 
     Private Sub AddFilterParams(ByVal cmd As SqlCommand)
         Dim j As Tuple(Of DateTime, DateTime) = Julat()
@@ -180,7 +201,8 @@ Partial Class html_administration_audittrail
                 "  SUM(CASE WHEN k.Kat = 'add' THEN 1 ELSE 0 END) AS AddCnt, " &
                 "  SUM(CASE WHEN k.Kat = 'upd' THEN 1 ELSE 0 END) AS UpdCnt, " &
                 "  SUM(CASE WHEN k.Kat = 'del' THEN 1 ELSE 0 END) AS DelCnt, " &
-                "  SUM(CASE WHEN k.Kat = 'log' THEN 1 ELSE 0 END) AS LogCnt " &
+                "  SUM(CASE WHEN k.Kat = 'log' THEN 1 ELSE 0 END) AS LogCnt, " &
+                "  SUM(CASE WHEN k.Kat = 'fail' THEN 1 ELSE 0 END) AS FailCnt " &
                 "FROM TBL_AUDITTRAIL a CROSS APPLY (SELECT " & KAT_SQL & " AS Kat) k " & WHERE_SQL
             Using cmd As New SqlCommand(sqlStat, conn)
                 cmd.CommandTimeout = 120
@@ -194,6 +216,7 @@ Partial Class html_administration_audittrail
                         litUpd.Text = ToInt(rdr("UpdCnt")).ToString("N0")
                         litDel.Text = ToInt(rdr("DelCnt")).ToString("N0")
                         litLog.Text = ToInt(rdr("LogCnt")).ToString("N0")
+                        litFail.Text = ToInt(rdr("FailCnt")).ToString("N0")
                     End If
                 End Using
             End Using
@@ -223,7 +246,7 @@ Partial Class html_administration_audittrail
         Dim sql As String =
             "SELECT a.AT_Id, a.AT_UserId, a.AT_UserName, a.AT_IP, a.AT_Action, a.AT_Module, " &
             "       CAST(a.AT_Title AS varchar(max)) AS AT_Title, a.AT_datetime, " &
-            "       ISNULL(u.Users_Fullname, '') AS FullName, k.Kat " &
+            "       ISNULL(u.Users_Fullname, '') AS FullName, k.Kat, " & RefCols & " " &
             "FROM TBL_AUDITTRAIL a " &
             "LEFT JOIN TBL_USERS u ON u.Users_Id = a.AT_UserId " &
             "CROSS APPLY (SELECT " & KAT_SQL & " AS Kat) k " & WHERE_SQL &
@@ -347,7 +370,7 @@ Partial Class html_administration_audittrail
     End Function
 
     '----- Excel (.xlsx sebenar tanpa pustaka luar, sama seperti Laporan Inspektorat) -----
-    Private Shared ReadOnly LebarLajur() As Double = {6, 24, 18, 9, 28, 20, 20, 60, 16}
+    Private Shared ReadOnly LebarLajur() As Double = {6, 24, 18, 9, 28, 20, 20, 60, 16, 24, 50}
 
     Private Function BinaXlsx(ByVal dt As DataTable) As Byte()
         Dim ms As New IO.MemoryStream()
@@ -437,7 +460,7 @@ Partial Class html_administration_audittrail
         sb.Append("<row r=""2"">" & SelStr("A2", "ProLesen - Majlis Perbandaran Kluang | " & TeksPenapis(), 2) & "</row>")
         sb.Append("<row r=""3"">" & SelStr("A3", DijanaOleh() & " | " & dt.Rows.Count.ToString("N0") & " records", 2) & "</row>")
 
-        Dim tajuk() As String = {"No.", "Date / Time", "User Name", "User ID", "Full Name", "Action", "Module", "Title", "IP Address"}
+        Dim tajuk() As String = {"No.", "Date / Time", "User Name", "User ID", "Full Name", "Action", "Module", "Title", "IP Address", "Reference", "Detail"}
         sb.Append("<row r=""5"">")
         For i As Integer = 0 To tajuk.Length - 1
             sb.Append(SelStr(Ruj(i, 5), tajuk(i), 3))
@@ -457,11 +480,13 @@ Partial Class html_administration_audittrail
             sb.Append(SelStr(Ruj(6, baris), Convert.ToString(r("AT_Module")), 4))
             sb.Append(SelStr(Ruj(7, baris), Convert.ToString(r("AT_Title")), 4))
             sb.Append(SelStr(Ruj(8, baris), Convert.ToString(r("AT_IP")), 4))
+            sb.Append(SelStr(Ruj(9, baris), Convert.ToString(r("AT_Ref")), 4))
+            sb.Append(SelStr(Ruj(10, baris), Convert.ToString(r("AT_Detail")), 4))
             sb.Append("</row>")
         Next
 
         sb.Append("</sheetData>")
-        If baris > 5 Then sb.Append("<autoFilter ref=""A5:I" & baris & """/>")
+        If baris > 5 Then sb.Append("<autoFilter ref=""A5:K" & baris & """/>")
         sb.Append("<pageMargins left=""0.4"" right=""0.4"" top=""0.5"" bottom=""0.5"" header=""0.3"" footer=""0.3""/>")
         sb.Append("<pageSetup paperSize=""9"" orientation=""landscape""/>")
         sb.Append("</worksheet>")
@@ -522,11 +547,11 @@ Partial Class html_administration_audittrail
         pNota.SpacingAfter = 8
         doc.Add(pNota)
 
-        Dim tbl As New PdfX.PdfPTable(8)
+        Dim tbl As New PdfX.PdfPTable(9)
         tbl.WidthPercentage = 100
-        tbl.SetWidths(New Single() {4, 12, 16, 9, 12, 12, 26, 9})
+        tbl.SetWidths(New Single() {4, 11, 15, 8, 11, 10, 11, 23, 7})
         tbl.HeaderRows = 1
-        For Each h As String In {"No.", "Date / Time", "User", "Action", "Module", "IP Address", "Title", "Record ID"}
+        For Each h As String In {"No.", "Date / Time", "User", "Action", "Module", "IP Address", "Reference", "Title / Detail", "Record ID"}
             Dim c As New PdfX.PdfPCell(New Pdf.Phrase(h, fKepala))
             c.BackgroundColor = New Pdf.BaseColor(&HEE, &HF1, &HFA)
             c.BorderColor = New Pdf.BaseColor(&HDD, &HE2, &HEE)
@@ -546,7 +571,8 @@ Partial Class html_administration_audittrail
                                      Convert.ToString(r("AT_Action")),
                                      Convert.ToString(r("AT_Module")),
                                      Convert.ToString(r("AT_IP")),
-                                     Convert.ToString(r("AT_Title")),
+                                     Convert.ToString(r("AT_Ref")),
+                                     TajukDanButiran(r),
                                      Convert.ToString(r("AT_Id"))}
                 Dim c As New PdfX.PdfPCell(New Pdf.Phrase(v, fSel))
                 c.BackgroundColor = latar
@@ -557,7 +583,7 @@ Partial Class html_administration_audittrail
         Next
         If dt.Rows.Count = 0 Then
             Dim c As New PdfX.PdfPCell(New Pdf.Phrase("No activity found for the selected filters.", fSel))
-            c.Colspan = 8
+            c.Colspan = 9
             c.Padding = 10
             c.HorizontalAlignment = Pdf.Element.ALIGN_CENTER
             tbl.AddCell(c)
@@ -565,6 +591,12 @@ Partial Class html_administration_audittrail
         doc.Add(tbl)
         doc.Close()
         Return ms.ToArray()
+    End Function
+
+    Private Shared Function TajukDanButiran(ByVal r As DataRow) As String
+        Dim t As String = Convert.ToString(r("AT_Title"))
+        Dim d As String = Convert.ToString(r("AT_Detail"))
+        Return If(d = "", t, t & vbLf & "Detail: " & d)
     End Function
 
     ''' <summary>Kaki setiap halaman PDF: dijana oleh / tarikh (kiri) dan nombor halaman (kanan).</summary>

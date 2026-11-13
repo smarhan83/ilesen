@@ -781,7 +781,7 @@ Partial Class sepandukSemakanIK
 
                     trans.Commit()
 
-                    GlobalClass.auditTrail("Semakan Sepanduk - Pegawai IK", noRujukan, "Hantar")
+                    GlobalClass.auditTrail("Semakan Sepanduk - Pegawai IK", noRujukan, GlobalClass.AUDIT_HANTAR, noRujukan, "")
                     ShowAlert("success", "", "Rekod berjaya disimpan dan dihantar kepada KB Inspektorat")
                     ResetPanel()
                     GridView1.DataBind()
@@ -798,7 +798,7 @@ Partial Class sepandukSemakanIK
     '===================== KB INSPEKTORAT =====================
     Protected Sub FormViewKBInspektorat_ItemInserting(sender As Object, e As System.Web.UI.WebControls.FormViewInsertEventArgs) Handles FormViewKBInspektorat.ItemInserting
         Dim noRujukan As String = Convert.ToString(GridView1.SelectedDataKey("SemakanIK_NoRujukan"))
-        GlobalClass.auditTrail("Semakan KB Inspektorat", noRujukan, "Kunci Masuk")
+        GlobalClass.auditTrail("Semakan KB Inspektorat", noRujukan, GlobalClass.AUDIT_HANTAR, noRujukan, "")
     End Sub
 
     Protected Sub FormViewKBInspektorat_ItemInserted(sender As Object, e As System.Web.UI.WebControls.FormViewInsertedEventArgs) Handles FormViewKBInspektorat.ItemInserted
@@ -843,7 +843,7 @@ Partial Class sepandukSemakanIK
     '===================== KB LESEN =====================
     Protected Sub FormViewKBLesen_ItemInserting(sender As Object, e As System.Web.UI.WebControls.FormViewInsertEventArgs) Handles FormViewKBLesen.ItemInserting
         Dim noRujukan As String = Convert.ToString(GridView1.SelectedDataKey("SemakanIK_NoRujukan"))
-        GlobalClass.auditTrail("Semakan KB Lesen", noRujukan, "Kunci Masuk")
+        GlobalClass.auditTrail("Semakan KB Lesen", noRujukan, GlobalClass.AUDIT_HANTAR, noRujukan, "")
     End Sub
 
     Protected Sub FormViewKBLesen_ItemInserted(sender As Object, e As System.Web.UI.WebControls.FormViewInsertedEventArgs) Handles FormViewKBLesen.ItemInserted
@@ -858,7 +858,7 @@ Partial Class sepandukSemakanIK
     '===================== KJ LESEN =====================
     Protected Sub FormViewKJLesen_ItemInserting(sender As Object, e As System.Web.UI.WebControls.FormViewInsertEventArgs) Handles FormViewKJLesen.ItemInserting
         Dim noRujukan As String = Convert.ToString(GridView1.SelectedDataKey("SemakanIK_NoRujukan"))
-        GlobalClass.auditTrail("Perakuan KJ Lesen", noRujukan, "Kunci Masuk")
+        GlobalClass.auditTrail("Perakuan KJ Lesen", noRujukan, GlobalClass.AUDIT_HANTAR, noRujukan, "")
     End Sub
 
     Protected Sub FormViewKJLesen_ItemInserted(sender As Object, e As System.Web.UI.WebControls.FormViewInsertedEventArgs) Handles FormViewKJLesen.ItemInserted
@@ -893,7 +893,7 @@ Partial Class sepandukSemakanIK
     '===================== KERANI LESEN - KEMASKINI KEWANGAN =====================
     Protected Sub FormViewKerani_ItemInserting(sender As Object, e As System.Web.UI.WebControls.FormViewInsertEventArgs) Handles FormViewKerani.ItemInserting
         Dim noRujukan As String = Convert.ToString(GridView1.SelectedDataKey("SemakanIK_NoRujukan"))
-        GlobalClass.auditTrail("Kemaskini Kewangan - Kerani Lesen", noRujukan, "Kunci Masuk")
+        GlobalClass.auditTrail("Kemaskini Kewangan - Kerani Lesen", noRujukan, GlobalClass.AUDIT_HANTAR, noRujukan, "")
 
         '// pastikan Kewangan_Tindakan diisi dari nilai syor KB Lesen (bukan input bebas)
         Dim hdn As HiddenField = DirectCast(FormViewKerani.FindControl("hdnTindakan"), HiddenField)
