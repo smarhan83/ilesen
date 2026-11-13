@@ -33,7 +33,15 @@ Partial Class html_administration_user
         'GlobalClass.auditTrail("User Management", title, "Insert")
     End Sub
 
+    ' Salinan profil sebelum kemaskini (untuk audit)
+    Private _auditSebelum As Dictionary(Of String, String)
+
     Protected Sub FormView1_ItemUpdated(ByVal sender As Object, ByVal e As System.Web.UI.WebControls.FormViewUpdatedEventArgs) Handles FormView1.ItemUpdated
+        If e.Exception Is Nothing AndAlso _auditSebelum IsNot Nothing Then
+            Dim uid As Integer = CInt(Session.Item("sessionUsersId"))
+            AuditAliran.LogPerubahanRekod("User Profile", GlobalClass.AUDIT_KEMASKINI, Convert.ToString(Session.Item("sessionUserName")),
+                                          _auditSebelum, AuditAliran.Snapshot("TBL_USERS", "Users_Id", uid))
+        End If
         lblMessageUpdate.Text = "Kemaskini berjaya"
     End Sub
 
@@ -53,8 +61,8 @@ Partial Class html_administration_user
 
         updateUploadFile(ufPicture, SaveLocation)
 
-        '//run audit trail : Insert : Update : Delete : Login : Logout
-        GlobalClass.auditTrail("User Management", title, "Update")
+        ' Audit: simpan salinan sebelum; perubahan sebenar direkod dalam ItemUpdated
+        _auditSebelum = AuditAliran.Snapshot("TBL_USERS", "Users_Id", CInt(Session.Item("sessionUsersId")))
 
     End Sub
 

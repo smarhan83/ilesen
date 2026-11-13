@@ -615,6 +615,8 @@ Partial Class semakpembatalan1
 
             Try
                 myCommandSelect.ExecuteNonQuery()
+                AuditAliran.Log(idWindowTitle.InnerText, If(cb.Checked, AuditAliran.TERBIT_SURAT, AuditAliran.TARIK_SURAT), PermohonanID, 0, True,
+                                AuditAliran.Status(PermohonanID, 0, True), If(cb.Checked, "Surat pembatalan diterbitkan kepada pemohon", "Surat pembatalan tidak lagi diterbitkan"))
 
                 If cb.Checked Then
                     tabSurat.Visible = False
@@ -1414,6 +1416,11 @@ Partial Class semakpembatalan1
 
             Try
                 myCommandSelect.ExecuteNonQuery()
+                AuditAliran.Log(idWindowTitle.InnerText, AuditAliran.KEPUTUSAN_MESYUARAT, PermohonanID, 0, True, AuditAliran.Status(PermohonanID, 0, True),
+                                AuditAliran.Gabung(If(TB_NoMesyuarat.Text.Trim() = "", "", "No. Mesyuarat: " & TB_NoMesyuarat.Text.Trim()),
+                                                   If(TB_TarikhMesyuarat.Text = "", "", "Tarikh: " & TB_TarikhMesyuarat.Text),
+                                                   If(DDL_TindakanBatal.SelectedItem Is Nothing OrElse DDL_TindakanBatal.SelectedValue = "", "", "Tindakan: " & DDL_TindakanBatal.SelectedItem.Text),
+                                                   If(CB_IsPulang.Checked, "Pulang: Ya" & If(TB_TarikhPulang.Text = "", "", " (" & TB_TarikhPulang.Text & ")"), "")))
                 ShowAlert("success", "", "Rekod mesyuarat telah dikemaskini.")
             Catch ex As Exception
                 MessageBox(ex.Message, Me)

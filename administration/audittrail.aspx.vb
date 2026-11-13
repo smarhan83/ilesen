@@ -16,6 +16,11 @@ Partial Class html_administration_audittrail
     Private Const KAT_SQL As String =
         "CASE " &
         " WHEN a.AT_Action IN ('Login Gagal','Akses Ditolak') THEN 'fail' " &
+        " WHEN a.AT_Action IN ('Muat Naik','Muat Turun','Export') THEN 'doc' " &
+        " WHEN a.AT_Action IN ('Hantar','Hantar Permohonan','Hantar Semakan Surat','Tetapkan Pegawai','Hantar Ulasan','Pengesahan Ulasan'," &
+        "   'Sokong','Tidak Sokong','Lulus','Tolak','Kembali ke IK','Terbit Surat','Tarik Balik Surat','Keputusan Mesyuarat') THEN 'wf' " &
+        " WHEN a.AT_Action IN ('Hantar','Hantar Permohonan','Hantar Semakan Surat','Tetapkan Pegawai','Hantar Ulasan','Pengesahan Ulasan'," &
+        "   'Sokong','Tidak Sokong','Lulus','Tolak','Kembali ke IK','Terbit Surat','Tarik Balik Surat','Keputusan Mesyuarat') THEN 'wf' " &
         " WHEN a.AT_Action IN ('Login','Logout','Log Keluar') THEN 'log' " &
         " WHEN a.AT_Action IN ('Delete','Nyah Aktif','Padam','Buang Kebenaran') OR a.AT_Action LIKE 'Delete%' OR a.AT_Action LIKE 'Remove%' OR a.AT_Action LIKE 'Padam%' THEN 'del' " &
         " WHEN a.AT_Action IN ('Insert','Tambah','Daftar','Maklumat','Kunci Masuk') OR a.AT_Action LIKE 'Add%' OR a.AT_Action LIKE 'Insert%' OR a.AT_Action LIKE 'Tambah%' THEN 'add' " &
@@ -202,6 +207,8 @@ Partial Class html_administration_audittrail
                 "  SUM(CASE WHEN k.Kat = 'upd' THEN 1 ELSE 0 END) AS UpdCnt, " &
                 "  SUM(CASE WHEN k.Kat = 'del' THEN 1 ELSE 0 END) AS DelCnt, " &
                 "  SUM(CASE WHEN k.Kat = 'log' THEN 1 ELSE 0 END) AS LogCnt, " &
+                "  SUM(CASE WHEN k.Kat = 'wf' THEN 1 ELSE 0 END) AS WfCnt, " &
+                "  SUM(CASE WHEN k.Kat = 'doc' THEN 1 ELSE 0 END) AS DocCnt, " &
                 "  SUM(CASE WHEN k.Kat = 'fail' THEN 1 ELSE 0 END) AS FailCnt " &
                 "FROM TBL_AUDITTRAIL a CROSS APPLY (SELECT " & KAT_SQL & " AS Kat) k " & WHERE_SQL
             Using cmd As New SqlCommand(sqlStat, conn)
@@ -217,6 +224,8 @@ Partial Class html_administration_audittrail
                         litDel.Text = ToInt(rdr("DelCnt")).ToString("N0")
                         litLog.Text = ToInt(rdr("LogCnt")).ToString("N0")
                         litFail.Text = ToInt(rdr("FailCnt")).ToString("N0")
+                        litWf.Text = ToInt(rdr("WfCnt")).ToString("N0")
+                        litDoc.Text = ToInt(rdr("DocCnt")).ToString("N0")
                     End If
                 End Using
             End Using

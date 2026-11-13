@@ -62,7 +62,17 @@ Partial Class html_administration_user
 
     End Sub
 
+    ' Salinan rekod pengguna sebelum kemaskini (untuk audit perubahan peranan / maklumat)
+    Private _auditSebelum As Dictionary(Of String, String)
+    Private _auditUserId As Integer
+
     Protected Sub FormView1_ItemUpdated(ByVal sender As Object, ByVal e As System.Web.UI.WebControls.FormViewUpdatedEventArgs) Handles FormView1.ItemUpdated
+        If e.Exception Is Nothing AndAlso _auditSebelum IsNot Nothing Then
+            Dim selepas As Dictionary(Of String, String) = AuditAliran.Snapshot("TBL_USERS", "Users_Id", _auditUserId)
+            Dim nama As String = ""
+            selepas.TryGetValue("Users_Name", nama)
+            AuditAliran.LogPerubahanRekod("User Management", GlobalClass.AUDIT_KEMASKINI, If(nama, "ID " & _auditUserId), _auditSebelum, selepas)
+        End If
         GridView1.DataBind()
     End Sub
 
@@ -78,8 +88,11 @@ Partial Class html_administration_user
             e.Cancel = True
         End If
 
-        '//run audit trail : Insert : Update : Delete : Login : Logout
-        GlobalClass.auditTrail("User Management", title, "Update")
+        ' Audit: simpan salinan sebelum; perubahan sebenar direkod dalam ItemUpdated
+        If Not e.Cancel Then
+            _auditUserId = CInt(GridView1.SelectedValue)
+            _auditSebelum = AuditAliran.Snapshot("TBL_USERS", "Users_Id", _auditUserId)
+        End If
     End Sub
 
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load

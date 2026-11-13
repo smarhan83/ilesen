@@ -442,6 +442,7 @@ Partial Class appregister1
                     Sql = "UPDATE LESEN_Permohonan SET StatusID=10, BantingID=@BantingID WHERE StatusID=0 AND Permohonan_ID=@Permohonan_ID"
                 End If
 
+                Dim statusLamaHantar As String = AuditAliran.Status(CInt(hfid), 0, cb)
                 Dim result As Integer
                 Using myCommand As New SqlCommand(Sql, myConnection)
                     myCommand.Parameters.AddWithValue("@Permohonan_ID", hfid)
@@ -454,6 +455,7 @@ Partial Class appregister1
                 If result < 1 Then
                     ShowAlert("error", "", "Gagal hantar")
                 Else
+                    AuditAliran.Log(idWindowTitle.InnerText, AuditAliran.HANTAR_PERMOHONAN, CInt(hfid), 0, cb, statusLamaHantar)
                     ShowAlert("success", "", "Berjaya hantar")
                     GridView1.DataBind()
                 End If
@@ -3211,6 +3213,7 @@ Partial Class appregister1
                 End Using
             End Using
 
+            AuditAliran.LogSemakanSurat(idWindowTitle.InnerText, PermohonanAgensi_ID, False)
             GridViewMaintenanceTemplate.DataBind()
             MessageBox("Berjaya dihantar untuk semakan surat", Me)
         End If
@@ -3237,6 +3240,7 @@ Partial Class appregister1
                 End Using
             End Using
 
+            AuditAliran.LogSemakanSurat(idWindowTitle.InnerText, PermohonanAgensi_ID, True)
             GridViewJabatanAgensiBatal.DataBind()
             MessageBox("Berjaya dihantar untuk semakan surat", Me)
         End If
@@ -3321,6 +3325,7 @@ Partial Class appregister1
                     Sql = "UPDATE LESEN_Permohonan SET StatusID = 10, BantingID = @BantingID WHERE StatusID = 0 AND Permohonan_ID = @PermohonanID"
                 End If
 
+                Dim statusLamaHantar As String = AuditAliran.Status(CInt(hfid.Value), 0, cb.Checked)
                 Dim result As Integer
                 Using myCommand As New SqlCommand(Sql, myConnection)
                     myCommand.Parameters.AddWithValue("@PermohonanID", hfid.Value)
@@ -3333,6 +3338,7 @@ Partial Class appregister1
                 If result < 1 Then
                     ShowAlert("error", "", "Gagal hantar")
                 Else
+                    AuditAliran.Log(idWindowTitle.InnerText, AuditAliran.HANTAR_PERMOHONAN, CInt(hfid.Value), 0, cb.Checked, statusLamaHantar)
                     ShowAlert("success", "", "Berjaya hantar")
                     GridView1.DataBind()
                     backToList()
@@ -4397,7 +4403,10 @@ Partial Class appregister1
                 myCommandSelect.Parameters.AddWithValue("@KategoriEkspo", GetKategoriEkspoValue(DDL_KategoriEkspo_ins, TB_KategoriEkspoLain_ins))
 
                 Try
+                    Dim sebelum As Dictionary(Of String, String) = AuditAliran.Snapshot("LESEN_PermohonanPembetulan", "Permohonan_ID", PermohonanID)
                     myCommandSelect.ExecuteNonQuery()
+                    AuditAliran.LogPerubahan(idWindowTitle.InnerText, PermohonanID, False, sebelum,
+                                             AuditAliran.Snapshot("LESEN_PermohonanPembetulan", "Permohonan_ID", PermohonanID), "Pembetulan Maklumat Permohonan")
                     ShowAlert("success", "", "Pembetulan maklumat permohonan telah dikemaskini.")
                 Catch ex As Exception
                     MessageBox(ex.Message, Me)

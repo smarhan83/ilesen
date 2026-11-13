@@ -37,7 +37,7 @@
         .kl-frow > .kl-f-w { flex: 1.4 1 190px; }
         .kl-filter-actions { display: flex; gap: 8px; margin-left: auto; }
 
-        .kl-stats { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 12px; padding: 16px 20px; border-bottom: 1px solid #E6EBF5; }
+        .kl-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; padding: 16px 20px; border-bottom: 1px solid #E6EBF5; }
         .kl-stat { border: 1px solid #e3e8f2; border-radius: 10px; padding: 12px 14px; background: #fff; display: flex; align-items: center; gap: 12px; }
         .kl-stat .ic { width: 38px; height: 38px; flex: 0 0 38px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 17px; }
         .kl-stat .v { font-size: 20px; font-weight: 800; color: #1f2937; line-height: 1.15; }
@@ -48,6 +48,8 @@
         .kl-stat.del .ic { background: #FCEAEA; color: #C0392B; }
         .kl-stat.log .ic { background: #E4DFFB; color: #2E3192; }
         .kl-stat.fail .ic { background: #FFE9E3; color: #B4441F; }
+        .kl-stat.wf .ic { background: #E0F2F1; color: #00695C; }
+        .kl-stat.doc .ic { background: #F3E8FF; color: #7E3AF2; }
 
         .kl-table { margin: 0 !important; width: 100%; }
         .kl-table th { background: #EEF1FA !important; color: #3F4A6B !important; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; padding: 12px 16px !important; border-bottom: 1px solid #e9ecef !important; white-space: nowrap; }
@@ -76,6 +78,8 @@
         .kl-status-badge.log { background: #E4DFFB; color: #2E3192; }
         .kl-status-badge.oth { background: #f1f3f5; color: #6c757d; }
         .kl-status-badge.fail { background: #FFE9E3; color: #B4441F; }
+        .kl-status-badge.wf { background: #E0F2F1; color: #00695C; }
+        .kl-status-badge.doc { background: #F3E8FF; color: #6B21A8; }
         .kl-ref { display: inline-block; margin-top: 3px; padding: 1px 7px; border-radius: 5px; background: #EEF1FA; color: #2E3192; font-size: 11.5px; font-weight: 600; }
         .atm-detail { background: #FFF8F5; border-color: #F3D9CF; }
 
@@ -212,6 +216,8 @@
                     <div class="kl-stat upd"><div class="ic"><i class="bi bi-pencil-fill"></i></div><div><div class="v"><asp:Literal ID="litUpd" runat="server" Text="0" /></div><div class="k">Update</div></div></div>
                     <div class="kl-stat del"><div class="ic"><i class="bi bi-trash3-fill"></i></div><div><div class="v"><asp:Literal ID="litDel" runat="server" Text="0" /></div><div class="k">Delete / Remove</div></div></div>
                     <div class="kl-stat log"><div class="ic"><i class="bi bi-box-arrow-in-right"></i></div><div><div class="v"><asp:Literal ID="litLog" runat="server" Text="0" /></div><div class="k">Login / Logout</div></div></div>
+                    <div class="kl-stat wf"><div class="ic"><i class="bi bi-diagram-3"></i></div><div><div class="v"><asp:Literal ID="litWf" runat="server" Text="0" /></div><div class="k">Approval / Workflow</div></div></div>
+                    <div class="kl-stat doc"><div class="ic"><i class="bi bi-file-earmark-arrow-down"></i></div><div><div class="v"><asp:Literal ID="litDoc" runat="server" Text="0" /></div><div class="k">Upload / Download</div></div></div>
                     <div class="kl-stat fail"><div class="ic"><i class="bi bi-shield-exclamation"></i></div><div><div class="v"><asp:Literal ID="litFail" runat="server" Text="0" /></div><div class="k">Failed / Denied</div></div></div>
                 </div>
 
