@@ -2013,7 +2013,8 @@ Partial Class kelulusan1
     End Sub
 
     ' Seksyen Lampiran: lampiran permohonan ('LA') untuk semua; lampiran MPK ('U') hanya untuk agensi dalaman (Jabatan Lesen / jabatan dalaman)
-    Private Sub SqlDataSourceTabLampiran_Selecting(sender As Object, e As SqlDataSourceSelectingEventArgs) Handles SqlDataSourceTabLampiran.Selecting
+    ' Disambungkan melalui OnSelecting dalam markup (kawalan berada dalam templat, tiada pemboleh ubah WithEvents)
+    Protected Sub SqlDataSourceTabLampiran_Selecting(sender As Object, e As SqlDataSourceSelectingEventArgs)
         Dim estateId As Integer = If(IsNumeric(Session("sessionEstateID")), CInt(Session("sessionEstateID")), 0)
         Dim isAgensiDalaman As Boolean = getJabatanLesen(estateId) OrElse getJabatanDalaman(estateId)
         e.Command.Parameters("@IsAgensiDalaman").Value = If(isAgensiDalaman, 1, 0)
