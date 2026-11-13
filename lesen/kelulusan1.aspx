@@ -1822,7 +1822,7 @@ ORDER BY SortOrder">
 
                         </div>
 
-						<asp:SqlDataSource ID="SqlDataSourceTabLampiran" runat="server"
+						<asp:SqlDataSource ID="SqlDataSourceTabLampiran" runat="server" OnSelecting="SqlDataSourceTabLampiran_Selecting"
 							ConnectionString="<%$ ConnectionStrings:webcon_ConnectionStr %>"
 							SelectCommand=" SELECT a.*, b.StatusID FROM LESEN_PermohonanFail a INNER JOIN LESEN_Permohonan b ON a.PermohonanFail_PermohonanID = b.Permohonan_ID 
 							WHERE a.PermohonanFail_PermohonanID = @Permohonan_ID
