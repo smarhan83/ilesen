@@ -702,10 +702,12 @@ Partial Class pembatalan1
             myCommand.Parameters.AddWithValue("@PengesahID", Session.Item("sessionUsersId"))
 
             If ikAssignCheck Then
+                Dim statusLama As String = AuditAliran.Status(Permohonan_ID, AgensiID, True)
                 myConnection.Open()
                 Dim recordset As Integer = myCommand.ExecuteNonQuery()
 
                 If recordset > 0 Then
+                    LogSubmitAudit(Permohonan_ID, AgensiID, ApprStatusID, statusLama, ddlSokongUlasan, txtNotaUlasan, ddlPengesahSokongUlasan, txtPengesahNotaKelulusan)
                     ShowAlert("success", "", "Rekod berjaya dihantar")
                     GridView1.DataBind()
                     backToList()
@@ -714,6 +716,25 @@ Partial Class pembatalan1
                 ShowAlert("error", "", "Sila Pilih Staff")
             End If
         End Using
+    End Sub
+
+    ''' <summary>Audit bagi butang Simpan / Hantar Ulasan (status 2 - 5) mengikut langkah semasa (pembatalan).</summary>
+    Private Sub LogSubmitAudit(pid As Integer, agensiId As Integer, apprStatusId As Integer, statusLama As String,
+                               ddlSokong As DropDownList, txtNota As TextBox, ddlPengesah As DropDownList, txtPengesahNota As TextBox)
+        Dim tindakan As String = AuditAliran.HANTAR_ULASAN
+        Dim catatan As String = ""
+        Select Case apprStatusId
+            Case 2
+                tindakan = AuditAliran.TETAPKAN_PEGAWAI
+            Case 4
+                tindakan = AuditAliran.PENGESAHAN_ULASAN
+                catatan = AuditAliran.Gabung(If(ddlPengesah IsNot Nothing AndAlso ddlPengesah.SelectedItem IsNot Nothing, "Keputusan: " & ddlPengesah.SelectedItem.Text, ""),
+                                             AuditAliran.Nota("Nota", If(txtPengesahNota IsNot Nothing, txtPengesahNota.Text, "")))
+            Case 5
+                catatan = AuditAliran.Gabung(If(ddlSokong IsNot Nothing AndAlso ddlSokong.SelectedItem IsNot Nothing, "Keputusan: " & ddlSokong.SelectedItem.Text, ""),
+                                             AuditAliran.Nota("Nota", If(txtNota IsNot Nothing, txtNota.Text, "")))
+        End Select
+        AuditAliran.Log(idWindowTitle.InnerText, tindakan, pid, agensiId, True, statusLama, catatan)
     End Sub
 
     Private Function getikAssignCheck(permohonan_ID As Integer) As Boolean
@@ -775,10 +796,16 @@ Partial Class pembatalan1
             myCommand.Parameters.AddWithValue("@NotaKelulusanBatal", txtNotaKelulusan.Text)
             myCommand.Parameters.AddWithValue("@NotaKelulusanKJ", rblNotaKelulusanKJ.SelectedValue)
 
+            Dim statusLama As String = AuditAliran.Status(Permohonan_ID, 0, True)
             myConnection.Open()
             Dim recordset As Integer = myCommand.ExecuteNonQuery()
 
             If recordset > 0 Then
+                ' Audit: status 5 = Pengesah sokong, status 8 = Peraku lulus pembatalan
+                AuditAliran.Log(idWindowTitle.InnerText, If(ApprStatusID = 5, AuditAliran.SOKONG, AuditAliran.LULUS), Permohonan_ID, 0, True, statusLama,
+                                AuditAliran.Gabung(AuditAliran.Nota("Nota Pengesah", txtNotaKelulusanPengesah.Text),
+                                                   AuditAliran.Nota("Nota Kelulusan", txtNotaKelulusan.Text),
+                                                   If(ApprStatusID = 8 AndAlso rblNotaKelulusanKJ.SelectedItem IsNot Nothing, "KJ: " & rblNotaKelulusanKJ.SelectedItem.Text, "")))
                 ShowAlert("success", "", "Rekod berjaya dihantar")
             End If
         End Using
@@ -826,10 +853,15 @@ Partial Class pembatalan1
             myCommand.Parameters.AddWithValue("@NotaKelulusanPengesahBatal", txtNotaKelulusanPengesah.Text)
             myCommand.Parameters.AddWithValue("@NotaKelulusanBatal", txtNotaKelulusan.Text)
 
+            Dim statusLama As String = AuditAliran.Status(Permohonan_ID, 0, True)
             myConnection.Open()
             Dim recordset As Integer = myCommand.ExecuteNonQuery()
 
             If recordset > 0 Then
+                ' Audit: status 5 = Pengesah tidak sokong, selain itu = tolak
+                AuditAliran.Log(idWindowTitle.InnerText, If(ApprStatusID = 5, AuditAliran.TIDAK_SOKONG, AuditAliran.TOLAK), Permohonan_ID, 0, True, statusLama,
+                                AuditAliran.Gabung(AuditAliran.Nota("Nota Pengesah", txtNotaKelulusanPengesah.Text),
+                                                   AuditAliran.Nota("Nota Kelulusan", txtNotaKelulusan.Text)))
                 ShowAlert("success", "", "Rekod berjaya dihantar")
             End If
         End Using
@@ -865,8 +897,13 @@ Partial Class pembatalan1
             myCommand.Parameters.AddWithValue("@Catatan", Catatan)
             myCommand.Parameters.AddWithValue("@CreatedBy", Session.Item("SessionUserName"))
 
+            Dim agensiId As Integer = If(IsDBNull(GridView1.SelectedDataKey.Values(1)), 0, CInt(GridView1.SelectedDataKey.Values(1)))
+            Dim statusLama As String = AuditAliran.Status(Permohonan_ID, agensiId, True)
+
             myConnection.Open()
             myCommand.ExecuteNonQuery()
+
+            AuditAliran.Log(idWindowTitle.InnerText, AuditAliran.KEMBALI_IK, Permohonan_ID, agensiId, True, statusLama, AuditAliran.Nota("Catatan", Catatan))
         End Using
 
         txtCatatanKembaliIK.Text = ""

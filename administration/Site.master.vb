@@ -11,6 +11,13 @@ Partial Class html_administration_Site
 
         Dim allowedAccess As Boolean = GlobalClass.CheckPagePermission("Read")
         If allowedAccess = False Then
+            ' Audit: akses ditolak
+            Dim uid As Integer = 0
+            Integer.TryParse(Convert.ToString(Session.Item("sessionUsersId")), uid)
+            Dim url As String = Request.Url.PathAndQuery
+            GlobalClass.auditTrailUser(uid, Convert.ToString(Session.Item("sessionUserName")), "Kawalan Akses", "Akses ditolak: " & url,
+                                       GlobalClass.AUDIT_AKSES_DITOLAK, url,
+                                       If(uid > 0, "Tiada kebenaran untuk page ini", "Tiada sesi (belum log masuk atau sesi tamat)"))
             Response.Redirect("deniedpage.aspx")
         End If
 

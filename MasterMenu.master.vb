@@ -132,6 +132,7 @@ Partial Class MasterMenu
 
 
         If allowedAccess = False Then
+            LogAksesDitolak(CurUrl)
             Response.Redirect("~/administration/deniedpage.aspx")
         End If
 
@@ -335,6 +336,9 @@ Partial Class MasterMenu
                 GlobalClass.GlobalVariables.urlSessionEnd = ""
             End If
         Else
+            ' Audit: log masuk gagal (kata laluan tidak direkodkan)
+            LogLoginGagal(txtUsername, GlobalClass.Encrypt(paraPassword, "kmbportal", True))
+
             Session.Item("sessionLoginDenied") = "Maklumat Pengguna Tidak Sah. Sila Cuba Sekali Lagi"
             txtError.Text = Session.Item("sessionLoginDenied")
             'Response.Redirect("Default.aspx")
@@ -349,6 +353,61 @@ Partial Class MasterMenu
 
         End If
 
+    End Sub
+
+    ''' <summary>
+    ''' Rekod log masuk yang gagal dalam audit trail, bersama sebab: ID tidak wujud, kata laluan salah,
+    ''' akaun tidak aktif atau tiada kumpulan pengguna. Padanan ID sama seperti btnLogin_Click.
+    ''' </summary>
+    Private Sub LogLoginGagal(ByVal idCubaan As String, ByVal kataLaluanEnc As String)
+        Dim userId As Integer = 0
+        Dim sebab As String = "ID pengguna tidak wujud"
+        Try
+            Using conn As New SqlConnection(ConfigurationManager.ConnectionStrings("webcon_ConnectionStr").ConnectionString)
+                Dim sql As String =
+                    "SELECT TOP 1 u.Users_Id, u.Users_Enabled, " &
+                    "  CASE WHEN u.Users_Password = @pwd THEN 1 ELSE 0 END AS PwdOk, " &
+                    "  CASE WHEN EXISTS (SELECT 1 FROM TBL_USER_GROUPLIST g WHERE g.UGL_Users_Id = u.Users_Id) THEN 1 ELSE 0 END AS AdaKumpulan " &
+                    "FROM VW_TBL_USERS u " &
+                    "WHERE u.Users_Name = @id " &
+                    "   OR CASE WHEN CHARINDEX('@', ISNULL(u.Users_Email, '')) = 0 THEN NULL ELSE SUBSTRING(u.Users_Email, 0, CHARINDEX('@', u.Users_Email)) END = " &
+                    "      CASE WHEN CHARINDEX('@', ISNULL(@id, '')) = 0 THEN @id ELSE SUBSTRING(@id, 0, CHARINDEX('@', @id)) END " &
+                    "ORDER BY CASE WHEN u.Users_Name = @id THEN 0 ELSE 1 END"
+                Using cmd As New SqlCommand(sql, conn)
+                    cmd.Parameters.AddWithValue("@id", If(idCubaan, ""))
+                    cmd.Parameters.AddWithValue("@pwd", If(kataLaluanEnc, ""))
+                    conn.Open()
+                    Using rdr As SqlDataReader = cmd.ExecuteReader()
+                        If rdr.Read() Then
+                            userId = Convert.ToInt32(rdr("Users_Id"))
+                            If Not (Not IsDBNull(rdr("Users_Enabled")) AndAlso CBool(rdr("Users_Enabled"))) Then
+                                sebab = "Akaun tidak aktif"
+                            ElseIf CInt(rdr("PwdOk")) = 0 Then
+                                sebab = "Kata laluan salah"
+                            ElseIf CInt(rdr("AdaKumpulan")) = 0 Then
+                                sebab = "Pengguna tiada kumpulan / peranan"
+                            Else
+                                sebab = "Log masuk ditolak"
+                            End If
+                        End If
+                    End Using
+                End Using
+            End Using
+        Catch ex As Exception
+            sebab = "Log masuk ditolak"
+        End Try
+
+        GlobalClass.auditTrailUser(userId, If(idCubaan, ""), "Login Form", "Login gagal: " & sebab,
+                                   GlobalClass.AUDIT_LOGIN_GAGAL, If(idCubaan, ""), sebab)
+    End Sub
+
+    ''' <summary>Rekod akses ke page tanpa kebenaran (atau tanpa sesi) sebelum dihantar ke deniedpage.</summary>
+    Private Sub LogAksesDitolak(ByVal url As String)
+        Dim userId As Integer = 0
+        Integer.TryParse(Convert.ToString(Session.Item("sessionUsersId")), userId)
+        Dim sebab As String = If(userId > 0, "Tiada kebenaran untuk page ini", "Tiada sesi (belum log masuk atau sesi tamat)")
+        GlobalClass.auditTrailUser(userId, Convert.ToString(Session.Item("sessionUserName")), "Kawalan Akses",
+                                   "Akses ditolak: " & url, GlobalClass.AUDIT_AKSES_DITOLAK, url, sebab)
     End Sub
 
     Private Sub lbFP_Click(sender As Object, e As EventArgs) Handles lbFP.Click

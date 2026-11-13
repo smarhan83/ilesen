@@ -628,6 +628,7 @@ Partial Class semakkelulusan1
             Try
                 myCommandSelect.ExecuteNonQuery()
                 gvTabBayaran.DataBind()
+                AuditAliran.Log(idWindowTitle.InnerText, If(cb.Checked, AuditAliran.TERBIT_SURAT, AuditAliran.TARIK_SURAT), PermohonanID, 0, False, AuditAliran.Status(PermohonanID, 0, False), If(cb.Checked, "Surat diterbitkan kepada pemohon", "Surat tidak lagi diterbitkan"))
 
                 If cb.Checked Then
                     tabSurat.Visible = False
