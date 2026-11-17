@@ -5,6 +5,7 @@ Imports System.Data
 Imports System.Data.SqlClient
 Imports System.Drawing
 Imports System.Drawing.Imaging
+Imports System.Globalization
 Imports System.IO
 Imports System.Linq
 Imports System.Web.UI
@@ -47,7 +48,6 @@ Partial Class appregister1
 #Region "Fields & Constants"
     Public Shared CS As String = ConfigurationManager.ConnectionStrings("webcon_ConnectionStr").ConnectionString
     Private Const MaxFileSizeInBytes As Integer = 5 * 1024 * 1024 ' 5 MB max upload
-    Private Const MaxKelulusanSementaraCount As Integer = 5
 
     Public Property OriginalImageSize As Size
     Public Property NewImageSize As Size
@@ -181,8 +181,9 @@ Partial Class appregister1
                     gvTabBayaran.Columns.Item(4).Visible = False
                     gvTabBayaran.Columns.Item(5).Visible = False
                     gvTabBayaran.Columns.Item(6).Visible = False
-                    If gvKelulusanSementara.Columns.Count >= 6 Then
-                        gvKelulusanSementara.Columns.Item(5).Visible = False
+                    ' Lajur Tindakan sentiasa lajur terakhir
+                    If gvKelulusanSementara.Columns.Count > 0 Then
+                        gvKelulusanSementara.Columns.Item(gvKelulusanSementara.Columns.Count - 1).Visible = False
                     End If
                 End If
             End If
@@ -4767,7 +4768,7 @@ Partial Class appregister1
         Dim dt As New DataTable()
         Using conn As New SqlConnection(CS)
             conn.Open()
-            Dim sql As String = "SELECT KelulusanSementara_ID, Permohonan_ID, TarikhMula, TarikhTamat, CreatorID, CreatedDt, LastModID, LastModDt " &
+            Dim sql As String = "SELECT KelulusanSementara_ID, Permohonan_ID, TarikhMula, TarikhTamat, BayaranLesen, BayaranIklan, StatusBayaran, CreatorID, CreatedDt, LastModID, LastModDt " &
                                 "FROM dbo.LESEN_KelulusanSementara WHERE Permohonan_ID = @Permohonan_ID ORDER BY KelulusanSementara_ID ASC"
             Using cmd As New SqlCommand(sql, conn)
                 cmd.Parameters.AddWithValue("@Permohonan_ID", permohonanId)
@@ -4782,22 +4783,7 @@ Partial Class appregister1
 
         Dim currentCount As Integer = dt.Rows.Count
         If lblKelulusanSementaraCount IsNot Nothing Then
-            lblKelulusanSementaraCount.Text = currentCount.ToString() & " / " & MaxKelulusanSementaraCount.ToString() & " Pembaharuan"
-        End If
-
-        Dim reachedMax As Boolean = (currentCount >= MaxKelulusanSementaraCount)
-        If pnlMaxKelulusanSementara IsNot Nothing Then
-            pnlMaxKelulusanSementara.Visible = reachedMax
-        End If
-        If TB_TarikhMulaSementara IsNot Nothing Then
-            TB_TarikhMulaSementara.Enabled = Not reachedMax
-        End If
-        If TB_TarikhTamatSementara IsNot Nothing Then
-            TB_TarikhTamatSementara.Enabled = Not reachedMax
-        End If
-        If btnAddKelulusanSementara IsNot Nothing Then
-            btnAddKelulusanSementara.Enabled = Not reachedMax
-            btnAddKelulusanSementara.CssClass = If(reachedMax, "btn btn-secondary w-100 disabled", "btn btn-primary w-100")
+            lblKelulusanSementaraCount.Text = currentCount.ToString() & " Pembaharuan"
         End If
     End Sub
 
@@ -4817,6 +4803,55 @@ Partial Class appregister1
             End Select
         End If
         Return "Pertama"
+    End Function
+
+    Protected Function FormatBayaranSementara(amountObj As Object) As String
+        If amountObj Is Nothing OrElse IsDBNull(amountObj) Then Return "-"
+        Return "RM " & Convert.ToDecimal(amountObj).ToString("#,##0.00", CultureInfo.InvariantCulture)
+    End Function
+
+    Protected Function FormatBayaranInput(amountObj As Object) As String
+        If amountObj Is Nothing OrElse IsDBNull(amountObj) Then Return ""
+        Return Convert.ToDecimal(amountObj).ToString("0.00", CultureInfo.InvariantCulture)
+    End Function
+
+    Protected Function GetStatusBayaranValue(statusObj As Object) As String
+        If statusObj Is Nothing OrElse IsDBNull(statusObj) Then Return ""
+        Return If(Convert.ToInt32(statusObj) = 1, "1", "0")
+    End Function
+
+    Protected Function FormatStatusBayaranSementara(statusObj As Object) As String
+        Select Case GetStatusBayaranValue(statusObj)
+            Case "1" : Return "<span class=""badge bg-success"">Jelas</span>"
+            Case "0" : Return "<span class=""badge bg-danger"">Tidak Jelas</span>"
+            Case Else : Return "-"
+        End Select
+    End Function
+
+    ''' <summary>
+    ''' Tukar input bayaran (RM) kepada nilai SQL. Wajib diisi. Pulangkan False jika kosong, format tidak sah atau negatif.
+    ''' </summary>
+    Private Function TryParseBayaranSementara(input As String, ByRef result As Object) As Boolean
+        Dim s As String = If(input, "").Trim().Replace("RM", "").Replace("rm", "").Replace(",", "").Trim()
+        If s = "" Then
+            result = DBNull.Value
+            Return False
+        End If
+        Dim amount As Decimal
+        If Not Decimal.TryParse(s, NumberStyles.Number, CultureInfo.InvariantCulture, amount) OrElse amount < 0D Then
+            result = DBNull.Value
+            Return False
+        End If
+        result = Math.Round(amount, 2)
+        Return True
+    End Function
+
+    Private Shared Function StatusBayaranToDb(value As String) As Object
+        Select Case If(value, "").Trim()
+            Case "1" : Return 1
+            Case "0" : Return 0
+            Case Else : Return DBNull.Value
+        End Select
     End Function
 
     Protected Sub btnAddKelulusanSementara_Click(sender As Object, e As EventArgs)
@@ -4849,26 +4884,34 @@ Partial Class appregister1
             Return
         End If
 
+        Dim bayaranLesen As Object = DBNull.Value
+        Dim bayaranIklan As Object = DBNull.Value
+        If Not TryParseBayaranSementara(If(TB_BayaranLesenSementara IsNot Nothing, TB_BayaranLesenSementara.Text, ""), bayaranLesen) Then
+            ShowAlert("warning", "", "Sila masukkan Bayaran Lesen Sementara (RM) yang sah.")
+            Return
+        End If
+        If Not TryParseBayaranSementara(If(TB_BayaranIklanSementara IsNot Nothing, TB_BayaranIklanSementara.Text, ""), bayaranIklan) Then
+            ShowAlert("warning", "", "Sila masukkan Bayaran Lesen Iklan Sementara (RM) yang sah.")
+            Return
+        End If
+        Dim statusBayaran As Object = StatusBayaranToDb(If(DDL_StatusBayaranSementara IsNot Nothing, DDL_StatusBayaranSementara.SelectedValue, ""))
+        If IsDBNull(statusBayaran) Then
+            ShowAlert("warning", "", "Sila pilih Status Pembayaran.")
+            Return
+        End If
+
         Using conn As New SqlConnection(CS)
             conn.Open()
 
-            Dim countSql As String = "SELECT COUNT(*) FROM dbo.LESEN_KelulusanSementara WHERE Permohonan_ID = @Permohonan_ID"
-            Using countCmd As New SqlCommand(countSql, conn)
-                countCmd.Parameters.AddWithValue("@Permohonan_ID", permohonanId)
-                Dim currentCount As Integer = Convert.ToInt32(countCmd.ExecuteScalar())
-                If currentCount >= MaxKelulusanSementaraCount Then
-                    ShowAlert("warning", "", "Maksimum " & MaxKelulusanSementaraCount.ToString() & " kali pembaharuan kelulusan sementara sahaja dibenarkan.")
-                    BindKelulusanSementara()
-                    Return
-                End If
-            End Using
-
-            Dim insertSql As String = "INSERT INTO dbo.LESEN_KelulusanSementara (Permohonan_ID, TarikhMula, TarikhTamat, CreatorID, CreatedDt) " &
-                                      "VALUES (@Permohonan_ID, @TarikhMula, @TarikhTamat, @CreatorID, GETDATE())"
+            Dim insertSql As String = "INSERT INTO dbo.LESEN_KelulusanSementara (Permohonan_ID, TarikhMula, TarikhTamat, BayaranLesen, BayaranIklan, StatusBayaran, CreatorID, CreatedDt) " &
+                                      "VALUES (@Permohonan_ID, @TarikhMula, @TarikhTamat, @BayaranLesen, @BayaranIklan, @StatusBayaran, @CreatorID, GETDATE())"
             Using insCmd As New SqlCommand(insertSql, conn)
                 insCmd.Parameters.AddWithValue("@Permohonan_ID", permohonanId)
                 insCmd.Parameters.AddWithValue("@TarikhMula", dtMula.Date)
                 insCmd.Parameters.AddWithValue("@TarikhTamat", dtTamat.Date)
+                insCmd.Parameters.Add("@BayaranLesen", SqlDbType.Decimal).Value = bayaranLesen
+                insCmd.Parameters.Add("@BayaranIklan", SqlDbType.Decimal).Value = bayaranIklan
+                insCmd.Parameters.Add("@StatusBayaran", SqlDbType.Int).Value = statusBayaran
                 insCmd.Parameters.AddWithValue("@CreatorID", Convert.ToString(If(Session("sessionUserName"), "")))
                 insCmd.ExecuteNonQuery()
             End Using
@@ -4876,6 +4919,9 @@ Partial Class appregister1
 
         If TB_TarikhMulaSementara IsNot Nothing Then TB_TarikhMulaSementara.Text = ""
         If TB_TarikhTamatSementara IsNot Nothing Then TB_TarikhTamatSementara.Text = ""
+        If TB_BayaranLesenSementara IsNot Nothing Then TB_BayaranLesenSementara.Text = ""
+        If TB_BayaranIklanSementara IsNot Nothing Then TB_BayaranIklanSementara.Text = ""
+        If DDL_StatusBayaranSementara IsNot Nothing Then DDL_StatusBayaranSementara.SelectedValue = ""
 
         gvKelulusanSementara.EditIndex = -1
         BindKelulusanSementara()
@@ -4921,15 +4967,38 @@ Partial Class appregister1
             Return
         End If
 
+        Dim txtBayaranLesen As TextBox = TryCast(row.FindControl("txtEditBayaranLesenSementara"), TextBox)
+        Dim txtBayaranIklan As TextBox = TryCast(row.FindControl("txtEditBayaranIklanSementara"), TextBox)
+        Dim ddlStatusBayaran As DropDownList = TryCast(row.FindControl("ddlEditStatusBayaranSementara"), DropDownList)
+
+        Dim bayaranLesen As Object = DBNull.Value
+        Dim bayaranIklan As Object = DBNull.Value
+        If Not TryParseBayaranSementara(If(txtBayaranLesen IsNot Nothing, txtBayaranLesen.Text, ""), bayaranLesen) Then
+            ShowAlert("warning", "", "Sila masukkan Bayaran Lesen Sementara (RM) yang sah.")
+            Return
+        End If
+        If Not TryParseBayaranSementara(If(txtBayaranIklan IsNot Nothing, txtBayaranIklan.Text, ""), bayaranIklan) Then
+            ShowAlert("warning", "", "Sila masukkan Bayaran Lesen Iklan Sementara (RM) yang sah.")
+            Return
+        End If
+        Dim statusBayaran As Object = StatusBayaranToDb(If(ddlStatusBayaran IsNot Nothing, ddlStatusBayaran.SelectedValue, ""))
+        If IsDBNull(statusBayaran) Then
+            ShowAlert("warning", "", "Sila pilih Status Pembayaran.")
+            Return
+        End If
+
         Dim permohonanId As Integer = GetCurrentPermohonanID()
         Using conn As New SqlConnection(CS)
             conn.Open()
             Dim updSql As String = "UPDATE dbo.LESEN_KelulusanSementara " &
-                                   "SET TarikhMula = @TarikhMula, TarikhTamat = @TarikhTamat, LastModID = @LastModID, LastModDt = GETDATE() " &
+                                   "SET TarikhMula = @TarikhMula, TarikhTamat = @TarikhTamat, BayaranLesen = @BayaranLesen, BayaranIklan = @BayaranIklan, StatusBayaran = @StatusBayaran, LastModID = @LastModID, LastModDt = GETDATE() " &
                                    "WHERE KelulusanSementara_ID = @KelulusanSementara_ID AND Permohonan_ID = @Permohonan_ID"
             Using updCmd As New SqlCommand(updSql, conn)
                 updCmd.Parameters.AddWithValue("@TarikhMula", dtMula.Date)
                 updCmd.Parameters.AddWithValue("@TarikhTamat", dtTamat.Date)
+                updCmd.Parameters.Add("@BayaranLesen", SqlDbType.Decimal).Value = bayaranLesen
+                updCmd.Parameters.Add("@BayaranIklan", SqlDbType.Decimal).Value = bayaranIklan
+                updCmd.Parameters.Add("@StatusBayaran", SqlDbType.Int).Value = statusBayaran
                 updCmd.Parameters.AddWithValue("@LastModID", Convert.ToString(If(Session("sessionUserName"), "")))
                 updCmd.Parameters.AddWithValue("@KelulusanSementara_ID", id)
                 updCmd.Parameters.AddWithValue("@Permohonan_ID", permohonanId)
