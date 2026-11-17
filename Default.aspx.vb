@@ -88,6 +88,79 @@ Partial Class _Default
 
     End Sub
 
+    ' ---------------------------------------------------------------
+    ' Skop pengguna (tapisan ikut ID pengguna)
+    '   * Super admin / pengguna lain : tiada tapisan pengguna (tapisan agensi sedia ada kekal)
+    '   * Pegawai IK (Inspektorat, Penyedia, bukan Penilai, bukan baca-sahaja):
+    '       permohonan di mana dia ditetapkan sebagai pegawai lawatan tapak
+    '   * KB Inspektorat (Inspektorat, Penilai):
+    '       permohonan yang dia tetapkan pegawai (ikAssign) / sahkan (PengesahID),
+    '       permohonan Inspektorat yang belum ditetapkan pegawai, dan yang dia sendiri lawati
+    ' ---------------------------------------------------------------
+    Private Const AGENSI_INSPEKTORAT As Integer = 3
+    Private Const SKOP_SEMUA As Integer = 0
+    Private Const SKOP_IK As Integer = 1
+    Private Const SKOP_KB As Integer = 2
+
+    Private _skop As Integer = -1
+    Private ReadOnly Property SkopPengguna As Integer
+        Get
+            If _skop >= 0 Then Return _skop
+            _skop = SKOP_SEMUA
+            Try
+                Dim uid As Integer = 0
+                Integer.TryParse(Convert.ToString(Session.Item("sessionUsersId")), uid)
+                Dim estate As Integer = 0
+                Integer.TryParse(Convert.ToString(Session.Item("sessionEstateID")), estate)
+                If uid > 0 AndAlso estate = AGENSI_INSPEKTORAT AndAlso Not GlobalClass.isSuperAdmin(uid.ToString()) Then
+                    Dim penilai As Boolean = Convert.ToString(Session.Item("sessionIsPenilai")) = "True"
+                    Dim penyedia As Boolean = Convert.ToString(Session.Item("sessionIsPenyedia")) = "True"
+                    Dim bacaSahaja As Boolean = Convert.ToString(Session.Item("sessionIsReadOnly")) = "True"
+                    If penilai Then
+                        _skop = SKOP_KB
+                    ElseIf penyedia AndAlso Not bacaSahaja Then
+                        _skop = SKOP_IK
+                    End If
+                End If
+            Catch ex As Exception
+                _skop = SKOP_SEMUA
+            End Try
+            Return _skop
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' Syarat SQL tambahan bagi kolum Permohonan_ID mengikut skop pengguna ("" jika tiada tapisan).
+    ''' Gunakan bersama TambahParamSkop pada SqlCommand yang sama.
+    ''' </summary>
+    Private Function SkopSql(ByVal kolumPermohonan As String) As String
+        If SkopPengguna = SKOP_SEMUA Then Return ""
+        ' Rekod yang pengguna ditetapkan sebagai pegawai lawatan tapak (IK, dan KB yang turut melawat)
+        Dim ik As String =
+            "SELECT pa.Permohonan_ID FROM LESEN_PermohonanAgensi pa INNER JOIN LESEN_PermohonanAgensiStaff s ON s.PermohonanAgensi_ID = pa.PermohonanAgensi_ID " &
+            "WHERE pa.JabatanAgensi_ID = @SkopAgensi AND s.PermohonanAgensiStaffID_UsersID = @SkopUser " &
+            "UNION SELECT pa.Permohonan_ID FROM LESEN_PermohonanAgensiBatal pa INNER JOIN LESEN_PermohonanAgensiStaffBatal s ON s.PermohonanAgensi_ID = pa.PermohonanAgensi_ID " &
+            "WHERE pa.JabatanAgensi_ID = @SkopAgensi AND s.PermohonanAgensiStaffID_UsersID = @SkopUser"
+        If SkopPengguna = SKOP_KB Then
+            ' Ditetapkan / disahkan oleh KB ini, atau belum ditetapkan pegawai (baris gilir semua KB)
+            Dim kb As String =
+                "SELECT Permohonan_ID FROM LESEN_PermohonanAgensi WHERE JabatanAgensi_ID = @SkopAgensi " &
+                "AND (ikAssign = @SkopUser OR PengesahID = @SkopUser OR (ikAssign IS NULL AND PengesahID IS NULL)) " &
+                "UNION SELECT Permohonan_ID FROM LESEN_PermohonanAgensiBatal WHERE JabatanAgensi_ID = @SkopAgensi " &
+                "AND (ikAssign = @SkopUser OR PengesahID = @SkopUser OR (ikAssign IS NULL AND PengesahID IS NULL))"
+            Return " AND " & kolumPermohonan & " IN (" & ik & " UNION " & kb & ") "
+        End If
+        Return " AND " & kolumPermohonan & " IN (" & ik & ") "
+    End Function
+
+    Private Sub TambahParamSkop(ByVal cmd As SqlCommand)
+        If SkopPengguna = SKOP_SEMUA Then Return
+        Dim uid As Integer = 0
+        Integer.TryParse(Convert.ToString(Session.Item("sessionUsersId")), uid)
+        cmd.Parameters.AddWithValue("@SkopUser", uid)
+        cmd.Parameters.AddWithValue("@SkopAgensi", AGENSI_INSPEKTORAT)
+    End Sub
+
     ' Kad statistik atas + pie chart status + bar chart bulanan.
     ' Dua view (kelulusan & pembatalan) dibaca sekali ke @a, kemudian
     ' 3 result set dikira daripadanya (dulu 3 query berasingan).
@@ -107,7 +180,7 @@ Partial Class _Default
                 SELECT Permohonan_ID, ApprStatusID, AgensiID, TarikhMohon FROM v_LESEN_ApprovalListBatal_Curr
             ) x
             WHERE IIF(@AgensiID = 0 OR @AgensiID = 1,0,@AgensiID) =
-                  IIF(@AgensiID = 0 OR @AgensiID = 1,0,x.AgensiID);
+                  IIF(@AgensiID = 0 OR @AgensiID = 1,0,x.AgensiID)" & SkopSql("x.Permohonan_ID") & ";
 
             -- 1) Kad statistik (semua tahun)
             SELECT
@@ -143,6 +216,7 @@ Partial Class _Default
             ", con)
 
                 cmd.Parameters.AddWithValue("@AgensiID", If(Session.Item("sessionEstateID"), DBNull.Value))
+                TambahParamSkop(cmd)
 
                 Dim ds As New DataSet()
                 Using da As New SqlDataAdapter(cmd)
@@ -225,7 +299,7 @@ Partial Class _Default
                 WHERE YEAR(a.TarikhMohon) = YEAR(GETDATE())
                 AND MONTH(a.TarikhMohon) = MONTH(GETDATE())
                 AND IIF(@AgensiID = 0 OR @AgensiID = 1,0,@AgensiID) =
-                    IIF(@AgensiID = 0 OR @AgensiID = 1,0,a.AgensiID)
+                    IIF(@AgensiID = 0 OR @AgensiID = 1,0,a.AgensiID)" & SkopSql("a.Permohonan_ID") & "
                 AND a.ApprStatusID = 10
                 GROUP BY DAY(a.TarikhMohon)
             ) x
@@ -234,6 +308,7 @@ Partial Class _Default
             ", con)
 
                 cmd.Parameters.AddWithValue("@AgensiID", Session.Item("sessionEstateID"))
+                TambahParamSkop(cmd)
 
                 con.Open()
 
@@ -656,7 +731,7 @@ Partial Class _Default
     End Sub
 
     Private Function GetSummaryData(agensiId As Integer, jenisLesenId As Integer, keyword As String) As DataTable
-        Const sql As String = "
+        Dim sql As String = "
 SELECT
     a.JenisLesen_ID,
     a.JenisLesen_Description,
@@ -682,7 +757,7 @@ LEFT JOIN LESEN_Permohonan x
                 SELECT TOP 1 x2.AgensiID FROM LESEN_ApprovalList x2
                 WHERE x2.AgensiID = @AgensiID AND x2.Permohonan_ID = x.Permohonan_ID
             )
-          )
+          )" & SkopSql("x.Permohonan_ID") & "
 OUTER APPLY (
     SELECT TOP 1 ApprovalDate FROM LESEN_ApprovalList m
     WHERE m.Permohonan_ID = x.Permohonan_ID AND m.ApprStatusID = 1
@@ -702,6 +777,7 @@ ORDER BY a.JenisLesen_Description;"
                 cmd.Parameters.AddWithValue("@AgensiID", agensiId)
                 cmd.Parameters.AddWithValue("@JenisLesenID", jenisLesenId)
                 cmd.Parameters.AddWithValue("@Keyword", keyword)
+                TambahParamSkop(cmd)
 
                 conn.Open()
                 Using da As New SqlDataAdapter(cmd)
@@ -718,7 +794,7 @@ ORDER BY a.JenisLesen_Description;"
     ''' for each of the last 6 months (oldest first).
     ''' </summary>
     Private Function GetTrendData(agensiId As Integer) As Dictionary(Of Integer, List(Of Integer))
-        Const sql As String = "
+        Dim sql As String = "
 SELECT
     a.JenisLesen_ID,
     FORMAT(DATEFROMPARTS(YEAR(appr10.ApprovalDate), MONTH(appr10.ApprovalDate), 1), 'yyyy-MM') AS BulanKey,
@@ -738,7 +814,7 @@ WHERE x.StatusID = 10
             SELECT TOP 1 x2.AgensiID FROM LESEN_ApprovalList x2
             WHERE x2.AgensiID = @AgensiID AND x2.Permohonan_ID = x.Permohonan_ID
         )
-      )
+      )" & SkopSql("x.Permohonan_ID") & "
 GROUP BY a.JenisLesen_ID,
          DATEFROMPARTS(YEAR(appr10.ApprovalDate), MONTH(appr10.ApprovalDate), 1)
 ORDER BY a.JenisLesen_ID, BulanKey;"
@@ -754,6 +830,7 @@ ORDER BY a.JenisLesen_ID, BulanKey;"
         Using conn As New SqlConnection(ConfigurationManager.ConnectionStrings("webcon_ConnectionStr").ConnectionString)
             Using cmd As New SqlCommand(sql, conn)
                 cmd.Parameters.AddWithValue("@AgensiID", agensiId)
+                TambahParamSkop(cmd)
                 conn.Open()
                 Using reader As SqlDataReader = cmd.ExecuteReader()
                     Dim raw As New Dictionary(Of Integer, Dictionary(Of String, Integer))
