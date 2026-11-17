@@ -978,7 +978,7 @@
 
               <asp:SqlDataSource runat="server" ID="sdsListStaffIK" ConnectionString='<%$ ConnectionStrings:webcon_ConnectionStr %>'
                   OnSelected="sdsListStaffIK_Selected"
-                  SelectCommand="SELECT F.Rujukan, G.JenisLesen_Description, D.PermohonanAgensiStaffID_UsersID, E.Users_Fullname AS StaffName, 
+                  SelectCommand="SELECT F.Rujukan, ISNULL(NULLIF(F.JenisLesenDescList, ''), G.JenisLesen_Description) AS JenisLesen_Description, D.PermohonanAgensiStaffID_UsersID, E.Users_Fullname AS StaffName, 
                   convert(varchar, A.TarikhMohon, 103) AS TarikhMohon, 
                   ApprovalID, A.Permohonan_ID, ApprStatusID, Description, ApprLevel, AgensiID, B.JabatanAgensi_Description, 
                   ApproverID, ApprovalDate, IsComplete, IsFinalApproval, IsResult, Remarks, A.JenisLesen_ID, A.Permohonan_PemohonID, H.Pemohon_Name,
@@ -989,7 +989,7 @@
                   INNER JOIN LESEN_PermohonanAgensiStaff D ON C.PermohonanAgensi_ID=D.PermohonanAgensi_ID
                   INNER JOIN TBL_USERS E ON D.PermohonanAgensiStaffID_UsersID=E.Users_Id
                   INNER JOIN LESEN_Permohonan F ON A.Permohonan_ID=F.Permohonan_ID
-                  INNER JOIN LESEN_JenisLesen G ON A.JenisLesen_ID=G.JenisLesen_ID
+                  LEFT JOIN LESEN_JenisLesen G ON A.JenisLesen_ID=G.JenisLesen_ID
                   INNER JOIN LESEN_Pemohon H ON F.Permohonan_PemohonID=H.Pemohon_ID
                   WHERE ApprStatusID=3
                   and iif(@AgensiID = 0 or @AgensiID = 1,0,@AgensiID) = iif(@AgensiID = 0 or @AgensiID = 1,0,(select top 1 x2.AgensiID from LESEN_ApprovalList x2 where x2.agensiID = @AgensiID and x2.Permohonan_ID = A.Permohonan_ID))
@@ -1644,7 +1644,7 @@ where x2.Permohonan_ID = g.Permohonan_ID and x2.JabatanAgensi_ID = @AgensiID uni
                             </div>
 
                             <div class="tugasan-stats">
-                                <a href="<%= ResolveUrl("~/lesen/kelulusan.aspx?p_Id=3351&m_Id=3352") %>" class="stat-box stat-blue">
+                                <a href="<%= ResolveUrl("~/lesen/kelulusan1.aspx?p_Id=3351&m_Id=4358") %>" class="stat-box stat-blue">
                                     <asp:FormView ID="FormView11" runat="server" DataSourceID="sdsPemohonBaru" OnDataBound="FormViewTugasan_DataBound">
                                         <ItemTemplate>
                                             <div class="stat-num"><%# Eval("cnt") %></div>
@@ -1653,7 +1653,7 @@ where x2.Permohonan_ID = g.Permohonan_ID and x2.JabatanAgensi_ID = @AgensiID uni
                                     <div class="stat-label">Pendaftaran</div>
                                 </a>
 
-                                <a href="<%= ResolveUrl("~/lesen/pembatalan.aspx?p_Id=3351&m_Id=4351") %>" class="stat-box stat-red">
+                                <a href="<%= ResolveUrl("~/lesen/pembatalan1.aspx?p_Id=3351&m_Id=4375") %>" class="stat-box stat-red">
                                     <asp:FormView ID="FormView12" runat="server" DataSourceID="sdsPembatalanBaru" OnDataBound="FormViewTugasan_DataBound">
                                         <ItemTemplate>
                                             <div class="stat-num"><%# Eval("cnt") %></div>
@@ -1663,7 +1663,7 @@ where x2.Permohonan_ID = g.Permohonan_ID and x2.JabatanAgensi_ID = @AgensiID uni
                                 </a>
                             </div>
 
-                            <a href="<%= ResolveUrl("~/lesen/kelulusan.aspx?p_Id=3351&m_Id=3352") %>" class="tugasan-btn">
+                            <a href="<%= ResolveUrl("~/lesen/kelulusan1.aspx?p_Id=3351&m_Id=4358") %>" class="tugasan-btn">
                                 Lihat Semua Tugasan <i class="bi bi-chevron-right"></i>
                             </a>
                         </div>
@@ -1671,7 +1671,7 @@ where x2.Permohonan_ID = g.Permohonan_ID and x2.JabatanAgensi_ID = @AgensiID uni
                         <asp:SqlDataSource ID="sdsPemohonBaru" runat="server" ConnectionString="<%$ ConnectionStrings:webcon_ConnectionStr %>"
                             SelectCommand="SELECT count(*) as cnt FROM 
                         v_LESEN_ApprovalList_Curr a
-                        inner join LESEN_JenisLesen d on d.JenisLesen_ID = a.JenisLesen_ID
+                        left join LESEN_JenisLesen d on d.JenisLesen_ID = a.JenisLesen_ID
                         left join LESEN_JabatanAgensi e on e.JabatanAgensi_ID = a.AgensiID
                         inner join LESEN_Pemohon f on f.Pemohon_ID = a.Permohonan_PemohonID
                         inner join LESEN_Permohonan g on g.Permohonan_ID = a.Permohonan_ID
@@ -1711,7 +1711,7 @@ where x2.Permohonan_ID = g.Permohonan_ID and x2.JabatanAgensi_ID = @AgensiID uni
                         <asp:SqlDataSource ID="sdsPembatalanBaru" runat="server" ConnectionString="<%$ ConnectionStrings:webcon_ConnectionStr %>"
                             SelectCommand="SELECT count(*) as cnt FROM 
                         v_LESEN_ApprovalListBatal_Curr a
-                        inner join LESEN_JenisLesen d on d.JenisLesen_ID = a.JenisLesen_ID
+                        left join LESEN_JenisLesen d on d.JenisLesen_ID = a.JenisLesen_ID
                         left join LESEN_JabatanAgensi e on e.JabatanAgensi_ID = a.AgensiID
                         inner join LESEN_Pemohon f on f.Pemohon_ID = a.Permohonan_PemohonID
                         inner join LESEN_Permohonan g on g.Permohonan_ID = a.Permohonan_ID
@@ -1919,14 +1919,14 @@ where x2.Permohonan_ID = g.Permohonan_ID and x2.JabatanAgensi_ID = @AgensiID uni
                                 SELECT 1, a.ApprStatusID, a.Description,
                                     CASE WHEN iif(@AgensiID = 0 or @AgensiID = 1,0,@AgensiID) = iif(@AgensiID = 0 or @AgensiID = 1,0,(select top 1 x2.AgensiID from LESEN_ApprovalList x2 where x2.agensiID = @AgensiID and x2.Permohonan_ID = a.Permohonan_ID)) THEN 1 ELSE 0 END
                                 FROM v_LESEN_ApprovalList_Curr a
-                                inner join LESEN_JenisLesen d on d.JenisLesen_ID = a.JenisLesen_ID
+                                left join LESEN_JenisLesen d on d.JenisLesen_ID = a.JenisLesen_ID
                                 inner join LESEN_Pemohon f on f.Pemohon_ID = a.Permohonan_PemohonID;
 
                                 INSERT INTO @src (src, ApprStatusID, Description, ok)
                                 SELECT 2, a.ApprStatusID, a.Description,
                                     CASE WHEN iif(@AgensiID = 0 or @AgensiID = 1,0,@AgensiID) = iif(@AgensiID = 0 or @AgensiID = 1,0,(select top 1 x2.AgensiID from LESEN_ApprovalListBatal x2 where x2.agensiID = @AgensiID and x2.Permohonan_ID = a.Permohonan_ID)) THEN 1 ELSE 0 END
                                 FROM v_LESEN_ApprovalListBatal_Curr a
-                                inner join LESEN_JenisLesen d on d.JenisLesen_ID = a.JenisLesen_ID
+                                left join LESEN_JenisLesen d on d.JenisLesen_ID = a.JenisLesen_ID
                                 inner join LESEN_Pemohon f on f.Pemohon_ID = a.Permohonan_PemohonID;
 
                                 /* jumlah pembatalan memang tanpa penapis agensi (kekal seperti query asal) */

@@ -809,7 +809,11 @@ SELECT
                END), 0) AS PurataSLA
 FROM LESEN_JenisLesen a
 LEFT JOIN LESEN_Permohonan x
-       ON x.JenisLesen_ID = a.JenisLesen_ID
+       /* JenisLesenIdList (format baru, cth. 6,11,10) jika ada; jika kosong, JenisLesen_ID (rekod lama belum dimigrasi).
+          Satu permohonan berbilang lesen dikira dalam setiap jenis lesennya. */
+       ON (CASE WHEN LTRIM(RTRIM(ISNULL(x.JenisLesenIdList, ''))) <> ''
+                THEN CASE WHEN (',' + REPLACE(x.JenisLesenIdList, ' ', '') + ',') LIKE '%,' + CAST(a.JenisLesen_ID AS varchar(10)) + ',%' THEN 1 ELSE 0 END
+                ELSE CASE WHEN x.JenisLesen_ID = a.JenisLesen_ID THEN 1 ELSE 0 END END) = 1
       AND YEAR(x.TarikhMohon)  = YEAR(GETDATE())
       AND MONTH(x.TarikhMohon) = MONTH(GETDATE())
       AND (
@@ -861,7 +865,9 @@ SELECT
     FORMAT(DATEFROMPARTS(YEAR(appr10.ApprovalDate), MONTH(appr10.ApprovalDate), 1), 'yyyy-MM') AS BulanKey,
     COUNT(*) AS Bilangan
 FROM LESEN_Permohonan x
-JOIN LESEN_JenisLesen a ON a.JenisLesen_ID = x.JenisLesen_ID
+JOIN LESEN_JenisLesen a ON (CASE WHEN LTRIM(RTRIM(ISNULL(x.JenisLesenIdList, ''))) <> ''
+     THEN CASE WHEN (',' + REPLACE(x.JenisLesenIdList, ' ', '') + ',') LIKE '%,' + CAST(a.JenisLesen_ID AS varchar(10)) + ',%' THEN 1 ELSE 0 END
+     ELSE CASE WHEN x.JenisLesen_ID = a.JenisLesen_ID THEN 1 ELSE 0 END END) = 1
 OUTER APPLY (
     SELECT TOP 1 ApprovalDate FROM LESEN_ApprovalList m
     WHERE m.Permohonan_ID = x.Permohonan_ID AND m.ApprStatusID = 10
