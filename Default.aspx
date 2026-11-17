@@ -993,6 +993,7 @@
                   INNER JOIN LESEN_Pemohon H ON F.Permohonan_PemohonID=H.Pemohon_ID
                   WHERE ApprStatusID=3
                   and iif(@AgensiID = 0 or @AgensiID = 1,0,@AgensiID) = iif(@AgensiID = 0 or @AgensiID = 1,0,(select top 1 x2.AgensiID from LESEN_ApprovalList x2 where x2.agensiID = @AgensiID and x2.Permohonan_ID = A.Permohonan_ID))
+                  and (@AgensiID = 0 or @AgensiID = 1 or A.AgensiID = @AgensiID) /* pengguna agensi: hanya lawatan tapak agensi sendiri */
                   ORDER BY ApprovalID DESC">
       
                   <SelectParameters>
@@ -1923,7 +1924,7 @@ where x2.Permohonan_ID = g.Permohonan_ID and x2.JabatanAgensi_ID = @AgensiID uni
 
                                 INSERT INTO @src (src, ApprStatusID, Description, ok)
                                 SELECT 2, a.ApprStatusID, a.Description,
-                                    CASE WHEN iif(@AgensiID = 0 or @AgensiID = 1,0,@AgensiID) = iif(@AgensiID = 0 or @AgensiID = 1,0,(select top 1 x2.AgensiID from LESEN_ApprovalList x2 where x2.agensiID = @AgensiID and x2.Permohonan_ID = a.Permohonan_ID)) THEN 1 ELSE 0 END
+                                    CASE WHEN iif(@AgensiID = 0 or @AgensiID = 1,0,@AgensiID) = iif(@AgensiID = 0 or @AgensiID = 1,0,(select top 1 x2.AgensiID from LESEN_ApprovalListBatal x2 where x2.agensiID = @AgensiID and x2.Permohonan_ID = a.Permohonan_ID)) THEN 1 ELSE 0 END
                                 FROM v_LESEN_ApprovalListBatal_Curr a
                                 inner join LESEN_JenisLesen d on d.JenisLesen_ID = a.JenisLesen_ID
                                 inner join LESEN_Pemohon f on f.Pemohon_ID = a.Permohonan_PemohonID;

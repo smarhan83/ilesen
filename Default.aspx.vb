@@ -29,6 +29,9 @@ Partial Class _Default
 
         End If
 
+        '//tapisan ikut ID pengguna (IK / KB Inspektorat) bagi SqlDataSource dalam markup
+        TerapkanSkopSumberData()
+
         '//kad statistik (load pertama) + carta bulanan & status (bila login) - satu query
         Dim isLoggedIn As Boolean = False
         Try
@@ -153,6 +156,41 @@ Partial Class _Default
         Return " AND " & kolumPermohonan & " IN (" & ik & ") "
     End Function
 
+    ''' <summary>
+    ''' Pasang tapisan skop pengguna pada SqlDataSource dalam Default.aspx (perlu setiap permintaan kerana
+    ''' SelectCommand dibaca semula daripada markup):
+    '''   sdsListStaffIK                          - Senarai Permohonan Masih Dalam Proses Lawatan Tapak
+    '''   sdsPemohonLulus / sdsPemohonDalamProses / sdsWeek - Trafik minggu lepas
+    '''   sdsPermohonanStatus                     - Status Permohonan dan Pembatalan
+    ''' </summary>
+    Private Sub TerapkanSkopSumberData()
+        If SkopPengguna = SKOP_SEMUA Then Return
+
+        ' Senarai lawatan tapak: rekod dalam skop; pegawai IK hanya baris penugasan dirinya
+        Dim staff As String = SkopSql("A.Permohonan_ID") &
+                              If(SkopPengguna = SKOP_IK, " AND D.PermohonanAgensiStaffID_UsersID = @SkopUser ", "")
+        SuntikSkop(sdsListStaffIK, "WHERE ApprStatusID=3", "WHERE ApprStatusID=3" & staff)
+
+        ' Trafik: setiap subquery LESEN_Permohonan a
+        For Each sds As SqlDataSource In {sdsPemohonLulus, sdsPemohonDalamProses, sdsWeek}
+            SuntikSkop(sds, "and a.StatusID", SkopSql("a.Permohonan_ID") & " and a.StatusID")
+        Next
+
+        ' Status permohonan / pembatalan: tapis baris yang dibaca ke @src
+        SuntikSkop(sdsPermohonanStatus, "f.Pemohon_ID = a.Permohonan_PemohonID;", "f.Pemohon_ID = a.Permohonan_PemohonID WHERE 1 = 1" & SkopSql("a.Permohonan_ID") & ";")
+    End Sub
+
+    Private Sub SuntikSkop(ByVal sds As SqlDataSource, ByVal cari As String, ByVal ganti As String)
+        If sds Is Nothing OrElse String.IsNullOrEmpty(sds.SelectCommand) Then Return
+        If sds.SelectParameters("SkopUser") IsNot Nothing Then Return   ' sudah dipasang dalam permintaan ini
+        If sds.SelectCommand.IndexOf(cari, StringComparison.Ordinal) < 0 Then Return
+        sds.SelectCommand = sds.SelectCommand.Replace(cari, ganti)
+        Dim uid As Integer = 0
+        Integer.TryParse(Convert.ToString(Session.Item("sessionUsersId")), uid)
+        sds.SelectParameters.Add("SkopUser", TypeCode.Int32, uid.ToString())
+        sds.SelectParameters.Add("SkopAgensi", TypeCode.Int32, AGENSI_INSPEKTORAT.ToString())
+    End Sub
+
     Private Sub TambahParamSkop(ByVal cmd As SqlCommand)
         If SkopPengguna = SKOP_SEMUA Then Return
         Dim uid As Integer = 0
@@ -171,16 +209,28 @@ Partial Class _Default
             SET NOCOUNT ON;
             DECLARE @a TABLE (Permohonan_ID int, ApprStatusID int, TarikhMohon date);
 
-            INSERT INTO @a (Permohonan_ID, ApprStatusID, TarikhMohon)
-            SELECT x.Permohonan_ID, x.ApprStatusID, x.TarikhMohon
-            FROM
-            (
-                SELECT Permohonan_ID, ApprStatusID, AgensiID, TarikhMohon FROM v_LESEN_ApprovalList_Curr
-                UNION ALL
-                SELECT Permohonan_ID, ApprStatusID, AgensiID, TarikhMohon FROM v_LESEN_ApprovalListBatal_Curr
-            ) x
-            WHERE IIF(@AgensiID = 0 OR @AgensiID = 1,0,@AgensiID) =
-                  IIF(@AgensiID = 0 OR @AgensiID = 1,0,x.AgensiID)" & SkopSql("x.Permohonan_ID") & ";
+            IF @AgensiID IS NULL OR @AgensiID IN (0, 1)
+                -- Jabatan Lesen / admin: langkah semasa semua permohonan (seperti sedia ada)
+                INSERT INTO @a (Permohonan_ID, ApprStatusID, TarikhMohon)
+                SELECT x.Permohonan_ID, x.ApprStatusID, x.TarikhMohon
+                FROM
+                (
+                    SELECT Permohonan_ID, ApprStatusID, AgensiID, TarikhMohon FROM v_LESEN_ApprovalList_Curr
+                    UNION ALL
+                    SELECT Permohonan_ID, ApprStatusID, AgensiID, TarikhMohon FROM v_LESEN_ApprovalListBatal_Curr
+                ) x
+                WHERE IIF(@AgensiID = 0 OR @AgensiID = 1,0,@AgensiID) =
+                      IIF(@AgensiID = 0 OR @AgensiID = 1,0,x.AgensiID);
+            ELSE
+                -- Pengguna agensi: semua permohonan yang pernah melibatkan agensi ini, dengan status akhir
+                -- permohonan (langkah semasa agensi hilang selepas agensi selesai, jadi lulus / tolak tidak kelihatan).
+                -- Status 11 (24 jam, semakan agensi belum selesai) dikira dalam proses.
+                INSERT INTO @a (Permohonan_ID, ApprStatusID, TarikhMohon)
+                SELECT p.Permohonan_ID, CASE WHEN p.StatusID = 11 THEN 5 ELSE p.StatusID END, p.TarikhMohon
+                FROM LESEN_Permohonan p
+                WHERE p.StatusID > 0
+                  AND (EXISTS (SELECT 1 FROM LESEN_PermohonanAgensi pa WHERE pa.Permohonan_ID = p.Permohonan_ID AND pa.JabatanAgensi_ID = @AgensiID)
+                       OR EXISTS (SELECT 1 FROM LESEN_PermohonanAgensiBatal pa WHERE pa.Permohonan_ID = p.Permohonan_ID AND pa.JabatanAgensi_ID = @AgensiID))" & SkopSql("p.Permohonan_ID") & ";
 
             -- 1) Kad statistik (semua tahun)
             SELECT
@@ -286,6 +336,7 @@ Partial Class _Default
                         AgensiID,
                         TarikhMohon
                     FROM v_LESEN_ApprovalList_Curr
+                    WHERE @AgensiID IS NULL OR @AgensiID IN (0, 1)
 
                     UNION ALL
 
@@ -295,11 +346,21 @@ Partial Class _Default
                         AgensiID,
                         TarikhMohon
                     FROM v_LESEN_ApprovalListBatal_Curr
+                    WHERE @AgensiID IS NULL OR @AgensiID IN (0, 1)
+
+                    UNION ALL
+
+                    -- Pengguna agensi: permohonan yang pernah melibatkan agensi ini, status akhir lulus
+                    SELECT p.Permohonan_ID, p.StatusID, @AgensiID, p.TarikhMohon
+                    FROM LESEN_Permohonan p
+                    WHERE @AgensiID NOT IN (0, 1)
+                      AND (EXISTS (SELECT 1 FROM LESEN_PermohonanAgensi pa WHERE pa.Permohonan_ID = p.Permohonan_ID AND pa.JabatanAgensi_ID = @AgensiID)
+                           OR EXISTS (SELECT 1 FROM LESEN_PermohonanAgensiBatal pa WHERE pa.Permohonan_ID = p.Permohonan_ID AND pa.JabatanAgensi_ID = @AgensiID))" & SkopSql("p.Permohonan_ID") & "
                 ) a
                 WHERE YEAR(a.TarikhMohon) = YEAR(GETDATE())
                 AND MONTH(a.TarikhMohon) = MONTH(GETDATE())
                 AND IIF(@AgensiID = 0 OR @AgensiID = 1,0,@AgensiID) =
-                    IIF(@AgensiID = 0 OR @AgensiID = 1,0,a.AgensiID)" & SkopSql("a.Permohonan_ID") & "
+                    IIF(@AgensiID = 0 OR @AgensiID = 1,0,a.AgensiID)
                 AND a.ApprStatusID = 10
                 GROUP BY DAY(a.TarikhMohon)
             ) x
