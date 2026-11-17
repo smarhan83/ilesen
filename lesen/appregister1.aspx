@@ -4911,36 +4911,44 @@
                             <div class="card-body">
 
                                 <asp:Panel ID="pnlAddKelulusanSementara" runat="server" CssClass="mb-4 p-3 bg-light rounded border">
-                                    <div class="row align-items-end g-3">
-                                        <div class="col-md-4 col-lg-2">
+                                    <%-- Seksyen 1: Tempoh Kelulusan --%>
+                                    <h6 class="fw-bold text-secondary mb-2"><i class="bi bi-calendar-range me-1"></i>Tempoh Kelulusan</h6>
+                                    <div class="row g-3">
+                                        <div class="col-md-6 col-lg-4">
                                             <div class="form-group mb-0">
                                                 <label class="form-label-custom">Tarikh Mula <span class="text-danger">*</span></label>
                                                 <asp:TextBox ID="TB_TarikhMulaSementara" runat="server" TextMode="Date" CssClass="form-control" />
                                             </div>
                                         </div>
 
-                                        <div class="col-md-4 col-lg-2">
+                                        <div class="col-md-6 col-lg-4">
                                             <div class="form-group mb-0">
                                                 <label class="form-label-custom">Tarikh Tamat <span class="text-danger">*</span></label>
                                                 <asp:TextBox ID="TB_TarikhTamatSementara" runat="server" TextMode="Date" CssClass="form-control" />
                                             </div>
                                         </div>
+                                    </div>
 
-                                        <div class="col-md-4 col-lg-2">
+                                    <hr class="my-3" />
+
+                                    <%-- Seksyen 2: Maklumat Pembayaran --%>
+                                    <h6 class="fw-bold text-secondary mb-2"><i class="bi bi-cash-coin me-1"></i>Maklumat Pembayaran</h6>
+                                    <div class="row g-3">
+                                        <div class="col-md-6 col-lg-4">
                                             <div class="form-group mb-0">
                                                 <label class="form-label-custom">Bayaran Lesen Sementara (RM) <span class="text-danger">*</span></label>
                                                 <asp:TextBox ID="TB_BayaranLesenSementara" runat="server" TextMode="Number" step="0.01" min="0" placeholder="0.00" CssClass="form-control" />
                                             </div>
                                         </div>
 
-                                        <div class="col-md-4 col-lg-2">
+                                        <div class="col-md-6 col-lg-4">
                                             <div class="form-group mb-0">
                                                 <label class="form-label-custom">Bayaran Lesen Iklan Sementara (RM) <span class="text-danger">*</span></label>
                                                 <asp:TextBox ID="TB_BayaranIklanSementara" runat="server" TextMode="Number" step="0.01" min="0" placeholder="0.00" CssClass="form-control" />
                                             </div>
                                         </div>
 
-                                        <div class="col-md-4 col-lg-2">
+                                        <div class="col-md-6 col-lg-4">
                                             <div class="form-group mb-0">
                                                 <label class="form-label-custom">Status Pembayaran <span class="text-danger">*</span></label>
                                                 <asp:DropDownList ID="DDL_StatusBayaranSementara" runat="server" CssClass="form-select form-control">
@@ -4950,14 +4958,12 @@
                                                 </asp:DropDownList>
                                             </div>
                                         </div>
+                                    </div>
 
-                                        <div class="col-md-4 col-lg-2">
-                                            <div class="form-group mb-0">
-                                                <asp:LinkButton ID="btnAddKelulusanSementara" runat="server" CssClass="btn btn-primary w-100" OnClick="btnAddKelulusanSementara_Click" CausesValidation="false">
-                                                    <i class="bi bi-plus-circle me-1"></i> Tambah Kelulusan Sementara
-                                                </asp:LinkButton>
-                                            </div>
-                                        </div>
+                                    <div class="d-flex justify-content-end mt-3">
+                                        <asp:LinkButton ID="btnAddKelulusanSementara" runat="server" CssClass="btn btn-primary px-4" OnClick="btnAddKelulusanSementara_Click" CausesValidation="false">
+                                            <i class="bi bi-plus-circle me-1"></i> Tambah
+                                        </asp:LinkButton>
                                     </div>
                                 </asp:Panel>
 
@@ -4979,7 +4985,7 @@
                                                 <EditItemTemplate>
                                                     <%# Container.DataItemIndex + 1 %>
                                                 </EditItemTemplate>
-                                                <HeaderStyle Width="4%" HorizontalAlign="Center" />
+                                                <HeaderStyle Width="5%" HorizontalAlign="Center" />
                                                 <ItemStyle HorizontalAlign="Center" VerticalAlign="Middle" />
                                             </asp:TemplateField>
 
@@ -4990,65 +4996,65 @@
                                                 <EditItemTemplate>
                                                     <span class="fw-bold"><%# GetNamaPembaharuan(Container.DataItemIndex + 1) %></span>
                                                 </EditItemTemplate>
-                                                <HeaderStyle Width="9%" />
+                                                <HeaderStyle Width="12%" />
                                                 <ItemStyle VerticalAlign="Middle" />
                                             </asp:TemplateField>
 
-                                            <asp:TemplateField HeaderText="Tarikh Mula">
+                                            <asp:TemplateField HeaderText="Tempoh Kelulusan">
                                                 <ItemTemplate>
-                                                    <%# Eval("TarikhMula", "{0:dd/MM/yyyy}") %>
+                                                    <div class="d-flex align-items-center gap-2">
+                                                        <span><%# Eval("TarikhMula", "{0:dd/MM/yyyy}") %></span>
+                                                        <i class="bi bi-arrow-right text-muted"></i>
+                                                        <span><%# Eval("TarikhTamat", "{0:dd/MM/yyyy}") %></span>
+                                                    </div>
                                                 </ItemTemplate>
                                                 <EditItemTemplate>
-                                                    <asp:TextBox ID="txtEditTarikhMulaSementara" runat="server" Text='<%# Eval("TarikhMula", "{0:yyyy-MM-dd}") %>' TextMode="Date" CssClass="form-control" />
+                                                    <div class="mb-2">
+                                                        <small class="text-muted d-block">Tarikh Mula <span class="text-danger">*</span></small>
+                                                        <asp:TextBox ID="txtEditTarikhMulaSementara" runat="server" Text='<%# Eval("TarikhMula", "{0:yyyy-MM-dd}") %>' TextMode="Date" CssClass="form-control form-control-sm" />
+                                                    </div>
+                                                    <div>
+                                                        <small class="text-muted d-block">Tarikh Tamat <span class="text-danger">*</span></small>
+                                                        <asp:TextBox ID="txtEditTarikhTamatSementara" runat="server" Text='<%# Eval("TarikhTamat", "{0:yyyy-MM-dd}") %>' TextMode="Date" CssClass="form-control form-control-sm" />
+                                                    </div>
                                                 </EditItemTemplate>
-                                                <HeaderStyle Width="11%" />
+                                                <HeaderStyle Width="22%" />
                                                 <ItemStyle VerticalAlign="Middle" />
                                             </asp:TemplateField>
 
-                                            <asp:TemplateField HeaderText="Tarikh Tamat">
+                                            <asp:TemplateField HeaderText="Pembayaran">
                                                 <ItemTemplate>
-                                                    <%# Eval("TarikhTamat", "{0:dd/MM/yyyy}") %>
+                                                    <div class="d-flex justify-content-between gap-3">
+                                                        <small class="text-muted">Lesen Sementara</small>
+                                                        <span><%# FormatBayaranSementara(Eval("BayaranLesen")) %></span>
+                                                    </div>
+                                                    <div class="d-flex justify-content-between gap-3">
+                                                        <small class="text-muted">Lesen Iklan Sementara</small>
+                                                        <span><%# FormatBayaranSementara(Eval("BayaranIklan")) %></span>
+                                                    </div>
+                                                    <div class="mt-1"><%# FormatStatusBayaranSementara(Eval("StatusBayaran")) %></div>
                                                 </ItemTemplate>
                                                 <EditItemTemplate>
-                                                    <asp:TextBox ID="txtEditTarikhTamatSementara" runat="server" Text='<%# Eval("TarikhTamat", "{0:yyyy-MM-dd}") %>' TextMode="Date" CssClass="form-control" />
+                                                    <div class="mb-2">
+                                                        <small class="text-muted d-block">Bayaran Lesen Sementara (RM) <span class="text-danger">*</span></small>
+                                                        <asp:TextBox ID="txtEditBayaranLesenSementara" runat="server" Text='<%# FormatBayaranInput(Eval("BayaranLesen")) %>' TextMode="Number" step="0.01" min="0" placeholder="0.00" CssClass="form-control form-control-sm" />
+                                                    </div>
+                                                    <div class="mb-2">
+                                                        <small class="text-muted d-block">Bayaran Lesen Iklan Sementara (RM) <span class="text-danger">*</span></small>
+                                                        <asp:TextBox ID="txtEditBayaranIklanSementara" runat="server" Text='<%# FormatBayaranInput(Eval("BayaranIklan")) %>' TextMode="Number" step="0.01" min="0" placeholder="0.00" CssClass="form-control form-control-sm" />
+                                                    </div>
+                                                    <div>
+                                                        <small class="text-muted d-block">Status Pembayaran <span class="text-danger">*</span></small>
+                                                        <asp:DropDownList ID="ddlEditStatusBayaranSementara" runat="server" CssClass="form-select form-select-sm form-control form-control-sm"
+                                                            SelectedValue='<%# GetStatusBayaranValue(Eval("StatusBayaran")) %>'>
+                                                            <asp:ListItem Text="-- Pilih --" Value="" />
+                                                            <asp:ListItem Text="Jelas" Value="1" />
+                                                            <asp:ListItem Text="Tidak Jelas" Value="0" />
+                                                        </asp:DropDownList>
+                                                    </div>
                                                 </EditItemTemplate>
-                                                <HeaderStyle Width="11%" />
+                                                <HeaderStyle Width="28%" />
                                                 <ItemStyle VerticalAlign="Middle" />
-                                            </asp:TemplateField>
-
-                                            <asp:TemplateField HeaderText="Bayaran Lesen Sementara (RM)">
-                                                <ItemTemplate>
-                                                    <%# FormatBayaranSementara(Eval("BayaranLesen")) %>
-                                                </ItemTemplate>
-                                                <EditItemTemplate>
-                                                    <asp:TextBox ID="txtEditBayaranLesenSementara" runat="server" Text='<%# FormatBayaranInput(Eval("BayaranLesen")) %>' TextMode="Number" step="0.01" min="0" placeholder="0.00" CssClass="form-control" />
-                                                </EditItemTemplate>
-                                                <ItemStyle HorizontalAlign="Right" VerticalAlign="Middle" />
-                                            </asp:TemplateField>
-
-                                            <asp:TemplateField HeaderText="Bayaran Lesen Iklan Sementara (RM)">
-                                                <ItemTemplate>
-                                                    <%# FormatBayaranSementara(Eval("BayaranIklan")) %>
-                                                </ItemTemplate>
-                                                <EditItemTemplate>
-                                                    <asp:TextBox ID="txtEditBayaranIklanSementara" runat="server" Text='<%# FormatBayaranInput(Eval("BayaranIklan")) %>' TextMode="Number" step="0.01" min="0" placeholder="0.00" CssClass="form-control" />
-                                                </EditItemTemplate>
-                                                <ItemStyle HorizontalAlign="Right" VerticalAlign="Middle" />
-                                            </asp:TemplateField>
-
-                                            <asp:TemplateField HeaderText="Status Pembayaran">
-                                                <ItemTemplate>
-                                                    <%# FormatStatusBayaranSementara(Eval("StatusBayaran")) %>
-                                                </ItemTemplate>
-                                                <EditItemTemplate>
-                                                    <asp:DropDownList ID="ddlEditStatusBayaranSementara" runat="server" CssClass="form-select form-control"
-                                                        SelectedValue='<%# GetStatusBayaranValue(Eval("StatusBayaran")) %>'>
-                                                        <asp:ListItem Text="-- Pilih --" Value="" />
-                                                        <asp:ListItem Text="Jelas" Value="1" />
-                                                        <asp:ListItem Text="Tidak Jelas" Value="0" />
-                                                    </asp:DropDownList>
-                                                </EditItemTemplate>
-                                                <ItemStyle HorizontalAlign="Center" VerticalAlign="Middle" />
                                             </asp:TemplateField>
 
                                             <asp:TemplateField HeaderText="Tarikh Kemaskini">
@@ -5060,7 +5066,7 @@
                                                     <div><%# If(IsDBNull(Eval("LastModDt")), Eval("CreatedDt", "{0:dd/MM/yyyy HH:mm}"), Eval("LastModDt", "{0:dd/MM/yyyy HH:mm}")) %></div>
                                                     <small class="text-muted"><%# If(IsDBNull(Eval("LastModID")) OrElse String.IsNullOrEmpty(Eval("LastModID").ToString()), Eval("CreatorID"), Eval("LastModID")) %></small>
                                                 </EditItemTemplate>
-                                                <HeaderStyle Width="13%" />
+                                                <HeaderStyle Width="15%" />
                                                 <ItemStyle VerticalAlign="Middle" />
                                             </asp:TemplateField>
 
@@ -5081,7 +5087,7 @@
                                                         <i class="bi bi-x-lg me-1"></i>Batal
                                                     </asp:LinkButton>
                                                 </EditItemTemplate>
-                                                <HeaderStyle Width="20%" HorizontalAlign="Center" />
+                                                <HeaderStyle Width="18%" HorizontalAlign="Center" />
                                                 <ItemStyle HorizontalAlign="Center" VerticalAlign="Middle" />
                                             </asp:TemplateField>
                                         </Columns>
