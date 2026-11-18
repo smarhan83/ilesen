@@ -1390,35 +1390,38 @@
     <%-- ========================================================================= --%>
     <asp:SqlDataSource ID="SqlDataSourceGrid" runat="server"
         ConnectionString="<%$ ConnectionStrings:webcon_ConnectionStr %>"
-        SelectCommand="SELECT ROW_NUMBER() OVER(ORDER BY TarikhMohon desc, Permohonan_ID desc) as RowNo, * FROM (
+        SelectCommand="SET NOCOUNT ON;
+            DECLARE @IsLesen bit = ISNULL((SELECT TOP 1 x.JabatanAgensi_IsLesen FROM LESEN_JabatanAgensi x WHERE x.JabatanAgensi_ID = @AgensiID), 0);
+            SELECT ROW_NUMBER() OVER(ORDER BY tbl.TarikhMohon desc, tbl.Permohonan_ID desc) as RowNo, tbl.*,
+            (CASE WHEN EXISTS (SELECT 1 FROM LESEN_PermohonanFail pf WHERE pf.PermohonanFail_PermohonanID = tbl.Permohonan_ID AND pf.PermohonanFail_JenisLampiran = 'L1' AND ISNULL(pf.PermohonanFail_FilePath, '') <> '') THEN 1 ELSE 0 END) AS HasLampiran1,
+            (CASE WHEN EXISTS (SELECT 1 FROM LESEN_PermohonanFail pf WHERE pf.PermohonanFail_PermohonanID = tbl.Permohonan_ID AND pf.PermohonanFail_JenisLampiran = 'L2' AND ISNULL(pf.PermohonanFail_FilePath, '') <> '') THEN 1 ELSE 0 END) AS HasLampiran2
+            FROM (
             SELECT ROW_NUMBER() OVER (PARTITION BY a.Permohonan_ID ORDER BY a.ApprovalID DESC) AS RepNo,
             (CASE WHEN a.ApprStatusID < 9 AND ISNULL(a.AgensiID, 0) > 0 then a.Description + ' - ' + e.JabatanAgensi_Description ELSE a.Description END) AS StatusDesc,
-            @AgensiID AS UserType, a.*, g.JenisLesenIdList, g.JenisLesenDescList, g.Rujukan, g.IsSuratKelulusanFail, g.StatusID, g.IsPublish, g.Is24jam, f.Pemohon_Name, h.CreatedDt,
-            (CASE WHEN EXISTS (SELECT 1 FROM LESEN_PermohonanFail pf WHERE pf.PermohonanFail_PermohonanID = a.Permohonan_ID AND pf.PermohonanFail_JenisLampiran = 'L1' AND ISNULL(pf.PermohonanFail_FilePath, '') <> '') THEN 1 ELSE 0 END) AS HasLampiran1,
-            (CASE WHEN EXISTS (SELECT 1 FROM LESEN_PermohonanFail pf WHERE pf.PermohonanFail_PermohonanID = a.Permohonan_ID AND pf.PermohonanFail_JenisLampiran = 'L2' AND ISNULL(pf.PermohonanFail_FilePath, '') <> '') THEN 1 ELSE 0 END) AS HasLampiran2
-            FROM 
-            v_LESEN_ApprovalList_Curr a 
+            @AgensiID AS UserType, a.*, g.JenisLesenIdList, g.JenisLesenDescList, g.Rujukan, g.IsSuratKelulusanFail, g.StatusID, g.IsPublish, g.Is24jam, f.Pemohon_Name, h.CreatedDt
+            FROM
+            v_LESEN_ApprovalList_Curr a
             left join LESEN_JabatanAgensi e on e.JabatanAgensi_ID = a.AgensiID
             inner join LESEN_Pemohon f on f.Pemohon_ID = a.Permohonan_PemohonID
-            inner join LESEN_Permohonan g on g.Permohonan_ID = a.Permohonan_ID 
-            inner join LESEN_ApprovalList h on h.Permohonan_ID = a.Permohonan_ID and h.ApprStatusID = a.ApprStatusID 
-            WHERE a.Permohonan_ID in (
-            SELECT x1.Permohonan_ID 
-            FROM LESEN_ApprovalList x1 
-            where 
-            case when @AgensiID = 0 then '0' when isnull((select top 1 x.JabatanAgensi_IsLesen from LESEN_JabatanAgensi x where x.JabatanAgensi_ID = @AgensiID),0) = 1 then isnull(x1.AgensiID, @AgensiID) else x1.AgensiID end 
-            = case when @AgensiID = 0 then '0'  when isnull((select top 1 x.JabatanAgensi_IsLesen from LESEN_JabatanAgensi x where x.JabatanAgensi_ID = @AgensiID),0) = 1 then @AgensiID else @AgensiID end
-            and RTRIM(Rujukan) like case when @AgensiID = 0 then @Rujukan else '%'+ @Rujukan +'%' end
-            )
-            and g.JenisLesenDescList LIKE case when @LesenDesc = '0' then g.JenisLesenDescList else '%'+@LesenDesc+'%' end
-            and (CONVERT(VARCHAR(25), h.CreatedDt, 126) LIKE '%'+@TarikhLulus+'%' 
-            or h.CreatedDt IS NULL)
-            and a.ApprStatusID = case when @statusID = -1 then a.ApprStatusID else @statusID end
-            and g.StatusID > 0  
-            and g.IsBatal = 0 
+            inner join LESEN_Permohonan g on g.Permohonan_ID = a.Permohonan_ID
+            inner join LESEN_ApprovalList h on h.Permohonan_ID = a.Permohonan_ID and h.ApprStatusID = a.ApprStatusID
+            WHERE (@AgensiID = 0 OR EXISTS (
+                SELECT 1 FROM LESEN_ApprovalList x1
+                WHERE x1.Permohonan_ID = a.Permohonan_ID
+                AND (x1.AgensiID = @AgensiID OR (@IsLesen = 1 AND x1.AgensiID IS NULL))
+            ))
+            and g.Rujukan is not null
+            and (@Rujukan = '%%' OR RTRIM(g.Rujukan) like case when @AgensiID = 0 then @Rujukan else '%'+ @Rujukan +'%' end)
+            and g.JenisLesenDescList is not null
+            and (@LesenDesc = '0' OR g.JenisLesenDescList LIKE '%'+@LesenDesc+'%')
+            and (@TarikhLulus = '%%' OR CONVERT(VARCHAR(25), h.CreatedDt, 126) LIKE '%'+@TarikhLulus+'%' or h.CreatedDt IS NULL)
+            and (@statusID = -1 OR a.ApprStatusID = @statusID)
+            and g.StatusID > 0
+            and g.IsBatal = 0
             and g.JenisLesenIdList is not null
             and g.JenisLesenIdList <> '27'
-            ) AS tbl WHERE RepNo = 1 order by TarikhMohon desc, Permohonan_ID desc">
+            ) AS tbl WHERE tbl.RepNo = 1 order by tbl.TarikhMohon desc, tbl.Permohonan_ID desc
+            OPTION (RECOMPILE)">
         <SelectParameters>
             <asp:SessionParameter SessionField="sessionEstateID" DefaultValue="0" Name="AgensiID"></asp:SessionParameter>
             <asp:ControlParameter ControlID="txtNoRujukan" PropertyName="Text" DefaultValue="%%" Name="Rujukan"></asp:ControlParameter>
