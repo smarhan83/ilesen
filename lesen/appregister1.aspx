@@ -981,39 +981,50 @@
            Lihat Ulasan Agensi (ikon + popup)
            ========================================================================= */
         .btn-ulasan-view {
-            width: 34px; height: 34px;
+            position: relative;
+            width: 26px; height: 26px;
             display: inline-flex; align-items: center; justify-content: center;
-            border-radius: 50%;
-            border: 1px solid rgba(45, 108, 223, 0.30);
-            background: #eef3fd; color: #2D6CDF;
+            border-radius: 6px;
+            border: none;
+            background: transparent; color: #64748b;
             cursor: pointer; padding: 0;
-            transition: all 0.15s ease;
+            transition: background 0.15s ease, color 0.15s ease;
         }
-        .btn-ulasan-view:hover { background: #2D6CDF; color: #fff; transform: translateY(-1px); box-shadow: 0 4px 10px rgba(45,108,223,0.25); }
-        .btn-ulasan-view .bi { font-size: 1rem; line-height: 1; }
-        .btn-ulasan-view.ulasan-semula { border-color: rgba(220,53,69,0.35); background: #fdeef0; color: #dc3545; }
-        .btn-ulasan-view.ulasan-semula:hover { background: #dc3545; color: #fff; box-shadow: 0 4px 10px rgba(220,53,69,0.25); }
-        .ulasan-none { color: #adb5bd; }
+        .btn-ulasan-view:hover { background: #eef3fd; color: #2D6CDF; }
+        .btn-ulasan-view .bi { font-size: 0.95rem; line-height: 1; }
+        .btn-ulasan-view.ulasan-semula::after {
+            content: ""; position: absolute; top: 3px; right: 3px;
+            width: 6px; height: 6px; border-radius: 50%;
+            background: #dc3545; box-shadow: 0 0 0 2px #fff;
+        }
+        .ulasan-none { color: #cbd5e1; }
 
-        #modalUlasanAgensi .modal-content { border: 1px solid rgba(45,108,223,0.25); border-radius: 12px; box-shadow: 0 10px 30px rgba(15,23,42,0.16); overflow: hidden; }
-        #modalUlasanAgensi .modal-header { background: linear-gradient(135deg, #2D6CDF, #1d4ed8); color: #fff; padding: 14px 20px; border-bottom: none; }
-        #modalUlasanAgensi .modal-title { font-size: 1rem; font-weight: 700; display: flex; align-items: center; gap: 8px; color: #fff; }
-        #modalUlasanAgensi .btn-modal-close { background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.35); color: #fff; width: 30px; height: 30px; border-radius: 6px; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; }
-        #modalUlasanAgensi .btn-modal-close:hover { background: rgba(255,255,255,0.30); }
-        #modalUlasanAgensi .modal-body { padding: 18px 20px; background: #f8fafc; }
-        .ulasan-meta { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
-        .ulasan-meta .ulasan-agensi { font-weight: 700; color: #1e293b; display: flex; align-items: center; gap: 8px; }
-        .ulasan-meta .ulasan-agensi .bi { color: #2D6CDF; }
-        .ulasan-badge { font-size: 0.75rem; font-weight: 600; padding: 4px 10px; border-radius: 999px; }
-        .ulasan-badge.st-1 { background: #fff4e0; color: #b45309; }
-        .ulasan-badge.st-2 { background: #e7f8ee; color: #15803d; }
-        .ulasan-badge.st-3 { background: #fdeef0; color: #b91c1c; }
-        .ulasan-block { background: #fff; border: 1px solid #e2e8f0; border-left: 4px solid #2D6CDF; border-radius: 8px; padding: 12px 14px; margin-bottom: 10px; }
+        #modalUlasanAgensi .modal-dialog { max-width: 500px; }
+        #modalUlasanAgensi .modal-content { border: none; border-radius: 14px; box-shadow: 0 20px 50px rgba(15,23,42,0.22); overflow: hidden; }
+        #modalUlasanAgensi .modal-header { background: linear-gradient(135deg, #2D6CDF, #1d4ed8); color: #fff; padding: 16px 22px !important; border-bottom: none; }
+        #modalUlasanAgensi .modal-title { font-size: 1rem; font-weight: 600; display: flex; align-items: center; gap: 10px; color: #fff; margin: 0; }
+        #modalUlasanAgensi .btn-modal-close { background: rgba(255,255,255,0.15); border: none; color: #fff; width: 30px; height: 30px; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; font-size: 0.85rem; }
+        #modalUlasanAgensi .btn-modal-close:hover { background: rgba(255,255,255,0.28); }
+        #modalUlasanAgensi .modal-body { padding: 0 !important; background: #fff; }
+        .ulasan-wrap { padding: 20px 22px 22px; }
+        .ulasan-meta { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; padding-bottom: 16px; margin-bottom: 16px; border-bottom: 1px solid #eef2f7; }
+        .ulasan-meta .ulasan-cap { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #94a3b8; margin-bottom: 3px; }
+        .ulasan-meta .ulasan-agensi { font-weight: 600; font-size: 0.95rem; color: #1e293b; }
+        .ulasan-badge { flex-shrink: 0; display: inline-flex; align-items: center; gap: 6px; font-size: 0.72rem; font-weight: 600; padding: 4px 10px; border-radius: 999px; white-space: nowrap; }
+        .ulasan-badge::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+        .ulasan-badge.st-1 { background: #fff7ed; color: #c2410c; }
+        .ulasan-badge.st-2 { background: #ecfdf3; color: #15803d; }
+        .ulasan-badge.st-3 { background: #fef2f2; color: #b91c1c; }
+        .ulasan-block { margin-bottom: 14px; }
         .ulasan-block:last-child { margin-bottom: 0; }
-        .ulasan-block.peraku { border-left-color: #7c3aed; }
-        .ulasan-block .ulasan-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: #64748b; margin-bottom: 6px; }
-        .ulasan-block .ulasan-teks { white-space: pre-wrap; word-break: break-word; color: #1e293b; font-size: 0.95rem; }
+        .ulasan-block .ulasan-label { display: flex; align-items: center; gap: 6px; font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #64748b; margin-bottom: 8px; }
+        .ulasan-block .ulasan-label .bi { color: #2D6CDF; font-size: 0.85rem; }
+        .ulasan-block.peraku .ulasan-label .bi { color: #7c3aed; }
+        .ulasan-block .ulasan-teks { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 12px 14px; white-space: pre-wrap; word-break: break-word; color: #334155; font-size: 0.9rem; line-height: 1.55; }
         .ulasan-block .ulasan-teks.kosong { color: #94a3b8; font-style: italic; }
+        #modalUlasanAgensi .modal-footer { padding: 12px 22px !important; border-top: 1px solid #eef2f7; background: #fbfcfe; }
+        #modalUlasanAgensi .btn-ulasan-tutup { background: #fff; border: 1px solid #cbd5e1; color: #334155; font-size: 0.85rem; font-weight: 500; padding: 6px 16px; border-radius: 8px; }
+        #modalUlasanAgensi .btn-ulasan-tutup:hover { background: #f1f5f9; }
     </style>
 </asp:Content>
 
@@ -3619,18 +3630,26 @@
                             </button>
                         </div>
                         <div class="modal-body">
-                            <div class="ulasan-meta">
-                                <div class="ulasan-agensi"><i class="bi bi-building"></i><span id="ulasanAgensiNama"></span></div>
-                                <span id="ulasanStatusBadge" class="ulasan-badge"></span>
+                            <div class="ulasan-wrap">
+                                <div class="ulasan-meta">
+                                    <div>
+                                        <div class="ulasan-cap">Jabatan Agensi</div>
+                                        <div class="ulasan-agensi" id="ulasanAgensiNama"></div>
+                                    </div>
+                                    <span id="ulasanStatusBadge" class="ulasan-badge"></span>
+                                </div>
+                                <div class="ulasan-block">
+                                    <div class="ulasan-label"><i class="bi bi-person-check"></i>Ulasan Pengesah</div>
+                                    <div class="ulasan-teks" id="ulasanTeksKb"></div>
+                                </div>
+                                <div class="ulasan-block peraku" id="ulasanBlokKj">
+                                    <div class="ulasan-label"><i class="bi bi-person-badge"></i>Ulasan Peraku</div>
+                                    <div class="ulasan-teks" id="ulasanTeksKj"></div>
+                                </div>
                             </div>
-                            <div class="ulasan-block">
-                                <div class="ulasan-label">Ulasan Pengesah</div>
-                                <div class="ulasan-teks" id="ulasanTeksKb"></div>
-                            </div>
-                            <div class="ulasan-block peraku" id="ulasanBlokKj">
-                                <div class="ulasan-label">Ulasan Peraku</div>
-                                <div class="ulasan-teks" id="ulasanTeksKj"></div>
-                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-ulasan-tutup" data-bs-dismiss="modal" data-dismiss="modal">Tutup</button>
                         </div>
                     </div>
                 </div>
