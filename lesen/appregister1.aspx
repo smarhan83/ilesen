@@ -976,6 +976,44 @@
         .font-weight-bold {
             font-weight: 700 !important;
         }
+
+        /* =========================================================================
+           Lihat Ulasan Agensi (ikon + popup)
+           ========================================================================= */
+        .btn-ulasan-view {
+            width: 34px; height: 34px;
+            display: inline-flex; align-items: center; justify-content: center;
+            border-radius: 50%;
+            border: 1px solid rgba(45, 108, 223, 0.30);
+            background: #eef3fd; color: #2D6CDF;
+            cursor: pointer; padding: 0;
+            transition: all 0.15s ease;
+        }
+        .btn-ulasan-view:hover { background: #2D6CDF; color: #fff; transform: translateY(-1px); box-shadow: 0 4px 10px rgba(45,108,223,0.25); }
+        .btn-ulasan-view .bi { font-size: 1rem; line-height: 1; }
+        .btn-ulasan-view.ulasan-semula { border-color: rgba(220,53,69,0.35); background: #fdeef0; color: #dc3545; }
+        .btn-ulasan-view.ulasan-semula:hover { background: #dc3545; color: #fff; box-shadow: 0 4px 10px rgba(220,53,69,0.25); }
+        .ulasan-none { color: #adb5bd; }
+
+        #modalUlasanAgensi .modal-content { border: 1px solid rgba(45,108,223,0.25); border-radius: 12px; box-shadow: 0 10px 30px rgba(15,23,42,0.16); overflow: hidden; }
+        #modalUlasanAgensi .modal-header { background: linear-gradient(135deg, #2D6CDF, #1d4ed8); color: #fff; padding: 14px 20px; border-bottom: none; }
+        #modalUlasanAgensi .modal-title { font-size: 1rem; font-weight: 700; display: flex; align-items: center; gap: 8px; color: #fff; }
+        #modalUlasanAgensi .btn-modal-close { background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.35); color: #fff; width: 30px; height: 30px; border-radius: 6px; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; }
+        #modalUlasanAgensi .btn-modal-close:hover { background: rgba(255,255,255,0.30); }
+        #modalUlasanAgensi .modal-body { padding: 18px 20px; background: #f8fafc; }
+        .ulasan-meta { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+        .ulasan-meta .ulasan-agensi { font-weight: 700; color: #1e293b; display: flex; align-items: center; gap: 8px; }
+        .ulasan-meta .ulasan-agensi .bi { color: #2D6CDF; }
+        .ulasan-badge { font-size: 0.75rem; font-weight: 600; padding: 4px 10px; border-radius: 999px; }
+        .ulasan-badge.st-1 { background: #fff4e0; color: #b45309; }
+        .ulasan-badge.st-2 { background: #e7f8ee; color: #15803d; }
+        .ulasan-badge.st-3 { background: #fdeef0; color: #b91c1c; }
+        .ulasan-block { background: #fff; border: 1px solid #e2e8f0; border-left: 4px solid #2D6CDF; border-radius: 8px; padding: 12px 14px; margin-bottom: 10px; }
+        .ulasan-block:last-child { margin-bottom: 0; }
+        .ulasan-block.peraku { border-left-color: #7c3aed; }
+        .ulasan-block .ulasan-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: #64748b; margin-bottom: 6px; }
+        .ulasan-block .ulasan-teks { white-space: pre-wrap; word-break: break-word; color: #1e293b; font-size: 0.95rem; }
+        .ulasan-block .ulasan-teks.kosong { color: #94a3b8; font-style: italic; }
     </style>
 </asp:Content>
 
@@ -3567,6 +3605,37 @@
                  SECTION 2: Modal QR Code
                  ========================================================================= --%>
             <!-- Modal QR Code -->
+            <%-- Modal Lihat Ulasan Agensi --%>
+            <div class="modal fade" id="modalUlasanAgensi" tabindex="-1" role="dialog" aria-labelledby="modalUlasanAgensiLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header d-flex justify-content-between align-items-center">
+                            <h5 class="modal-title mb-0" id="modalUlasanAgensiLabel">
+                                <i class="bi bi-chat-square-text"></i>
+                                <span>Ulasan Semakan</span>
+                            </h5>
+                            <button type="button" class="btn-modal-close" data-bs-dismiss="modal" data-dismiss="modal" title="Tutup" aria-label="Tutup">
+                                <i class="bi bi-x-lg"></i>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="ulasan-meta">
+                                <div class="ulasan-agensi"><i class="bi bi-building"></i><span id="ulasanAgensiNama"></span></div>
+                                <span id="ulasanStatusBadge" class="ulasan-badge"></span>
+                            </div>
+                            <div class="ulasan-block">
+                                <div class="ulasan-label">Ulasan Pengesah</div>
+                                <div class="ulasan-teks" id="ulasanTeksKb"></div>
+                            </div>
+                            <div class="ulasan-block peraku" id="ulasanBlokKj">
+                                <div class="ulasan-label">Ulasan Peraku</div>
+                                <div class="ulasan-teks" id="ulasanTeksKj"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="modal fade" id="modalQrCode" tabindex="-1" role="dialog" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
@@ -6104,6 +6173,22 @@
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
                                                 <asp:BoundField DataField="ViewStatus" HeaderText="Status Dibaca" SortExpression="ViewStatus"></asp:BoundField>
+                                                <asp:TemplateField HeaderText="Ulasan">
+                                                    <HeaderStyle HorizontalAlign="Center" />
+                                                    <ItemStyle HorizontalAlign="Center" />
+                                                    <ItemTemplate>
+                                                        <button type="button" title="Lihat Ulasan" onclick="lihatUlasanAgensi(this)"
+                                                            class="<%# If(Convert.ToString(Eval("reviewStatusID")) = "3", "btn-ulasan-view ulasan-semula", "btn-ulasan-view") %>"
+                                                            style="<%# If(Convert.ToString(Eval("kbReview")).Trim() <> "" OrElse Convert.ToString(Eval("kjReview")).Trim() <> "", "", "display:none") %>"
+                                                            data-agensi="<%# HttpUtility.HtmlEncode(Convert.ToString(Eval("JabatanAgensi_Description"))) %>"
+                                                            data-status="<%# Convert.ToString(Eval("reviewStatusID")) %>"
+                                                            data-kb="<%# HttpUtility.HtmlEncode(Convert.ToString(Eval("kbReview"))) %>"
+                                                            data-kj="<%# HttpUtility.HtmlEncode(Convert.ToString(Eval("kjReview"))) %>">
+                                                            <i class="bi bi-eye"></i>
+                                                        </button>
+                                                        <span class="ulasan-none" style="<%# If(Convert.ToString(Eval("kbReview")).Trim() <> "" OrElse Convert.ToString(Eval("kjReview")).Trim() <> "", "display:none", "") %>">&mdash;</span>
+                                                    </ItemTemplate>
+                                                </asp:TemplateField>
                                                 <asp:TemplateField ShowHeader="False">
                                                     <EditItemTemplate>
                                                     </EditItemTemplate>
@@ -6118,17 +6203,6 @@
                                                             Enabled='<%# If(IsDBNull(Eval("reviewStatusID")), True, If(Eval("reviewStatusID") = "1", False, If(Eval("reviewStatusID") = "2", False, If(Eval("reviewStatusID") = "3", True, False)))) %>'
                                                             BackColor='<%# If(IsDBNull(Eval("reviewStatusID")), System.Drawing.ColorTranslator.FromHtml("#87CEEB"), If(Eval("reviewStatusID") = "1", System.Drawing.ColorTranslator.FromHtml("#FFA500"), If(Eval("reviewStatusID") = "2", System.Drawing.ColorTranslator.FromHtml("#00FF00"), If(Eval("reviewStatusID") = "3", System.Drawing.ColorTranslator.FromHtml("#FF0000"), "")))) %>'
                                                             CommandName="review" CausesValidation="False" ID="LinkButton4" CommandArgument='<%# Container.DataItemIndex %>'></asp:LinkButton>
-
-                                                        <div class="wrapperTooltip" runat="server" visible='<%# If(IsDBNull(Eval("reviewStatusID")), False, If(Eval("reviewStatusID") = "3", True, True)) %>'>
-                                                            <span style="font-weight: normal" data-placement="top" title="Lihat Ulasan" class="badge badge-danger">Lihat Ulasan</span>
-                                                            <div class="tooltip">
-                                                                <label style="font-weight: bold; text-decoration: underline;">Ulasan Pengesah : </label>
-                                                                <asp:Label ID="lblkbReview" runat="server" Text='<%# Eval("kbReview") %>'></asp:Label>
-                                                                <br />
-                                                                <%--<label style="font-weight: bold; text-decoration: underline;">Ulasan Peraku : </label>
-                                                                <asp:Label ID="lblkjReview" runat="server" Text='<%# Eval("kjReview") %>'></asp:Label>--%>
-                                                            </div>
-                                                        </div>
 
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
@@ -6194,6 +6268,22 @@
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
                                                 <asp:BoundField DataField="ViewStatus" HeaderText="Status Dibaca" SortExpression="ViewStatus"></asp:BoundField>
+                                                <asp:TemplateField HeaderText="Ulasan">
+                                                    <HeaderStyle HorizontalAlign="Center" />
+                                                    <ItemStyle HorizontalAlign="Center" />
+                                                    <ItemTemplate>
+                                                        <button type="button" title="Lihat Ulasan" onclick="lihatUlasanAgensi(this)"
+                                                            class="<%# If(Convert.ToString(Eval("reviewStatusID")) = "3", "btn-ulasan-view ulasan-semula", "btn-ulasan-view") %>"
+                                                            style="<%# If(Convert.ToString(Eval("kbReview")).Trim() <> "" OrElse Convert.ToString(Eval("kjReview")).Trim() <> "", "", "display:none") %>"
+                                                            data-agensi="<%# HttpUtility.HtmlEncode(Convert.ToString(Eval("JabatanAgensi_Description"))) %>"
+                                                            data-status="<%# Convert.ToString(Eval("reviewStatusID")) %>"
+                                                            data-kb="<%# HttpUtility.HtmlEncode(Convert.ToString(Eval("kbReview"))) %>"
+                                                            data-kj="<%# HttpUtility.HtmlEncode(Convert.ToString(Eval("kjReview"))) %>">
+                                                            <i class="bi bi-eye"></i>
+                                                        </button>
+                                                        <span class="ulasan-none" style="<%# If(Convert.ToString(Eval("kbReview")).Trim() <> "" OrElse Convert.ToString(Eval("kjReview")).Trim() <> "", "display:none", "") %>">&mdash;</span>
+                                                    </ItemTemplate>
+                                                </asp:TemplateField>
                                                 <asp:TemplateField ShowHeader="False">
                                                     <EditItemTemplate>
                                                     </EditItemTemplate>
@@ -6208,17 +6298,6 @@
                                                             Enabled='<%# If(IsDBNull(Eval("reviewStatusID")), True, If(Eval("reviewStatusID") = "1", False, If(Eval("reviewStatusID") = "2", False, If(Eval("reviewStatusID") = "3", True, False)))) %>'
                                                             BackColor='<%# If(IsDBNull(Eval("reviewStatusID")), System.Drawing.ColorTranslator.FromHtml("#87CEEB"), If(Eval("reviewStatusID") = "1", System.Drawing.ColorTranslator.FromHtml("#FFA500"), If(Eval("reviewStatusID") = "2", System.Drawing.ColorTranslator.FromHtml("#00FF00"), If(Eval("reviewStatusID") = "3", System.Drawing.ColorTranslator.FromHtml("#FF0000"), "")))) %>'
                                                             CommandName="review" CausesValidation="False" ID="LinkButton4" CommandArgument='<%# Container.DataItemIndex %>'></asp:LinkButton>
-
-                                                        <div class="wrapperTooltip" runat="server" visible='<%# If(IsDBNull(Eval("reviewStatusID")), False, If(Eval("reviewStatusID") = "3", True, False)) %>'>
-                                                            <span style="font-weight: normal" data-placement="top" title="Lihat Ulasan" class="badge badge-danger">Lihat Ulasan</span>
-                                                            <div class="tooltip">
-                                                                <label style="font-weight: bold; text-decoration: underline;">Ulasan Pengesah : </label>
-                                                                <asp:Label ID="lblkbReview" runat="server" Text='<%# Eval("kbReview") %>'></asp:Label>
-                                                                <br />
-                                                                <label style="font-weight: bold; text-decoration: underline;">Ulasan Peraku : </label>
-                                                                <asp:Label ID="lblkjReview" runat="server" Text='<%# Eval("kjReview") %>'></asp:Label>
-                                                            </div>
-                                                        </div>
 
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
@@ -6978,6 +7057,37 @@ ORDER BY SortOrder">
             document.body.classList.remove('modal-open');
             document.body.style.overflow = '';
             document.body.style.paddingRight = '';
+        }
+
+        function lihatUlasanAgensi(btn) {
+            var modalEl = document.getElementById('modalUlasanAgensi');
+            if (!modalEl || !btn) return;
+            var kb = (btn.getAttribute('data-kb') || '').trim();
+            var kj = (btn.getAttribute('data-kj') || '').trim();
+            var st = btn.getAttribute('data-status') || '';
+            var label = { '1': 'Dalam Proses Semakan', '2': 'Diluluskan', '3': 'Semakan Semula' };
+
+            document.getElementById('ulasanAgensiNama').textContent = btn.getAttribute('data-agensi') || '';
+            var badge = document.getElementById('ulasanStatusBadge');
+            badge.textContent = label[st] || '';
+            badge.className = 'ulasan-badge' + (label[st] ? ' st-' + st : '');
+            badge.style.display = label[st] ? '' : 'none';
+
+            var tKb = document.getElementById('ulasanTeksKb');
+            tKb.textContent = kb || 'Tiada ulasan.';
+            tKb.classList.toggle('kosong', !kb);
+            document.getElementById('ulasanTeksKj').textContent = kj;
+            document.getElementById('ulasanBlokKj').style.display = kj ? '' : 'none';
+
+            cleanupModalBackdrops();
+            if (typeof bootstrap !== 'undefined' && bootstrap.Modal) {
+                var inst = bootstrap.Modal.getOrCreateInstance ? bootstrap.Modal.getOrCreateInstance(modalEl) : new bootstrap.Modal(modalEl);
+                inst.show();
+            } else if (typeof $ !== 'undefined' && $.fn.modal) {
+                $('#modalUlasanAgensi').modal('show');
+            }
+            modalEl.removeEventListener('hidden.bs.modal', cleanupModalBackdrops);
+            modalEl.addEventListener('hidden.bs.modal', cleanupModalBackdrops);
         }
 
         function showSuratBalasanModal() {
