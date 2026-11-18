@@ -1,11 +1,11 @@
-Imports System.Web.UI.HtmlControls
-
 Imports System
 Imports System.Data
 Imports System.Data.SqlClient
 Imports System.Drawing
 Imports System.Drawing.Imaging
 Imports System.IO
+Imports System.Web.UI.HtmlControls
+Imports DocumentFormat.OpenXml.Presentation
 Imports Microsoft.ReportingServices.Rendering.ExcelRenderer.ExcelGenerator.BIFF8
 
 Partial Class kelulusan1
@@ -2442,7 +2442,7 @@ Partial Class kelulusan1
             myCommandSelect.Parameters.AddWithValue("@@JenisPasar", jenispasar)
             myCommandSelect.Parameters.AddWithValue("@@JenisPerniagaanPasar", jenisperniagaanpasar)
             myCommandSelect.Parameters.AddWithValue("@@JumlahPetak", jumlahpetak)
-            myCommandSelect.Parameters.AddWithValue("@@LokasiPasar", lokasipasar)
+            myCommandSelect.Parameters.AddWithValue("@@LokasiPasar", StrConv(lokasipasar, VbStrConv.ProperCase))
 
             Dim cvtDate = CDate(TB_TarikhPeriksa.Text).ToString("dd/MM/yyyy")
             myCommandSelect.Parameters.AddWithValue("@@TarikhPemeriksaan", cvtDate)
