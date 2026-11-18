@@ -131,7 +131,7 @@ Partial Class semakpembatalan1
         Dim IsFail As Boolean = CBool(GridView1.SelectedDataKey.Values(3))
         Dim IsPublish As Boolean = CBool(GridView1.SelectedDataKey.Values(4))
 
-        PopulateMaklumatPermohonanModal(PermohonanID)
+        ' Modal Maklumat Permohonan diisi sekali sahaja dalam Page_PreRenderComplete
 
         If getJabatanLesen(CInt(Session.Item("sessionEstateID"))) = False OrElse ApprStatusID < 9 Then
             tabSurat.Visible = False
@@ -260,15 +260,8 @@ Partial Class semakpembatalan1
 
     Private Sub FormView1_DataBound(sender As Object, e As EventArgs) Handles FormView1.DataBound
         initPageName()
-        Try
-            If FormView1.DataKey IsNot Nothing AndAlso FormView1.DataKey("Permohonan_ID") IsNot Nothing Then
-                Dim pid As Integer = 0
-                If Integer.TryParse(FormView1.DataKey("Permohonan_ID").ToString(), pid) AndAlso pid > 0 Then
-                    PopulateMaklumatPermohonanModal(pid)
-                End If
-            End If
-        Catch ex As Exception
-        End Try
+        ' Modal Maklumat Permohonan diisi sekali sahaja dalam Page_PreRenderComplete
+        ' (sebelum ini query yang sama dijalankan 3 kali setiap postback)
     End Sub
 
 #Region "Modal Maklumat Permohonan Details"
