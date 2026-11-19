@@ -28,6 +28,8 @@ Public Class AuditAliran
     Public Const TERBIT_SURAT As String = "Terbit Surat"
     Public Const TARIK_SURAT As String = "Tarik Balik Surat"
     Public Const KEPUTUSAN_MESYUARAT As String = "Keputusan Mesyuarat"
+    Public Const PADAM_PERMOHONAN As String = "Padam Permohonan"
+    Public Const BATAL_PROSES As String = "Batal Proses"
 
     Private Shared ReadOnly Property ConnStr As String
         Get
@@ -93,6 +95,22 @@ Public Class AuditAliran
             Dim detail As String = jenis & " | Status: " & If(statusLama, "-") & " -> " & baru
             If Not String.IsNullOrWhiteSpace(catatan) Then detail &= " | " & catatan.Trim()
             GlobalClass.auditTrail(modul, tindakan & " - " & ruj, tindakan, ruj, detail)
+        Catch ex As Exception
+            ' log tidak boleh mengganggu tindakan pengguna
+        End Try
+    End Sub
+
+    ''' <summary>
+    ''' Rekod pemadaman permohonan. Rujukan dan status mesti dibaca SEBELUM rekod dipadam
+    ''' (selepas dipadam, Rujukan() dan Status() tidak lagi menjumpai rekod).
+    ''' </summary>
+    Public Shared Sub LogPadam(ByVal modul As String, ByVal rujukan As String, ByVal batal As Boolean,
+                               ByVal statusLama As String, Optional ByVal catatan As String = "")
+        Try
+            Dim jenis As String = If(batal, "Pembatalan", "Permohonan Baru")
+            Dim detail As String = jenis & " | Status: " & If(statusLama, "-") & " -> Dipadam"
+            If Not String.IsNullOrWhiteSpace(catatan) Then detail &= " | " & catatan.Trim()
+            GlobalClass.auditTrail(modul, PADAM_PERMOHONAN & " - " & rujukan, PADAM_PERMOHONAN, rujukan, detail)
         Catch ex As Exception
             ' log tidak boleh mengganggu tindakan pengguna
         End Try
