@@ -4386,7 +4386,14 @@
                                     <Columns>
                                         <asp:BoundField DataField="Permohonan_ID" HeaderText="ID" SortExpression="Permohonan_ID" Visible="false"></asp:BoundField>
                                         <asp:BoundField DataField="RowNo" HeaderText="No" SortExpression="RowNo"></asp:BoundField>
-                                        <asp:BoundField DataField="TarikhMohon" HeaderText="Tarikh" DataFormatString="{0:dd/MM/yyyy}" SortExpression="TarikhMohon"></asp:BoundField>
+                                        <asp:TemplateField HeaderText="Tarikh" SortExpression="TarikhMohon">
+                                            <ItemTemplate>
+                                                <div class="small text-muted">Mohon</div>
+                                                <div class="text-nowrap"><%# Eval("TarikhMohon", "{0:dd/MM/yyyy}") %></div>
+                                                <div class="small text-muted mt-1">Dikemaskini</div>
+                                                <div class="text-nowrap"><%# If(IsDBNull(Eval("LastModDt")), "-", Eval("LastModDt", "{0:dd/MM/yyyy}")) %></div>
+                                            </ItemTemplate>
+                                        </asp:TemplateField>
                                         <asp:BoundField DataField="JenisLesenDescList" HeaderText="Jenis Lesen/Permit" SortExpression="JenisLesenDescList"></asp:BoundField>
                                         <asp:TemplateField>
                                             <HeaderTemplate>
@@ -4443,9 +4450,8 @@
                                             </ItemTemplate>
                                         </asp:TemplateField>
                                         <asp:BoundField DataField="Description" HeaderText="Status" SortExpression="Description"></asp:BoundField>
-                                        <asp:BoundField DataField="LastModDt" HeaderText="Tarikh Dikemaskini" DataFormatString="{0:dd/MM/yyyy}" SortExpression="LastModDt" NullDisplayText="-"></asp:BoundField>
                                         <asp:TemplateField HeaderText="Catatan" SortExpression="RemarksFail">
-                                            <ItemTemplate><span style="white-space: pre-line; font-size: 0.72rem;"><%#: Eval("RemarksFail") %></span></ItemTemplate>
+                                            <ItemTemplate><span class="small" style="white-space: pre-line;"><%#: Eval("RemarksFail") %></span></ItemTemplate>
                                         </asp:TemplateField>
 
                                         <asp:TemplateField HeaderText="Maklumat Permohonan" HeaderStyle-Font-Size="10pt" HeaderStyle-Width="90%" ItemStyle-Width="90%">

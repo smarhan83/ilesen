@@ -2942,7 +2942,7 @@
                                             </ItemTemplate>
                                         </asp:TemplateField>
                                         <asp:TemplateField HeaderText="Catatan" SortExpression="RemarksFail">
-                                            <ItemTemplate><span style="white-space: pre-line; font-size: 0.72rem;"><%#: Eval("RemarksFail") %></span></ItemTemplate>
+                                            <ItemTemplate><span class="small" style="white-space: pre-line;"><%#: Eval("RemarksFail") %></span></ItemTemplate>
                                         </asp:TemplateField>
 
                                         <asp:TemplateField ShowHeader="False">

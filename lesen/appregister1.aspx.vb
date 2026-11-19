@@ -142,10 +142,9 @@ Partial Class appregister1
                     GridView1.Columns(7).Visible = False
                     GridView1.Columns(8).Visible = False
                     GridView1.Columns(9).Visible = False
-                    GridView1.Columns(10).Visible = False
-                    GridView1.Columns(11).Visible = True
+                    GridView1.Columns(10).Visible = True
                 Else
-                    GridView1.Columns(11).Visible = False
+                    GridView1.Columns(10).Visible = False
                 End If
             Catch ex As Exception
                 ' Safe fallback
