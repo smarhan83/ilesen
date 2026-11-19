@@ -4445,7 +4445,7 @@
                                         <asp:BoundField DataField="Description" HeaderText="Status" SortExpression="Description"></asp:BoundField>
                                         <asp:BoundField DataField="LastModDt" HeaderText="Tarikh Dikemaskini" DataFormatString="{0:dd/MM/yyyy}" SortExpression="LastModDt" NullDisplayText="-"></asp:BoundField>
                                         <asp:TemplateField HeaderText="Catatan" SortExpression="RemarksFail">
-                                            <ItemTemplate><span style="white-space: pre-line; font-size: 0.8rem;"><%#: Eval("RemarksFail") %></span></ItemTemplate>
+                                            <ItemTemplate><span style="white-space: pre-line; font-size: 0.72rem;"><%#: Eval("RemarksFail") %></span></ItemTemplate>
                                         </asp:TemplateField>
 
                                         <asp:TemplateField HeaderText="Maklumat Permohonan" HeaderStyle-Font-Size="10pt" HeaderStyle-Width="90%" ItemStyle-Width="90%">
