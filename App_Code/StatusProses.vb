@@ -50,6 +50,36 @@ Public Class StatusProses
         End Select
     End Function
 
+    ''' <summary>
+    ''' Kotak ulasan di bawah langkah timeline (ulasan KB Agensi, Pengesah Jabatan Lesen, Peraku dan keputusan KJ).
+    ''' Lajur Nota / NotaKJ datang dari query timeline; kosong = tiada apa dipaparkan.
+    ''' </summary>
+    Public Shared Function NotaHtml(ByVal nota As Object, ByVal notaKJ As Object) As String
+        Dim teks As String = If(nota Is Nothing OrElse IsDBNull(nota), "", nota.ToString().Trim())
+        Dim kj As String = If(notaKJ Is Nothing OrElse IsDBNull(notaKJ), "", notaKJ.ToString().Trim())
+        If teks = "" AndAlso kj = "" Then Return ""
+
+        Dim sb As New System.Text.StringBuilder()
+        sb.Append("<div class=""status-step-nota"" style=""margin-top:6px;max-width:620px;background:#fffbeb;border:1px solid #fde68a;" &
+                  "border-left:3px solid #f59e0b;border-radius:6px;padding:7px 10px;"">")
+        If kj <> "" Then
+            sb.Append("<div style=""display:inline-flex;align-items:center;gap:5px;font-size:7.5pt;font-weight:700;color:#92400e;" &
+                      "background:#fef3c7;border-radius:999px;padding:2px 8px;margin-bottom:5px;"">" &
+                      "<i class=""bi bi-flag-fill"" style=""font-size:7pt;""></i>Keputusan: ")
+            sb.Append(System.Web.HttpUtility.HtmlEncode(kj))
+            sb.Append("</div>")
+        End If
+        If teks <> "" Then
+            sb.Append("<div style=""font-size:7pt;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#b45309;margin-bottom:2px;"">" &
+                      "<i class=""bi bi-chat-left-quote"" style=""margin-right:4px;""></i>Ulasan</div>")
+            sb.Append("<div style=""font-size:8.5pt;color:#374151;white-space:pre-wrap;word-break:break-word;line-height:1.45;"">")
+            sb.Append(System.Web.HttpUtility.HtmlEncode(teks))
+            sb.Append("</div>")
+        End If
+        sb.Append("</div>")
+        Return sb.ToString()
+    End Function
+
     Private Shared Function ToInt(ByVal value As Object) As Integer
         If value Is Nothing OrElse IsDBNull(value) Then Return 0
         Dim n As Integer
