@@ -2941,7 +2941,9 @@
                                                 <span runat="server" class="badge badge-secondary" visible='<%# If(Eval("IsBatal") = False, True, False) %>'>Tidak</span>
                                             </ItemTemplate>
                                         </asp:TemplateField>
-                                        <asp:BoundField DataField="RemarksFail" HeaderText="Catatan" SortExpression="RemarksFail"></asp:BoundField>
+                                        <asp:TemplateField HeaderText="Catatan" SortExpression="RemarksFail">
+                                            <ItemTemplate><span style="white-space: pre-line; font-size: 0.72rem;"><%#: Eval("RemarksFail") %></span></ItemTemplate>
+                                        </asp:TemplateField>
 
                                         <asp:TemplateField ShowHeader="False">
                                             <ItemTemplate>
