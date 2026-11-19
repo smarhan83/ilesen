@@ -4444,7 +4444,9 @@
                                         </asp:TemplateField>
                                         <asp:BoundField DataField="Description" HeaderText="Status" SortExpression="Description"></asp:BoundField>
                                         <asp:BoundField DataField="LastModDt" HeaderText="Tarikh Dikemaskini" DataFormatString="{0:dd/MM/yyyy}" SortExpression="LastModDt" NullDisplayText="-"></asp:BoundField>
-                                        <asp:BoundField DataField="RemarksFail" HeaderText="Catatan" SortExpression="RemarksFail"></asp:BoundField>
+                                        <asp:TemplateField HeaderText="Catatan" SortExpression="RemarksFail">
+                                            <ItemTemplate><span style="white-space: pre-line; font-size: 0.8rem;"><%#: Eval("RemarksFail") %></span></ItemTemplate>
+                                        </asp:TemplateField>
 
                                         <asp:TemplateField HeaderText="Maklumat Permohonan" HeaderStyle-Font-Size="10pt" HeaderStyle-Width="90%" ItemStyle-Width="90%">
                                             <ItemTemplate>
@@ -4503,7 +4505,7 @@
                                                 <asp:Label ID="lblMobLastMod" runat="server" Text='<%# If(IsDBNull(Eval("LastModDt")), "-", Eval("LastModDt", "{0:dd/MM/yyyy}")) %>' Font-Size="10pt"></asp:Label><br />
 
                                                 <asp:Label ID="lblMobHdrCatatan" runat="server" Text="Catatan :" Font-Bold="True" Font-Size="10pt"></asp:Label><br />
-                                                <asp:Label ID="lblMobCatatan" runat="server" Text='<%# If(IsDBNull(Eval("RemarksFail")) OrElse String.IsNullOrEmpty(Eval("RemarksFail").ToString()), "-", Eval("RemarksFail")) %>' Font-Size="10pt"></asp:Label>
+                                                <asp:Label ID="lblMobCatatan" runat="server" Text='<%# If(IsDBNull(Eval("RemarksFail")) OrElse String.IsNullOrEmpty(Eval("RemarksFail").ToString()), "-", Eval("RemarksFail")) %>' Font-Size="9pt" style="white-space: pre-line;"></asp:Label>
                                             </ItemTemplate>
                                             <ItemStyle HorizontalAlign="Left" />
                                         </asp:TemplateField>
