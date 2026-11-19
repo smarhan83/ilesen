@@ -1205,8 +1205,54 @@ Partial Class MasterMenu
 
 		myConnection.Close()
 
-	End Using		
+	End Using
 
+        setBadgePilihPegawai()
+
+    End Sub
+
+    ' Kerani Inspektorat (Penyedia + ReadOnly, agensi Inspektorat) memantau permohonan yang masih di langkah
+    ' "Pilih Pegawai Lawatan Tapak" (ApprStatusID = 2) - Pendaftaran & Pembatalan. Peranan lain tidak nampak item ini.
+    Private Const AGENSI_INSPEKTORAT As Integer = 3
+
+    Private Sub setBadgePilihPegawai()
+        divNotiPilihPegawai.Visible = False
+        divNotiPilihPegawaiBatal.Visible = False
+
+        Dim agensiId As Integer
+        Integer.TryParse(Convert.ToString(Session.Item("sessionEstateID")), agensiId)
+        Dim isPenyedia As Boolean = Convert.ToString(Session.Item("sessionIsPenyedia")) = "1" OrElse Convert.ToString(Session.Item("sessionIsPenyedia")).ToLower() = "true"
+        Dim isReadOnly As Boolean = Convert.ToString(Session.Item("sessionIsReadOnly")) = "1" OrElse Convert.ToString(Session.Item("sessionIsReadOnly")).ToLower() = "true"
+        If Not (isPenyedia AndAlso isReadOnly AndAlso agensiId = AGENSI_INSPEKTORAT) Then Exit Sub
+
+        Try
+            Using myConnection As New SqlConnection(ConfigurationManager.ConnectionStrings("webcon_ConnectionStr").ConnectionString)
+                Dim strSQL As String =
+                    "SELECT " &
+                    " (SELECT COUNT(*) FROM v_LESEN_ApprovalList_Curr a INNER JOIN LESEN_Permohonan g ON g.Permohonan_ID = a.Permohonan_ID " &
+                    "   WHERE a.ApprStatusID = 2 AND a.AgensiID = @AgensiID AND g.JenisLesenIdList IS NOT NULL) AS cntBaru, " &
+                    " (SELECT COUNT(*) FROM v_LESEN_ApprovalListBatal_Curr a INNER JOIN LESEN_Permohonan g ON g.Permohonan_ID = a.Permohonan_ID " &
+                    "   WHERE a.ApprStatusID = 2 AND a.AgensiID = @AgensiID AND g.JenisLesenIdList IS NOT NULL) AS cntBatal"
+
+                Using myCommand As New SqlCommand(strSQL, myConnection)
+                    myCommand.Parameters.AddWithValue("@AgensiID", agensiId)
+                    myConnection.Open()
+                    Using myReader As SqlDataReader = myCommand.ExecuteReader()
+                        If myReader.Read() Then
+                            Dim cntBaru As Integer = CInt(myReader.Item("cntBaru"))
+                            Dim cntBatal As Integer = CInt(myReader.Item("cntBatal"))
+                            lblNotiPilihPegawai.Text = cntBaru.ToString()
+                            lblNotiPilihPegawaiBatal.Text = cntBatal.ToString()
+                            divNotiPilihPegawai.Visible = True
+                            divNotiPilihPegawaiBatal.Visible = True
+                            If cntBaru > 0 OrElse cntBatal > 0 Then idSpanNoti.Visible = True
+                        End If
+                    End Using
+                End Using
+            End Using
+        Catch ex As Exception
+            ' Notifikasi tidak boleh menggagalkan halaman
+        End Try
     End Sub
 
     'Public Property badgeIconPropertyOnMasterPage As String

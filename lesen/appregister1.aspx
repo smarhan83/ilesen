@@ -6384,6 +6384,7 @@
                                                     <div class="status-step-actionby" runat="server" visible='<%# (Eval("StepStatus").ToString() = "done" OrElse (Eval("StepStatus").ToString() = "current" AndAlso Not IsDBNull(Eval("ApprovalDate")))) AndAlso Not IsDBNull(Eval("ActionBy")) AndAlso Eval("ActionBy").ToString() <> "" %>'>
                                                         <i class="bi bi-person"></i> <%# Eval("ActionBy") %>
                                                     </div>
+                                                    <%# StatusProses.NotaHtml(Eval("Nota"), Eval("NotaKJ")) %>
                                                 </div>
                                             </ItemTemplate>
                                         </asp:Repeater>
@@ -6529,9 +6530,19 @@ Result AS (
     FROM Picked
     WHERE rn = 1
 )
-SELECT * FROM Result
-WHERE NOT (StepGroup IN (6, 8) AND StepStatus <> 'done')
-ORDER BY SortOrder">
+SELECT r.*,
+    /* Ulasan pegawai atasan untuk rujukan kerani: KB Agensi (4), Pengesah Jabatan Lesen (5), Peraku (8) */
+    CASE WHEN r.ApprovalDate IS NULL THEN NULL
+         WHEN r.StepGroup = 4 THEN (SELECT TOP 1 CAST(x.PengesahNotaKelulusan AS NVARCHAR(MAX)) FROM LESEN_PermohonanAgensi x WHERE x.Permohonan_ID = @Permohonan_ID AND x.JabatanAgensi_ID = r.AgensiID)
+         WHEN r.StepGroup = 5 THEN (SELECT CAST(x.NotaKelulusanPengesah AS NVARCHAR(MAX)) FROM LESEN_Permohonan x WHERE x.Permohonan_ID = @Permohonan_ID)
+         WHEN r.StepGroup = 8 THEN (SELECT CAST(x.NotaKelulusan AS NVARCHAR(MAX)) FROM LESEN_Permohonan x WHERE x.Permohonan_ID = @Permohonan_ID)
+    END AS Nota,
+    CASE WHEN r.ApprovalDate IS NOT NULL AND r.StepGroup = 8 THEN
+         (SELECT CASE x.NotaKelulusanKJ WHEN 1 THEN 'Diluluskan' WHEN 2 THEN 'Diluluskan dengan pindaan' WHEN 4 THEN 'Ditolak' WHEN 6 THEN 'Lain-lain' END FROM LESEN_Permohonan x WHERE x.Permohonan_ID = @Permohonan_ID)
+    END AS NotaKJ
+FROM Result r
+WHERE NOT (r.StepGroup IN (6, 8) AND r.StepStatus <> 'done')
+ORDER BY r.SortOrder">
                                     <SelectParameters>
                                         <asp:ControlParameter ControlID="GridView1" PropertyName="SelectedValue" Name="Permohonan_ID"></asp:ControlParameter>
                                     </SelectParameters>
@@ -6570,6 +6581,7 @@ ORDER BY SortOrder">
                                                     <div class="status-step-actionby" runat="server" visible='<%# (Eval("StepStatus").ToString() = "done" OrElse (Eval("StepStatus").ToString() = "current" AndAlso Not IsDBNull(Eval("ApprovalDate")))) AndAlso Not IsDBNull(Eval("ActionBy")) AndAlso Eval("ActionBy").ToString() <> "" %>'>
                                                         <i class="bi bi-person"></i> <%# Eval("ActionBy") %>
                                                     </div>
+                                                    <%# StatusProses.NotaHtml(Eval("Nota"), Eval("NotaKJ")) %>
                                                 </div>
                                             </ItemTemplate>
                                         </asp:Repeater>
@@ -6722,9 +6734,19 @@ Result AS (
     FROM Picked
     WHERE rn = 1
 )
-SELECT * FROM Result
-WHERE NOT (StepGroup IN (6, 8) AND StepStatus <> 'done')
-ORDER BY SortOrder">
+SELECT r.*,
+    /* Ulasan pegawai atasan untuk rujukan kerani: KB Agensi (4), Pengesah Jabatan Lesen (5), Peraku (8) */
+    CASE WHEN r.ApprovalDate IS NULL THEN NULL
+         WHEN r.StepGroup = 4 THEN (SELECT TOP 1 CAST(x.PengesahNotaKelulusan AS NVARCHAR(MAX)) FROM LESEN_PermohonanAgensiBatal x WHERE x.Permohonan_ID = @Permohonan_ID AND x.JabatanAgensi_ID = r.AgensiID)
+         WHEN r.StepGroup = 5 THEN (SELECT CAST(x.NotaKelulusanPengesahBatal AS NVARCHAR(MAX)) FROM LESEN_Permohonan x WHERE x.Permohonan_ID = @Permohonan_ID)
+         WHEN r.StepGroup = 8 THEN (SELECT CAST(x.NotaKelulusanBatal AS NVARCHAR(MAX)) FROM LESEN_Permohonan x WHERE x.Permohonan_ID = @Permohonan_ID)
+    END AS Nota,
+    CASE WHEN r.ApprovalDate IS NOT NULL AND r.StepGroup = 8 THEN
+         (SELECT CASE x.NotaKelulusanKJ WHEN 1 THEN 'Setuju untuk proses pembatalan' WHEN 2 THEN 'Setuju untuk proses pembatalan dengan pindaan' WHEN 3 THEN 'Setuju untuk proses pembatalan dan Wang Deposit dirampas' WHEN 5 THEN 'Setuju untuk proses pembatalan dan Wang Deposit dipulangkan' WHEN 4 THEN 'Pembatalan ditolak' WHEN 6 THEN 'Lain-lain' END FROM LESEN_Permohonan x WHERE x.Permohonan_ID = @Permohonan_ID)
+    END AS NotaKJ
+FROM Result r
+WHERE NOT (r.StepGroup IN (6, 8) AND r.StepStatus <> 'done')
+ORDER BY r.SortOrder">
                                     <SelectParameters>
                                         <asp:ControlParameter ControlID="GridView1" PropertyName="SelectedValue" Name="Permohonan_ID"></asp:ControlParameter>
                                     </SelectParameters>

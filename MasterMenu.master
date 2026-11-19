@@ -1073,6 +1073,38 @@ h1{
                         </li>
 
 
+                        <!-- Kerani Inspektorat: pantau Pilih Pegawai Lawatan Tapak (Pendaftaran) -->
+                        <li id="divNotiPilihPegawai" runat="server" visible="false">
+                            <a class="dropdown-item py-2"
+                               href="<%= ResolveUrl("~/lesen/kelulusan1.aspx?p_Id=3351&m_Id=4358&status=2") %>">
+
+                                <i class="bi bi-person-check text-primary me-2"></i>
+                                Pilih Pegawai - Pendaftaran
+
+                                <span class="badge bg-danger ms-2">
+                                    <asp:Label ID="lblNotiPilihPegawai" runat="server"></asp:Label>
+                                </span>
+
+                            </a>
+                        </li>
+
+
+                        <!-- Kerani Inspektorat: pantau Pilih Pegawai Lawatan Tapak (Pembatalan) -->
+                        <li id="divNotiPilihPegawaiBatal" runat="server" visible="false">
+                            <a class="dropdown-item py-2"
+                               href="<%= ResolveUrl("~/lesen/pembatalan1.aspx?p_Id=3351&m_Id=4375&status=2") %>">
+
+                                <i class="bi bi-person-x text-danger me-2"></i>
+                                Pilih Pegawai - Pembatalan
+
+                                <span class="badge bg-danger ms-2">
+                                    <asp:Label ID="lblNotiPilihPegawaiBatal" runat="server"></asp:Label>
+                                </span>
+
+                            </a>
+                        </li>
+
+
                         <!-- Notification 3 -->
                         <li id="divNotiSuratMohonUlasan" runat="server" visible="false">
 

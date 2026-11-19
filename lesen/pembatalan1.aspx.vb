@@ -22,6 +22,16 @@ Partial Class pembatalan1
         Page.Form.Attributes.Add("enctype", "multipart/form-data")
 
         If Not Page.IsPostBack Then
+
+            ' ?status=N (cth. dari notifikasi "Pilih Pegawai"): pilih terus status dalam penapis
+            Dim qsStatus As Integer
+            If Integer.TryParse(Request.QueryString("status"), qsStatus) Then
+                Try
+                    DDL_Status.DataBind()
+                    If DDL_Status.Items.FindByValue(qsStatus.ToString()) IsNot Nothing Then DDL_Status.SelectedValue = qsStatus.ToString()
+                Catch ex As Exception
+                End Try
+            End If
             If Request.Browser.IsMobileDevice Then
                 GridView1.Columns(0).Visible = "false"
                 GridView1.Columns(1).Visible = "false"
