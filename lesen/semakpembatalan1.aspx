@@ -1420,6 +1420,61 @@
     <asp:SqlDataSource ID="SqlDataSourceGrid" runat="server"
         ConnectionString="<%$ ConnectionStrings:webcon_ConnectionStr %>"
         SelectCommand="SET NOCOUNT ON;
+            /* Logik v_LESEN_ApprovalListBatal_Curr dibina terus di sini (lebih laju): subquery ROW_NUMBER dikira sekali ke #temp, bukan per baris */
+            IF OBJECT_ID('tempdb..#r2') IS NOT NULL DROP TABLE #r2;
+            IF OBJECT_ID('tempdb..#r1') IS NOT NULL DROP TABLE #r1;
+            IF OBJECT_ID('tempdb..#fin') IS NOT NULL DROP TABLE #fin;
+            IF OBJECT_ID('tempdb..#v') IS NOT NULL DROP TABLE #v;
+
+            SELECT Permohonan_ID, ApprLevel, ApprStatusID, AgensiID INTO #r2 FROM (
+                SELECT ROW_NUMBER() OVER(PARTITION BY A.Permohonan_ID, A.AgensiID ORDER BY A.Permohonan_ID, A.ApprStatusID, A.AgensiID) AS RowNo,
+                A.Permohonan_ID, A.ApprLevel, A.ApprStatusID, A.AgensiID
+                FROM LESEN_ApprovalListBatal A INNER JOIN ApprovalStatusBatal B ON A.ApprStatusID = B.ApprStatusID
+                WHERE A.IsComplete = 0 AND A.ApprLevel = 2
+            ) t WHERE RowNo = 1;
+
+            SELECT Permohonan_ID, ApprLevel, ApprStatusID INTO #r1 FROM (
+                SELECT ROW_NUMBER() OVER(PARTITION BY A.Permohonan_ID ORDER BY A.Permohonan_ID, A.ApprStatusID, A.AgensiID) AS RowNo,
+                A.Permohonan_ID, A.ApprLevel, A.ApprStatusID
+                FROM LESEN_ApprovalListBatal A INNER JOIN ApprovalStatusBatal B ON A.ApprStatusID = B.ApprStatusID
+                WHERE A.IsComplete = 0 AND A.IsResult = 0
+            ) t WHERE RowNo = 1;
+
+            SELECT DISTINCT Permohonan_ID INTO #fin FROM LESEN_ApprovalListBatal WHERE IsFinalApproval = 1 AND IsComplete = 1;
+
+            SELECT ApprovalID, App.Permohonan_ID, A.ApprStatusID, B.Description, A.ApprLevel, AgensiID, ApproverID, ApprovalDate,
+            IsComplete, A.IsFinalApproval, A.IsResult, Remarks, JenisLesen_ID, Permohonan_PemohonID, TarikhMohon, NotaKelulusan
+            INTO #v
+            FROM LESEN_Permohonan App
+            INNER JOIN LESEN_ApprovalListBatal A ON App.Permohonan_ID = A.Permohonan_ID
+            INNER JOIN ApprovalStatusBatal B ON A.ApprStatusID = B.ApprStatusID
+            WHERE App.IsBatal = 1 AND App.StatusID > 0
+            AND A.IsComplete = 0 AND A.ApprLevel = 2
+            AND EXISTS (SELECT 1 FROM #r2 r WHERE r.Permohonan_ID = App.Permohonan_ID AND r.ApprLevel = A.ApprLevel AND r.ApprStatusID = A.ApprStatusID AND r.AgensiID = A.AgensiID)
+            UNION ALL
+            SELECT ApprovalID, App.Permohonan_ID, A.ApprStatusID, B.Description, A.ApprLevel, AgensiID, ApproverID, ApprovalDate,
+            IsComplete, A.IsFinalApproval, A.IsResult, Remarks, JenisLesen_ID, Permohonan_PemohonID, TarikhMohon, NotaKelulusan
+            FROM LESEN_Permohonan App
+            INNER JOIN LESEN_ApprovalListBatal A ON App.Permohonan_ID = A.Permohonan_ID
+            INNER JOIN ApprovalStatusBatal B ON A.ApprStatusID = B.ApprStatusID
+            WHERE App.IsBatal = 1 AND App.StatusID > 0
+            AND A.IsComplete = 0 AND A.ApprLevel <> 2
+            AND (EXISTS (SELECT 1 FROM #r1 r WHERE r.Permohonan_ID = App.Permohonan_ID AND r.ApprLevel = A.ApprLevel AND r.ApprStatusID = A.ApprStatusID)
+                 OR App.StatusID = A.ApprStatusID OR (App.StatusID = 7 AND A.ApprStatusID = 8))
+            AND NOT EXISTS (SELECT 1 FROM #fin f WHERE f.Permohonan_ID = App.Permohonan_ID)
+            UNION ALL
+            SELECT ApprovalID, Permohonan_ID, ApprStatusID, Description, ApprLevel, AgensiID, ApproverID, ApprovalDate,
+            IsComplete, IsFinalApproval, IsResult, Remarks, JenisLesen_ID, Permohonan_PemohonID, TarikhMohon, NotaKelulusan FROM (
+                SELECT ROW_NUMBER() OVER(PARTITION BY App.Permohonan_ID ORDER BY App.Permohonan_ID, A.ApprStatusID DESC) AS RowNo,
+                ApprovalID, App.Permohonan_ID, A.ApprStatusID, B.Description, A.ApprLevel, AgensiID, ApproverID, ApprovalDate,
+                IsComplete, A.IsFinalApproval, A.IsResult, Remarks, JenisLesen_ID, Permohonan_PemohonID, TarikhMohon, NotaKelulusan
+                FROM LESEN_Permohonan App
+                INNER JOIN LESEN_ApprovalListBatal A ON App.Permohonan_ID = A.Permohonan_ID
+                INNER JOIN ApprovalStatusBatal B ON A.ApprStatusID = B.ApprStatusID
+                WHERE App.IsBatal = 1 AND App.StatusID > 0
+                AND A.IsComplete = 1 AND A.IsFinalApproval = 1
+            ) tbl1 WHERE RowNo = 1;
+
             DECLARE @IsLesen bit = ISNULL((SELECT TOP 1 x.JabatanAgensi_IsLesen FROM LESEN_JabatanAgensi x WHERE x.JabatanAgensi_ID = @AgensiID), 0);
             SELECT ROW_NUMBER() OVER(ORDER BY tbl.TarikhMohon desc, tbl.Permohonan_ID desc) as RowNo, tbl.*,
             (CASE WHEN EXISTS (SELECT 1 FROM LESEN_PermohonanFail pf WHERE pf.PermohonanFail_PermohonanID = tbl.Permohonan_ID AND pf.PermohonanFail_JenisLampiran = 'L1' AND ISNULL(pf.PermohonanFail_FilePath, '') <> '') THEN 1 ELSE 0 END) AS HasLampiran1,
@@ -1429,7 +1484,7 @@
             (CASE WHEN a.ApprStatusID < 9 AND ISNULL(a.AgensiID, 0) > 0 then a.Description + ' - ' + e.JabatanAgensi_Description ELSE a.Description END) AS StatusDesc,
             @AgensiID AS UserType, a.*, g.JenisLesenIdList, g.JenisLesenDescList, g.Rujukan, g.IsSuratPembatalanFail, g.StatusID, g.IsPublish, g.Is24jam, f.Pemohon_Name, h.CreatedDt
             FROM
-            v_LESEN_ApprovalListBatal_Curr a
+            #v a
             left join LESEN_JabatanAgensi e on e.JabatanAgensi_ID = a.AgensiID
             inner join LESEN_Pemohon f on f.Pemohon_ID = a.Permohonan_PemohonID
             inner join LESEN_Permohonan g on g.Permohonan_ID = a.Permohonan_ID
