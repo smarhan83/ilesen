@@ -2420,7 +2420,7 @@ ORDER BY SortOrder">
                                     <div class="info-notice-icon"><i class="bi bi-info-lg"></i></div>
                                     <div class="info-notice-content">
                                         <div class="info-notice-title">Kandungan surat masih kosong</div>
-                                        <div class="info-notice-desc mb-0">Sila pilih templat dan jana surat supaya surat pemeriksaan boleh dicetak.</div>
+                                        <div class="info-notice-desc mb-0">Sila pilih templat dan jana laporan supaya surat pemeriksaan boleh dicetak.</div>
                                     </div>
                                 </div>
 
@@ -2457,11 +2457,11 @@ ORDER BY SortOrder">
                                     </div>
                                     <div class="col-md-7 col-lg-8">
                                         <div class="d-flex flex-wrap gap-2">
-                                            <asp:LinkButton runat="server" CssClass="btn btn-primary" ValidationGroup="updateForm" Text="Jana Surat Sokong" ID="BT_Generate" OnCommand="BT_Generate_Command" CausesValidation="True">
-                                                <i class="bi bi-gear-fill me-1"></i> Jana Surat Sokong
+                                            <asp:LinkButton runat="server" CssClass="btn btn-primary" ValidationGroup="updateForm" Text="Jana Laporan" ID="BT_Generate" OnCommand="BT_Generate_Command" CausesValidation="True">
+                                                <i class="bi bi-gear-fill me-1"></i> Jana Laporan
                                             </asp:LinkButton>
-                                            <asp:LinkButton runat="server" CssClass="btn btn-outline-primary" ValidationGroup="updateForm" Text="Lihat Surat" ID="BT_ViewMail" OnCommand="BT_ViewMail_Command" CausesValidation="True">
-                                                <i class="bi bi-file-earmark-pdf me-1"></i> Lihat Surat
+                                            <asp:LinkButton runat="server" CssClass="btn btn-outline-primary" ValidationGroup="updateForm" Text="Lihat Laporan Pemeriksaan" ID="BT_ViewMail" OnCommand="BT_ViewMail_Command" CausesValidation="True">
+                                                <i class="bi bi-file-earmark-pdf me-1"></i> Lihat Laporan Pemeriksaan
                                             </asp:LinkButton>
                                             <asp:LinkButton runat="server" CssClass="btn btn-outline-info" ValidationGroup="updateForm" Text="Surat Mohon Ulasan" ID="BT_ViewMU" OnCommand="BT_ViewMU_Command" CausesValidation="True">
                                                 <i class="bi bi-envelope-paper me-1"></i> Surat Mohon Ulasan

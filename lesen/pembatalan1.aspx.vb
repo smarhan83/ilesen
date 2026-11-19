@@ -434,7 +434,10 @@ Partial Class pembatalan1
                 End If
 
             Case 6, 7, 9, 10
-                ' Status Selesai / Lulus / Tolak
+                ' Status Selesai / Lulus / Tolak (IK dan KB disembunyikan kawalan cetakan terus)
+                divtemplatsurat.Visible = False
+                BT_Generate.Visible = False
+
                 If (isPeraku OrElse isPenilai) AndAlso isJabatanLesen Then
                     btnApprove.Visible = False
                     btnReject.Visible = False
@@ -466,6 +469,11 @@ Partial Class pembatalan1
             SetGridColumnsVisible(gvIK, False, 1)
         End If
 
+        ' Tab Surat dibuka bagi status selain 2 (kecuali Kerani Inspektorat), sama seperti kelulusan1
+        If apprStatusId <> 2 Then
+            tabSurat.Visible = Not isKeraniInspektorat
+        End If
+
         ' =========================================================================
         ' 6. Pengurusan Tab Surat & Wang Amanah (Jabatan Dalaman)
         ' =========================================================================
@@ -475,11 +483,13 @@ Partial Class pembatalan1
 
             ' Maklumat Surat Pemeriksaan untuk Inspektorat (sessionOCS = 3)
             If isOCS3 Then
-                tabSurat.Visible = Not isKeraniInspektorat
+                tabSurat.Visible = Not (apprStatusId = 2 OrElse isKeraniInspektorat)
 
                 If isPenilaianStatus <> 0 OrElse isPenilai Then
                     BT_ViewMail.Visible = True
                     Session.Item("isDisablePrintSession") = "N"
+                Else
+                    Session.Item("isDisablePrintSession") = "Y"
                 End If
 
                 divTarikhSurat.Visible = isPenilai
@@ -488,8 +498,8 @@ Partial Class pembatalan1
 
             ' Penjanaan Surat Pemeriksaan (Status 3 & 4)
             If apprStatusId = 3 OrElse apprStatusId = 4 Then
+                ' Tab Surat kekal dipaparkan di peranti mudah alih (sama seperti kelulusan1)
                 If Request.Browser.IsMobileDevice Then
-                    tabSurat.Visible = False
                     tabKadarBayaran.Visible = False
                 End If
 
@@ -503,6 +513,7 @@ Partial Class pembatalan1
 
                 GetSuratFail(permohonanId)
             Else
+                divtemplatsurat.Visible = False
                 BT_Generate.Visible = False
 
                 ' Status lain: suis muat naik tidak dipaparkan; papar panel ikut jenis surat rekod ini
@@ -516,7 +527,47 @@ Partial Class pembatalan1
         End If
 
         ' =========================================================================
-        ' 7. Mod Jana Surat Lewat (status 5 ke atas, surat masih kosong)
+        ' 7. Kawalan Mod Semakan / Perakuan KB Inspektorat (Tab Surat)
+        ' =========================================================================
+        ' Apabila btnKembaliIK dipaparkan (KB Inspektorat, status 4): KB hanya mengesahkan surat IK
+        If btnKembaliIK.Visible Then
+            divtemplatsurat.Visible = False
+            BT_Generate.Visible = False
+            divCbSuratFail.Visible = False
+            pnlSuratFail.Visible = False
+            pnlSuratContentAuto.Visible = False
+            TB_TarikhPeriksa.ReadOnly = True
+            TB_NoRujukan.ReadOnly = True
+
+            If isFail Then
+                btnSaveLetter.Visible = False
+            End If
+        Else
+            TB_TarikhPeriksa.ReadOnly = False
+            TB_NoRujukan.ReadOnly = False
+        End If
+
+        ' =========================================================================
+        ' 8. Had Khas Jabatan Lesen Untuk Tab Surat
+        ' =========================================================================
+        If isJabatanLesen Then
+            ' Jika Jabatan Lesen: hanya paparkan butang Lihat Laporan Pemeriksaan dan butang Surat Mohon Ulasan
+            BT_ViewMail.Visible = True
+            BT_ViewMU.Visible = True
+            Session.Item("isDisablePrintSession") = "N"
+
+            ' Sembunyikan semua kawalan lain dalam tab Surat
+            divtemplatsurat.Visible = False
+            BT_Generate.Visible = False
+            divCbSuratFail.Visible = False
+            pnlSuratFail.Visible = False
+            pnlSuratAuto.Visible = False
+            btnSaveLetter.Visible = False
+            pnlSuratContentAuto.Visible = False
+        End If
+
+        ' =========================================================================
+        ' 9. Mod Jana Surat Lewat (status 5 ke atas, surat masih kosong)
         ' =========================================================================
         ' Pegawai IK yang dilantik boleh menjana surat pemeriksaan bagi data lama yang telah
         ' dihantar tanpa kandungan surat. Hanya surat janaan sistem; suis muat naik disembunyikan.
@@ -572,7 +623,7 @@ Partial Class pembatalan1
         ' Status 3 (Lawatan Tapak): pegawai IK Inspektorat mesti menjana kandungan surat sebelum hantar ulasan
         If ApprStatusID = 3 AndAlso Session("sessionOCS")?.ToString() = "3" AndAlso Not CB_SuratFail.Checked Then
             If Not HasSuratContent(CInt(GridView1.SelectedDataKey.Values(0)), "LIB") Then
-                ShowAlert("error", "", "Kandungan surat masih kosong. Sila jana surat sebelum hantar ulasan.")
+                ShowAlert("error", "", "Kandungan surat masih kosong. Sila jana laporan sebelum hantar ulasan.")
                 retval = False
             End If
         End If
@@ -1000,9 +1051,9 @@ Partial Class pembatalan1
     End Sub
 
     Protected Sub BT_Generate_Command(sender As Object, e As CommandEventArgs)
-        ' Status 5 ke atas: jana surat hanya dibenarkan dalam mod jana surat lewat
+        ' Status 5 ke atas: jana laporan hanya dibenarkan dalam mod jana surat lewat
         If CInt(GridView1.SelectedDataKey.Values(2)) >= 5 AndAlso Not ModJanaSuratLewat Then
-            ShowAlert("error", "", "Surat tidak boleh dijana pada status ini.")
+            ShowAlert("error", "", "Laporan tidak boleh dijana pada status ini.")
             Return
         End If
 
@@ -1089,7 +1140,7 @@ Partial Class pembatalan1
             myCommandSelect.Parameters.AddWithValue("@@JenisPasar", jenispasar)
             myCommandSelect.Parameters.AddWithValue("@@JenisPerniagaanPasar", jenisperniagaanpasar)
             myCommandSelect.Parameters.AddWithValue("@@JumlahPetak", jumlahpetak)
-            myCommandSelect.Parameters.AddWithValue("@@LokasiPasar", lokasipasar)
+            myCommandSelect.Parameters.AddWithValue("@@LokasiPasar", StrConv(lokasipasar, VbStrConv.ProperCase))
 
             Dim cvtDate As String = CDate(TB_TarikhPeriksa.Text).ToString("dd/MM/yyyy")
             myCommandSelect.Parameters.AddWithValue("@@TarikhPemeriksaan", cvtDate)
@@ -1232,7 +1283,7 @@ Partial Class pembatalan1
                             GetSuratFail(PermohonanID)
                         Catch ex As Exception
                             isSuccess = False
-                            MessageBox("ERROR2", Me)
+                            MessageBox("ERROR", Me)
                         End Try
                     End Using
                 End If
@@ -1365,11 +1416,8 @@ Partial Class pembatalan1
         If GetIsSuratFail(pid) Then
             ViewSuratPemeriksaanFail(pid.ToString())
         Else
-            If CStr(Session.Item("isDisablePrintSession")) = "Y" Then
-                ViewSuratPemeriksaanAuto(pid.ToString(), False)
-            Else
-                ViewSuratPemeriksaanAuto(pid.ToString(), True)
-            End If
+            ' Sentiasa papar PDF, sama seperti kelulusan1
+            ViewSuratPemeriksaanAuto(pid.ToString(), True)
         End If
     End Sub
 

@@ -360,6 +360,9 @@ Partial Class appregister1
             Dim IsBatal As Boolean = CBool(Me.GridView1.DataKeys(intRow)("IsBatal"))
             Dim IsRevertStatus As Boolean = False
 
+            ' Audit: status sebelum proses dibatalkan
+            Dim statusLamaBatal As String = AuditAliran.Status(CInt(Permohonan_ID), 0, IsBatal)
+
             Using myConnection As New SqlConnection(CS)
                 myConnection.Open()
 
@@ -403,6 +406,10 @@ Partial Class appregister1
                     myCommand2.ExecuteNonQuery()
                 End Using
             End Using
+
+            ' Audit: Batal Proses (status lama -> status selepas reset)
+            AuditAliran.Log(idWindowTitle.InnerText, AuditAliran.BATAL_PROSES, CInt(Permohonan_ID), 0, IsBatal, statusLamaBatal,
+                            If(IsRevertStatus, "Pembatalan dibatalkan; status dikembalikan kepada Lulus", ""))
 
             GridView1.DataBind()
 
@@ -957,7 +964,27 @@ Partial Class appregister1
         End Try
     End Sub
 
+    ' Audit Padam: maklumat dibaca sebelum rekod dipadam (RowDeleting), log ditulis selepas berjaya (RowDeleted)
+    Private auditPadamRujukan As String = Nothing
+    Private auditPadamStatus As String = Nothing
+    Private auditPadamBatal As Boolean = False
+
+    Private Sub GridView1_RowDeleting(sender As Object, e As GridViewDeleteEventArgs) Handles GridView1.RowDeleting
+        Try
+            Dim pid As Integer = CInt(GridView1.DataKeys(e.RowIndex)("Permohonan_ID"))
+            auditPadamBatal = CBool(GridView1.DataKeys(e.RowIndex)("IsBatal"))
+            auditPadamRujukan = AuditAliran.Rujukan(pid)
+            auditPadamStatus = AuditAliran.Status(pid, 0, auditPadamBatal)
+        Catch ex As Exception
+            auditPadamRujukan = Nothing
+        End Try
+    End Sub
+
     Private Sub GridView1_RowDeleted(sender As Object, e As GridViewDeletedEventArgs) Handles GridView1.RowDeleted
+        If e.Exception Is Nothing AndAlso auditPadamRujukan IsNot Nothing Then
+            AuditAliran.LogPadam(idWindowTitle.InnerText, auditPadamRujukan, auditPadamBatal, auditPadamStatus)
+        End If
+
         ShowAlert("success", "", "Rekod telah dipadam!")
     End Sub
 
